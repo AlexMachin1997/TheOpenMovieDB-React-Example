@@ -1,7 +1,9 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
-import { Facebook, Twitter, Instagram, ExternalLink } from 'styled-icons/entypo-social';
+import { Facebook, Twitter, Instagram } from 'styled-icons/entypo-social';
+import { ExternalLink } from 'styled-icons/evaicons-solid';
+
 import Tooltip from '../Tooltip';
 import SocialLink from './SocialLink';
 
