@@ -1,0 +1,15 @@
+./README.md
+
+src/ServiceWorker/*.js
+
+node_modules/*
+
+*.test.js
+
+*.stories.js
+
+src/setupTests.js
+
+src/utils/testUtils/createDOMElement/index.js
+
+package-lock.json
