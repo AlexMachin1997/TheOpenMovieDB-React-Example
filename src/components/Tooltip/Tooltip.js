@@ -43,8 +43,3 @@ export const TooltipText = styled.span`
 		border-color: #555 transparent transparent transparent;
 	}
 `;
-
-export const StoryPreview = styled.div`
-	margin-top: 3rem;
-	margin-left: 2rem;
-`;

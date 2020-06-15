@@ -1,37 +1,17 @@
 import React from 'react';
 
 import Paragraph from './index';
-import { StoryPreview } from './Paragraph';
+import Preview from '../Blocks/Storybook/Preview';
 
-export const DefaultParagraph = () => (
-	<StoryPreview>
-		<Paragraph />
-	</StoryPreview>
-);
+export const DefaultParagraph = () => <Preview content={<Paragraph />} />;
 
-export const CustomHeight = () => (
-	<StoryPreview>
-		<Paragraph height={2} />
-	</StoryPreview>
-);
+export const CustomHeight = () => <Preview content={<Paragraph height={2} />} />;
 
-export const CustomFontSize = () => (
-	<StoryPreview>
-		<Paragraph size="4rem" />
-	</StoryPreview>
-);
+export const CustomFontSize = () => <Preview content={<Paragraph size="4rem" />} />;
 
-export const CustomText = () => (
-	<StoryPreview>
-		<Paragraph text="Popular Shows" />
-	</StoryPreview>
-);
+export const CustomText = () => <Preview content={<Paragraph text="Popular Shows" />} />;
 
-export const CustomColour = () => (
-	<StoryPreview>
-		<Paragraph colour="red" />
-	</StoryPreview>
-);
+export const CustomColour = () => <Preview content={<Paragraph colour="red" />} />;
 
 export default {
 	component: Paragraph,

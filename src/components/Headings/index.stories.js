@@ -1,36 +1,17 @@
 import React from 'react';
 
 import Heading from './index';
+import Preview from '../Blocks/Storybook/Preview';
 
-export const Default = () => (
-	<div style={{ background: '#f0f2f5', padding: '1rem' }}>
-		<Heading />
-	</div>
-);
+export const Default = () => <Preview content={<Heading />} />;
 
-export const CustomType = () => (
-	<div style={{ background: '#f0f2f5', padding: '1rem' }}>
-		<Heading type="h4" />
-	</div>
-);
+export const CustomType = () => <Preview content={<Heading type="h4" />} />;
 
-export const CustomHeight = () => (
-	<div style={{ background: '#f0f2f5', padding: '1rem' }}>
-		<Heading height={2} />
-	</div>
-);
+export const CustomHeight = () => <Preview content={<Heading height={2} />} />;
 
-export const CustomFontSize = () => (
-	<div style={{ background: '#f0f2f5', padding: '1rem' }}>
-		<Heading size="4rem" />
-	</div>
-);
+export const CustomFontSize = () => <Preview content={<Heading size="4rem" />} />;
 
-export const CustomText = () => (
-	<div style={{ background: '#f0f2f5', padding: '1rem' }}>
-		<Heading text="Popular Movies" />
-	</div>
-);
+export const CustomText = () => <Preview content={<Heading text="Popular Movies" />} />;
 
 export default {
 	component: Heading,

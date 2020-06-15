@@ -11,7 +11,7 @@ const Button = styled.button`
 	align-items: center;
 	justify-content: center;
 	padding: 8px 16px;
-	border: ${(props) => (props.border !== '' ? props.border : '1px solid transparent')};
+	border: ${(props) => (props.border !== '' ? props.border : 'none')};
 	background-color: ${(props) =>
 		generateColours(props.theme, props.backgroundColour, props.backgroundColour)};
 	color: ${(props) => generateColours(props.theme, props.textColour, props.textColour)};

@@ -10,9 +10,4 @@ const Paragraph = styled.p`
 	color: ${(props) => (props.textColour === '' ? props.theme.textColour : props.textColour)};
 `;
 
-export const StoryPreview = styled.div`
-	background: #f0f2f5;
-	padding: 1rem;
-`;
-
 export default Paragraph;

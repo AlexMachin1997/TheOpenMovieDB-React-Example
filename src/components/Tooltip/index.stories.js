@@ -1,32 +1,50 @@
 import React from 'react';
 
 import Tooltip from './index';
-import { StoryPreview } from './Tooltip';
+import Preview from '../Blocks/Storybook/Preview';
 
-export const Default = () => <Tooltip />;
+export const Default = () => <Preview content={<Tooltip />} />;
 
 export const CustomContentWithText = () => (
-	<StoryPreview>
-		<Tooltip content="Facebook" />
-	</StoryPreview>
+	<Preview
+		content={
+			<div style={{ marginTop: '1.5rem', marginLeft: '1rem' }}>
+				<Tooltip content="Facebook" />
+			</div>
+		}
+	/>
 );
 
 export const CustomContentWithJSX = () => (
-	<StoryPreview>
-		<Tooltip content={<p style={{ color: 'red', margin: 0, fontSize: '1rem' }}>Custom JSX</p>} />
-	</StoryPreview>
+	<Preview
+		content={
+			<div style={{ marginTop: '1.5rem', marginLeft: '1rem' }}>
+				<Tooltip
+					content={<p style={{ color: 'red', margin: 0, fontSize: '1rem' }}>Custom JSX</p>}
+				/>
+			</div>
+		}
+	/>
 );
 
 export const CustomTooltipTextWithText = () => (
-	<StoryPreview>
-		<Tooltip tooltipText="Visit facebook" />
-	</StoryPreview>
+	<Preview
+		content={
+			<div style={{ marginTop: '1.5rem', marginLeft: '1rem' }}>
+				<Tooltip tooltipText="Visit facebook" />
+			</div>
+		}
+	/>
 );
 
 export const FacebookTooltip = () => (
-	<StoryPreview>
-		<Tooltip content="Facebook" tooltipText="Visit Facebook" />
-	</StoryPreview>
+	<Preview
+		content={
+			<div style={{ marginTop: '1.5rem', marginLeft: '1rem' }}>
+				<Tooltip content="Facebook" tooltipText="Visit Facebook" />
+			</div>
+		}
+	/>
 );
 
 export default {
