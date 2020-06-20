@@ -3,24 +3,45 @@ import { axe } from 'jest-axe';
 import { fireEvent } from '@testing-library/react';
 
 import Button from './index';
-import createDOMElement from '../../utils/testUtils/createDOMElement';
 
-const stylingChecks = (expectedResult, props, target = 'button') => {
+import createDOMElement from '../../utils/testUtils/createDOMElement';
+import replaceSpacesWith from '../../utils/formatters/replaceSpacesWith';
+
+const stylingCheck = (expectedResult, props) => {
 	// Arrange and act
-	const element = createDOMElement(<Button {...props} />, target);
+	const element = createDOMElement(<Button {...props} />, 'button');
 
 	// Assert
 	expect(element).toHaveStyle(expectedResult);
 };
 
+const labelCheck = (label) => {
+	// Arrange and act
+	const element = createDOMElement(
+		<Button ariaLabel={label} />,
+		`button[aria-label=${replaceSpacesWith(label, '-')}]`
+	);
+
+	// Assert
+	expect(element).toBeTruthy();
+};
+
+const typeCheck = (type = 'button') => {
+	// Arrange and act
+	const element = createDOMElement(<Button type={type} />, `button[type=${type}]`);
+
+	// Assert
+	expect(element).toBeTruthy();
+};
+
 describe('Button tests', () => {
 	describe('textTransform', () => {
 		it('Should return the default textTransform', () => {
-			stylingChecks('text-transform: uppercase', {});
+			stylingCheck('text-transform: uppercase', {});
 		});
 
 		it('Should retuern the custom textTransform', () => {
-			stylingChecks('text-transform: lowercase', { textTransform: 'lowercase' });
+			stylingCheck('text-transform: lowercase', { textTransform: 'lowercase' });
 		});
 	});
 
@@ -44,72 +65,61 @@ describe('Button tests', () => {
 
 	describe('backgroundColour', () => {
 		it('Should return the default background', () => {
-			stylingChecks('background-color: transparent', {});
+			stylingCheck('background-color: transparent', {});
 		});
 
 		it('Should return the custom background', () => {
-			stylingChecks('background-color: red', { backgroundColour: 'red' });
+			stylingCheck('background-color: red', { backgroundColour: 'red' });
 		});
 	});
 
 	describe('border', () => {
 		it('Should return the default border', () => {
-			stylingChecks('border: none');
+			stylingCheck('border: none');
 		});
 
 		it('Should return the custom border', () => {
-			stylingChecks('border: 1px solid red', { border: '1px solid red' });
+			stylingCheck('border: 1px solid red', { border: '1px solid red' });
 		});
 	});
 
 	describe('colour', () => {
 		it('Should return the default colour', () => {
-			stylingChecks('color: black', {});
+			stylingCheck('color: black', {});
 		});
 
 		it('Should return the custom colour', () => {
-			stylingChecks('color: red', { colour: 'red' });
+			stylingCheck('color: red', { colour: 'red' });
 		});
 	});
 
 	describe('isDisabled', () => {
 		it('Should return the pointer if the button is disabled', () => {
-			stylingChecks('cursor: pointer', {});
+			stylingCheck('cursor: pointer', {});
 		});
 
 		it('Should return the pointer if the button is disabled', () => {
-			stylingChecks('cursor: not-allowed', { isDisabled: true });
+			stylingCheck('cursor: not-allowed', { isDisabled: true });
 		});
 	});
 
 	describe('borderRadius', () => {
 		it('Should return the default borderRadius', () => {
-			stylingChecks('border-radius: 0 0 0 0', {});
+			stylingCheck('border-radius: 0 0 0 0', {});
 		});
 
 		it('Should return the custom borderRadius', () => {
-			stylingChecks('border-radius: 1rem', { borderRadius: '1rem' });
+			stylingCheck('border-radius: 1rem', { borderRadius: '1rem' });
 		});
 	});
 
 	describe('ariaLabel', () => {
 		it('Should return the default ariaLabel', () => {
-			// Arrange and act
-			const element = createDOMElement(<Button />, 'button[aria-label=label]');
-
-			// Assert
-			expect(element).toBeTruthy();
+			labelCheck('label');
 		});
 
 		it('Should return the default ariaLabel', () => {
-			// Arrange and act
-			const element = createDOMElement(
-				<Button ariaLabel="custom label" />,
-				'button[aria-label=custom-label]'
-			);
-
-			// Assert
-			expect(element).toBeTruthy();
+			labelCheck('custom label');
 		});
 	});
 
@@ -130,18 +140,10 @@ describe('Button tests', () => {
 
 	describe('type', () => {
 		it('The default button type should be button', () => {
-			// Arrange and act
-			const element = createDOMElement(<Button />, 'button[type=button]');
-
-			// Assert
-			expect(element).toBeTruthy();
+			typeCheck();
 		});
 		it('The custom type for the button should be button', () => {
-			// Arrange and act
-			const element = createDOMElement(<Button type="submit" />, 'button[type=submit]');
-
-			// Assert
-			expect(element).toBeTruthy();
+			typeCheck('submit');
 		});
 	});
 

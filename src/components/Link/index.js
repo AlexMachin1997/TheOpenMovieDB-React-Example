@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Link from './Link';
+import replaceSpacesWith from '../../utils/formatters/replaceSpacesWith';
 
 const LinkComponent = ({ href, newTab, content, colour, label }) => (
 	<Link
 		href={href}
 		target={newTab === true ? '_blank' : '_self'}
 		textColour={colour}
-		aria-label={label}
+		aria-label={replaceSpacesWith(label, '-')}
 	>
 		{content}
 	</Link>

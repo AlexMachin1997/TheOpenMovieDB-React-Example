@@ -7,13 +7,13 @@ import { darkTheme, lightTheme } from '../theme';
 import Heading from './index';
 import createDOMElement from '../../utils/testUtils/createDOMElement';
 
-const stylingChecks = (expectedResult, props, target = 'h1', theme = lightTheme) => {
+const stylingCheck = (expectedResult, props, theme = lightTheme) => {
 	// Arrange and act
 	const element = createDOMElement(
 		<ThemeProvider theme={theme}>
 			<Heading {...props} />
 		</ThemeProvider>,
-		target
+		'h1'
 	);
 
 	// Assert
@@ -23,21 +23,21 @@ const stylingChecks = (expectedResult, props, target = 'h1', theme = lightTheme)
 describe('Heading tests', () => {
 	describe('weight', () => {
 		it('Should have default font-weight of 500', () => {
-			stylingChecks('font-weight: 500', {});
+			stylingCheck('font-weight: 500', {});
 		});
 
 		it('Should have a font-weight of 700', () => {
-			stylingChecks('font-weight: 700', { weight: '700' });
+			stylingCheck('font-weight: 700', { weight: '700' });
 		});
 	});
 
 	describe('height', () => {
 		it('Should have a default height of 1', () => {
-			stylingChecks('height: 1', {});
+			stylingCheck('height: 1', {});
 		});
 
 		it('Should have a default height of 2', () => {
-			stylingChecks('height: 2', { height: 2 });
+			stylingCheck('height: 2', { height: 2 });
 		});
 	});
 
@@ -47,35 +47,35 @@ describe('Heading tests', () => {
 			const element = createDOMElement(<Heading />, 'h1');
 
 			// Assert
-			expect(element.textContent).toBe('Default text');
+			expect(element.innerHTML).toBe('Default text');
 		});
 
 		it('Should return the custom text', () => {
 			// Arrange and act
-			const element = createDOMElement(<Heading text="Custom" />, 'h1');
+			const element = createDOMElement(<Heading text="Custom Text" />, 'h1');
 
 			// Assert
-			expect(element.textContent).toBe('Custom');
+			expect(element.innerHTML).toBe('Custom Text');
 		});
 	});
 
 	describe('size', () => {
 		it('Should return a font-size of 1rem', () => {
-			stylingChecks('font-size: 1rem', {});
+			stylingCheck('font-size: 1rem', {});
 		});
 
 		it('Should return a font-size of 2rem', () => {
-			stylingChecks('font-size: 2rem', { size: '2rem' });
+			stylingCheck('font-size: 2rem', { size: '2rem' });
 		});
 	});
 
 	describe('Theming (Dark/Light modes)', () => {
 		it('The font colour should be white', () => {
-			stylingChecks('color: black', {}, 'h1', lightTheme);
+			stylingCheck('color: black', {}, lightTheme);
 		});
 
 		it('The font colour should be black', () => {
-			stylingChecks('color: white', {}, 'h1', darkTheme);
+			stylingCheck('color: white', {}, darkTheme);
 		});
 	});
 

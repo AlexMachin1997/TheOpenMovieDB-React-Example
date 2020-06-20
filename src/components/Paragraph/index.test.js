@@ -6,7 +6,7 @@ import { darkTheme, lightTheme } from '../theme';
 import Paragraph from './index';
 import createDOMElement from '../../utils/testUtils/createDOMElement';
 
-const stylingChecks = (expectedResult, props, target = 'p', theme = lightTheme) => {
+const stylingCheck = (expectedResult, props, target = 'p', theme = lightTheme) => {
 	// Arrange and act
 	const element = createDOMElement(
 		<ThemeProvider theme={theme}>
@@ -22,21 +22,21 @@ const stylingChecks = (expectedResult, props, target = 'p', theme = lightTheme) 
 describe('Paragraph tests', () => {
 	describe('weight', () => {
 		it('Should have default font-weight of 500', () => {
-			stylingChecks('font-weight: 500', {});
+			stylingCheck('font-weight: 500', {});
 		});
 
 		it('Should have a font-weight of 700', () => {
-			stylingChecks('font-weight: 700', { weight: '700' });
+			stylingCheck('font-weight: 700', { weight: '700' });
 		});
 	});
 
 	describe('height', () => {
 		it('Should have a default height of 1', () => {
-			stylingChecks('height: 1', {});
+			stylingCheck('height: 1', {});
 		});
 
 		it('Should have a default height of 2', () => {
-			stylingChecks('height: 2', { height: 2 });
+			stylingCheck('height: 2', { height: 2 });
 		});
 	});
 
@@ -60,21 +60,21 @@ describe('Paragraph tests', () => {
 
 	describe('size', () => {
 		it('Should return a font-size of 1rem', () => {
-			stylingChecks('font-size: 1rem', {});
+			stylingCheck('font-size: 1rem', {});
 		});
 
 		it('Should return a font-size of 2rem', () => {
-			stylingChecks('font-size: 2rem', { size: '2rem' });
+			stylingCheck('font-size: 2rem', { size: '2rem' });
 		});
 	});
 
 	describe('colour', () => {
 		it('Should return the light mode default colour', () => {
-			stylingChecks('color: black', {}, 'p', lightTheme);
+			stylingCheck('color: black', {}, 'p', lightTheme);
 		});
 
 		it('Should return the dark mode default colour', () => {
-			stylingChecks('color: white', {}, 'p', darkTheme);
+			stylingCheck('color: white', {}, 'p', darkTheme);
 		});
 	});
 

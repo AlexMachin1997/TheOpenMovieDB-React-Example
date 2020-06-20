@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import ImageComponent from './Image';
+import replaceSpacesWith from '../../utils/formatters/replaceSpacesWith';
 
 /*
 
@@ -32,7 +33,11 @@ const Image = ({ width, height, borderRadius, border, alt, label, src }) => {
 			alt={error === true ? 'Failed to load the image, this is a fallback' : alt}
 			onError={() => setError(true)}
 			decoding="async"
-			aria-label={error === true ? 'An image in the error state' : label}
+			aria-label={
+				error === true
+					? replaceSpacesWith('An image in the error state', '-')
+					: replaceSpacesWith(label, '-')
+			}
 			src={
 				error === true ? `https://via.placeholder.com/${width}x${height}?text=Default+Image` : src
 			}
