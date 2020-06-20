@@ -36,7 +36,7 @@ describe('Paragraph tests', () => {
 		});
 
 		it('Should have a default height of 2', () => {
-			stylingChecks('height: 2', { height: '2' });
+			stylingChecks('height: 2', { height: 2 });
 		});
 	});
 
