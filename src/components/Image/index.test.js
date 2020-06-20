@@ -4,75 +4,52 @@ import { axe } from 'jest-axe';
 import Image from './index';
 import createDOMElement from '../../utils/testUtils/createDOMElement';
 
+const stylingChecks = (expectedResult, props, target = 'img') => {
+	// Arrange and act
+	const element = createDOMElement(<Image {...props} />, target);
+
+	// Assert
+	expect(element).toHaveStyle(expectedResult);
+};
+
 describe('Image tests', () => {
 	describe('width', () => {
 		it('Should have a default width of 200px', () => {
-			// Arrange and act
-			const element = createDOMElement(<Image />, 'img');
-
-			// Assert
-			expect(element).toHaveStyle('width: 200px');
+			stylingChecks('width: 200px', {});
 		});
 
 		it('Should have a custom width of 500px', () => {
-			// Arrange and act
-			const element = createDOMElement(<Image width="500px" />, 'img');
-
-			// Assert
-			expect(element).toHaveStyle('width: 500px');
+			stylingChecks('width: 500px', { width: '500px' });
 		});
 	});
 
 	describe('height', () => {
 		it('Should have a default height of 200px', () => {
-			// Arrange and act
-			const element = createDOMElement(<Image />, 'img');
-
-			// Assert
-			expect(element).toHaveStyle('height: 200px');
+			stylingChecks('height: 200px', {});
 		});
 
 		it('Should have a custom height of 500px', () => {
-			// Arrange and act
-			const element = createDOMElement(<Image height="500px" />, 'img');
-
-			// Assert
-			expect(element).toHaveStyle('height: 500px');
+			stylingChecks('height: 500px', { height: '500px' });
 		});
 	});
 
 	describe('border-radius', () => {
 		it('Sould have a default border-radius of 8px', () => {
-			// Arrange and act
-			const element = createDOMElement(<Image />, 'img');
-
-			// Assert
-			expect(element).toHaveStyle('border-radius: 8px;');
+			stylingChecks('border-radius: 8px', {});
 		});
 
-		it('Sould have a custom border-radius of 8px', () => {
-			// Arrange and act
-			const element = createDOMElement(<Image borderRadius="10px" />, 'img');
-
-			// Assert
-			expect(element).toHaveStyle('border-radius: 10px;');
+		it('Sould have a custom border-radius of 1rem', () => {
+			stylingChecks('border-radius: 1rem', { borderRadius: '1rem' });
 		});
 	});
 
 	describe('border', () => {
 		it('Should have a default border of transparent', () => {
-			// Arrange and act
-			const element = createDOMElement(<Image />, 'img');
-
-			// Assert
-			expect(element).toHaveStyle('border: transparent');
+			stylingChecks('border: transparent', {});
 		});
-		it('Should have a custom border of 1px solid black', () => {
-			// Arrange and act
-			const element = createDOMElement(<Image border="1px solid black" />, 'img');
 
-			// Assert
-			expect(element).toHaveStyle('border: 1px solid black');
+		it('Should have a custom border of 1px solid black', () => {
+			stylingChecks('border: 1px solid black', { border: '1px solid black' });
 		});
 	});
 
