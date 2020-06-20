@@ -7,13 +7,13 @@ import DefaultButton from './Button';
 import replaceSpacesWith from '../../utils/formatters/replaceSpacesWith';
 
 const Button = ({
-	textTransform,
+	transform,
 	content,
-	backgroundColour,
+	background,
 	border,
 	colour,
 	isDisabled,
-	hoverBackgroundColour,
+	hoverbackground,
 	borderRadius,
 	ariaLabel,
 	id,
@@ -21,12 +21,12 @@ const Button = ({
 	type
 }) => (
 	<DefaultButton
-		textTransform={textTransform}
-		backgroundColour={backgroundColour}
+		transform={transform}
+		background={background}
 		border={border}
 		colour={colour}
 		disabled={isDisabled}
-		hoverBackgroundColour={hoverBackgroundColour}
+		hoverbackground={hoverbackground}
 		borderRadius={borderRadius}
 		aria-label={replaceSpacesWith(ariaLabel, '-').toLowerCase()}
 		id={replaceSpacesWith(id, '-').toLowerCase()}
@@ -38,12 +38,12 @@ const Button = ({
 );
 
 Button.defaultProps = {
-	textTransform: 'uppercase',
+	transform: 'uppercase',
 	content: 'Default',
-	backgroundColour: 'transparent',
-	hoverBackgroundColour: '',
+	background: 'transparent',
+	hoverbackground: '',
 	border: '',
-	colour: 'black',
+	colour: '',
 	isDisabled: false,
 	borderRadius: '0 0 0 0',
 	ariaLabel: 'label',
@@ -53,7 +53,7 @@ Button.defaultProps = {
 };
 
 Button.propTypes = {
-	textTransform: PropTypes.oneOf([
+	transform: PropTypes.oneOf([
 		'none',
 		'capitalize',
 		'uppercase',
@@ -62,8 +62,8 @@ Button.propTypes = {
 		'inherit'
 	]),
 	content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-	backgroundColour: PropTypes.string,
-	hoverBackgroundColour: PropTypes.string,
+	background: PropTypes.string,
+	hoverbackground: PropTypes.string,
 	border: PropTypes.string,
 	colour: PropTypes.string,
 	isDisabled: PropTypes.bool,

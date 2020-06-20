@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Image from '../../Image';
 import Row from '../../Layouts/Row';
 import Column from '../../Layouts/Column';
-import Heading from '../../Headings';
+import Heading from '../../Heading';
 import Section from './Section';
 import { Container } from './PersonSidebar';
 import SocialLinks from '../../SocialLinks';

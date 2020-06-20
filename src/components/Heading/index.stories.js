@@ -13,7 +13,9 @@ export const CustomFontSize = () => <Preview content={<Heading size="4rem" />} /
 
 export const CustomText = () => <Preview content={<Heading text="Popular Movies" />} />;
 
+export const CustomColour = () => <Preview content={<Heading colour="red" />} />;
+
 export default {
 	component: Heading,
-	title: 'Headings'
+	title: 'Heading'
 };

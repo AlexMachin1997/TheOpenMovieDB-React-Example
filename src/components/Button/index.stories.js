@@ -16,11 +16,11 @@ export const Default = () => (
 		}
 	/>
 );
-export const CustomTextTransform = () => (
+export const Customtransform = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button textTransform="lowercase" />
+				<Button transform="lowercase" />
 			</div>
 		}
 	/>
@@ -30,7 +30,7 @@ export const CustomBackground = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button backgroundColour="secondary" />
+				<Button background="secondary" />
 			</div>
 		}
 	/>
@@ -46,11 +46,11 @@ export const CustomBorder = () => (
 	/>
 );
 
-export const CustomTextColour = () => (
+export const CustomColour = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button textColour="secondary" content="Join Our Community" />
+				<Button colour="red" content="Join Our Community" />
 			</div>
 		}
 	/>
@@ -95,11 +95,11 @@ export const CustomIsDisabled = () => (
 	/>
 );
 
-export const CustomHoverBackgroundColour = () => (
+export const CustomHoverbackground = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button hoverBackgroundColour="secondary" />
+				<Button hoverbackground="secondary" />
 			</div>
 		}
 	/>
@@ -109,7 +109,7 @@ export const CustomBorderRadius = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button borderRadius="0.5rem" backgroundColour="secondary" />
+				<Button borderRadius="0.5rem" background="secondary" />
 			</div>
 		}
 	/>

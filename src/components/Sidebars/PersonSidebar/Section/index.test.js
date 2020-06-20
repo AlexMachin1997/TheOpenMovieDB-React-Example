@@ -35,15 +35,6 @@ describe('Section tests', () => {
 			expect(element).toBeTruthy();
 		});
 
-		it('Should return custom JSX', () => {
-			// Arrange and act
-			const element = createDOMElement(<Section content={<p>Title</p>} />, '#title div');
-
-			// Assert
-			expect(element.textContent).toBe('Title');
-			expect(element).toBeTruthy();
-		});
-
 		it('Should return custom text', () => {
 			// Arrange and act
 			const element = createDOMElement(<Section title="Title" />, '#Title div');

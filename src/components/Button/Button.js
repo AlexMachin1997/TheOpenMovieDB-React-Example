@@ -3,17 +3,18 @@ import generateColours from '../../utils/theming/generateColours';
 
 const Button = styled.button`
 	width: 100%;
-	text-transform: ${(props) => props.textTransform};
+	text-transform: ${(props) => props.transform};
 	font-weight: bold;
 	font-size: 1.3rem;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 8px 16px;
+	padding: 0.5rem 1rem;
 	border: ${(props) => (props.border !== '' ? props.border : 'none')};
-	background-color: ${(props) => generateColours(props.theme, props.backgroundColour)};
-	color: ${(props) => generateColours(props.theme, props.colour)};
+	background-color: ${(props) => generateColours(props.theme, props.background)};
+	color: ${(props) =>
+		props.colour !== '' ? generateColours(props.theme, props.colour) : props.theme.textColour};
 	transition: 0.6s;
 	outline: transparent;
 	border-radius: ${(props) => props.borderRadius};
@@ -23,11 +24,11 @@ const Button = styled.button`
 	&:active {
 		outline: transparent;
 		background-color: ${(props) => {
-			if (props.hoverBackgroundColour === '') {
+			if (props.hoverbackground === '') {
 				return props.background;
 			}
 
-			return generateColours(props.theme, props.hoverBackgroundColour, props.hoverBackgroundColour);
+			return generateColours(props.theme, props.hoverbackground, props.hoverbackground);
 		}};
 	}
 

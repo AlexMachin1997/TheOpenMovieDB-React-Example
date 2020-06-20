@@ -1,5 +1,4 @@
 import React from 'react';
-import { render } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { axe } from 'jest-axe';
 
@@ -69,13 +68,17 @@ describe('Heading tests', () => {
 		});
 	});
 
-	describe('Theming (Dark/Light modes)', () => {
-		it('The font colour should be white', () => {
+	describe('colour', () => {
+		it('Should return the default colour (LightTheme)', () => {
 			stylingCheck('color: black', {}, lightTheme);
 		});
 
-		it('The font colour should be black', () => {
+		it('Should return the default colour (DarkTheme)', () => {
 			stylingCheck('color: white', {}, darkTheme);
+		});
+
+		it('Should return the custom colour', () => {
+			stylingCheck('color: red', { colour: 'red' });
 		});
 	});
 
@@ -88,7 +91,6 @@ describe('Heading tests', () => {
 			);
 
 			// Assert
-
 			const result = await axe(element);
 
 			expect(result).toHaveNoViolations();

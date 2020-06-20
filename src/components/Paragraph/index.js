@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ParagraphComponent from './Paragraph';
 
 const Paragraph = ({ weight, height, size, text, colour }) => (
-	<ParagraphComponent fontWeight={weight} lineHeight={height} fontSize={size} textColour={colour}>
+	<ParagraphComponent fontWeight={weight} lineHeight={height} fontSize={size} colour={colour}>
 		{text}
 	</ParagraphComponent>
 );

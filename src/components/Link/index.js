@@ -8,7 +8,7 @@ const LinkComponent = ({ href, newTab, content, colour, label }) => (
 	<Link
 		href={href}
 		target={newTab === true ? '_blank' : '_self'}
-		textColour={colour}
+		colour={colour}
 		aria-label={replaceSpacesWith(label, '-')}
 	>
 		{content}

@@ -7,7 +7,7 @@ const Paragraph = styled.p`
 	font-size: ${(props) => props.fontSize};
 	margin: 0;
 	padding: 0;
-	color: ${(props) => (props.textColour === '' ? props.theme.textColour : props.textColour)};
+	color: ${(props) => (props.colour === '' ? props.theme.textColour : props.colour)};
 `;
 
 export default Paragraph;
