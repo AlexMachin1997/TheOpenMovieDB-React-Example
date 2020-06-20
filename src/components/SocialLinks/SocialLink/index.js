@@ -20,11 +20,11 @@ SocialLink.defaultProps = {
 	newTab: true,
 	content: 'Default link text',
 	link: 'https://www.facebook.com/',
-	label: 'Facebook Social Link" '
+	label: 'Facebook Social Link'
 };
 
 SocialLink.propTypes = {
-	content: PropTypes.object,
+	content: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
 	link: PropTypes.string,
 	display: PropTypes.bool,
 	newTab: PropTypes.bool,

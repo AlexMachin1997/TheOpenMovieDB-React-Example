@@ -12,12 +12,12 @@ const Button = styled.button`
 	justify-content: center;
 	padding: 8px 16px;
 	border: ${(props) => (props.border !== '' ? props.border : 'none')};
-	background-color: ${(props) =>
-		generateColours(props.theme, props.backgroundColour, props.backgroundColour)};
-	color: ${(props) => generateColours(props.theme, props.textColour, props.textColour)};
+	background-color: ${(props) => generateColours(props.theme, props.backgroundColour)};
+	color: ${(props) => generateColours(props.theme, props.colour)};
 	transition: 0.6s;
 	outline: transparent;
 	border-radius: ${(props) => props.borderRadius};
+	cursor: pointer;
 
 	&:hover,
 	&:active {

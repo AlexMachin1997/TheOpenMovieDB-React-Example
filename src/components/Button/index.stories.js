@@ -1,4 +1,5 @@
 import React from 'react';
+import { action } from '@storybook/addon-actions';
 
 import Button from './index';
 import Paragraph from '../Paragraph';
@@ -109,6 +110,46 @@ export const CustomBorderRadius = () => (
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
 				<Button borderRadius="0.5rem" backgroundColour="secondary" />
+			</div>
+		}
+	/>
+);
+
+export const CustomAriaLabel = () => (
+	<Preview
+		content={
+			<div style={{ width: '300px', border: '1px solid black' }}>
+				<Button ariaLabel="Submit" />
+			</div>
+		}
+	/>
+);
+
+export const CustomId = () => (
+	<Preview
+		content={
+			<div style={{ width: '300px', border: '1px solid black' }}>
+				<Button id="Custom ID" />
+			</div>
+		}
+	/>
+);
+
+export const CustomOnClick = () => (
+	<Preview
+		content={
+			<div style={{ width: '300px', border: '1px solid black' }}>
+				<Button onClick={action('Button clicked')} />
+			</div>
+		}
+	/>
+);
+
+export const CustomType = () => (
+	<Preview
+		content={
+			<div style={{ width: '300px', border: '1px solid black' }}>
+				<Button type="submit" />
 			</div>
 		}
 	/>

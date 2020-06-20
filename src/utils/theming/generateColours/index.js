@@ -1,5 +1,5 @@
-const generateColours = (theme, key, colour) => {
-	switch (key) {
+const generateColours = (theme, colour) => {
+	switch (colour) {
 		case 'primary': {
 			return theme.primary;
 		}
