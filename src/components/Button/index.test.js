@@ -15,11 +15,11 @@ const stylingChecks = (expectedResult, props, target = 'button') => {
 
 describe('Button tests', () => {
 	describe('textTransform', () => {
-		it('The default textTransform should be uppercase', () => {
+		it('Should return the default textTransform', () => {
 			stylingChecks('text-transform: uppercase', {});
 		});
 
-		it('The custom textTransform should be lowercase', () => {
+		it('Should retuern the custom textTransform', () => {
 			stylingChecks('text-transform: lowercase', { textTransform: 'lowercase' });
 		});
 	});
