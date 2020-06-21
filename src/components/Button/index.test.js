@@ -158,10 +158,12 @@ describe('Button tests', () => {
 
 	describe('Accessability test', () => {
 		it('No violations should be present', async () => {
-			const element = createDOMElement(<Button />, 'button');
 
+			// Arrange and act
+			const element = createDOMElement(<Button />, 'button');
 			const result = await axe(element);
 
+			// Assert
 			expect(result).toHaveNoViolations();
 		});
 	});
