@@ -158,7 +158,6 @@ describe('Button tests', () => {
 
 	describe('Accessability test', () => {
 		it('No violations should be present', async () => {
-
 			// Arrange and act
 			const element = createDOMElement(<Button />, 'button');
 			const result = await axe(element);
