@@ -1,0 +1,16 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"VisualStudioExptTeam.vscodeintellicode",
+		"christian-kohler.npm-intellisense",
+		"letrieu.expand-region",
+		"formulahendry.auto-rename-tag",
+		"christian-kohler.path-intellisense",
+		"2gua.rainbow-brackets",
+		"PKief.material-icon-theme",
+		"orta.vscode-jest",
+		"equimper.react-native-react-redux",
+		"kumar-harsh.graphql-for-vscode"
+	]
+}
