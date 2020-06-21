@@ -7,12 +7,7 @@ const Paragraph = styled.p`
 	font-size: ${(props) => props.fontSize};
 	margin: 0;
 	padding: 0;
-	color: ${(props) => (props.textColour === '' ? props.theme.textColour : props.textColour)};
-`;
-
-export const StoryPreview = styled.div`
-	background: #f0f2f5;
-	padding: 1rem;
+	color: ${(props) => (props.colour === '' ? props.theme.textColour : props.colour)};
 `;
 
 export default Paragraph;

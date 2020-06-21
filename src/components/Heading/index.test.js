@@ -3,23 +3,23 @@ import { ThemeProvider } from 'styled-components';
 import { axe } from 'jest-axe';
 
 import { darkTheme, lightTheme } from '../theme';
-import Paragraph from './index';
+import Heading from './index';
 import createDOMElement from '../../utils/testUtils/createDOMElement';
 
-const stylingCheck = (expectedResult, props, target = 'p', theme = lightTheme) => {
+const stylingCheck = (expectedResult, props, theme = lightTheme) => {
 	// Arrange and act
 	const element = createDOMElement(
 		<ThemeProvider theme={theme}>
-			<Paragraph {...props} />
+			<Heading {...props} />
 		</ThemeProvider>,
-		target
+		'h1'
 	);
 
 	// Assert
 	expect(element).toHaveStyle(expectedResult);
 };
 
-describe('Paragraph tests', () => {
+describe('Heading tests', () => {
 	describe('weight', () => {
 		it('Should have default font-weight of 500', () => {
 			stylingCheck('font-weight: 500', {});
@@ -42,19 +42,19 @@ describe('Paragraph tests', () => {
 
 	describe('text', () => {
 		it('Should return the default text', () => {
-			// Assert and act
-			const element = createDOMElement(<Paragraph />, 'p');
+			// Arrange and act
+			const element = createDOMElement(<Heading />, 'h1');
 
 			// Assert
-			expect(element.textContent).toBe('Default text');
+			expect(element.innerHTML).toBe('Default text');
 		});
 
 		it('Should return the custom text', () => {
-			// Assert and act
-			const element = createDOMElement(<Paragraph text="Custom" />, 'p');
+			// Arrange and act
+			const element = createDOMElement(<Heading text="Custom Text" />, 'h1');
 
 			// Assert
-			expect(element.textContent).toBe('Custom');
+			expect(element.innerHTML).toBe('Custom Text');
 		});
 	});
 
@@ -69,22 +69,28 @@ describe('Paragraph tests', () => {
 	});
 
 	describe('colour', () => {
-		it('Should return the light mode default colour', () => {
-			stylingCheck('color: black', {}, 'p', lightTheme);
+		it('Should return the default colour (LightTheme)', () => {
+			stylingCheck('color: black', {}, lightTheme);
 		});
 
-		it('Should return the dark mode default colour', () => {
-			stylingCheck('color: white', {}, 'p', darkTheme);
+		it('Should return the default colour (DarkTheme)', () => {
+			stylingCheck('color: white', {}, darkTheme);
+		});
+
+		it('Should return the custom colour', () => {
+			stylingCheck('color: red', { colour: 'red' });
 		});
 	});
 
 	describe('Accessability test', () => {
 		it('No violations should be present', async () => {
+			// Arrange and act
 			const element = createDOMElement(
-				<Paragraph text="Test" weight="bolder" height={1} size="1rem" colour="red" />,
-				'p'
+				<Heading text="a11y" size="2rem" weight="bold" height={1} />,
+				'h1'
 			);
 
+			// Assert
 			const result = await axe(element);
 
 			expect(result).toHaveNoViolations();

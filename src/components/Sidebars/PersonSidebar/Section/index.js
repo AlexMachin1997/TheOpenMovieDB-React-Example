@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Heading from '../../../Headings';
+import Heading from '../../../Heading';
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
 /*

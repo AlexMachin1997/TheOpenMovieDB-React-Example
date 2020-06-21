@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { KeyboardArrowRight, KeyboardArrowDown } from 'styled-icons/material-rounded';
 
 import { FilterActionContainer, FilterActionButton, FilterActionDropdown } from './Action';
-import Heading from '../../../Headings';
+import Heading from '../../../Heading';
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
 const FilterAction = ({ title, onClick, content, isToggled }) => (

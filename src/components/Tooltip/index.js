@@ -5,7 +5,7 @@ import { Tooltip, TooltipText } from './Tooltip';
 import replaceSpacesWith from '../../utils/formatters/replaceSpacesWith';
 
 const TooltipComponent = ({ content, tooltipText }) => (
-	<Tooltip id={replaceSpacesWith(tooltipText, '-')}>
+	<Tooltip id={replaceSpacesWith(tooltipText, '-').toLowerCase()}>
 		<div>{content}</div>
 		<TooltipText>{tooltipText}</TooltipText>
 	</Tooltip>
