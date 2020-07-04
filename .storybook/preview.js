@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Normalize from '../src/components/Normalize';
+
 // Storybook modules
 import { addDecorator } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
@@ -28,4 +30,9 @@ addDecorator(withKnobs);
 addDecorator(withA11y);
 
 // Provides a global wrapper
-addDecorator((storyFn) => <ThemeProvider theme={lightTheme}>{storyFn()}</ThemeProvider>);
+addDecorator((storyFn) => (
+	<>
+		<Normalize />
+		<ThemeProvider theme={lightTheme}>{storyFn()}</ThemeProvider>
+	</>
+));
