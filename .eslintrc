@@ -30,7 +30,11 @@
 		"import/no-extraneous-dependencies": [
 			"error",
 			{
-				"devDependencies": [".storybook/**", "./src/components/**/*.stories.js", "**/*.test.js"]
+				"devDependencies": [
+					".storybook/**",
+					"./src/components/**/*.stories.js",
+					"**/*.test.js"
+				]
 			}
 		],
 		"no-debugger": 0,
@@ -100,13 +104,6 @@
 			{
 				"avoidEscape": true,
 				"allowTemplateLiterals": true
-			}
-		],
-		"prettier/prettier": [
-			"error",
-			{
-				"singleQuote": true,
-				"endOfLine": "auto"
 			}
 		],
 		"react-hooks/rules-of-hooks": "error",

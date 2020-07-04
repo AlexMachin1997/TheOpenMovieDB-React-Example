@@ -1,11 +1,11 @@
 {
 	"name": "theopenmoviedb-react-example",
 	"private": true,
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"main": "index.js",
 	"description": "A Progressive Web Application (PWA) to allow users to quickly search for movies, tv shows and various celebrities.",
 	"author": "Alex Machin",
-	"license": "ISC",
+	"license": "MIT",
 	"keywords": [
 		"Testing Library",
 		"Jest",
@@ -44,6 +44,7 @@
 	},
 	"dependencies": {
 		"@apollo/react-hooks": "^3.1.4",
+		"@types/react": "^16.9.41",
 		"apollo-cache-inmemory": "^1.6.5",
 		"apollo-client": "^2.6.8",
 		"apollo-link": "^1.2.14",
@@ -99,5 +100,9 @@
 			"last 1 firefox version",
 			"last 1 safari version"
 		]
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example.git"
 	}
 }
