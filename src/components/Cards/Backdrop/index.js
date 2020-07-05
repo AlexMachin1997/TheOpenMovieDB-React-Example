@@ -21,7 +21,7 @@ const Backdrop = ({ title, releaseDate, rating, img, onClick }) => (
 		/>
 		<ContentContainer id={`${replacesSpacesWith(title, '-')}-content`}>
 			<RatingContainer id={`${replacesSpacesWith(title, '-')}-rating`}>
-				<Rating percentage={rating} sqSize={50} strokeWidth={5} />
+				<Rating percentage={rating} size={50} strokeWidth={5} />
 			</RatingContainer>
 			<CardInformation id={`${replacesSpacesWith(title, '-')}-information`}>
 				<Heading type="h1" text={title} size="1.2rem" weight="bolder" />
@@ -34,7 +34,7 @@ const Backdrop = ({ title, releaseDate, rating, img, onClick }) => (
 Backdrop.defaultProps = {
 	title: 'Example title',
 	releaseDate: 'September 17th, 2020',
-	rating: 59,
+	rating: 50,
 	img: 'https://via.placeholder.com/468x60?text=Default+Card+Image',
 	onClick: () => false
 };
