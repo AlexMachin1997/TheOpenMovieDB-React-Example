@@ -29,9 +29,9 @@ const DesktopPersonSidebar = ({
 				<div style={{ marginBottom: '1rem' }}>
 					<Image
 						src={actorImage}
-						width="308px"
-						height="462px"
-						borderRadius="1rem"
+						width='308px'
+						height='462px'
+						borderRadius='1rem'
 						alt={actorName}
 						label={`A picture of ${actorName}`}
 					/>
@@ -43,17 +43,17 @@ const DesktopPersonSidebar = ({
 					homepageLink={homepageLink}
 					name={actorName}
 				/>
-				<Heading type="h1" size="2rem" text="Personal Info" weight="bold" />
-				<Section title="Known For" content={knownFor} display={knownFor.length !== 0} />
-				<Section title="Known Credits" content={knownCredits} display={knownCredits !== 0} />
-				<Section title="Gender" content={gender} display={gender.length !== 0} />
-				<Section title="Birthday" content={birthday} display={birthday.length !== 0} />
+				<Heading type='h1' size='2rem' text='Personal Info' weight='bold' />
+				<Section title='Known For' content={knownFor} display={knownFor.length !== 0} />
+				<Section title='Known Credits' content={knownCredits} display={knownCredits !== 0} />
+				<Section title='Gender' content={gender} display={gender.length !== 0} />
+				<Section title='Birthday' content={birthday} display={birthday.length !== 0} />
 				<Section
-					title="Place of Birth"
+					title='Place of Birth'
 					content={placeOfBirth}
 					display={placeOfBirth.length !== 0}
 				/>
-				<Section title="Known as" content={knownAs} display={knownAs.length !== 0} />
+				<Section title='Known as' content={knownAs} display={knownAs.length !== 0} />
 			</Column>
 		</Row>
 	</Container>

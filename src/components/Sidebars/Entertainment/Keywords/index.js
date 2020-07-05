@@ -6,7 +6,7 @@ import Row from '../../../Layouts/Row';
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
 const Keywords = ({ keywords, onClick }) => (
-	<div id="Keywords">
+	<div id='Keywords'>
 		<Row>
 			{keywords.map((keyword, index) => (
 				<Keyword key={index} onClick={onClick} id={replaceSpacesWith(keyword, '-')}>

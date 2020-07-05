@@ -10,7 +10,7 @@ const Section = ({ content, title, display }) => {
 
 	return (
 		<Container id={replaceSpacesWith(title, '-')}>
-			<Heading type="h3" size="0.8rem" weight="bolder" text={title} />
+			<Heading type='h3' size='0.8rem' weight='bolder' text={title} />
 			<div>{content}</div>
 		</Container>
 	);

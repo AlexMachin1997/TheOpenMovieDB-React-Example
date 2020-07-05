@@ -25,17 +25,17 @@ const Section = ({ title, content, display }) => {
 	if (Array.isArray(content) === true) {
 		contentElement = content.map((data, index) => (
 			<div style={{ marginBottom: '1rem' }} key={index}>
-				<Heading type="h3" text={data} weight="bold" height={1} size="1.4rem" />
+				<Heading type='h3' text={data} weight='bold' height={1} size='1.4rem' />
 			</div>
 		));
 	} else {
-		contentElement = <Heading type="h3" text={content} weight="bold" height={1} size="1.4rem" />;
+		contentElement = <Heading type='h3' text={content} weight='bold' height={1} size='1.4rem' />;
 	}
 
 	return (
 		<div style={{ margin: '1rem 0' }} id={replaceSpacesWith(title, '-')}>
-			<Heading type="h2" text={title} weight="bold" height={1} size="1.4rem" />
-			<div id="content">{contentElement}</div>
+			<Heading type='h2' text={title} weight='bold' height={1} size='1.4rem' />
+			<div id='content'>{contentElement}</div>
 		</div>
 	);
 };

@@ -11,13 +11,13 @@ const DiscoverSidebar = () => {
 	return (
 		<Container>
 			<FilterAction
-				title="Sort"
+				title='Sort'
 				onClick={() => setSortByVisibility(!sortByVisibility)}
 				content={<p>Sort</p>}
 				isToggled={sortByVisibility}
 			/>
 			<FilterAction
-				title="Filters"
+				title='Filters'
 				onClick={() => setFiltersVisibility(!filtersVisibility)}
 				content={<p>Filtering</p>}
 				isToggled={filtersVisibility}
@@ -30,7 +30,7 @@ const DiscoverSidebar = () => {
 						textAlign: 'center',
 						width: '100%'
 					}}
-					type="button"
+					type='button'
 				>
 					Search
 				</button>

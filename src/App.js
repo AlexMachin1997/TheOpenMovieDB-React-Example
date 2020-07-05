@@ -43,79 +43,79 @@ const App = () => {
 		<ApolloProvider client={ApolloClient}>
 			<Suspense fallback={<Loader />}>
 				<Switch>
-					<Route path="/" exact>
+					<Route path='/' exact>
 						<Homepage />
 					</Route>
 
-					<Route path="/movies/:id" exact>
+					<Route path='/movies/:id' exact>
 						<SingleMovie />
 					</Route>
 
-					<Route path="/movies/popular" exact>
+					<Route path='/movies/popular' exact>
 						<PopularMovies />
 					</Route>
 
-					<Route path="/movies/now-playing" exact>
+					<Route path='/movies/now-playing' exact>
 						<NowPlayingMovies />
 					</Route>
 
-					<Route path="/movies/upcoming" exact>
+					<Route path='/movies/upcoming' exact>
 						<UpcomingMovies />
 					</Route>
 
-					<Route path="/movies/top-rated" exact>
+					<Route path='/movies/top-rated' exact>
 						<TopRatedMovies />
 					</Route>
 
-					<Route path="/show/:id" exact>
+					<Route path='/show/:id' exact>
 						<SingleShow />
 					</Route>
 
-					<Route path="/shows/popular" exact>
+					<Route path='/shows/popular' exact>
 						<PopularShows />
 					</Route>
 
-					<Route path="/shows/airing-today" exact>
+					<Route path='/shows/airing-today' exact>
 						<AiringToday />
 					</Route>
 
-					<Route path="/shows/on-tv" exact>
+					<Route path='/shows/on-tv' exact>
 						<OnTV />
 					</Route>
 
-					<Route path="/shows/top-rated" exact>
+					<Route path='/shows/top-rated' exact>
 						<TopRatedShows />
 					</Route>
 
-					<Route path="/people/popular" exact>
+					<Route path='/people/popular' exact>
 						<PopularPeople />
 					</Route>
 
-					<Route path="/people/:id" exact>
+					<Route path='/people/:id' exact>
 						<SinglePerson />
 					</Route>
 
-					<Route path="/login" exact>
+					<Route path='/login' exact>
 						<Login />
 					</Route>
 
-					<Route path="/register" exact>
+					<Route path='/register' exact>
 						<Register />
 					</Route>
 
-					<Route path="/forgot" exact>
+					<Route path='/forgot' exact>
 						<ForgotPassword />
 					</Route>
 
-					<Route path="/reset-password" exact>
+					<Route path='/reset-password' exact>
 						<ResetPassword />
 					</Route>
 
-					<Route path="/account" exact>
+					<Route path='/account' exact>
 						<Account />
 					</Route>
 
-					<Route path="/search" exact>
+					<Route path='/search' exact>
 						<Search />
 					</Route>
 

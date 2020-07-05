@@ -30,11 +30,7 @@
 		"import/no-extraneous-dependencies": [
 			"error",
 			{
-				"devDependencies": [
-					".storybook/**",
-					"./src/components/**/*.stories.js",
-					"**/*.test.js"
-				]
+				"devDependencies": [".storybook/**", "./src/components/**/*.stories.js", "**/*.test.js"]
 			}
 		],
 		"no-debugger": 0,
@@ -106,7 +102,15 @@
 				"allowTemplateLiterals": true
 			}
 		],
+		"prettier/prettier": [
+			"error",
+			{
+				"singleQuote": true,
+				"endOfLine": "auto"
+			}
+		],
 		"react-hooks/rules-of-hooks": "error",
-		"react-hooks/exhaustive-deps": "error"
+		"react-hooks/exhaustive-deps": "error",
+		"jsx-quotes": ["error", "prefer-single"]
 	}
 }

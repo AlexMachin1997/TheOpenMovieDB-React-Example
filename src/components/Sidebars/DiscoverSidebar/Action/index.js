@@ -10,8 +10,8 @@ import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 const FilterAction = ({ title, onClick, content, isToggled }) => (
 	<FilterActionContainer id={replaceSpacesWith(title, '-')}>
 		<FilterActionButton isToggled={isToggled} onClick={onClick}>
-			<Heading type="h3" weight="bold" height={1} size="1.5rem" text={title} />
-			{isToggled === true ? <KeyboardArrowDown size="18" /> : <KeyboardArrowRight size="18" />}
+			<Heading type='h3' weight='bold' height={1} size='1.5rem' text={title} />
+			{isToggled === true ? <KeyboardArrowDown size='18' /> : <KeyboardArrowRight size='18' />}
 		</FilterActionButton>
 		<FilterActionDropdown
 			isToggled={isToggled}

@@ -31,10 +31,10 @@ const Rating = ({ size, strokeWidth, percentage }) => {
 				rating={percentage}
 			/>
 			<CircleText
-				x="50%" // Defines the x coordinate of the starting point of the text baseline.
-				y="50%" // Defines the y coordinate of the starting point of the text baseline.
-				dy=".3em" // Shifts the text position vertically from a previous text element.
-				textAnchor="middle" // Aligns the text
+				x='50%' // Defines the x coordinate of the starting point of the text baseline.
+				y='50%' // Defines the y coordinate of the starting point of the text baseline.
+				dy='.3em' // Shifts the text position vertically from a previous text element.
+				textAnchor='middle' // Aligns the text
 			>
 				{`${percentage}%`}
 			</CircleText>

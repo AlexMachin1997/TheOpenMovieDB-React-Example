@@ -29,10 +29,10 @@ const Image = ({ width, height, borderRadius, border, alt, label, src }) => {
 			border={border}
 			width={width}
 			height={height}
-			loading="lazy"
+			loading='lazy'
 			alt={error === true ? 'Failed to load the image, this is a fallback' : alt}
 			onError={() => setError(true)}
-			decoding="async"
+			decoding='async'
 			aria-label={
 				error === true
 					? replaceSpacesWith('An image in the error state', '-')
