@@ -19,13 +19,13 @@ const Section = ({ content, title, display }) => {
 Section.defaultProps = {
 	display: true,
 	content: 'Example content',
-	title: 'title'
+	title: 'title',
 };
 
 Section.propTypes = {
 	content: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
 	title: PropTypes.string,
-	display: PropTypes.bool
+	display: PropTypes.bool,
 };
 
 export default Section;

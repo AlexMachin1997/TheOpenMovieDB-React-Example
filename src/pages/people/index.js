@@ -7,7 +7,7 @@ import Loader from '../../components/loader';
 
 const People = () => {
 	const { loading, error, data } = useQuery(PopularPeopleQuery, {
-		displayName: 'Popular people query'
+		displayName: 'Popular people query',
 	});
 
 	if (loading) return <Loader />;

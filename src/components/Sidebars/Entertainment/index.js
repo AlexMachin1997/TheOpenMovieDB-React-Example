@@ -22,7 +22,7 @@ const Entertainment = ({
 	revenue,
 	networkImage,
 	entertainmentType,
-	entertainmentName
+	entertainmentName,
 }) => (
 	<Row>
 		<Column>
@@ -105,7 +105,7 @@ Entertainment.propTypes = {
 	revenue: PropTypes.string,
 	networkImage: PropTypes.string,
 	entertainmentType: PropTypes.string,
-	entertainmentName: PropTypes.string
+	entertainmentName: PropTypes.string,
 };
 
 Entertainment.defaultProps = {
@@ -121,7 +121,7 @@ Entertainment.defaultProps = {
 	revenue: '£100,000,000',
 	entertainmentType: 'tv',
 	networkImage: 'https://via.placeholder.com/200x200?text=Default+Image',
-	entertainmentName: ''
+	entertainmentName: '',
 };
 
 export default Entertainment;

@@ -63,7 +63,7 @@ Heading.defaultProps = {
 	height: 1,
 	text: 'Default text',
 	size: '1rem',
-	colour: ''
+	colour: '',
 };
 
 Heading.propTypes = {
@@ -72,7 +72,7 @@ Heading.propTypes = {
 	size: PropTypes.string,
 	text: PropTypes.string,
 	type: PropTypes.string,
-	colour: PropTypes.string
+	colour: PropTypes.string,
 };
 
 export default Heading;

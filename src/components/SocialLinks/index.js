@@ -50,7 +50,7 @@ SocialLinks.defaultProps = {
 	twitterLink: '',
 	instagramLink: '',
 	homepageLink: '',
-	name: ''
+	name: '',
 };
 
 SocialLinks.propTypes = {
@@ -58,7 +58,7 @@ SocialLinks.propTypes = {
 	twitterLink: propTypes.string,
 	instagramLink: propTypes.string,
 	homepageLink: propTypes.string,
-	name: propTypes.string
+	name: propTypes.string,
 };
 
 export default SocialLinks;

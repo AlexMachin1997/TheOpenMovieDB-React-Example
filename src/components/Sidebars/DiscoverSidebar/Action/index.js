@@ -26,14 +26,14 @@ FilterAction.defaultProps = {
 	title: 'title',
 	onClick: () => console.log('Action clicked'),
 	content: <p>Default Content</p>,
-	isToggled: false
+	isToggled: false,
 };
 
 FilterAction.propTypes = {
 	title: PropTypes.string,
 	onClick: PropTypes.func,
 	content: PropTypes.object,
-	isToggled: PropTypes.bool
+	isToggled: PropTypes.bool,
 };
 
 export default FilterAction;

@@ -52,7 +52,7 @@ Image.defaultProps = {
 	border: 'transparent',
 	alt: 'Default',
 	label: 'Default',
-	src: 'https://via.placeholder.com/200x200?text=Default+Image'
+	src: 'https://via.placeholder.com/200x200?text=Default+Image',
 };
 
 Image.propTypes = {
@@ -62,7 +62,7 @@ Image.propTypes = {
 	border: PropTypes.string,
 	alt: PropTypes.string,
 	label: PropTypes.string,
-	src: PropTypes.string
+	src: PropTypes.string,
 };
 
 export default Image;

@@ -19,12 +19,12 @@ const Keywords = ({ keywords, onClick }) => (
 
 Keywords.defaultProps = {
 	onClick: () => console.log('Keyword action'),
-	keywords: ['Thriller']
+	keywords: ['Thriller'],
 };
 
 Keywords.propTypes = {
 	keywords: PropTypes.array,
-	onClick: PropTypes.func
+	onClick: PropTypes.func,
 };
 
 export default Keywords;

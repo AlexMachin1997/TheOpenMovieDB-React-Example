@@ -20,7 +20,7 @@ SocialLink.defaultProps = {
 	newTab: true,
 	content: 'Default link text',
 	link: 'https://www.facebook.com/',
-	label: 'Facebook Social Link'
+	label: 'Facebook Social Link',
 };
 
 SocialLink.propTypes = {
@@ -28,7 +28,7 @@ SocialLink.propTypes = {
 	link: PropTypes.string,
 	display: PropTypes.bool,
 	newTab: PropTypes.bool,
-	label: PropTypes.string
+	label: PropTypes.string,
 };
 
 export default SocialLink;

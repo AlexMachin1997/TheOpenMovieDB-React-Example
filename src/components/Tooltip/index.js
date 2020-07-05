@@ -13,12 +13,12 @@ const TooltipComponent = ({ content, tooltipText }) => (
 
 TooltipComponent.defaultProps = {
 	content: 'Tooltip title',
-	tooltipText: 'Tooltip content'
+	tooltipText: 'Tooltip content',
 };
 
 TooltipComponent.propTypes = {
 	content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-	tooltipText: PropTypes.string
+	tooltipText: PropTypes.string,
 };
 
 export default TooltipComponent;

@@ -7,7 +7,7 @@ import Loader from '../../components/loader';
 
 const AiringToday = () => {
 	const { loading, error, data } = useQuery(AiringTodayQuery, {
-		displayName: 'Airing today (show) query'
+		displayName: 'Airing today (show) query',
 	});
 
 	if (loading) return <Loader />;

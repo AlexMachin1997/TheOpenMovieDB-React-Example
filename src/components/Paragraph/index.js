@@ -14,7 +14,7 @@ Paragraph.defaultProps = {
 	height: 1,
 	text: 'Default text',
 	size: '1rem',
-	colour: ''
+	colour: '',
 };
 
 Paragraph.propTypes = {
@@ -22,7 +22,7 @@ Paragraph.propTypes = {
 	height: PropTypes.number,
 	size: PropTypes.string,
 	text: PropTypes.string,
-	colour: PropTypes.string
+	colour: PropTypes.string,
 };
 
 export default Paragraph;

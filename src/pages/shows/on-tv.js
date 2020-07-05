@@ -7,7 +7,7 @@ import Loader from '../../components/loader';
 
 const OnTv = () => {
 	const { loading, error, data } = useQuery(OnTvQuery, {
-		displayName: 'On tv query'
+		displayName: 'On tv query',
 	});
 
 	if (loading) return <Loader />;

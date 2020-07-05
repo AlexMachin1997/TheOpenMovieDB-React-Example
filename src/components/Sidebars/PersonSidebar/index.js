@@ -21,7 +21,7 @@ const DesktopPersonSidebar = ({
 	facebookLink,
 	twitterLink,
 	instagramLink,
-	homepageLink
+	homepageLink,
 }) => (
 	<Container>
 		<Row>
@@ -71,7 +71,7 @@ DesktopPersonSidebar.defaultProps = {
 	facebookLink: '',
 	twitterLink: '',
 	instagramLink: '',
-	homepageLink: ''
+	homepageLink: '',
 };
 
 DesktopPersonSidebar.propTypes = {
@@ -86,7 +86,7 @@ DesktopPersonSidebar.propTypes = {
 	facebookLink: PropTypes.string,
 	twitterLink: PropTypes.string,
 	instagramLink: PropTypes.string,
-	homepageLink: PropTypes.string
+	homepageLink: PropTypes.string,
 };
 
 export default DesktopPersonSidebar;

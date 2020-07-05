@@ -7,7 +7,7 @@ import Loader from '../../components/loader';
 
 const Upcoming = () => {
 	const { loading, error, data } = useQuery(UpcomingMoviesQuery, {
-		displayName: 'Upcoming movies query'
+		displayName: 'Upcoming movies query',
 	});
 
 	if (loading) return <Loader />;

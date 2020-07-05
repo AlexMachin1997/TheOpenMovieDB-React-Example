@@ -20,7 +20,7 @@ LinkComponent.defaultProps = {
 	content: 'Default link',
 	colour: '',
 	label: 'Default',
-	href: 'https://www.google.com/'
+	href: 'https://www.google.com/',
 };
 
 LinkComponent.propTypes = {
@@ -28,7 +28,7 @@ LinkComponent.propTypes = {
 	newTab: PropTypes.bool,
 	content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 	label: PropTypes.string,
-	colour: PropTypes.string
+	colour: PropTypes.string,
 };
 
 export default LinkComponent;

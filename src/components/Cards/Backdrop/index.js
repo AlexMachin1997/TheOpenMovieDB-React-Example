@@ -36,7 +36,7 @@ Backdrop.defaultProps = {
 	releaseDate: 'September 17th, 2020',
 	rating: 50,
 	img: 'https://image.tmdb.org/t/p/original/3lBDg3i6nn5R2NKFCJ6oKyUo2j5.jpg',
-	onClick: () => false
+	onClick: () => false,
 };
 
 Backdrop.propTypes = {
@@ -44,7 +44,7 @@ Backdrop.propTypes = {
 	releaseDate: PropTypes.string,
 	rating: PropTypes.number,
 	img: PropTypes.string,
-	onClick: PropTypes.func
+	onClick: PropTypes.func,
 };
 
 export default Backdrop;

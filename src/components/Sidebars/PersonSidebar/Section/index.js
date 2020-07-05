@@ -43,7 +43,7 @@ const Section = ({ title, content, display }) => {
 Section.defaultProps = {
 	title: 'title',
 	content: 'Default content',
-	display: true
+	display: true,
 };
 
 Section.propTypes = {
@@ -52,9 +52,9 @@ Section.propTypes = {
 		PropTypes.string,
 		PropTypes.object,
 		PropTypes.number,
-		PropTypes.array
+		PropTypes.array,
 	]),
-	display: PropTypes.bool
+	display: PropTypes.bool,
 };
 
 export default Section;

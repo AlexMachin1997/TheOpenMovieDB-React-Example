@@ -36,7 +36,7 @@ Poster.defaultProps = {
 	rating: 50,
 	img: 'https://image.tmdb.org/t/p/original/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg',
 	onClick: () => false,
-	hasInformation: true
+	hasInformation: true,
 };
 
 Poster.propTypes = {
@@ -45,7 +45,7 @@ Poster.propTypes = {
 	rating: PropTypes.number,
 	img: PropTypes.string,
 	onClick: PropTypes.func,
-	hasInformation: PropTypes.bool
+	hasInformation: PropTypes.bool,
 };
 
 export default Poster;

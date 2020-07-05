@@ -35,25 +35,25 @@ const base = styled.span`
 `;
 
 export const Heading1 = styled(base).attrs({
-	as: 'h1'
+	as: 'h1',
 })``;
 
 export const Heading2 = styled(base).attrs({
-	as: 'h2'
+	as: 'h2',
 })``;
 
 export const Heading3 = styled(base).attrs({
-	as: 'h3'
+	as: 'h3',
 })``;
 
 export const Heading4 = styled(base).attrs({
-	as: 'h4'
+	as: 'h4',
 })``;
 
 export const Heading5 = styled(base).attrs({
-	as: 'h5'
+	as: 'h5',
 })``;
 
 export const Heading6 = styled(base).attrs({
-	as: 'h6'
+	as: 'h6',
 })``;

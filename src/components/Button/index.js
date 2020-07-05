@@ -18,7 +18,7 @@ const Button = ({
 	ariaLabel,
 	id,
 	onClick,
-	type
+	type,
 }) => (
 	<DefaultButton
 		transform={transform}
@@ -49,7 +49,7 @@ Button.defaultProps = {
 	ariaLabel: 'label',
 	id: `button ${shortid.generate()}`,
 	onClick: () => false,
-	type: 'button'
+	type: 'button',
 };
 
 Button.propTypes = {
@@ -59,7 +59,7 @@ Button.propTypes = {
 		'uppercase',
 		'lowercase',
 		'initial',
-		'inherit'
+		'inherit',
 	]),
 	content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 	background: PropTypes.string,
@@ -71,7 +71,7 @@ Button.propTypes = {
 	ariaLabel: PropTypes.string,
 	id: PropTypes.string,
 	onClick: PropTypes.func,
-	type: PropTypes.oneOf(['button', 'reset', 'submit'])
+	type: PropTypes.oneOf(['button', 'reset', 'submit']),
 };
 
 export default Button;

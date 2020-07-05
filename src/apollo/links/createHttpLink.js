@@ -3,7 +3,7 @@ import settings from '../../settings.json';
 
 const createHttpLink = () => {
 	const httpLink = new HttpLink({
-		uri: settings.REACT_APP_APOLLO_CLIENT_URI
+		uri: settings.REACT_APP_APOLLO_CLIENT_URI,
 	});
 
 	return httpLink;

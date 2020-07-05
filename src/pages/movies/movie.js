@@ -10,8 +10,8 @@ const Single = () => {
 		displayName: 'Single movie query',
 		variables: {
 			search: 'birds-of-prey-and-the-fantabulous-emancipation-of-one-harley-quinn',
-			id: 495764
-		}
+			id: 495764,
+		},
 	});
 
 	if (loading) return <Loader />;

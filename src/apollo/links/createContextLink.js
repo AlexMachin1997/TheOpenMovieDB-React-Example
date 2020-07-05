@@ -6,8 +6,8 @@ const createContextLink = () => {
 			...rest,
 			headers: {
 				...headers,
-				Authorization: `bearer ${localStorage.getItem('token')}`
-			}
+				Authorization: `bearer ${localStorage.getItem('token')}`,
+			},
 		};
 		return context;
 	});

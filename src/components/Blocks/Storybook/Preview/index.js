@@ -9,12 +9,12 @@ const Preview = ({ content, background }) => (
 
 Preview.defaultProps = {
 	content: <p>Child element</p>,
-	background: '#f0f2f5'
+	background: '#f0f2f5',
 };
 
 Preview.propTypes = {
 	content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-	background: PropTypes.string
+	background: PropTypes.string,
 };
 
 export default Preview;

@@ -11,7 +11,3 @@ node_modules/*
 src/setupTests.js
 
 src/utils/testUtils/createDOMElement/index.js
-
-package-lock.json
-
-package.json
