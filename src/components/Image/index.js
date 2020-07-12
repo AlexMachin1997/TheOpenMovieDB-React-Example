@@ -38,9 +38,7 @@ const Image = ({ width, height, borderRadius, border, alt, label, src }) => {
 					? replaceSpacesWith('An image in the error state', '-')
 					: replaceSpacesWith(label, '-')
 			}
-			src={
-				error === true ? `https://via.placeholder.com/${width}x${height}?text=Default+Image` : src
-			}
+			src={error === true ? `https://via.placeholder.com/200x200?text=Default+Image` : src}
 		/>
 	);
 };

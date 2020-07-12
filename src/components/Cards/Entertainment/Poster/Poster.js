@@ -4,7 +4,7 @@ export const PosterContainer = styled.div`
 	border-radius: 1rem;
 	background: white;
 	margin: 1rem;
-	max-width: 208px;
+	max-width: 160px;
 	height: 100%;
 
 	&:hover {
@@ -12,9 +12,9 @@ export const PosterContainer = styled.div`
 	}
 `;
 
-export const PosterRatingContainer = styled.div`
+export const RatingContainer = styled.div`
 	position: absolute;
-	top: -25px;
+	top: -23px;
 	left: 10px;
 
 	text {
@@ -22,10 +22,10 @@ export const PosterRatingContainer = styled.div`
 	}
 `;
 
-export const PosterInformation = styled.div`
+export const ContentContainer = styled.div`
 	position: relative;
 	padding: 20px 10px 12px 10px;
 	height: 100%;
-	display: ${(props) => (props.display === true ? 'flex' : 'none')};
+	display: flex;
 	flex-direction: column;
 `;
