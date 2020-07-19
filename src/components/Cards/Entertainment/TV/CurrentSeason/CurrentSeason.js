@@ -26,7 +26,7 @@ export const CurrentSeasonContentContainer = styled.div`
 		overflow: hidden;
 	}
 
-	/* When no desktop show all avaliable lines (*/
+	/* When no desktop show all avaliable lines */
 	@media (min-width: 700px) {
 		p {
 			-webkit-line-clamp: 6;
