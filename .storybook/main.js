@@ -8,9 +8,9 @@ module.exports = {
 		{
 			name: '@storybook/addon-docs',
 			options: {
-				configureJSX: true
-			}
+				configureJSX: true,
+			},
 		},
-		'@storybook/addon-a11y/register'
-	]
+		'@storybook/addon-a11y/register',
+	],
 };

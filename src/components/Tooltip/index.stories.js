@@ -9,7 +9,7 @@ export const CustomContentWithText = () => (
 	<Preview
 		content={
 			<div style={{ marginTop: '1.5rem', marginLeft: '1rem' }}>
-				<Tooltip content="Facebook" />
+				<Tooltip content='Facebook' />
 			</div>
 		}
 	/>
@@ -31,7 +31,7 @@ export const CustomTooltipTextWithText = () => (
 	<Preview
 		content={
 			<div style={{ marginTop: '1.5rem', marginLeft: '1rem' }}>
-				<Tooltip tooltipText="Visit facebook" />
+				<Tooltip tooltipText='Visit facebook' />
 			</div>
 		}
 	/>
@@ -41,7 +41,7 @@ export const FacebookTooltip = () => (
 	<Preview
 		content={
 			<div style={{ marginTop: '1.5rem', marginLeft: '1rem' }}>
-				<Tooltip content="Facebook" tooltipText="Visit Facebook" />
+				<Tooltip content='Facebook' tooltipText='Visit Facebook' />
 			</div>
 		}
 	/>
@@ -49,5 +49,5 @@ export const FacebookTooltip = () => (
 
 export default {
 	component: Tooltip,
-	title: 'Tooltip'
+	title: 'Tooltip',
 };

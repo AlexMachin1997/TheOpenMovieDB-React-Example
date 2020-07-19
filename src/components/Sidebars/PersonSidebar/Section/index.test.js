@@ -17,7 +17,7 @@ describe('Section tests', () => {
 
 		it('Should return a custom title', () => {
 			// Arrange and act
-			const element = createDOMElement(<Section title="Custom title" />, '#Custom-title h2');
+			const element = createDOMElement(<Section title='Custom title' />, '#Custom-title h2');
 
 			// Assert
 			expect(element.textContent).toBe('Custom title');
@@ -37,7 +37,7 @@ describe('Section tests', () => {
 
 		it('Should return custom text', () => {
 			// Arrange and act
-			const element = createDOMElement(<Section title="Title" />, '#Title div');
+			const element = createDOMElement(<Section title='Title' />, '#Title div');
 
 			// Assert
 			expect(element.textContent).toBe('Default content');

@@ -15,7 +15,7 @@ const stylingCheck = (expectedResult, props, theme = lightTheme) => {
 		<ThemeProvider theme={theme}>
 			<Button {...props} />
 		</ThemeProvider>,
-		'button'
+		'button',
 	);
 
 	// Assert
@@ -44,7 +44,7 @@ describe('Button tests', () => {
 
 		it('Should return the custom text', () => {
 			// Arrange and act
-			const element = createDOMElement(<Button content="Custom Content" />, 'button');
+			const element = createDOMElement(<Button content='Custom Content' />, 'button');
 
 			// Assert
 			expect(element.innerHTML).toBe('Custom Content');
@@ -116,8 +116,8 @@ describe('Button tests', () => {
 
 		it('Should return the default ariaLabel', () => {
 			const element = createDOMElement(
-				<Button ariaLabel="Custom Label" />,
-				"button[aria-label='custom-label'"
+				<Button ariaLabel='Custom Label' />,
+				"button[aria-label='custom-label'",
 			);
 
 			expect(element).toBeTruthy();
@@ -149,7 +149,7 @@ describe('Button tests', () => {
 		});
 		it('The custom type for the button should be button', () => {
 			// Arrange and act
-			const element = createDOMElement(<Button type="submit" />, `button[type=submit]`);
+			const element = createDOMElement(<Button type='submit' />, `button[type=submit]`);
 
 			// Assert
 			expect(element).toBeTruthy();

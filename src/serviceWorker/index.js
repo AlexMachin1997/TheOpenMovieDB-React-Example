@@ -33,7 +33,7 @@ export const registerServiceWorker = () => {
 			const registration = await navigator.serviceWorker.register(
 				`${process.env.PUBLIC_URL}/sw.js`,
 
-				{ scope: '/' }
+				{ scope: '/' },
 			);
 
 			// Ensure the case when the updatefound event was missed is also handled by re-invoking the prompt when there's a waiting Service Worker
