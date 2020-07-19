@@ -5,6 +5,7 @@ export const PersonContainer = styled.div`
 	margin: 1rem;
 	max-width: 235px;
 	height: 100%;
+	width: 100%;
 
 	&:hover {
 		cursor: pointer;

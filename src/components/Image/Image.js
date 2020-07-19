@@ -7,7 +7,6 @@ const Image = styled.img`
 	border: ${(props) => props.border};
 
 	&:hover {
-		cursor: pointer;
 		outline: 0;
 	}
 `;

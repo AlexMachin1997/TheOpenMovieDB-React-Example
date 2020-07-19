@@ -10,6 +10,10 @@ export const PosterContainer = styled.div`
 	&:hover {
 		cursor: pointer;
 	}
+
+	@media (min-width: 700px) {
+		max-width: 210px;
+	}
 `;
 
 export const RatingContainer = styled.div`
@@ -19,6 +23,7 @@ export const RatingContainer = styled.div`
 
 	text {
 		font-size: 0.7rem;
+		font-weight: 600;
 	}
 `;
 
@@ -28,4 +33,18 @@ export const ContentContainer = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+
+	@media (min-width: 700px) {
+		h1 {
+			font-size: 1.1rem;
+		}
+
+		p {
+			font-size: 1rem;
+		}
+
+		p {
+			margin-top: 0.5rem;
+		}
+	}
 `;

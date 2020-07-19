@@ -5,6 +5,7 @@ export const KnownForContainer = styled.div`
 	background: white;
 	margin: 1rem;
 	max-width: 138px;
+	min-width: 138px;
 	height: 100%;
 
 	&:hover {

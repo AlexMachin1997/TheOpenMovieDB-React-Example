@@ -5,7 +5,7 @@ export const TopBilledContainer = styled.div`
 	background: white;
 	margin: 1rem;
 	max-width: 140px;
-	height: 100%;
+	min-width: 140px;
 	border: 0.5px solid lightgrey;
 
 	&:hover {

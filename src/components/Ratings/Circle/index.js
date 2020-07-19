@@ -45,7 +45,7 @@ const Rating = ({ size, strokeWidth, percentage }) => {
 Rating.defaultProps = {
 	size: 75,
 	strokeWidth: 7,
-	percentage: 75,
+	percentage: 0,
 };
 
 Rating.propTypes = {

@@ -25,10 +25,10 @@ const TopBilled = ({ actorName, characterName, img, onClick, entertainmentType, 
 
 		<ContentContainer id={generateComponentId(actorName, 'topbilled-card-content-container')}>
 			<Heading entertainmentType='h1' text={actorName} size='1rem' weight='bold' />
-			<Paragraph size='0.9rem' text={characterName} weight='lighter' colour='black' />
+			<Paragraph size='0.8rem' text={characterName} weight='lighter' colour='black' />
 			{entertainmentType === 'tv' && (
 				<Paragraph
-					size='0.9rem'
+					size='0.8rem'
 					text={`${episodeCount} episodes`}
 					weight='lighter'
 					colour='#C0C0C0'
@@ -41,7 +41,7 @@ const TopBilled = ({ actorName, characterName, img, onClick, entertainmentType, 
 TopBilled.defaultProps = {
 	actorName: 'Elizabeth Henstridge',
 	characterName: 'Jemma Simmons',
-	img: 'https://image.tmdb.org/t/p/w138_and_h175_face/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
+	img: 'https://image.tmdb.org/t/p/original/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
 	onClick: () => false,
 	entertainmentType: 'tv',
 	episodeCount: 136,

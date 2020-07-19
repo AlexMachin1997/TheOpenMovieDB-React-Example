@@ -8,30 +8,28 @@ import Row from '../../../Layouts/Row';
 
 export const Default = () => <Preview content={<PosterCard />} background='#F5F5F5' />;
 
-export const entertainmentName = () => (
-	<Preview content={<PosterCard entertainmentName='The Walking Dead' />} background='#F5F5F5' />
+export const Title = () => (
+	<Preview content={<PosterCard title='The Walking Dead' />} background='#F5F5F5' />
 );
 
-export const entertainmentReleaseDate = () => (
-	<Preview content={<PosterCard entertainmentReleaseDate='2010' />} background='#F5F5F5' />
+export const ReleaseDate = () => (
+	<Preview content={<PosterCard releaseDate='2010' />} background='#F5F5F5' />
 );
 
-export const entertainmentRating = () => (
-	<Preview content={<PosterCard entertainmentRating={75} />} background='#F5F5F5' />
-);
+export const Rating = () => <Preview content={<PosterCard rating={75} />} background='#F5F5F5' />;
 
-export const entertainmentImage = () => (
+export const image = () => (
 	<Preview
 		content={
-			<PosterCard entertainmentImage='https://image.tmdb.org/t/p/original/lAwLmgq1zy0xJnusszmvWTLjFlO.jpg' />
+			<PosterCard image='https://image.tmdb.org/t/p/original/lAwLmgq1zy0xJnusszmvWTLjFlO.jpg' />
 		}
 		background='#F5F5F5'
 	/>
 );
 
-export const entertainmentAction = () => (
+export const onClick = () => (
 	<Preview
-		content={<PosterCard entertainmentAction={action('Poster card has been clicked')} />}
+		content={<PosterCard onClick={action('Poster card has been clicked')} />}
 		background='#F5F5F5'
 	/>
 );
@@ -42,16 +40,16 @@ export const MultipleCards = () => (
 			<Row>
 				<Column autoWidth>
 					<PosterCard
-						entertainmentName='Westworld'
-						entertainmentImage='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-						entertainmentRating={75}
+						title='Westworld'
+						image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
+						rating={75}
 					/>
 				</Column>
 				<Column autoWidth>
 					<PosterCard
-						entertainmentName='The Walking Dead'
-						entertainmentImage='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-						entertainmentRating={25}
+						title='The Walking Dead'
+						image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
+						rating={25}
 					/>
 				</Column>
 			</Row>

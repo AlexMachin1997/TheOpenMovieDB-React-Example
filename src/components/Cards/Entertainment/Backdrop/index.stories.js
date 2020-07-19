@@ -8,29 +8,25 @@ import Row from '../../../Layouts/Row';
 
 export const Default = () => <Preview content={<BackdropCard />} background='#F5F5F5' />;
 
-export const entertainmentTitle = () => (
-	<Preview content={<BackdropCard entertainmentTitle='Dark' />} background='#F5F5F5' />
+export const Title = () => <Preview content={<BackdropCard title='Dark' />} background='#F5F5F5' />;
+
+export const ReleaseDate = () => (
+	<Preview content={<BackdropCard releaseDate='2020' />} background='#F5F5F5' />
 );
 
-export const entertainmentReleaseDate = () => (
-	<Preview content={<BackdropCard entertainmentReleaseDate='2020' />} background='#F5F5F5' />
-);
+export const Rating = () => <Preview content={<BackdropCard rating={75} />} background='#F5F5F5' />;
 
-export const entertainmentRating = () => (
-	<Preview content={<BackdropCard entertainmentRating={75} />} background='#F5F5F5' />
-);
-
-export const entertainmentImage = () => (
+export const Image = () => (
 	<Preview
 		content={
-			<BackdropCard entertainmentImage='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg' />
+			<BackdropCard image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg' />
 		}
 		background='#F5F5F5'
 	/>
 );
 
-export const entertainmentAction = () => (
-	<Preview content={<BackdropCard entertainmentAction={action('Card clicked')} />} />
+export const OnClick = () => (
+	<Preview content={<BackdropCard onClick={action('Card clicked')} />} />
 );
 
 export const MultipleBackdropCards = () => (
@@ -39,18 +35,18 @@ export const MultipleBackdropCards = () => (
 			<Row>
 				<Column>
 					<BackdropCard
-						entertainmentImage='https://image.tmdb.org/t/p/original/3lBDg3i6nn5R2NKFCJ6oKyUo2j5.jpg'
-						entertainmentTitle='Dark'
-						entertainmentReleaseDate='4th July 2020'
-						entertainmentRating={90}
+						image='https://image.tmdb.org/t/p/original/3lBDg3i6nn5R2NKFCJ6oKyUo2j5.jpg'
+						title='Dark'
+						releaseDate='4th July 2020'
+						rating={90}
 					/>
 				</Column>
 				<Column>
 					<BackdropCard
-						entertainmentImage='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-						entertainmentTitle='Supernatural'
-						entertainmentReleaseDate='4th July 2010'
-						entertainmentRating={50}
+						image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+						title='Supernatural'
+						releaseDate='4th July 2010'
+						rating={50}
 					/>
 				</Column>
 			</Row>
