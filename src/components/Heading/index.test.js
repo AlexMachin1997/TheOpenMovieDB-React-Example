@@ -12,7 +12,7 @@ const stylingCheck = (expectedResult, props, theme = lightTheme) => {
 		<ThemeProvider theme={theme}>
 			<Heading {...props} />
 		</ThemeProvider>,
-		'h1'
+		'h1',
 	);
 
 	// Assert
@@ -51,7 +51,7 @@ describe('Heading tests', () => {
 
 		it('Should return the custom text', () => {
 			// Arrange and act
-			const element = createDOMElement(<Heading text="Custom Text" />, 'h1');
+			const element = createDOMElement(<Heading text='Custom Text' />, 'h1');
 
 			// Assert
 			expect(element.innerHTML).toBe('Custom Text');
@@ -86,8 +86,8 @@ describe('Heading tests', () => {
 		it('No violations should be present', async () => {
 			// Arrange and act
 			const element = createDOMElement(
-				<Heading text="a11y" size="2rem" weight="bold" height={1} />,
-				'h1'
+				<Heading text='a11y' size='2rem' weight='bold' height={1} />,
+				'h1',
 			);
 
 			// Assert

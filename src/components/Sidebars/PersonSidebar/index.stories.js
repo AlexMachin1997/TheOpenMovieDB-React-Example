@@ -4,21 +4,21 @@ import PersonSidebar from './index';
 
 export const Default = () => <PersonSidebar />;
 
-export const CustomActorName = () => <PersonSidebar actorName="Scarlett Johansson" />;
+export const CustomActorName = () => <PersonSidebar actorName='Scarlett Johansson' />;
 
 export const CustomActorImage = () => (
-	<PersonSidebar actorImage="https://image.tmdb.org/t/p/original/6NsMbJXRlDZuDzatN2akFdGuTvx.jpg" />
+	<PersonSidebar actorImage='https://image.tmdb.org/t/p/original/6NsMbJXRlDZuDzatN2akFdGuTvx.jpg' />
 );
 
-export const CustomKnownFor = () => <PersonSidebar knownFor="Acting" />;
+export const CustomKnownFor = () => <PersonSidebar knownFor='Acting' />;
 
 export const CustomKnownCredits = () => <PersonSidebar knownCredits={136} />;
 
-export const CustomGender = () => <PersonSidebar gender="Female" />;
+export const CustomGender = () => <PersonSidebar gender='Female' />;
 
-export const CustomBirthday = () => <PersonSidebar birthday="1984-11-22 (35 year old)" />;
+export const CustomBirthday = () => <PersonSidebar birthday='1984-11-22 (35 year old)' />;
 
-export const CustomPlaceBirth = () => <PersonSidebar placeOfBirth="New York City, New Yokr, USA" />;
+export const CustomPlaceBirth = () => <PersonSidebar placeOfBirth='New York City, New Yokr, USA' />;
 
 export const CustomKnownAs = () => (
 	<PersonSidebar
@@ -35,14 +35,14 @@ export const CustomKnownAs = () => (
 			'斯嘉丽·约翰逊',
 			'스칼렛 요한슨',
 			'Σκάρλετ Τζοχάνσον',
-			'اسکارلت جوهانسون'
+			'اسکارلت جوهانسون',
 		]}
 	/>
 );
 
-export const CustomSocialLink = () => <PersonSidebar facebookLink="https://www.facebook.com" />;
+export const CustomSocialLink = () => <PersonSidebar facebookLink='https://www.facebook.com' />;
 
 export default {
 	component: PersonSidebar,
-	title: 'Person Sidebar'
+	title: 'Person Sidebar',
 };

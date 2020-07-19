@@ -11,13 +11,13 @@ export const DefaultEntertainmentSidebar = () => (
 export const EntertainmentTVSidebar = () => (
 	<div style={{ marginTop: '5rem', marginLeft: '5rem' }}>
 		<Entertainment
-			facebookLink="https://www.facebook.com/RickandMorty"
-			twitterLink="https://www.twitter.com/RickandMorty"
-			instagramLink="https://www.instagram.com/rickandmorty/"
-			homePageLink="https://www.adultswim.com/videos/rick-and-morty"
-			status="Returning Series"
-			networkImage="https://image.tmdb.org/t/p/h30/9AKyspxVzywuaMuZ1Bvilu8sXly.png"
-			type="Scripted"
+			facebookLink='https://www.facebook.com/RickandMorty'
+			twitterLink='https://www.twitter.com/RickandMorty'
+			instagramLink='https://www.instagram.com/rickandmorty/'
+			homePageLink='https://www.adultswim.com/videos/rick-and-morty'
+			status='Returning Series'
+			networkImage='https://image.tmdb.org/t/p/h30/9AKyspxVzywuaMuZ1Bvilu8sXly.png'
+			type='Scripted'
 			keywords={[
 				'time travel',
 				'grandfarther',
@@ -26,11 +26,11 @@ export const EntertainmentTVSidebar = () => (
 				'alien',
 				'scitentist',
 				'multiple dimensions',
-				'spaceship'
+				'spaceship',
 			]}
-			originalLanguage="English"
-			entertainmentType="tv"
-			entertainmentName="Rick and Morty"
+			originalLanguage='English'
+			entertainmentType='tv'
+			entertainmentName='Rick and Morty'
 		/>
 	</div>
 );
@@ -38,21 +38,21 @@ export const EntertainmentTVSidebar = () => (
 export const EntertainmentMovieSidebar = () => (
 	<div style={{ marginTop: '5rem', marginLeft: '5rem' }}>
 		<Entertainment
-			facebookLink="https://www.facebook.com/RickandMorty"
-			twitterLink="https://www.twitter.com/RickandMorty"
-			instagramLink="https://www.instagram.com/rickandmorty/"
-			homePageLink="https://www.adultswim.com/videos/rick-and-morty"
-			status="Released"
-			budget="-"
+			facebookLink='https://www.facebook.com/RickandMorty'
+			twitterLink='https://www.twitter.com/RickandMorty'
+			instagramLink='https://www.instagram.com/rickandmorty/'
+			homePageLink='https://www.adultswim.com/videos/rick-and-morty'
+			status='Released'
+			budget='-'
 			keywords={['spy']}
-			originalLanguage="English"
-			entertainmentType="movie"
-			entertainmentName="My Spy"
+			originalLanguage='English'
+			entertainmentType='movie'
+			entertainmentName='My Spy'
 		/>
 	</div>
 );
 
 export default {
 	component: Entertainment,
-	title: 'Entertainment Sidebar'
+	title: 'Entertainment Sidebar',
 };

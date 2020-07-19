@@ -20,7 +20,7 @@ export const Customtransform = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button transform="lowercase" />
+				<Button transform='lowercase' />
 			</div>
 		}
 	/>
@@ -30,7 +30,7 @@ export const CustomBackground = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button background="secondary" />
+				<Button background='secondary' />
 			</div>
 		}
 	/>
@@ -40,7 +40,7 @@ export const CustomBorder = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px' }}>
-				<Button border="1px solid red" />
+				<Button border='1px solid red' />
 			</div>
 		}
 	/>
@@ -50,7 +50,7 @@ export const CustomColour = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button colour="red" content="Join Our Community" />
+				<Button colour='red' content='Join Our Community' />
 			</div>
 		}
 	/>
@@ -60,7 +60,7 @@ export const CustomContentText = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button content="Join The Community" />
+				<Button content='Join The Community' />
 			</div>
 		}
 	/>
@@ -74,7 +74,7 @@ export const CustomContentJSX = () => (
 					content={
 						<>
 							<div style={{ margin: '0.5rem' }}>
-								<Paragraph text="Social Link" size="1.2rem" weight="bold" height={1.5} />
+								<Paragraph text='Social Link' size='1.2rem' weight='bold' height={1.5} />
 							</div>
 							<Facebook size={25} />
 						</>
@@ -99,7 +99,7 @@ export const CustomHoverbackground = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button hoverbackground="secondary" />
+				<Button hoverbackground='secondary' />
 			</div>
 		}
 	/>
@@ -109,7 +109,7 @@ export const CustomBorderRadius = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button borderRadius="0.5rem" background="secondary" />
+				<Button borderRadius='0.5rem' background='secondary' />
 			</div>
 		}
 	/>
@@ -119,7 +119,7 @@ export const CustomAriaLabel = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button ariaLabel="Submit" />
+				<Button ariaLabel='Submit' />
 			</div>
 		}
 	/>
@@ -129,7 +129,7 @@ export const CustomId = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button id="Custom ID" />
+				<Button id='Custom ID' />
 			</div>
 		}
 	/>
@@ -149,7 +149,7 @@ export const CustomType = () => (
 	<Preview
 		content={
 			<div style={{ width: '300px', border: '1px solid black' }}>
-				<Button type="submit" />
+				<Button type='submit' />
 			</div>
 		}
 	/>
@@ -157,5 +157,5 @@ export const CustomType = () => (
 
 export default {
 	component: Button,
-	title: 'Buttons'
+	title: 'Buttons',
 };

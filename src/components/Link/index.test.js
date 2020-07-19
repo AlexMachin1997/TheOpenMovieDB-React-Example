@@ -19,8 +19,8 @@ describe('Link tests', () => {
 		it('The custom prop should be https://www.facebook.com/', () => {
 			// Arrange and act
 			const element = createDOMElement(
-				<Link href="https://www.facebook.com/" />,
-				"a[href='https://www.facebook.com/']"
+				<Link href='https://www.facebook.com/' />,
+				"a[href='https://www.facebook.com/']",
 			);
 
 			// Assert
@@ -32,8 +32,8 @@ describe('Link tests', () => {
 		it('The link should have a target of _blank', () => {
 			// Arrange and act
 			const element = createDOMElement(
-				<Link href="https://www.facebook.com/" />,
-				"a[target='_blank']"
+				<Link href='https://www.facebook.com/' />,
+				"a[target='_blank']",
 			);
 
 			// Assert
@@ -43,8 +43,8 @@ describe('Link tests', () => {
 		it('The custom prop should give the link component a target of _self', () => {
 			// Arrange and act
 			const element = createDOMElement(
-				<Link href="https://www.facebook.com/" newTab={false} />,
-				"a[target='_self']"
+				<Link href='https://www.facebook.com/' newTab={false} />,
+				"a[target='_self']",
 			);
 
 			// Assert
@@ -59,7 +59,7 @@ describe('Link tests', () => {
 				<ThemeProvider theme={lightTheme}>
 					<Link />
 				</ThemeProvider>,
-				"a[href='https://www.google.com/']"
+				"a[href='https://www.google.com/']",
 			);
 
 			// Assert
@@ -68,7 +68,7 @@ describe('Link tests', () => {
 
 		it('The custom colour should be red', () => {
 			// Arrange and act
-			const element = createDOMElement(<Link colour="red" />, "a[href='https://www.google.com/']");
+			const element = createDOMElement(<Link colour='red' />, "a[href='https://www.google.com/']");
 
 			// Assert
 			expect(element).toHaveStyle('color: red');
@@ -79,8 +79,8 @@ describe('Link tests', () => {
 		it('Custom text', () => {
 			// Arrange and act
 			const element = createDOMElement(
-				<Link content="Custom content" />,
-				"a[href='https://www.google.com/']"
+				<Link content='Custom content' />,
+				"a[href='https://www.google.com/']",
 			);
 
 			// Assert
@@ -91,7 +91,7 @@ describe('Link tests', () => {
 			// Arrange and act
 			const element = createDOMElement(
 				<Link content={<p>Custom jsx</p>} />,
-				"a[href='https://www.google.com/']"
+				"a[href='https://www.google.com/']",
 			);
 
 			// Assert
@@ -111,8 +111,8 @@ describe('Link tests', () => {
 		it('Should return the custom label', () => {
 			// Arrange and act
 			const element = createDOMElement(
-				<Link ariaLabel="Custom Label" />,
-				"a[aria-label='Default']"
+				<Link ariaLabel='Custom Label' />,
+				"a[aria-label='Default']",
 			);
 
 			// Assert

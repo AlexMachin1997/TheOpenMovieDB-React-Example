@@ -12,7 +12,7 @@ describe('Action tests', () => {
 			const onClick = jest.fn();
 
 			// Act
-			const element = createDOMElement(<Action title="onClick" onClick={onClick} />, 'h3');
+			const element = createDOMElement(<Action title='onClick' onClick={onClick} />, 'h3');
 			fireEvent.click(element);
 
 			// Assert
@@ -24,7 +24,7 @@ describe('Action tests', () => {
 	describe('title', () => {
 		it('Should return custom title', () => {
 			// Arrange and Act
-			const element = createDOMElement(<Action title="Custom Title" />, 'h3');
+			const element = createDOMElement(<Action title='Custom Title' />, 'h3');
 
 			// Assert
 			expect(element.textContent).toBe('Custom Title');
@@ -73,7 +73,7 @@ describe('Action tests', () => {
 			// Arrange and Act
 			const element = createDOMElement(
 				<Action content={<p>Custom Content</p>} />,
-				'div[aria-expanded=false]'
+				'div[aria-expanded=false]',
 			);
 
 			// Assert

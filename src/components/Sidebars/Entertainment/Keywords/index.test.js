@@ -20,7 +20,7 @@ describe('Action tests', () => {
 			// Arrange and act
 			const element = createDOMElement(
 				<Keywords keywords={['Thriller', 'Horror', 'Action', 'Drama']} />,
-				'#Keywords div'
+				'#Keywords div',
 			);
 
 			// Asset
@@ -35,7 +35,7 @@ describe('Action tests', () => {
 
 			const element = createDOMElement(
 				<Keywords keywords={['Thriller', 'Horror', 'Action', 'Drama']} onClick={onClick} />,
-				'#Keywords #Thriller'
+				'#Keywords #Thriller',
 			);
 
 			// Act
@@ -51,7 +51,7 @@ describe('Action tests', () => {
 			// Arrange and Act
 			const element = createDOMElement(
 				<Keywords keywords={['Thriller', 'Horror', 'Action', 'Drama']} />,
-				'#Keywords'
+				'#Keywords',
 			);
 			const result = await axe(element);
 

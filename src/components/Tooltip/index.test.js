@@ -17,8 +17,8 @@ describe('Tooltip tests', () => {
 
 		it('Should return the custom content', () => {
 			// Arrange and act
-			const element = createDOMElement(<Tooltip content="Custom content" />, 'div').querySelector(
-				'div'
+			const element = createDOMElement(<Tooltip content='Custom content' />, 'div').querySelector(
+				'div',
 			).firstChild;
 
 			// Assert
@@ -39,7 +39,7 @@ describe('Tooltip tests', () => {
 
 		it('The custom prop should show Visit Facebook', () => {
 			// Arrange and act
-			const element = createDOMElement(<Tooltip tooltipText="Custom title" />, 'span');
+			const element = createDOMElement(<Tooltip tooltipText='Custom title' />, 'span');
 
 			// Assert
 			expect(element.textContent).toBe('Custom title');

@@ -12,7 +12,7 @@ const stylingCheck = (expectedResult, props, target = 'p', theme = lightTheme) =
 		<ThemeProvider theme={theme}>
 			<Paragraph {...props} />
 		</ThemeProvider>,
-		target
+		target,
 	);
 
 	// Assert
@@ -51,7 +51,7 @@ describe('Paragraph tests', () => {
 
 		it('Should return the custom text', () => {
 			// Assert and act
-			const element = createDOMElement(<Paragraph text="Custom" />, 'p');
+			const element = createDOMElement(<Paragraph text='Custom' />, 'p');
 
 			// Assert
 			expect(element.textContent).toBe('Custom');
@@ -81,8 +81,8 @@ describe('Paragraph tests', () => {
 	describe('Accessability test', () => {
 		it('No violations should be present', async () => {
 			const element = createDOMElement(
-				<Paragraph text="Test" weight="bolder" height={1} size="1rem" colour="red" />,
-				'p'
+				<Paragraph text='Test' weight='bolder' height={1} size='1rem' colour='red' />,
+				'p',
 			);
 
 			const result = await axe(element);

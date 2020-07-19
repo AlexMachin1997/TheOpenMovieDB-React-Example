@@ -15,7 +15,7 @@ export const CustomKeywords = () => (
 			'alien',
 			'scitentist',
 			'multiple dimensions',
-			'spaceship'
+			'spaceship',
 		]}
 		onClick={action('Click')}
 	/>
@@ -23,5 +23,5 @@ export const CustomKeywords = () => (
 
 export default {
 	component: Keywords,
-	title: 'Entertainment Sidebar Keywords'
+	title: 'Entertainment Sidebar Keywords',
 };

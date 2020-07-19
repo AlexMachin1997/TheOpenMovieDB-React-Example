@@ -64,7 +64,7 @@ describe('Image tests', () => {
 
 		it('Should have a custom aria-label (No Spaces)', () => {
 			// Arrange and act
-			const element = createDOMElement(<Image label="Custom" />, 'img[aria-label=Custom]');
+			const element = createDOMElement(<Image label='Custom' />, 'img[aria-label=Custom]');
 
 			// Assert
 			expect(element).toBeTruthy();
@@ -73,8 +73,8 @@ describe('Image tests', () => {
 		it('Should have a custom aria-label (With Spaces)', () => {
 			// Arrange and act
 			const element = createDOMElement(
-				<Image label="Custom Lable With Spacing" />,
-				'img[aria-label=Custom-Lable-With-Spacing]'
+				<Image label='Custom Lable With Spacing' />,
+				'img[aria-label=Custom-Lable-With-Spacing]',
 			);
 
 			// Assert
@@ -86,14 +86,14 @@ describe('Image tests', () => {
 		it('No violations should be present', async () => {
 			const element = createDOMElement(
 				<Image
-					alt="Alt"
-					width="200px"
-					height="200px"
-					label="Alt"
-					borderRadius="16px"
-					src="https://image.tmdb.org/t/p/w1280/h4VB6m0RwcicVEZvzftYZyKXs6K.jpg"
+					alt='Alt'
+					width='200px'
+					height='200px'
+					label='Alt'
+					borderRadius='16px'
+					src='https://image.tmdb.org/t/p/w1280/h4VB6m0RwcicVEZvzftYZyKXs6K.jpg'
 				/>,
-				'img'
+				'img',
 			);
 
 			const result = await axe(element);
