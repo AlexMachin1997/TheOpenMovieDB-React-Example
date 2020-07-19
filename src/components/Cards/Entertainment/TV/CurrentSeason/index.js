@@ -26,7 +26,7 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview }) => (
 		<div>
 			<Image
 				width='130px'
-				height='150px'
+				height='100%'
 				alt={replacesSpacesWith(title, '-')}
 				src={image}
 				borderRadius='1rem 0 0 1rem'
@@ -47,7 +47,7 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview }) => (
 				/>
 			</div>
 			<CurrentSeasonContentOverview>
-				<Paragraph size='1rem' colour='black' text={overview} />
+				<Paragraph size='1rem' height={2} colour='black' text={overview} />
 			</CurrentSeasonContentOverview>
 		</CurrentSeasonContentContainer>
 	</CurrentSeasonContainer>

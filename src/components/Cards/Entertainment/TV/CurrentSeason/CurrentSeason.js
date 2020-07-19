@@ -9,12 +9,6 @@ export const CurrentSeasonContainer = styled.div`
 	img {
 		display: flex;
 	}
-
-	@media (min-width: 500px) {
-		img {
-			height: 100%;
-		}
-	}
 `;
 
 export const CurrentSeasonContentContainer = styled.div`
@@ -33,9 +27,10 @@ export const CurrentSeasonContentContainer = styled.div`
 	}
 
 	/* When no desktop show all avaliable lines (*/
-	@media (min-width: 500px) {
+	@media (min-width: 700px) {
 		p {
 			-webkit-line-clamp: 6;
+			height: 2;
 		}
 	}
 `;
