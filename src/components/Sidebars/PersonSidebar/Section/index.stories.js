@@ -16,5 +16,5 @@ export const CustomDisplay = () => <Section content='' />;
 
 export default {
 	title: 'Person Sidebar Section',
-	component: Section,
+	component: Section
 };

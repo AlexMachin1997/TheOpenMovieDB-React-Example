@@ -48,5 +48,5 @@ export const GroupedKnownFor = () => (
 
 export default {
 	component: KnownForCard,
-	title: 'Card - KnownFor',
+	title: 'Card - KnownFor'
 };

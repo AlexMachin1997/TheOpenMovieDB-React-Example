@@ -16,5 +16,5 @@ export const CustomDisplay = () => <Section display={false} />;
 
 export default {
 	title: 'Entertainment Sidebar Section',
-	component: Section,
+	component: Section
 };

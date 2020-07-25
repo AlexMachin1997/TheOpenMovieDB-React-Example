@@ -35,7 +35,7 @@ export const CustomKnownAs = () => (
 			'斯嘉丽·约翰逊',
 			'스칼렛 요한슨',
 			'Σκάρλετ Τζοχάνσον',
-			'اسکارلت جوهانسون',
+			'اسکارلت جوهانسون'
 		]}
 	/>
 );
@@ -44,5 +44,5 @@ export const CustomSocialLink = () => <PersonSidebar facebookLink='https://www.f
 
 export default {
 	component: PersonSidebar,
-	title: 'Person Sidebar',
+	title: 'Person Sidebar'
 };

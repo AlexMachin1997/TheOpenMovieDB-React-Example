@@ -18,7 +18,7 @@ const generateServiceWorkerManifest = async () => {
 
 			// Maximum file size
 			// Allows up to 30 mb, this is typically what Airbnb and Instagram allows
-			maximumFileSizeToCacheInBytes: 30000000,
+			maximumFileSizeToCacheInBytes: 30000000
 		});
 
 		// Once the manifest has been injected show what the precaching size is (Roughly)

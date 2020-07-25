@@ -27,5 +27,5 @@ export const InteractiveAction = () => (
 
 export default {
 	component: FilterAction,
-	title: 'Discover Sidebar Action',
+	title: 'Discover Sidebar Action'
 };
