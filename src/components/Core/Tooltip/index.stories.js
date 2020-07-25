@@ -49,5 +49,5 @@ export const FacebookTooltip = () => (
 
 export default {
 	component: Tooltip,
-	title: 'Tooltip'
+	title: 'Core -> Tooltip'
 };

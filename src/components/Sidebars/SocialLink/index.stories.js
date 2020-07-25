@@ -17,6 +17,6 @@ export const CustomDisplay = () => <SocialLink display={false} />;
 export const CustomNewTab = () => <SocialLink link='https://www.alexmachin.co.uk' newTab={false} />;
 
 export default {
-	title: 'Entertainment Sidebar Social Link',
-	component: SocialLink,
+	title: 'Sidebars -> SocialLinks -> SocialLink',
+	component: SocialLink
 };

@@ -47,5 +47,5 @@ export const GroupedExample = () => (
 
 export default {
 	component: Overview,
-	title: 'Card - Overview'
+	title: 'Card -> Entertainment -> Overview'
 };

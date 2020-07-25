@@ -11,6 +11,6 @@ export const YellowRating = () => <Rating percentage={50} />;
 export const GreenRating = () => <Rating percentage={75} />;
 
 export default {
-	title: 'Rating - Circle',
-	component: Rating,
+	title: 'Rating -> Percentage',
+	component: Rating
 };

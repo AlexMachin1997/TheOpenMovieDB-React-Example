@@ -16,5 +16,5 @@ export const FiveStar = () => <Stars rating={100} />;
 
 export default {
 	component: Stars,
-	title: 'Rating - Stars',
+	title: 'Rating -> Stars'
 };

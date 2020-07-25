@@ -15,6 +15,6 @@ export const CustomTextArray = () => (
 export const CustomDisplay = () => <Section content='' />;
 
 export default {
-	title: 'Person Sidebar Section',
-	component: Section,
+	title: 'Sidebars -> PersonSidebar -> Section',
+	component: Section
 };

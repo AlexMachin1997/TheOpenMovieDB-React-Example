@@ -7,7 +7,7 @@ import Column from '../../Blocks/Flexbox/Column';
 import Typography from '../../Core/Typography';
 import Section from './Section';
 import { Container } from './PersonSidebar';
-import SocialLinks from '../../SocialLinks';
+import SocialLinks from '../SocialLinks';
 
 const DesktopPersonSidebar = ({
 	actorName,

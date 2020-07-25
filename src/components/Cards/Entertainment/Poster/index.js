@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Typography from '../../../Core/Typography';
 import Image from '../../../Core/Image';
-import Rating from '../../../Ratings/Circle';
+import Rating from '../../../Ratings/Percentage';
 
 import { PosterContainer, RatingContainer, ContentContainer } from './Poster';
 

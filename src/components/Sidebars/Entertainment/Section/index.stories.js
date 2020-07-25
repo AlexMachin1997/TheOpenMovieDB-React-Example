@@ -15,6 +15,6 @@ export const CustomContentWithJSX = () => (
 export const CustomDisplay = () => <Section display={false} />;
 
 export default {
-	title: 'Entertainment Sidebar Section',
-	component: Section,
+	title: 'Sidebars -> Entertainment -> Section',
+	component: Section
 };

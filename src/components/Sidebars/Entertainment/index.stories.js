@@ -26,7 +26,7 @@ export const EntertainmentTVSidebar = () => (
 				'alien',
 				'scitentist',
 				'multiple dimensions',
-				'spaceship',
+				'spaceship'
 			]}
 			originalLanguage='English'
 			entertainmentType='tv'
@@ -54,5 +54,5 @@ export const EntertainmentMovieSidebar = () => (
 
 export default {
 	component: Entertainment,
-	title: 'Entertainment Sidebar',
+	title: 'Sidebars -> Entertainment'
 };

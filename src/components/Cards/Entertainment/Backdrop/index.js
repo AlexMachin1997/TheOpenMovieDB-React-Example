@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Image from '../../../Core/Image';
 import Typography from '../../../Core/Typography';
-import Rating from '../../../Ratings/Circle';
+import Rating from '../../../Ratings/Percentage';
 
 import { ContentContainer, BackdropContainer, RatingContainer, CardInformation } from './Backdrop';
 

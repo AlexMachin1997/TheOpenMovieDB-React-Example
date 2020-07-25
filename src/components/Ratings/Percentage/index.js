@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Circle, CircleBackground, CircleProgress, CircleText } from './Rating';
+import { Circle, CircleBackground, CircleProgress, CircleText } from './Percentage';
 
 const Rating = ({ size, strokeWidth, percentage }) => {
 	const radius = (size - strokeWidth) / 2;

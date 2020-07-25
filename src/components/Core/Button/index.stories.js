@@ -157,5 +157,5 @@ export const CustomType = () => (
 
 export default {
 	component: Button,
-	title: 'Buttons'
+	title: 'Core -> Button'
 };

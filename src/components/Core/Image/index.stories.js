@@ -20,5 +20,5 @@ export const onErrorExample = () => <Image src='invalid_path' />;
 
 export default {
 	component: Image,
-	title: 'Image',
+	title: 'Core -> Image'
 };

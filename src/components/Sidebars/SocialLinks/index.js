@@ -4,8 +4,8 @@ import propTypes from 'prop-types';
 import { Facebook, Twitter, Instagram } from 'styled-icons/entypo-social';
 import { ExternalLink } from 'styled-icons/evaicons-solid';
 
-import Tooltip from '../Core/Tooltip';
-import SocialLink from './SocialLink';
+import Tooltip from '../../Core/Tooltip';
+import SocialLink from '../SocialLink';
 
 const SocialLinks = ({ facebookLink, twitterLink, instagramLink, homepageLink, name }) => {
 	const iconSize = '30';

@@ -60,5 +60,5 @@ export const MultipleCards = () => {
 
 export default {
 	component: Person,
-	title: 'Card - Person'
+	title: 'Card -> Person'
 };

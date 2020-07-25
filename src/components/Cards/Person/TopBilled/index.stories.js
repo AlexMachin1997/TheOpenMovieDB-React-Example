@@ -117,6 +117,6 @@ export const MultipleCardsExampleMovieExample = () => (
 );
 
 export default {
-	title: 'Card - TopBilledCastMember',
-	component: PosterCard,
+	title: 'Card -> Person -> TopBilledCastMember',
+	component: PosterCard
 };

@@ -14,5 +14,5 @@ export const Homepage = () => <SocialLinks homepageLink='https://www.alexmachin.
 
 export default {
 	component: SocialLinks,
-	title: 'Social Links',
+	title: 'Sidebars -> SocialLinks'
 };

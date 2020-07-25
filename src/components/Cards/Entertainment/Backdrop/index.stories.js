@@ -56,6 +56,6 @@ export const MultipleBackdropCards = () => (
 );
 
 export default {
-	title: 'Card - Backdrop',
+	title: 'Card -> Entertainment -> Backdrop',
 	component: BackdropCard
 };

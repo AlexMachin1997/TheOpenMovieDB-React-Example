@@ -6,5 +6,5 @@ export const Default = () => <DiscoverSidebar />;
 
 export default {
 	component: DiscoverSidebar,
-	title: 'Discover Sidebar',
+	title: 'Sidebar -> DiscoverSidebar'
 };

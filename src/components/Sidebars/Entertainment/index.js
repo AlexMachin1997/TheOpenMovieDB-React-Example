@@ -7,7 +7,7 @@ import Typography from '../../Core/Typography';
 import Image from '../../Core/Image';
 import Section from './Section';
 import Keyword from './Keywords';
-import SocialLinks from '../../SocialLinks';
+import SocialLinks from '../SocialLinks';
 
 const Entertainment = ({
 	facebookLink,

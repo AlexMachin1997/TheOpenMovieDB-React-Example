@@ -59,6 +59,6 @@ export const MultipleCards = () => (
 );
 
 export default {
-	title: 'Card -  Poster',
+	title: 'Card -> Entertainment -> Poster',
 	component: PosterCard
 };

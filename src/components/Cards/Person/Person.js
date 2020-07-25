@@ -11,7 +11,7 @@ export const PersonContainer = styled.div`
 		cursor: pointer;
 	}
 
-	h2 {
+	h3 {
 		white-space: nowrap;
 		width: 100%;
 		overflow: hidden;

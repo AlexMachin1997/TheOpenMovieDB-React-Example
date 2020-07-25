@@ -85,5 +85,5 @@ export const GroupedExample = () => (
 
 export default {
 	component: Video,
-	title: 'Card - Video'
+	title: 'Card -> Entertainment -> Video'
 };

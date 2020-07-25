@@ -30,5 +30,5 @@ export const TheWalkingDeadExample = () => (
 
 export default {
 	component: CurrentSeason,
-	title: 'Card - Current Season',
+	title: 'Card -> Entertainment -> TV -> Current Season'
 };
