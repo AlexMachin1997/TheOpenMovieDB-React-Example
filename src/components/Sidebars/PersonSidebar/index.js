@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../Image';
-import Row from '../../Layouts/Row';
-import Column from '../../Layouts/Column';
-import Heading from '../../Heading';
+import Image from '../../Core/Image';
+import Row from '../../Blocks/Flexbox/Row';
+import Column from '../../Blocks/Flexbox/Column';
+import Typography from '../../Core/Typography';
 import Section from './Section';
 import { Container } from './PersonSidebar';
 import SocialLinks from '../../SocialLinks';
@@ -21,7 +21,7 @@ const DesktopPersonSidebar = ({
 	facebookLink,
 	twitterLink,
 	instagramLink,
-	homepageLink,
+	homepageLink
 }) => (
 	<Container>
 		<Row>
@@ -43,7 +43,7 @@ const DesktopPersonSidebar = ({
 					homepageLink={homepageLink}
 					name={actorName}
 				/>
-				<Heading type='h1' size='2rem' text='Personal Info' weight='bold' />
+				<Typography type='h1' size='2rem' text='Personal Info' weight='bold' />
 				<Section title='Known For' content={knownFor} display={knownFor.length !== 0} />
 				<Section title='Known Credits' content={knownCredits} display={knownCredits !== 0} />
 				<Section title='Gender' content={gender} display={gender.length !== 0} />
@@ -71,7 +71,7 @@ DesktopPersonSidebar.defaultProps = {
 	facebookLink: '',
 	twitterLink: '',
 	instagramLink: '',
-	homepageLink: '',
+	homepageLink: ''
 };
 
 DesktopPersonSidebar.propTypes = {
@@ -86,7 +86,7 @@ DesktopPersonSidebar.propTypes = {
 	facebookLink: PropTypes.string,
 	twitterLink: PropTypes.string,
 	instagramLink: PropTypes.string,
-	homepageLink: PropTypes.string,
+	homepageLink: PropTypes.string
 };
 
 export default DesktopPersonSidebar;

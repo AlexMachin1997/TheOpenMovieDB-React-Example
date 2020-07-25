@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Heading from '../../../Heading';
-import Paragraph from '../../../Paragraph';
-import Image from '../../../Image';
+import Typography from '../../../Core/Typography';
+import Image from '../../../Core/Image';
 import Rating from '../../../Ratings/Circle';
 
 import { PosterContainer, RatingContainer, ContentContainer } from './Poster';
@@ -26,8 +25,8 @@ const Poster = ({ title, releaseDate, rating, image, onClick }) => (
 				<Rating percentage={rating} size={34} strokeWidth={2.5} />
 			</RatingContainer>
 			<div id={generateComponentId(title, 'poster-card-meta')}>
-				<Heading type='h1' text={title} size='1rem' weight='bolder' />
-				<Paragraph size='1rem' text={releaseDate} weight='lighter' colour='#C0C0C0' />
+				<Typography type='h1' text={title} size='1rem' weight='bolder' />
+				<Typography type='p' size='1rem' text={releaseDate} weight='lighter' colour='#C0C0C0' />
 			</div>
 		</ContentContainer>
 	</PosterContainer>
@@ -38,7 +37,7 @@ Poster.defaultProps = {
 	releaseDate: 'Dec 01, 2017',
 	rating: 50,
 	image: 'https://image.tmdb.org/t/p/original/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg',
-	onClick: () => false,
+	onClick: () => false
 };
 
 Poster.propTypes = {
@@ -46,7 +45,7 @@ Poster.propTypes = {
 	releaseDate: PropTypes.string,
 	rating: PropTypes.number,
 	image: PropTypes.string,
-	onClick: PropTypes.func,
+	onClick: PropTypes.func
 };
 
 export default Poster;

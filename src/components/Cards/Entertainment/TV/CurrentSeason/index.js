@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../../Image';
-import Paragraph from '../../../../Paragraph';
-import Heading from '../../../../Heading';
+import Image from '../../../../Core/Image';
+import Typography from '../../../../Core/Typography';
 
 import {
 	CurrentSeasonContainer,
 	CurrentSeasonContentContainer,
-	CurrentSeasonContentOverview,
+	CurrentSeasonContentOverview
 } from './CurrentSeason';
 
 import replacesSpacesWith from '../../../../../utils/formatters/replaceSpacesWith';
@@ -35,11 +34,12 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview }) => (
 
 		<CurrentSeasonContentContainer>
 			<div>
-				<Heading type='h2' size='1.5rem' colour='black' text={title} weight='bolder' />
+				<Typography type='h2' size='1.5rem' colour='black' text={title} weight='bolder' />
 			</div>
 
 			<div style={{ marginTop: '0.5rem' }}>
-				<Paragraph
+				<Typography
+					type='p'
 					size='1rem'
 					colour='black'
 					text={generateSubHeading(episodeCount, year)}
@@ -47,7 +47,7 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview }) => (
 				/>
 			</div>
 			<CurrentSeasonContentOverview>
-				<Paragraph size='1rem' height={2} colour='black' text={overview} />
+				<Typography type='p' size='1rem' height={2} colour='black' text={overview} />
 			</CurrentSeasonContentOverview>
 		</CurrentSeasonContentContainer>
 	</CurrentSeasonContainer>
@@ -59,7 +59,7 @@ CurrentSeason.defaultProps = {
 	year: 2020,
 	episodeCount: 8,
 	overview:
-		'Taking place immediately after the events of the second season, Dolores develops a relationship with Caleb in neo-Los Angeles, and learns how robots are treated in the real world. Meanwhile, Maeve finds herself in another Delos park, this one with a World War II theme and set in Fascist Italy.',
+		'Taking place immediately after the events of the second season, Dolores develops a relationship with Caleb in neo-Los Angeles, and learns how robots are treated in the real world. Meanwhile, Maeve finds herself in another Delos park, this one with a World War II theme and set in Fascist Italy.'
 };
 
 CurrentSeason.propTypes = {
@@ -67,7 +67,7 @@ CurrentSeason.propTypes = {
 	title: PropTypes.string,
 	year: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
 	episodeCount: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-	overview: PropTypes.string,
+	overview: PropTypes.string
 };
 
 export default CurrentSeason;

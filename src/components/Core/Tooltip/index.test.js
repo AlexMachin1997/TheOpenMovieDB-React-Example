@@ -2,7 +2,7 @@ import React from 'react';
 import { axe } from 'jest-axe';
 
 import Tooltip from './index';
-import createDOMElement from '../../utils/testUtils/createDOMElement';
+import createDOMElement from '../../../utils/testUtils/createDOMElement';
 
 describe('Tooltip tests', () => {
 	describe('content', () => {
@@ -18,7 +18,7 @@ describe('Tooltip tests', () => {
 		it('Should return the custom content', () => {
 			// Arrange and act
 			const element = createDOMElement(<Tooltip content='Custom content' />, 'div').querySelector(
-				'div',
+				'div'
 			).firstChild;
 
 			// Assert

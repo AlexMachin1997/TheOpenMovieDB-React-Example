@@ -45,13 +45,13 @@ const Rating = ({ size, strokeWidth, percentage }) => {
 Rating.defaultProps = {
 	size: 75,
 	strokeWidth: 7,
-	percentage: 0,
+	percentage: 0
 };
 
 Rating.propTypes = {
 	size: PropTypes.number,
 	strokeWidth: PropTypes.number,
-	percentage: PropTypes.number,
+	percentage: PropTypes.number
 };
 
 export default Rating;

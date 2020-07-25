@@ -10,8 +10,8 @@ const Single = () => {
 		displayName: 'Single show query',
 		variables: {
 			search: 'Westworld',
-			id: 63247,
-		},
+			id: 63247
+		}
 	});
 
 	if (loading) return <Loader />;

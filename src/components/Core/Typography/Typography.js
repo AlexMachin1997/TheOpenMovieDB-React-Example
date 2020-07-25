@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import generateColours from '../../utils/theming/generateColours';
+import generateColours from '../../../utils/theming/generateColours';
 
 /*
 
@@ -28,32 +28,41 @@ const base = styled.span`
 	padding: 0;
 	color: ${(props) =>
 		props.colour === '' ? props.theme.textColour : generateColours(props.theme, props.colour)};
-
-	&:focus {
-		outline: 0;
-	}
+	text-decoration: ${(props) => (props.underline === true ? 'underline' : 'none')};
 `;
 
 export const Heading1 = styled(base).attrs({
-	as: 'h1',
+	as: 'h1'
 })``;
 
 export const Heading2 = styled(base).attrs({
-	as: 'h2',
+	as: 'h2'
 })``;
 
 export const Heading3 = styled(base).attrs({
-	as: 'h3',
+	as: 'h3'
 })``;
 
 export const Heading4 = styled(base).attrs({
-	as: 'h4',
+	as: 'h4'
 })``;
 
 export const Heading5 = styled(base).attrs({
-	as: 'h5',
+	as: 'h5'
 })``;
 
 export const Heading6 = styled(base).attrs({
-	as: 'h6',
+	as: 'h5'
+})``;
+
+export const Link = styled(base).attrs({
+	as: 'a'
+})``;
+
+export const Label = styled(base).attrs({
+	as: 'label'
+})``;
+
+export const Paragraph = styled(base).attrs({
+	as: 'p'
 })``;

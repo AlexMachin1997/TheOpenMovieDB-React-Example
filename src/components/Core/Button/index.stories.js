@@ -2,8 +2,8 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 
 import Button from './index';
-import Paragraph from '../Paragraph';
-import Preview from '../Blocks/Storybook/Preview';
+import Typography from '../Typography';
+import Preview from '../../Blocks/Storybook/Preview';
 
 import { Facebook } from 'styled-icons/entypo-social';
 
@@ -74,7 +74,7 @@ export const CustomContentJSX = () => (
 					content={
 						<>
 							<div style={{ margin: '0.5rem' }}>
-								<Paragraph text='Social Link' size='1.2rem' weight='bold' height={1.5} />
+								<Typography type='p' text='Social Link' size='1.2rem' weight='bold' height={1.5} />
 							</div>
 							<Facebook size={25} />
 						</>
@@ -157,5 +157,5 @@ export const CustomType = () => (
 
 export default {
 	component: Button,
-	title: 'Buttons',
+	title: 'Buttons'
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Keyword from './Keyword';
-import Row from '../../../Layouts/Row';
+import Row from '../../../Blocks/Flexbox/Row';
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
 const Keywords = ({ keywords, onClick }) => (
@@ -19,12 +19,12 @@ const Keywords = ({ keywords, onClick }) => (
 
 Keywords.defaultProps = {
 	onClick: () => console.log('Keyword action'),
-	keywords: ['Thriller'],
+	keywords: ['Thriller']
 };
 
 Keywords.propTypes = {
 	keywords: PropTypes.array,
-	onClick: PropTypes.func,
+	onClick: PropTypes.func
 };
 
 export default Keywords;

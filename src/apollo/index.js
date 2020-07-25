@@ -6,7 +6,7 @@ import createLink from './links';
 const createApolloClient = new ApolloClient({
 	cache: createCache(),
 	link: createLink(),
-	connectToDevTools: process.env.NODE_ENV !== 'production',
+	connectToDevTools: process.env.NODE_ENV !== 'production'
 });
 
 export default createApolloClient;

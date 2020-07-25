@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Image';
-import Heading from '../../../Heading';
-import Paragraph from '../../../Paragraph';
+import Image from '../../../Core/Image';
+import Typography from '../../../Core/Typography';
 import Rating from '../../../Ratings/Circle';
 
 import { ContentContainer, BackdropContainer, RatingContainer, CardInformation } from './Backdrop';
@@ -25,8 +24,8 @@ const Backdrop = ({ title, releaseDate, rating, image, onClick }) => (
 				<Rating percentage={rating} size={55} strokeWidth={5} />
 			</RatingContainer>
 			<CardInformation id={generateComponentId(title, 'backdrop-card-information')}>
-				<Heading type='h1' text={title} size='1.2rem' weight='bolder' />
-				<Paragraph size='1rem' text={releaseDate} weight='lighter' colour='#A9A9A9' />
+				<Typography type='h1' text={title} size='1.2rem' weight='bolder' />
+				<Typography type='p' size='1rem' text={releaseDate} weight='lighter' colour='#A9A9A9' />
 			</CardInformation>
 		</ContentContainer>
 	</BackdropContainer>
@@ -37,7 +36,7 @@ Backdrop.defaultProps = {
 	releaseDate: 'September 17th, 2020',
 	rating: 50,
 	image: 'https://image.tmdb.org/t/p/original/3lBDg3i6nn5R2NKFCJ6oKyUo2j5.jpg',
-	onClick: () => false,
+	onClick: () => false
 };
 
 Backdrop.propTypes = {
@@ -45,7 +44,7 @@ Backdrop.propTypes = {
 	releaseDate: PropTypes.string,
 	rating: PropTypes.number,
 	image: PropTypes.string,
-	onClick: PropTypes.func,
+	onClick: PropTypes.func
 };
 
 export default Backdrop;

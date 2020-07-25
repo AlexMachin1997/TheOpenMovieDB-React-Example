@@ -4,7 +4,7 @@ import propTypes from 'prop-types';
 import { Facebook, Twitter, Instagram } from 'styled-icons/entypo-social';
 import { ExternalLink } from 'styled-icons/evaicons-solid';
 
-import Tooltip from '../Tooltip';
+import Tooltip from '../Core/Tooltip';
 import SocialLink from './SocialLink';
 
 const SocialLinks = ({ facebookLink, twitterLink, instagramLink, homepageLink, name }) => {
@@ -50,7 +50,7 @@ SocialLinks.defaultProps = {
 	twitterLink: '',
 	instagramLink: '',
 	homepageLink: '',
-	name: '',
+	name: ''
 };
 
 SocialLinks.propTypes = {
@@ -58,7 +58,7 @@ SocialLinks.propTypes = {
 	twitterLink: propTypes.string,
 	instagramLink: propTypes.string,
 	homepageLink: propTypes.string,
-	name: propTypes.string,
+	name: propTypes.string
 };
 
 export default SocialLinks;

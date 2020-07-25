@@ -2,7 +2,7 @@ import React from 'react';
 import { axe } from 'jest-axe';
 
 import Image from './index';
-import createDOMElement from '../../utils/testUtils/createDOMElement';
+import createDOMElement from '../../../utils/testUtils/createDOMElement';
 
 const stylingCheck = (expectedResult, props, target = 'img') => {
 	// Arrange and act
@@ -74,7 +74,7 @@ describe('Image tests', () => {
 			// Arrange and act
 			const element = createDOMElement(
 				<Image label='Custom Lable With Spacing' />,
-				'img[aria-label=Custom-Lable-With-Spacing]',
+				'img[aria-label=Custom-Lable-With-Spacing]'
 			);
 
 			// Assert
@@ -93,7 +93,7 @@ describe('Image tests', () => {
 					borderRadius='16px'
 					src='https://image.tmdb.org/t/p/w1280/h4VB6m0RwcicVEZvzftYZyKXs6K.jpg'
 				/>,
-				'img',
+				'img'
 			);
 
 			const result = await axe(element);

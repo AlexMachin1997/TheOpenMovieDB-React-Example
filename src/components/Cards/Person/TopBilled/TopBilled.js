@@ -18,7 +18,7 @@ export const ContentContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 
-	h1,
+	h2,
 	p {
 		margin-bottom: 0.3rem;
 	}

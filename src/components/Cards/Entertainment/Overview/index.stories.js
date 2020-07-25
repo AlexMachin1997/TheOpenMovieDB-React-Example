@@ -2,8 +2,8 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 
 import Overview from './index';
-import Row from '../../../Layouts/Row';
-import Column from '../../../Layouts/Column';
+import Row from '../../../Blocks/Flexbox/Row';
+import Column from '../../../Blocks/Flexbox/Column';
 import Preview from '../../../Blocks/Storybook/Preview';
 
 export const Default = () => <Overview />;
@@ -47,5 +47,5 @@ export const GroupedExample = () => (
 
 export default {
 	component: Overview,
-	title: 'Card - Overview',
+	title: 'Card - Overview'
 };

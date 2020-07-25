@@ -1,69 +1,68 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Image';
-import Heading from '../../../Heading';
+import Image from '../../../Core/Image';
+import Typography from '../../../Core/Typography';
 
 import {
 	ImageContainer,
 	VideoContentContainer,
 	PlayIcon,
 	PlayIconContainer,
-	VideoContainer,
+	VideoContainer
 } from './Video';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
 
-const Video = ({
-	entertainmentTitle,
-	entertainmentOverview,
-	entertainmentImage,
-	entertainmentBackdropAction,
-	entertainmentVideoAction,
-}) => {
+const Video = ({ title, overview, thumbnail, thumbnailContainerAction, thumbnailAction }) => {
 	const [hovered, setHovered] = useState(false);
 
 	return (
-		<VideoContainer onFocus={entertainmentBackdropAction} onMouseOver={entertainmentBackdropAction}>
+		<VideoContainer
+			id={generateComponentId(title, 'video-card-container')}
+			onFocus={thumbnailContainerAction}
+			onMouseOver={thumbnailContainerAction}
+		>
 			<ImageContainer
+				id={generateComponentId(title, 'video-card-container-icon-container')}
 				onMouseOver={() => setHovered(true)}
 				onMouseLeave={() => setHovered(false)}
 				onFocus={() => setHovered(true)}
-				onClick={entertainmentVideoAction}
+				onClick={thumbnailAction}
 			>
 				<Image
 					width='100%'
 					height='100%'
-					alt={replacesSpacesWith(entertainmentTitle, '-')}
-					src={entertainmentImage}
+					alt={replacesSpacesWith(title, '-')}
+					src={thumbnail}
 					borderRadius='1rem'
 				/>
 				<PlayIconContainer>
 					<PlayIcon size={hovered === true ? 50 : 40} />
 				</PlayIconContainer>
 			</ImageContainer>
-			<VideoContentContainer>
-				<Heading text={entertainmentTitle} size='1rem' weight='bolder' colour='white' />
-				<Heading text={entertainmentOverview} size='1rem' weight='lighter' colour='white' />
+			<VideoContentContainer id={generateComponentId(title, 'video-card-content')}>
+				<Typography type='h2' text={title} size='1rem' weight='bolder' colour='white' />
+				<Typography type='h3' text={overview} size='1rem' weight='lighter' colour='white' />
 			</VideoContentContainer>
 		</VideoContainer>
 	);
 };
 Video.defaultProps = {
-	entertainmentTitle: 'The Umbrella Academy',
-	entertainmentOverview: 'The Umbrella Academy Season 2 | Official Trailer | Netflix',
-	entertainmentImage: 'https://image.tmdb.org/t/p/original/mE3zzMkpP8yqlkzdjPsQmJHceoe.jpg',
-	entertainmentBackdropAction: () => false,
-	entertainmentVideoAction: () => false,
+	title: 'The Umbrella Academy',
+	overview: 'The Umbrella Academy Season 2 | Official Trailer | Netflix',
+	thumbnail: 'https://image.tmdb.org/t/p/original/mE3zzMkpP8yqlkzdjPsQmJHceoe.jpg',
+	thumbnailContainerAction: () => false,
+	thumbnailAction: () => false
 };
 
 Video.propTypes = {
-	entertainmentTitle: PropTypes.string,
-	entertainmentOverview: PropTypes.string,
-	entertainmentImage: PropTypes.string,
-	entertainmentBackdropAction: PropTypes.func,
-	entertainmentVideoAction: PropTypes.func,
+	title: PropTypes.string,
+	overview: PropTypes.string,
+	thumbnail: PropTypes.string,
+	thumbnailContainerAction: PropTypes.func,
+	thumbnailAction: PropTypes.func
 };
 
 export default Video;

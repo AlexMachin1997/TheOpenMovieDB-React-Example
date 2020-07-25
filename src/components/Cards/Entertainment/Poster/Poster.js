@@ -12,7 +12,7 @@ export const PosterContainer = styled.div`
 	}
 
 	@media (min-width: 700px) {
-		max-width: 210px;
+		max-width: 170px;
 	}
 `;
 

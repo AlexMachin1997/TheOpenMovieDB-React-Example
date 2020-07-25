@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Heading from '../../../Heading';
+import Typography from '../../../Core/Typography';
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
 /*
@@ -25,16 +25,16 @@ const Section = ({ title, content, display }) => {
 	if (Array.isArray(content) === true) {
 		contentElement = content.map((data, index) => (
 			<div style={{ marginBottom: '1rem' }} key={index}>
-				<Heading type='h3' text={data} weight='bold' height={1} size='1.4rem' />
+				<Typography type='h3' text={data} weight='bold' height={1} size='1.4rem' />
 			</div>
 		));
 	} else {
-		contentElement = <Heading type='h3' text={content} weight='bold' height={1} size='1.4rem' />;
+		contentElement = <Typography type='h3' text={content} weight='bold' height={1} size='1.4rem' />;
 	}
 
 	return (
 		<div style={{ margin: '1rem 0' }} id={replaceSpacesWith(title, '-')}>
-			<Heading type='h2' text={title} weight='bold' height={1} size='1.4rem' />
+			<Typography type='h2' text={title} weight='bold' height={1} size='1.4rem' />
 			<div id='content'>{contentElement}</div>
 		</div>
 	);
@@ -43,7 +43,7 @@ const Section = ({ title, content, display }) => {
 Section.defaultProps = {
 	title: 'title',
 	content: 'Default content',
-	display: true,
+	display: true
 };
 
 Section.propTypes = {
@@ -52,9 +52,9 @@ Section.propTypes = {
 		PropTypes.string,
 		PropTypes.object,
 		PropTypes.number,
-		PropTypes.array,
+		PropTypes.array
 	]),
-	display: PropTypes.bool,
+	display: PropTypes.bool
 };
 
 export default Section;

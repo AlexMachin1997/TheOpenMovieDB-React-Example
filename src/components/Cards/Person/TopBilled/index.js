@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Heading from '../../../Heading';
-import Paragraph from '../../../Paragraph';
-import Image from '../../../Image';
+import Typography from '../../../Core/Typography';
+import Image from '../../../Core/Image';
 
 import { TopBilledContainer, ContentContainer } from './TopBilled';
 
@@ -24,10 +23,11 @@ const TopBilled = ({ actorName, characterName, img, onClick, entertainmentType, 
 		/>
 
 		<ContentContainer id={generateComponentId(actorName, 'topbilled-card-content-container')}>
-			<Heading entertainmentType='h1' text={actorName} size='1rem' weight='bold' />
-			<Paragraph size='0.8rem' text={characterName} weight='lighter' colour='black' />
+			<Typography type='h2' text={actorName} size='1rem' weight='bold' />
+			<Typography type='p' size='0.8rem' text={characterName} weight='lighter' colour='black' />
 			{entertainmentType === 'tv' && (
-				<Paragraph
+				<Typography
+					type='p'
 					size='0.8rem'
 					text={`${episodeCount} episodes`}
 					weight='lighter'
@@ -44,7 +44,7 @@ TopBilled.defaultProps = {
 	img: 'https://image.tmdb.org/t/p/original/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
 	onClick: () => false,
 	entertainmentType: 'tv',
-	episodeCount: 136,
+	episodeCount: 136
 };
 
 TopBilled.propTypes = {
@@ -53,7 +53,7 @@ TopBilled.propTypes = {
 	img: PropTypes.string,
 	onClick: PropTypes.func,
 	entertainmentType: PropTypes.string,
-	episodeCount: PropTypes.number,
+	episodeCount: PropTypes.number
 };
 
 export default TopBilled;

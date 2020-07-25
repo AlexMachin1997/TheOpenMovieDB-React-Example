@@ -4,10 +4,9 @@ import { axe } from 'jest-axe';
 import { fireEvent } from '@testing-library/react';
 
 import Button from './index';
-import { lightTheme, darkTheme } from '../theme';
+import { lightTheme, darkTheme } from '../../theme';
 
-import createDOMElement from '../../utils/testUtils/createDOMElement';
-import replaceSpacesWith from '../../utils/formatters/replaceSpacesWith';
+import createDOMElement from '../../../utils/testUtils/createDOMElement';
 
 const stylingCheck = (expectedResult, props, theme = lightTheme) => {
 	// Arrange and act
@@ -15,7 +14,7 @@ const stylingCheck = (expectedResult, props, theme = lightTheme) => {
 		<ThemeProvider theme={theme}>
 			<Button {...props} />
 		</ThemeProvider>,
-		'button',
+		'button'
 	);
 
 	// Assert
@@ -117,7 +116,7 @@ describe('Button tests', () => {
 		it('Should return the default ariaLabel', () => {
 			const element = createDOMElement(
 				<Button ariaLabel='Custom Label' />,
-				"button[aria-label='custom-label'",
+				"button[aria-label='custom-label'"
 			);
 
 			expect(element).toBeTruthy();

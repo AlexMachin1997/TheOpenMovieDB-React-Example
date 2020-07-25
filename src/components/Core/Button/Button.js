@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import generateColours from '../../utils/theming/generateColours';
+import generateColours from '../../../utils/theming/generateColours';
 
 const Button = styled.button`
 	width: 100%;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Tooltip, TooltipText } from './Tooltip';
-import replaceSpacesWith from '../../utils/formatters/replaceSpacesWith';
+import replaceSpacesWith from '../../../utils/formatters/replaceSpacesWith';
 
 const TooltipComponent = ({ content, tooltipText }) => (
 	<Tooltip id={replaceSpacesWith(tooltipText, '-').toLowerCase()}>
@@ -13,12 +13,12 @@ const TooltipComponent = ({ content, tooltipText }) => (
 
 TooltipComponent.defaultProps = {
 	content: 'Tooltip title',
-	tooltipText: 'Tooltip content',
+	tooltipText: 'Tooltip content'
 };
 
 TooltipComponent.propTypes = {
 	content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-	tooltipText: PropTypes.string,
+	tooltipText: PropTypes.string
 };
 
 export default TooltipComponent;

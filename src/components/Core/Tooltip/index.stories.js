@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Tooltip from './index';
-import Preview from '../Blocks/Storybook/Preview';
+import Preview from '../../Blocks/Storybook/Preview';
 
 export const Default = () => <Preview content={<Tooltip />} />;
 
@@ -49,5 +49,5 @@ export const FacebookTooltip = () => (
 
 export default {
 	component: Tooltip,
-	title: 'Tooltip',
+	title: 'Tooltip'
 };

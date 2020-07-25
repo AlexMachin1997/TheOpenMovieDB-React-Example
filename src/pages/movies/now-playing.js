@@ -7,7 +7,7 @@ import Loader from '../../components/loader';
 
 const NowPlaying = () => {
 	const { loading, error, data } = useQuery(NowPlayingMovieQuery, {
-		displayName: 'Now playing movie query',
+		displayName: 'Now playing movie query'
 	});
 
 	if (loading) return <Loader />;

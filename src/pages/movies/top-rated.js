@@ -7,7 +7,7 @@ import Loader from '../../components/loader';
 
 const TopRated = () => {
 	const { loading, error, data } = useQuery(TopRatedMoviesQuery, {
-		displayName: 'Top rated movies query',
+		displayName: 'Top rated movies query'
 	});
 
 	if (loading) return <Loader />;

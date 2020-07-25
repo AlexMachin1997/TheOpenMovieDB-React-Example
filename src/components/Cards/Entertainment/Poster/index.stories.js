@@ -3,8 +3,8 @@ import { action } from '@storybook/addon-actions';
 
 import PosterCard from './index';
 import Preview from '../../../Blocks/Storybook/Preview';
-import Column from '../../../Layouts/Column';
-import Row from '../../../Layouts/Row';
+import Row from '../../../Blocks/Flexbox/Row';
+import Column from '../../../Blocks/Flexbox/Column';
 
 export const Default = () => <Preview content={<PosterCard />} background='#F5F5F5' />;
 
@@ -60,5 +60,5 @@ export const MultipleCards = () => (
 
 export default {
 	title: 'Card -  Poster',
-	component: PosterCard,
+	component: PosterCard
 };

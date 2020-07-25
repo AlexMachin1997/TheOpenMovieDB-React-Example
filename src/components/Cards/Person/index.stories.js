@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Person from './index';
-import Preview from '../../../Blocks/Storybook/Preview';
-import Column from '../../../Layouts/Column';
-import Row from '../../../Layouts/Row';
+import Preview from '../../Blocks/Storybook/Preview';
+import Row from '../../Blocks/Flexbox/Row';
+import Column from '../../Blocks/Flexbox/Column';
 
 export const Default = () => <Preview content={<Person />} />;
 
@@ -37,7 +37,7 @@ export const MultipleCards = () => {
 							knownFor={[
 								{ original_title: 'Forrest Gumpy' },
 								{ original_title: 'Toy Story' },
-								{ original_title: 'The Green Mile' },
+								{ original_title: 'The Green Mile' }
 							]}
 						/>
 					</Column>
@@ -48,7 +48,7 @@ export const MultipleCards = () => {
 							knownFor={[
 								{ original_title: 'The Avengers' },
 								{ original_title: 'Avengers Infinity War' },
-								{ original_title: 'Iron man 2' },
+								{ original_title: 'Iron man 2' }
 							]}
 						/>
 					</Column>
@@ -60,5 +60,5 @@ export const MultipleCards = () => {
 
 export default {
 	component: Person,
-	title: 'Card - Person',
+	title: 'Card - Person'
 };

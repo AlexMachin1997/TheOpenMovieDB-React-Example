@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Link from '../../Link';
+import Typography from '../../Core/Typography';
 import { Container } from './SocialLink';
 import replaceSpacesWith from '../../../utils/formatters/replaceSpacesWith';
 
@@ -10,7 +10,7 @@ const SocialLink = ({ content, link, display, newTab, label }) => {
 
 	return (
 		<Container id={replaceSpacesWith(label, '-')}>
-			<Link href={link} content={content} newTab={newTab} label={label} />
+			<Typography type='a' href={link} content={content} newTab={newTab} label={label} />
 		</Container>
 	);
 };
@@ -20,7 +20,7 @@ SocialLink.defaultProps = {
 	newTab: true,
 	content: 'Default link text',
 	link: 'https://www.facebook.com/',
-	label: 'Facebook Social Link',
+	label: 'Facebook Social Link'
 };
 
 SocialLink.propTypes = {
@@ -28,7 +28,7 @@ SocialLink.propTypes = {
 	link: PropTypes.string,
 	display: PropTypes.bool,
 	newTab: PropTypes.bool,
-	label: PropTypes.string,
+	label: PropTypes.string
 };
 
 export default SocialLink;

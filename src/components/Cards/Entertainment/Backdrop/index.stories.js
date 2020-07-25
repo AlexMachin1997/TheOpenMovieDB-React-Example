@@ -3,8 +3,8 @@ import { action } from '@storybook/addon-actions';
 
 import BackdropCard from './index';
 import Preview from '../../../Blocks/Storybook/Preview';
-import Column from '../../../Layouts/Column';
-import Row from '../../../Layouts/Row';
+import Column from '../../../Blocks/Flexbox/Column';
+import Row from '../../../Blocks/Flexbox/Row';
 
 export const Default = () => <Preview content={<BackdropCard />} background='#F5F5F5' />;
 
@@ -57,5 +57,5 @@ export const MultipleBackdropCards = () => (
 
 export default {
 	title: 'Card - Backdrop',
-	component: BackdropCard,
+	component: BackdropCard
 };

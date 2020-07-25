@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Image';
-import Paragraph from '../../../Paragraph';
-import Heading from '../../../Heading';
+import Image from '../../../Core/Image';
+import Typography from '../../../Core/Typography';
 import Rating from '../../../Ratings/Stars';
 
 import { OverviewContainer, OverviewContentContainer } from './Overview';
@@ -24,7 +23,7 @@ const Overview = ({ image, title, genres, releaseDate, onClick, rating }) => (
 
 		<OverviewContentContainer>
 			<div>
-				<Heading type='h2' size='1rem' colour='black' text={title} weight='bolder' />
+				<Typography type='h2' size='1rem' colour='black' text={title} weight='bolder' />
 			</div>
 
 			<div>
@@ -32,11 +31,11 @@ const Overview = ({ image, title, genres, releaseDate, onClick, rating }) => (
 			</div>
 
 			<div>
-				<Paragraph size='0.9rem' text={releaseDate} weight='lighter' colour='grey' />
+				<Typography type='p' size='0.9rem' text={releaseDate} weight='lighter' colour='grey' />
 			</div>
 
 			<div>
-				<Paragraph size='0.9rem' text={genres} weight='lighter' colour='grey' />
+				<Typography type='p' size='0.9rem' text={genres} weight='lighter' colour='grey' />
 			</div>
 		</OverviewContentContainer>
 	</OverviewContainer>
@@ -48,7 +47,7 @@ Overview.defaultProps = {
 	genres: 'Drama, Scifi, onClick',
 	releaseDate: 'October 2nd 2016',
 	onClick: () => false,
-	rating: 35,
+	rating: 35
 };
 
 Overview.propTypes = {
@@ -57,7 +56,7 @@ Overview.propTypes = {
 	genres: PropTypes.string,
 	releaseDate: PropTypes.string,
 	onClick: PropTypes.func,
-	rating: PropTypes.number,
+	rating: PropTypes.number
 };
 
 export default Overview;

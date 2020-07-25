@@ -18,7 +18,7 @@ export const KnownForContainer = styled.div`
 	align-items: center;
 	text-align: center;
 
-	h1 {
+	h2 {
 		margin: 0.5rem 0;
 	}
 `;

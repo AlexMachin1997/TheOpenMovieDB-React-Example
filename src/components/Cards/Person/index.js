@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { PersonContainer, ContentContainer } from './Person';
-import Image from '../../../Image';
-import Heading from '../../../Heading';
+import Image from '../../Core/Image';
+import Typography from '../../Core/Typography';
 
-import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
-import generateComponentId from '../../../../utils/formatters/generateComponentId';
+import replacesSpacesWith from '../../../utils/formatters/replaceSpacesWith';
+import generateComponentId from '../../../utils/formatters/generateComponentId';
 
 const Person = ({ actorName, actorImage, knownFor }) => (
 	<PersonContainer id={generateComponentId(actorName, 'person-card-container')}>
@@ -18,10 +18,10 @@ const Person = ({ actorName, actorImage, knownFor }) => (
 			borderRadius='0'
 		/>
 		<ContentContainer id={generateComponentId(actorName, 'person-card-content-container')}>
-			<Heading type='h1' text={actorName} size='1.1rem' weight={600} height={1} />
+			<Typography type='h2' text={actorName} size='1.1rem' weight={600} height={1} />
 			{knownFor.length !== 0 && (
-				<Heading
-					type='h2'
+				<Typography
+					type='h3'
 					text={`${knownFor.map((item) => item.original_title).join(', ')}`}
 					size='0.9rem'
 					weight={400}
@@ -36,7 +36,7 @@ const Person = ({ actorName, actorImage, knownFor }) => (
 Person.propTypes = {
 	actorName: PropTypes.string,
 	actorImage: PropTypes.string,
-	knownFor: PropTypes.arrayOf(PropTypes.string),
+	knownFor: PropTypes.arrayOf(PropTypes.string)
 };
 
 Person.defaultProps = {
@@ -46,8 +46,8 @@ Person.defaultProps = {
 		{ original_title: 'Saving Private Ryan' },
 		{ original_title: 'Drive' },
 		{ original_title: 'Godzilla' },
-		{ original_title: 'Breaking bad' },
-	],
+		{ original_title: 'Breaking bad' }
+	]
 };
 
 export default Person;

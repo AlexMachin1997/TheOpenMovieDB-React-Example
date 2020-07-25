@@ -23,12 +23,12 @@ const StarComponent = ({ rating, size }) => (
 
 StarComponent.defaultProps = {
 	rating: 0,
-	size: 20,
+	size: 20
 };
 
 StarComponent.propTypes = {
 	rating: PropTypes.number,
-	size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	size: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
 export default StarComponent;

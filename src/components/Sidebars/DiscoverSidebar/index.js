@@ -28,7 +28,7 @@ const DiscoverSidebar = () => {
 					style={{
 						padding: '1rem',
 						textAlign: 'center',
-						width: '100%',
+						width: '100%'
 					}}
 					type='button'
 				>
