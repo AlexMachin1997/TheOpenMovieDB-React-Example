@@ -73,7 +73,7 @@ describe('Action tests', () => {
 			// Arrange and Act
 			const element = createDOMElement(
 				<Action content={<p>Custom Content</p>} />,
-				'div[aria-expanded=false]',
+				'div[aria-expanded=false]'
 			);
 
 			// Assert

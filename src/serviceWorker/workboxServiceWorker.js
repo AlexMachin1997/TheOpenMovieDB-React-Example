@@ -51,10 +51,10 @@ if (workbox) {
 				new workbox.expiration.Plugin({
 					maxEntries: 60,
 
-					maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-				}),
-			],
-		}),
+					maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+				})
+			]
+		})
 	);
 
 	// JS, CSS caching
@@ -68,10 +68,10 @@ if (workbox) {
 				new workbox.expiration.Plugin({
 					maxEntries: 60,
 
-					maxAgeSeconds: 20 * 24 * 60 * 60, // 20 Days
-				}),
-			],
-		}),
+					maxAgeSeconds: 20 * 24 * 60 * 60 // 20 Days
+				})
+			]
+		})
 	);
 } else {
 	console.error('[ServiceWorker] Workbox could not be loaded. No offline support');

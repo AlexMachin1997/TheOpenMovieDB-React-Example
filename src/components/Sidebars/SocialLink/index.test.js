@@ -9,7 +9,7 @@ describe('SocialLink tests', () => {
 		it('Should not be in the DOM', () => {
 			const element = createDOMElement(
 				<SocialLink display={false} href='https://www.google.come' />,
-				'body',
+				'body'
 			);
 			expect(element).not.toBeInTheDocument();
 		});
