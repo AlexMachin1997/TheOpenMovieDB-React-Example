@@ -5,7 +5,7 @@ import { BrowserRouter as Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from './apollo';
 
-import Loader from './components/loader';
+import Loader from './components/Core/Loader';
 
 import usePageView from './hooks/react-router/pageView';
 

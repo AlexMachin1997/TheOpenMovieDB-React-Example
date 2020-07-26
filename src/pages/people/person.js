@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 import PersonQuery from '../../graphql/queries/People/Person';
 
-import Loader from '../../components/loader';
+import Loader from '../../components/Core/Loader';
 
 const Person = () => {
 	const { loading, error, data } = useQuery(PersonQuery, {

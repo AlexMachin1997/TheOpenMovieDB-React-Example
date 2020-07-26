@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 import OnTvQuery from '../../graphql/queries/Shows/OnTv';
 
-import Loader from '../../components/loader';
+import Loader from '../../components/Core/Loader';
 
 const OnTv = () => {
 	const { loading, error, data } = useQuery(OnTvQuery, {

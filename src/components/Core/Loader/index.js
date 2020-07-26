@@ -32,7 +32,7 @@ const LoaderComponent = ({ type, height }) => {
 
 LoaderComponent.defaultProps = {
 	type: 'basic',
-	height: '300px'
+	height: '500px'
 };
 
 LoaderComponent.propTypes = {

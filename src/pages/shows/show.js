@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 import ShowQuery from '../../graphql/queries/Shows/Show';
 
-import Loader from '../../components/loader';
+import Loader from '../../components/Core/Loader';
 
 const Single = () => {
 	const { loading, error, data } = useQuery(ShowQuery, {
