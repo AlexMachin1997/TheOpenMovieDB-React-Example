@@ -44,9 +44,5 @@ export const CustomSocialLink = () => <PersonSidebar facebookLink='https://www.f
 
 export default {
 	component: PersonSidebar,
-<<<<<<< HEAD
 	title: 'Sidebars -> PersonSidebar'
-=======
-	title: 'Person Sidebar'
->>>>>>> 69ca42d4ec3b98b139feebc68236943d1716d6a6
 };

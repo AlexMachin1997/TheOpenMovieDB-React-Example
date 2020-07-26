@@ -54,9 +54,5 @@ export const EntertainmentMovieSidebar = () => (
 
 export default {
 	component: Entertainment,
-<<<<<<< HEAD
 	title: 'Sidebars -> Entertainment'
-=======
-	title: 'Entertainment Sidebar'
->>>>>>> 69ca42d4ec3b98b139feebc68236943d1716d6a6
 };

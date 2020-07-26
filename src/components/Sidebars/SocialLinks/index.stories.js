@@ -12,11 +12,16 @@ export const Instagram = () => <SocialLinks instagramLink='https://www.instagram
 
 export const Homepage = () => <SocialLinks homepageLink='https://www.alexmachin.co.uk' />;
 
+export const FullExample = () => (
+	<SocialLinks
+		facebookLink='https://www.facebook.com'
+		twitterLink='https://www.twitter.com'
+		instagramLink='https://www.instagram.com'
+		homepageLink='https://www.alexmachin.co.uk'
+	/>
+);
+
 export default {
 	component: SocialLinks,
-<<<<<<< HEAD:src/components/Sidebars/SocialLinks/index.stories.js
 	title: 'Sidebars -> SocialLinks'
-=======
-	title: 'Social Links'
->>>>>>> 69ca42d4ec3b98b139feebc68236943d1716d6a6:src/components/SocialLinks/index.stories.js
 };
