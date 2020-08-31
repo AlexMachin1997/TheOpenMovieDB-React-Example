@@ -26,16 +26,15 @@ preview.js notes:
 // Adds interactive component support e.g. isToggled
 addDecorator(withKnobs);
 
-
 // Adds accessibility tests to storybook
 addParameters({
-  a11y: {
-    element: '#root',
-    config: {},
-    options: {},
-    manual: true,
-  }
-})
+	a11y: {
+		element: '#root',
+		config: {},
+		options: {},
+		manual: true
+	}
+});
 
 // Provides a global wrapper
 addDecorator((storyFn) => (
