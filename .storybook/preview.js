@@ -3,7 +3,7 @@ import React from 'react';
 import Normalize from '../src/components/Normalize';
 
 // Storybook modules
-import { addDecorator } from '@storybook/react';
+import { addDecorator, addParameters } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { withA11y } from '@storybook/addon-a11y';
@@ -26,8 +26,16 @@ preview.js notes:
 // Adds interactive component support e.g. isToggled
 addDecorator(withKnobs);
 
+
 // Adds accessibility tests to storybook
-addDecorator(withA11y);
+addParameters({
+  a11y: {
+    element: '#root',
+    config: {},
+    options: {},
+    manual: true,
+  }
+})
 
 // Provides a global wrapper
 addDecorator((storyFn) => (

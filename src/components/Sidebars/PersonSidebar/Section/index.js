@@ -25,16 +25,18 @@ const Section = ({ title, content, display }) => {
 	if (Array.isArray(content) === true) {
 		contentElement = content.map((data, index) => (
 			<div style={{ marginBottom: '1rem' }} key={index}>
-				<Typography type='h3' text={data} weight='bold' height={1} size='1.4rem' />
+				<Typography type='h3' text={data} weight='lighter' height={1} size='1.2rem' />
 			</div>
 		));
 	} else {
-		contentElement = <Typography type='h3' text={content} weight='bold' height={1} size='1.4rem' />;
+		contentElement = (
+			<Typography type='h3' text={content} weight='lighter' height={1} size='1rem' />
+		);
 	}
 
 	return (
 		<div style={{ margin: '1rem 0' }} id={replaceSpacesWith(title, '-')}>
-			<Typography type='h2' text={title} weight='bold' height={1} size='1.4rem' />
+			<Typography type='h2' text={title} weight='bold' height={1} size='1.2rem' />
 			<div id='content'>{contentElement}</div>
 		</div>
 	);

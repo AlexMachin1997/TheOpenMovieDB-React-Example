@@ -43,7 +43,7 @@ const DesktopPersonSidebar = ({
 					homepageLink={homepageLink}
 					name={actorName}
 				/>
-				<Typography type='h1' size='2rem' text='Personal Info' weight='bold' />
+				<Typography type='h1' size='1.3rem' text='Personal Info' weight='bold' />
 				<Section title='Known For' content={knownFor} display={knownFor.length !== 0} />
 				<Section title='Known Credits' content={knownCredits} display={knownCredits !== 0} />
 				<Section title='Gender' content={gender} display={gender.length !== 0} />

@@ -10,7 +10,7 @@ const SocialLink = ({ content, link, display, newTab, label }) => {
 
 	return (
 		<Container id={replaceSpacesWith(label, '-')}>
-			<Typography type='a' href={link} content={content} newTab={newTab} label={label} />
+			<Typography type='a' href={link} text={content} newTab={newTab} label={label} />
 		</Container>
 	);
 };
