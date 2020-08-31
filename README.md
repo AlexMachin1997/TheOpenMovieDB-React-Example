@@ -62,7 +62,7 @@ As part of the README file it will describe and explain the following sections:
 
 ## Purpose
 
-The whole idea by this web application is to allow me to develop a PWA using some of the latest and best technologies around, some of which include React, Apollo, Graphql etc. However, while it is primairly for me to push my skills further it will also allow users to search for the very latest movies, tv shows, people and more all through a single web application.
+The whole idea by this web application is to allow me to develop a PWA using some of the latest and best technologies around, some of which include React, Apollo, Graphql etc. However, while it is primarily for me to push my skills further it will also allow users to search for the very latest movies, tv shows, people and more all through a single web application.
 
 ## Core features
 
@@ -78,7 +78,7 @@ As of the current version of the API, it is currently capable of performing the 
 
 - Discover the latest Movies and TV Shows via an interactive sidebar. Users will be able to filter by rating, release date, genre, score, keywords and where to watch, this won't be avaliable for Celebrities.
 
-- View content offline (Apollo InMemoryCache will store content in the cache once the user has visisted it before. Later on the cache will be persisted, but for now it will be on a per session basis)
+- View content offline (Apollo InMemoryCache will store content in the cache once the user has visited it before. Later on the cache will be persisted, but for now it will be on a per session basis)
 
 - Switch between dark and light theme (Will be stored in Apollo cache, no custom React Provider//Context will be used)
 
@@ -136,9 +136,9 @@ As of the current version of the API, it is currently capable of performing the 
 
 ## Unit and integration testing setup
 
-To get started with the testing suites you will need to install all the development dependencies used for the application. To install the dependencies use `npm run devDependencies`, this will install all the development depencies, this includes react-testing-library, storybook, jest-axe etc.
+To get started with the testing suites you will need to install all the development dependencies used for the application. To install the dependencies use `npm run devDependencies`, this will install all the development decencies, this includes react-testing-library, storybook, jest-axe etc.
 
-By installing the development dependencies you will be able to run the whole applications component, GrpahQL and any other tests produced as part of the development of this project.
+By installing the development dependencies you will be able to run the whole applications component, GraphQL and any other tests produced as part of the development of this project.
 
 A complete list of all the tests which have been or are going to be created below
 
@@ -160,9 +160,9 @@ If you find any problems while using the API, report them [here](https://github.
 
 If you would like to request features for future versions of the application again, please post them [here](https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/issues). When posting ideas ensure the functionality is explained to provide any developers contributing to the project know what to implement.
 
-### Implimenting features
+### Implementing features
 
-If you would like to impliment a feature in the issues list or refactor existing code (Withut breaking exisitng functionality), feel free to form the repo and submit a [PR](https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/pulls) detailing all the changes mades.
+If you would like to implement a feature in the issues list or refactor existing code (Without breaking existing functionality), feel free to form the repo and submit a [PR](https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/pulls) detailing all the changes made.
 
 # Project Information
 

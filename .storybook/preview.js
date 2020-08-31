@@ -6,7 +6,6 @@ import Normalize from '../src/components/Normalize';
 import { addDecorator, addParameters } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import { withKnobs } from '@storybook/addon-knobs';
-import { withA11y } from '@storybook/addon-a11y';
 import { lightTheme } from '../src/components/theme';
 
 /*
