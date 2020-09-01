@@ -23,7 +23,8 @@ const Heading = ({
 	underline,
 	newTab,
 	href,
-	htmlFor
+	htmlFor,
+	transform
 }) => {
 	switch (type) {
 		case 'h1': {
@@ -34,6 +35,7 @@ const Heading = ({
 					fontSize={size}
 					colour={colour}
 					underline={underline}
+					transform={transform}
 				>
 					{text}
 				</Heading1>
@@ -47,6 +49,7 @@ const Heading = ({
 					fontSize={size}
 					colour={colour}
 					underline={underline}
+					transform={transform}
 				>
 					{text}
 				</Heading2>
@@ -60,6 +63,7 @@ const Heading = ({
 					fontSize={size}
 					colour={colour}
 					underline={underline}
+					transform={transform}
 				>
 					{text}
 				</Heading3>
@@ -73,6 +77,7 @@ const Heading = ({
 					fontSize={size}
 					colour={colour}
 					underline={underline}
+					transform={transform}
 				>
 					{text}
 				</Heading4>
@@ -86,6 +91,7 @@ const Heading = ({
 					fontSize={size}
 					colour={colour}
 					underline={underline}
+					transform={transform}
 				>
 					{text}
 				</Heading5>
@@ -99,6 +105,7 @@ const Heading = ({
 					fontSize={size}
 					colour={colour}
 					underline={underline}
+					transform={transform}
 				>
 					{text}
 				</Heading6>
@@ -113,6 +120,7 @@ const Heading = ({
 					fontSize={size}
 					colour={colour}
 					underline={underline}
+					transform={transform}
 				>
 					{text}
 				</Paragraph>
@@ -129,6 +137,7 @@ const Heading = ({
 					underline={underline}
 					target={newTab === true ? '_blank' : '_self'}
 					href={href}
+					transform={transform}
 				>
 					{text}
 				</Link>
@@ -144,6 +153,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					htmlFor={htmlFor}
+					transform={transform}
 				>
 					{text}
 				</Label>
@@ -158,6 +168,7 @@ const Heading = ({
 					fontSize={size}
 					colour={colour}
 					underline={underline}
+					transform={transform}
 				>
 					{text}
 				</Heading1>
@@ -180,7 +191,7 @@ Heading.defaultProps = {
 
 Heading.propTypes = {
 	weight: PropTypes.string,
-	height: PropTypes.number,
+	height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	size: PropTypes.string,
 	text: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.number]),
 	type: PropTypes.string,
