@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Column from '../../Layouts/Column';
-import Row from '../../Layouts/Row';
-import Paragraph from '../../Paragraph';
-import Image from '../../Image';
+import Column from '../../Blocks/Flexbox/Column';
+import Row from '../../Blocks/Flexbox/Row';
+import Typography from '../../Core/Typography';
+import Image from '../../Core/Image';
 import Section from './Section';
 import Keyword from './Keywords';
-import SocialLinks from '../../SocialLinks';
+import SocialLinks from '../SocialLinks';
 
 const Entertainment = ({
 	facebookLink,
@@ -34,11 +34,11 @@ const Entertainment = ({
 				name={entertainmentName}
 			/>
 
-			<Section content={null} title="Facts" display={entertainmentType === 'tv'} />
+			<Section content={null} title='Facts' display={entertainmentType === 'tv'} />
 
 			<Section
-				content={<Paragraph text={status} weight="lighter" size="1rem" />}
-				title="Status"
+				content={<Typography type='p' text={status} weight='lighter' size='1rem' />}
+				title='Status'
 				display
 			/>
 
@@ -47,14 +47,14 @@ const Entertainment = ({
 					entertainmentType === 'tv' ? (
 						<Image
 							src={networkImage}
-							width="50px"
-							height="30px"
-							borderRadius="0"
-							alt="Network logo"
+							width='50px'
+							height='30px'
+							borderRadius='0'
+							alt='Network logo'
 							label={`The network logo for ${entertainmentName}`}
 						/>
 					) : (
-						<Paragraph text={originalLanguage} weight="lighter" size="1rem" />
+						<Typography type='p' text={originalLanguage} weight='lighter' size='1rem' />
 					)
 				}
 				title={entertainmentType === 'tv' ? 'Network' : 'Original Language'}
@@ -63,10 +63,11 @@ const Entertainment = ({
 
 			<Section
 				content={
-					<Paragraph
+					<Typography
+						type='p'
 						text={entertainmentType === 'tv' ? type : budget}
-						weight="lighter"
-						size="1rem"
+						weight='lighter'
+						size='1rem'
 					/>
 				}
 				title={entertainmentType === 'tv' ? 'type' : 'Budget'}
@@ -74,10 +75,11 @@ const Entertainment = ({
 
 			<Section
 				content={
-					<Paragraph
+					<Typography
+						type='p'
 						text={entertainmentType === 'tv' ? originalLanguage : revenue}
-						weight="lighter"
-						size="1rem"
+						weight='lighter'
+						size='1rem'
 					/>
 				}
 				title={entertainmentType === 'tv' ? 'Original Language' : 'Revenue'}
@@ -85,7 +87,7 @@ const Entertainment = ({
 
 			<Section
 				content={<Keyword keywords={keywords} />}
-				title="Keywords"
+				title='Keywords'
 				display={keywords.length !== 0}
 			/>
 		</Column>

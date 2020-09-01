@@ -6,7 +6,7 @@ import FilterAction from './index';
 
 export const Default = () => <FilterAction />;
 
-export const CustomTitle = () => <FilterAction title="Custom title" />;
+export const CustomTitle = () => <FilterAction title='Custom title' />;
 
 export const CustomOnClick = () => <FilterAction onClick={action('toggled')} />;
 
@@ -18,7 +18,7 @@ export const CustomIsToggled = () => <FilterAction isToggled />;
 
 export const InteractiveAction = () => (
 	<FilterAction
-		title="Sort"
+		title='Sort'
 		onClick={action('toggled')}
 		actions={<h1 style={{ margin: 0 }}>Hello</h1>}
 		isToggled={boolean('toggled', false, 1)}
@@ -27,5 +27,5 @@ export const InteractiveAction = () => (
 
 export default {
 	component: FilterAction,
-	title: 'Discover Sidebar Action'
+	title: 'Sidebars -> DiscoverSidebar -> Action'
 };

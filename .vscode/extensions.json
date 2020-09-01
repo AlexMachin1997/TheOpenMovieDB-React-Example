@@ -10,7 +10,11 @@
 		"2gua.rainbow-brackets",
 		"PKief.material-icon-theme",
 		"orta.vscode-jest",
-		"equimper.react-native-react-redux",
-		"kumar-harsh.graphql-for-vscode"
+		"kumar-harsh.graphql-for-vscode",
+		"jpoissonnier.vscode-styled-components",
+		"ionutvmi.path-autocomplete",
+		"emmanuelbeziat.vscode-great-icons",
+		"vincaslt.highlight-matching-tag",
+		"eamodio.gitlens"
 	]
 }

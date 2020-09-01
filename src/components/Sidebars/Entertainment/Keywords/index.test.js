@@ -28,24 +28,6 @@ describe('Action tests', () => {
 		});
 	});
 
-	describe('onClick', () => {
-		it('The Thriller onClick should be fired once', () => {
-			// Arrange
-			const onClick = jest.fn();
-
-			const element = createDOMElement(
-				<Keywords keywords={['Thriller', 'Horror', 'Action', 'Drama']} onClick={onClick} />,
-				'#Keywords #Thriller'
-			);
-
-			// Act
-			fireEvent.click(element);
-
-			// Assert
-			expect(onClick).toHaveBeenCalledTimes(1);
-		});
-	});
-
 	describe('Accessability test', () => {
 		it('No violations should be present', async () => {
 			// Arrange and Act

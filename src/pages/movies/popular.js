@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 import PopularMoviesQuery from '../../graphql/queries/Movies/Popular';
 
-import Loader from '../../components/loader';
+import Loader from '../../components/Core/Loader';
 
 const Popular = () => {
 	const { loading, error, data } = useQuery(PopularMoviesQuery, {

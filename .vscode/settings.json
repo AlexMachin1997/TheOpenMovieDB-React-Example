@@ -23,7 +23,7 @@
 
 	"javascript.updateImportsOnFileMove.enabled": "always",
 
-	"typescript.validate.enable": false,
+	"typescript.validate.enable": true,
 
 	"files.autoSave": "off",
 	"files.exclude": {
@@ -31,7 +31,8 @@
 	},
 	"files.defaultLanguage": "{activeEditorLanguage}",
 
-	"javascript.validate.enable": true,
+	"javascript.validate.enable": true, // Highligts the unused imports when true
+	"editor.showUnused": true, // Highligts the unused imports when true
 
 	"search.exclude": {
 		"**/node_modules": true,
@@ -48,15 +49,19 @@
 	"npm.runSilent": true,
 	"explorer.confirmDragAndDrop": true,
 
-	"php.suggest.basic": true,
-
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
-		"editor.suggestSelection": "recentlyUsed",
-		"editor.suggest.showKeywords": false
+		"editor.suggestSelection": "recentlyUsedByPrefix",
+		"editor.suggest.showKeywords": true
 	},
 
 	"[json]": {
 		"breadcrumbs.showBooleans": true
+	},
+
+	"files.associations": {
+		"*.react.js": "javascriptreact",
+		"*.jsx": "javascriptreact",
+		"*.js": "javascriptreact"
 	}
 }

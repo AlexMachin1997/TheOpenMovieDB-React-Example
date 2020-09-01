@@ -23,5 +23,5 @@ export const CustomKeywords = () => (
 
 export default {
 	component: Keywords,
-	title: 'Entertainment Sidebar Keywords'
+	title: 'Sidebars -> Entertainment -> Keywords'
 };

@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import { KeyboardArrowRight, KeyboardArrowDown } from 'styled-icons/material-rounded';
 
 import { FilterActionContainer, FilterActionButton, FilterActionDropdown } from './Action';
-import Heading from '../../../Heading';
+import Typography from '../../../Core/Typography';
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
 const FilterAction = ({ title, onClick, content, isToggled }) => (
 	<FilterActionContainer id={replaceSpacesWith(title, '-')}>
 		<FilterActionButton isToggled={isToggled} onClick={onClick}>
-			<Heading type="h3" weight="bold" height={1} size="1.5rem" text={title} />
-			{isToggled === true ? <KeyboardArrowDown size="18" /> : <KeyboardArrowRight size="18" />}
+			<Typography type='h3' weight='bold' height={1} size='1.5rem' text={title} />
+			{isToggled === true ? <KeyboardArrowDown size='18' /> : <KeyboardArrowRight size='18' />}
 		</FilterActionButton>
 		<FilterActionDropdown
 			isToggled={isToggled}

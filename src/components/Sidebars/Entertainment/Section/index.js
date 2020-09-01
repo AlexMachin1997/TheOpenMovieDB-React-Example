@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Heading from '../../../Heading';
+import Typography from '../../../Core/Typography';
 import { Container } from './Section';
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
@@ -10,7 +10,7 @@ const Section = ({ content, title, display }) => {
 
 	return (
 		<Container id={replaceSpacesWith(title, '-')}>
-			<Heading type="h3" size="0.8rem" weight="bolder" text={title} />
+			<Typography type='h3' size='0.8rem' weight='bolder' text={title} />
 			<div>{content}</div>
 		</Container>
 	);

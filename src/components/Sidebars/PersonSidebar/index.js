@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../Image';
-import Row from '../../Layouts/Row';
-import Column from '../../Layouts/Column';
-import Heading from '../../Heading';
+import Image from '../../Core/Image';
+import Row from '../../Blocks/Flexbox/Row';
+import Column from '../../Blocks/Flexbox/Column';
+import Typography from '../../Core/Typography';
 import Section from './Section';
 import { Container } from './PersonSidebar';
-import SocialLinks from '../../SocialLinks';
+import SocialLinks from '../SocialLinks';
 
 const DesktopPersonSidebar = ({
 	actorName,
@@ -29,9 +29,9 @@ const DesktopPersonSidebar = ({
 				<div style={{ marginBottom: '1rem' }}>
 					<Image
 						src={actorImage}
-						width="308px"
-						height="462px"
-						borderRadius="1rem"
+						width='308px'
+						height='462px'
+						borderRadius='1rem'
 						alt={actorName}
 						label={`A picture of ${actorName}`}
 					/>
@@ -43,17 +43,17 @@ const DesktopPersonSidebar = ({
 					homepageLink={homepageLink}
 					name={actorName}
 				/>
-				<Heading type="h1" size="2rem" text="Personal Info" weight="bold" />
-				<Section title="Known For" content={knownFor} display={knownFor.length !== 0} />
-				<Section title="Known Credits" content={knownCredits} display={knownCredits !== 0} />
-				<Section title="Gender" content={gender} display={gender.length !== 0} />
-				<Section title="Birthday" content={birthday} display={birthday.length !== 0} />
+				<Typography type='h1' size='1.3rem' text='Personal Info' weight='bold' />
+				<Section title='Known For' content={knownFor} display={knownFor.length !== 0} />
+				<Section title='Known Credits' content={knownCredits} display={knownCredits !== 0} />
+				<Section title='Gender' content={gender} display={gender.length !== 0} />
+				<Section title='Birthday' content={birthday} display={birthday.length !== 0} />
 				<Section
-					title="Place of Birth"
+					title='Place of Birth'
 					content={placeOfBirth}
 					display={placeOfBirth.length !== 0}
 				/>
-				<Section title="Known as" content={knownAs} display={knownAs.length !== 0} />
+				<Section title='Known as' content={knownAs} display={knownAs.length !== 0} />
 			</Column>
 		</Row>
 	</Container>
