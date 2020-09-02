@@ -2,23 +2,62 @@ import styled from 'styled-components';
 
 import hexToRGBA from '../../../utils/formatters/hexToRGBA';
 
-export const Container = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+/* Desktop Menu Styled-Components */
+export const DesktopHeader = styled.nav`
 	background: ${(props) => props.theme.primary};
-	padding: 1rem;
-	color: white;
-	position: relative;
 	position: fixed;
 	top: 0;
 	right: 0;
 	left: 0;
 
-	svg {
-		&:hover {
-			cursor: pointer;
-		}
+	/* Move the desktop image down to be level with the content */
+	img {
+		position: relative;
+		top: 5px;
+	}
+`;
+
+export const DesktopHeaderContent = styled.div`
+	display: none;
+	justify-content: space-between;
+	align-items: center;
+	background: ${(props) => props.theme.primary};
+	padding: 1rem;
+	max-width: 1400px;
+	margin: 0 auto;
+
+	li {
+		padding: 0 1rem;
+	}
+
+	@media (min-width: 900px) {
+		display: flex;
+	}
+`;
+
+export const HeaderSection = styled.ul`
+	display: flex;
+	align-items: center;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+`;
+
+/* Mobile Sidebar Styled-Components */
+
+export const MobileHeader = styled.nav`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: ${(props) => props.theme.primary};
+	padding: 1rem;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+
+	@media (min-width: 900px) {
+		display: none;
 	}
 `;
 

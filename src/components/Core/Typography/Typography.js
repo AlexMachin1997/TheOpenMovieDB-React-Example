@@ -67,3 +67,7 @@ export const Label = styled(base).attrs({
 export const Paragraph = styled(base).attrs({
 	as: 'p'
 })``;
+
+export const ListItem = styled(base).attrs({
+	as: 'li'
+})``;

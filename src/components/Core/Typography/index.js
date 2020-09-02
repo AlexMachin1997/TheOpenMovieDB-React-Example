@@ -10,7 +10,8 @@ import {
 	Heading6,
 	Label,
 	Link,
-	Paragraph
+	Paragraph,
+	ListItem
 } from './Typography';
 
 const Heading = ({
@@ -157,6 +158,21 @@ const Heading = ({
 				>
 					{text}
 				</Label>
+			);
+		}
+
+		case 'li': {
+			return (
+				<ListItem
+					fontWeight={weight}
+					lineHeight={height}
+					fontSize={size}
+					colour={colour}
+					underline={underline}
+					transform={transform}
+				>
+					{text}
+				</ListItem>
 			);
 		}
 
