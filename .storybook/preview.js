@@ -31,7 +31,7 @@ addParameters({
 		element: '#root',
 		config: {},
 		options: {},
-		manual: true
+		manual: false
 	}
 });
 

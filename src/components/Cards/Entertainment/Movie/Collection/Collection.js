@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import hexToRgba from '../../../../../utils/formatters/hextToRGBA';
+import hexToRgba from '../../../../../utils/formatters/hexToRGBA';
 
 export const CollectionContainer = styled.div`
 	height: 260px;
