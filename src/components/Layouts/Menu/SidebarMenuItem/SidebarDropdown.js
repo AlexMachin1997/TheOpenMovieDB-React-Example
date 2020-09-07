@@ -9,8 +9,11 @@ export const Container = styled.div`
 `;
 
 export const InternalLinks = styled.ul`
-	display: ${(props) => (props.display === true ? 'block' : 'none')};
 	padding: 0;
+
+	p {
+		cursor: pointer;
+	}
 `;
 
 export const ExternalLinks = styled.ul`

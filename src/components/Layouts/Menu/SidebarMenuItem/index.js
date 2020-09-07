@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Container, InternalLinks, ExternalLinks } from './SidebarDropdown';
@@ -15,10 +15,14 @@ TODO LIST:
 const SidebarMenuItem = ({ title, items, textColour, contentType, onItemClick, display }) => {
 	let links = null;
 
-	// Internal or external links
-	if (items.length !== 0 && contentType === 'internal') {
+	/*
+		Internal Links:
+		- Will need to be replaced with a react-router link
+	*/
+
+	if (items.length !== 0 && contentType === 'internal' && display === true) {
 		links = (
-			<InternalLinks display={display}>
+			<InternalLinks>
 				{items.map((data, index) => (
 					<Typography
 						key={index}
@@ -33,6 +37,11 @@ const SidebarMenuItem = ({ title, items, textColour, contentType, onItemClick, d
 			</InternalLinks>
 		);
 	}
+
+	/*
+		External Links:
+		- Will take the user to an external site
+	*/
 
 	if (items.length !== 0 && contentType === 'external') {
 		links = (

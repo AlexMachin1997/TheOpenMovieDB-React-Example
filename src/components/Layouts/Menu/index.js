@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Icon from '../../Core/Icon';
 import Image from '../../Core/Image';
@@ -9,6 +9,14 @@ import { MobileHeader, Sidebar, DesktopHeaderContent, DesktopHeader, HeaderSecti
 const NavigationMenu = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [sidebarSectionIndex, setSidebarSectionIndex] = useState(0);
+
+	useEffect(() => {
+		window.addEventListener('resize', () => {
+			if (isSidebarOpen && window.innerWidth > 900) {
+				setIsSidebarOpen(false);
+			}
+		});
+	});
 
 	const Movies = [
 		{

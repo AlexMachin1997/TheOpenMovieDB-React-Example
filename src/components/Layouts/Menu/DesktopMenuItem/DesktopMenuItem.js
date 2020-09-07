@@ -9,6 +9,7 @@ export const Dropdown = styled.ul`
 	background: white;
 	border-radius: 0.5rem;
 	flex-direction: column;
+	border: 1px solid lightgrey;
 	li {
 		list-style-type: none;
 
@@ -22,6 +23,7 @@ export const DropdownContainer = styled.li`
 	position: relative;
 	cursor: pointer;
 	padding: 0 1rem;
+	list-style-type: none;
 
 	&:hover ${Dropdown} {
 		display: flex;

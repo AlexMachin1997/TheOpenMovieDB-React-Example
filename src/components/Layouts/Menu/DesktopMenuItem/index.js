@@ -5,7 +5,7 @@ import { DropdownContainer, Dropdown } from './DesktopMenuItem';
 
 import Typography from '../../../Core/Typography';
 
-const DesktopMenuItem = ({ content, items, textColour, headingType, linkType }) => {
+const DesktopMenuItem = ({ content, items, headingType, linkType }) => {
 	let links = null;
 
 	// Internal or external link
@@ -17,7 +17,7 @@ const DesktopMenuItem = ({ content, items, textColour, headingType, linkType }) 
 						key={index}
 						text={data.text}
 						weight='400'
-						colour={textColour}
+						colour='#000'
 						size='1rem'
 						height='2.3rem'
 						type='li'
@@ -37,7 +37,7 @@ const DesktopMenuItem = ({ content, items, textColour, headingType, linkType }) 
 						key={index}
 						text={data.text}
 						weight='lighter'
-						colour={textColour}
+						colour='#000'
 						size='1rem'
 						height='2.3rem'
 					/>
@@ -63,15 +63,13 @@ const DesktopMenuItem = ({ content, items, textColour, headingType, linkType }) 
 DesktopMenuItem.propTypes = {
 	content: PropTypes.string,
 	items: PropTypes.array,
-	textColour: PropTypes.string,
 	headingType: PropTypes.string,
 	linkType: PropTypes.string
 };
 
 DesktopMenuItem.defaultProps = {
-	content: '',
+	content: 'Default heading',
 	items: [],
-	textColour: '#000',
 	headingType: 'text',
 	linkType: 'internal'
 };
