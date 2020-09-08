@@ -14,7 +14,7 @@ const Poster = ({ title, releaseDate, rating, image, onClick }) => (
 	<PosterContainer onClick={onClick} id={generateComponentId(title, 'poster-card-container')}>
 		<Image
 			width='100%'
-			height='385px'
+			height='300px'
 			alt={replacesSpacesWith(title, '-')}
 			src={image}
 			borderRadius='1rem 1rem 0 0'
