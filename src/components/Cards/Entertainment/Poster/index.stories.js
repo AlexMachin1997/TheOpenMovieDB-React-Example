@@ -3,25 +3,59 @@ import { action } from '@storybook/addon-actions';
 
 import PosterCard from './index';
 import Preview from '../../../Blocks/Storybook/Preview';
-import Row from '../../../Blocks/Flexbox/Row';
-import Column from '../../../Blocks/Flexbox/Column';
 
-export const Default = () => <Preview content={<PosterCard />} background='#F5F5F5' />;
+import { GroupedExample, SingleExample } from '../../Shared';
+
+export const Default = () => (
+	<Preview
+		content={
+			<SingleExample>
+				<PosterCard />
+			</SingleExample>
+		}
+		background='#F5F5F5'
+	/>
+);
 
 export const Title = () => (
-	<Preview content={<PosterCard title='The Walking Dead' />} background='#F5F5F5' />
+	<Preview
+		content={
+			<SingleExample>
+				<PosterCard title='The Walking Dead' />
+			</SingleExample>
+		}
+		background='#F5F5F5'
+	/>
 );
 
 export const ReleaseDate = () => (
-	<Preview content={<PosterCard releaseDate='2010' />} background='#F5F5F5' />
+	<Preview
+		content={
+			<SingleExample>
+				<PosterCard releaseDate='2010' />
+			</SingleExample>
+		}
+		background='#F5F5F5'
+	/>
 );
 
-export const Rating = () => <Preview content={<PosterCard rating={75} />} background='#F5F5F5' />;
+export const Rating = () => (
+	<Preview
+		content={
+			<SingleExample>
+				<PosterCard rating={75} />
+			</SingleExample>
+		}
+		background='#F5F5F5'
+	/>
+);
 
 export const image = () => (
 	<Preview
 		content={
-			<PosterCard image='https://image.tmdb.org/t/p/original/lAwLmgq1zy0xJnusszmvWTLjFlO.jpg' />
+			<SingleExample>
+				<PosterCard image='https://image.tmdb.org/t/p/original/lAwLmgq1zy0xJnusszmvWTLjFlO.jpg' />
+			</SingleExample>
 		}
 		background='#F5F5F5'
 	/>
@@ -29,66 +63,19 @@ export const image = () => (
 
 export const onClick = () => (
 	<Preview
-		content={<PosterCard onClick={action('Poster card has been clicked')} />}
-		background='#F5F5F5'
-	/>
-);
-
-export const MultipleCardsWithFlexBox = () => (
-	<Preview
 		content={
-			<div style={{ display: 'flex', flexWrap: 'wrap' }}>
-				<PosterCard
-					title='Westworld'
-					image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-					rating={75}
-				/>
-				<PosterCard
-					title='Westworld'
-					image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-					rating={75}
-				/>
-				<PosterCard
-					title='Westworld'
-					image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-					rating={75}
-				/>
-				<PosterCard
-					title='Westworld'
-					image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-					rating={75}
-				/>
-
-				<PosterCard
-					title='The Walking Dead'
-					image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-					rating={25}
-				/>
-				<PosterCard
-					title='The Walking Dead'
-					image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-					rating={25}
-				/>
-				<PosterCard
-					title='The Walking Dead'
-					image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-					rating={25}
-				/>
-				<PosterCard
-					title='The Walking Dead'
-					image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-					rating={25}
-				/>
-			</div>
+			<SingleExample>
+				<PosterCard onClick={action('Poster card has been clicked')} />{' '}
+			</SingleExample>
 		}
 		background='#F5F5F5'
 	/>
 );
 
-export const MultipleCardsWithCSSGrid = () => (
+export const GroupedPosters = () => (
 	<Preview
 		content={
-			<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+			<GroupedExample>
 				<PosterCard
 					title='Westworld'
 					image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
@@ -130,9 +117,8 @@ export const MultipleCardsWithCSSGrid = () => (
 					image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
 					rating={25}
 				/>
-			</div>
+			</GroupedExample>
 		}
-		// background='#F5F5F5'
 	/>
 );
 

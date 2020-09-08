@@ -4,11 +4,6 @@ export const PosterContainer = styled.div`
 	border-radius: 1rem;
 	background: white;
 	margin: 1rem;
-	width: 100%;
-
-	@media (min-width: 600px) {
-		max-width: 300px;
-	}
 
 	&:hover {
 		cursor: pointer;
@@ -19,11 +14,6 @@ export const RatingContainer = styled.div`
 	position: absolute;
 	top: -29px;
 	left: 8px;
-
-	/* text {
-		font-size: 0.9rem;
-		font-weight: 600;
-	} */
 `;
 
 export const ContentContainer = styled.div`
