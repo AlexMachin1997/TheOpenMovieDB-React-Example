@@ -39,6 +39,14 @@ export const GroupedExample = () => (
 				<Column autoWidth>
 					<Overview />
 				</Column>
+
+				<Column autoWidth>
+					<Overview />
+				</Column>
+
+				<Column autoWidth>
+					<Overview />
+				</Column>
 			</Row>
 		}
 		background='lightblue'

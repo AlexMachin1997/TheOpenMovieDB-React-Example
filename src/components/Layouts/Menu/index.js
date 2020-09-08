@@ -2,21 +2,34 @@ import React, { useState, useEffect } from 'react';
 
 import Icon from '../../Core/Icon';
 import Image from '../../Core/Image';
+import Typography from '../../Core/Typography';
 import SidebarMenuItem from './SidebarMenuItem';
-import DesktopMenuItem from './DesktopMenuItem';
+import Dropdown from '../../Dropdown';
 import { MobileHeader, Sidebar, DesktopHeaderContent, DesktopHeader, HeaderSection } from './Menu';
 
 const NavigationMenu = () => {
+	// Sidebar state
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-	const [sidebarSectionIndex, setSidebarSectionIndex] = useState(0);
+
+	// Sidebar sections state
+	const [isMovieSectionActive, setIsMovieSectionActive] = useState(false);
+	const [isShowSectionActive, setIsShowSectionActive] = useState(false);
+	const [isPeopleSectionActive, setIsPeopleSectionActive] = useState(false);
 
 	useEffect(() => {
-		window.addEventListener('resize', () => {
-			if (isSidebarOpen && window.innerWidth > 900) {
+		// Create the sidebar resize event
+		const sidebarResizeEvent = () => {
+			if (isSidebarOpen === true && window.innerWidth > 900) {
 				setIsSidebarOpen(false);
 			}
-		});
-	});
+		};
+
+		// Adds a resize event, when the browser resizes and the sidebar is open trigger the callback
+		window.addEventListener('resize', sidebarResizeEvent);
+
+		// Removes the resize event (Requires the event and previous function to be passed in)
+		return () => window.removeEventListener('resize', sidebarResizeEvent);
+	}, [isSidebarOpen]);
 
 	const Movies = [
 		{
@@ -123,28 +136,22 @@ const NavigationMenu = () => {
 				<SidebarMenuItem
 					title='Movies'
 					items={Movies}
-					display={sidebarSectionIndex === 1}
-					onItemClick={() =>
-						sidebarSectionIndex !== 1 ? setSidebarSectionIndex(1) : setSidebarSectionIndex(0)
-					}
+					display={isMovieSectionActive}
+					onItemClick={() => setIsMovieSectionActive(!isMovieSectionActive)}
 				/>
 
 				<SidebarMenuItem
 					title='TV Shows'
 					items={Shows}
-					display={sidebarSectionIndex === 2}
-					onItemClick={() =>
-						sidebarSectionIndex !== 2 ? setSidebarSectionIndex(2) : setSidebarSectionIndex(0)
-					}
+					display={isShowSectionActive}
+					onItemClick={() => setIsShowSectionActive(!isShowSectionActive)}
 				/>
 
 				<SidebarMenuItem
 					title='People'
 					items={People}
-					display={sidebarSectionIndex === 3}
-					onItemClick={() =>
-						sidebarSectionIndex !== 3 ? setSidebarSectionIndex(3) : setSidebarSectionIndex(0)
-					}
+					display={isPeopleSectionActive}
+					onItemClick={() => setIsPeopleSectionActive(!isPeopleSectionActive)}
 				/>
 
 				<SidebarMenuItem items={SidebarExternalLinks} textColour='#ffffff' contentType='external' />
@@ -178,36 +185,84 @@ const NavigationMenu = () => {
 			<DesktopHeader aria-labelledby='Desktop Navigation'>
 				<DesktopHeaderContent>
 					<HeaderSection>
-						<DesktopMenuItem
-							headingType='image'
-							content={
-								<Image
-									src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg'
-									alt='TMBDb Logo'
-									width='190px'
-									height='20px'
-								/>
-							}
+						<li>
+							<Image
+								src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg'
+								alt='TMBDb Logo'
+								width='190px'
+								height='20px'
+							/>
+						</li>
+
+						<Dropdown
+							content='Movies'
+							contentType='text'
+							items={Movies}
+							linkType='internal'
+							dropdownBackground='white'
+							dropdownBorderColour='lightgrey'
+							itemHoverBackground='lightgrey'
+							background='inherit'
+							colour='white'
 						/>
 
-						<DesktopMenuItem content='Movies' items={Movies} />
+						<Dropdown
+							content='TV Shows'
+							contentType='text'
+							items={Shows}
+							linkType='internal'
+							dropdownBackground='white'
+							dropdownBorderColour='lightgrey'
+							itemHoverBackground='lightgrey'
+							background='inherit'
+							colour='white'
+						/>
 
-						<DesktopMenuItem content='TV Shows' items={Shows} />
+						<Dropdown
+							content='People'
+							contentType='text'
+							items={People}
+							linkType='internal'
+							dropdownBackground='white'
+							dropdownBorderColour='lightgrey'
+							itemHoverBackground='lightgrey'
+							background='inherit'
+							colour='white'
+						/>
 
-						<DesktopMenuItem content='People' items={People} />
-
-						<DesktopMenuItem content='More' items={DesktopExternalLinks} />
+						<Dropdown
+							content='More'
+							contentType='text'
+							items={DesktopExternalLinks}
+							linkType='external'
+							dropdownBackground='white'
+							dropdownBorderColour='lightgrey'
+							itemHoverBackground='lightgrey'
+							background='inherit'
+							colour='white'
+						/>
 					</HeaderSection>
 
 					<HeaderSection>
-						<DesktopMenuItem content='Login' />
-
-						<DesktopMenuItem content='Register' />
-
-						<DesktopMenuItem
-							content={<Icon icon='SearchCircle' size={40} colour='secondary' />}
-							headingType='image'
+						<Typography
+							text='Login'
+							weight='bolder'
+							colour='white'
+							size='1rem'
+							height='2.3rem'
+							type='li'
 						/>
+
+						<Typography
+							text='Register'
+							weight='bolder'
+							colour='white'
+							size='1rem'
+							height='2.3rem'
+							type='li'
+						/>
+
+						<Icon icon='SearchCircle' size={40} colour='secondary' />
 					</HeaderSection>
 				</DesktopHeaderContent>
 			</DesktopHeader>

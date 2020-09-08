@@ -29,7 +29,7 @@ export const OnClick = () => (
 	<Preview content={<BackdropCard onClick={action('Card clicked')} />} />
 );
 
-export const MultipleBackdropCards = () => (
+export const MultipleBackdropCardsWithFlexBox = () => (
 	<Preview
 		content={
 			<Row>
@@ -52,6 +52,63 @@ export const MultipleBackdropCards = () => (
 			</Row>
 		}
 		background='#F5F5F5'
+	/>
+);
+
+export const MultipleBackdropCardsWithCSSGrid = () => (
+	<Preview
+		content={
+			<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+				<BackdropCard
+					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+					title='Supernatural'
+					releaseDate='4th July 2010'
+					rating={50}
+				/>
+				<BackdropCard
+					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+					title='Supernatural'
+					releaseDate='4th July 2010'
+					rating={50}
+				/>
+				<BackdropCard
+					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+					title='Supernatural'
+					releaseDate='4th July 2010'
+					rating={50}
+				/>
+				<BackdropCard
+					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+					title='Supernatural'
+					releaseDate='4th July 2010'
+					rating={50}
+				/>
+				<BackdropCard
+					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+					title='Supernatural'
+					releaseDate='4th July 2010'
+					rating={50}
+				/>
+				<BackdropCard
+					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+					title='Supernatural'
+					releaseDate='4th July 2010'
+					rating={50}
+				/>
+				<BackdropCard
+					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+					title='Supernatural'
+					releaseDate='4th July 2010'
+					rating={50}
+				/>
+				<BackdropCard
+					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+					title='Supernatural'
+					releaseDate='4th July 2010'
+					rating={50}
+				/>
+			</div>
+		}
 	/>
 );
 

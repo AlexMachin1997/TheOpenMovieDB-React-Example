@@ -4,27 +4,26 @@ export const PosterContainer = styled.div`
 	border-radius: 1rem;
 	background: white;
 	margin: 1rem;
-	max-width: 160px;
-	height: 100%;
+	width: 100%;
+
+	@media (min-width: 600px) {
+		max-width: 300px;
+	}
 
 	&:hover {
 		cursor: pointer;
-	}
-
-	@media (min-width: 700px) {
-		max-width: 170px;
 	}
 `;
 
 export const RatingContainer = styled.div`
 	position: absolute;
-	top: -23px;
-	left: 10px;
+	top: -29px;
+	left: 8px;
 
-	text {
-		font-size: 0.7rem;
+	/* text {
+		font-size: 0.9rem;
 		font-weight: 600;
-	}
+	} */
 `;
 
 export const ContentContainer = styled.div`

@@ -14,7 +14,7 @@ const Poster = ({ title, releaseDate, rating, image, onClick }) => (
 	<PosterContainer onClick={onClick} id={generateComponentId(title, 'poster-card-container')}>
 		<Image
 			width='100%'
-			height='244px'
+			height='385px'
 			alt={replacesSpacesWith(title, '-')}
 			src={image}
 			borderRadius='1rem 1rem 0 0'
@@ -22,7 +22,7 @@ const Poster = ({ title, releaseDate, rating, image, onClick }) => (
 
 		<ContentContainer id={generateComponentId(title, 'poster-card-content')}>
 			<RatingContainer id={generateComponentId(title, 'poster-card-rating')}>
-				<Rating percentage={rating} size={34} strokeWidth={2.5} />
+				<Rating percentage={rating} size={40} strokeWidth={2.5} textSize='0.8rem' />
 			</RatingContainer>
 			<div id={generateComponentId(title, 'poster-card-meta')}>
 				<Typography type='h1' text={title} size='1rem' weight='bolder' />

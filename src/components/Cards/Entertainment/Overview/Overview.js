@@ -4,17 +4,6 @@ export const OverviewContainer = styled.div`
 	display: flex;
 	margin: 1rem;
 	border-radius: 1rem;
-
-	@media (min-width: 700px) {
-		img {
-			display: flex;
-			width: 150px;
-		}
-
-		p {
-			font-size: 1rem;
-		}
-	}
 `;
 
 export const OverviewContentContainer = styled.div`

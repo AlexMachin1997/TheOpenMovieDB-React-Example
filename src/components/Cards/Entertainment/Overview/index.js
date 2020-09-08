@@ -13,8 +13,8 @@ const Overview = ({ image, title, genres, releaseDate, onClick, rating }) => (
 	<OverviewContainer onClick={onClick}>
 		<div>
 			<Image
-				width='100px'
-				height='100%'
+				width='150px'
+				height='200px'
 				alt={replacesSpacesWith(title, '-')}
 				src={image}
 				borderRadius='1rem'
