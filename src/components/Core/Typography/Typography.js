@@ -20,7 +20,6 @@ NOTE: The base component doesn't need to be the same type, the .attrs({as: [Inse
 */
 
 const base = styled.span`
-	font-family: ${(props) => props.theme.font};
 	font-weight: ${(props) => props.fontWeight};
 	line-height: ${(props) => props.lineHeight};
 	font-size: ${(props) => props.fontSize};

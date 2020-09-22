@@ -26,7 +26,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Source Sans Pro', Arial, sans-serif;
+  font-family: MyFontFamily, sans-serif;
 }
 
 /**
