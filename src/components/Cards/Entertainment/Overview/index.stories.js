@@ -5,6 +5,7 @@ import Overview from './index';
 import Row from '../../../Blocks/Flexbox/Row';
 import Column from '../../../Blocks/Flexbox/Column';
 import Preview from '../../../Blocks/Storybook/Preview';
+import { GroupedExample, SingleExample } from '../../Shared';
 
 export const Default = () => <Overview />;
 
@@ -18,7 +19,13 @@ export const Image = () => (
 
 export const Title = () => <Preview content={<Overview title='The Walking Dead' />} />;
 
-export const Genres = () => <Preview content={<Overview genres='Action, Drama' />} />;
+export const OverviewProperty = () => (
+	<Preview
+		content={
+			<Overview overview='Sixth-grader Peter is pretty much your average kid—he likes gaming, hanging with his friends and his beloved pair of Air Jordans. But when his recently widowed grandfather Ed  moves in with Peter’s family, the boy is forced to give up his most prized possession of all, his bedroom. Unwilling to let such an injustice stand, Peter devises a series of increasingly elaborate pranks to drive out the interloper, but Grandpa Ed won’t go without a fight.' />
+		}
+	/>
+);
 
 export const ReleaseDate = () => (
 	<Preview content={<Overview releaseDate='10th October, 2010' />} />
@@ -28,29 +35,18 @@ export const OnClick = () => <Preview content={<Overview onClick={action('Search
 
 export const Rating = () => <Preview content={<Overview rating={100} />} />;
 
-export const GroupedExample = () => (
-	<Preview
-		content={
-			<Row>
-				<Column autoWidth>
-					<Overview />
-				</Column>
+export const GroupExample = () => (
+	<>
+		<GroupedExample>
+			<Overview overview='Sixth-grader Peter is pretty much your average kid—he likes gaming, hanging with his friends and his beloved pair of Air Jordans. But when his recently widowed grandfather Ed  moves in with Peter’s family, the boy is forced to give up his most prized possession of all, his bedroom. Unwilling to let such an injustice stand, Peter devises a series of increasingly elaborate pranks to drive out the interloper, but Grandpa Ed won’t go without a fight.' />
 
-				<Column autoWidth>
-					<Overview />
-				</Column>
+			<Overview overview='Sixth-grader Peter is pretty much your average kid—he likes gaming, hanging with his friends and his beloved pair of Air Jordans. But when his recently widowed grandfather Ed  moves in with Peter’s family, the boy is forced to give up his most prized possession of all, his bedroom. Unwilling to let such an injustice stand, Peter devises a series of increasingly elaborate pranks to drive out the interloper, but Grandpa Ed won’t go without a fight.' />
 
-				<Column autoWidth>
-					<Overview />
-				</Column>
+			<Overview overview='Sixth-grader Peter is pretty much your average kid—he likes gaming, hanging with his friends and his beloved pair of Air Jordans. But when his recently widowed grandfather Ed  moves in with Peter’s family, the boy is forced to give up his most prized possession of all, his bedroom. Unwilling to let such an injustice stand, Peter devises a series of increasingly elaborate pranks to drive out the interloper, but Grandpa Ed won’t go without a fight.' />
 
-				<Column autoWidth>
-					<Overview />
-				</Column>
-			</Row>
-		}
-		background='lightblue'
-	/>
+			<Overview overview='Sixth-grader Peter is pretty much your average kid—he likes gaming, hanging with his friends and his beloved pair of Air Jordans. But when his recently widowed grandfather Ed  moves in with Peter’s family, the boy is forced to give up his most prized possession of all, his bedroom. Unwilling to let such an injustice stand, Peter devises a series of increasingly elaborate pranks to drive out the interloper, but Grandpa Ed won’t go without a fight.' />
+		</GroupedExample>
+	</>
 );
 
 export default {

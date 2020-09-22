@@ -2,14 +2,14 @@ import styled from 'styled-components';
 
 export const OverviewContainer = styled.div`
 	display: flex;
-	margin: 1rem;
 	border-radius: 1rem;
+	height: 100%;
 `;
 
 export const OverviewContentContainer = styled.div`
 	padding: 1rem;
 	display: flex;
-	justify-content: flex-start;
+	justify-content: center;
 	flex-direction: column;
 
 	div {
@@ -17,12 +17,15 @@ export const OverviewContentContainer = styled.div`
 	}
 
 	@media (min-width: 700px) {
-		div {
-			margin-top: 1rem;
-		}
+	}
+`;
 
-		div:first-child {
-			margin-top: 0;
-		}
+export const OverviewInformation = styled.div`
+	p {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 `;

@@ -4,7 +4,6 @@ import { action } from '@storybook/addon-actions';
 import PosterCard from './index';
 import Preview from '../../../Blocks/Storybook/Preview';
 import { GroupedExample, SingleExample } from '../../Shared';
-import DiscoverSidebar from '../../../Sidebars/DiscoverSidebar';
 
 export const Default = () => (
 	<Preview
@@ -73,59 +72,76 @@ export const onClick = () => (
 );
 
 export const GroupedPosters = () => (
-	<Preview
-		content={
-			<div style={{ display: 'flex', maxWidth: '1400px', margin: '0 auto' }}>
-				<div>
-					<DiscoverSidebar />
-				</div>
-				<GroupedExample>
-					<PosterCard
-						title='Westworld'
-						image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-						rating={75}
-					/>
-					<PosterCard
-						title='Westworld'
-						image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-						rating={75}
-					/>
-					<PosterCard
-						title='Westworld'
-						image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-						rating={75}
-					/>
-					<PosterCard
-						title='Westworld'
-						image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-						rating={75}
-					/>
+	<div>
+		<Preview
+			content={
+				<>
+					<div
+						style={{
+							maxWidth: '1300px',
+							margin: '0 auto',
+							padding: '0 1rem'
+						}}
+					>
+						<h1>Popular Movies</h1>
+					</div>
+					<div
+						style={{
+							display: 'flex',
+							maxWidth: '1300px',
+							margin: '0 auto',
+							padding: '1.9rem 2.5rem'
+						}}
+					>
+						<GroupedExample>
+							<PosterCard
+								title='Westworld'
+								image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
+								rating={75}
+							/>
+							<PosterCard
+								title='Westworld'
+								image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
+								rating={75}
+							/>
+							<PosterCard
+								title='Westworld'
+								image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
+								rating={75}
+							/>
+							<PosterCard
+								title='Westworld'
+								image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
+								rating={75}
+							/>
 
-					<PosterCard
-						title='The Walking Dead'
-						image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-						rating={25}
-					/>
-					<PosterCard
-						title='The Walking Dead'
-						image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-						rating={25}
-					/>
-					<PosterCard
-						title='The Walking Dead'
-						image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-						rating={25}
-					/>
-					<PosterCard
-						title='The Walking Dead'
-						image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-						rating={25}
-					/>
-				</GroupedExample>
-			</div>
-		}
-		background='white'
-	/>
+							<PosterCard
+								title='The Walking Dead'
+								image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
+								rating={25}
+							/>
+							<PosterCard
+								title='The Walking Dead'
+								image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
+								rating={25}
+							/>
+							<PosterCard
+								title='The Walking Dead'
+								image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
+								rating={25}
+							/>
+							<PosterCard
+								title='The Walking Dead'
+								image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
+								rating={25}
+							/>
+						</GroupedExample>
+					</div>
+				</>
+			}
+			background='white'
+		/>
+	</div>
 );
 
 export default {

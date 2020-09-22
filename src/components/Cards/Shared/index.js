@@ -16,6 +16,7 @@ export const GroupedExample = styled.div`
 	display: grid;
 	grid-template-columns: 1fr;
 	column-gap: 50px;
+	row-gap: 50px;
 
 	@media (min-width: 600px) {
 		grid-template-columns: repeat(2, 1fr);
