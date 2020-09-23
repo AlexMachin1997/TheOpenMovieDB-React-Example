@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { DropdownLinks, DropdownContainer, Dropdown, ContentContainer } from './Dropdown';
+import { DropdownLinks, DropdownContainer, Dropdown } from './Dropdown';
 
-import Typography from '../Core/Typography';
+import Typography from '../Typography';
 
 const DesktopMenuItem = ({
 	content,
@@ -33,7 +33,7 @@ const DesktopMenuItem = ({
 							<Typography
 								key={index}
 								text={data.text}
-								weight='400'
+								weight='lighter'
 								colour={dropdownItemColour}
 								size='1rem'
 								height='2.3rem'
@@ -62,9 +62,7 @@ const DesktopMenuItem = ({
 	return (
 		<DropdownContainer tabIndex='0' background={background}>
 			{contentType === 'text' ? (
-				<ContentContainer>
-					<Typography text={content} weight='bolder' colour={colour} size='1rem' height='2.3rem' />
-				</ContentContainer>
+				<Typography text={content} weight='bolder' colour={colour} size='1rem' height='2.3rem' />
 			) : (
 				content
 			)}

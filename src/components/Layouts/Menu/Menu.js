@@ -3,8 +3,11 @@ import styled from 'styled-components';
 import hexToRGBA from '../../../utils/formatters/hexToRGBA';
 
 /* Desktop Menu Styled-Components */
-export const DesktopHeader = styled.nav`
+export const DesktopMenu = styled.nav`
 	background: ${(props) => props.theme.primary};
+	padding: 1rem 2.5rem;
+
+	/* Allows the menu to scroll to be fixed to the top of the screen, this could be extended to toggle between fixed and none fixed..... */
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -18,25 +21,21 @@ export const DesktopHeader = styled.nav`
 	}
 `;
 
-export const DesktopHeaderContent = styled.div`
+export const DesktopContainer = styled.div`
 	display: none;
-	justify-content: space-between;
+	justify-content: space-between; /* Adds Spacing between the HeaderSections  */
 	align-items: center;
 	background: ${(props) => props.theme.primary};
-	padding: 1rem;
 	max-width: 1400px;
 	margin: 0 auto;
 
-	li {
-		padding: 0 1rem;
-	}
-
+	/* Show only in desktop mode */
 	@media (min-width: 900px) {
 		display: flex;
 	}
 `;
 
-export const HeaderSection = styled.ul`
+export const MenuSection = styled.ul`
 	display: flex;
 	align-items: center;
 	list-style-type: none;
@@ -44,9 +43,13 @@ export const HeaderSection = styled.ul`
 	margin: 0;
 `;
 
-/* Mobile Sidebar Styled-Components */
+export const MenuItem = styled.li`
+	padding-right: 1rem;
+`;
 
-export const MobileHeader = styled.nav`
+/* Mobile MobileSidebar Styled-Components */
+
+export const MobileMenu = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -57,20 +60,21 @@ export const MobileHeader = styled.nav`
 	right: 0;
 	left: 0;
 
+	/* Hide when not in mobile mode */
 	@media (min-width: 900px) {
 		display: none;
 	}
 `;
 
-export const Sidebar = styled.div`
+export const MobileSidebar = styled.div`
 	position: fixed;
 	top: 75px;
 	left: ${(props) => (props.isSideBarOpen ? '0' : '-90%')};
 	width: ${(props) => (props.isSideBarOpen ? '100%' : '0%')};
 	background: ${(props) => hexToRGBA(props.theme.primary, '0.9')};
 	padding: 1rem;
-	transition: ease 0.6s;
+	transition: ease 0.6s; /* While the background is */
 	bottom: 0;
-	overflow-y: scroll;
-	backdrop-filter: blur(20px);
+	overflow-y: scroll; /* Allow y axios scrolling */
+	backdrop-filter: blur(20px); /* Blur the background behind the MobileSidebar*/
 `;

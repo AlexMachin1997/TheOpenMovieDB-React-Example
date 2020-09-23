@@ -4,31 +4,38 @@ import Icon from '../../Core/Icon';
 import Image from '../../Core/Image';
 import Typography from '../../Core/Typography';
 import SidebarMenuItem from './SidebarMenuItem';
-import Dropdown from '../../Dropdown';
-import { MobileHeader, Sidebar, DesktopHeaderContent, DesktopHeader, HeaderSection } from './Menu';
+import Dropdown from '../../Core/Dropdown';
+import {
+	MenuItem,
+	MobileMenu,
+	MenuSection,
+	MobileSidebar,
+	DesktopContainer,
+	DesktopMenu
+} from './Menu';
 import SearchBar from './SearchBar';
 
 const NavigationMenu = () => {
-	// Sidebar state
+	// MobileSidebar state
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 	// Search bar
 	const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
-	// Sidebar sections state
+	// MobileSidebar sections state
 	const [isMovieSectionActive, setIsMovieSectionActive] = useState(false);
 	const [isShowSectionActive, setIsShowSectionActive] = useState(false);
 	const [isPeopleSectionActive, setIsPeopleSectionActive] = useState(false);
 
 	useEffect(() => {
-		// Create the sidebar resize event
+		// Create the MobileSidebar resize event
 		const sidebarResizeEvent = () => {
 			if (isSidebarOpen === true && window.innerWidth > 900) {
 				setIsSidebarOpen(false);
 			}
 		};
 
-		// Adds a resize event, when the browser resizes and the sidebar is open trigger the callback
+		// Adds a resize event, when the browser resizes and the MobileSidebar is open trigger the callback
 		window.addEventListener('resize', sidebarResizeEvent);
 
 		// Removes the resize event (Requires the event and previous function to be passed in)
@@ -138,7 +145,7 @@ const NavigationMenu = () => {
 		<div>
 			<SearchBar display={isSearchBarVisible} />
 
-			<Sidebar isSideBarOpen={isSidebarOpen}>
+			<MobileSidebar isSideBarOpen={isSidebarOpen}>
 				<SidebarMenuItem
 					title='Movies'
 					items={Movies}
@@ -161,10 +168,10 @@ const NavigationMenu = () => {
 				/>
 
 				<SidebarMenuItem items={SidebarExternalLinks} textColour='#ffffff' contentType='external' />
-			</Sidebar>
+			</MobileSidebar>
 
-			<MobileHeader aria-labelledby='Mobile Navigation'>
-				<HeaderSection
+			<MobileMenu aria-labelledby='Mobile Navigation'>
+				<MenuSection
 					onClick={() => {
 						setIsSidebarOpen(!isSidebarOpen);
 						setIsSearchBarVisible(false);
@@ -172,112 +179,124 @@ const NavigationMenu = () => {
 					tabIndex='0'
 					role='button'
 				>
-					<li>
+					<MenuItem>
 						<Icon icon='Menu' size={30} colour='white' />
-					</li>
-				</HeaderSection>
+					</MenuItem>
+				</MenuSection>
 
-				<HeaderSection>
-					<li>
+				<MenuSection>
+					<MenuItem>
 						<Image
 							src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg'
 							alt='TMBDb Logo'
 							width='75px'
 							height='40px'
 						/>
-					</li>
-				</HeaderSection>
+					</MenuItem>
+				</MenuSection>
 
-				<HeaderSection onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}>
-					<li>
+				<MenuSection onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}>
+					<MenuItem>
 						<Icon
 							icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
 							size={30}
 							colour='secondary'
 						/>
-					</li>
-				</HeaderSection>
-			</MobileHeader>
+					</MenuItem>
+				</MenuSection>
+			</MobileMenu>
 
-			<DesktopHeader aria-labelledby='Desktop Navigation'>
-				<DesktopHeaderContent>
-					<HeaderSection>
-						<li>
+			<DesktopMenu aria-labelledby='Desktop Navigation'>
+				<DesktopContainer>
+					<MenuSection>
+						<MenuItem>
 							<Image
 								src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg'
 								alt='TMBDb Logo'
 								width='190px'
 								height='20px'
 							/>
-						</li>
+						</MenuItem>
 
-						<Dropdown
-							content='Movies'
-							contentType='text'
-							items={Movies}
-							linkType='internal'
-							dropdownBackground='white'
-							dropdownBorderColour='lightgrey'
-							itemHoverBackground='lightgrey'
-							background='inherit'
-							colour='white'
-						/>
+						<MenuItem>
+							<Dropdown
+								content='Movies'
+								contentType='text'
+								items={Movies}
+								linkType='internal'
+								dropdownBackground='white'
+								dropdownBorderColour='lightgrey'
+								itemHoverBackground='lightgrey'
+								background='inherit'
+								colour='white'
+							/>
+						</MenuItem>
 
-						<Dropdown
-							content='TV Shows'
-							contentType='text'
-							items={Shows}
-							linkType='internal'
-							dropdownBackground='white'
-							dropdownBorderColour='lightgrey'
-							itemHoverBackground='lightgrey'
-							background='inherit'
-							colour='white'
-						/>
+						<MenuItem>
+							<Dropdown
+								content='TV Shows'
+								contentType='text'
+								items={Shows}
+								linkType='internal'
+								dropdownBackground='white'
+								dropdownBorderColour='lightgrey'
+								itemHoverBackground='lightgrey'
+								background='inherit'
+								colour='white'
+							/>
+						</MenuItem>
 
-						<Dropdown
-							content='People'
-							contentType='text'
-							items={People}
-							linkType='internal'
-							dropdownBackground='white'
-							dropdownBorderColour='lightgrey'
-							itemHoverBackground='lightgrey'
-							background='inherit'
-							colour='white'
-						/>
+						<MenuItem>
+							<Dropdown
+								content='People'
+								contentType='text'
+								items={People}
+								linkType='internal'
+								dropdownBackground='white'
+								dropdownBorderColour='lightgrey'
+								itemHoverBackground='lightgrey'
+								background='inherit'
+								colour='white'
+							/>
+						</MenuItem>
 
-						<Dropdown
-							content='More'
-							contentType='text'
-							items={DesktopExternalLinks}
-							linkType='external'
-							dropdownBackground='white'
-							dropdownBorderColour='lightgrey'
-							itemHoverBackground='lightgrey'
-							background='inherit'
-							colour='white'
-						/>
-					</HeaderSection>
+						<MenuItem>
+							<Dropdown
+								content='More'
+								contentType='text'
+								items={DesktopExternalLinks}
+								linkType='external'
+								dropdownBackground='white'
+								dropdownBorderColour='lightgrey'
+								itemHoverBackground='lightgrey'
+								background='inherit'
+								colour='white'
+							/>
+						</MenuItem>
+					</MenuSection>
 
-					<HeaderSection>
-						<Typography
-							text='Login'
-							weight='bolder'
-							colour='white'
-							size='1rem'
-							height='2.3rem'
-							type='li'
-						/>
+					<MenuSection>
+						<MenuItem>
+							<Typography
+								text='Login'
+								weight='bolder'
+								colour='white'
+								size='1rem'
+								height='2.3rem'
+								type='p'
+							/>
+						</MenuItem>
 
-						<Typography
-							text='Register'
-							weight='bolder'
-							colour='white'
-							size='1rem'
-							height='2.3rem'
-							type='li'
-						/>
+						<MenuItem>
+							<Typography
+								text='Register'
+								weight='bolder'
+								colour='white'
+								size='1rem'
+								height='2.3rem'
+								type='p'
+							/>
+						</MenuItem>
 
 						<Icon
 							icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
@@ -285,9 +304,9 @@ const NavigationMenu = () => {
 							colour='secondary'
 							onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
 						/>
-					</HeaderSection>
-				</DesktopHeaderContent>
-			</DesktopHeader>
+					</MenuSection>
+				</DesktopContainer>
+			</DesktopMenu>
 		</div>
 	);
 };

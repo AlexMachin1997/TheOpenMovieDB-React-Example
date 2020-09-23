@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Dropdown from './index';
-import Image from '../Core/Image';
+import Image from '../Image';
 
 const DropdownWithItems = (props) => (
 	<Dropdown

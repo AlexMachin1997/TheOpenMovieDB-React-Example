@@ -1,15 +1,14 @@
 import styled from 'styled-components';
 
-import generateColours from '../../utils/theming/generateColours';
+import generateColours from '../../../utils/theming/generateColours';
 
 export const DropdownLinks = styled.div`
 	display: none;
 `;
 
-export const DropdownContainer = styled.li`
+export const DropdownContainer = styled.div`
 	position: relative;
 	cursor: pointer;
-	padding: 0 1rem;
 	list-style-type: none;
 	background: ${(props) => generateColours(props.theme, props.background)};
 
@@ -19,7 +18,7 @@ export const DropdownContainer = styled.li`
 `;
 
 export const Dropdown = styled.ul`
-	padding: 1rem 0;
+	padding: 0.5rem;
 	position: absolute;
 	z-index: 100000;
 	width: 170px;
@@ -29,7 +28,8 @@ export const Dropdown = styled.ul`
 	border: 1px solid ${(props) => generateColours(props.theme, props.dropdownBorderColour)};
 	margin: 0;
 	li {
-		list-style-type: none;
+		display: block;
+		padding: 0 1rem;
 
 		&:hover {
 			background: ${(props) => generateColours(props.theme, props.itemHoverBackground)};
@@ -38,11 +38,10 @@ export const Dropdown = styled.ul`
 
 	a {
 		display: block;
+		padding: 0 1rem;
+
 		&:hover {
 			background: ${(props) => generateColours(props.theme, props.itemHoverBackground)};
 		}
-		padding: 0 1rem;
 	}
 `;
-
-export const ContentContainer = styled.span``;
