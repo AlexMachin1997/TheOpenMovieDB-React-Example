@@ -179,13 +179,13 @@ const NavigationMenu = () => {
 					tabIndex='0'
 					role='button'
 				>
-					<MenuItem>
+					<MenuItem tabIndex='0'>
 						<Icon icon='Menu' size={30} colour='white' />
 					</MenuItem>
 				</MenuSection>
 
 				<MenuSection>
-					<MenuItem>
+					<MenuItem tabIndex='0'>
 						<Image
 							src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg'
 							alt='TMBDb Logo'
@@ -196,7 +196,7 @@ const NavigationMenu = () => {
 				</MenuSection>
 
 				<MenuSection onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}>
-					<MenuItem>
+					<MenuItem tabIndex='0'>
 						<Icon
 							icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
 							size={30}
@@ -209,7 +209,7 @@ const NavigationMenu = () => {
 			<DesktopMenu aria-labelledby='Desktop Navigation'>
 				<DesktopContainer>
 					<MenuSection>
-						<MenuItem>
+						<MenuItem tabIndex='0'>
 							<Image
 								src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg'
 								alt='TMBDb Logo'
@@ -276,7 +276,7 @@ const NavigationMenu = () => {
 					</MenuSection>
 
 					<MenuSection>
-						<MenuItem>
+						<MenuItem tabIndex='0'>
 							<Typography
 								text='Login'
 								weight='bolder'
@@ -287,7 +287,7 @@ const NavigationMenu = () => {
 							/>
 						</MenuItem>
 
-						<MenuItem>
+						<MenuItem tabIndex='0'>
 							<Typography
 								text='Register'
 								weight='bolder'
@@ -298,12 +298,22 @@ const NavigationMenu = () => {
 							/>
 						</MenuItem>
 
-						<Icon
-							icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
-							size={30}
-							colour='secondary'
-							onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-						/>
+						<span
+							role='button'
+							tabIndex='0'
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									setIsSearchBarVisible(!isSearchBarVisible);
+								}
+							}}
+						>
+							<Icon
+								icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
+								size={30}
+								colour='secondary'
+								onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
+							/>
+						</span>
 					</MenuSection>
 				</DesktopContainer>
 			</DesktopMenu>
