@@ -2,7 +2,14 @@
 name: Application Linting
 
 # When the to run the greeting
-on: [pull_request]
+on:
+  pull_request:
+    branches:    
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - '!master'   # excludes master
+
 
 # Jobs to run for the action (You can have multiple actions in one file)
 jobs:
