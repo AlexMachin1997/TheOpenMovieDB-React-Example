@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-import { DropdownContainer, Dropdown, ContentContainer } from './Dropdown';
+import { DropdownLinks, DropdownContainer, Dropdown, ContentContainer } from './Dropdown';
 
 import Typography from '../Core/Typography';
 
@@ -18,8 +18,6 @@ const DesktopMenuItem = ({
 	dropdownItemColour
 }) => {
 	let links = null;
-
-	const [isItemVisible, setIsItemVisible] = useState(false);
 
 	// Internal or external link
 	if (items.length !== 0) {
@@ -62,27 +60,15 @@ const DesktopMenuItem = ({
 	}
 
 	return (
-		<DropdownContainer
-			tabIndex='0'
-			onMouseLeave={() => setIsItemVisible(false)}
-			background={background}
-			onClick={() => setIsItemVisible(!isItemVisible)}
-			onMouseEnter={() => setIsItemVisible(true)}
-			onFocus={() => setIsItemVisible(true)}
-			onBlur={() => setIsItemVisible(false)}
-		>
+		<DropdownContainer tabIndex='0' background={background}>
 			{contentType === 'text' ? (
-				<ContentContainer
-					onClick={() => setIsItemVisible(!isItemVisible)}
-					onMouseEnter={() => setIsItemVisible(true)}
-					onFocus={() => setIsItemVisible(true)}
-				>
+				<ContentContainer>
 					<Typography text={content} weight='bolder' colour={colour} size='1rem' height='2.3rem' />
 				</ContentContainer>
 			) : (
 				content
 			)}
-			{isItemVisible === true && links}
+			{items.length !== 0 && <DropdownLinks>{links}</DropdownLinks>}
 		</DropdownContainer>
 	);
 };

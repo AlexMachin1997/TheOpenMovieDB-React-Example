@@ -2,12 +2,20 @@ import styled from 'styled-components';
 
 import generateColours from '../../utils/theming/generateColours';
 
+export const DropdownLinks = styled.div`
+	display: none;
+`;
+
 export const DropdownContainer = styled.li`
 	position: relative;
 	cursor: pointer;
 	padding: 0 1rem;
 	list-style-type: none;
 	background: ${(props) => generateColours(props.theme, props.background)};
+
+	&:hover ${DropdownLinks}, &:focus ${DropdownLinks} {
+		display: block;
+	}
 `;
 
 export const Dropdown = styled.ul`
