@@ -21,7 +21,7 @@ const Backdrop = ({ title, releaseDate, rating, image, onClick }) => (
 		/>
 		<ContentContainer id={generateComponentId(title, 'backdrop-card-content')}>
 			<RatingContainer id={generateComponentId(title, 'backdrop-card-rating')}>
-				<Rating percentage={rating} size={55} strokeWidth={5} />
+				<Rating percentage={rating} size={50} strokeWidth={5} textSize='0.9rem' />
 			</RatingContainer>
 			<CardInformation id={generateComponentId(title, 'backdrop-card-information')}>
 				<Typography type='h1' text={title} size='1.2rem' weight='bolder' />

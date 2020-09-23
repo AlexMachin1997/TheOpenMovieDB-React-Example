@@ -8,6 +8,8 @@ import { ThemeProvider } from 'styled-components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { lightTheme } from '../src/components/theme';
 
+import '../src/index.css';
+
 /*
 
 preview.js notes:
@@ -31,7 +33,7 @@ addParameters({
 		element: '#root',
 		config: {},
 		options: {},
-		manual: true
+		manual: false
 	}
 });
 

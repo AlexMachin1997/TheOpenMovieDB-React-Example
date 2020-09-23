@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import generateColours from '../../../utils/theming/generateColours';
 
 const Button = styled.button`
-	width: 100%;
 	text-transform: ${(props) => props.transform};
 	font-weight: bold;
 	font-size: 1.3rem;
@@ -15,7 +14,6 @@ const Button = styled.button`
 	background-color: ${(props) => generateColours(props.theme, props.background)};
 	color: ${(props) =>
 		props.colour !== '' ? generateColours(props.theme, props.colour) : props.theme.textColour};
-	transition: 0.6s;
 	outline: transparent;
 	border-radius: ${(props) => props.borderRadius};
 	cursor: pointer;

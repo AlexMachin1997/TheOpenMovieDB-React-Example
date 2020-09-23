@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Circle, CircleBackground, CircleProgress, CircleText } from './Percentage';
 
-const Rating = ({ size, strokeWidth, percentage }) => {
+const Rating = ({ size, strokeWidth, percentage, textSize }) => {
 	const radius = (size - strokeWidth) / 2;
 	const dashArray = radius * Math.PI * 2;
 	const dashOffset = dashArray - (dashArray * percentage) / 100;
@@ -35,6 +35,7 @@ const Rating = ({ size, strokeWidth, percentage }) => {
 				y='50%' // Defines the y coordinate of the starting point of the text baseline.
 				dy='.3em' // Shifts the text position vertically from a previous text element.
 				textAnchor='middle' // Aligns the text
+				textSize={textSize}
 			>
 				{`${percentage}%`}
 			</CircleText>
@@ -45,13 +46,15 @@ const Rating = ({ size, strokeWidth, percentage }) => {
 Rating.defaultProps = {
 	size: 75,
 	strokeWidth: 7,
-	percentage: 0
+	percentage: 0,
+	textSize: '1.3rem'
 };
 
 Rating.propTypes = {
 	size: PropTypes.number,
 	strokeWidth: PropTypes.number,
-	percentage: PropTypes.number
+	percentage: PropTypes.number,
+	textSize: PropTypes.string
 };
 
 export default Rating;

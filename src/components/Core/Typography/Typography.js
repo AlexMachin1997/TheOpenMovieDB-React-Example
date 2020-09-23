@@ -20,7 +20,6 @@ NOTE: The base component doesn't need to be the same type, the .attrs({as: [Inse
 */
 
 const base = styled.span`
-	font-family: ${(props) => props.theme.font};
 	font-weight: ${(props) => props.fontWeight};
 	line-height: ${(props) => props.lineHeight};
 	font-size: ${(props) => props.fontSize};
@@ -29,6 +28,7 @@ const base = styled.span`
 	color: ${(props) =>
 		props.colour === '' ? props.theme.textColour : generateColours(props.theme, props.colour)};
 	text-decoration: ${(props) => (props.underline === true ? 'underline' : 'none')};
+	text-transform: ${(props) => props.transform};
 `;
 
 export const Heading1 = styled(base).attrs({
@@ -65,4 +65,8 @@ export const Label = styled(base).attrs({
 
 export const Paragraph = styled(base).attrs({
 	as: 'p'
+})``;
+
+export const ListItem = styled(base).attrs({
+	as: 'li'
 })``;

@@ -37,7 +37,7 @@ export const CircleProgress = styled.circle`
 `;
 
 export const CircleText = styled.text`
-	font-size: 1rem;
+	font-size: ${(props) => props.textSize};
 	font-weight: 900;
 	fill: white;
 `;
