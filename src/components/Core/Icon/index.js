@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Close } from 'styled-icons/ionicons-solid';
 import { Menu } from 'styled-icons/boxicons-regular';
 import { SearchCircle } from 'styled-icons/heroicons-outline';
 import * as IconReference from './iconReferences';
@@ -21,6 +22,14 @@ const Icon = ({ icon, colour, onClick, size }) => {
 			return (
 				<IconWrapper colour={colour} onClick={onClick}>
 					<SearchCircle size={size} />
+				</IconWrapper>
+			);
+		}
+
+		case IconReference.CloseIconRef: {
+			return (
+				<IconWrapper colour={colour} onClick={onClick}>
+					<Close size={size} />
 				</IconWrapper>
 			);
 		}

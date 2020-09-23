@@ -52,7 +52,7 @@ const FooterComponent = () => {
 										type='h1'
 										text='Join The Community'
 										colour='secondary'
-										size='1.1rem'
+										size='0.8rem'
 										weight='bolder'
 										transform='uppercase'
 									/>

@@ -6,10 +6,14 @@ import Typography from '../../Core/Typography';
 import SidebarMenuItem from './SidebarMenuItem';
 import Dropdown from '../../Dropdown';
 import { MobileHeader, Sidebar, DesktopHeaderContent, DesktopHeader, HeaderSection } from './Menu';
+import SearchBar from './SearchBar';
 
 const NavigationMenu = () => {
 	// Sidebar state
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+	// Search bar
+	const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
 	// Sidebar sections state
 	const [isMovieSectionActive, setIsMovieSectionActive] = useState(false);
@@ -132,6 +136,8 @@ const NavigationMenu = () => {
 
 	return (
 		<div>
+			<SearchBar display={isSearchBarVisible} />
+
 			<Sidebar isSideBarOpen={isSidebarOpen}>
 				<SidebarMenuItem
 					title='Movies'
@@ -158,9 +164,16 @@ const NavigationMenu = () => {
 			</Sidebar>
 
 			<MobileHeader aria-labelledby='Mobile Navigation'>
-				<HeaderSection onClick={() => setIsSidebarOpen(!isSidebarOpen)} tabIndex='0' role='button'>
+				<HeaderSection
+					onClick={() => {
+						setIsSidebarOpen(!isSidebarOpen);
+						setIsSearchBarVisible(false);
+					}}
+					tabIndex='0'
+					role='button'
+				>
 					<li>
-						<Icon icon='Menu' size={40} colour='white' />
+						<Icon icon='Menu' size={30} colour='white' />
 					</li>
 				</HeaderSection>
 
@@ -175,9 +188,13 @@ const NavigationMenu = () => {
 					</li>
 				</HeaderSection>
 
-				<HeaderSection>
+				<HeaderSection onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}>
 					<li>
-						<Icon icon='SearchCircle' size={40} colour='secondary' />
+						<Icon
+							icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
+							size={30}
+							colour='secondary'
+						/>
 					</li>
 				</HeaderSection>
 			</MobileHeader>
@@ -262,7 +279,12 @@ const NavigationMenu = () => {
 							type='li'
 						/>
 
-						<Icon icon='SearchCircle' size={40} colour='secondary' />
+						<Icon
+							icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
+							size={30}
+							colour='secondary'
+							onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
+						/>
 					</HeaderSection>
 				</DesktopHeaderContent>
 			</DesktopHeader>

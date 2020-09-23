@@ -14,6 +14,7 @@ export const DesktopHeader = styled.nav`
 	img {
 		position: relative;
 		top: 5px;
+		right: 12px;
 	}
 `;
 
@@ -28,6 +29,10 @@ export const DesktopHeaderContent = styled.div`
 
 	li {
 		padding: 0 1rem;
+	}
+
+	li:first-child {
+		padding: 0;
 	}
 
 	@media (min-width: 900px) {
@@ -71,4 +76,5 @@ export const Sidebar = styled.div`
 	transition: ease 0.6s;
 	bottom: 0;
 	overflow-y: scroll;
+	backdrop-filter: blur(20px);
 `;
