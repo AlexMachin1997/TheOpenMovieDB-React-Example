@@ -13,7 +13,7 @@ export const DesktopHeader = styled.nav`
 	/* Move the desktop image down to be level with the content */
 	img {
 		position: relative;
-		top: 5px;
+		top: 3px;
 		right: 12px;
 	}
 `;
@@ -29,10 +29,6 @@ export const DesktopHeaderContent = styled.div`
 
 	li {
 		padding: 0 1rem;
-	}
-
-	li:first-child {
-		padding: 0;
 	}
 
 	@media (min-width: 900px) {

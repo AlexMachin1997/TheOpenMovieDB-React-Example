@@ -33,6 +33,7 @@ export const Dropdown = styled.ul`
 		&:hover {
 			background: ${(props) => generateColours(props.theme, props.itemHoverBackground)};
 		}
+		padding: 0 1rem;
 	}
 `;
 

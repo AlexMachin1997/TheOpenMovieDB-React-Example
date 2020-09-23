@@ -66,12 +66,16 @@ const DesktopMenuItem = ({
 			tabIndex='0'
 			onMouseLeave={() => setIsItemVisible(false)}
 			background={background}
+			onClick={() => setIsItemVisible(!isItemVisible)}
+			onMouseEnter={() => setIsItemVisible(true)}
+			onFocus={() => setIsItemVisible(true)}
+			onBlur={() => setIsItemVisible(false)}
 		>
 			{contentType === 'text' ? (
 				<ContentContainer
 					onClick={() => setIsItemVisible(!isItemVisible)}
-					onMouseEnter={() => setIsItemVisible(!isItemVisible)}
-					onFocus={() => setIsItemVisible(!isItemVisible)}
+					onMouseEnter={() => setIsItemVisible(true)}
+					onFocus={() => setIsItemVisible(true)}
 				>
 					<Typography text={content} weight='bolder' colour={colour} size='1rem' height='2.3rem' />
 				</ContentContainer>
