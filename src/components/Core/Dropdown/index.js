@@ -6,95 +6,51 @@ import { DropdownLinks, DropdownContainer, Dropdown } from './Dropdown';
 import Typography from '../Typography';
 
 const DesktopMenuItem = ({
-	content,
-	contentType,
-	items,
-	linkType,
+	title,
+	titleType,
 	dropdownBackground,
 	dropdownBorderColour,
 	itemHoverBackground,
 	background,
 	colour,
-	dropdownItemColour
-}) => {
-	let links = null;
-
-	// Internal or external link
-	if (items.length !== 0) {
-		links = (
+	children
+}) => (
+	<DropdownContainer tabIndex='0' background={background}>
+		{titleType === 'text' ? (
+			<Typography text={title} weight='bolder' colour={colour} size='1rem' height='2.3rem' />
+		) : (
+			title
+		)}
+		<DropdownLinks>
 			<Dropdown
 				dropdownBackground={dropdownBackground}
 				dropdownBorderColour={dropdownBorderColour}
 				itemHoverBackground={itemHoverBackground}
 			>
-				{items.map((data, index) => {
-					if (linkType === 'internal') {
-						return (
-							<Typography
-								key={index}
-								text={data.text}
-								weight='lighter'
-								colour={dropdownItemColour}
-								size='1rem'
-								height='2.3rem'
-								type='li'
-							/>
-						);
-					}
-
-					return (
-						<Typography
-							key={index}
-							text={data.text}
-							href={data.link}
-							weight='lighter'
-							colour={dropdownItemColour}
-							size='1rem'
-							height='2.3rem'
-							type='a'
-						/>
-					);
-				})}
+				{children}
 			</Dropdown>
-		);
-	}
-
-	return (
-		<DropdownContainer tabIndex='0' background={background}>
-			{contentType === 'text' ? (
-				<Typography text={content} weight='bolder' colour={colour} size='1rem' height='2.3rem' />
-			) : (
-				content
-			)}
-			{items.length !== 0 && <DropdownLinks>{links}</DropdownLinks>}
-		</DropdownContainer>
-	);
-};
+		</DropdownLinks>
+	</DropdownContainer>
+);
 
 DesktopMenuItem.propTypes = {
-	content: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-	contentType: PropTypes.string,
-	items: PropTypes.array,
-	linkType: PropTypes.string,
+	title: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+	titleType: PropTypes.string,
 	dropdownBackground: PropTypes.string,
 	dropdownBorderColour: PropTypes.string,
 	itemHoverBackground: PropTypes.string,
 	background: PropTypes.string,
-	colour: PropTypes.string,
-	dropdownItemColour: PropTypes.string
+	colour: PropTypes.string
 };
 
 DesktopMenuItem.defaultProps = {
-	content: 'Default Heading',
-	contentType: 'text',
-	items: [],
-	linkType: 'internal',
+	title: 'Default title',
+	titleType: 'text',
 	dropdownBackground: 'grey',
 	dropdownBorderColour: 'black',
 	itemHoverBackground: 'white',
 	background: 'black',
-	colour: 'white',
-	dropdownItemColour: '#000'
+	colour: 'white'
 };
 
 export default DesktopMenuItem;

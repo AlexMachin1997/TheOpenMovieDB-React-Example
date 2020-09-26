@@ -14,7 +14,6 @@ const Button = styled.button`
 	background-color: ${(props) => generateColours(props.theme, props.background)};
 	color: ${(props) =>
 		props.colour !== '' ? generateColours(props.theme, props.colour) : props.theme.textColour};
-	outline: transparent;
 	border-radius: ${(props) => props.borderRadius};
 	cursor: pointer;
 

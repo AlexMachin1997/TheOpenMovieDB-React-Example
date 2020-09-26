@@ -65,7 +65,9 @@ export const Label = styled(base).attrs({
 
 export const Paragraph = styled(base).attrs({
 	as: 'p'
-})``;
+})`
+	display: inline;
+`;
 
 export const ListItem = styled(base).attrs({
 	as: 'li'

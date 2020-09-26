@@ -167,7 +167,7 @@ const NavigationMenu = () => {
 					onItemClick={() => setIsPeopleSectionActive(!isPeopleSectionActive)}
 				/>
 
-				<SidebarMenuItem items={SidebarExternalLinks} textColour='#ffffff' contentType='external' />
+				<SidebarMenuItem items={SidebarExternalLinks} textColour='#ffffff' titleType='external' />
 			</MobileSidebar>
 
 			<MobileMenu aria-labelledby='Mobile Navigation'>
@@ -220,58 +220,99 @@ const NavigationMenu = () => {
 
 						<MenuItem>
 							<Dropdown
-								content='Movies'
-								contentType='text'
-								items={Movies}
-								linkType='internal'
+								title='Movies'
+								titleType='text'
 								dropdownBackground='white'
 								dropdownBorderColour='lightgrey'
 								itemHoverBackground='lightgrey'
 								background='inherit'
 								colour='white'
-							/>
+							>
+								{Movies.map((data, index) => (
+									<Typography
+										key={index}
+										text={data.text}
+										weight='lighter'
+										colour='black'
+										size='1rem'
+										height='2.3rem'
+										type='li'
+									/>
+								))}
+							</Dropdown>
 						</MenuItem>
 
 						<MenuItem>
 							<Dropdown
-								content='TV Shows'
-								contentType='text'
-								items={Shows}
-								linkType='internal'
+								title='TV Shows'
+								titleType='text'
 								dropdownBackground='white'
 								dropdownBorderColour='lightgrey'
 								itemHoverBackground='lightgrey'
 								background='inherit'
 								colour='white'
-							/>
+							>
+								{Shows.map((data, index) => (
+									<Typography
+										key={index}
+										text={data.text}
+										weight='lighter'
+										colour='black'
+										size='1rem'
+										height='2.3rem'
+										type='li'
+									/>
+								))}
+							</Dropdown>
 						</MenuItem>
 
 						<MenuItem>
 							<Dropdown
-								content='People'
-								contentType='text'
-								items={People}
-								linkType='internal'
+								title='People'
+								titleType='text'
 								dropdownBackground='white'
 								dropdownBorderColour='lightgrey'
 								itemHoverBackground='lightgrey'
 								background='inherit'
 								colour='white'
-							/>
+							>
+								{People.map((data, index) => (
+									<Typography
+										key={index}
+										text={data.text}
+										weight='lighter'
+										colour='black'
+										size='1rem'
+										height='2.3rem'
+										type='li'
+									/>
+								))}
+							</Dropdown>
 						</MenuItem>
 
 						<MenuItem>
 							<Dropdown
-								content='More'
-								contentType='text'
-								items={DesktopExternalLinks}
-								linkType='external'
+								title='More'
+								titleType='text'
 								dropdownBackground='white'
 								dropdownBorderColour='lightgrey'
 								itemHoverBackground='lightgrey'
 								background='inherit'
 								colour='white'
-							/>
+							>
+								{DesktopExternalLinks.map((data, index) => (
+									<Typography
+										key={index}
+										text={data.text}
+										href={data.link}
+										weight='lighter'
+										colour='black'
+										size='1rem'
+										height='2.3rem'
+										type='a'
+									/>
+								))}
+							</Dropdown>
 						</MenuItem>
 					</MenuSection>
 
