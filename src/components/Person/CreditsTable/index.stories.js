@@ -1,6 +1,8 @@
 import React from 'react';
 
 import CreditsTable from './index';
+import ActingGroupData from './ActingGroupData';
+import Typography from '../../Core/Typography';
 
 export const TVExample = () => (
 	<CreditsTable
@@ -49,6 +51,21 @@ export const MovieExample = () => (
 		}}
 	/>
 );
+
+export const ActingTable = () => {
+	const tables = ActingGroupData.map((data, index) => {
+		return <CreditsTable group={data} key={index} />;
+	});
+
+	return (
+		<div>
+			<div style={{ margin: '1rem 0' }}>
+				<Typography text='Acting' size='1.5rem' colour='black' weight='bold' />
+			</div>
+			<div style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>{tables}</div>
+		</div>
+	);
+};
 
 export default {
 	title: 'Person -> CreditTable',
