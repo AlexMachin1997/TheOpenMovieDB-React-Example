@@ -13,10 +13,14 @@ Header Containers
 */
 export const BackgroundImage = styled.section`
 	border-bottom: 1px solid rgba(15.69%, 18.63%, 20.39%, 1);
-	background-position: right -200px top;
+	background-position: calc((((100vw / 2.222222) - 20px) / 1.5) / 2) 0;
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-image: url(${(props) => props.backgroundImage});
+
+	@media (min-width: 900px) {
+		background-position: right -200px top;
+	}
 `;
 
 export const BackgroundOverlay = styled.div`

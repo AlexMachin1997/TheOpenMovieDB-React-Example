@@ -13,9 +13,11 @@ export const FeaturedCrew = styled.ol`
 	display: grid;
 
 	grid-template-columns: repeat(2, 1fr);
+	row-gap: 10px;
 
 	@media (min-width: 900px) {
 		grid-template-columns: repeat(3, 1fr);
+		row-gap: 0;
 	}
 `;
 

@@ -51,14 +51,6 @@ export const RatingText = styled.div`
 	font-weight: 700;
 `;
 
-export const AddToList = styled.li``;
-
-export const AddToFavorites = styled.li``;
-
-export const AddToBookmarks = styled.li``;
-
-export const RateIt = styled.li``;
-
 export const PlayTrailer = styled.li`
 	display: flex;
 	align-items: center;

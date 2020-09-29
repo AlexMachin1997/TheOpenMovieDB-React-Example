@@ -4,6 +4,21 @@ export const Facts = styled.div`
 	color: white;
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem 1rem 1rem 1rem;
+
+	background-color: rgba(0, 0, 0, 0.1);
+	border-top: 1px solid rgba(0, 0, 0, 0.2);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+	@media (min-width: 900px) {
+		padding: 0;
+		background-color: transparent;
+		border-top: none;
+		border-bottom: none;
+		justify-content: flex-start;
+	}
 `;
 
 export const Certification = styled.span`

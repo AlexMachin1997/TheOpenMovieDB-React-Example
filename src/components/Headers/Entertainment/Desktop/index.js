@@ -12,10 +12,10 @@ import {
 	Actions,
 	RatingContainer,
 	RatingText,
-	AddToList,
-	AddToFavorites,
-	AddToBookmarks,
-	RateIt,
+	// AddToList,
+	// AddToFavorites,
+	// AddToBookmarks,
+	// RateIt,
 	PlayTrailer
 } from './Desktop';
 
@@ -100,24 +100,24 @@ const DesktopEntertainmentHeader = ({
 							</RatingText>
 						</RatingContainer>
 
-						<AddToList>
+						<li>
 							<Action tooltip='Login to create and edit custom lists' icon='ListTask' />
-						</AddToList>
+						</li>
 
-						<AddToFavorites>
+						<li>
 							<Action
 								tooltip='Login to create and add it to your favorites list'
 								icon='HeartFilled'
 							/>
-						</AddToFavorites>
+						</li>
 
-						<AddToBookmarks>
+						<li>
 							<Action tooltip='Login to create and add it to your watch list' icon='BookmarkFill' />
-						</AddToBookmarks>
+						</li>
 
-						<RateIt>
+						<li>
 							<Action tooltip='Login to rate this title' icon='StarFill' />
-						</RateIt>
+						</li>
 
 						<PlayTrailer>
 							<Icon size={20} colour='white' icon='PlayFill' />

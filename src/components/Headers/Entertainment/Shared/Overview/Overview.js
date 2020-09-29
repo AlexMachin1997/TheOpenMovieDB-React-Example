@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Overview = styled.div``;
+export const Overview = styled.div`
+	@media (min-width: 600px) {
+		padding: 0;
+	}
+`;
 
 export const Tagline = styled.div`
 	p {
