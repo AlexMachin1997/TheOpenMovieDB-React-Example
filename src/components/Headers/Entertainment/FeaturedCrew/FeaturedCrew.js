@@ -7,7 +7,6 @@ Featured Crew
 */
 
 export const FeaturedCrew = styled.ol`
-	margin-top: 1.3rem;
 	padding: 0;
 	list-style: none;
 	display: grid;

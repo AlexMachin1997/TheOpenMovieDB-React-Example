@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Typography from '../../../../Core/Typography';
+import Typography from '../../../Core/Typography';
 
 import { FeaturedCrew, FeaturedCrewMember } from './FeaturedCrew';
 

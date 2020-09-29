@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Facts, Certification, Genres, Runtime, ReleaseDate } from './MetaData';
-import Icon from '../../../../Core/Icon';
+import Icon from '../../../Core/Icon';
 
 const MetaData = ({ ageRating, releaseDate, genres, runtime }) => (
 	<Facts>

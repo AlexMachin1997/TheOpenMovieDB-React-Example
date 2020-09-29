@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Container } from './Action';
 
-import Tooltip from '../../../../Core/Tooltip';
-import Icon from '../../../../Core/Icon';
+import Tooltip from '../../../Core/Tooltip';
+import Icon from '../../../Core/Icon';
 
 const Action = ({ tooltip, icon, colour }) => (
 	<Tooltip

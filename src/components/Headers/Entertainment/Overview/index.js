@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Overview, Tagline, OverviewInformation } from './Overview';
-import Typography from '../../../../Core/Typography';
+import Typography from '../../../Core/Typography';
 
 const OverviewSection = ({ tagline, overview }) => (
 	<Overview>
