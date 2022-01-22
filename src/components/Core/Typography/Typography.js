@@ -29,6 +29,7 @@ const base = styled.span`
 		props.colour === '' ? props.theme.textColour : generateColours(props.theme, props.colour)};
 	text-decoration: ${(props) => (props.underline === true ? 'underline' : 'none')};
 	text-transform: ${(props) => props.transform};
+	font-style: ${(props) => props.fontStyle};
 `;
 
 export const Heading1 = styled(base).attrs({

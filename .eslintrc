@@ -44,13 +44,8 @@
 		"no-await-in-loop": 0,
 		"no-return-assign": ["error", "except-parens"],
 		"no-restricted-syntax": [2, "ForInStatement", "LabeledStatement", "WithStatement"],
-		"no-unused-vars": [
-			1,
-			{
-				"ignoreSiblings": true,
-				"argsIgnorePattern": "res|next|^err"
-			}
-		],
+		"no-unused-vars": "off",
+		"react/style-prop-object": "off",
 		"prefer-const": [
 			"error",
 			{
