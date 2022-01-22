@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const Show = gql`
-	query($search: String!, $id: Int) {
+	query ($search: String!, $id: Int) {
 		SearchForAShow(search: $search, id: $id) {
 			backdrop_path
 			poster_path

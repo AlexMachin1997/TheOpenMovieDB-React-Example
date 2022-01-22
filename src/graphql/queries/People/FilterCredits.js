@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const FilterCredits = gql`
-	query($personID: Int!, $mediaType: String) {
+	query ($personID: Int!, $mediaType: String) {
 		FilterCredits(id: $personID, mediaType: $mediaType) {
 			ActingGroup {
 				release_date

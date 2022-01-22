@@ -36,7 +36,8 @@ LoaderComponent.defaultProps = {
 };
 
 LoaderComponent.propTypes = {
-	type: PropTypes.string
+	type: PropTypes.string,
+	height: PropTypes.string
 };
 
 export default LoaderComponent;
