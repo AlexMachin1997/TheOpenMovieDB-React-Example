@@ -25,7 +25,8 @@ const Heading = ({
 	newTab,
 	href,
 	htmlFor,
-	transform
+	transform,
+	style
 }) => {
 	switch (type) {
 		case 'h1': {
@@ -37,6 +38,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Heading1>
@@ -51,6 +53,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Heading2>
@@ -65,6 +68,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Heading3>
@@ -79,6 +83,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Heading4>
@@ -93,6 +98,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Heading5>
@@ -107,6 +113,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Heading6>
@@ -122,6 +129,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Paragraph>
@@ -139,6 +147,7 @@ const Heading = ({
 					target={newTab === true ? '_blank' : '_self'}
 					href={href}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Link>
@@ -155,6 +164,7 @@ const Heading = ({
 					underline={underline}
 					htmlFor={htmlFor}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Label>
@@ -170,6 +180,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</ListItem>
@@ -185,6 +196,7 @@ const Heading = ({
 					colour={colour}
 					underline={underline}
 					transform={transform}
+					fontStyle={style}
 				>
 					{text}
 				</Heading1>
@@ -202,7 +214,8 @@ Heading.defaultProps = {
 	colour: '',
 	newTab: true,
 	href: 'https://www.google.com/',
-	htmlFor: ''
+	htmlFor: '',
+	style: 'normal'
 };
 
 Heading.propTypes = {
@@ -214,7 +227,8 @@ Heading.propTypes = {
 	colour: PropTypes.string,
 	newTab: PropTypes.bool,
 	href: PropTypes.string,
-	htmlFor: PropTypes.string
+	htmlFor: PropTypes.string,
+	style: PropTypes.string
 };
 
 export default Heading;

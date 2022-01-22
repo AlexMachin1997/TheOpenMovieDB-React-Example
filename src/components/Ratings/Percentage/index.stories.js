@@ -2,7 +2,7 @@ import React from 'react';
 
 import Rating from './index';
 
-export const Default = () => <Rating />;
+export const Default = () => <Rating percentage={66} />;
 
 export const RedRating = () => <Rating percentage={10} />;
 

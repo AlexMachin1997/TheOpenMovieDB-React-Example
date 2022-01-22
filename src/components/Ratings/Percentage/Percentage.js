@@ -2,12 +2,12 @@ import styled from 'styled-components';
 
 const generateRatingStrokeColour = (rating) => {
 	// Red (Less than 40)
-	if (rating < 40) {
+	if (rating <= 40) {
 		return '#FF0000';
 	}
 
 	// Yellow (Less than or equal to 50)
-	if (rating <= 50) {
+	if (rating <= 50 || rating < 70) {
 		return '#ffea00';
 	}
 

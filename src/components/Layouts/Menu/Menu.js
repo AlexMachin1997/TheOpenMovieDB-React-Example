@@ -19,6 +19,11 @@ export const DesktopMenu = styled.nav`
 		top: 3px;
 		right: 12px;
 	}
+
+	/* When in desktop mode ie above 900px screen remove the padding for this elemen */
+	@media (max-width: 900px) {
+		padding: 0;
+	}
 `;
 
 export const DesktopContainer = styled.div`
