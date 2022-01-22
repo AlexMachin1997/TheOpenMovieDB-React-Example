@@ -40,7 +40,8 @@ DesktopMenuItem.propTypes = {
 	dropdownBorderColour: PropTypes.string,
 	itemHoverBackground: PropTypes.string,
 	background: PropTypes.string,
-	colour: PropTypes.string
+	colour: PropTypes.string,
+	children: PropTypes.node.isRequired
 };
 
 DesktopMenuItem.defaultProps = {
