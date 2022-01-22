@@ -4,14 +4,7 @@ import PropTypes from 'prop-types';
 import { Close } from 'styled-icons/ionicons-solid';
 import { Menu, TimeFive } from 'styled-icons/boxicons-regular';
 import { SearchCircle } from 'styled-icons/heroicons-outline';
-import {
-	HeartFill,
-	BookmarkFill,
-	ListTask,
-	StarFill,
-	PlayFill,
-	CardChecklist
-} from 'styled-icons/bootstrap';
+import { HeartFill, BookmarkFill, StarFill, PlayFill, CardChecklist } from 'styled-icons/bootstrap';
 import * as IconReference from './iconReferences';
 import { IconWrapper } from './Icon';
 
