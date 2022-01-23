@@ -5,7 +5,8 @@ module.exports = {
 		'eslint:recommended',
 		'plugin:react-hooks/recommended',
 		'plugin:react/recommended',
-		'plugin:import/react'
+		'plugin:import/react',
+		'plugin:storybook/recommended'
 	],
 	plugins: ['prettier', 'react'],
 	globals: {

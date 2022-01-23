@@ -64,14 +64,15 @@
 		"workbox-build": "^5.0.0"
 	},
 	"devDependencies": {
-		"@storybook/addon-a11y": "^6.0.21",
-		"@storybook/addon-actions": "^6.0.21",
-		"@storybook/addon-docs": "^6.0.21",
+		"@storybook/addon-a11y": "^6.4.14",
+		"@storybook/addon-actions": "^6.4.14",
+		"@storybook/addon-docs": "^6.4.14",
 		"@storybook/addon-knobs": "^6.0.21",
-		"@storybook/addon-links": "^6.0.21",
-		"@storybook/addons": "^6.0.21",
-		"@storybook/preset-create-react-app": "^3.1.4",
-		"@storybook/react": "^6.0.21",
+		"@storybook/addons": "^6.4.14",
+		"@storybook/builder-webpack5": "^6.4.14",
+		"@storybook/manager-webpack5": "^6.4.14",
+		"@storybook/preset-create-react-app": "^4.0.0",
+		"@storybook/react": "^6.4.14",
 		"@testing-library/jest-dom": "^5.16.1",
 		"@testing-library/react": "^12.1.2",
 		"@testing-library/user-event": "^13.5.0",
@@ -83,9 +84,11 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-react": "^7.27.0",
 		"eslint-plugin-react-hooks": "^4.3.0",
+		"eslint-plugin-storybook": "^0.5.6",
 		"eslint-webpack-plugin": "^3.0.1",
 		"jest-axe": "^5.0.1",
-		"prettier": "^2.4.1"
+		"prettier": "^2.4.1",
+		"webpack": "5"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
