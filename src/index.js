@@ -1,5 +1,5 @@
 // React dependencies
-import React from 'react';
+import * as React from 'react';
 import { render } from 'react-dom';
 
 // React application entry point

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { Container, Footer, FooterContent, JoinNowColumn } from './Footer';
 import Image from '../../Core/Image';

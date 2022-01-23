@@ -43,15 +43,13 @@
 		"lint": "eslint src/**/*.js  --fix"
 	},
 	"dependencies": {
-		"@apollo/react-hooks": "^3.1.4",
+		"@apollo/client": "^3.5.7",
 		"apollo-cache-inmemory": "^1.6.5",
-		"apollo-client": "^2.6.8",
 		"apollo-link": "^1.2.14",
 		"apollo-link-context": "^1.0.20",
 		"apollo-link-error": "^1.1.13",
 		"apollo-link-http": "^1.5.17",
-		"graphql": "^15.3.0",
-		"graphql-tag": "^2.11.0",
+		"graphql": "^16.2.0",
 		"prop-types": "^15.7.2",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",

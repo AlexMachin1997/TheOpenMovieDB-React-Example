@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import KnownForCard from './index';
 import Preview from '../../../Blocks/Storybook/Preview';

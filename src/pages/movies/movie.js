@@ -1,6 +1,5 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-
+import * as React from 'react';
+import { useQuery } from '@apollo/client';
 import MovieQuery from '../../graphql/queries/Movies/Movie';
 
 import Loader from '../../components/Core/Loader';

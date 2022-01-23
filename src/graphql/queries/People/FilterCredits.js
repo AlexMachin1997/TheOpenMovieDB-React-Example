@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 const FilterCredits = gql`
 	query ($personID: Int!, $mediaType: String) {
