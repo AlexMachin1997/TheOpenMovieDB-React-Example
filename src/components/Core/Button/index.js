@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import shortid from 'shortid';
 
 import DefaultButton from './Button';
 
@@ -47,7 +46,6 @@ Button.defaultProps = {
 	isDisabled: false,
 	borderRadius: '0 0 0 0',
 	ariaLabel: 'label',
-	id: `button ${shortid.generate()}`,
 	onClick: () => false,
 	type: 'button'
 };
@@ -69,7 +67,7 @@ Button.propTypes = {
 	isDisabled: PropTypes.bool,
 	borderRadius: PropTypes.string,
 	ariaLabel: PropTypes.string,
-	id: PropTypes.string,
+	id: PropTypes.string.isRequired,
 	onClick: PropTypes.func,
 	type: PropTypes.oneOf(['button', 'reset', 'submit'])
 };
