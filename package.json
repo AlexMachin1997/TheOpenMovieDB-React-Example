@@ -28,19 +28,15 @@
 		"url": "https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/issues"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject",
-		"storybook": "start-storybook -p 9009 -s public",
-		"build-storybook": "build-storybook -s public",
-		"build-sw": "node ./src/serviceWorker/generateManifest.js",
-		"clean-cra-sw": "rimraf  -f build/precache-manifest.*.js && rimraf  -f build/service-worker.js",
-		"build": "react-scripts build && npm run build-sw && npm run clean-cra-sw",
-		"PWA": "react-scripts build && npm run build-sw && npm run clean-cra-sw && serve -s build",
-		"allDependencies": "npm run coreDependencies && npm run devDependencies",
-		"coreDependencies": "npm install",
-		"devDependencies": " npm install --only=dev",
-		"lint": "eslint src/**/*.js  --fix"
+		"client:start": "react-scripts start",
+		"client:test": "react-scripts test",
+		"client:eject": "react-scripts eject",
+		"client:storybook": "start-storybook -p 9009 -s public",
+		"client:build-storybook": "build-storybook -s public",
+		"client:build": "react-scripts build && yarn client-pwa:build && yarn client-pwa:clean",
+		"client-pwa:build": "node ./src/serviceWorker/generateManifest.js",
+		"client-pwa:clean": "rimraf  -f build/precache-manifest.*.js && rimraf  -f build/service-worker.js",
+		"client:lint": "eslint src/**/*.js  --fix"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.5.7",
@@ -49,15 +45,19 @@
 		"apollo-link-context": "^1.0.20",
 		"apollo-link-error": "^1.1.13",
 		"apollo-link-http": "^1.5.17",
+		"autoprefixer": "^10.4.2",
 		"graphql": "^16.2.0",
+		"postcss": "^8.4.5",
 		"prop-types": "^15.8.1",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-helmet": "^6.1.0",
 		"react-router-dom": "6",
 		"react-scripts": "^5.0.0",
+		"sass": "^1.49.0",
 		"styled-components": "^5.1.1",
 		"styled-icons": "^10.18.0",
+		"tailwindcss": "^3.0.18",
 		"workbox-build": "^5.0.0"
 	},
 	"devDependencies": {
