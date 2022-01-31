@@ -26,9 +26,16 @@ jobs:
           node-version: 16
           cache: 'yarn'
 
+      # Cache the node_modules, only invalidate when the yarn lock file changes
+      # Original source: https://dev.to/mpocock1/how-to-cache-nodemodules-in-github-actions-with-yarn-24eh
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
       # Installs all the project dependencies e.g. prettier, eslint etc via a custom project script
       - name: Install yarn dependencies
-        run: 'yarn'
+        run: 'yarn install'
 
       # Run the react-testing-library tests
       - name: Run all tests
