@@ -12,7 +12,7 @@ const stylingCheck = (expectedResult, props, theme = lightTheme) => {
 	// Arrange and act
 	const element = createDOMElement(
 		<ThemeProvider theme={theme}>
-			<Button {...props} />
+			<Button {...props} id='example-id' />
 		</ThemeProvider>,
 		'button'
 	);
@@ -35,7 +35,7 @@ describe('Button tests', () => {
 	describe('content', () => {
 		it('Should return the default text', () => {
 			// Arrange and act
-			const element = createDOMElement(<Button />, 'button');
+			const element = createDOMElement(<Button id='example-id' />, 'button');
 
 			// Assert
 			expect(element.innerHTML).toBe('Default');
@@ -43,7 +43,10 @@ describe('Button tests', () => {
 
 		it('Should return the custom text', () => {
 			// Arrange and act
-			const element = createDOMElement(<Button content='Custom Content' />, 'button');
+			const element = createDOMElement(
+				<Button id='example-id' content='Custom Content' />,
+				'button'
+			);
 
 			// Assert
 			expect(element.innerHTML).toBe('Custom Content');
@@ -107,7 +110,7 @@ describe('Button tests', () => {
 	describe('ariaLabel', () => {
 		it('Should return the default ariaLabel', () => {
 			// Arrange and act
-			const element = createDOMElement(<Button />, `button[aria-label='label']`);
+			const element = createDOMElement(<Button id='example-id' />, `button[aria-label='label']`);
 
 			// Assert
 			expect(element).toBeTruthy();
@@ -115,7 +118,7 @@ describe('Button tests', () => {
 
 		it('Should return the default ariaLabel', () => {
 			const element = createDOMElement(
-				<Button ariaLabel='Custom Label' />,
+				<Button ariaLabel='Custom Label' id='example-id' />,
 				"button[aria-label='custom-label'"
 			);
 
@@ -129,7 +132,7 @@ describe('Button tests', () => {
 			const onClick = jest.fn();
 
 			// Act
-			const element = createDOMElement(<Button onClick={onClick} />, 'button');
+			const element = createDOMElement(<Button onClick={onClick} id='example-id' />, 'button');
 			fireEvent.click(element);
 
 			// Assert
@@ -141,14 +144,17 @@ describe('Button tests', () => {
 	describe('type', () => {
 		it('The default button type should be button', () => {
 			// Arrange and act
-			const element = createDOMElement(<Button />, `button[type=button]`);
+			const element = createDOMElement(<Button id='example-id' />, `button[type=button]`);
 
 			// Assert
 			expect(element).toBeTruthy();
 		});
 		it('The custom type for the button should be button', () => {
 			// Arrange and act
-			const element = createDOMElement(<Button type='submit' />, `button[type=submit]`);
+			const element = createDOMElement(
+				<Button type='submit' id='example-id' />,
+				`button[type=submit]`
+			);
 
 			// Assert
 			expect(element).toBeTruthy();
@@ -158,7 +164,7 @@ describe('Button tests', () => {
 	describe('Accessability test', () => {
 		it('No violations should be present', async () => {
 			// Arrange and act
-			const element = createDOMElement(<Button />, 'button');
+			const element = createDOMElement(<Button id='example-id' />, 'button');
 			const result = await axe(element);
 
 			// Assert

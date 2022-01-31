@@ -27,7 +27,7 @@ jobs:
           cache: 'yarn'
 
       # Installs all the project dependencies e.g. prettier, eslint etc via a custom project script
-      - name: Install Node.js dependencies
+      - name: Install yarn dependencies
         run: 'yarn'
 
       # Run the react-testing-library tests
