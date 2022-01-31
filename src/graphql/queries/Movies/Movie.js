@@ -1,7 +1,7 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 const Movie = gql`
-	query($search: String!, $id: Int!) {
+	query ($search: String!, $id: Int!) {
 		SearchForAMovie(search: $search, id: $id) {
 			backdrop_path
 			poster_path

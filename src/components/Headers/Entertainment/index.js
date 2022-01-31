@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import FeaturedCrew from './FeaturedCrew';
@@ -34,7 +34,7 @@ const EntertainmentHeader = ({
 	genres,
 	runtime,
 	rating,
-	trailerLink,
+	// trailerLink,
 	tagline,
 	overview,
 	featuredCrew,
@@ -194,7 +194,7 @@ EntertainmentHeader.propTypes = {
 	).isRequired,
 	runtime: PropTypes.string.isRequired,
 	rating: PropTypes.number.isRequired,
-	trailerLink: PropTypes.string.isRequired,
+	// trailerLink: PropTypes.string.isRequired,
 	tagline: PropTypes.string.isRequired,
 	overview: PropTypes.string.isRequired,
 	featuredCrew: PropTypes.arrayOf(

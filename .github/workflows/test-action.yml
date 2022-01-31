@@ -1,5 +1,5 @@
 # Job name
-name: Intergration and Unit Tests
+name: Application testing
 
 # When the to run the greeting
 on: [pull_request]
@@ -13,49 +13,30 @@ jobs:
     # Runs on a Linux based OS
     runs-on: ubuntu-latest
 
-    # Run the job on 2 different versions of Node (12, 14)
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x]
-
     # Steps involved for this particular task
     steps:
-      # Checks out the reporsitoy and enables the use of commands made avaliable in the project ie npm run
+      # Checks out the repository and enables the use of commands made available in the project ie npm run
       - name: Checkout Git repository
         uses: actions/checkout@v2
 
-      # Setup Nodes on the versions specified in the matrix stratergy
-      - name: Setup Node.js version ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      # Configure yarn
+      - name: Setup Node.js version
+        uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16
+          cache: 'yarn'
 
-      # Cache the node_modules
-      - name: Cache node modules
-        uses: actions/cache@v2
-
-        # Defining the cache env config ie the key
-        env:
-          cache-name: cache-node-modules
-
-        # Caching options (https://github.com/actions/cache)
+      # Cache the node_modules, only invalidate when the yarn lock file changes
+      # Original source: https://dev.to/mpocock1/how-to-cache-nodemodules-in-github-actions-with-yarn-24eh
+      - uses: actions/cache@v2
         with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-
-          # Key for caching the files initally
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-
-          # Restore keys
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       # Installs all the project dependencies e.g. prettier, eslint etc via a custom project script
-      - name: Install Node.js dependencies
-        run: npm run allDependencies
+      - name: Install yarn dependencies
+        run: 'yarn install'
 
       # Run the react-testing-library tests
       - name: Run all tests
-        run: npm run test
+        run: 'yarn client:test'

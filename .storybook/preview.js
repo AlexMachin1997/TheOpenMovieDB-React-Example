@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import Normalize from '../src/components/Normalize';
 
@@ -8,7 +8,7 @@ import { ThemeProvider } from 'styled-components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { lightTheme } from '../src/components/theme';
 
-import '../src/index.css';
+import '../src/index.scss';
 
 /*
 

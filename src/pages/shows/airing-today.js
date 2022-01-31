@@ -1,5 +1,5 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import * as React from 'react';
+import { useQuery } from '@apollo/client';
 
 import AiringTodayQuery from '../../graphql/queries/Shows/AiringToday';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import propTypes from 'prop-types';
 
 import { Facebook, Twitter, Instagram } from 'styled-icons/entypo-social';

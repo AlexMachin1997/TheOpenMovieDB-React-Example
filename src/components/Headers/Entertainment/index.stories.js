@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import DesktopEntertainmentHeader from './index';
 
@@ -13,7 +13,7 @@ export const Example = () => (
 		runtime='1h 53m'
 		rating={66}
 		ageRating='R'
-		trailerLink=''
+		// trailerLink=''
 		tagline='What would you risk for five minutes of pure power?'
 		overview='An ex-soldier, a teen and a cop collide in New Orleans as they hunt for the source behind a dangerous new pill that grants users temporary superpowers.'
 		featuredCrew={[

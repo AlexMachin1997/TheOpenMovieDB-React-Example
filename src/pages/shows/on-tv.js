@@ -1,5 +1,5 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import * as React from 'react';
+import { useQuery } from '@apollo/client';
 
 import OnTvQuery from '../../graphql/queries/Shows/OnTv';
 

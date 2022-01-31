@@ -1,4 +1,3 @@
-import shortid from 'shortid';
 import replaceSpacesWith from '../replaceSpacesWith';
 
 const generateComponentId = (field, additionalInfo) => {
@@ -12,7 +11,7 @@ const generateComponentId = (field, additionalInfo) => {
 		return id;
 	} catch (err) {
 		console.log(`[generateComponentId failed], ${err.message}`);
-		return shortid();
+		return '';
 	}
 };
 

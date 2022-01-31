@@ -1,7 +1,7 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 const Person = gql`
-	query($search: String!, $id: Int!) {
+	query ($search: String!, $id: Int!) {
 		SearchForAPerson(search: $search, id: $id) {
 			birthday
 			known_for_department

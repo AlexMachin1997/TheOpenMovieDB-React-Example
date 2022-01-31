@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -215,7 +215,9 @@ Heading.defaultProps = {
 	newTab: true,
 	href: 'https://www.google.com/',
 	htmlFor: '',
-	style: 'normal'
+	style: 'normal',
+	underline: false,
+	transform: 'none'
 };
 
 Heading.propTypes = {
@@ -228,7 +230,9 @@ Heading.propTypes = {
 	newTab: PropTypes.bool,
 	href: PropTypes.string,
 	htmlFor: PropTypes.string,
-	style: PropTypes.string
+	style: PropTypes.string,
+	underline: PropTypes.bool,
+	transform: PropTypes.string
 };
 
 export default Heading;
