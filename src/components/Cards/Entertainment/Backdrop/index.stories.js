@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { action } from '@storybook/addon-actions';
 
-import BackdropCard from './index';
+import BackdropCard from './Backdrop.jsx';
 import Preview from '../../../Blocks/Storybook/Preview';
 import { GroupedExample, SingleExample } from '../../Shared';
 
@@ -128,6 +128,6 @@ export const GroupedBackdrops = () => (
 );
 
 export default {
-	title: 'Card -> Entertainment -> Backdrop',
+	title: 'Design System/Cards/Entertainment/Backdrop',
 	component: BackdropCard
 };
