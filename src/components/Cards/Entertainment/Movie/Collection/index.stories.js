@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { action } from '@storybook/addon-actions';
 
-import Collection from './index';
+import Collection from './Collection';
 
 export const Default = () => <Collection />;
 
@@ -19,5 +19,5 @@ export const OnClick = () => <Collection onClick={action('Collection button clic
 
 export default {
 	component: Collection,
-	title: 'Cards -> Entertainment -> Movie -> Collection'
+	title: 'Design System/Cards/Entertainment/Movie/Collection'
 };

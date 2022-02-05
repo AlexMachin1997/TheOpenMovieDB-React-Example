@@ -3,7 +3,7 @@ export const lightTheme = {
 	secondary: '#01b4e4', // Light blue
 	tertiary: '#90cea1', // Light Green
 	font: 'Segoe UI Historic, Segoe UI, Helvetica, Arial, sans-serif', // Font Family,
-	textColour: 'black'
+	textColour: 'black  '
 };
 
 export const darkTheme = {

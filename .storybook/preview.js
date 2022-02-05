@@ -27,6 +27,8 @@ preview.js notes:
 // Adds interactive component support e.g. isToggled
 addDecorator(withKnobs);
 
+document.body.classList.add('light-mode');
+
 // Adds accessibility tests to storybook
 addParameters({
 	a11y: {
