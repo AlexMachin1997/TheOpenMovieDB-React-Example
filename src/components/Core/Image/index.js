@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import ImageComponent from './Image';
 import replaceSpacesWith from '../../../utils/formatters/replaceSpacesWith';
 
 /*
@@ -18,17 +17,15 @@ Resource: https://web.dev/native-lazy-loading/
 
 */
 
-const Image = ({ width, height, borderRadius, border, alt, label, src }) => {
+const Image = ({ width, height, alt, label, src, className }) => {
 	const [error, setError] = useState(false);
 
 	return (
-		<ImageComponent
-			imageWidth={width}
-			imageHeight={height}
-			borderRadius={borderRadius}
-			border={border}
-			width={width}
-			height={height}
+		<img
+			style={{
+				width,
+				height
+			}}
 			loading='lazy'
 			alt={error === true ? 'Failed to load the image, this is a fallback' : alt}
 			onError={() => setError(true)}
@@ -39,6 +36,7 @@ const Image = ({ width, height, borderRadius, border, alt, label, src }) => {
 					: replaceSpacesWith(label, '-')
 			}
 			src={error === true ? `https://via.placeholder.com/200x200?text=Default+Image` : src}
+			className={className}
 		/>
 	);
 };
@@ -46,18 +44,16 @@ const Image = ({ width, height, borderRadius, border, alt, label, src }) => {
 Image.defaultProps = {
 	width: '200px',
 	height: '200px',
-	borderRadius: '8px',
-	border: 'transparent',
 	alt: 'Default',
 	label: 'Default',
-	src: 'https://via.placeholder.com/200x200?text=Default+Image'
+	src: 'https://via.placeholder.com/200x200?text=Default+Image',
+	className: ''
 };
 
 Image.propTypes = {
 	width: PropTypes.string,
 	height: PropTypes.string,
-	borderRadius: PropTypes.string,
-	border: PropTypes.string,
+	className: PropTypes.string,
 	alt: PropTypes.string,
 	label: PropTypes.string,
 	src: PropTypes.string

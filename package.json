@@ -40,6 +40,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.5.7",
+		"@tailwindcss/line-clamp": "^0.3.1",
 		"autoprefixer": "^10.4.2",
 		"graphql": "^16.2.0",
 		"postcss": "^8.4.6",
