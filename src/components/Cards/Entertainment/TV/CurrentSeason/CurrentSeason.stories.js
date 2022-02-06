@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import CurrentSeason from './index';
+import CurrentSeason from './CurrentSeason';
 
 export const Default = () => <CurrentSeason />;
 
@@ -30,5 +30,6 @@ export const TheWalkingDeadExample = () => (
 
 export default {
 	component: CurrentSeason,
-	title: 'Card -> Entertainment -> TV -> Current Season'
+	title: 'Card -> Entertainment -> TV -> Current Season',
+	title: 'Design System/Cards/Entertainment/TV/CurrentSeason'
 };

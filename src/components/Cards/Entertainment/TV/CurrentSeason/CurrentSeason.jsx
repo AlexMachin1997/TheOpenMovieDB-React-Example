@@ -2,13 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import Image from '../../../../Core/Image';
-import Typography from '../../../../Core/Typography';
-
-import {
-	CurrentSeasonContainer,
-	CurrentSeasonContentContainer,
-	CurrentSeasonContentOverview
-} from './CurrentSeason';
 
 import replacesSpacesWith from '../../../../../utils/formatters/replaceSpacesWith';
 
@@ -21,36 +14,26 @@ const generateSubHeading = (episodeCount, year) => {
 };
 
 const CurrentSeason = ({ image, title, year, episodeCount, overview }) => (
-	<CurrentSeasonContainer>
-		<div>
-			<Image
-				width='130px'
-				height='200px'
-				alt={replacesSpacesWith(title, '-')}
-				src={image}
-				borderRadius='1rem 0 0 1rem'
-			/>
+	<div className='md:flex md:p-0 p-4 border border-solid border-[#D3D3D3] rounded-2xl'>
+		<Image
+			width='130px'
+			height='200px'
+			alt={replacesSpacesWith(title, '-')}
+			src={image}
+			borderRadius='1rem 0 0 1rem'
+			className='rounded-l-lg hidden md:flex'
+		/>
+
+		<div className='flex align-center justify-center flex-col pl-2'>
+			<h2 className='text-2xl text-black font-bold'>{title}</h2>
+
+			<p className='text-base text-black font-bold md:line-clamp-3 mb-4 md:mb-0'>
+				{generateSubHeading(episodeCount, year)}
+			</p>
+
+			<p className='text-base leading-8 text-black line-clamp-6 md:line-clamp-3'>{overview}</p>
 		</div>
-
-		<CurrentSeasonContentContainer>
-			<div>
-				<Typography type='h2' size='1.5rem' colour='black' text={title} weight='bolder' />
-			</div>
-
-			<div style={{ marginTop: '0.5rem' }}>
-				<Typography
-					type='p'
-					size='1rem'
-					colour='black'
-					text={generateSubHeading(episodeCount, year)}
-					weight='bolder'
-				/>
-			</div>
-			<CurrentSeasonContentOverview>
-				<Typography type='p' size='1rem' height={2} colour='black' text={overview} />
-			</CurrentSeasonContentOverview>
-		</CurrentSeasonContentContainer>
-	</CurrentSeasonContainer>
+	</div>
 );
 
 CurrentSeason.defaultProps = {
