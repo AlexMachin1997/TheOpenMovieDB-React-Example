@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { action } from '@storybook/addon-actions';
 
-import Video from './index';
+import Video from './Video';
 import Preview from '../../../Blocks/Storybook/Preview';
 import { CardGroup } from '../../Shared';
 
@@ -11,7 +11,7 @@ export const Title = () => (
 	<Preview content={<Video title='Marvel Agents of S.H.I.E.L.D' />} background='lightblue' />
 );
 
-export const Overivew = () => (
+export const Overview = () => (
 	<Preview
 		content={<Video overview="Marvel's Agents of S.H.I.E.L.D. - Official Season 7 Trailer" />}
 		background='lightblue'
@@ -85,5 +85,5 @@ export const GroupedExample = () => (
 
 export default {
 	component: Video,
-	title: 'Card -> Entertainment -> Video'
+	title: 'Design System/Cards/Entertainment/Video'
 };

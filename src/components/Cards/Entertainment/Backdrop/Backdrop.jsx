@@ -23,7 +23,7 @@ const Backdrop = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => 
 				onKeyDown(event);
 			}
 		}}
-		className='cursor-pointer m-4 bg-white rounded-lg '
+		className='cursor-pointer m-4 bg-white rounded-lg'
 	>
 		<Image
 			width='100%'

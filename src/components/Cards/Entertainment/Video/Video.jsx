@@ -1,54 +1,53 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Core/Image';
-import Typography from '../../../Core/Typography';
+import { Play } from 'styled-icons/fa-solid';
 
-import {
-	ImageContainer,
-	VideoContentContainer,
-	PlayIcon,
-	PlayIconContainer,
-	VideoContainer
-} from './Video';
+import Image from '../../../Core/Image';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
 
 const Video = ({ title, overview, thumbnail, thumbnailContainerAction, thumbnailAction }) => {
-	const [hovered, setHovered] = useState(false);
+	const [hovered, setHovered] = React.useState(false);
 
 	return (
-		<VideoContainer
+		<div
 			id={generateComponentId(title, 'video-card-container')}
 			onFocus={thumbnailContainerAction}
 			onMouseOver={thumbnailContainerAction}
+			className='relative min-w-[300px] max-w-[300px] p-4'
 		>
-			<ImageContainer
+			<div
 				id={generateComponentId(title, 'video-card-container-icon-container')}
 				onMouseOver={() => setHovered(true)}
 				onMouseLeave={() => setHovered(false)}
 				onFocus={() => setHovered(true)}
 				onClick={thumbnailAction}
+				className='w-100 max-w-[300px] relative group'
+				onKeyDown={() => {}}
+				tabIndex={0}
+				role='button'
 			>
 				<Image
 					width='100%'
 					height='100%'
 					alt={replacesSpacesWith(title, '-')}
 					src={thumbnail}
-					borderRadius='1rem'
+					className='group-hover:scale-105'
 				/>
-				<PlayIconContainer>
-					<PlayIcon size={hovered === true ? 50 : 40} />
-				</PlayIconContainer>
-			</ImageContainer>
-			<VideoContentContainer id={generateComponentId(title, 'video-card-content')}>
-				<Typography type='h2' text={title} size='1rem' weight='bolder' colour='white' />
-				<Typography type='h3' text={overview} size='1rem' weight='lighter' colour='white' />
-			</VideoContentContainer>
-		</VideoContainer>
+				<div className='w-[100%] h-[100%] absolute top-0 left-0 flex justify-center items-center text-white'>
+					<Play size={hovered === true ? 50 : 40} />
+				</div>
+			</div>
+			<div className='text-center' id={generateComponentId(title, 'video-card-content')}>
+				<h3 className='text-base text-white font-bold'>{title}</h3>
+				<h4 className='text-base text-white font-light'>{overview}</h4>
+			</div>
+		</div>
 	);
 };
+
 Video.defaultProps = {
 	title: 'The Umbrella Academy',
 	overview: 'The Umbrella Academy Season 2 | Official Trailer | Netflix',

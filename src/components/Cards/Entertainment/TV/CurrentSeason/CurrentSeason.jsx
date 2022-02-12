@@ -21,7 +21,7 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview }) => (
 			alt={replacesSpacesWith(title, '-')}
 			src={image}
 			borderRadius='1rem 0 0 1rem'
-			className='rounded-l-lg hidden md:flex'
+			className='rounded-lg hidden md:flex'
 		/>
 
 		<div className='flex align-center justify-center flex-col pl-2'>

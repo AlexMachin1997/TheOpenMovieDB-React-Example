@@ -30,6 +30,5 @@ export const TheWalkingDeadExample = () => (
 
 export default {
 	component: CurrentSeason,
-	title: 'Card -> Entertainment -> TV -> Current Season',
 	title: 'Design System/Cards/Entertainment/TV/CurrentSeason'
 };

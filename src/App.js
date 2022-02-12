@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import '@fortawesome/fontawesome-free';
+
 import { Routes, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import ApolloClient from './apollo';
