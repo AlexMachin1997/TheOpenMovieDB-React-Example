@@ -6,68 +6,39 @@ import Preview from '../../../Blocks/Storybook/Preview';
 import { GroupedExample, SingleExample } from '../../Shared';
 
 export const Default = () => (
-	<Preview
-		content={
-			<SingleExample>
-				<BackdropCard />
-			</SingleExample>
-		}
-		background='#F5F5F5'
-	/>
+	<div className='flex'>
+		<BackdropCard />
+	</div>
 );
 
 export const Title = () => (
-	<Preview
-		content={
-			<SingleExample>
-				<BackdropCard title='Dark' />
-			</SingleExample>
-		}
-		background='#F5F5F5'
-	/>
+	<div className='flex'>
+		<BackdropCard title='Dark' />
+	</div>
 );
 
 export const ReleaseDate = () => (
-	<Preview
-		content={
-			<SingleExample>
-				<BackdropCard releaseDate='2020' />
-			</SingleExample>
-		}
-		background='#F5F5F5'
-	/>
+	<div className='flex'>
+		<BackdropCard releaseDate='2020' />
+	</div>
 );
 
 export const Rating = () => (
-	<Preview
-		content={
-			<SingleExample>
-				<BackdropCard rating={75} />
-			</SingleExample>
-		}
-		background='#F5F5F5'
-	/>
+	<div className='flex'>
+		<BackdropCard rating={75} />
+	</div>
 );
 
 export const Image = () => (
-	<Preview
-		content={
-			<SingleExample>
-				<BackdropCard image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg' />
-			</SingleExample>
-		}
-		background='#F5F5F5'
-	/>
+	<div className='flex'>
+		<BackdropCard image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg' />
+	</div>
 );
 
 export const OnClick = () => (
-	<Preview
-		content={
-			<SingleExample>
-				<BackdropCard onClick={action('Card clicked')} />
-			</SingleExample>
-		}
-	/>
+	<div className='flex'>
+		<BackdropCard onClick={action('Card clicked')} />
+	</div>
 );
 
 export const GroupedBackdrops = () => (

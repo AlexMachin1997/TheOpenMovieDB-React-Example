@@ -1,26 +1,25 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { KnownForContainer, ContentContainer } from './KnownFor';
-import Typography from '../../../Core/Typography';
 import Image from '../../../Core/Image';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
 
 const KnownFor = ({ actorName, actorImage }) => (
-	<KnownForContainer id={generateComponentId(actorName, 'knownfor-card-container')}>
+	<div
+		className='rounded-xl bg-white m-4 h-full cursor-pointer flex flex-col items-center content-center text-center'
+		id={generateComponentId(actorName, 'known-for-card')}
+	>
 		<Image
 			width='100%'
 			height='195px'
 			alt={replacesSpacesWith(actorName, '-')}
 			src={actorImage}
-			borderRadius='1rem'
+			className='rounded-xl'
 		/>
-		<ContentContainer id={generateComponentId(actorName, 'knownfor-card-content')}>
-			<Typography type='h2' text={actorName} size='0.8rem' weight='bolder' />
-		</ContentContainer>
-	</KnownForContainer>
+		<h2 className='text-sm font-bold'>{actorName}</h2>
+	</div>
 );
 
 KnownFor.defaultProps = {

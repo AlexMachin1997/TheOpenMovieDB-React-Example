@@ -1,25 +1,25 @@
 import * as React from 'react';
 
-import KnownForCard from './index';
+import KnownForCard from './KnownFor';
 import Preview from '../../../Blocks/Storybook/Preview';
 import { CardGroup } from '../../Shared';
 
-export const Default = () => <Preview content={<KnownForCard />} background='white' />;
+export const Default = () => (
+	<div className='flex'>
+		<KnownForCard />
+	</div>
+);
 
 export const actorName = () => (
-	<Preview
-		content={<KnownForCard actorName='Aurora Teagarden Mysteries: The Disappearing Game' />}
-		background='white'
-	/>
+	<div className='flex'>
+		<KnownForCard actorName='Aurora Teagarden Mysteries: The Disappearing Game' />
+	</div>
 );
 
 export const actorImage = () => (
-	<Preview
-		content={
-			<KnownForCard actorImage='https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg' />
-		}
-		background='white'
-	/>
+	<div className='flex'>
+		<KnownForCard actorImage='https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg' />
+	</div>
 );
 
 export const GroupedKnownFor = () => (
@@ -48,5 +48,5 @@ export const GroupedKnownFor = () => (
 
 export default {
 	component: KnownForCard,
-	title: 'Card -> Person -> KnownFor'
+	title: 'Design System/Cards/Person/Know for'
 };
