@@ -3,18 +3,16 @@
 	src: './assets/font/MaidenOrange-Regular.ttf' format('tff');
 }
 
-:root {
-	.light-mode {
-		--primary: #0d253f;
-		--secondary: #01b4e4;
-		--tertiary: #90cea1;
-	}
+.light-mode {
+	--primary: #0d253f;
+	--secondary: #01b4e4;
+	--tertiary: #90cea1;
+}
 
-	.dark-mode {
-		--primary: #90cea1;
-		--secondary: #0d253f;
-		--tertiary: #3cb371;
-	}
+.dark-mode {
+	--primary: #90cea1;
+	--secondary: #0d253f;
+	--tertiary: #3cb371;
 }
 
 body {
