@@ -3,7 +3,6 @@ import { action } from '@storybook/addon-actions';
 
 import PosterCard from './Poster';
 import Preview from '../../../Blocks/Storybook/Preview';
-import { GroupedExample, SingleExample } from '../../Shared';
 
 export const Default = () => (
 	<Preview

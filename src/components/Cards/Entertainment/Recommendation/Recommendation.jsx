@@ -51,7 +51,8 @@ Recommendation.propTypes = {
 	releaseDate: PropTypes.string,
 	image: PropTypes.string,
 	rating: PropTypes.number,
-	onClick: PropTypes.func
+	onClick: PropTypes.func,
+	onKeyDown: PropTypes.func
 };
 
 Recommendation.defaultProps = {
@@ -59,7 +60,8 @@ Recommendation.defaultProps = {
 	releaseDate: '07/04/2020',
 	image: 'https://image.tmdb.org/t/p/original/6P3c80EOm7BodndGBUAJHHsHKrp.jpg',
 	rating: 70,
-	onClick: null
+	onClick: null,
+	onKeyDown: null
 };
 
 export default Recommendation;

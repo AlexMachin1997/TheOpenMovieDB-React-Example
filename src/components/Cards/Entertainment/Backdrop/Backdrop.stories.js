@@ -2,8 +2,6 @@ import * as React from 'react';
 import { action } from '@storybook/addon-actions';
 
 import BackdropCard from './Backdrop.jsx';
-import Preview from '../../../Blocks/Storybook/Preview';
-import { GroupedExample, SingleExample } from '../../Shared';
 
 export const Default = () => (
 	<div className='flex'>
@@ -41,64 +39,7 @@ export const OnClick = () => (
 	</div>
 );
 
-export const GroupedBackdrops = () => (
-	<Preview
-		content={
-			<GroupedExample>
-				<BackdropCard
-					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-					title='Supernatural'
-					releaseDate='4th July 2010'
-					rating={50}
-				/>
-				<BackdropCard
-					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-					title='Supernatural'
-					releaseDate='4th July 2010'
-					rating={50}
-				/>
-				<BackdropCard
-					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-					title='Supernatural'
-					releaseDate='4th July 2010'
-					rating={50}
-				/>
-				<BackdropCard
-					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-					title='Supernatural'
-					releaseDate='4th July 2010'
-					rating={50}
-				/>
-				<BackdropCard
-					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-					title='Supernatural'
-					releaseDate='4th July 2010'
-					rating={50}
-				/>
-				<BackdropCard
-					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-					title='Supernatural'
-					releaseDate='4th July 2010'
-					rating={50}
-				/>
-				<BackdropCard
-					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-					title='Supernatural'
-					releaseDate='4th July 2010'
-					rating={50}
-				/>
-				<BackdropCard
-					image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
-					title='Supernatural'
-					releaseDate='4th July 2010'
-					rating={50}
-				/>
-			</GroupedExample>
-		}
-	/>
-);
-
 export default {
-	title: 'Design System/Cards/Entertainment/Backdrop',
-	component: BackdropCard
+	component: BackdropCard,
+	title: 'Design System/Cards/Entertainment/Backdrop'
 };

@@ -63,6 +63,7 @@ TopBilled.defaultProps = {
 	characterName: 'Jemma Simmons',
 	img: 'https://image.tmdb.org/t/p/original/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
 	onClick: null,
+	onKeyDown: null,
 	entertainmentType: 'tv',
 	episodeCount: 136
 };
@@ -72,6 +73,7 @@ TopBilled.propTypes = {
 	characterName: PropTypes.string,
 	img: PropTypes.string,
 	onClick: PropTypes.func,
+	onKeyDown: PropTypes.func,
 	entertainmentType: PropTypes.string,
 	episodeCount: PropTypes.number
 };

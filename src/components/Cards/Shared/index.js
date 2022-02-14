@@ -11,27 +11,3 @@ export const CardGroup = styled.div`
 		display: none;
 	} */
 `;
-
-export const GroupedExample = styled.div`
-	display: grid;
-	grid-template-columns: 1fr;
-	column-gap: 50px;
-	row-gap: 50px;
-
-	@media (min-width: 600px) {
-		grid-template-columns: repeat(2, 1fr);
-	}
-
-	@media (min-width: 900px) {
-		grid-template-columns: repeat(3, 1fr);
-	}
-
-	@media (min-width: 1400px) {
-		grid-template-columns: repeat(4, 1fr);
-	}
-`;
-
-export const SingleExample = styled.div`
-	display: grid;
-	grid-template-columns: 1fr;
-`;
