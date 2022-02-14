@@ -42,7 +42,6 @@ addParameters({
 // Provides a global wrapper
 addDecorator((storyFn) => (
 	<>
-		<Normalize />
 		<ThemeProvider theme={lightTheme}>{storyFn()}</ThemeProvider>
 	</>
 ));

@@ -30,7 +30,7 @@ const Collection = ({ title, subtitle, image, onClick }) => {
 		>
 			<h2 className='text-xl text-white font-bold'>Part of the {title} Collection</h2>
 
-			<p className='text-white font-normal text-base '>{subtitle}</p>
+			<p className='text-white font-normal text-base'>{subtitle}</p>
 
 			<button
 				className='uppercase bg-tertiary text-white rounded-2xl p-2 cursor-pointer font-bold text-xs mt-4	'

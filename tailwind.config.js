@@ -8,6 +8,11 @@ module.exports = {
 				secondary: 'var(--secondary)',
 				tertiary: 'var(--tertiary)'
 			},
+			textColor: {
+				primary: 'var(--primary)',
+				secondary: 'var(--secondary)',
+				tertiary: 'var(--tertiary)'
+			},
 			boxShadow: {
 				card: '0 2px 8px rgba(0, 0, 0, 0.1)'
 			}

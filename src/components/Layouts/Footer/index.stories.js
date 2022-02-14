@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import Footer from './index';
+import Footer from './Footer';
 
 export const Default = () => <Footer />;
 
 export default {
-	title: 'Layouts -> Footer',
+	title: 'Design System/Core/Layouts/Footer',
 	component: Footer
 };

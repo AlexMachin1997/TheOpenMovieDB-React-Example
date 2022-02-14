@@ -17,6 +17,10 @@
 	}
 }
 
+body {
+	font-family: MyFontFamily;
+}
+
 @import 'tailwindcss/base';
 
 @import 'tailwindcss/components';
