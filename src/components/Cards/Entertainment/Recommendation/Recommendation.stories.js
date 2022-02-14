@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { action } from '@storybook/addon-actions';
+
 import Recommendation from './Recommendation';
 import { CardGroup } from '../../Shared';
 
@@ -11,6 +13,14 @@ export const ReleaseDate = () => <Recommendation releaseDate='25/10/2017' />;
 
 export const Image = () => (
 	<Recommendation image='https://image.tmdb.org/t/p/original/kaIfm5ryEOwYg8mLbq8HkPuM1Fo.jpg' />
+);
+
+export const OnClick = () => (
+	<Recommendation onClick={action('You have clicked a Recommendation card')} />
+);
+
+export const OnKeyDown = () => (
+	<Recommendation onKeyDown={action('You have keyed down on a Recommendation card')} />
 );
 
 export const Rating = () => <Recommendation rating={75} />;

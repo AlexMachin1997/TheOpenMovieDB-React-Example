@@ -9,9 +9,9 @@ import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 const Overview = ({ image, title, overview, releaseDate, onClick, rating, onKeyDown }) => (
 	<div
 		className='flex rounded-2xl'
-		onClick={() => {
+		onClick={(event) => {
 			if (onClick) {
-				onClick();
+				onClick(event);
 			}
 		}}
 		role='button'
