@@ -13,8 +13,8 @@ module.exports = {
 				secondary: 'var(--secondary)',
 				tertiary: 'var(--tertiary)'
 			},
-			boxShadow: {
-				card: '0 2px 8px rgba(0, 0, 0, 0.1)'
+			fontFamily: {
+				karla: "'Karla', sans-serif"
 			}
 		}
 	},

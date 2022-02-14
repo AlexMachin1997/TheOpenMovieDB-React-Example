@@ -1,8 +1,3 @@
-@font-face {
-	font-family: MyFontFamily;
-	src: './assets/font/MaidenOrange-Regular.ttf' format('tff');
-}
-
 .light-mode {
 	--primary: #0d253f;
 	--secondary: #01b4e4;
@@ -13,10 +8,6 @@
 	--primary: #90cea1;
 	--secondary: #0d253f;
 	--tertiary: #3cb371;
-}
-
-body {
-	font-family: MyFontFamily;
 }
 
 @import 'tailwindcss/base';

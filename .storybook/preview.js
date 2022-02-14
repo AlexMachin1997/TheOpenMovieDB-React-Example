@@ -28,6 +28,7 @@ preview.js notes:
 addDecorator(withKnobs);
 
 document.body.classList.add('light-mode');
+document.body.classList.add('font-karla');
 
 // Adds accessibility tests to storybook
 addParameters({
