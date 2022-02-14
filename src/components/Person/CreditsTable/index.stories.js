@@ -53,9 +53,7 @@ export const MovieExample = () => (
 );
 
 export const ActingTable = () => {
-	const tables = ActingGroupData.map((data, index) => {
-		return <CreditsTable group={data} key={index} />;
-	});
+	const tables = ActingGroupData.map((data, index) => <CreditsTable group={data} key={index} />);
 
 	return (
 		<div>

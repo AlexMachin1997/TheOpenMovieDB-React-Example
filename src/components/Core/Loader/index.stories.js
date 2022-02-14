@@ -1,5 +1,5 @@
-import Loader from './index';
 import * as React from 'react';
+import Loader from './index';
 
 export const Default = () => <Loader />;
 

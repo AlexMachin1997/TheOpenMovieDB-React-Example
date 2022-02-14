@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 
-import socialMediaImage from '../../../assets/images/icon.png';
+import socialMediaImage from '../../../assets/icon.png';
 
 const Head = ({ title, description, keywords }) => {
 	// Returns the page url e.g. / or /account

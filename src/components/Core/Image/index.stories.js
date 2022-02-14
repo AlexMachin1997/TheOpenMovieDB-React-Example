@@ -16,7 +16,7 @@ export const Src = () => (
 	<Image src='https://image.tmdb.org/t/p/w1280/h4VB6m0RwcicVEZvzftYZyKXs6K.jpg' />
 );
 
-export const onErrorExample = () => <Image src='invalid_path' />;
+export const OnErrorExample = () => <Image src='invalid_path' />;
 
 export default {
 	component: Image,

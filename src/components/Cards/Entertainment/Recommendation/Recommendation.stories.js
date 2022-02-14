@@ -3,7 +3,6 @@ import * as React from 'react';
 import { action } from '@storybook/addon-actions';
 
 import Recommendation from './Recommendation';
-import { CardGroup } from '../../Shared';
 
 export const Default = () => <Recommendation />;
 
@@ -26,7 +25,7 @@ export const OnKeyDown = () => (
 export const Rating = () => <Recommendation rating={75} />;
 
 export const GroupedExample = () => (
-	<CardGroup>
+	<div className='w-100 overflow-x-auto overflow-y-auto flex'>
 		<Recommendation
 			title='Black Panther'
 			releaseDate='13/02/2018'
@@ -45,7 +44,7 @@ export const GroupedExample = () => (
 			image='https://image.tmdb.org/t/p/original/vc8bCGjdVp0UbMNLzHnHSLRbBWQ.jpg'
 			rating={45}
 		/>
-	</CardGroup>
+	</div>
 );
 
 export default {

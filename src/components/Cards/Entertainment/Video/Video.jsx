@@ -41,8 +41,8 @@ const Video = ({ title, overview, thumbnail, thumbnailContainerAction, thumbnail
 				</div>
 			</div>
 			<div className='text-center' id={generateComponentId(title, 'video-card-content')}>
-				<h3 className='text-base text-white font-bold'>{title}</h3>
-				<h4 className='text-base text-white font-light'>{overview}</h4>
+				<h3 className='text-sm text-black font-bold'>{title}</h3>
+				<h4 className='text-sm text-black font-light'>{overview}</h4>
 			</div>
 		</div>
 	);
