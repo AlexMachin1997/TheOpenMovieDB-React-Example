@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import Normalize from '../src/components/Normalize';
-
 // Storybook modules
 import { addDecorator, addParameters } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';

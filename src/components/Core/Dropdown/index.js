@@ -15,7 +15,7 @@ const DesktopMenuItem = ({
 	colour,
 	children
 }) => (
-	<DropdownContainer tabIndex='0' background={background}>
+	<DropdownContainer background={background}>
 		{titleType === 'text' ? (
 			<Typography text={title} weight='bolder' colour={colour} size='1rem' height='2.3rem' />
 		) : (

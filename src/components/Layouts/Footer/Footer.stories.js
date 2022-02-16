@@ -5,6 +5,6 @@ import Footer from './Footer';
 export const Default = () => <Footer />;
 
 export default {
-	title: 'Design System/Core/Layouts/Footer',
+	title: 'Design System/Layouts/Footer',
 	component: Footer
 };

@@ -17,7 +17,7 @@ export const DropdownContainer = styled.div`
 	}
 `;
 
-export const Dropdown = styled.ul`
+export const Dropdown = styled.div`
 	padding: 0.5rem;
 	position: absolute;
 	z-index: 100000;
@@ -28,9 +28,6 @@ export const Dropdown = styled.ul`
 	border: 1px solid ${(props) => generateColours(props.theme, props.dropdownBorderColour)};
 	margin: 0;
 	li {
-		display: block;
-		padding: 0 1rem;
-
 		&:hover {
 			background: ${(props) => generateColours(props.theme, props.itemHoverBackground)};
 		}
@@ -38,7 +35,6 @@ export const Dropdown = styled.ul`
 
 	a {
 		display: block;
-		padding: 0 1rem;
 
 		&:hover {
 			background: ${(props) => generateColours(props.theme, props.itemHoverBackground)};
