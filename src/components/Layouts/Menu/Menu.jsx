@@ -20,7 +20,8 @@ import useClientSideRoutes from '../../../hooks/useClientSideRoutes';
 const DropdownProps = {
 	buttonClass: 'text-white rounded-md font-bold',
 	dropdownClass: 'bg-white border-slate-300 border-[1px] rounded-2xl p-2',
-	alignment: 'left'
+	alignment: 'left',
+	containerClass: 'pr-4'
 };
 
 const LinksProps = {
@@ -115,6 +116,8 @@ const NavigationMenu = ({ isAuthenticated }) => {
 			<SearchBar display={isSearchBarVisible} />
 
 			<aside
+				id='mobile-navigation-sidebar'
+				aria-label='mobile navigation menu sidebar'
 				className={className(
 					'fixed top-[75px] bg-primary opacity-90 p-4 bottom-0 overflow-y-scroll backdrop-blur-[20px] ease-in duration-500',
 					{
@@ -149,96 +152,112 @@ const NavigationMenu = ({ isAuthenticated }) => {
 				/>
 			</aside>
 
-			<div className='flex md:hidden justify-between items-center bg-primary p-4 fixed top-0 right-0 left-0'>
-				<div
-					onClick={() => {
-						setIsSidebarOpen(!isSidebarOpen);
-						setIsSearchBarVisible(false);
-					}}
-					onKeyDown={(event) => {
-						if (event.key === 'Enter') {
-							setIsSidebarOpen(!isSidebarOpen);
-							setIsSearchBarVisible(false);
-						}
-					}}
-					className='flex items-center p-0 m-0 cursor-pointer'
-					type='button'
-					role='button'
-					tabIndex={0}
-					aria-hidden={isSidebarOpen.toString()}
-					aria-label={isSidebarOpen === true ? 'Open sidebar' : 'Close sidebar'}
-				>
-					<Icon icon='Menu' size={30} colour='white' />
-				</div>
+			<nav
+				id='mobile-navigation-menu'
+				className='bg-primary p-4 fixed top-0 right-0 left-0'
+				aria-label='mobile navigation menu'
+				role='navigation'
+			>
+				<ul className='flex md:hidden justify-between items-center'>
+					<li>
+						<div
+							onClick={() => {
+								setIsSidebarOpen(!isSidebarOpen);
+								setIsSearchBarVisible(false);
+							}}
+							onKeyDown={(event) => {
+								if (event.key === 'Enter') {
+									setIsSidebarOpen(!isSidebarOpen);
+									setIsSearchBarVisible(false);
+								}
+							}}
+							className='flex items-center p-0 m-0 cursor-pointer'
+							type='button'
+							role='button'
+							tabIndex={0}
+							aria-hidden={isSidebarOpen.toString()}
+							aria-label={isSidebarOpen === true ? 'Open sidebar' : 'Close sidebar'}
+						>
+							<Icon icon='Menu' size={30} colour='white' />
+						</div>
+					</li>
+					<li>
+						<Link to='/'>
+							<Image
+								src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg'
+								alt='TMBDb Logo'
+								width='75px'
+								height='40px'
+								className='cursor-pointer'
+							/>
+						</Link>
+					</li>
+					<li>
+						<div
+							onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
+							className='flex items-center p-0 m-0 cursor-pointer'
+							onKeyDown={(event) => {
+								if (event.key === 'Enter') {
+									setIsSearchBarVisible(!isSearchBarVisible);
+								}
+							}}
+							type='button'
+							role='button'
+							tabIndex={0}
+							aria-hidden={isSearchBarVisible.toString()}
+							aria-label={isSearchBarVisible === true ? 'Open search bar' : 'Close search bar'}
+						>
+							<Icon
+								icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
+								size={30}
+								colour='secondary'
+							/>
+						</div>
+					</li>
+				</ul>
+			</nav>
 
-				<Image
-					src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg'
-					alt='TMBDb Logo'
-					width='75px'
-					height='40px'
-					className='cursor-pointer'
-				/>
-
-				<div
-					onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-					className='flex items-center p-0 m-0 cursor-pointer'
-					onKeyDown={(event) => {
-						if (event.key === 'Enter') {
-							setIsSearchBarVisible(!isSearchBarVisible);
-						}
-					}}
-					type='button'
-					role='button'
-					tabIndex={0}
-					aria-hidden={isSearchBarVisible.toString()}
-					aria-label={isSearchBarVisible === true ? 'Open search bar' : 'Close search bar'}
-				>
-					<Icon
-						icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
-						size={30}
-						colour='secondary'
-					/>
-				</div>
-			</div>
-
-			<nav className='bg-primary fixed top-0 right-0 left-0'>
+			<nav
+				id='desktop-navigation-menu'
+				className='bg-primary fixed top-0 right-0 left-0'
+				aria-label='desktop navigation menu'
+				role='navigation'
+			>
 				<div className='md:flex hidden max-w-[1400px] mx-auto	justify-between p-4'>
-					<div className='flex items-center p-0 m-0' id='desktop-navigation-menu-left-hand-side'>
-						<Image
-							src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg'
-							alt='TMBDb Logo'
-							width='190px'
-							height='20px'
-							className='cursor-pointer'
-						/>
+					<div className='flex items-center p-0 m-0' id='desktop-navigation-menu-left'>
+						<ul>
+							<li>
+								<Link to='/'>
+									<Image
+										src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg'
+										alt='TMBDb Logo'
+										width='190px'
+										height='20px'
+										className='cursor-pointer'
+									/>
+								</Link>
+							</li>
+						</ul>
 
-						<div className='pr-4'>
-							<Dropdown title='Movies' {...DropdownProps}>
-								<Links links={movieLinks} {...LinksProps} />
-							</Dropdown>
-						</div>
+						<Dropdown title='Movies' {...DropdownProps}>
+							<Links links={movieLinks} {...LinksProps} />
+						</Dropdown>
 
-						<div className='pr-4'>
-							<Dropdown title='TV Shows' {...DropdownProps}>
-								<Links links={showLinks} {...LinksProps} />
-							</Dropdown>
-						</div>
+						<Dropdown title='TV Shows' {...DropdownProps}>
+							<Links links={showLinks} {...LinksProps} />
+						</Dropdown>
 
-						<div className='pr-4'>
-							<Dropdown title='People' {...DropdownProps}>
-								<Links links={personLinks} {...LinksProps} />
-							</Dropdown>
-						</div>
+						<Dropdown title='People' {...DropdownProps}>
+							<Links links={personLinks} {...LinksProps} />
+						</Dropdown>
 
-						<div className='pr-4'>
-							<Dropdown title='More' {...DropdownProps}>
-								<Links links={externalLinks} {...LinksProps} />
-							</Dropdown>
-						</div>
+						<Dropdown title='More' {...DropdownProps}>
+							<Links links={externalLinks} {...LinksProps} />
+						</Dropdown>
 					</div>
 
 					{isAuthenticated === false ? (
-						<ul className='flex items-center p-0 m-0' id='desktop-navigation-menu-right-hand-side'>
+						<ul className='flex items-center p-0 m-0' id='desktop-navigation-menu-right'>
 							<li className='text-base text-white pr-3 font-bold'>Login</li>
 
 							<li className='text-base text-white pr-3 font-bold'>Register</li>
@@ -273,7 +292,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 							alignment='right'
 							dropdownClass='bg-slate-50 rounded w-[200px] border border-solid border-gray-300 drop-shadow-xl'
 							buttonClass='text-white'
-							id='desktop-navigation-menu-right-hand-side'
+							id='desktop-navigation-menu-right'
 						>
 							<ul className='p-2'>
 								<li className='text-base text-black font-semibold'>Alex Machin</li>

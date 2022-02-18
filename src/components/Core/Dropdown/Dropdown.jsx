@@ -7,9 +7,9 @@ const Dropdown = ({
 	children,
 	buttonClass,
 	dropdownClass,
+	containerClass,
 	onClick,
-	alignment,
-	...props
+	alignment
 }) => {
 	// Stores the dropdown open state
 	const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
@@ -48,7 +48,7 @@ const Dropdown = ({
 	}, []);
 
 	return (
-		<div className='relative inline-block' ref={dropdownRef} {...props}>
+		<div className={className('relative inline-block', containerClass)} ref={dropdownRef}>
 			<button
 				type='button'
 				className={`inline-flex justify-center w-full ${buttonClass}`}
@@ -90,6 +90,7 @@ Dropdown.propTypes = {
 	children: PropTypes.node.isRequired,
 	buttonClass: PropTypes.string,
 	dropdownClass: PropTypes.string,
+	containerClass: PropTypes.string,
 	onClick: PropTypes.func,
 	alignment: PropTypes.string
 };
@@ -98,6 +99,7 @@ Dropdown.defaultProps = {
 	title: 'Default title',
 	buttonClass: '',
 	dropdownClass: '',
+	containerClass: '',
 	onClick: null,
 	alignment: 'left'
 };
