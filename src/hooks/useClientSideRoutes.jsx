@@ -32,7 +32,8 @@ const useClientSideRoutes = (config) => {
 		() => [
 			{
 				url: '/',
-				element: includesElements === true ? <Homepage /> : null
+				element: includesElements === true ? <Homepage /> : null,
+				isMenuLink: false
 			},
 			{
 				url: '/movies',
@@ -40,27 +41,32 @@ const useClientSideRoutes = (config) => {
 					{
 						url: '/:id',
 						element: includesElements === true ? <SingleMovie /> : null,
-						menuTitle: ''
+						menuTitle: '',
+						isMenuLink: false
 					},
 					{
 						url: '/popular',
 						element: includesElements === true ? <PopularMovies /> : null,
-						menuTitle: 'Popular'
+						menuTitle: 'Popular',
+						isMenuLink: true
 					},
 					{
 						url: '/now-playing',
 						element: includesElements === true ? <NowPlayingMovies /> : null,
-						menuTitle: 'Now Playing'
+						menuTitle: 'Now Playing',
+						isMenuLink: true
 					},
 					{
 						url: '/upcoming',
 						element: includesElements === true ? <UpcomingMovies /> : null,
-						menuTitle: 'Upcoming'
+						menuTitle: 'Upcoming',
+						isMenuLink: true
 					},
 					{
 						url: '/top-rated',
 						element: includesElements === true ? <TopRatedMovies /> : null,
-						menuTitle: 'Top Rated'
+						menuTitle: 'Top Rated',
+						isMenuLink: true
 					}
 				]
 			},
@@ -70,27 +76,32 @@ const useClientSideRoutes = (config) => {
 					{
 						url: '/:id',
 						element: includesElements === true ? <SingleShow /> : null,
-						menuTitle: ''
+						menuTitle: '',
+						isMenuLink: false
 					},
 					{
 						url: '/popular',
 						element: includesElements === true ? <PopularShows /> : null,
-						menuTitle: 'Popular'
+						menuTitle: 'Popular',
+						isMenuLink: true
 					},
 					{
 						url: '/airing-today',
 						element: includesElements === true ? <AiringToday /> : null,
-						menuTitle: 'Airing Today'
+						menuTitle: 'Airing Today',
+						isMenuLink: true
 					},
 					{
 						url: '/on-tv',
 						element: includesElements === true ? <OnTV /> : null,
-						menuTitle: 'On TV'
+						menuTitle: 'On TV',
+						isMenuLink: true
 					},
 					{
 						url: '/top-rated',
 						element: includesElements === true ? <TopRatedShows /> : null,
-						menuTitle: 'Top Rated'
+						menuTitle: 'Top Rated',
+						isMenuLink: true
 					}
 				]
 			},
@@ -100,50 +111,71 @@ const useClientSideRoutes = (config) => {
 					{
 						url: '/:id',
 						element: includesElements === true ? <SinglePerson /> : null,
-						menuTitle: ''
+						menuTitle: '',
+						isMenuLink: false
 					},
 					{
 						url: '/popular',
 						element: includesElements === true ? <PopularPeople /> : null,
-						menuTitle: 'Popular People'
+						menuTitle: 'Popular People',
+						isMenuLink: true
 					}
 				]
 			},
 			{
 				url: '/login',
 				element: includesElements === true ? <Login /> : null,
-				menuTitle: 'Login'
+				menuTitle: 'Login',
+				isMenuLink: true
 			},
 			{
 				url: '/register',
 				element: includesElements === true ? <Register /> : null,
-				menuTitle: 'Register'
+				menuTitle: 'Register',
+				isMenuLink: true
 			},
 			{
 				url: '/forgot',
 				element: includesElements === true ? <ForgotPassword /> : null,
-				menuTitle: 'Forgot'
+				menuTitle: 'Forgot',
+				isMenuLink: false
 			},
 			{
 				url: '/reset-password',
 				element: includesElements === true ? <ResetPassword /> : null,
-				menuTitle: 'Reset Password'
+				menuTitle: 'Reset Password',
+				isMenuLink: false
 			},
 			{
 				url: '/account',
 				element: includesElements === true ? <Account /> : null,
-				menuTitle: 'Account'
+				menuTitle: 'Account',
+				isMenuLink: false
 			},
 			{
 				url: '/search',
 				element: includesElements === true ? <Search /> : null,
-				menuTitle: 'Search'
+				menuTitle: 'Search',
+				isMenuLink: false
 			}
 		],
 		[includesElements]
 	);
 
-	return routes;
+	return {
+		allApplicationClientSideRoutes: routes,
+		menuLinks: {
+			movieLinks: routes
+				.find((el) => el.url.includes('/movies'))
+				.children.filter((el) => el.isMenuLink === true),
+			showLinks: routes
+				.find((el) => el.url.includes('/shows'))
+				.children.filter((el) => el.isMenuLink === true),
+			personLinks: routes
+				.find((el) => el.url.includes('/people'))
+				.children.filter((el) => el.isMenuLink === true)
+		}
+	};
 };
 
 export default useClientSideRoutes;

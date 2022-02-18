@@ -16,20 +16,20 @@ Title.args = {
 export const Items = Template.bind({});
 Items.args = {
 	title: 'People',
-	items: [
-		{ text: 'Popular', to: '/', type: 'internal' },
-		{ text: 'Discover', to: '/', type: 'internal' },
-		{ text: 'Now Playing', to: '/', type: 'internal' }
+	links: [
+		{ menuTitle: 'Popular', url: '/', type: 'internal' },
+		{ menuTitle: 'Discover', url: '/', type: 'internal' },
+		{ menuTitle: 'Now Playing', url: '/', type: 'internal' }
 	]
 };
 
 export const OnItemClick = Template.bind({});
 OnItemClick.args = {
 	title: 'People',
-	items: [
-		{ text: 'Popular', to: '/', type: 'internal' },
-		{ text: 'Discover', to: '/', type: 'internal' },
-		{ text: 'Now Playing', to: '/', type: 'internal' }
+	links: [
+		{ menuTitle: 'Popular', url: '/', type: 'internal' },
+		{ menuTitle: 'Discover', url: '/', type: 'internal' },
+		{ menuTitle: 'Now Playing', url: '/', type: 'internal' }
 	],
 	onItemClick: () => 'Hello'
 };
@@ -45,8 +45,5 @@ export default {
 				</div>
 			</MemoryRouter>
 		)
-	],
-	argTypes: {
-		onItemClick: { action: 'clicked' }
-	}
+	]
 };

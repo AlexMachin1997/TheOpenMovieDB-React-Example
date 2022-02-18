@@ -3,7 +3,14 @@ import { MemoryRouter } from 'react-router-dom';
 
 import Menu from './Menu';
 
-export const Default = () => <Menu />;
+const Template = (args) => <Menu {...args} />;
+
+export const Default = Template.bind({});
+
+export const IsAuthenticated = Template.bind({});
+IsAuthenticated.args = {
+	isAuthenticated: true
+};
 
 export default {
 	title: 'Design System/Layouts/Menu',
@@ -11,7 +18,9 @@ export default {
 	decorators: [
 		(Story) => (
 			<MemoryRouter>
-				<Story />
+				<div className='bg-primary opacity-90'>
+					<Story />
+				</div>
 			</MemoryRouter>
 		)
 	]

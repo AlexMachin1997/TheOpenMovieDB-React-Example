@@ -18,12 +18,12 @@ const App = () => {
 	usePageView();
 
 	// Used to get all the routes in the application
-	const routes = useClientSideRoutes({ includesElements: true });
+	const { allApplicationClientSideRoutes } = useClientSideRoutes({ includesElements: true });
 
 	return (
 		<ApolloProvider client={ApolloClient}>
 			<Routes>
-				{routes.map((route) => {
+				{allApplicationClientSideRoutes.map((route) => {
 					// When there are children elements available render a Route for each element
 					if ((route?.children?.length ?? 0) > 1) {
 						return route.children.map((childElement) => (
