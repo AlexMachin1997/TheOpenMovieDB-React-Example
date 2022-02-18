@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { Facts, Certification, Genres, Runtime, ReleaseDate } from './MetaData';
-import Icon from '../../../Core/Icon';
+import Icon from '../../../Core/Icon/Icon';
 
 const MetaData = ({ ageRating, releaseDate, genres, runtime }) => (
 	<Facts>
@@ -10,7 +10,7 @@ const MetaData = ({ ageRating, releaseDate, genres, runtime }) => (
 		<ReleaseDate>{releaseDate}</ReleaseDate>
 		<Genres>{genres}</Genres>
 		<Runtime>
-			<Icon icon='Time' size={20} colour='white' />
+			<Icon className='fa-solid fa-clock-two text-white' />
 			{runtime}
 		</Runtime>
 	</Facts>

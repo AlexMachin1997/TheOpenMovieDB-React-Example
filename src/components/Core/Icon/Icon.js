@@ -1,7 +1,5 @@
-import styled from 'styled-components';
+import * as React from 'react';
 
-import generateColours from '../../../utils/theming/generateColours';
+const Icon = ({ ...props }) => <i {...props} />;
 
-export const IconWrapper = styled.div`
-	color: ${(props) => generateColours(props.theme, props.colour)};
-`;
+export default Icon;

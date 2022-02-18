@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import Image from '../../../Core/Image';
-import Rating from '../../../Ratings/Stars';
+import Rating from '../../../Ratings/Stars/Stars';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 

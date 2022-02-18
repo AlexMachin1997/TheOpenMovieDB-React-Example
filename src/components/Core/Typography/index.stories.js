@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import Typography from './index';
-import Icon from '../Icon';
 
 export const Default = () => <Typography />;
 
@@ -21,9 +20,7 @@ export const TypeHref = () => <Typography type='a' text='Custom Href' />;
 
 export const Colour = () => <Typography colour='red' />;
 
-export const Href = () => (
-	<Typography type='a' href='www.facebook.com' text={<Icon icon='Facebook' size='30' />} />
-);
+export const Href = () => <Typography type='a' href='www.facebook.com' text='Facebook' />;
 
 export const Underline = () => (
 	<Typography type='p' href='www.facebook.com' content='Facebook' underline />

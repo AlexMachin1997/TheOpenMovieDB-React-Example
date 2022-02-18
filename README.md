@@ -86,13 +86,7 @@ As of the current version of the API, it is currently capable of performing the 
 
 ### Core Dependencies
 
-- [@apollo/react-hooks](https://www.npmjs.com/package/@apollo/react-hooks)
-- [apollo-cache-inmemory](https://www.npmjs.com/package/apollo-cache-inmemory)
 - [apollo-client](https://www.npmjs.com/package/apollo-client)
-- [apollo-link](https://www.npmjs.com/package/apollo-link)
-- [apollo-link-context](https://www.npmjs.com/package/apollo-link-context)
-- [apollo-link-error](https://www.npmjs.com/package/apollo-link-error)
-- [apollo-link-http](https://www.npmjs.com/package/apollo-link-http)
 - [graphl](https://www.npmjs.com/package/graphql)
 - [graphql-tag](https://www.npmjs.com/package/graphql-tag)
 - [prop-types](https://www.npmjs.com/package/prop-types)
@@ -101,7 +95,6 @@ As of the current version of the API, it is currently capable of performing the 
 - [react-router-dom](https://reactrouter.com/docs/en/v6/getting-started/overview)
 - [react-scripts](https://www.npmjs.com/package/react-scripts)
 - [styled-components](https://www.npmjs.com/package/styled-components)
-- [styled-icons](https://www.npmjs.com/package/styled-icons)
 - [workbox-build](https://www.npmjs.com/package/workbox-build)
 
 ### Development Dependencies

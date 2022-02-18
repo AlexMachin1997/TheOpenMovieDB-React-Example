@@ -10,6 +10,13 @@
 	--tertiary: #3cb371;
 }
 
+// This is an internal font awesome sass/scss variable, we need to override to point to our webfonts (copy of the internal fonts)
+$fa-font-path: '../webfonts';
+
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
 @import 'tailwindcss/base';
 
 @import 'tailwindcss/components';

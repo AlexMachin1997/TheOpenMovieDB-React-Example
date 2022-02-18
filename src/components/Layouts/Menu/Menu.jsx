@@ -1,13 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import * as React from 'react';
 import className from 'classnames';
 import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import { PersonCircle } from '@styled-icons/bootstrap';
-
-import Icon from '../../Core/Icon';
+import Icon from '../../Core/Icon/Icon';
 import Image from '../../Core/Image';
 import Dropdown from '../../Core/Dropdown/Dropdown';
 
@@ -178,7 +175,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 							aria-hidden={isSidebarOpen.toString()}
 							aria-label={isSidebarOpen === true ? 'Open sidebar' : 'Close sidebar'}
 						>
-							<Icon icon='Menu' size={30} colour='white' />
+							<Icon className='fa-solid fa-bars text-white' />
 						</div>
 					</li>
 					<li>
@@ -208,9 +205,10 @@ const NavigationMenu = ({ isAuthenticated }) => {
 							aria-label={isSearchBarVisible === true ? 'Open search bar' : 'Close search bar'}
 						>
 							<Icon
-								icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
-								size={30}
-								colour='secondary'
+								className={className('text-white', {
+									'fa-solid fa-xmark': isSearchBarVisible === true,
+									'fa-solid fa-magnifying-glass': isSearchBarVisible === false
+								})}
 							/>
 						</div>
 					</li>
@@ -274,9 +272,10 @@ const NavigationMenu = ({ isAuthenticated }) => {
 									type='button'
 								>
 									<Icon
-										icon={isSearchBarVisible === true ? 'Close' : 'SearchCircle'}
-										size={30}
-										colour='secondary'
+										className={className('text-white text-base', {
+											'fa-solid fa-xmark': isSearchBarVisible === true,
+											'fa-solid fa-magnifying-glass': isSearchBarVisible === false
+										})}
 									/>
 									<span className='sr-only'>Search toggle</span>
 								</button>
@@ -286,12 +285,12 @@ const NavigationMenu = ({ isAuthenticated }) => {
 						<Dropdown
 							title={
 								<>
-									<PersonCircle size={30} /> <span className='sr-only'>Search toggle</span>
+									<Icon className='fa-solid fa-user text-white' />
+									<span className='sr-only'>User profile</span>
 								</>
 							}
 							alignment='right'
 							dropdownClass='bg-slate-50 rounded w-[200px] border border-solid border-gray-300 drop-shadow-xl'
-							buttonClass='text-white'
 							id='desktop-navigation-menu-right'
 						>
 							<ul className='p-2'>

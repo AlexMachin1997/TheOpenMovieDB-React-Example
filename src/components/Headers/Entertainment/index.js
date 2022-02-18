@@ -21,9 +21,8 @@ import {
 import Image from '../../Core/Image';
 import Typography from '../../Core/Typography';
 import Rating from '../../Ratings/Percentage';
-import Icon from '../../Core/Icon';
-
-import Action from './Action';
+import Icon from '../../Core/Icon/Icon';
+import Tooltip from '../../Core/Tooltip';
 
 const EntertainmentHeader = ({
 	posterImage,
@@ -100,32 +99,53 @@ const EntertainmentHeader = ({
 									/>
 								</RatingText>
 							</li>
-
 							<li>
-								<Action tooltip='Login to create and edit custom lists' icon='ListTask' />
-							</li>
-
-							<li>
-								<Action
-									tooltip='Login to create and add it to your favorites list'
-									icon='HeartFilled'
+								<Tooltip
+									content={
+										<div className='w-[50px] h-[50px] bg-primary flex items-center justify-center rounded-full'>
+											<Icon className='fa-solid fa-list-ol' />
+										</div>
+									}
+									tooltipText='Login to create and edit custom lists'
 								/>
 							</li>
 
 							<li>
-								<Action
-									tooltip='Login to create and add it to your watch list'
-									icon='BookmarkFill'
+								<Tooltip
+									content={
+										<div className='w-[50px] h-[50px] bg-primary flex items-center justify-center rounded-full'>
+											<Icon className='fa-solid fa-heart' />
+										</div>
+									}
+									tooltipText='Login to create and add it to your favorites list'
 								/>
 							</li>
 
 							<li>
-								<Action tooltip='Login to rate this title' icon='StarFill' />
+								<Tooltip
+									content={
+										<div className='w-[50px] h-[50px] bg-primary flex items-center justify-center rounded-full'>
+											<Icon className='fa-solid fa-bookmark' />
+										</div>
+									}
+									tooltipText='Login to create and add it to your watch list'
+								/>
 							</li>
 
 							<li>
-								<Icon size={20} colour='white' icon='PlayFill' />
-								Play Trailer
+								<Tooltip
+									content={
+										<div className='w-[50px] h-[50px] bg-primary flex items-center justify-center rounded-full'>
+											<Icon className='fa-solid fa-star' />
+										</div>
+									}
+									tooltipText='Login to rate this title'
+								/>
+							</li>
+
+							<li className='flex items-center'>
+								<Icon className='fa-solid fa-play text-white mr-3' />
+								<p className='text-base text-white'>Play Trailer</p>
 							</li>
 						</Actions>
 
@@ -165,7 +185,7 @@ const EntertainmentHeader = ({
 				</li>
 
 				<li>
-					<Icon size={20} colour='white' icon='PlayFill' />
+					<Icon className='fa-solid fa-play text-white mr-3' />
 					<Typography type='p' colour='white' text='Play Trailer' size='1rem' />
 				</li>
 			</Actions>

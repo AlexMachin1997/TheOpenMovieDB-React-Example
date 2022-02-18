@@ -1,15 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { Dot } from 'styled-icons/octicons';
 import { Container, Year, Separator, Role } from './TableRow';
 import Typography from '../../../Core/Typography';
+import Icon from '../../../Core/Icon/Icon';
 
 const TableRow = ({ year, mediaType, title, episodeCount, character }) => (
 	<Container tabIndex='0'>
 		<Year>{year}</Year>
 		<Separator>
-			<Dot size={30} />
+			<Icon className='class="fa-solid fa-circle' />
 		</Separator>
 		<Role>
 			<Typography type='p' text={title} size='1rem' weight={600} colour='black' />{' '}
