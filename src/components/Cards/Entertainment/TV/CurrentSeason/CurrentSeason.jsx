@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../../Core/Image';
+import { Image } from '../../../../Core';
 
 import replacesSpacesWith from '../../../../../utils/formatters/replaceSpacesWith';
 
@@ -14,20 +14,20 @@ const generateSubHeading = (episodeCount, year) => {
 };
 
 const CurrentSeason = ({ image, title, year, episodeCount, overview }) => (
-	<div className='md:flex md:p-0 p-4 border border-solid border-[#D3D3D3] rounded-2xl'>
+	<div className='rounded-2xl border border-solid border-[#D3D3D3] p-4 md:flex md:p-0'>
 		<Image
 			width='130px'
 			height='200px'
 			alt={replacesSpacesWith(title, '-')}
 			src={image}
 			borderRadius='1rem 0 0 1rem'
-			className='rounded-lg hidden md:flex'
+			className='hidden rounded-lg md:flex'
 		/>
 
-		<div className='flex align-center justify-center flex-col pl-2'>
-			<h2 className='text-2xl text-black font-bold'>{title}</h2>
+		<div className='align-center flex flex-col justify-center pl-2'>
+			<h2 className='text-2xl font-bold text-black'>{title}</h2>
 
-			<p className='text-base text-black font-bold md:line-clamp-3 mb-4 md:mb-0'>
+			<p className='mb-4 text-base font-bold text-black md:mb-0 md:line-clamp-3'>
 				{generateSubHeading(episodeCount, year)}
 			</p>
 

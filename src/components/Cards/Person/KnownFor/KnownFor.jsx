@@ -1,14 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Core/Image';
+import { Image } from '../../../Core';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
 
 const KnownFor = ({ actorName, actorImage }) => (
 	<div
-		className='rounded-xl bg-white m-4 h-full cursor-pointer flex flex-col items-center content-center text-center'
+		className='m-4 flex h-full cursor-pointer flex-col content-center items-center rounded-xl bg-white text-center'
 		id={generateComponentId(actorName, 'known-for-card')}
 	>
 		<Image

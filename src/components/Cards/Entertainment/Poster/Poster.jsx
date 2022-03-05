@@ -1,15 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Core/Image';
-import Rating from '../../../Ratings/Percentage';
+import { Image, PercentageRating } from '../../../Core';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
 
 const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 	<div
-		className='rounded-2xl bg-white m-4 cursor-pointer shadow-card'
+		className='shadow-card m-4 cursor-pointer rounded-2xl bg-white'
 		onClick={(event) => {
 			if (onClick) {
 				onClick(event);
@@ -33,17 +32,17 @@ const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 		/>
 
 		<div
-			className='relative p-4 flex flex-col'
+			className='relative flex flex-col p-4'
 			id={generateComponentId(title, 'poster-card-content')}
 		>
 			<div
 				className='absolute top-[-29px] left-[8px]'
 				id={generateComponentId(title, 'poster-card-rating')}
 			>
-				<Rating percentage={rating} size={40} strokeWidth={2.5} textSize='0.7rem' />
+				<PercentageRating percentage={rating} size={40} strokeWidth={2.5} textSize='0.7rem' />
 			</div>
 			<div id={generateComponentId(title, 'poster-card-meta')}>
-				<h3 className='text-base weight font-bold text-black'>{title}</h3>
+				<h3 className='weight text-base font-bold text-black'>{title}</h3>
 				<p className='text-base font-light text-slate-400'>{releaseDate}</p>
 			</div>
 		</div>

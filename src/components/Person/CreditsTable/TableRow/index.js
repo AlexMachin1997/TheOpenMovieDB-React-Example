@@ -2,8 +2,11 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { Container, Year, Separator, Role } from './TableRow';
+
+// TODO: Remove once this has been renamed with a native heading tag
 import Typography from '../../../Core/Typography';
-import Icon from '../../../Core/Icon/Icon';
+
+import { Icon } from '../../../Core';
 
 const TableRow = ({ year, mediaType, title, episodeCount, character }) => (
 	<Container tabIndex='0'>

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import propTypes from 'prop-types';
 
-import Tooltip from '../../Core/Tooltip';
 import SocialLink from '../SocialLink';
-import Icon from '../../Core/Icon/Icon';
+
+import { Tooltip, Icon } from '../../Core';
 
 const SocialLinks = ({ facebookLink, twitterLink, instagramLink, homepageLink, name }) => (
 	<div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>

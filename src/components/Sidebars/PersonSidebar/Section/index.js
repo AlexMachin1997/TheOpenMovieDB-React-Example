@@ -1,27 +1,17 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
+// TODO: Remove once this has been renamed with a native heading tag
 import Typography from '../../../Core/Typography';
+
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
-
-/*
-
-Accessability notes:
-
-- Heading order:
-	The main heading is h2, so the child elements need to be h3 and not h4 or anything beyond that.
-	The heading order matters for accessbility reasons, see the below link for more information.
-
-	resource: https://webaim.org/techniques/semanticstructure/
-
-*/
 
 const Section = ({ title, content, display }) => {
 	if (display === false) return null;
 
 	let contentElement;
 
-	// If an arrary is provided loop through the elements
+	// If an array is provided loop through the elements
 	if (Array.isArray(content) === true) {
 		contentElement = content.map((data, index) => (
 			<div style={{ marginBottom: '1rem' }} key={index}>

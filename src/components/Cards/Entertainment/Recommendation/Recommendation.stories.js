@@ -25,7 +25,7 @@ export const OnKeyDown = () => (
 export const Rating = () => <Recommendation rating={75} />;
 
 export const GroupedExample = () => (
-	<div className='w-100 overflow-x-auto overflow-y-auto flex'>
+	<div className='w-100 flex overflow-x-auto overflow-y-auto'>
 		<Recommendation
 			title='Black Panther'
 			releaseDate='13/02/2018'

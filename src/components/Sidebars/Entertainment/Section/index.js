@@ -1,7 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
+// TODO: Remove once this has been renamed with a native heading tag
 import Typography from '../../../Core/Typography';
+
 import { Container } from './Section';
 import replaceSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 

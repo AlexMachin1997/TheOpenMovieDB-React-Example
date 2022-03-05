@@ -21,7 +21,7 @@ export const ActorImage = () => (
 );
 
 export const GroupedKnownFor = () => (
-	<div className='w-100 overflow-x-auto overflow-y-auto flex'>
+	<div className='w-100 flex overflow-x-auto overflow-y-auto'>
 		<KnownForCard
 			actorName='Fast and furious 7'
 			actorImage='https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg'

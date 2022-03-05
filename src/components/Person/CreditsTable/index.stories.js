@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import CreditsTable from './index';
 import ActingGroupData from './ActingGroupData';
+
+// TODO: Remove once this has been renamed with a native heading tag
 import Typography from '../../Core/Typography';
 
 export const TVExample = () => (

@@ -1,9 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Core/Image';
-import Typography from '../../../Core/Typography';
-import Rating from '../../../Ratings/Percentage';
+import { Image, PercentageRating } from '../../../Core';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
@@ -23,7 +21,7 @@ const Backdrop = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => 
 				onKeyDown(event);
 			}
 		}}
-		className='cursor-pointer m-4 bg-white rounded-lg'
+		className='m-4 cursor-pointer rounded-lg bg-white'
 	>
 		<Image
 			width='100%'
@@ -34,18 +32,14 @@ const Backdrop = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => 
 		/>
 		<div id={generateComponentId(title, 'backdrop-card-content')} className='flex items-center'>
 			<div id={generateComponentId(title, 'backdrop-card-rating')} className='m-2	'>
-				<Rating percentage={rating} size={50} strokeWidth={5} textSize='0.9rem' />
+				<PercentageRating percentage={rating} size={50} strokeWidth={5} textSize='0.9rem' />
 			</div>
 			<div
 				id={generateComponentId(title, 'backdrop-card-information')}
 				className='flex items-center'
 			>
-				<div>
-					<Typography type='h1' text={title} size='1.2rem' weight='bolder' />
-				</div>
-				<div className='m-2'>
-					<Typography type='p' size='1rem' text={releaseDate} weight='lighter' colour='#A9A9A9' />
-				</div>
+				<h1 className='m-2 text-base font-bold text-black'>{title}</h1>
+				<p className='text-base font-light text-gray-300'>{releaseDate}</p>
 			</div>
 		</div>
 	</div>

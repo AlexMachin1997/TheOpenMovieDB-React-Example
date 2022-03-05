@@ -18,11 +18,10 @@ import {
 	Pipe
 } from './Desktop';
 
-import Image from '../../Core/Image';
+// TODO: Remove once this has been renamed with a native heading tag
 import Typography from '../../Core/Typography';
-import Rating from '../../Ratings/Percentage';
-import Icon from '../../Core/Icon/Icon';
-import Tooltip from '../../Core/Tooltip';
+
+import { Image, PercentageRating, Icon, Tooltip } from '../../Core';
 
 const EntertainmentHeader = ({
 	posterImage,
@@ -78,7 +77,7 @@ const EntertainmentHeader = ({
 
 						<Actions>
 							<li>
-								<Rating size={50} textSize='0.9rem' percentage={rating} strokeWidth={5} />
+								<PercentageRating size={50} textSize='0.9rem' percentage={rating} strokeWidth={5} />
 								<RatingText>
 									<Typography
 										type='p'
@@ -102,7 +101,7 @@ const EntertainmentHeader = ({
 							<li>
 								<Tooltip
 									content={
-										<div className='w-[50px] h-[50px] bg-primary flex items-center justify-center rounded-full'>
+										<div className='flex h-[50px] w-[50px] items-center justify-center rounded-full bg-primary'>
 											<Icon className='fa-solid fa-list-ol' />
 										</div>
 									}
@@ -113,7 +112,7 @@ const EntertainmentHeader = ({
 							<li>
 								<Tooltip
 									content={
-										<div className='w-[50px] h-[50px] bg-primary flex items-center justify-center rounded-full'>
+										<div className='flex h-[50px] w-[50px] items-center justify-center rounded-full bg-primary'>
 											<Icon className='fa-solid fa-heart' />
 										</div>
 									}
@@ -124,7 +123,7 @@ const EntertainmentHeader = ({
 							<li>
 								<Tooltip
 									content={
-										<div className='w-[50px] h-[50px] bg-primary flex items-center justify-center rounded-full'>
+										<div className='flex h-[50px] w-[50px] items-center justify-center rounded-full bg-primary'>
 											<Icon className='fa-solid fa-bookmark' />
 										</div>
 									}
@@ -135,7 +134,7 @@ const EntertainmentHeader = ({
 							<li>
 								<Tooltip
 									content={
-										<div className='w-[50px] h-[50px] bg-primary flex items-center justify-center rounded-full'>
+										<div className='flex h-[50px] w-[50px] items-center justify-center rounded-full bg-primary'>
 											<Icon className='fa-solid fa-star' />
 										</div>
 									}
@@ -144,7 +143,7 @@ const EntertainmentHeader = ({
 							</li>
 
 							<li className='flex items-center'>
-								<Icon className='fa-solid fa-play text-white mr-3' />
+								<Icon className='fa-solid fa-play mr-3 text-white' />
 								<p className='text-base text-white'>Play Trailer</p>
 							</li>
 						</Actions>
@@ -167,7 +166,7 @@ const EntertainmentHeader = ({
 
 			<Actions>
 				<li>
-					<Rating size={50} textSize='0.9rem' percentage={rating} strokeWidth={5} />
+					<PercentageRating size={50} textSize='0.9rem' percentage={rating} strokeWidth={5} />
 					<RatingText>
 						<Typography
 							type='p'
@@ -185,7 +184,7 @@ const EntertainmentHeader = ({
 				</li>
 
 				<li>
-					<Icon className='fa-solid fa-play text-white mr-3' />
+					<Icon className='fa-solid fa-play mr-3 text-white' />
 					<Typography type='p' colour='white' text='Play Trailer' size='1rem' />
 				</li>
 			</Actions>

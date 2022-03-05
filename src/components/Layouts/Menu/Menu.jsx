@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import Icon from '../../Core/Icon/Icon';
-import Image from '../../Core/Image';
-import Dropdown from '../../Core/Dropdown/Dropdown';
+import { Icon, Image, Dropdown, Button } from '../../Core';
 
 import SearchBar from './SearchBar/SearchBar';
 import MobileMenuDropdown from './MobileMenuDropdown/MobileMenuDropdown';
@@ -116,7 +114,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 				id='mobile-navigation-sidebar'
 				aria-label='mobile navigation menu sidebar'
 				className={className(
-					'fixed top-[75px] bg-primary opacity-90 p-4 bottom-0 overflow-y-scroll backdrop-blur-[20px] ease-in duration-500',
+					'fixed top-[75px] bottom-0 overflow-y-scroll bg-primary p-4 opacity-90 backdrop-blur-[20px] duration-500 ease-in',
 					{
 						// When the menu item is active
 						'left-0': isSidebarOpen === true,
@@ -151,13 +149,13 @@ const NavigationMenu = ({ isAuthenticated }) => {
 
 			<nav
 				id='mobile-navigation-menu'
-				className='bg-primary p-4 fixed top-0 right-0 left-0'
+				className='fixed top-0 right-0 left-0 bg-primary p-4'
 				aria-label='mobile navigation menu'
 				role='navigation'
 			>
-				<ul className='flex md:hidden justify-between items-center'>
+				<ul className='flex items-center justify-between md:hidden'>
 					<li>
-						<div
+						<Button
 							onClick={() => {
 								setIsSidebarOpen(!isSidebarOpen);
 								setIsSearchBarVisible(false);
@@ -168,15 +166,12 @@ const NavigationMenu = ({ isAuthenticated }) => {
 									setIsSearchBarVisible(false);
 								}
 							}}
-							className='flex items-center p-0 m-0 cursor-pointer'
-							type='button'
-							role='button'
-							tabIndex={0}
+							className='m-0 flex cursor-pointer items-center p-0'
 							aria-hidden={isSidebarOpen.toString()}
 							aria-label={isSidebarOpen === true ? 'Open sidebar' : 'Close sidebar'}
 						>
 							<Icon className='fa-solid fa-bars text-white' />
-						</div>
+						</Button>
 					</li>
 					<li>
 						<Link to='/'>
@@ -190,17 +185,14 @@ const NavigationMenu = ({ isAuthenticated }) => {
 						</Link>
 					</li>
 					<li>
-						<div
+						<Button
 							onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-							className='flex items-center p-0 m-0 cursor-pointer'
+							className='m-0 flex cursor-pointer items-center p-0'
 							onKeyDown={(event) => {
 								if (event.key === 'Enter') {
 									setIsSearchBarVisible(!isSearchBarVisible);
 								}
 							}}
-							type='button'
-							role='button'
-							tabIndex={0}
 							aria-hidden={isSearchBarVisible.toString()}
 							aria-label={isSearchBarVisible === true ? 'Open search bar' : 'Close search bar'}
 						>
@@ -210,19 +202,19 @@ const NavigationMenu = ({ isAuthenticated }) => {
 									'fa-solid fa-magnifying-glass': isSearchBarVisible === false
 								})}
 							/>
-						</div>
+						</Button>
 					</li>
 				</ul>
 			</nav>
 
 			<nav
 				id='desktop-navigation-menu'
-				className='bg-primary fixed top-0 right-0 left-0'
+				className='fixed top-0 right-0 left-0 bg-primary'
 				aria-label='desktop navigation menu'
 				role='navigation'
 			>
-				<div className='md:flex hidden max-w-[1400px] mx-auto	justify-between p-4'>
-					<div className='flex items-center p-0 m-0' id='desktop-navigation-menu-left'>
+				<div className='mx-auto hidden max-w-[1400px] justify-between	p-4 md:flex'>
+					<div className='m-0 flex items-center p-0' id='desktop-navigation-menu-left'>
 						<ul>
 							<li>
 								<Link to='/'>
@@ -255,30 +247,28 @@ const NavigationMenu = ({ isAuthenticated }) => {
 					</div>
 
 					{isAuthenticated === false ? (
-						<ul className='flex items-center p-0 m-0' id='desktop-navigation-menu-right'>
-							<li className='text-base text-white pr-3 font-bold'>Login</li>
+						<ul className='m-0 flex items-center p-0' id='desktop-navigation-menu-right'>
+							<li className='pr-3 text-base font-bold text-white'>Login</li>
 
-							<li className='text-base text-white pr-3 font-bold'>Register</li>
+							<li className='pr-3 text-base font-bold text-white'>Register</li>
 
 							<li>
-								<button
+								<Button
 									onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-									tabIndex='0'
 									onKeyDown={(event) => {
 										if (event.key === 'Enter') {
 											setIsSearchBarVisible(!isSearchBarVisible);
 										}
 									}}
-									type='button'
 								>
 									<Icon
-										className={className('text-white text-base', {
+										className={className('text-base text-white', {
 											'fa-solid fa-xmark': isSearchBarVisible === true,
 											'fa-solid fa-magnifying-glass': isSearchBarVisible === false
 										})}
 									/>
 									<span className='sr-only'>Search toggle</span>
-								</button>
+								</Button>
 							</li>
 						</ul>
 					) : (
@@ -294,7 +284,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 							id='desktop-navigation-menu-right'
 						>
 							<ul className='p-2'>
-								<li className='text-base text-black font-semibold'>Alex Machin</li>
+								<li className='text-base font-semibold text-black'>Alex Machin</li>
 								<li className='text-xs text-gray-400'>
 									<Link to='/'>View profile</Link>
 								</li>

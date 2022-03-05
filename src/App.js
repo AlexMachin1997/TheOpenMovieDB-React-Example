@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import ApolloClient from './apollo';
 
-import Loader from './components/Core/Loader';
+import { Loader } from './components';
 
 import usePageView from './hooks/react-router/pageView';
 import useClientSideRoutes from './hooks/useClientSideRoutes';

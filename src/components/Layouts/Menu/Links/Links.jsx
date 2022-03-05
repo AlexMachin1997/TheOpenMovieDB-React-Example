@@ -11,7 +11,7 @@ const Links = ({
 	anchorClassName,
 	...props
 }) => (
-	<WrapperTag className='p-0 mb-3' {...props}>
+	<WrapperTag className='mb-3 p-0' {...props}>
 		{links.map((link, index) => {
 			// If the link is internal use the react-router-dom Link component
 			if (link.url.startsWith('/')) {

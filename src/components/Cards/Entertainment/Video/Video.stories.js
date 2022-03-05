@@ -34,7 +34,7 @@ export const VideoTVExample = () => (
 );
 
 export const GroupedExample = () => (
-	<div className='w-100 overflow-x-auto overflow-y-auto flex'>
+	<div className='w-100 flex overflow-x-auto overflow-y-auto'>
 		<Video
 			title='Marvel Agents of S.H.I.E.L.D'
 			overview="Marvel's Agents of S.H.I.E.L.D. - Official Season 7 Trailer"

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Core/Image';
+import { Image } from '../../../Core';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
@@ -22,7 +22,7 @@ const TopBilled = ({
 			}
 		}}
 		id={generateComponentId(actorName, 'top-billed-card-container')}
-		className='rounded-2xl bg-white border border-solid border-gray-300 cursor-pointer min-w-[200px] max-w-[200px]'
+		className='min-w-[200px] max-w-[200px] cursor-pointer rounded-2xl border border-solid border-gray-300 bg-white'
 		type='button'
 		role='button'
 		tabIndex={0}
@@ -44,13 +44,13 @@ const TopBilled = ({
 			className='flex flex-col p-4'
 			id={generateComponentId(actorName, 'top-billed-card-content-container')}
 		>
-			<h3 className='text-base font-bold text-black mb-[0.3rem] hover:text-gray-300'>
+			<h3 className='mb-[0.3rem] text-base font-bold text-black hover:text-gray-300'>
 				{actorName}
 			</h3>
-			<p className='text-sm text-black font-light'>{characterName}</p>
+			<p className='text-sm font-light text-black'>{characterName}</p>
 
 			{entertainmentType === 'tv' && (
-				<p className='text-sm font-light text-black italic'>{`${episodeCount} ${
+				<p className='text-sm font-light italic text-black'>{`${episodeCount} ${
 					episodeCount === 1 ? 'episode' : 'episodes'
 				}`}</p>
 			)}

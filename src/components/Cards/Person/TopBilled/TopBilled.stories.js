@@ -77,7 +77,7 @@ export const MovieExample = () => (
 );
 
 export const MultipleCardsExampleTVExample = () => (
-	<div className='w-100 overflow-x-auto overflow-y-auto flex'>
+	<div className='w-100 flex overflow-x-auto overflow-y-auto'>
 		<TopBilled
 			actorName='Evan Rachel Wood'
 			characterName='Delores Abernathy'
@@ -108,7 +108,7 @@ export const MultipleCardsExampleTVExample = () => (
 );
 
 export const MultipleCardsExampleMovieExample = () => (
-	<div className='w-100 overflow-x-auto overflow-y-auto flex'>
+	<div className='w-100 flex overflow-x-auto overflow-y-auto'>
 		<div className='mr-2'>
 			<TopBilled
 				actorName='Charlize Theron'

@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import TopRatedMoviesQuery from '../../graphql/queries/Movies/TopRated';
 
-import Loader from '../../components/Core/Loader';
+import { Loader } from '../../components';
 
 const TopRated = () => {
 	const { loading, error, data } = useQuery(TopRatedMoviesQuery, {

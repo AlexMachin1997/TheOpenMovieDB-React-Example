@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 
-import Icon from '../../Core/Icon/Icon';
+import Icon from '../../Icon/Icon';
 
 const StarRating = ({ rating }) => (
 	<div className='flex'>

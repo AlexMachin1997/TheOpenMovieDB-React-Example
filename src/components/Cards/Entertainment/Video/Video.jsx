@@ -2,8 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 
-import Image from '../../../Core/Image';
-import Icon from '../../../Core/Icon/Icon';
+import { Image, Icon } from '../../../Core';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
@@ -18,7 +17,7 @@ const Video = ({ title, overview, thumbnail, thumbnailContainerAction, thumbnail
 		<div
 			id={generateComponentId(title, 'video-card-container-icon-container')}
 			onClick={thumbnailAction}
-			className='w-100 max-w-[300px] relative group'
+			className='w-100 group relative max-w-[300px]'
 			onKeyDown={() => {}}
 			tabIndex={0}
 			role='button'
@@ -30,13 +29,13 @@ const Video = ({ title, overview, thumbnail, thumbnailContainerAction, thumbnail
 				src={thumbnail}
 				className='group-hover:scale-105'
 			/>
-			<div className='w-[100%] h-[100%] absolute top-0 left-0 flex justify-center items-center text-white'>
+			<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
 				<Icon className={className('fa-solid fa-play group-hover:text-2xl')} />
 			</div>
 		</div>
 		<div className='text-center' id={generateComponentId(title, 'video-card-content')}>
-			<h3 className='text-sm text-black font-bold'>{title}</h3>
-			<h4 className='text-sm text-black font-light'>{overview}</h4>
+			<h3 className='text-sm font-bold text-black'>{title}</h3>
+			<h4 className='text-sm font-light text-black'>{overview}</h4>
 		</div>
 	</div>
 );

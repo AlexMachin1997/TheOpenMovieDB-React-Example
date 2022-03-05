@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 import hexToRgba from '../../../../../utils/formatters/hexToRGBA';
 
-const Collection = ({ title, subtitle, image, onClick }) => {
+import { Button } from '../../../../Core';
+
+const Collection = ({ title, subtitle, image, onClick, onKeyDown }) => {
 	const imageBackground = React.useMemo(() => {
 		// Get the primary css variable value, it has whitespace so remove the white space
 		const primaryColour = getComputedStyle(document.body)
@@ -26,25 +28,21 @@ const Collection = ({ title, subtitle, image, onClick }) => {
 				height: '260px',
 				backgroundImage: imageBackground
 			}}
-			className='bg-cover bg-center flex justify-center items-start flex-col p-4'
+			className='flex flex-col items-start justify-center bg-cover bg-center p-4'
 		>
-			<h2 className='text-xl text-white font-bold'>Part of the {title} Collection</h2>
+			<h2 className='text-xl font-bold text-white'>Part of the {title} Collection</h2>
 
-			<p className='text-white font-normal text-base'>{subtitle}</p>
+			<p className='text-base font-normal text-white'>{subtitle}</p>
 
-			<button
-				className='uppercase bg-tertiary text-white rounded-2xl p-2 cursor-pointer font-bold text-xs mt-4	'
-				type='button'
+			<Button
+				className='mt-4 cursor-pointer rounded-2xl bg-tertiary p-2 text-xs font-bold uppercase text-white	'
 				aria-label={`View collection button for ${title}`}
 				id={`View collection button for ${title}`}
-				onClick={(event) => {
-					if (onClick) {
-						onClick(event);
-					}
-				}}
+				onClick={onClick}
+				onKeyDown={onKeyDown}
 			>
 				View the Collection
-			</button>
+			</Button>
 		</div>
 	);
 };
@@ -53,14 +51,16 @@ Collection.defaultProps = {
 	title: 'The Avengers',
 	subtitle: 'Includes The Avengers, Avengers: Age of Ultron, Avengers: Infinity War',
 	image: 'https://image.tmdb.org/t/p/original/zuW6fOiusv4X9nnW3paHGfXcSll.jpg',
-	onClick: null
+	onClick: null,
+	onKeyDown: null
 };
 
 Collection.propTypes = {
 	title: PropTypes.string,
 	subtitle: PropTypes.string,
 	image: PropTypes.string,
-	onClick: PropTypes.func
+	onClick: PropTypes.func,
+	onKeyDown: PropTypes.func
 };
 
 export default Collection;

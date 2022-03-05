@@ -1,13 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../Core/Image';
+import { Image } from '../../Core';
 
 import generateComponentId from '../../../utils/formatters/generateComponentId';
 
 const Person = ({ name, image, knownFor }) => (
 	<div
-		className='bg-white h-100 w-100 cursor-pointer max-w-[235px] max-h-[235px] shadow-xl shadow-gray-200'
+		className='h-100 w-100 max-h-[235px] max-w-[235px] cursor-pointer bg-white shadow-xl shadow-gray-200'
 		id={generateComponentId(name, 'person-card-container')}
 	>
 		<Image width='100%' height='100%' alt={name} src={image} />
@@ -17,7 +17,7 @@ const Person = ({ name, image, knownFor }) => (
 		>
 			<h3 className='text-base font-bold'>{name}</h3>
 			{knownFor.length !== 0 && (
-				<h4 className='text-sm font-light text-slate-500 truncate'>{`${knownFor
+				<h4 className='truncate text-sm font-light text-slate-500'>{`${knownFor
 					.map((item) => item.original_title)
 					.join(', ')}`}</h4>
 			)}

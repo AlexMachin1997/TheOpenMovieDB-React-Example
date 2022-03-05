@@ -1,15 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Core/Image';
-import Icon from '../../../Core/Icon/Icon';
+import { Image, Icon } from '../../../Core';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
 const Recommendation = ({ title, releaseDate, image, rating, onClick, onKeyDown }) => (
-	<div className='cursor-pointer max-w-[300px] min-w-[300px]' title={title}>
+	<div className='min-w-[300px] max-w-[300px] cursor-pointer' title={title}>
 		<div
-			className='relative group'
+			className='group relative'
 			onClick={(event) => {
 				if (onClick) {
 					onClick(event);
@@ -31,9 +30,9 @@ const Recommendation = ({ title, releaseDate, image, rating, onClick, onKeyDown 
 				src={image}
 				className='rounded-2xl'
 			/>
-			<div className='group-hover:visible invisible absolute bottom-0 left-0 w-full flex align-center bg-white p-2 opacity-90'>
-				<Icon className='fa-solid fa-calendar-days text-base mr-2' />
-				<p className='text-base text-black font-light'>{releaseDate}</p>
+			<div className='align-center invisible absolute bottom-0 left-0 flex w-full bg-white p-2 opacity-90 group-hover:visible'>
+				<Icon className='fa-solid fa-calendar-days mr-2 text-base' />
+				<p className='text-base font-light text-black'>{releaseDate}</p>
 			</div>
 		</div>
 		<div className='flex items-center justify-between'>

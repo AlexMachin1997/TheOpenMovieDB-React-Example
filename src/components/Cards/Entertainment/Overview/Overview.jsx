@@ -1,8 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Image from '../../../Core/Image';
-import Rating from '../../../Ratings/Stars/Stars';
+import { Image, StarsRating } from '../../../Core';
 
 import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
@@ -28,16 +27,16 @@ const Overview = ({ image, title, overview, releaseDate, onClick, rating, onKeyD
 			alt={replacesSpacesWith(title, '-')}
 			src={image}
 			label={`${title}-poster`}
-			className='rounded-2xl max-w-none'
+			className='max-w-none rounded-2xl'
 		/>
 
-		<div className='flex justify-center flex-col p-4'>
+		<div className='flex flex-col justify-center p-4'>
 			<div className='mb-2'>
-				<h2 className='text-base text-black font-bold'>{title}</h2>
+				<h2 className='text-base font-bold text-black'>{title}</h2>
 			</div>
 
 			<div className='mb-2'>
-				<Rating rating={rating} />
+				<StarsRating rating={rating} />
 			</div>
 
 			<div className='mb-2'>

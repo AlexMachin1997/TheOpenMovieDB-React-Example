@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 
-import Icon from '../../../Core/Icon/Icon';
+import { Icon } from '../../../Core';
 
 const SearchBar = ({ display }) => {
 	const containerClassName = className('fixed top-[57px] right-0 left-0', {
@@ -12,14 +12,14 @@ const SearchBar = ({ display }) => {
 
 	return (
 		<div className={containerClassName}>
-			<div className='flex items-center p-4 bg-white border border-solid border-slate-300'>
-				<Icon className='fa-solid fa-magnifying-glass text-black mr-3 cursor-pointer' />
+			<div className='flex items-center border border-solid border-slate-300 bg-white p-4'>
+				<Icon className='fa-solid fa-magnifying-glass mr-3 cursor-pointer text-black' />
 				<input
 					type='text'
 					placeholder='Search for a movie, tv show, person...'
-					className='pr-3 w-full border-none'
+					className='w-full border-none pr-3'
 				/>
-				<Icon className='fa-solid fa-xmark text-black text-base cursor-pointer' />
+				<Icon className='fa-solid fa-xmark cursor-pointer text-base text-black' />
 			</div>
 		</div>
 	);

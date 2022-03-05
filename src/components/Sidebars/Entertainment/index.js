@@ -1,10 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
+// TODO: Replace with tailwind utilities
 import Column from '../../Blocks/Flexbox/Column';
 import Row from '../../Blocks/Flexbox/Row';
+
+// TODO: Remove once this has been renamed with a native heading tag
 import Typography from '../../Core/Typography';
-import Image from '../../Core/Image';
+
+import { Image } from '../../Core';
+
 import Section from './Section';
 import Keyword from './Keywords';
 import SocialLinks from '../SocialLinks';

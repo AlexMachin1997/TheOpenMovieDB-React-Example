@@ -2,6 +2,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 
+import Button from '../Button/Button';
+
 const Dropdown = ({
 	title,
 	children,
@@ -49,9 +51,8 @@ const Dropdown = ({
 
 	return (
 		<div className={className('relative inline-block', containerClass)} ref={dropdownRef}>
-			<button
-				type='button'
-				className={`inline-flex justify-center w-full ${buttonClass}`}
+			<Button
+				className={`inline-flex w-full justify-center ${buttonClass}`}
 				aria-expanded='true'
 				aria-haspopup='true'
 				onClick={(event) => {
@@ -65,10 +66,10 @@ const Dropdown = ({
 				}}
 			>
 				{title}
-			</button>
+			</Button>
 
 			<ul
-				className={className(`origin-top-right absolute w-[173px]`, dropdownClass, {
+				className={className(`absolute w-[173px] origin-top-right`, dropdownClass, {
 					hidden: isDropdownOpen === false,
 					block: isDropdownOpen === true,
 					'left-0': alignment === 'left',

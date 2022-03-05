@@ -21,7 +21,7 @@ const MobileMenuDropdown = ({ title, links, onItemClick, ...props }) => {
 			role='button'
 			{...props}
 		>
-			{title.length !== 0 && <h3 className='font-bold text-white text-base'>{title}</h3>}
+			{title.length !== 0 && <h3 className='text-base font-bold text-white'>{title}</h3>}
 			{isSectionActive === true && (links?.length ?? 0) > 0 && (
 				<Links links={links} onItemClick={onItemClick} />
 			)}

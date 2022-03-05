@@ -1,24 +1,9 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+
 import PropTypes from 'prop-types';
 
-import replaceSpacesWith from '../../../utils/formatters/replaceSpacesWith';
-
-/*
-
-Lazy loading notes:
-
-For native lazy loading to work correctly you need to specify an inline height and width,
-If no default height or width is provided a console warning will appear.
-
-For more information about native lazy loading refer to the below resource
-
-Resource: https://web.dev/native-lazy-loading/
-
-
-*/
-
-const Image = ({ width, height, alt, label, src, className }) => {
-	const [error, setError] = useState(false);
+const Image = ({ width, height, alt, label, src, className, ...props }) => {
+	const [error, setError] = React.useState(false);
 
 	return (
 		<img
@@ -30,14 +15,11 @@ const Image = ({ width, height, alt, label, src, className }) => {
 			alt={error === true ? 'Failed to load the image, this is a fallback' : alt}
 			onError={() => setError(true)}
 			decoding='async'
-			aria-label={
-				error === true
-					? replaceSpacesWith('An image in the error state', '-')
-					: replaceSpacesWith(label, '-')
-			}
+			aria-label={error === true ? 'An image in the error state' : label}
 			src={error === true ? `https://via.placeholder.com/200x200?text=Default+Image` : src}
 			className={className}
 			title={alt}
+			{...props}
 		/>
 	);
 };

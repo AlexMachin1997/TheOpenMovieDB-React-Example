@@ -33,5 +33,5 @@ FiveStar.args = {
 
 export default {
 	component: Stars,
-	title: 'Rating/Starts'
+	title: 'Design System/Core/Ratings/Stars'
 };
