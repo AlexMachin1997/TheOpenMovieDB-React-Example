@@ -59,7 +59,6 @@ const Rating = ({ size, strokeWidth, percentage, textClass }) => {
 				y='50%' // Defines the y coordinate of the starting point of the text baseline.
 				dy='.3em' // Shifts the text position vertically from a previous text element.
 				textAnchor='middle' // Aligns the text
-				textClass={textClass}
 				className={classNames(textClass, 'font-bold, fill-white')}
 			>
 				{`${percentage}%`}

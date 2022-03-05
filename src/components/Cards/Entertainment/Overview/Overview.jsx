@@ -7,7 +7,7 @@ import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 
 const Overview = ({ image, title, overview, releaseDate, onClick, rating, onKeyDown }) => (
 	<div
-		className='flex rounded-2xl'
+		className='flex flex-col rounded-2xl sm:flex-row'
 		onClick={(event) => {
 			if (onClick) {
 				onClick(event);

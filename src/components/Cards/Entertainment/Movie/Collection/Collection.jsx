@@ -38,7 +38,12 @@ const Collection = ({ title, subtitle, image, onClick, onKeyDown }) => {
 				className='mt-4 cursor-pointer rounded-2xl bg-tertiary p-2 text-xs font-bold uppercase text-white	'
 				aria-label={`View collection button for ${title}`}
 				id={`View collection button for ${title}`}
-				onClick={onClick}
+				onClick={(event) => {
+					console.log('Click');
+					if (onClick) {
+						onClick(event);
+					}
+				}}
 				onKeyDown={onKeyDown}
 			>
 				View the Collection

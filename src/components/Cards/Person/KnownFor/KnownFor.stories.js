@@ -2,23 +2,23 @@ import * as React from 'react';
 
 import KnownForCard from './KnownFor';
 
-export const Default = () => (
+const Template = (args) => (
 	<div className='flex'>
-		<KnownForCard />
+		<KnownForCard {...args} />
 	</div>
 );
 
-export const ActorName = () => (
-	<div className='flex'>
-		<KnownForCard actorName='Aurora Teagarden Mysteries: The Disappearing Game' />
-	</div>
-);
+export const Default = Template.bind({});
 
-export const ActorImage = () => (
-	<div className='flex'>
-		<KnownForCard actorImage='https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg' />
-	</div>
-);
+export const ActorName = Template.bind({});
+ActorName.args = {
+	actorName: 'Aurora Teagarden Mysteries: The Disappearing Game'
+};
+
+export const ActorImage = Template.bind({});
+ActorImage.args = {
+	actorImage: 'https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg'
+};
 
 export const GroupedKnownFor = () => (
 	<div className='w-100 flex overflow-x-auto overflow-y-auto'>

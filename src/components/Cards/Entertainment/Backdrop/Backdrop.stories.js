@@ -1,45 +1,43 @@
 import * as React from 'react';
-import { action } from '@storybook/addon-actions';
 
 import BackdropCard from './Backdrop.jsx';
 
-export const Default = () => (
+const Template = (args) => (
 	<div className='flex'>
-		<BackdropCard />
+		<BackdropCard {...args} />
 	</div>
 );
 
-export const Title = () => (
-	<div className='flex'>
-		<BackdropCard title='Dark' />
-	</div>
-);
+export const Default = Template.bind({});
 
-export const ReleaseDate = () => (
-	<div className='flex'>
-		<BackdropCard releaseDate='2020' />
-	</div>
-);
+export const Title = Template.bind({});
+Title.args = {
+	title: 'Dark'
+};
 
-export const Rating = () => (
-	<div className='flex'>
-		<BackdropCard rating={75} />
-	</div>
-);
+export const ReleaseDate = Template.bind({});
+ReleaseDate.args = {
+	releaseDate: '17th February 2021'
+};
 
-export const Image = () => (
-	<div className='flex'>
-		<BackdropCard image='https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg' />
-	</div>
-);
+export const Rating = Template.bind({});
+Rating.args = {
+	rating: 50
+};
 
-export const OnClick = () => (
-	<div className='flex'>
-		<BackdropCard onClick={action('Card clicked')} />
-	</div>
-);
+export const Image = Template.bind({});
+Image.args = {
+	image: 'https://image.tmdb.org/t/p/original/nVRyd8hlg0ZLxBn9RaI7mUMQLnz.jpg'
+};
+
+// TODO: Output this in the "Storybook" Actions tab, it's currently not outputting.....
+export const OnClick = Template.bind({});
+OnClick.args = {
+	onClick: () => 'Click example'
+};
 
 export default {
 	component: BackdropCard,
-	title: 'Design System/Cards/Entertainment/Backdrop'
+	title: 'Design System/Cards/Entertainment/Backdrop',
+	argTypes: { onClick: { action: 'onClick click' } }
 };

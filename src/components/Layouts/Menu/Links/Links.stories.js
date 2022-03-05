@@ -20,7 +20,6 @@ Links.args = {
 
 export const OnItemClick = Template.bind({});
 OnItemClick.args = {
-	onItemClick: () => 'Hello',
 	links: [{ url: '/', menuTitle: 'Awesome menu item' }]
 };
 
@@ -50,6 +49,7 @@ AnchorClassName.args = {
 export default {
 	title: 'Design System/Layouts/Menu/Links',
 	component: Links,
+	argTypes: { onItemClick: { action: 'onItemClick click' } },
 	decorators: [
 		(Story) => (
 			<MemoryRouter>

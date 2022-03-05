@@ -1,47 +1,44 @@
 import * as React from 'react';
-import { action } from '@storybook/addon-actions';
 
-import Overview from './Overview';
+import OverviewCard from './Overview';
 
-export const Default = () => <Overview />;
-
-export const Image = () => (
+const Template = (args) => (
 	<div className='flex'>
-		<Overview image='https://image.tmdb.org/t/p/original/q3rlhCrawPHssE5kY7GeI2hN0GB.jpg' />
+		<OverviewCard {...args} />
 	</div>
 );
 
-export const Title = () => (
-	<div className='flex'>
-		<Overview title='The Walking Dead' />
-	</div>
-);
+export const Default = Template.bind({});
 
-export const OverviewProperty = () => (
-	<div className='flex'>
-		<Overview overview='Sixth-grader Peter is pretty much your average kid—he likes gaming, hanging with his friends and his beloved pair of Air Jordans. But when his recently widowed grandfather Ed  moves in with Peter’s family, the boy is forced to give up his most prized possession of all, his bedroom. Unwilling to let such an injustice stand, Peter devises a series of increasingly elaborate pranks to drive out the interloper, but Grandpa Ed won’t go without a fight.' />
-	</div>
-);
+export const Title = Template.bind({});
+Title.args = {
+	title: 'The Walking Dead'
+};
 
-export const ReleaseDate = () => (
-	<div className='flex'>
-		<Overview releaseDate='10th October, 2010' />
-	</div>
-);
+export const Overview = Template.bind({});
+Overview.args = {
+	overview:
+		'Sixth-grader Peter is pretty much your average kid—he likes gaming, hanging with his friends and his beloved pair of Air Jordans. But when his recently widowed grandfather Ed  moves in with Peter’s family, the boy is forced to give up his most prized possession of all, his bedroom. Unwilling to let such an injustice stand, Peter devises a series of increasingly elaborate pranks to drive out the interloper, but Grandpa Ed won’t go without a fight.'
+};
 
-export const OnClick = () => (
-	<div className='flex'>
-		<Overview onClick={action('Search Result')} />
-	</div>
-);
+export const ReleaseDate = Template.bind({});
+ReleaseDate.args = {
+	releaseDate: '10th October, 2020'
+};
 
-export const Rating = () => (
-	<div className='flex'>
-		<Overview rating={100} />
-	</div>
-);
+export const Rating = Template.bind({});
+Rating.args = {
+	rating: 95
+};
+
+// TODO: Output this in the "Storybook" Actions tab, it's currently not outputting.....
+export const OnClick = Template.bind({});
+OnClick.args = {
+	onClick: () => 'Click example'
+};
 
 export default {
-	component: Overview,
-	title: 'Design System/Cards/Entertainment/Overview'
+	component: OverviewCard,
+	title: 'Design System/Cards/Entertainment/Overview',
+	argTypes: { onClick: { action: 'onClick click' } }
 };

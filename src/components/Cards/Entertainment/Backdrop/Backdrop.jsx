@@ -21,25 +21,19 @@ const Backdrop = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => 
 				onKeyDown(event);
 			}
 		}}
-		className='m-4 cursor-pointer rounded-lg bg-white'
+		className='m-4 cursor-pointer rounded-lg bg-white shadow-xl shadow-gray-200'
 	>
-		<Image
-			width='100%'
-			height='250px'
-			alt={replacesSpacesWith(title, '-')}
-			src={image}
-			borderRadius='0px'
-		/>
+		<Image width='100%' height='250px' alt={replacesSpacesWith(title, '-')} src={image} />
 		<div id={generateComponentId(title, 'backdrop-card-content')} className='flex items-center'>
-			<div id={generateComponentId(title, 'backdrop-card-rating')} className='m-2	'>
+			<div id={generateComponentId(title, 'backdrop-card-rating')} className='p-1'>
 				<PercentageRating percentage={rating} size={50} strokeWidth={5} textSize='0.9rem' />
 			</div>
 			<div
 				id={generateComponentId(title, 'backdrop-card-information')}
 				className='flex items-center'
 			>
-				<h1 className='m-2 text-base font-bold text-black'>{title}</h1>
-				<p className='text-base font-light text-gray-300'>{releaseDate}</p>
+				<h1 className=' text-base font-bold text-black'>{title}</h1>
+				<p className='text-base font-light text-black'>{releaseDate}</p>
 			</div>
 		</div>
 	</div>

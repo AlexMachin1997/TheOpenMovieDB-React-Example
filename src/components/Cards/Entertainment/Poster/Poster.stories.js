@@ -1,96 +1,48 @@
 import * as React from 'react';
-import { action } from '@storybook/addon-actions';
 
 import PosterCard from './Poster';
 
-export const Default = () => (
+const Template = (args) => (
 	<div className='flex'>
-		<PosterCard />
+		<PosterCard {...args} />
 	</div>
 );
 
-export const Title = () => (
-	<div className='flex'>
-		<PosterCard title='The Walking Dead' />
-	</div>
-);
+export const Default = Template.bind({});
 
-export const ReleaseDate = () => (
-	<div className='flex'>
-		<PosterCard releaseDate='2010' />
-	</div>
-);
+export const Title = Template.bind({});
+Title.args = {
+	title: 'The Walking Dead'
+};
 
-export const Rating = () => (
-	<div className='flex'>
-		<PosterCard rating={75} />
-	</div>
-);
+export const ReleaseDate = Template.bind({});
+ReleaseDate.args = {
+	releaseDate: '2010'
+};
 
-export const Image = () => (
-	<div className='flex'>
-		<PosterCard image='https://image.tmdb.org/t/p/original/lAwLmgq1zy0xJnusszmvWTLjFlO.jpg' />
-	</div>
-);
+export const Rating = Template.bind({});
+Rating.args = {
+	rating: 75
+};
 
-export const OnClick = () => (
-	<div className='flex'>
-		<PosterCard onClick={action('Poster card has been clicked')} />{' '}
-	</div>
-);
+export const Image = Template.bind({});
+Image.args = {
+	image: 'https://image.tmdb.org/t/p/w220_and_h330_face/jtnfNzqZwN4E32FGGxx1YZaBWWf.jpg'
+};
 
-export const GroupedPosters = () => (
-	<>
-		<div>
-			<h1>Popular Movies</h1>
-		</div>
-		<div className='flex flex-wrap'>
-			<PosterCard
-				title='Westworld'
-				image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-				rating={75}
-			/>
-			<PosterCard
-				title='Westworld'
-				image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-				rating={75}
-			/>
-			<PosterCard
-				title='Westworld'
-				image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-				rating={75}
-			/>
-			<PosterCard
-				title='Westworld'
-				image='https://image.tmdb.org/t/p/original/y55oBgf6bVMI7sFNXwJDrSIxPQt.jpg'
-				rating={75}
-			/>
+// TODO: Output this in the "Storybook" Actions tab, it's currently not outputting.....
+export const OnClick = Template.bind({});
+OnClick.args = {
+	onClick: () => 'Click example'
+};
 
-			<PosterCard
-				title='The Walking Dead'
-				image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-				rating={25}
-			/>
-			<PosterCard
-				title='The Walking Dead'
-				image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-				rating={25}
-			/>
-			<PosterCard
-				title='The Walking Dead'
-				image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-				rating={25}
-			/>
-			<PosterCard
-				title='The Walking Dead'
-				image='https://image.tmdb.org/t/p/original/5l10EjdgPxu8Gbl5Ww6SWkVQH6T.jpg'
-				rating={25}
-			/>
-		</div>
-	</>
-);
+export const OnKeyDown = Template.bind({});
+OnKeyDown.args = {
+	onKeyDown: () => 'Click'
+};
 
 export default {
 	title: ' Design System/Cards/Entertainment/Poster',
-	component: PosterCard
+	component: PosterCard,
+	argTypes: { onClick: { action: 'onClick click' }, onKeyDown: { action: 'onKeyDown event' } }
 };

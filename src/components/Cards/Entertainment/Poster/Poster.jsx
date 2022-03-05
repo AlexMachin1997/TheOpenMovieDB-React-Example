@@ -8,7 +8,7 @@ import generateComponentId from '../../../../utils/formatters/generateComponentI
 
 const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 	<div
-		className='shadow-card m-4 cursor-pointer rounded-2xl bg-white'
+		className='shadow-card m-4 cursor-pointer rounded-2xl bg-white shadow-xl shadow-gray-200'
 		onClick={(event) => {
 			if (onClick) {
 				onClick(event);
@@ -28,7 +28,7 @@ const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 			height='300px'
 			alt={replacesSpacesWith(title, '-')}
 			src={image}
-			className='rounded-t-2xl	'
+			className='max-w-[200px] rounded-t-2xl'
 		/>
 
 		<div

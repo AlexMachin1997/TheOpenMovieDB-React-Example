@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 
 import { Image } from '../../../Core';
 
-import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
 import generateComponentId from '../../../../utils/formatters/generateComponentId';
 
 const TopBilled = ({
 	actorName,
 	characterName,
-	img,
+	actorImage,
 	onClick,
 	entertainmentType,
 	episodeCount,
@@ -22,23 +21,19 @@ const TopBilled = ({
 			}
 		}}
 		id={generateComponentId(actorName, 'top-billed-card-container')}
-		className='min-w-[200px] max-w-[200px] cursor-pointer rounded-2xl border border-solid border-gray-300 bg-white'
+		className='min-w-[200px] max-w-[200px] cursor-pointer rounded-2xl border border-solid border-gray-300 bg-white shadow-xl shadow-gray-200'
 		type='button'
 		role='button'
 		tabIndex={0}
 		onKeyDown={(event) => {
 			if (onKeyDown) {
-				onKeyDown(event);
+				if (event.key === 'Enter') {
+					onKeyDown(event);
+				}
 			}
 		}}
 	>
-		<Image
-			width='100%'
-			height='250px'
-			alt={replacesSpacesWith(actorName, '-')}
-			src={img}
-			className='rounded-t-2xl'
-		/>
+		<Image width='100%' height='250px' alt={actorName} src={actorImage} className='rounded-t-2xl' />
 
 		<div
 			className='flex flex-col p-4'
@@ -61,7 +56,7 @@ const TopBilled = ({
 TopBilled.defaultProps = {
 	actorName: 'Elizabeth Henstridge',
 	characterName: 'Jemma Simmons',
-	img: 'https://image.tmdb.org/t/p/original/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
+	actorImage: 'https://image.tmdb.org/t/p/original/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
 	onClick: null,
 	onKeyDown: null,
 	entertainmentType: 'tv',
@@ -71,7 +66,7 @@ TopBilled.defaultProps = {
 TopBilled.propTypes = {
 	actorName: PropTypes.string,
 	characterName: PropTypes.string,
-	img: PropTypes.string,
+	actorImage: PropTypes.string,
 	onClick: PropTypes.func,
 	onKeyDown: PropTypes.func,
 	entertainmentType: PropTypes.string,

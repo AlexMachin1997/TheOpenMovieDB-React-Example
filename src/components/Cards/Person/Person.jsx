@@ -5,10 +5,25 @@ import { Image } from '../../Core';
 
 import generateComponentId from '../../../utils/formatters/generateComponentId';
 
-const Person = ({ name, image, knownFor }) => (
+const Person = ({ name, image, knownFor, onKeyDown, onClick }) => (
 	<div
 		className='h-100 w-100 max-h-[235px] max-w-[235px] cursor-pointer bg-white shadow-xl shadow-gray-200'
 		id={generateComponentId(name, 'person-card-container')}
+		type='button'
+		role='button'
+		tabIndex={0}
+		onClick={(event) => {
+			if (onClick) {
+				onClick(event);
+			}
+		}}
+		onKeyDown={(event) => {
+			if (onKeyDown) {
+				if (event.key === 'Enter') {
+					onKeyDown(event);
+				}
+			}
+		}}
 	>
 		<Image width='100%' height='100%' alt={name} src={image} />
 		<div
@@ -28,7 +43,9 @@ const Person = ({ name, image, knownFor }) => (
 Person.propTypes = {
 	name: PropTypes.string,
 	image: PropTypes.string,
-	knownFor: PropTypes.arrayOf(PropTypes.shape({ original_title: PropTypes.string }))
+	knownFor: PropTypes.arrayOf(PropTypes.shape({ original_title: PropTypes.string })),
+	onClick: PropTypes.func,
+	onKeyDown: PropTypes.func
 };
 
 Person.defaultProps = {
@@ -39,7 +56,9 @@ Person.defaultProps = {
 		{ original_title: 'Drive' },
 		{ original_title: 'Godzilla' },
 		{ original_title: 'Breaking bad' }
-	]
+	],
+	onClick: null,
+	onKeyDown: null
 };
 
 export default Person;

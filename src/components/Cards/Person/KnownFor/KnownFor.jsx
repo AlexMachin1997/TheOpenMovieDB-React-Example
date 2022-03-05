@@ -8,7 +8,7 @@ import generateComponentId from '../../../../utils/formatters/generateComponentI
 
 const KnownFor = ({ actorName, actorImage }) => (
 	<div
-		className='m-4 flex h-full cursor-pointer flex-col content-center items-center rounded-xl bg-white text-center'
+		className='m-4 flex h-full cursor-pointer flex-col content-center items-center rounded-xl bg-white text-center shadow-xl shadow-gray-200'
 		id={generateComponentId(actorName, 'known-for-card')}
 	>
 		<Image
