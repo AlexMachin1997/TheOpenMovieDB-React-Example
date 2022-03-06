@@ -1,5 +1,5 @@
 import * as React from 'react';
 
-const Icon = ({ ...props }) => <span {...props} />;
+const Icon = ({ ...props }) => <i {...props} />;
 
 export default Icon;

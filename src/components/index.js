@@ -6,3 +6,6 @@ export * from './Cards';
 
 // Export all of the Layout components
 export * from './Layouts';
+
+// Export all of the Person components
+export * from './Person';
