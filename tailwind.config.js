@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 module.exports = {
 	content: ['./src/**/*.{js,jsx,ts,tsx}'],
+	darkMode: 'class',
 	theme: {
 		extend: {
 			backgroundColor: {
@@ -14,7 +15,10 @@ module.exports = {
 				tertiary: 'var(--tertiary)'
 			},
 			fontFamily: {
-				karla: "'Karla', sans-serif"
+				karla: ['Karla', 'sans-serif']
+			},
+			margin: {
+				auto: '0 auto'
 			}
 		}
 	},

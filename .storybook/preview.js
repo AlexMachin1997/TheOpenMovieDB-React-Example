@@ -40,7 +40,7 @@ addParameters({
 
 // Provides a global wrapper
 addDecorator((storyFn) => (
-	<>
+	<div className='light-mode font-karla'>
 		<ThemeProvider theme={lightTheme}>{storyFn()}</ThemeProvider>
-	</>
+	</div>
 ));

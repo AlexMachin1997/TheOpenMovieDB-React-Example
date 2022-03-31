@@ -32,7 +32,7 @@ const Backdrop = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => 
 				id={generateComponentId(title, 'backdrop-card-information')}
 				className='flex items-center'
 			>
-				<h1 className=' text-base font-bold text-black'>{title}</h1>
+				<h1 className='mr-2 text-base font-bold text-black'>{title}</h1>
 				<p className='text-base font-light text-black'>{releaseDate}</p>
 			</div>
 		</div>
