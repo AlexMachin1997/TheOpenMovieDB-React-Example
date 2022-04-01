@@ -217,8 +217,8 @@ const EntertainmentHeader = ({
 								</Tooltip>
 							</li>
 
-							<li className='group flex items-center'>
-								<Icon className='fa-solid fa-play mr-3 cursor-pointer text-white group-hover:text-gray-400 ' />
+							<li className='group flex cursor-pointer items-center'>
+								<Icon className='fa-solid fa-play mr-3 text-white group-hover:text-gray-400 ' />
 								<p className='text-base text-white group-hover:text-gray-400'>Play Trailer</p>
 							</li>
 						</ol>

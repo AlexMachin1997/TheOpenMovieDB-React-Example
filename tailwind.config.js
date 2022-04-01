@@ -14,9 +14,6 @@ module.exports = {
 				secondary: 'var(--secondary)',
 				tertiary: 'var(--tertiary)'
 			},
-			fontFamily: {
-				karla: ['Karla', 'sans-serif']
-			},
 			margin: {
 				auto: '0 auto'
 			}
