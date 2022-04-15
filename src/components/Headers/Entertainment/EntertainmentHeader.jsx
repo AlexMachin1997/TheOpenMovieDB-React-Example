@@ -50,7 +50,7 @@ const EntertainmentHeader = ({
 		// Check to see if the screen size is above
 		const result = window.matchMedia('(min-width: 768px)');
 
-		// Handles the checking of the screen size, seperate function so it can be called initially set and attached to the "change" event listener
+		// Handles the checking of the screen size, separate function so it can be called initially set and attached to the "change" event listener
 		const mediaQueryFunction = () => {
 			// If the screen size is above 768px ie desktop use the first overlay otherwise use the mobile overlay
 			if (result.matches) {
@@ -72,25 +72,23 @@ const EntertainmentHeader = ({
 	}, []);
 
 	return (
-		<div
-			className='md:bg-[url:var(--entertainmentBackgroundImage)] md:bg-cover md:bg-no-repeat'
-			style={{ backgroundPosition: 'right -200px top' }}
-		>
+		<div className='md:bg-[url:var(--entertainmentBackgroundImage)] md:bg-cover md:bg-no-repeat'>
 			<div
 				style={{
 					backgroundImage: overlay
 				}}
+				className='align-center flex justify-center'
 			>
-				<div className='relative top-0 left-0 block pt-4 md:flex md:max-w-[1400px] md:pt-8 md:pr-10 md:pb-8 md:pl-10'>
+				<div className='relative top-0 left-0 block pt-4 md:flex md:max-w-[1100px] md:pt-8 md:pr-10 md:pb-8 md:pl-10'>
 					<Image
 						src={posterImage}
 						width='200px'
 						height='unset'
 						alt={`${title} Poster Image`}
-						className='m-auto rounded-lg md:m-0'
+						className='m-auto max-h-[400px] rounded-lg md:m-0'
 					/>
 
-					<div className='flex flex-col justify-center md:flex-wrap md:pl-10'>
+					<div className='flex flex-col justify-center md:flex-wrap md:pl-5'>
 						<div>
 							<div className='flex flex-wrap items-center justify-center p-4 md:mb-2 md:flex-nowrap md:items-center md:justify-start md:p-0'>
 								<h1 className='mr-2 text-2xl font-bold leading-none text-white'>{title}</h1>

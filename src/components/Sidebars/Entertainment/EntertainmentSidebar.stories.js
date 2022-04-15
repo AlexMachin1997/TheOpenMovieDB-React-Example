@@ -1,15 +1,13 @@
 import * as React from 'react';
 
-import Entertainment from './index';
+import { MemoryRouter } from 'react-router-dom';
 
-export const DefaultEntertainmentSidebar = () => (
-	<div style={{ marginTop: '5rem', marginLeft: '5rem' }}>
-		<Entertainment />
-	</div>
-);
+import Entertainment from './EntertainmentSidebar';
+
+export const DefaultEntertainmentSidebar = () => <Entertainment />;
 
 export const EntertainmentTVSidebar = () => (
-	<div style={{ marginTop: '5rem', marginLeft: '5rem' }}>
+	<div className='mt-4'>
 		<Entertainment
 			facebookLink='https://www.facebook.com/RickandMorty'
 			twitterLink='https://www.twitter.com/RickandMorty'
@@ -19,14 +17,21 @@ export const EntertainmentTVSidebar = () => (
 			networkImage='https://image.tmdb.org/t/p/h30/9AKyspxVzywuaMuZ1Bvilu8sXly.png'
 			type='Scripted'
 			keywords={[
-				'time travel',
-				'grandfarther',
-				'mad scientist',
-				'alchoholism',
-				'alien',
-				'scitentist',
-				'multiple dimensions',
-				'spaceship'
+				{ name: 'Egypt', id: 1 },
+				{ name: 'Comic', id: 2 },
+				{ name: 'Based On Comic', id: 3 },
+				{
+					name: 'Gods',
+					id: 4
+				},
+				{
+					name: 'Marvel Cinematic Universe (mcu)',
+					id: 5
+				},
+				{
+					name: 'Dissociative Identity Disorder',
+					id: 6
+				}
 			]}
 			originalLanguage='English'
 			entertainmentType='tv'
@@ -36,15 +41,31 @@ export const EntertainmentTVSidebar = () => (
 );
 
 export const EntertainmentMovieSidebar = () => (
-	<div style={{ marginTop: '5rem', marginLeft: '5rem' }}>
+	<div className='mt-4'>
 		<Entertainment
 			facebookLink='https://www.facebook.com/RickandMorty'
 			twitterLink='https://www.twitter.com/RickandMorty'
 			instagramLink='https://www.instagram.com/rickandmorty/'
 			homePageLink='https://www.adultswim.com/videos/rick-and-morty'
 			status='Released'
-			budget='-'
-			keywords={['spy']}
+			budget='£20,000,000'
+			keywords={[
+				{ name: 'Egypt', id: 1 },
+				{ name: 'Comic', id: 2 },
+				{ name: 'Based On Comic', id: 3 },
+				{
+					name: 'Gods',
+					id: 4
+				},
+				{
+					name: 'Marvel Cinematic Universe (mcu)',
+					id: 5
+				},
+				{
+					name: 'Dissociative Identity Disorder',
+					id: 6
+				}
+			]}
 			originalLanguage='English'
 			entertainmentType='movie'
 			entertainmentName='My Spy'
@@ -54,5 +75,12 @@ export const EntertainmentMovieSidebar = () => (
 
 export default {
 	component: Entertainment,
-	title: 'Sidebars -> Entertainment'
+	title: 'Sidebars -> Entertainment',
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
 };

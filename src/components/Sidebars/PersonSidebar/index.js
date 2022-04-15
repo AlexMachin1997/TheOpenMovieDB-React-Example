@@ -13,7 +13,7 @@ import { Image } from '../../Core';
 import Section from './Section';
 
 import { Container } from './PersonSidebar';
-import SocialLinks from '../SocialLinks';
+import SocialLinks from '../SocialLinks/SocialLinks';
 
 const DesktopPersonSidebar = ({
 	actorName,
