@@ -75,7 +75,7 @@ export const EntertainmentMovieSidebar = () => (
 
 export default {
 	component: Entertainment,
-	title: 'Sidebars -> Entertainment',
+	title: 'Design System/Sidebars/Entertainment',
 	decorators: [
 		(Story) => (
 			<MemoryRouter>
