@@ -119,5 +119,6 @@ module.exports = {
 		'react-hooks/rules-of-hooks': 0,
 		'react-hooks/exhaustive-deps': 'error',
 		'jsx-quotes': ['error', 'prefer-single']
-	}
+	},
+	root: true
 };

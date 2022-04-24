@@ -2,9 +2,7 @@ import * as React from 'react';
 
 // Storybook modules
 import { addDecorator, addParameters } from '@storybook/react';
-import { ThemeProvider } from 'styled-components';
 import { withKnobs } from '@storybook/addon-knobs';
-import { lightTheme } from '../src/components/theme';
 
 import '../src/index.scss';
 
@@ -36,8 +34,4 @@ addParameters({
 });
 
 // Provides a global wrapper
-addDecorator((storyFn) => (
-	<div className='light'>
-		<ThemeProvider theme={lightTheme}>{storyFn()}</ThemeProvider>
-	</div>
-));
+addDecorator((storyFn) => <div className='light'>{storyFn()}</div>);

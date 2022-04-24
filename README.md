@@ -28,10 +28,6 @@
     <img src="https://raw.githubusercontent.com/storybooks/brand/master/badge/badge-storybook.svg" alt="Made with Storybook">
   </a>
 
-  <a href="https://styled-components.com/" target="_blank">
-    <img src="https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e" alt="Made with Styled-Components">
-  </a>
-
   <img alt="Integration and Unit Test Status" src="https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/workflows/Intergration%20and%20Unit%20Tests/badge.svg">
 
   <img alt="Linting status" src="https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/workflows/Application%20Linting/badge.svg">
@@ -94,7 +90,6 @@ As of the current version of the API, it is currently capable of performing the 
 - [react-dom](https://www.npmjs.com/package/react-dom)
 - [react-router-dom](https://reactrouter.com/docs/en/v6/getting-started/overview)
 - [react-scripts](https://www.npmjs.com/package/react-scripts)
-- [styled-components](https://www.npmjs.com/package/styled-components)
 - [workbox-build](https://www.npmjs.com/package/workbox-build)
 
 ### Development Dependencies
