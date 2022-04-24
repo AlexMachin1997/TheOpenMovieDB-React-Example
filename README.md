@@ -37,7 +37,7 @@
 
 This project contains of all the source code for my current personal project, [The Open Movie DB](https://www.themoviedb.org/) clone.
 
-**This project will only contain the front-end code, the back-end code will be stored in a seperate repository which can be found [here](https://github.com/AlexMachin1997/TheOpenMovieDB-Graphql-Example)**
+**This project will only contain the front-end code, the back-end code will be stored in a separate repository which can be found [here](https://github.com/AlexMachin1997/TheOpenMovieDB-Graphql-Example)**
 
 <h3 align="left">
     <img alt="Example of The OpenMovieDB Web App" src="./.github/screenshot.png" width="500px" />
@@ -51,7 +51,6 @@ As part of the README file it will describe and explain the following sections:
 - Core features
 - Technologies used
 - Getting started
-- Unit and integration testing setup
 - Reporting issues
 - Feature requests
 - Project information
@@ -72,69 +71,71 @@ As of the current version of the API, it is currently capable of performing the 
 
 - Filter through a celebrities backlog by media type (shows or movies or all) and department (Writing, Acting, Production etc).
 
-- Discover the latest Movies and TV Shows via an interactive sidebar. Users will be able to filter by rating, release date, genre, score, keywords and where to watch, this won't be avaliable for Celebrities.
+- Discover the latest Movies and TV Shows via an interactive sidebar. Users will be able to filter by rating, release date, genre, score, keywords and where to watch, this won't be available for Celebrities.
 
 - View content offline (Apollo InMemoryCache will store content in the cache once the user has visited it before. Later on the cache will be persisted, but for now it will be on a per session basis)
 
-- Switch between dark and light theme (Will be stored in Apollo cache, no custom React Provider//Context will be used)
+- Switch between dark and light theme (Will be stored in Apollo cache, no custom React Provider/Context will be used)
 
 ## Technologies used:
 
 ### Core Dependencies
 
 - [apollo-client](https://www.npmjs.com/package/apollo-client)
-- [graphl](https://www.npmjs.com/package/graphql)
-- [graphql-tag](https://www.npmjs.com/package/graphql-tag)
+- [@fortawesome/fontawesome-free](https://www.npmjs.com/package/@fortawesome/fontawesome-free)
+- [@tailwindcss/line-clamp](https://www.npmjs.com/package/@tailwindcss/line-clamp)
+- [@tippy/react](https://www.npmjs.com/package/@tippyjs/react)
+- [classnames](https://www.npmjs.com/package/classnames)
+- [font-awesome](https://www.npmjs.com/package/font-awesome)
+- [graphql](https://www.npmjs.com/package/graphql)
 - [prop-types](https://www.npmjs.com/package/prop-types)
 - [react](https://www.npmjs.com/package/react)
 - [react-dom](https://www.npmjs.com/package/react-dom)
+- [react-helmet](https://www.npmjs.com/package/react-helmet)
 - [react-router-dom](https://reactrouter.com/docs/en/v6/getting-started/overview)
 - [react-scripts](https://www.npmjs.com/package/react-scripts)
+- [sass](https://www.npmjs.com/package/sass)
+- [tailwindcss](https://www.npmjs.com/package/tailwindcss)
+- [tippy.js](https://www.npmjs.com/package/tippy.js)
 - [workbox-build](https://www.npmjs.com/package/workbox-build)
 
 ### Development Dependencies
 
+- [@storybook/addon-a11y](https://www.npmjs.com/package/@storybook/addon-a11y)
 - [@storybook/addon-actions](https://www.npmjs.com/package/@storybook/addon-actions)
-- [@storybook/addon-links](https://www.npmjs.com/package/@storybook/addon-links)
+- [@storybook/addon-docs](https://www.npmjs.com/package/@storybook/addon-docs)
+- [@storybook/addon-knobs](https://www.npmjs.com/package/@storybook/addon-knobs)
 - [@storybook/addons](https://www.npmjs.com/package/@storybook/addons)
+- [@storybook/builder-webpack5](https://www.npmjs.com/package/@storybook/builder-webpack5)
+- [@storybook/manager-webpack5](https://www.npmjs.com/package/@storybook/manager-webpack5)
 - [@storybook/preset-create-react-app](https://www.npmjs.com/package/@storybook/preset-create-react-app)
 - [@storybook/react](https://www.npmjs.com/package/@storybook/react)
-- [@storybook/addon-knobs](https://www.npmjs.com/package/@storybook/addon-knobs)
-- [@storybook/addon-docs](https://www.npmjs.com/package/@storybook/addon-docs)
-- [@storybook/addon-a11y](https://www.npmjs.com/package/@storybook/addon-a11y)
 - [@testing-library/jest-dom](https://www.npmjs.com/package/@testing-library/jest-dom)
 - [@testing-library/react](https://www.npmjs.com/package/@testing-library/react)
 - [@testing-library/user-event](https://www.npmjs.com/package/@testing-library/user-event)
+- [eslint](https://www.npmjs.com/package/eslint)
 - [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb)
-- [esling-config-prettier](https://www.npmjs.com/package/eslint-config-prettier)
+- [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier)
 - [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import)
+- [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
+- [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier)
 - [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
 - [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
-- [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier)
+- [eslint-plugin-storybook](https://www.npmjs.com/package/eslint-plugin-storybook)
+- [eslint-webpack-plugin](https://www.npmjs.com/package/eslint-webpack-plugin)
 - [prettier](https://www.npmjs.com/package/prettier)
-- [jest-axe](https://www.npmjs.com/package/jest-axe)
+- [webpack](https://www.npmjs.com/package/webpack)
+- [autoprefixer](https://www.npmjs.com/package/autoprefixer)
+- [postcss](https://www.npmjs.com/package/postcss)
+- [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss)
 
 ## Getting started
 
 - Clone the project to your development environment by using `git clone https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example.git`
 
-- Install all dependencies for the application by issuing this command `npm coreDependencies` **(Excludes all development dependencies e.g. react-testing-library, jest-axe etc)**
+- Once the project is cloned be sure to install of the project's dependencies, this will install both core and development dependencies
 
-## Unit and integration testing setup
-
-To get started with the testing suites you will need to install all the development dependencies used for the application. To install the dependencies use `npm run devDependencies`, this will install all the development decencies, this includes react-testing-library, storybook, jest-axe etc.
-
-By installing the development dependencies you will be able to run the whole applications component, GraphQL and any other tests produced as part of the development of this project.
-
-A complete list of all the tests which have been or are going to be created below
-
-- Checks each components defaultProps
-- Checks each components styling properties e.g. font-weight, border, border-radius etc
-- Checks each components events e.g. onClick, onChange etc **(COMING SOON)**
-- Checks each components states e.g. checked, toggled etc **(COMING SOON)**
-- Each GraphQL Query will be mocked via MockedProvider **(COMING SOON)**
-- All the react-router routes will be tested e.g. invalid paths, valid paths, 404's etc **(COMING SOON)**
-- React-Hooks e.g. form validation **(COMING SOON)**
+- With the project dependencies you can now run the project by using the `client:start` command. NOTE: The GraphQL API which can be found [here](https://github.com/AlexMachin1997/TheOpenMovieDB-GraphQL-Example)
 
 ## Contributing
 
@@ -165,6 +166,6 @@ If you want to connect with me on my professional social network platforms feel 
 
 The application is currently at version 0.1.0, with each feature added it will increment based on these [guidelines](https://docs.npmjs.com/about-semantic-versioning)
 
-### Project Licence information
+### Project License information
 
 This project is licensed under the MIT License, for more details about the PWA refer to the LICENSE.md file located within the project.
