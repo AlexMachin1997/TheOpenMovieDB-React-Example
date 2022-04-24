@@ -39,7 +39,6 @@ const Collection = ({ title, subtitle, image, onClick, onKeyDown }) => {
 				aria-label={`View collection button for ${title}`}
 				id={`View collection button for ${title}`}
 				onClick={(event) => {
-					console.log('Click');
 					if (onClick) {
 						onClick(event);
 					}
