@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import PopularPeopleQuery from '../../graphql/queries/People';
 
-import Loader from '../../components/Core/Loader';
+import { Loader } from '../../components';
 
 const People = () => {
 	const { loading, error, data } = useQuery(PopularPeopleQuery, {

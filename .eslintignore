@@ -6,8 +6,6 @@ node_modules/*
 
 *.test.js
 
-*.stories.js
-
 src/setupTests.js
 
 src/utils/testUtils/createDOMElement/index.js

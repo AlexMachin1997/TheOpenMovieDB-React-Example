@@ -45,7 +45,6 @@
 	"eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
 
 	"breadcrumbs.enabled": true,
-	"grunt.autoDetect": "off",
 	"npm.runSilent": true,
 	"explorer.confirmDragAndDrop": true,
 
@@ -61,7 +60,6 @@
 
 	"files.associations": {
 		"*.react.js": "javascriptreact",
-		"*.jsx": "javascriptreact",
-		"*.js": "javascriptreact"
+		"*.jsx": "javascriptreact"
 	}
 }

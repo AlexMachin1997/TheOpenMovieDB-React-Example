@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import AiringTodayQuery from '../../graphql/queries/Shows/AiringToday';
 
-import Loader from '../../components/Core/Loader';
+import { Loader } from '../../components';
 
 const AiringToday = () => {
 	const { loading, error, data } = useQuery(AiringTodayQuery, {

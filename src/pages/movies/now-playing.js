@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import NowPlayingMovieQuery from '../../graphql/queries/Movies/NowPlaying';
 
-import Loader from '../../components/Core/Loader';
+import { Loader } from '../../components';
 
 const NowPlaying = () => {
 	const { loading, error, data } = useQuery(NowPlayingMovieQuery, {

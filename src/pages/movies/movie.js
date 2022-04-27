@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useQuery } from '@apollo/client';
 import MovieQuery from '../../graphql/queries/Movies/Movie';
 
-import Loader from '../../components/Core/Loader';
+import { Loader } from '../../components';
 
 const Single = () => {
 	const { loading, error, data } = useQuery(MovieQuery, {

@@ -1,9 +1,0 @@
-export const MenuRef = 'Menu';
-export const SearchCircleRef = 'SearchCircle';
-export const CloseIconRef = 'Close';
-export const HeartFilledRef = 'HeartFilled';
-export const BookmarkFill = 'BookmarkFill';
-export const ListTask = 'ListTask';
-export const StarFill = 'StarFill';
-export const PlayFill = 'PlayFill';
-export const Time = 'Time';

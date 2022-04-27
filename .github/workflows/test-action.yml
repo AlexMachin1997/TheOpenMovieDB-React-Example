@@ -17,18 +17,18 @@ jobs:
     steps:
       # Checks out the repository and enables the use of commands made available in the project ie npm run
       - name: Checkout Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Configure yarn
       - name: Setup Node.js version
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: 'yarn'
 
       # Cache the node_modules, only invalidate when the yarn lock file changes
       # Original source: https://dev.to/mpocock1/how-to-cache-nodemodules-in-github-actions-with-yarn-24eh
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
