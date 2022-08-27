@@ -83,9 +83,9 @@ const EntertainmentHeader = ({
 					<Image
 						src={posterImage}
 						width='200px'
-						height='unset'
+						height='350px'
 						alt={`${title} Poster Image`}
-						className='m-auto max-h-[400px] rounded-lg md:m-0'
+						className='m-auto rounded-lg md:m-0'
 					/>
 
 					<div className='flex flex-col justify-center md:flex-wrap md:pl-5'>
