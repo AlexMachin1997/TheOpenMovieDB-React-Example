@@ -112,16 +112,15 @@ const EntertainmentHeader = ({
 										const isLastItem = genreIndex === genres.length - 1;
 
 										return (
-											<>
+											<React.Fragment key={genre.id}>
 												<Link
 													to='/'
 													className='inline text-sm font-bold text-white hover:text-gray-400'
-													key={genre.id}
 												>
 													{genre.name}
 												</Link>
 												{isLastItem === false ? ', ' : ''}
-											</>
+											</React.Fragment>
 										);
 									})}
 								</li>
@@ -255,7 +254,7 @@ EntertainmentHeader.propTypes = {
 	releaseYear: PropTypes.string.isRequired,
 	genres: PropTypes.arrayOf(
 		PropTypes.shape({
-			id: PropTypes.number,
+			id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 			name: PropTypes.string
 		}).isRequired
 	).isRequired,
@@ -266,7 +265,7 @@ EntertainmentHeader.propTypes = {
 	overview: PropTypes.string.isRequired,
 	featuredCrew: PropTypes.arrayOf(
 		PropTypes.shape({
-			name: PropTypes.number,
+			name: PropTypes.string,
 			roles: PropTypes.string
 		}).isRequired
 	).isRequired,

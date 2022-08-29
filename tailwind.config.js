@@ -9,18 +9,36 @@ module.exports = {
 	// Provide properties to override/extend the default Tailwind theme
 	theme: {
 		extend: {
-			// Create new background properties
-			backgroundColor: {
-				primary: 'var(--primary)',
-				secondary: 'var(--secondary)',
-				tertiary: 'var(--tertiary)'
-			},
+			/*
 
-			// Create new text properties
-			textColor: {
-				primary: 'var(--primary)',
-				secondary: 'var(--secondary)',
-				tertiary: 'var(--tertiary)'
+			Tailwind "colors" theme config:
+
+			- The colors key allows you to customize the global color palette for your project.
+
+			- By default, these colors are inherited by all color-related core plugins, like backgroundColor, borderColor, textColor, and others.
+
+			- By default you can apply a hex code, though if you want to use modifiers they need to be rgb, hsl or rgba values.
+
+			- If no "modifier" is applied it defaults to opacity 100 (I believe)
+
+			Example':
+
+			.bg-primary
+
+			.bg-primary/25
+
+			.text-tertiary/80
+
+			*/
+			colors: {
+				// Add the primary color to the Tailwind's theme (Changes depending on the theme class applied e.g. .light or .dark)
+				primary: 'rgb(var(--primary) / <alpha-value>)',
+
+				// Add the secondary color to the Tailwind's theme (Changes depending on the theme class applied e.g. .light or .dark)
+				secondary: 'rgb(var(--secondary) / <alpha-value>)',
+
+				// Add the tertiary color to the Tailwind's theme (Changes depending on the theme class applied e.g. .light or .dark)
+				tertiary: 'rgb(var(--tertiary) / <alpha-value>)'
 			},
 
 			// Create new margin properties
