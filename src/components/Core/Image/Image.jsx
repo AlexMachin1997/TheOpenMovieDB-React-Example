@@ -19,6 +19,8 @@ const Image = ({ width, height, alt, label, src, className, ...props }) => {
 			src={error === true ? `https://via.placeholder.com/200x200?text=Default+Image` : src}
 			className={className}
 			title={alt}
+			width={width}
+			height={height}
 			{...props}
 		/>
 	);
