@@ -8,6 +8,4 @@ node_modules/*
 
 src/setupTests.js
 
-src/utils/testUtils/createDOMElement/index.js
-
 ./.github/workflows/**/*.yml

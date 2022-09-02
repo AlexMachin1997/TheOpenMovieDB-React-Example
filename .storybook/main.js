@@ -3,7 +3,6 @@ module.exports = {
 	addons: [
 		'@storybook/preset-create-react-app',
 		'@storybook/addon-actions',
-		'@storybook/addon-knobs',
 		{
 			name: '@storybook/addon-docs',
 			options: {
@@ -12,7 +11,17 @@ module.exports = {
 		},
 		'@storybook/addon-a11y'
 	],
+	features: {
+		storyStoreV7: true
+	},
 	core: {
-		builder: 'webpack5'
-	}
+		builder: {
+			name: 'webpack5',
+			options: {
+				lazyCompilation: true,
+				fsCache: true
+			}
+		}
+	},
+	framework: '@storybook/react'
 };
