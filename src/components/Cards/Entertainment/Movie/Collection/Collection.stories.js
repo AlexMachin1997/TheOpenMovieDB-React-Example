@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import CollectionCard from './Collection';
 
-const Template = (args) => <CollectionCard {...args} className='light' />;
+const Template = (args) => <CollectionCard {...args} />;
 
 export const Default = Template.bind({});
 
@@ -31,12 +31,5 @@ OnClick.args = {
 export default {
 	component: CollectionCard,
 	title: 'Design System/Cards/Entertainment/Movie/Collection',
-	argTypes: { onClick: { action: 'clicked' } },
-	decorators: [
-		(Story) => (
-			<div className='light'>
-				<Story />
-			</div>
-		)
-	]
+	argTypes: { onClick: { action: 'clicked' } }
 };
