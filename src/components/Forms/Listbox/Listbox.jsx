@@ -6,7 +6,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import { Icon } from '../../Core';
 
-const CustomCombobox = ({
+const CustomListbox = ({
 	options,
 	value,
 	onChange,
@@ -45,25 +45,29 @@ const CustomCombobox = ({
 			multiple={isMulti}
 			disabled={disabled}
 		>
-			<div className='relative mt-1'>
+			<div className='relative'>
 				<Listbox.Button
 					className={classNames(
-						'relative mt-2 mr-2 mb-2 flex w-full cursor-default content-between items-center rounded-lg bg-white py-4 pl-1 pr-1 text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'
+						'relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 py-3 px-3 text-left shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'
 					)}
 				>
-					<span className='mt-2 w-full'>
-						{isMulti === false && `${value[displayName] !== undefined ? value[displayName] : ''}`}
+					<span className='w-full'>
+						{isMulti === false && (
+							<p className='text-black'>
+								{value[displayName] !== undefined ? value[displayName] : ''}
+							</p>
+						)}
 
 						{isMulti === true && (
 							<div className='flex flex-wrap items-center'>
 								{valuesToDisplay.map((el) => (
-									<div className='mt-2 mr-2 mb-2' key={el.id}>
-										<span className='align-center ease flex w-max cursor-pointer items-center rounded-full bg-gray-200 p-2 text-sm font-semibold text-gray-500 transition duration-300 active:bg-gray-300'>
-											{el[displayName]}
+									<div className='mr-2 py-1' key={el.id}>
+										<span className='align-center ease flex w-max cursor-pointer items-center rounded-full bg-secondary py-2 px-2 text-sm font-semibold transition duration-300 active:bg-gray-300'>
+											<p className='text-white'>{el[displayName]}</p>
 											<div
 												role='button'
 												tabIndex='0'
-												className='hover bg-transparent pl-2'
+												className='hover mx-2 bg-transparent text-black'
 												onClick={() => {
 													if (onChange) {
 														onChange({ value: value.filter((el2) => el.id !== el2.id) });
@@ -91,7 +95,7 @@ const CustomCombobox = ({
 							</div>
 						)}
 					</span>
-					<Icon className='fa-solid fa-arrows-up-down w-5 text-gray-400' />
+					<Icon className='fa-solid fa-arrows-up-down w-5 text-black' />
 				</Listbox.Button>
 				<Transition
 					as={React.Fragment}
@@ -114,7 +118,7 @@ const CustomCombobox = ({
 									key={option.id}
 									className={({ active }) =>
 										classNames('relative cursor-default select-none py-2 pl-10 pr-4', {
-											'bg-teal-600 text-white': active === true,
+											'bg-secondary text-white': active === true,
 											'text-gray-900': active === false
 										})
 									}
@@ -145,32 +149,19 @@ const CustomCombobox = ({
 	);
 };
 
-const ValuePropTypes = PropTypes.oneOfType([
-	PropTypes.shape({
-		label: PropTypes.string,
-		value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-	}),
-	PropTypes.arrayOf(
-		PropTypes.shape({
-			label: PropTypes.string,
-			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-		})
-	)
-]);
-
-CustomCombobox.propTypes = {
+CustomListbox.propTypes = {
 	options: PropTypes.array,
-	value: ValuePropTypes,
+	value: PropTypes.any,
+	defaultValue: PropTypes.any,
 	onChange: PropTypes.func,
 	isMulti: PropTypes.bool,
 	displayName: PropTypes.string,
 	name: PropTypes.string,
-	defaultValue: ValuePropTypes,
 	disabled: PropTypes.bool,
 	displayLimit: PropTypes.number
 };
 
-CustomCombobox.defaultProps = {
+CustomListbox.defaultProps = {
 	options: [],
 	value: [],
 	defaultValue: [],
@@ -182,4 +173,4 @@ CustomCombobox.defaultProps = {
 	displayLimit: 3
 };
 
-export default CustomCombobox;
+export default CustomListbox;
