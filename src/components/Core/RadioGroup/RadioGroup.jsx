@@ -8,7 +8,6 @@ const CustomRadioGroup = ({
 	options,
 	value,
 	onChange,
-	serverSideLabel,
 	displayName,
 	noOptionsAvailableMessage,
 	disabled
@@ -24,7 +23,6 @@ const CustomRadioGroup = ({
 				}}
 				disabled={disabled}
 			>
-				<RadioGroup.Label className='sr-only'>{serverSideLabel}</RadioGroup.Label>
 				<div className='space-y-2'>
 					{(options?.length ?? 0) === 0 && (
 						<p className='relative cursor-default select-none py-2 text-gray-700'>
@@ -78,7 +76,6 @@ CustomRadioGroup.propTypes = {
 	options: PropTypes.array,
 	value: PropTypes.any,
 	onChange: PropTypes.func,
-	serverSideLabel: PropTypes.string,
 	displayName: PropTypes.string,
 	noOptionsAvailableMessage: PropTypes.string,
 	disabled: PropTypes.bool
@@ -88,7 +85,6 @@ CustomRadioGroup.defaultProps = {
 	options: [],
 	value: [],
 	onChange: null,
-	serverSideLabel: 'Server-side label',
 	displayName: 'name',
 	noOptionsAvailableMessage: 'No options currently available.',
 	disabled: false
