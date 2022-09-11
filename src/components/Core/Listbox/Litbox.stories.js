@@ -110,7 +110,13 @@ CustomDisplayName.args = {
 	displayName: 'label'
 };
 
+export const CustomNoOptionsAvailableMessage = ControlledStoryTemplate.bind({});
+CustomNoOptionsAvailableMessage.args = {
+	...DefaultStoryArgs,
+	noOptionsAvailableMessage: 'My custom no options message'
+};
+
 export default {
 	component: Listbox,
-	title: 'Design System/Forms/Listbox'
+	title: 'Design System/Core/Listbox'
 };

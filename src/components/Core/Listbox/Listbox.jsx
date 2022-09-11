@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Listbox, Transition } from '@headlessui/react';
 
 import classNames from 'classnames';
-import { Icon } from '../../Core';
+import Icon from '../Icon/Icon';
 
 const CustomListbox = ({
 	options,
@@ -15,7 +15,8 @@ const CustomListbox = ({
 	name,
 	defaultValue,
 	disabled,
-	displayLimit
+	displayLimit,
+	noOptionsAvailableMessage
 }) => {
 	// Copy the current values, these are the values we want to display
 	const valuesToDisplay = isMulti === true ? [...value] : [];
@@ -106,8 +107,8 @@ const CustomListbox = ({
 					<Listbox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
 						{/* When there are no options and the query is empty */}
 						{(options?.length ?? 0) === 0 && (
-							<p className='relative cursor-default select-none py-2 px-4 text-gray-700'>
-								No options available Nothing found.
+							<p className='relative cursor-default select-none py-2 text-gray-700'>
+								{noOptionsAvailableMessage}
 							</p>
 						)}
 
@@ -158,7 +159,8 @@ CustomListbox.propTypes = {
 	displayName: PropTypes.string,
 	name: PropTypes.string,
 	disabled: PropTypes.bool,
-	displayLimit: PropTypes.number
+	displayLimit: PropTypes.number,
+	noOptionsAvailableMessage: PropTypes.string
 };
 
 CustomListbox.defaultProps = {
@@ -170,7 +172,8 @@ CustomListbox.defaultProps = {
 	displayName: 'name',
 	name: 'name',
 	disabled: false,
-	displayLimit: 3
+	displayLimit: 3,
+	noOptionsAvailableMessage: 'No options currently available.'
 };
 
 export default CustomListbox;

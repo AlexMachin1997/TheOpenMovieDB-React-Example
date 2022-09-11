@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Combobox, Transition } from '@headlessui/react';
 
 import classNames from 'classnames';
-import { Icon } from '../../Core';
+import Icon from '../Icon/Icon';
 
 const CustomCombobox = ({
 	options,
@@ -16,7 +16,9 @@ const CustomCombobox = ({
 	canAddCustomItems,
 	name,
 	defaultValue,
-	disabled
+	disabled,
+	noOptionsForSearchTermMessage,
+	noOptionsAvailableMessage
 }) => {
 	// Stores the current search term applied to the Combobox
 	const [query, setQuery] = React.useState(defaultQuery);
@@ -111,7 +113,7 @@ const CustomCombobox = ({
 						{/* When there are no options and the query is empty */}
 						{(filteredOptions?.length ?? 0) === 0 && query === '' && (
 							<p className='relative cursor-default select-none py-2 px-4 text-gray-700'>
-								No options available Nothing found.
+								{noOptionsAvailableMessage}
 							</p>
 						)}
 
@@ -120,7 +122,7 @@ const CustomCombobox = ({
 							query !== '' &&
 							canAddCustomItems === false && (
 								<p className='relative cursor-default select-none py-2 px-4 text-gray-700'>
-									No options available for your current query
+									{noOptionsForSearchTermMessage}
 								</p>
 							)}
 
@@ -130,7 +132,7 @@ const CustomCombobox = ({
 								value={{ id: query, [displayName]: query }}
 							>
 								<span className='block truncate font-medium'>
-									Click to add <strong>{query}</strong>
+									Click to add <strong>{query}</strong> as an option.
 								</span>
 							</Combobox.Option>
 						)}
@@ -198,7 +200,9 @@ CustomCombobox.propTypes = {
 	canAddCustomItems: PropTypes.bool,
 	name: PropTypes.string,
 	defaultValue: ValuePropTypes,
-	disabled: PropTypes.bool
+	disabled: PropTypes.bool,
+	noOptionsForSearchTermMessage: PropTypes.string,
+	noOptionsAvailableMessage: PropTypes.string
 };
 
 CustomCombobox.defaultProps = {
@@ -211,7 +215,9 @@ CustomCombobox.defaultProps = {
 	displayName: 'name',
 	canAddCustomItems: false,
 	name: 'name',
-	disabled: false
+	disabled: false,
+	noOptionsForSearchTermMessage: 'No options available for your current search term.',
+	noOptionsAvailableMessage: 'No options currently available.'
 };
 
 export default CustomCombobox;

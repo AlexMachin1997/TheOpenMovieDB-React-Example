@@ -45,15 +45,17 @@ const UncontrolledStoryTemplate = (args) => {
 
 const DefaultStoryArgs = {
 	options: [],
-	value: {},
-	defaultValue: {},
+	value: [],
+	defaultValue: [],
 	onChange: null,
 	isMulti: false,
 	defaultQuery: '',
 	displayName: 'name',
 	canAddCustomItems: false,
 	name: 'name',
-	disabled: false
+	disabled: false,
+	noOptionsForSearchTermMessage: 'No options available for your current search term.',
+	noOptionsAvailableMessage: 'No options currently available.'
 };
 
 // export const NativeHTMLForm = UncontrolledStoryTemplate.bind({});
@@ -156,7 +158,19 @@ MultipleDropdownWithAddableOptions.args = {
 	canAddCustomItems: true
 };
 
+export const CustomNoOptionsForSearchTermMessage = ControlledStoryTemplate.bind({});
+CustomNoOptionsForSearchTermMessage.args = {
+	...DefaultStoryArgs,
+	noOptionsForSearchTermMessage: 'My custom message for no option when there are no options'
+};
+
+export const CustomNoOptionsAvailableMessage = ControlledStoryTemplate.bind({});
+CustomNoOptionsAvailableMessage.args = {
+	...DefaultStoryArgs,
+	noOptionsAvailableMessage: 'My custom no options message'
+};
+
 export default {
 	component: Combobox,
-	title: 'Design System/Forms/Combobox'
+	title: 'Design System/Core/Combobox'
 };
