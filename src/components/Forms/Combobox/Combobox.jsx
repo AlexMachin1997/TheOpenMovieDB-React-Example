@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Combobox, Transition } from '@headlessui/react';
 
+import classNames from 'classnames';
 import { Icon } from '../../Core';
 
 const CustomCombobox = ({
@@ -140,9 +141,10 @@ const CustomCombobox = ({
 								<Combobox.Option
 									key={person.id}
 									className={({ active }) =>
-										`relative cursor-default select-none py-2 pl-10 pr-4 ${
-											active ? 'bg-teal-600 text-white' : 'text-gray-900'
-										}`
+										classNames('relative cursor-default select-none py-2 pl-10 pr-4', {
+											'bg-teal-600 text-white': active === true,
+											'text-gray-900': active === false
+										})
 									}
 									value={person}
 								>
