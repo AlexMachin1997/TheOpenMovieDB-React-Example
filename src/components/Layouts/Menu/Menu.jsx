@@ -114,7 +114,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 				id='mobile-navigation-sidebar'
 				aria-label='mobile navigation menu sidebar'
 				className={className(
-					'fixed top-[75px] bottom-0 overflow-y-scroll bg-primary p-4 opacity-90 backdrop-blur-[20px] duration-500 ease-in',
+					'bg-primary/90 fixed top-[75px] bottom-0 overflow-y-scroll p-4 backdrop-blur-[20px] duration-500 ease-in',
 					{
 						// When the menu item is active
 						'left-0': isSidebarOpen === true,

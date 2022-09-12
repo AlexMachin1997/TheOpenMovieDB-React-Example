@@ -3,11 +3,13 @@ import * as React from 'react';
 import RadioGroups from './RadioGroup';
 
 const ControlledStoryTemplate = (args) => {
-	const [value, setValue] = React.useState({});
+	const { defaultValue = {}, ...reset } = args;
+
+	const [value, setValue] = React.useState(defaultValue);
 
 	return (
 		<RadioGroups
-			{...args}
+			{...reset}
 			value={value}
 			onChange={({ value: newValue }) => {
 				setValue(newValue);
@@ -30,8 +32,13 @@ const DefaultStoryArgs = {
 	options: [],
 	value: [],
 	onChange: null,
-	serverSideLabel: 'Server-side label',
-	displayName: 'name'
+	displayName: 'name',
+	noOptionsAvailableMessage: 'No options currently available.',
+	disabled: false,
+	showRadioButtonOnTheLeft: true,
+	addSpaceBetweenLabelAndRadioButton: false,
+	name: 'name',
+	defaultValue: {}
 };
 
 export const DefaultRadioGroups = UncontrolledStoryTemplate.bind({});
@@ -42,6 +49,10 @@ DefaultRadioGroups.args = {
 export const ValueUpdating = ControlledStoryTemplate.bind({});
 ValueUpdating.args = {
 	...DefaultStoryArgs,
+	defaultValue: {
+		name: 'Radio option 2',
+		id: 2
+	},
 	options: [
 		{
 			name: 'Radio option 1',
@@ -82,6 +93,67 @@ export const CustomNoOptionsAvailableMessage = ControlledStoryTemplate.bind({});
 CustomNoOptionsAvailableMessage.args = {
 	...DefaultStoryArgs,
 	noOptionsAvailableMessage: 'My custom no options message'
+};
+
+export const Disabled = UncontrolledStoryTemplate.bind({});
+Disabled.args = {
+	...DefaultStoryArgs,
+	disabled: true,
+	options: [
+		{
+			name: 'Radio option 1',
+			id: 1
+		},
+		{
+			name: 'Radio option 2',
+			id: 2
+		},
+		{
+			name: 'Radio option 3',
+			id: 3
+		}
+	]
+};
+
+export const ShowRadioButtonOnTheLeft = UncontrolledStoryTemplate.bind({});
+ShowRadioButtonOnTheLeft.args = {
+	...DefaultStoryArgs,
+	options: [
+		{
+			name: 'Radio option 1',
+			id: 1
+		},
+		{
+			name: 'Radio option 2',
+			id: 2
+		},
+		{
+			name: 'Radio option 3',
+			id: 3
+		}
+	],
+	showRadioButtonOnTheLeft: false
+};
+
+export const AddSpaceBetweenLabelAndRadioButton = UncontrolledStoryTemplate.bind({});
+AddSpaceBetweenLabelAndRadioButton.args = {
+	...DefaultStoryArgs,
+	options: [
+		{
+			name: 'Radio option 1',
+			id: 1
+		},
+		{
+			name: 'Radio option 2',
+			id: 2
+		},
+		{
+			name: 'Radio option 3',
+			id: 3
+		}
+	],
+	showRadioButtonOnTheLeft: false,
+	addSpaceBetweenLabelAndRadioButton: true
 };
 
 export default { component: RadioGroups, title: 'Design System/Core/RadioGroups' };
