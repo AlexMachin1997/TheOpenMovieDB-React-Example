@@ -45,6 +45,7 @@ const CustomListbox = ({
 			// Other general properties made available to the component
 			multiple={isMulti}
 			disabled={disabled}
+			by='id' // When pre-populating the radio value compare by the id property (Basically the key for each option)
 		>
 			<div className='relative'>
 				<Listbox.Button
@@ -118,9 +119,11 @@ const CustomListbox = ({
 								<Listbox.Option
 									key={option.id}
 									className={({ active }) =>
-										classNames('relative cursor-default select-none py-2 pl-10 pr-4', {
+										classNames('relative cursor-default select-none py-2 pr-4', {
 											'bg-secondary text-white': active === true,
-											'text-gray-900': active === false
+											'text-gray-900': active === false,
+											'pl-10': isMulti === true,
+											'pl-3': isMulti === false
 										})
 									}
 									value={option}
@@ -130,7 +133,7 @@ const CustomListbox = ({
 											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
 												{option[displayName]}
 											</span>
-											{selected ? (
+											{selected === true && isMulti === true && (
 												<span
 													className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
 														active ? 'text-white' : 'text-teal-600'
@@ -138,7 +141,7 @@ const CustomListbox = ({
 												>
 													<Icon className='fa-solid fa-check' aria-hidden='true' />
 												</span>
-											) : null}
+											)}
 										</>
 									)}
 								</Listbox.Option>

@@ -4,10 +4,16 @@ import Listbox from './Listbox';
 
 const ControlledStoryTemplate = (args) => {
 	// Get the arguments (Story prop) provided by the Stories
-	const { isMulti = false, options = [], ...rest } = args;
+	const { isMulti = false, options = [], defaultValue = null, ...rest } = args;
 
 	// Store the current dropdown value
-	const [value, setValue] = React.useState(isMulti === true ? [] : {});
+	const [value, setValue] = React.useState(() => {
+		if (defaultValue === null) {
+			return isMulti === true ? [] : {};
+		}
+
+		return defaultValue;
+	});
 
 	return (
 		<form>
@@ -38,7 +44,7 @@ const UncontrolledStoryTemplate = (args) => {
 const DefaultStoryArgs = {
 	options: [],
 	value: {},
-	defaultValue: {},
+	defaultValue: null,
 	onChange: null,
 	isMulti: false,
 	displayName: 'name',
@@ -75,7 +81,8 @@ SingleValueDropdown.args = {
 		{ id: 4, name: 'Benedict Kessler' },
 		{ id: 5, name: 'Katelyn Rohan' }
 	],
-	isMulti: false
+	isMulti: false,
+	defaultValue: { id: 1, name: 'Durward Reynolds' }
 };
 
 export const MultipleValueDropdown = ControlledStoryTemplate.bind({});
@@ -91,6 +98,10 @@ MultipleValueDropdown.args = {
 		{ id: 6, name: 'Durward Reynolds Durward ReynoldsDurward Reynolds Durward Reynolds' },
 		{ id: 7, name: 'Kenton Towne' },
 		{ id: 8, name: 'Therese Wunsch' },
+		{ id: 9, name: 'Benedict Kessler' },
+		{ id: 10, name: 'Katelyn Rohan' }
+	],
+	defaultValue: [
 		{ id: 9, name: 'Benedict Kessler' },
 		{ id: 10, name: 'Katelyn Rohan' }
 	]

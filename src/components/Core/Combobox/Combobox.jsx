@@ -89,6 +89,7 @@ const CustomCombobox = ({
 			// Other general properties made available to the component
 			multiple={isMulti}
 			disabled={disabled}
+			by='id' // When pre-populating the radio value compare by the id property (Basically the key for each option)
 		>
 			<div className='relative mt-1'>
 				<div className='relative flex w-full cursor-default items-center rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
@@ -143,21 +144,21 @@ const CustomCombobox = ({
 								<Combobox.Option
 									key={person.id}
 									className={({ active }) =>
-										classNames('relative cursor-default select-none py-2 pl-10 pr-4', {
+										classNames('relative cursor-default select-none py-2 pr-4', {
 											'bg-teal-600 text-white': active === true,
-											'text-gray-900': active === false
+											'text-gray-900': active === false,
+											'pl-10': isMulti === true,
+											'pl-3': isMulti === false
 										})
 									}
 									value={person}
 								>
 									{({ selected, active }) => (
 										<>
-											<span
-												className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}
-											>
+											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
 												{person[displayName]}
 											</span>
-											{selected ? (
+											{selected === true && isMulti === true && (
 												<span
 													className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
 														active ? 'text-white' : 'text-teal-600'
@@ -165,7 +166,7 @@ const CustomCombobox = ({
 												>
 													<Icon className='fa-solid fa-check' aria-hidden='true' />
 												</span>
-											) : null}
+											)}
 										</>
 									)}
 								</Combobox.Option>
