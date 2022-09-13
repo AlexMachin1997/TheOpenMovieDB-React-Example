@@ -100,7 +100,7 @@ const CustomCombobox = ({
 							setQuery(event.target.value);
 						}}
 					/>
-					<Combobox.Button className='p-2'>
+					<Combobox.Button className='p-2' aria-hidden='true'>
 						<Icon className='fa-solid fa-arrows-up-down w-5 text-gray-400' />
 					</Combobox.Button>
 				</div>

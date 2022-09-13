@@ -19,30 +19,30 @@ const CustomRadioGroup = ({
 }) => (
 	<div className='w-full'>
 		<div className='mx-auto w-full'>
-			<RadioGroup
-				// Used when using the "uncontrolled" component ie using your own form management solution with state ()
-				value={value}
-				onChange={(newValue) => {
-					if (onChange) {
-						onChange({ value: newValue });
-					}
-				}}
-				// Used when using the "controlled" component ie using the native html form formData object
-				name={name}
-				defaultValue={defaultValue}
-				// Other general properties made available to the component
-				disabled={disabled}
-				by='id' // When pre-populating the radio value compare by the id property (Basically the key for each option)
-			>
-				<div className='space-y-2'>
-					{(options?.length ?? 0) === 0 && (
-						<p className='relative cursor-default select-none py-2 text-gray-700'>
-							{noOptionsAvailableMessage}
-						</p>
-					)}
+			{(options?.length ?? 0) === 0 && (
+				<p className='relative cursor-default select-none py-2 text-gray-700'>
+					{noOptionsAvailableMessage}
+				</p>
+			)}
 
-					{(options?.length ?? 0) > 0 &&
-						options.map((option) => (
+			{(options?.length ?? 0) > 0 && (
+				<RadioGroup
+					// Used when using the "uncontrolled" component ie using your own form management solution with state ()
+					value={value}
+					onChange={(newValue) => {
+						if (onChange) {
+							onChange({ value: newValue });
+						}
+					}}
+					// Used when using the "controlled" component ie using the native html form formData object
+					name={name}
+					defaultValue={defaultValue}
+					// Other general properties made available to the component
+					disabled={disabled}
+					by='id' // When pre-populating the radio value compare by the id property (Basically the key for each option)
+				>
+					<div className='space-y-2'>
+						{options.map((option) => (
 							<RadioGroup.Option
 								key={option.id}
 								value={option}
@@ -101,8 +101,9 @@ const CustomRadioGroup = ({
 								)}
 							</RadioGroup.Option>
 						))}
-				</div>
-			</RadioGroup>
+					</div>
+				</RadioGroup>
+			)}
 		</div>
 	</div>
 );

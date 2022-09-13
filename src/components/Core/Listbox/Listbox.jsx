@@ -52,6 +52,7 @@ const CustomListbox = ({
 					className={classNames(
 						'relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 py-3 px-3 text-left shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'
 					)}
+					aria-label='Listbox dropdown button'
 				>
 					<span className='w-full'>
 						{isMulti === false && (
@@ -108,7 +109,7 @@ const CustomListbox = ({
 					<Listbox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
 						{/* When there are no options and the query is empty */}
 						{(options?.length ?? 0) === 0 && (
-							<p className='relative cursor-default select-none py-2 text-gray-700'>
+							<p className='relative cursor-default select-none py-2 pl-3 text-gray-700'>
 								{noOptionsAvailableMessage}
 							</p>
 						)}

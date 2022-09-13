@@ -118,7 +118,25 @@ module.exports = {
 		],
 		'react-hooks/rules-of-hooks': 0,
 		'react-hooks/exhaustive-deps': 'error',
-		'jsx-quotes': ['error', 'prefer-single']
+		'jsx-quotes': ['error', 'prefer-single'],
+
+		// Can't always apply appy dom ids or additional aria-[name] to elements so we allow some nesting or an id
+		'jsx-a11y/label-has-associated-control': [
+			'error',
+			{
+				required: {
+					some: ['nesting', 'id']
+				}
+			}
+		],
+		'jsx-a11y/label-has-for': [
+			'error',
+			{
+				required: {
+					some: ['nesting', 'id']
+				}
+			}
+		]
 	},
 	root: true
 };

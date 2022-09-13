@@ -115,8 +115,8 @@ Disabled.args = {
 	]
 };
 
-export const ShowRadioButtonOnTheLeft = UncontrolledStoryTemplate.bind({});
-ShowRadioButtonOnTheLeft.args = {
+export const ShowRadioButtonOnTheRight = UncontrolledStoryTemplate.bind({});
+ShowRadioButtonOnTheRight.args = {
 	...DefaultStoryArgs,
 	options: [
 		{
@@ -135,8 +135,8 @@ ShowRadioButtonOnTheLeft.args = {
 	showRadioButtonOnTheLeft: false
 };
 
-export const AddSpaceBetweenLabelAndRadioButton = UncontrolledStoryTemplate.bind({});
-AddSpaceBetweenLabelAndRadioButton.args = {
+export const AddSpaceBetweenLabelAndRadioButtonOnTheRight = UncontrolledStoryTemplate.bind({});
+AddSpaceBetweenLabelAndRadioButtonOnTheRight.args = {
 	...DefaultStoryArgs,
 	options: [
 		{
@@ -152,7 +152,6 @@ AddSpaceBetweenLabelAndRadioButton.args = {
 			id: 3
 		}
 	],
-	showRadioButtonOnTheLeft: false,
 	addSpaceBetweenLabelAndRadioButton: true
 };
 

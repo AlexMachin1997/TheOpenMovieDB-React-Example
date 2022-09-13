@@ -26,21 +26,24 @@ const ControlledStoryTemplate = (args) => {
 
 	return (
 		<form>
-			<Combobox
-				{...rest}
-				options={remoteOptions}
-				isMulti={isMulti}
-				value={value}
-				canAddCustomItems={canAddCustomItems}
-				onChange={({ options: newOptions, value: newValue }) => {
-					if (canAddCustomItems === true) {
-						setRemoteOptions(newOptions);
-					}
+			<label htmlFor='name'>
+				A dropdown label
+				<Combobox
+					{...rest}
+					options={remoteOptions}
+					isMulti={isMulti}
+					value={value}
+					canAddCustomItems={canAddCustomItems}
+					onChange={({ options: newOptions, value: newValue }) => {
+						if (canAddCustomItems === true) {
+							setRemoteOptions(newOptions);
+						}
 
-					// Set the value of the dropdown.
-					setValue(newValue);
-				}}
-			/>
+						// Set the value of the dropdown.
+						setValue(newValue);
+					}}
+				/>
+			</label>
 		</form>
 	);
 };
@@ -50,7 +53,10 @@ const UncontrolledStoryTemplate = (args) => {
 
 	return (
 		<form>
-			<Combobox {...rest} name={name} defaultValue={defaultValue} />
+			<label htmlFor='name'>
+				A dropdown label
+				<Combobox {...rest} name={name} defaultValue={defaultValue} />
+			</label>
 		</form>
 	);
 };

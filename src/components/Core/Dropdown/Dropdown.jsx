@@ -53,7 +53,7 @@ const Dropdown = ({
 		<div className={className('relative inline-block', containerClass)} ref={dropdownRef}>
 			<Button
 				className={`inline-flex w-full justify-center ${buttonClass}`}
-				aria-expanded='true'
+				aria-expanded={isDropdownOpen.toString()}
 				aria-haspopup='true'
 				onClick={(event) => {
 					// When the button is clicked invert the current value (true => false, false => true)
