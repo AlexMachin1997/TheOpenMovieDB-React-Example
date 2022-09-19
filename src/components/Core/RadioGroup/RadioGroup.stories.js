@@ -155,4 +155,4 @@ AddSpaceBetweenLabelAndRadioButtonOnTheRight.args = {
 	addSpaceBetweenLabelAndRadioButton: true
 };
 
-export default { component: RadioGroups, title: 'Design System/Core/RadioGroups' };
+export default { component: RadioGroups, title: 'Design System/Core/RadioGroup' };

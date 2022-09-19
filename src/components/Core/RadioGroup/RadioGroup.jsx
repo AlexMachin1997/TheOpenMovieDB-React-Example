@@ -58,6 +58,7 @@ const CustomRadioGroup = ({
 										}
 									)
 								}
+								disabled={option.disabled}
 							>
 								{({ checked }) => (
 									<div
