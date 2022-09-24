@@ -51,9 +51,19 @@ const CustomCombobox = ({
 					// Is this item a single dropdown ?
 					if (isMulti === false) {
 						// Attempt to find the current value in the options list, if it's not in the options array add item
-						if (options.find((el) => el.name === dropdownValue[displayName]) === undefined) {
+						if (options.find((el) => el[displayName] === dropdownValue) === undefined) {
 							// Spread the existing options and append the value from the Combobox to the options list
-							existingOptions = [...existingOptions, dropdownValue];
+							existingOptions = [
+								...existingOptions,
+								{
+									// The display value should be whatever you typed in the input e.g. "Custom option"
+									[displayName]: dropdownValue,
+
+									// Hardcoded values as they are required for the options
+									id: dropdownValue,
+									value: dropdownValue
+								}
+							];
 						}
 					}
 
@@ -62,11 +72,19 @@ const CustomCombobox = ({
 						// Loop through all the values in the current Combobox
 						dropdownValue.forEach((comboboxValue) => {
 							// Attempt to find the current value in the options list, if it's not in the options array add item
-							if (
-								options.find((option) => option.name === comboboxValue[displayName]) === undefined
-							) {
+							if (options.find((option) => option[displayName] === comboboxValue) === undefined) {
 								// Spread the existing options and append the value from the Combobox to the options list
-								existingOptions = [...existingOptions, comboboxValue];
+								existingOptions = [
+									...existingOptions,
+									{
+										// The display value should be whatever you typed in the input e.g. "Custom option"
+										[displayName]: comboboxValue,
+
+										// Hardcoded values as they are required for the options
+										id: comboboxValue,
+										value: comboboxValue
+									}
+								];
 							}
 						});
 					}
@@ -89,13 +107,11 @@ const CustomCombobox = ({
 			// Other general properties made available to the component
 			multiple={isMulti}
 			disabled={disabled}
-			by='id' // When pre-populating the radio value compare by the id property (Basically the key for each option)
 		>
 			<div className='relative mt-1'>
 				<div className='relative flex w-full cursor-default items-center rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
 					<Combobox.Input
 						className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0'
-						displayValue={(option) => option[displayName]}
 						onChange={(event) => {
 							setQuery(event.target.value);
 						}}
@@ -110,27 +126,37 @@ const CustomCombobox = ({
 					leaveFrom='opacity-100'
 					leaveTo='opacity-0'
 				>
-					<Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+					<Combobox.Options
+						className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+						aria-label={`A dropdown for ${name}`}
+					>
 						{/* When there are no options and the query is empty */}
 						{(filteredOptions?.length ?? 0) === 0 && query === '' && (
-							<p className='relative cursor-default select-none py-2 px-4 text-gray-700'>
+							<Combobox.Option
+								disabled
+								aria-disabled
+								className='relative cursor-default select-none py-2 pl-3 text-gray-700'
+								aria-label='A'
+							>
 								{noOptionsAvailableMessage}
-							</p>
+							</Combobox.Option>
 						)}
 
 						{/* When there are no options and the query isn't empty */}
-						{(filteredOptions?.length ?? 0) === 0 &&
-							query !== '' &&
-							canAddCustomItems === false && (
-								<p className='relative cursor-default select-none py-2 px-4 text-gray-700'>
-									{noOptionsForSearchTermMessage}
-								</p>
-							)}
+						{(filteredOptions?.length ?? 0) === 0 && query !== '' && canAddCustomItems === false && (
+							<Combobox.Option
+								disabled
+								aria-disabled
+								className='relative cursor-default select-none py-2 pl-3 text-gray-700'
+							>
+								{noOptionsForSearchTermMessage}
+							</Combobox.Option>
+						)}
 
 						{(filteredOptions?.length ?? 0) === 0 && query !== '' && canAddCustomItems === true && (
 							<Combobox.Option
 								className='text-gray-900bg-teal-600 relative cursor-default select-none py-2 pl-10 pr-4'
-								value={{ id: query, [displayName]: query }}
+								value={query}
 							>
 								<span className='block truncate font-medium'>
 									Click to add <strong>{query}</strong> as an option.
@@ -140,9 +166,9 @@ const CustomCombobox = ({
 
 						{/* When there are options render the options */}
 						{(filteredOptions?.length ?? 0) !== 0 &&
-							filteredOptions.map((person) => (
+							filteredOptions.map((option) => (
 								<Combobox.Option
-									key={person.id}
+									key={option.id}
 									className={({ active }) =>
 										classNames('relative cursor-default select-none py-2 pr-4', {
 											'bg-teal-600 text-white': active === true,
@@ -151,12 +177,12 @@ const CustomCombobox = ({
 											'pl-3': isMulti === false
 										})
 									}
-									value={person}
+									value={option.value}
 								>
 									{({ selected, active }) => (
 										<>
 											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
-												{person[displayName]}
+												{option[displayName]}
 											</span>
 											{selected === true && isMulti === true && (
 												<span
@@ -208,8 +234,8 @@ CustomCombobox.propTypes = {
 
 CustomCombobox.defaultProps = {
 	options: [],
-	value: [],
-	defaultValue: [],
+	value: undefined,
+	defaultValue: undefined,
 	onChange: null,
 	isMulti: false,
 	defaultQuery: '',

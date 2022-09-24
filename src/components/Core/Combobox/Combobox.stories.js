@@ -14,8 +14,8 @@ const ControlledStoryTemplate = (args) => {
 
 	// Store the current dropdown value
 	const [value, setValue] = React.useState(() => {
-		if (defaultValue === null) {
-			return isMulti === true ? [] : {};
+		if (defaultValue === undefined) {
+			return isMulti === true ? [] : '';
 		}
 
 		return defaultValue;
@@ -63,42 +63,54 @@ const UncontrolledStoryTemplate = (args) => {
 
 const DefaultStoryArgs = {
 	options: [],
-	value: [],
-	defaultValue: null,
+	value: undefined,
+	defaultValue: undefined,
 	onChange: null,
 	isMulti: false,
-	defaultQuery: '',
 	displayName: 'name',
-	canAddCustomItems: false,
 	name: 'name',
 	disabled: false,
-	noOptionsForSearchTermMessage: 'No options available for your current search term.',
+	displayLimit: 3,
 	noOptionsAvailableMessage: 'No options currently available.'
 };
 
-// export const NativeHTMLForm = UncontrolledStoryTemplate.bind({});
-// NativeHTMLForm.args = {
-// 	name: 'people',
-// 	options: [
-// 		{ id: 1, name: 'Durward Reynolds' },
-// 		{ id: 2, name: 'Kenton Towne' },
-// 		{ id: 3, name: 'Therese Wunsch' },
-// 		{ id: 4, name: 'Benedict Kessler' },
-// 		{ id: 5, name: 'Katelyn Rohan' }
-// 	],
-// 	defaultValue: { id: 1, name: 'Durward Reynolds' },
-// 	isMulti: false
-// };
+export const MultipleValueDropdownNativeHTMLForm = UncontrolledStoryTemplate.bind({});
+MultipleValueDropdownNativeHTMLForm.args = {
+	name: 'people',
+	options: [
+		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
+	],
+	defaultValue: ['Durward Reynolds'],
+	isMulti: true
+};
+
+export const SingleValueDropdownNativeHTMLForm = UncontrolledStoryTemplate.bind({});
+SingleValueDropdownNativeHTMLForm.args = {
+	name: 'people',
+	options: [
+		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
+	],
+	defaultValue: 'Durward Reynolds',
+	isMulti: false
+};
 
 export const DefaultQuery = UncontrolledStoryTemplate.bind({});
 DefaultQuery.args = {
 	...DefaultStoryArgs,
 	options: [
-		{ id: 1, name: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan' }
+		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
 	],
 	defaultQuery: 'Durward Reynolds'
 };
@@ -112,14 +124,14 @@ export const SingleValueDropdown = ControlledStoryTemplate.bind({});
 SingleValueDropdown.args = {
 	...DefaultStoryArgs,
 	options: [
-		{ id: 1, name: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan' }
+		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
 	],
 	isMulti: false,
-	defaultValue: { id: 1, name: 'Durward Reynolds' }
+	defaultValue: 'Durward Reynolds'
 };
 
 export const MultipleValueDropdown = ControlledStoryTemplate.bind({});
@@ -127,16 +139,13 @@ MultipleValueDropdown.args = {
 	...DefaultStoryArgs,
 	isMulti: true,
 	options: [
-		{ id: 1, name: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan' }
+		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
 	],
-	defaultValue: [
-		{ id: 1, name: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne' }
-	]
+	defaultValue: ['Durward Reynolds', 'Kenton Towne']
 };
 
 export const CustomDisplayName = UncontrolledStoryTemplate.bind({});
@@ -144,11 +153,11 @@ CustomDisplayName.args = {
 	...DefaultStoryArgs,
 	isMulti: false,
 	options: [
-		{ id: 1, label: 'Durward Reynolds' },
-		{ id: 2, label: 'Kenton Towne' },
-		{ id: 3, label: 'Therese Wunsch' },
-		{ id: 4, label: 'Benedict Kessler' },
-		{ id: 5, label: 'Katelyn Rohan' }
+		{ id: 1, label: 'Durward Reynolds', value: 'Durward Reynolds' },
+		{ id: 2, label: 'Kenton Towne', value: 'Kenton Towne' },
+		{ id: 3, label: 'Therese Wunsch', value: 'Therese Wunsch' },
+		{ id: 4, label: 'Benedict Kessler', value: 'Benedict Kessler' },
+		{ id: 5, label: 'Katelyn Rohan', value: 'Katelyn Rohan' }
 	],
 	displayName: 'label'
 };
@@ -157,11 +166,11 @@ export const SingleDropdownWithAddableOptions = ControlledStoryTemplate.bind({})
 SingleDropdownWithAddableOptions.args = {
 	...DefaultStoryArgs,
 	options: [
-		{ id: 1, name: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan' }
+		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
 	],
 	isMulti: false,
 	canAddCustomItems: true
@@ -171,11 +180,11 @@ export const MultipleDropdownWithAddableOptions = ControlledStoryTemplate.bind({
 MultipleDropdownWithAddableOptions.args = {
 	...DefaultStoryArgs,
 	options: [
-		{ id: 1, name: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan' }
+		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
 	],
 	isMulti: true,
 	canAddCustomItems: true
