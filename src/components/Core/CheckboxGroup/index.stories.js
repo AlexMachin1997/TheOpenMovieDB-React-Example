@@ -44,8 +44,31 @@ DefaultCheckboxGroup.args = {
 	...DefaultStoryArgs
 };
 
-export const ValueUpdating = ControlledStoryTemplate.bind({});
-ValueUpdating.args = {
+export const ControlledCheckboxGroup = ControlledStoryTemplate.bind({});
+ControlledCheckboxGroup.args = {
+	...DefaultStoryArgs,
+	defaultValue: ['checkbox1', 'checkbox2'],
+	options: [
+		{
+			label: 'Checkbox 1',
+			id: '1',
+			value: 'checkbox1'
+		},
+		{
+			label: 'Checkbox 2',
+			id: '2',
+			value: 'checkbox2'
+		},
+		{
+			label: 'Checkbox 3',
+			id: '3',
+			value: 'checkbox3'
+		}
+	]
+};
+
+export const UncontrolledCheckboxGroup = ControlledStoryTemplate.bind({});
+UncontrolledCheckboxGroup.args = {
 	...DefaultStoryArgs,
 	defaultValue: ['checkbox1', 'checkbox2'],
 	options: [

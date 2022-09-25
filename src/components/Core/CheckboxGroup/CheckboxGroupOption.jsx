@@ -36,7 +36,7 @@ const CheckboxGroupOption = ({ label, disabled, id, value }) => {
 				// Since the component is controlled then we have to manually controlled the checked value of the checkbox
 				checked: checkedItems.includes(value),
 
-				// Expose the onChange event, useful callback for
+				// Expose the onChange event, useful callback for manually updating values or using the Event object.
 				onChange: (event) => {
 					// Since onChange returns the new value inverse the value to get the previous value e.g. when it's unchecked we get true so the previous value was false
 					const wasPreviouslyChecked = !optionRef.current.checked;
@@ -100,14 +100,15 @@ const CheckboxGroupOption = ({ label, disabled, id, value }) => {
 
 CheckboxGroupOption.defaultProps = {
 	label: 'Default label',
-	disabled: false
+	disabled: false,
+	value: undefined
 };
 
 CheckboxGroupOption.propTypes = {
 	label: PropTypes.string,
 	disabled: PropTypes.bool,
 	id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-	value: PropTypes.string.isRequired
+	value: PropTypes.string
 };
 
 export default CheckboxGroupOption;

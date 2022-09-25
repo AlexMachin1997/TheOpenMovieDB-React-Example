@@ -15,7 +15,10 @@ const CustomRadioGroup = ({
 	showRadioButtonOnTheLeft,
 	addSpaceBetweenLabelAndRadioButton,
 	name,
-	defaultValue
+	defaultValue,
+	getRadioLabelClassName,
+	getRadioOptionClassName,
+	getIconColour
 }) => (
 	<div className='w-full'>
 		<div className='mx-auto w-full'>
@@ -39,67 +42,96 @@ const CustomRadioGroup = ({
 					defaultValue={defaultValue}
 					// Other general properties made available to the component
 					disabled={disabled}
-					by='id' // When pre-populating the radio value compare by the id property (Basically the key for each option)
 				>
 					<div className='space-y-2'>
 						{options.map((option) => (
 							<RadioGroup.Option
 								key={option.id}
-								value={option}
-								className={({ active, checked }) =>
-									classNames(
+								value={option.value}
+								className={({ checked, active }) => {
+									// If the getRadioOptionClassName function is passed used the value returned from that otherwise use the default
+									if (getRadioOptionClassName) {
+										return getRadioOptionClassName({
+											isChecked: checked,
+											isActive: active,
+											isDisabled: disabled
+										});
+									}
+
+									// If the getRadioOptionClassName wasn't passed just use the default classNames for the option
+									return classNames(
 										' relative flex cursor-pointer rounded-lg border border-solid border-gray-300 px-5 py-4 shadow-md focus:outline-none',
 										{
 											'ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300':
 												active === true,
-											'bg-sky-900 bg-opacity-75 text-white': checked === true,
+											'bg-sky-900/75 text-white': checked === true,
 											'bg-white': checked === false,
 											'cursor-not-allowed': disabled === true
 										}
-									)
-								}
+									);
+								}}
 								disabled={option.disabled}
 							>
-								{({ checked }) => (
-									<div
-										className={classNames('flex w-full items-center', {
-											'justify-between': addSpaceBetweenLabelAndRadioButton === true
-										})}
-									>
-										{showRadioButtonOnTheLeft === true && (
-											<div className='mr-2 shrink-0 text-white'>
-												<Icon
-													className={classNames({
-														'fa-regular fa-circle-dot': checked === true,
-														'fa-regular fa-circle text-gray-300': checked === false
-													})}
-												/>
-											</div>
-										)}
+								{({ checked }) => {
+									// Generate the icon className
+									const iconClassName = classNames('fa-regular', {
+										'fa-circle-dot': checked === true,
+										'fa-circle': checked === false
+									});
 
-										<div className='flex items-center'>
-											<div className='text-sm'>
-												<RadioGroup.Label
-													as='p'
-													className={`font-medium  ${checked ? 'text-white' : 'text-gray-900'}`}
-												>
-													{option[displayName]}
-												</RadioGroup.Label>
+									// Generate the default icon container, usually specifies the colour of icon
+									let iconColour = classNames({
+										'text-white': checked === true,
+										'text-gray-300': checked === false
+									});
+
+									// If the getIconColour callback is provided then override the default className of the icons container
+									if (getIconColour) {
+										iconColour = getIconColour({ isChecked: checked });
+									}
+
+									return (
+										<div
+											className={classNames('flex w-full items-center', {
+												'justify-between': addSpaceBetweenLabelAndRadioButton === true
+											})}
+										>
+											{showRadioButtonOnTheLeft === true && (
+												<span className={iconColour}>
+													<Icon className={classNames(iconClassName, 'mr-2')} />
+												</span>
+											)}
+
+											<div className='flex items-center'>
+												<div className='text-sm'>
+													<RadioGroup.Label
+														as='p'
+														className={() => {
+															// If the getRadioLabelClassName function is passed used the value returned from that otherwise use the default
+															if (getRadioLabelClassName) {
+																return getRadioLabelClassName({ isChecked: checked });
+															}
+
+															// If the getRadioLabelClassName wasn't passed just use the default classNames for the option label
+															return classNames('font-medium', {
+																'text-white': checked === true,
+																'text-gray-900': checked === false
+															});
+														}}
+													>
+														{option[displayName]}
+													</RadioGroup.Label>
+												</div>
 											</div>
+
+											{showRadioButtonOnTheLeft === false && (
+												<span className={iconColour}>
+													<Icon className={classNames(iconClassName, 'ml-2')} />
+												</span>
+											)}
 										</div>
-
-										{showRadioButtonOnTheLeft === false && (
-											<div className='ml-2 shrink-0 text-white'>
-												<Icon
-													className={classNames({
-														'fa-regular fa-circle-dot': checked === true,
-														'fa-regular fa-circle text-gray-300': checked === false
-													})}
-												/>
-											</div>
-										)}
-									</div>
-								)}
+									);
+								}}
 							</RadioGroup.Option>
 						))}
 					</div>
@@ -110,29 +142,45 @@ const CustomRadioGroup = ({
 );
 
 CustomRadioGroup.propTypes = {
-	options: PropTypes.array,
-	value: PropTypes.any,
+	// These are our controlled properties, these values are used to control the value manually via some state
+	value: PropTypes.string,
 	onChange: PropTypes.func,
+
+	// These are our uncontrolled properties, these values are used when there is no state or onChange, instead the component controls it's own state
+	defaultValue: PropTypes.string,
+
+	// General properties to provide additional functionality options, displayName etc
+	name: PropTypes.string,
+	options: PropTypes.array,
 	displayName: PropTypes.string,
 	noOptionsAvailableMessage: PropTypes.string,
 	disabled: PropTypes.bool,
 	showRadioButtonOnTheLeft: PropTypes.bool,
 	addSpaceBetweenLabelAndRadioButton: PropTypes.bool,
-	name: PropTypes.string,
-	defaultValue: PropTypes.any
+	getRadioLabelClassName: PropTypes.func,
+	getRadioOptionClassName: PropTypes.func,
+	getIconColour: PropTypes.func
 };
 
 CustomRadioGroup.defaultProps = {
-	options: [],
-	value: [],
+	// These are our controlled properties, these values are used to control the value manually via some state
+	value: undefined,
 	onChange: null,
+
+	// These are our uncontrolled properties, these values are used when there is no state or onChange, instead the component controls it's own state
+	defaultValue: undefined,
+
+	// General properties to provide additional functionality options, displayName etc
+	name: 'name',
+	options: [],
 	displayName: 'name',
 	noOptionsAvailableMessage: 'No options currently available.',
 	disabled: false,
 	showRadioButtonOnTheLeft: true,
 	addSpaceBetweenLabelAndRadioButton: false,
-	name: 'name',
-	defaultValue: {}
+	getRadioLabelClassName: null,
+	getRadioOptionClassName: null,
+	getIconColour: null
 };
 
 export default CustomRadioGroup;

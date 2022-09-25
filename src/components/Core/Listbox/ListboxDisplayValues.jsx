@@ -73,7 +73,12 @@ const ListboxDisplayValues = ({
 };
 
 ListboxDisplayValues.propTypes = {
-	value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
+	// When no value is provided to the Listbox it provides an empty string, though most of the time it's going to be an array of strings or just a string
+	value: PropTypes.oneOfType([
+		PropTypes.arrayOf(PropTypes.string),
+		PropTypes.string,
+		PropTypes.object
+	]),
 	isMulti: PropTypes.bool,
 	onChange: PropTypes.func,
 	displayLimit: PropTypes.number,

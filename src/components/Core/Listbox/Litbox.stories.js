@@ -37,11 +37,11 @@ const ControlledStoryTemplate = (args) => {
 const UncontrolledStoryTemplate = (args) => {
 	// Get the "controlled" props, just to demonstrate what properties are required
 	// eslint-disable-next-line no-unused-vars
-	const { name = '', defaultValue = {}, value = undefined, ...rest } = args;
+	const { name = '', defaultValue = undefined, ...rest } = args;
 
 	return (
 		<form>
-			<Listbox {...rest} name={name} defaultValue={defaultValue} />
+			<Listbox {...rest} name={name} defaultValue={defaultValue} value={undefined} />
 		</form>
 	);
 };
@@ -59,8 +59,13 @@ const DefaultStoryArgs = {
 	noOptionsAvailableMessage: 'No options currently available.'
 };
 
-export const MultipleValueDropdownNativeHTMLForm = UncontrolledStoryTemplate.bind({});
-MultipleValueDropdownNativeHTMLForm.args = {
+export const DefaultDropdown = UncontrolledStoryTemplate.bind({});
+DefaultDropdown.args = {
+	...DefaultStoryArgs
+};
+
+export const UncontrolledMultipleValues = UncontrolledStoryTemplate.bind({});
+UncontrolledMultipleValues.args = {
 	name: 'people',
 	options: [
 		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
@@ -73,8 +78,8 @@ MultipleValueDropdownNativeHTMLForm.args = {
 	isMulti: true
 };
 
-export const SingleValueDropdownNativeHTMLForm = UncontrolledStoryTemplate.bind({});
-SingleValueDropdownNativeHTMLForm.args = {
+export const UncontrolledSingleValue = UncontrolledStoryTemplate.bind({});
+UncontrolledSingleValue.args = {
 	name: 'people',
 	options: [
 		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
@@ -87,13 +92,8 @@ SingleValueDropdownNativeHTMLForm.args = {
 	isMulti: false
 };
 
-export const DefaultDropdown = UncontrolledStoryTemplate.bind({});
-DefaultDropdown.args = {
-	...DefaultStoryArgs
-};
-
-export const SingleValueDropdown = ControlledStoryTemplate.bind({});
-SingleValueDropdown.args = {
+export const ControlledSingleValue = ControlledStoryTemplate.bind({});
+ControlledSingleValue.args = {
 	...DefaultStoryArgs,
 	options: [
 		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
@@ -106,8 +106,8 @@ SingleValueDropdown.args = {
 	defaultValue: 'Durward Reynolds'
 };
 
-export const MultipleValueDropdown = ControlledStoryTemplate.bind({});
-MultipleValueDropdown.args = {
+export const ControlledMultipleValues = ControlledStoryTemplate.bind({});
+ControlledMultipleValues.args = {
 	...DefaultStoryArgs,
 	isMulti: true,
 	options: [

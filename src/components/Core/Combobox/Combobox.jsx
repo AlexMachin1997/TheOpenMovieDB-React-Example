@@ -136,7 +136,6 @@ const CustomCombobox = ({
 								disabled
 								aria-disabled
 								className='relative cursor-default select-none py-2 pl-3 text-gray-700'
-								aria-label='A'
 							>
 								{noOptionsAvailableMessage}
 							</Combobox.Option>
@@ -204,44 +203,45 @@ const CustomCombobox = ({
 	);
 };
 
-const ValuePropTypes = PropTypes.oneOfType([
-	PropTypes.shape({
-		label: PropTypes.string,
-		value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-	}),
-	PropTypes.arrayOf(
-		PropTypes.shape({
-			label: PropTypes.string,
-			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-		})
-	)
-]);
-
 CustomCombobox.propTypes = {
-	options: PropTypes.array,
-	value: ValuePropTypes,
+	// These are our controlled properties, these values are used to control the value manually via some state
+	value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
 	onChange: PropTypes.func,
+
+	// These are our uncontrolled properties, these values are used when there is no state or onChange, instead the component controls it's own state
+	defaultValue: PropTypes.oneOfType([
+		PropTypes.arrayOf(PropTypes.string),
+		PropTypes.object,
+		PropTypes.string
+	]),
+
+	// General properties to provide additional functionality like chips, custom messages, displayLimit etc
+	options: PropTypes.array,
+	name: PropTypes.string,
 	isMulti: PropTypes.bool,
 	defaultQuery: PropTypes.string,
 	displayName: PropTypes.string,
 	canAddCustomItems: PropTypes.bool,
-	name: PropTypes.string,
-	defaultValue: ValuePropTypes,
 	disabled: PropTypes.bool,
 	noOptionsForSearchTermMessage: PropTypes.string,
 	noOptionsAvailableMessage: PropTypes.string
 };
 
 CustomCombobox.defaultProps = {
-	options: [],
+	// These are our controlled properties, these values are used to control the value manually via some state
 	value: undefined,
-	defaultValue: undefined,
 	onChange: null,
+
+	// These are our uncontrolled properties, these values are used when there is no state or onChange, instead the component controls it's own state
+	defaultValue: undefined,
+
+	// General properties to provide additional functionality like chips, custom messages, displayLimit etc
+	name: 'name',
+	options: [],
 	isMulti: false,
 	defaultQuery: '',
 	displayName: 'name',
 	canAddCustomItems: false,
-	name: 'name',
 	disabled: false,
 	noOptionsForSearchTermMessage: 'No options available for your current search term.',
 	noOptionsAvailableMessage: 'No options currently available.'

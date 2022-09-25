@@ -12,7 +12,7 @@ const Accordion = ({ children, title, defaultIsOpen, isDisabled }) => (
 			<>
 				<Disclosure.Button
 					className={classNames(
-						'flex w-full items-center justify-between rounded-tl-lg rounded-tr-lg border border-solid border-gray-300 p-2',
+						'flex w-full items-center justify-between rounded-tl-lg rounded-tr-lg border border-solid border-gray-300 p-4',
 						{
 							'rounded-bl-lg': open === false,
 							'rounded-br-lg': open === false,
@@ -42,7 +42,7 @@ const Accordion = ({ children, title, defaultIsOpen, isDisabled }) => (
 					leaveFrom='transform scale-100 opacity-100'
 					leaveTo='transform scale-95 opacity-0'
 				>
-					<Disclosure.Panel className='rounded-br-lg rounded-bl-lg border-b-[1px] border-l-[1px] border-r-[1px] border-solid border-gray-300 p-2'>
+					<Disclosure.Panel className='rounded-br-lg rounded-bl-lg border-b-[1px] border-l-[1px] border-r-[1px] border-solid border-gray-300 p-4'>
 						{children}
 					</Disclosure.Panel>
 				</Transition>
