@@ -9,5 +9,6 @@ export { default as StarsRating } from './Ratings/Stars/Stars';
 export { default as Tooltip } from './Tooltip/Tooltip';
 export { default as Listbox } from './Listbox/Listbox';
 export { default as Combobox } from './Combobox/Combobox';
-export { default as RadioGroups } from './RadioGroup/RadioGroup';
+export { default as RadioGroup } from './RadioGroup/RadioGroup';
+export { default as CheckboxGroup } from './CheckboxGroup';
 export { default as Accordion } from './Accordion/Accordion';

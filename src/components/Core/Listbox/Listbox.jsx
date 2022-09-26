@@ -51,6 +51,8 @@ const CustomListbox = ({
 							}}
 							displayLimit={displayLimit}
 							showMultiDeleteButton={isMulti === true && value !== undefined} // Don't show the delete button if the value is not undefined ie were in control mode (We control the state)
+							options={options}
+							displayName={displayName}
 						/>
 					</span>
 

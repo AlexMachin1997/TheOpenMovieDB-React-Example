@@ -41,8 +41,12 @@ const Accordion = ({ children, title, defaultIsOpen, isDisabled }) => (
 					leave='transition duration-75 ease-out'
 					leaveFrom='transform scale-100 opacity-100'
 					leaveTo='transform scale-95 opacity-0'
+					unmount={false} // Prevent's unmounting of children contents, causes component values to not be lost e.g. when using an uncontrolled form
 				>
-					<Disclosure.Panel className='rounded-br-lg rounded-bl-lg border-b-[1px] border-l-[1px] border-r-[1px] border-solid border-gray-300 p-4'>
+					<Disclosure.Panel
+						unmount={false}
+						className='rounded-br-lg rounded-bl-lg border-b-[1px] border-l-[1px] border-r-[1px] border-solid border-gray-300 p-4'
+					>
 						{children}
 					</Disclosure.Panel>
 				</Transition>

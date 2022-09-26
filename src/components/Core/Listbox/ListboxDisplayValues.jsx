@@ -8,7 +8,9 @@ const ListboxDisplayValues = ({
 	isMulti,
 	onChange,
 	displayLimit,
-	showMultiDeleteButton
+	showMultiDeleteButton,
+	options,
+	displayName
 }) => {
 	const onDeleteItem = (event, el) => {
 		if (onChange) {
@@ -20,9 +22,19 @@ const ListboxDisplayValues = ({
 		}
 	};
 
+	const getDisplayValue = (currentValue) => {
+		const foundOption = options?.find((option) => option.value === currentValue);
+
+		if (foundOption !== undefined) {
+			return foundOption[displayName];
+		}
+
+		return '';
+	};
+
 	// When it's a single select Listbox just output the value provided e.g. "Popularly (A-Z)"
 	if (isMulti === false && value !== undefined && Object.keys(value).length > 0) {
-		return <p className='text-black'>{value}</p>;
+		return <p className='text-black'>{getDisplayValue(value)}</p>;
 	}
 
 	// When it's a multi-select Listbox provide additional functionality via the Chips's
@@ -43,7 +55,7 @@ const ListboxDisplayValues = ({
 				{valuesToDisplay.map((el) => (
 					<div className='mr-2 py-1' key={el}>
 						<span className='align-center ease flex w-max items-center rounded-full bg-secondary py-2 px-2 text-sm font-semibold transition duration-300 active:bg-gray-300'>
-							<p className='text-md text-white'>{el}</p>
+							<p className='text-md text-white'>{getDisplayValue(el)}</p>
 
 							{/* NOTE: You can't have buttons inside of buttons that's now allowed, hence the reason it's a div with a role attached for accessability */}
 							{showMultiDeleteButton === true && (
@@ -82,7 +94,9 @@ ListboxDisplayValues.propTypes = {
 	isMulti: PropTypes.bool,
 	onChange: PropTypes.func,
 	displayLimit: PropTypes.number,
-	showMultiDeleteButton: PropTypes.bool
+	showMultiDeleteButton: PropTypes.bool,
+	options: PropTypes.array,
+	displayName: PropTypes.string
 };
 
 ListboxDisplayValues.defaultProps = {
@@ -90,7 +104,9 @@ ListboxDisplayValues.defaultProps = {
 	isMulti: false,
 	onChange: null,
 	displayLimit: 5,
-	showMultiDeleteButton: true
+	showMultiDeleteButton: true,
+	options: [],
+	displayName: 'name'
 };
 
 export default ListboxDisplayValues;
