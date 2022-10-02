@@ -56,7 +56,7 @@ const CheckboxGroupOption = ({ label, disabled, id, value }) => {
 
 					// If there is an onChange make sure to pass back the new checkboxes and the event object just incase you need to do additional logic like prevent bubbling etc
 					if (onChange) {
-						onChange(existingCheckboxes, event);
+						onChange(existingCheckboxes, event, id);
 					}
 				}
 			};
@@ -85,7 +85,7 @@ const CheckboxGroupOption = ({ label, disabled, id, value }) => {
 	]);
 
 	return (
-		<div className='mb-4 flex items-center'>
+		<div className='flex items-center'>
 			<input
 				{...checkboxProps}
 				ref={optionRef}

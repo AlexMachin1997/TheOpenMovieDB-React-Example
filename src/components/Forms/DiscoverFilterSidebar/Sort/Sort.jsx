@@ -1,40 +1,37 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
+
+import { useFormikContext } from 'formik';
 
 import Settings from '../../../../settings';
 
 import { Accordion, Listbox } from '../../../Core';
 
-const Sort = ({ defaultFormData }) => (
-	<Accordion title={<h3 className='text-lg text-black'>Sort</h3>}>
-		<label htmlFor='sort_by'>
-			{/* Dropdown label */}
-			<span className='mb-2 block font-light'>Sort Results By</span>
+const Sort = () => {
+	const { values, setFieldValue } = useFormikContext();
 
-			{/* Dropdown component */}
-			<Listbox
-				value={undefined} // TODO: Inject with the value from Formik
-				onChange={null} // This will be used to update the Formik value
-				options={Settings.SORT_BY_OPTIONS} // Hardcoded options from the config
-				isMulti={false} // Used to decide weather the value is multi select or not, sortBy is a single select
-				displayName='label' // The value which should be used as the display name from the options e.g. {label: "A to Z", value: "A"}
-				name='sort_by' // The html formData name, useful when wanting to access the formData object without Formik
-				defaultValue={defaultFormData.sort_by} // The default value, by default it's the first option from the SORT_BY_OPTIONS
-				disabled={false} // Is this filter disabled ?
-				noOptionsAvailableMessage='No sort by options available at this time.' // When there are no options available it should output this message
-			/>
-		</label>
-	</Accordion>
-);
+	return (
+		<Accordion title={<h3 className='text-lg text-black'>Sort</h3>}>
+			<label htmlFor='sort_by'>
+				{/* Dropdown label */}
+				<span className='mb-2 block font-light'>Sort Results By</span>
 
-Sort.propTypes = {
-	defaultFormData: PropTypes.object
-};
-
-Sort.defaultProps = {
-	defaultFormData: {
-		sort_by: Settings.SORT_BY_OPTIONS[0].value
-	}
+				{/* Dropdown component */}
+				<Listbox
+					value={values.sort_by}
+					onChange={({ value }) => {
+						setFieldValue('sort_by', value);
+					}}
+					options={Settings.SORT_BY_OPTIONS}
+					isMulti={false}
+					displayName='label'
+					name='sort_by'
+					defaultValue={undefined}
+					disabled={false}
+					noOptionsAvailableMessage='No sort by options available at this time.'
+				/>
+			</label>
+		</Accordion>
+	);
 };
 
 export default Sort;

@@ -1,8 +1,18 @@
+import { Formik } from 'formik';
 import * as React from 'react';
 
 import Sort from './Sort';
 
-const ControlledStoryTemplate = () => <Sort />;
+const ControlledStoryTemplate = () => (
+	<Formik
+		initialValues={{
+			sort_by: ''
+		}}
+		enableReinitialize
+	>
+		<Sort />
+	</Formik>
+);
 
 export const Example = ControlledStoryTemplate.bind({});
 Example.args = {};

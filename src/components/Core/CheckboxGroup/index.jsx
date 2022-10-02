@@ -22,19 +22,19 @@ const CustomCheckboxGroup = ({
 				</p>
 			)}
 
-			{(options?.length ?? 0) > 0 && (
-				<CheckboxGroup
-					value={value}
-					onChange={(newValue, event) => {
-						if (onChange) {
-							onChange({ value: newValue, event });
-						}
-					}}
-					disabled={disabled}
-					name={name}
-					defaultValue={defaultValue}
-				>
-					<div className=''>
+			<div className='space-y-2'>
+				{(options?.length ?? 0) > 0 && (
+					<CheckboxGroup
+						value={value}
+						onChange={(newValue, event, id) => {
+							if (onChange) {
+								onChange({ value: newValue, event, elementClicked: id });
+							}
+						}}
+						disabled={disabled}
+						name={name}
+						defaultValue={defaultValue}
+					>
 						{options.map((option) => (
 							<CheckboxGroupOption
 								key={option.id}
@@ -44,9 +44,9 @@ const CustomCheckboxGroup = ({
 								value={option.value}
 							/>
 						))}
-					</div>
-				</CheckboxGroup>
-			)}
+					</CheckboxGroup>
+				)}
+			</div>
 		</div>
 	</div>
 );
