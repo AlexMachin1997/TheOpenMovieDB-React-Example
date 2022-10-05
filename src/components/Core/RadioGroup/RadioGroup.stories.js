@@ -2,6 +2,8 @@ import classNames from 'classnames';
 import * as React from 'react';
 
 import RadioGroups from './RadioGroup';
+import CountryFlag from '../../CountryFlag/CountryFlag';
+import Settings from '../../../settings';
 
 const ControlledStoryTemplate = (args) => {
 	const { defaultValue = '', ...reset } = args;
@@ -20,7 +22,7 @@ const ControlledStoryTemplate = (args) => {
 };
 
 const UncontrolledStoryTemplate = (args) => {
-	const { name = '', defaultValue = [], ...rest } = args;
+	const { name = '', defaultValue = '', ...rest } = args;
 
 	return (
 		<form>
@@ -191,8 +193,31 @@ AddSpaceBetweenLabelAndRadioButtonOnTheRight.args = {
 	addSpaceBetweenLabelAndRadioButton: true
 };
 
-export const FullyCustomStyledRadioGroup = ControlledStoryTemplate.bind({});
+export const AddSpaceBetweenLabelAndRadioButtonOnTheLeft = UncontrolledStoryTemplate.bind({});
+AddSpaceBetweenLabelAndRadioButtonOnTheLeft.args = {
+	...DefaultStoryArgs,
+	options: [
+		{
+			name: 'Radio option 1',
+			id: 1,
+			value: '1'
+		},
+		{
+			name: 'Radio option 2',
+			id: 2,
+			value: '2'
+		},
+		{
+			name: 'Radio option 3',
+			id: 3,
+			value: '3'
+		}
+	],
+	addSpaceBetweenLabelAndRadioButton: true,
+	showRadioButtonOnTheLeft: false
+};
 
+export const FullyCustomStyledRadioGroup = ControlledStoryTemplate.bind({});
 FullyCustomStyledRadioGroup.args = {
 	...DefaultStoryArgs,
 	defaultValue: '2',
@@ -216,11 +241,23 @@ FullyCustomStyledRadioGroup.args = {
 	getRadioOptionClassName: () =>
 		'cursor-pointer rounded-lg focus:outline-none bg-white relative flex',
 	getRadioLabelClassName: () => 'text-black',
-	getIconColour: ({ isChecked }) =>
-		classNames({
-			'text-black': isChecked === true,
-			'text-gray-300': isChecked === false
+	getIconComponentClassName: ({ isChecked }) =>
+		classNames('fa-regular text-secondary', {
+			'fa-circle-dot': isChecked === true,
+			'fa-circle': isChecked === false
 		})
+};
+
+const CustomIcon = ({ option }) => (
+	<CountryFlag countryCode={option?.value ?? ''} className='mr-3' />
+);
+
+export const CustomIconComponent = ControlledStoryTemplate.bind({});
+CustomIconComponent.args = {
+	...DefaultStoryArgs,
+	options: [Settings.COUNTRY_OPTIONS[0], Settings.COUNTRY_OPTIONS[1], Settings.COUNTRY_OPTIONS[2]],
+	displayName: 'label',
+	iconComponent: CustomIcon
 };
 
 export default { component: RadioGroups, title: 'Design System/Core/RadioGroup' };

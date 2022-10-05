@@ -82,6 +82,8 @@ const ListboxDisplayValues = ({
 			</div>
 		);
 	}
+
+	return null;
 };
 
 ListboxDisplayValues.propTypes = {

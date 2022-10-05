@@ -79,7 +79,6 @@ module.exports = {
 		'max-len': 0,
 		'import/extensions': 0,
 		'no-underscore-dangle': 0,
-		'consistent-return': 0,
 		'react/display-name': 0,
 		'react/no-array-index-key': 0,
 		'react/react-in-jsx-scope': 2,
@@ -137,6 +136,5 @@ module.exports = {
 				}
 			}
 		]
-	},
-	root: true
+	}
 };

@@ -1,14 +1,33 @@
 import * as React from 'react';
 
 import { useFormikContext } from 'formik';
+import { Popover } from '@headlessui/react';
+import { usePopper } from 'react-popper';
 
 import classNames from 'classnames';
 import Settings from '../../../../settings';
 
-import { Accordion, CheckboxGroup, Combobox, Listbox, RadioGroup } from '../../../Core';
+import { Accordion, CheckboxGroup, Icon, Listbox, RadioGroup } from '../../../Core';
+import CountryFlag from '../../../CountryFlag/CountryFlag';
 
 const Filters = () => {
 	const { values, setFieldValue } = useFormikContext();
+
+	const [referenceElement, setReferenceElement] = React.useState();
+	const [popperElement, setPopperElement] = React.useState();
+
+	const [searchTerm, setSearchTerm] = React.useState('');
+
+	const { styles, attributes } = usePopper(referenceElement, popperElement, {
+		modifiers: [
+			{
+				name: 'flip',
+				options: {
+					fallbackPlacements: ['top', 'bottom'] // Flip between top and bottom, depends on how much space is available
+				}
+			}
+		]
+	});
 
 	const onChangeCheckboxGroup = ({
 		idOfTheCheckboxElement = '',
@@ -39,6 +58,9 @@ const Filters = () => {
 			// Add all the options which aren't the all value
 			return newCheckboxValues;
 		}
+
+		// When none of the above is met then just return the current checkbox values don't do any transforming.
+		return currentCheckboxValues;
 	};
 
 	return (
@@ -60,12 +82,16 @@ const Filters = () => {
 					showRadioButtonOnTheLeft
 					addSpaceBetweenLabelAndRadioButton={false}
 					name='show_me'
-					getRadioOptionClassName={() =>
-						'cursor-pointer rounded-lg focus:outline-none bg-white relative flex'
+					getRadioOptionClassName={({ isActive }) =>
+						classNames('cursor-pointer rounded-lg focus:outline-none bg-white relative flex', {
+							'ring-2 ring-black ring-opacity-60 ring-offset-2 ring-offset-black': isActive === true
+						})
 					}
 					getRadioLabelClassName={() => 'text-black'}
-					getIconColour={({ isChecked }) =>
-						classNames('fa-lg', {
+					getIconClassName={({ isChecked }) =>
+						classNames('fa-regular fa-lg mr-2', {
+							'fa-circle-dot': isChecked === true,
+							'fa-circle': isChecked === false,
 							'text-secondary': isChecked === true,
 							'text-gray-300': isChecked === false
 						})
@@ -104,6 +130,34 @@ const Filters = () => {
 					name='with_release_type'
 					defaultValue={undefined}
 				/>
+			</div>
+
+			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+				{/* Dropdown label */}
+				<span className='mb-2 block font-light'>Release Region</span>
+
+				{/* Dropdown component */}
+				<Popover>
+					<Popover.Button ref={setReferenceElement}>
+						<div className='flex items-center'>
+							<CountryFlag countryCode='GB' className='mr-2' />
+							{Settings.COUNTRY_OPTIONS.find((el) => el.value === 'GB').english_name}
+						</div>
+					</Popover.Button>
+
+					<Popover.Panel ref={setPopperElement} style={styles.popper} {...attributes.popper}>
+						<div className='border border-solid border-gray-400 bg-white'>
+							<div className='m-4 border border-solid border-gray-300 p-1'>
+								<input
+									type='text'
+									value={searchTerm}
+									onChange={(e) => setSearchTerm(e.target.value)}
+								/>
+								<Icon className='fa-solid fa-magnifying-glass' />
+							</div>
+						</div>
+					</Popover.Panel>
+				</Popover>
 			</div>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
@@ -195,13 +249,13 @@ const Filters = () => {
 					onChange={({ value }) => {
 						setFieldValue('with_original_language', value);
 					}}
-					options={Settings.LANGUAGE_OPTIONS}
+					options={Settings.CERTIFICATION_OPTIONS}
 					isMulti
 					displayName='label'
-					name='with_original_language'
+					name='certification'
 					defaultValue={undefined}
 					disabled={false}
-					noOptionsAvailableMessage='No languages options available.'
+					noOptionsAvailableMessage='No certification options available.'
 				/>
 			</label>
 		</Accordion>

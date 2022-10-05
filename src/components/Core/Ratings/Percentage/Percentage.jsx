@@ -23,6 +23,8 @@ const Rating = ({ size, strokeWidth, percentage, textClass }) => {
 		if (percentage >= 70) {
 			return 'stroke-green-500';
 		}
+
+		return '';
 	};
 
 	return (
