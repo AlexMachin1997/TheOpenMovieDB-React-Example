@@ -1,4 +1,5 @@
 import * as React from 'react';
+import settings from '../../../settings';
 
 import Listbox from './Listbox';
 
@@ -138,6 +139,14 @@ export const CustomNoOptionsAvailableMessage = ControlledStoryTemplate.bind({});
 CustomNoOptionsAvailableMessage.args = {
 	...DefaultStoryArgs,
 	noOptionsAvailableMessage: 'My custom no options message'
+};
+
+export const MassiveListOfCountries = ControlledStoryTemplate.bind({});
+MassiveListOfCountries.args = {
+	...DefaultStoryArgs,
+	isMulti: true,
+	options: settings.COUNTRY_OPTIONS,
+	displayName: 'label'
 };
 
 export default {

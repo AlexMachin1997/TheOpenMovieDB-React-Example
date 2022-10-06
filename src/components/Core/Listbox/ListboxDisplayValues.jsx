@@ -33,12 +33,12 @@ const ListboxDisplayValues = ({
 	};
 
 	// When it's a single select Listbox just output the value provided e.g. "Popularly (A-Z)"
-	if (isMulti === false && value !== undefined && Object.keys(value).length > 0) {
+	if (isMulti === false && Boolean(value) === true && Object.keys(value).length > 0) {
 		return <p className='text-black'>{getDisplayValue(value)}</p>;
 	}
 
 	// When it's a multi-select Listbox provide additional functionality via the Chips's
-	if (isMulti === true && (value?.length ?? 0) > 0) {
+	if (isMulti === true && Boolean(value) === true && (value?.length ?? 0) > 0) {
 		// Store the number of items currently available
 		const valuesToDisplay = [...value];
 

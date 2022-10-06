@@ -2,10 +2,108 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+import { useVirtualizer } from '@tanstack/react-virtual';
+
 import { Listbox, Transition } from '@headlessui/react';
 
 import Icon from '../Icon/Icon';
 import ListboxDisplayValues from './ListboxDisplayValues';
+
+const VirtualizedList = React.memo(
+	({ options, noOptionsAvailableMessage, isMulti, displayName }) => {
+		// This will store the reference to the options list (Wrapper for the options)
+		const optionsRef = React.useRef();
+
+		// Virtualize the List, improves the performance for bigger lists e.g. 250 countries being rendered.
+		const rowVirtualizer = useVirtualizer({
+			count: options?.length,
+			getScrollElement: () => optionsRef.current,
+			estimateSize: React.useCallback(() => 35, []),
+			overscan: 5
+		});
+
+		return (
+			<div
+				className='absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+				ref={optionsRef}
+			>
+				{/* When there are no options and the query is empty */}
+				{rowVirtualizer.getVirtualItems().length === 0 && (
+					<Listbox.Option
+						disabled
+						aria-disabled
+						className='relative cursor-default select-none py-2 pl-3 text-gray-700'
+					>
+						{noOptionsAvailableMessage}
+					</Listbox.Option>
+				)}
+
+				{/* When there are options render the options */}
+				{rowVirtualizer.getVirtualItems().length > 0 && (
+					<div
+						style={{
+							height: `${rowVirtualizer.getTotalSize()}px`,
+							width: '100%',
+							position: 'relative'
+						}}
+					>
+						{rowVirtualizer.getVirtualItems().map((virtualRow) => {
+							// Get the current option
+							const option = options[virtualRow.index];
+
+							return (
+								<Listbox.Option
+									key={option.id}
+									className={({ active }) =>
+										classNames('relative cursor-default select-none py-2 pr-4', {
+											'bg-secondary text-white': active === true,
+											'text-gray-900': active === false,
+											'pl-10': isMulti === true,
+											'pl-3': isMulti === false
+										})
+									}
+									value={option.value}
+									style={{
+										position: 'absolute',
+										top: 0,
+										left: 0,
+										width: '100%',
+										height: `${virtualRow.size}px`,
+										transform: `translateY(${virtualRow.start}px)`
+									}}
+								>
+									{({ selected, active }) => (
+										<>
+											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
+												{option[displayName]}
+											</span>
+											{selected === true && isMulti === true && (
+												<span
+													className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+														active ? 'text-white' : 'text-teal-600'
+													}`}
+												>
+													<Icon className='fa-solid fa-check' aria-hidden='true' />
+												</span>
+											)}
+										</>
+									)}
+								</Listbox.Option>
+							);
+						})}
+					</div>
+				)}
+			</div>
+		);
+	}
+);
+
+VirtualizedList.propTypes = {
+	options: PropTypes.array.isRequired,
+	noOptionsAvailableMessage: PropTypes.string.isRequired,
+	isMulti: PropTypes.bool.isRequired,
+	displayName: PropTypes.string.isRequired
+};
 
 const CustomListbox = ({
 	options,
@@ -68,54 +166,13 @@ const CustomListbox = ({
 					leaveFrom='opacity-100'
 					leaveTo='opacity-0'
 				>
-					<Listbox.Options
-						className='absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
-						aria-label={`A dropdown for ${name}`}
-					>
-						{/* When there are no options and the query is empty */}
-						{(options?.length ?? 0) === 0 && (
-							<Listbox.Option
-								disabled
-								aria-disabled
-								className='relative cursor-default select-none py-2 pl-3 text-gray-700'
-							>
-								{noOptionsAvailableMessage}
-							</Listbox.Option>
-						)}
-
-						{/* When there are options render the options */}
-						{(options?.length ?? 0) !== 0 &&
-							options.map((option) => (
-								<Listbox.Option
-									key={option.id}
-									className={({ active }) =>
-										classNames('relative cursor-default select-none py-2 pr-4', {
-											'bg-secondary text-white': active === true,
-											'text-gray-900': active === false,
-											'pl-10': isMulti === true,
-											'pl-3': isMulti === false
-										})
-									}
-									value={option.value}
-								>
-									{({ selected, active }) => (
-										<>
-											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
-												{option[displayName]}
-											</span>
-											{selected === true && isMulti === true && (
-												<span
-													className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-														active ? 'text-white' : 'text-teal-600'
-													}`}
-												>
-													<Icon className='fa-solid fa-check' aria-hidden='true' />
-												</span>
-											)}
-										</>
-									)}
-								</Listbox.Option>
-							))}
+					<Listbox.Options aria-label={`A dropdown for ${name}`}>
+						<VirtualizedList
+							options={options}
+							noOptionsAvailableMessage={noOptionsAvailableMessage}
+							isMulti={isMulti}
+							displayName={displayName}
+						/>
 					</Listbox.Options>
 				</Transition>
 			</div>
