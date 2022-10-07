@@ -1,4 +1,5 @@
 import * as React from 'react';
+import settings from '../../../settings';
 
 import Combobox from './Combobox';
 
@@ -14,12 +15,14 @@ const ControlledStoryTemplate = (args) => {
 
 	// Store the current dropdown value
 	const [value, setValue] = React.useState(() => {
-		if (defaultValue === undefined) {
+		if (defaultValue === null) {
 			return isMulti === true ? [] : '';
 		}
 
 		return defaultValue;
 	});
+
+	console.log(value);
 
 	// Store the current dropdown options in state, this is so we can update them when canAddCustomItems is true
 	const [remoteOptions, setRemoteOptions] = React.useState(options);
@@ -200,6 +203,14 @@ export const CustomNoOptionsAvailableMessage = ControlledStoryTemplate.bind({});
 CustomNoOptionsAvailableMessage.args = {
 	...DefaultStoryArgs,
 	noOptionsAvailableMessage: 'My custom no options message'
+};
+
+export const MassiveListOfCountriesA = ControlledStoryTemplate.bind({});
+MassiveListOfCountriesA.args = {
+	...DefaultStoryArgs,
+	isMulti: true,
+	options: settings.COUNTRY_OPTIONS,
+	displayName: 'label'
 };
 
 export default {

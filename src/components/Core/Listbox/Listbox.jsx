@@ -73,7 +73,7 @@ const VirtualizedList = React.memo(
 									}}
 								>
 									{({ selected, active }) => (
-										<>
+										<div className='relative'>
 											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
 												{option[displayName]}
 											</span>
@@ -86,7 +86,7 @@ const VirtualizedList = React.memo(
 													<Icon className='fa-solid fa-check' aria-hidden='true' />
 												</span>
 											)}
-										</>
+										</div>
 									)}
 								</Listbox.Option>
 							);
@@ -166,7 +166,9 @@ const CustomListbox = ({
 					leaveFrom='opacity-100'
 					leaveTo='opacity-0'
 				>
-					<Listbox.Options aria-label={`A dropdown for ${name}`}>
+					<Listbox.Options
+						aria-label={`A ${isMulti === true ? 'multiple' : 'single'} dropdown for ${name}`}
+					>
 						<VirtualizedList
 							options={options}
 							noOptionsAvailableMessage={noOptionsAvailableMessage}

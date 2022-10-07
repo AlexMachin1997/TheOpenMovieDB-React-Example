@@ -1,10 +1,145 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
+import { useVirtualizer } from '@tanstack/react-virtual';
+
 import { Combobox, Transition } from '@headlessui/react';
 
 import classNames from 'classnames';
 import Icon from '../Icon/Icon';
+
+const VirtualizedList = React.memo(
+	({
+		options,
+		query,
+		noOptionsAvailableMessage,
+		canAddCustomItems,
+		noOptionsForSearchTermMessage,
+		isMulti,
+		displayName
+	}) => {
+		// This will store the reference to the options list (Wrapper for the options)
+		const optionsRef = React.useRef();
+
+		// Virtualize the List, improves the performance for bigger lists e.g. 250 countries being rendered.
+		const rowVirtualizer = useVirtualizer({
+			count: options?.length ?? 0,
+			getScrollElement: () => optionsRef.current,
+			estimateSize: React.useCallback(() => 35, []),
+			overscan: 5
+		});
+
+		return (
+			<div
+				className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+				ref={optionsRef}
+			>
+				{/* When there are no options and the query is empty */}
+				{rowVirtualizer.getVirtualItems().length === 0 && query === '' && (
+					<Combobox.Option
+						disabled
+						aria-disabled
+						className='relative cursor-default select-none py-2 pl-3 text-gray-700'
+					>
+						{noOptionsAvailableMessage}
+					</Combobox.Option>
+				)}
+
+				{/* When there are no options and the query isn't empty */}
+				{rowVirtualizer.getVirtualItems().length === 0 &&
+					query !== '' &&
+					canAddCustomItems === false && (
+						<Combobox.Option
+							disabled
+							aria-disabled
+							className='relative cursor-default select-none py-2 pl-3 text-gray-700'
+						>
+							{noOptionsForSearchTermMessage}
+						</Combobox.Option>
+					)}
+
+				{rowVirtualizer.getVirtualItems().length === 0 &&
+					query !== '' &&
+					canAddCustomItems === true && (
+						<Combobox.Option
+							className='text-gray-900bg-teal-600 relative cursor-default select-none py-2 pl-10 pr-4'
+							value={query}
+						>
+							<span className='block truncate font-medium'>
+								Click to add <strong>{query}</strong> as an option.
+							</span>
+						</Combobox.Option>
+					)}
+
+				{/* When there are options render the options */}
+				{rowVirtualizer.getVirtualItems().length > 0 && (
+					<div
+						style={{
+							height: `${rowVirtualizer.getTotalSize()}px`,
+							width: '100%',
+							position: 'relative'
+						}}
+					>
+						{rowVirtualizer.getVirtualItems().map((virtualRow) => {
+							// Get the current option
+							const option = options[virtualRow.index];
+
+							return (
+								<Combobox.Option
+									key={option.id}
+									className={({ active }) =>
+										classNames('relative cursor-default select-none py-2 pr-4', {
+											'bg-teal-600 text-white': active === true,
+											'text-gray-900': active === false,
+											'pl-10': isMulti === true,
+											'pl-3': isMulti === false
+										})
+									}
+									value={option.value}
+									style={{
+										position: 'absolute',
+										top: 0,
+										left: 0,
+										width: '100%',
+										height: `${virtualRow.size}px`,
+										transform: `translateY(${virtualRow.start}px)`
+									}}
+								>
+									{({ selected, active }) => (
+										<div>
+											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
+												{option[displayName]}
+											</span>
+											{selected === true && isMulti === true && (
+												<span
+													className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+														active ? 'text-white' : 'text-teal-600'
+													}`}
+												>
+													<Icon className='fa-solid fa-check' aria-hidden='true' />
+												</span>
+											)}
+										</div>
+									)}
+								</Combobox.Option>
+							);
+						})}
+					</div>
+				)}
+			</div>
+		);
+	}
+);
+
+VirtualizedList.propTypes = {
+	options: PropTypes.array.isRequired,
+	query: PropTypes.string.isRequired,
+	noOptionsAvailableMessage: PropTypes.string.isRequired,
+	canAddCustomItems: PropTypes.bool.isRequired,
+	noOptionsForSearchTermMessage: PropTypes.string.isRequired,
+	isMulti: PropTypes.bool.isRequired,
+	displayName: PropTypes.string.isRequired
+};
 
 const CustomCombobox = ({
 	options,
@@ -127,75 +262,17 @@ const CustomCombobox = ({
 					leaveTo='opacity-0'
 				>
 					<Combobox.Options
-						className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
-						aria-label={`A dropdown for ${name}`}
+						aria-label={`A ${isMulti === true ? 'multiple' : 'single'} dropdown for ${name}`}
 					>
-						{/* When there are no options and the query is empty */}
-						{(filteredOptions?.length ?? 0) === 0 && query === '' && (
-							<Combobox.Option
-								disabled
-								aria-disabled
-								className='relative cursor-default select-none py-2 pl-3 text-gray-700'
-							>
-								{noOptionsAvailableMessage}
-							</Combobox.Option>
-						)}
-
-						{/* When there are no options and the query isn't empty */}
-						{(filteredOptions?.length ?? 0) === 0 && query !== '' && canAddCustomItems === false && (
-							<Combobox.Option
-								disabled
-								aria-disabled
-								className='relative cursor-default select-none py-2 pl-3 text-gray-700'
-							>
-								{noOptionsForSearchTermMessage}
-							</Combobox.Option>
-						)}
-
-						{(filteredOptions?.length ?? 0) === 0 && query !== '' && canAddCustomItems === true && (
-							<Combobox.Option
-								className='text-gray-900bg-teal-600 relative cursor-default select-none py-2 pl-10 pr-4'
-								value={query}
-							>
-								<span className='block truncate font-medium'>
-									Click to add <strong>{query}</strong> as an option.
-								</span>
-							</Combobox.Option>
-						)}
-
-						{/* When there are options render the options */}
-						{(filteredOptions?.length ?? 0) !== 0 &&
-							filteredOptions.map((option) => (
-								<Combobox.Option
-									key={option.id}
-									className={({ active }) =>
-										classNames('relative cursor-default select-none py-2 pr-4', {
-											'bg-teal-600 text-white': active === true,
-											'text-gray-900': active === false,
-											'pl-10': isMulti === true,
-											'pl-3': isMulti === false
-										})
-									}
-									value={option.value}
-								>
-									{({ selected, active }) => (
-										<>
-											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
-												{option[displayName]}
-											</span>
-											{selected === true && isMulti === true && (
-												<span
-													className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-														active ? 'text-white' : 'text-teal-600'
-													}`}
-												>
-													<Icon className='fa-solid fa-check' aria-hidden='true' />
-												</span>
-											)}
-										</>
-									)}
-								</Combobox.Option>
-							))}
+						<VirtualizedList
+							options={filteredOptions}
+							query={query}
+							noOptionsAvailableMessage={noOptionsAvailableMessage}
+							canAddCustomItems={canAddCustomItems}
+							noOptionsForSearchTermMessage={noOptionsForSearchTermMessage}
+							isMulti={isMulti}
+							displayName={displayName}
+						/>
 					</Combobox.Options>
 				</Transition>
 			</div>
