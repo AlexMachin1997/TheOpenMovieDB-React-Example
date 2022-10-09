@@ -2,166 +2,180 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-// import { useVirtualizer } from '@tanstack/react-virtual';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { RadioGroup } from '@headlessui/react';
 
 import Icon from '../Icon/Icon';
+import CountryFlag from '../../CountryFlag/CountryFlag';
 
-const CustomRadioGroup = ({
-	options,
-	value,
-	onChange,
-	displayName,
-	noOptionsAvailableMessage,
-	disabled,
-	showRadioButtonOnTheLeft,
-	addSpaceBetweenLabelAndRadioButton,
-	name,
-	defaultValue,
-	getRadioLabelClassName,
-	getRadioOptionClassName,
-	iconComponent: IconComponent,
-	getIconComponentClassName
-}) => {
-	const parentRef = React.useRef();
-	console.log(parentRef);
+const CustomRadioGroup = React.memo(
+	({
+		options,
+		value,
+		onChange,
+		displayName,
+		noOptionsAvailableMessage,
+		disabled,
+		showRadioButtonOnTheLeft,
+		addSpaceBetweenLabelAndRadioButton,
+		name,
+		defaultValue,
+		getRadioLabelClassName,
+		getRadioOptionClassName,
+		iconComponent: IconComponent,
+		getIconComponentClassName
+	}) => {
+		const optionsRef = React.useRef();
 
-	// const rowVirtualizer = useVirtualizer({
-	// 	count: options?.length ?? 0,
-	// 	getScrollElement: () => parentRef.current,
-	// 	estimateSize: () => 35,
-	// 	overscan: 5
-	// });
+		const rowVirtualizer = useVirtualizer({
+			count: options?.length ?? 0,
+			getScrollElement: () => optionsRef.current,
+			estimateSize: React.useCallback(() => 35, []),
+			overscan: 5
+		});
 
-	return (
-		<div className='w-full'>
-			<div className='mx-auto w-full'>
-				{(options?.length ?? 0) === 0 && (
-					<p className='relative cursor-default select-none py-2 text-gray-700'>
-						{noOptionsAvailableMessage}
-					</p>
-				)}
+		return (
+			<div className='w-full'>
+				<div className='mx-auto w-full' ref={optionsRef}>
+					{rowVirtualizer.getVirtualItems().length === 0 && (
+						<p className='relative cursor-default select-none py-2 text-gray-700'>
+							{noOptionsAvailableMessage}
+						</p>
+					)}
 
-				{(options?.length ?? 0) > 0 && (
-					<RadioGroup
-						ref={parentRef}
-						// Used when using the "uncontrolled" component ie using your own form management solution with state ()
-						value={value}
-						onChange={(newValue) => {
-							if (onChange) {
-								onChange({ value: newValue });
-							}
-						}}
-						// Used when using the "controlled" component ie using the native html form formData object
-						name={name}
-						defaultValue={defaultValue}
-						// Other general properties made available to the component
-						disabled={disabled}
-					>
-						<div className='space-y-2'>
-							{options.map((option) => (
-								<RadioGroup.Option
-									key={option.id}
-									value={option.value}
-									className={({ checked, active }) => {
-										// If the getRadioOptionClassName function is passed used the value returned from that otherwise use the default
-										if (getRadioOptionClassName) {
-											return getRadioOptionClassName({
-												isChecked: checked,
-												isActive: active,
-												isDisabled: disabled
-											});
-										}
+					{rowVirtualizer.getVirtualItems().length > 0 && (
+						<div
+							style={{
+								height: `${rowVirtualizer.getTotalSize()}px`,
+								width: '100%',
+								position: 'relative'
+							}}
+						>
+							<RadioGroup
+								// Used when using the "uncontrolled" component ie using your own form management solution with state ()
+								value={value}
+								onChange={(newValue) => {
+									if (onChange) {
+										onChange({ value: newValue });
+									}
+								}}
+								// Used when using the "controlled" component ie using the native html form formData object
+								name={name}
+								defaultValue={defaultValue}
+								// Other general properties made available to the component
+								disabled={disabled}
+							>
+								{rowVirtualizer.getVirtualItems().map((virtualRow) => {
+									const option = options[virtualRow.index];
 
-										// If the getRadioOptionClassName wasn't passed just use the default classNames for the option
-										return classNames(
-											' relative flex cursor-pointer rounded-lg border border-solid border-gray-300 px-5 py-4 shadow-md focus:outline-none',
-											{
-												'ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300':
-													active === true,
-												'bg-sky-900/75 text-white': checked === true,
-												'bg-white': checked === false,
-												'cursor-not-allowed': disabled === true
-											}
-										);
-									}}
-									disabled={option.disabled}
-								>
-									{({ checked }) => {
-										let generatedIconClassName = classNames('fa-regular', {
-											'text-white': checked === true,
-											'text-gray-300': checked === false,
-											'fa-circle-dot': checked === true,
-											'fa-circle': checked === false
-										});
+									return (
+										<div key={option.id}>
+											<RadioGroup.Option
+												ref={virtualRow.measureElement}
+												value={option.value}
+												className={({ checked, active }) => {
+													// If the getRadioOptionClassName function is passed used the value returned from that otherwise use the default
+													if (getRadioOptionClassName) {
+														return getRadioOptionClassName({
+															isChecked: checked,
+															isActive: active,
+															isDisabled: disabled
+														});
+													}
 
-										if (getIconComponentClassName) {
-											generatedIconClassName = getIconComponentClassName({
-												isChecked: checked,
-												option,
-												isRadioGroupDisabled: disabled
-											});
-										}
-
-										return (
-											<div
-												className={classNames('flex w-full items-center', {
-													'justify-between': addSpaceBetweenLabelAndRadioButton === true
-												})}
+													// If the getRadioOptionClassName wasn't passed just use the default classNames for the option
+													return classNames(
+														'relative flex cursor-pointer rounded-lg border border-solid border-gray-300 px-5 py-4 shadow-md focus:outline-none',
+														{
+															'ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300':
+																active === true,
+															'bg-sky-900/75 text-white': checked === true,
+															'bg-white': checked === false,
+															'cursor-not-allowed': disabled === true
+														}
+													);
+												}}
+												disabled={option.disabled}
+												style={{
+													position: 'absolute',
+													top: 0,
+													left: 0,
+													width: '100%',
+													transform: `translateY(${virtualRow.start}px)`
+												}}
 											>
-												{showRadioButtonOnTheLeft === true && (
-													<span className='mr-3'>
-														<IconComponent
-															isChecked={checked}
-															option={option}
-															className={generatedIconClassName}
-														/>
-													</span>
-												)}
+												{({ checked }) => {
+													let generatedIconClassName = classNames('fa-regular', {
+														'text-white': checked === true,
+														'text-gray-300': checked === false,
+														'fa-circle-dot': checked === true,
+														'fa-circle': checked === false
+													});
 
-												<div className='flex items-center'>
-													<div className='text-sm'>
-														<RadioGroup.Label
-															as='p'
-															className={() => {
-																// If the getRadioLabelClassName function is passed used the value returned from that otherwise use the default
-																if (getRadioLabelClassName) {
-																	return getRadioLabelClassName({ isChecked: checked });
-																}
+													if (getIconComponentClassName) {
+														generatedIconClassName = getIconComponentClassName({
+															isChecked: checked,
+															option,
+															isRadioGroupDisabled: disabled
+														});
+													}
 
-																// If the getRadioLabelClassName wasn't passed just use the default classNames for the option label
-																return classNames('font-medium', {
-																	'text-white': checked === true,
-																	'text-gray-900': checked === false
-																});
-															}}
+													return (
+														<div
+															className={classNames('flex w-full items-center', {
+																'justify-between': addSpaceBetweenLabelAndRadioButton === true
+															})}
 														>
-															{option[displayName]}
-														</RadioGroup.Label>
-													</div>
-												</div>
+															{showRadioButtonOnTheLeft === true && (
+																<CountryFlag countryCode={option?.value ?? ''} />
+															)}
 
-												{showRadioButtonOnTheLeft === false && (
-													<span className='ml-3'>
-														<IconComponent
-															isChecked={checked}
-															option={option}
-															className={generatedIconClassName}
-														/>
-													</span>
-												)}
-											</div>
-										);
-									}}
-								</RadioGroup.Option>
-							))}
+															<div className='flex items-center'>
+																<div className='text-sm'>
+																	<RadioGroup.Label
+																		as='p'
+																		className={() => {
+																			// If the getRadioLabelClassName function is passed used the value returned from that otherwise use the default
+																			if (getRadioLabelClassName) {
+																				return getRadioLabelClassName({ isChecked: checked });
+																			}
+
+																			// If the getRadioLabelClassName wasn't passed just use the default classNames for the option label
+																			return classNames('font-medium', {
+																				'text-white': checked === true,
+																				'text-gray-900': checked === false
+																			});
+																		}}
+																	>
+																		{option[displayName]}
+																	</RadioGroup.Label>
+																</div>
+															</div>
+
+															{showRadioButtonOnTheLeft === false && (
+																<span className='ml-3'>
+																	<IconComponent
+																		isChecked={checked}
+																		option={option}
+																		className={generatedIconClassName}
+																	/>
+																</span>
+															)}
+														</div>
+													);
+												}}
+											</RadioGroup.Option>
+										</div>
+									);
+								})}
+							</RadioGroup>
 						</div>
-					</RadioGroup>
-				)}
+					)}
+				</div>
 			</div>
-		</div>
-	);
-};
+		);
+	}
+);
 
 CustomRadioGroup.propTypes = {
 	// These are our controlled properties, these values are used to control the value manually via some state

@@ -27,7 +27,7 @@ const ReleaseRegionPopup = ({ value }) => {
 
 			<div className='m-3 h-[232px] overflow-y-scroll'>
 				<RadioGroup
-					options={[settings.COUNTRY_OPTIONS[0], settings.COUNTRY_OPTIONS[1]]}
+					options={settings.COUNTRY_OPTIONS}
 					displayName='label'
 					iconComponent={CustomIcon}
 					name='country'
@@ -48,7 +48,7 @@ ReleaseRegionPopup.propTypes = {
 };
 
 ReleaseRegionPopup.defaultProps = {
-	value: []
+	value: ''
 };
 
 export default ReleaseRegionPopup;

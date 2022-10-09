@@ -4,6 +4,7 @@ import * as React from 'react';
 import RadioGroups from './RadioGroup';
 import CountryFlag from '../../CountryFlag/CountryFlag';
 import Settings from '../../../settings';
+import settings from '../../../settings';
 
 const ControlledStoryTemplate = (args) => {
 	const { defaultValue = '', ...reset } = args;
@@ -47,6 +48,13 @@ const DefaultStoryArgs = {
 export const DefaultRadioGroups = UncontrolledStoryTemplate.bind({});
 DefaultRadioGroups.args = {
 	...DefaultStoryArgs
+};
+
+export const CountriesExample = UncontrolledStoryTemplate.bind({});
+CountriesExample.args = {
+	...DefaultStoryArgs,
+	options: settings.COUNTRY_OPTIONS,
+	displayName: 'label'
 };
 
 export const UncontrolledRadioGroup = UncontrolledStoryTemplate.bind({});
