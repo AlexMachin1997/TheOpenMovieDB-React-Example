@@ -7,7 +7,7 @@ import { usePopper } from 'react-popper';
 import classNames from 'classnames';
 import Settings from '../../../../settings';
 
-import { Accordion, CheckboxGroup, Icon, Listbox, RadioGroup } from '../../../Core';
+import { Accordion, CheckboxGroup, DatePicker, Icon, Listbox, RadioGroup } from '../../../Core';
 import CountryFlag from '../../../CountryFlag/CountryFlag';
 
 const Filters = () => {
@@ -88,13 +88,15 @@ const Filters = () => {
 						})
 					}
 					getRadioLabelClassName={() => 'text-black'}
-					getIconClassName={({ isChecked }) =>
-						classNames('fa-regular fa-lg mr-2', {
-							'fa-circle-dot': isChecked === true,
-							'fa-circle': isChecked === false,
-							'text-secondary': isChecked === true,
-							'text-gray-300': isChecked === false
-						})
+					getIconComponentClassName={({ isChecked, className }) =>
+						classNames(
+							'fa-lg mr-2 align-[-0.15rem]',
+							{
+								'text-secondary': isChecked === true,
+								'text-gray-300': isChecked === false
+							},
+							className
+						)
 					}
 					defaultValue={undefined}
 				/>
@@ -130,6 +132,35 @@ const Filters = () => {
 					name='with_release_type'
 					defaultValue={undefined}
 				/>
+			</div>
+
+			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+				{/* Dropdown label */}
+				<span className='mb-2 block font-light'>Release Dates</span>
+
+				{/* DatePicker component's */}
+				<div className='space-y-2'>
+					<DatePicker
+						label='From'
+						isRow
+						id='release_date.gte'
+						onChange={(event) => {
+							setFieldValue("['release_date.gte']", event.target.value);
+						}}
+						value={values['release_date.gte']}
+						name='release_date.gte'
+					/>
+					<DatePicker
+						label='To'
+						isRow
+						id='release_date.lte'
+						onChange={(event) => {
+							setFieldValue("['release_date.lte']", event.target.value);
+						}}
+						value={values['release_date.lte']}
+						name='release_date.lte'
+					/>
+				</div>
 			</div>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>

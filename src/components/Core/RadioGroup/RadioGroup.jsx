@@ -76,20 +76,26 @@ const CustomRadioGroup = React.memo(
 									disabled={option.disabled}
 								>
 									{({ checked }) => {
-										let generatedIconClassName = classNames('fa-regular', {
-											'text-white': checked === true,
-											'text-gray-300': checked === false,
-											'fa-circle-dot': checked === true,
-											'fa-circle': checked === false
-										});
+										let classNameOverride = '';
 
-										if (getIconComponentClassName) {
-											generatedIconClassName = getIconComponentClassName({
+										if (typeof getIconComponentClassName === 'function') {
+											classNameOverride = getIconComponentClassName({
 												isChecked: checked,
 												option,
 												isRadioGroupDisabled: disabled
 											});
 										}
+
+										const generatedIconClassName = classNames(
+											'fa-regular',
+											{
+												'text-white': checked === true,
+												'text-gray-300': checked === false,
+												'fa-circle-dot': checked === true,
+												'fa-circle': checked === false
+											},
+											classNameOverride
+										);
 
 										return (
 											<div

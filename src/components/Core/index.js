@@ -12,3 +12,4 @@ export { default as Combobox } from './Combobox/Combobox';
 export { default as RadioGroup } from './RadioGroup/RadioGroup';
 export { default as CheckboxGroup } from './CheckboxGroup';
 export { default as Accordion } from './Accordion/Accordion';
+export { default as DatePicker } from './DatePicker/DatePicker';

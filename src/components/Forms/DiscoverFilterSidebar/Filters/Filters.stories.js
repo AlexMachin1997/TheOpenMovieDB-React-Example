@@ -12,7 +12,9 @@ const ControlledStoryTemplate = () => (
 			with_genres: ['28'],
 			certification: ['NR'],
 			with_release_type: ['all'],
-			with_original_language: []
+			with_original_language: [],
+			'release_date.lte': '',
+			'release_date.gte': ''
 		}}
 		enableReinitialize
 	>
