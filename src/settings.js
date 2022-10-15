@@ -2274,7 +2274,7 @@ const COUNTRIES_OPTIONS = [
 ].map((country) => ({
 	...country,
 	value: country.iso_3166_1,
-	label: country.english_name,
+	label: `${country.english_name} (${country.iso_3166_1})`,
 	id: `${country.iso_3166_1} - ${country.english_name}`
 }));
 

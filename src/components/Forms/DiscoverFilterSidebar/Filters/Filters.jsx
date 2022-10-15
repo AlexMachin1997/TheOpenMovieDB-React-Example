@@ -1,33 +1,14 @@
 import * as React from 'react';
 
 import { useFormikContext } from 'formik';
-import { Popover } from '@headlessui/react';
-import { usePopper } from 'react-popper';
 
 import classNames from 'classnames';
 import Settings from '../../../../settings';
 
-import { Accordion, CheckboxGroup, DatePicker, Icon, Listbox, RadioGroup } from '../../../Core';
-import CountryFlag from '../../../CountryFlag/CountryFlag';
+import { Accordion, CheckboxGroup, DatePicker, Listbox, RadioGroup } from '../../../Core';
 
 const Filters = () => {
 	const { values, setFieldValue } = useFormikContext();
-
-	const [referenceElement, setReferenceElement] = React.useState();
-	const [popperElement, setPopperElement] = React.useState();
-
-	const [searchTerm, setSearchTerm] = React.useState('');
-
-	const { styles, attributes } = usePopper(referenceElement, popperElement, {
-		modifiers: [
-			{
-				name: 'flip',
-				options: {
-					fallbackPlacements: ['top', 'bottom'] // Flip between top and bottom, depends on how much space is available
-				}
-			}
-		]
-	});
 
 	const onChangeCheckboxGroup = ({
 		idOfTheCheckboxElement = '',
@@ -165,30 +146,24 @@ const Filters = () => {
 
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
 				{/* Dropdown label */}
-				<span className='mb-2 block font-light'>Release Region</span>
+				<label htmlFor='with_original_language' className='mb-2 block font-light'>
+					Release Region
+				</label>
 
-				{/* Dropdown component */}
-				<Popover>
-					<Popover.Button ref={setReferenceElement}>
-						<div className='flex items-center'>
-							<CountryFlag countryCode='GB' className='mr-2' />
-							{Settings.COUNTRY_OPTIONS.find((el) => el.value === 'GB').english_name}
-						</div>
-					</Popover.Button>
-
-					<Popover.Panel ref={setPopperElement} style={styles.popper} {...attributes.popper}>
-						<div className='border border-solid border-gray-400 bg-white'>
-							<div className='m-4 border border-solid border-gray-300 p-1'>
-								<input
-									type='text'
-									value={searchTerm}
-									onChange={(e) => setSearchTerm(e.target.value)}
-								/>
-								<Icon className='fa-solid fa-magnifying-glass' />
-							</div>
-						</div>
-					</Popover.Panel>
-				</Popover>
+				<Listbox
+					options={Settings.COUNTRY_OPTIONS}
+					value={values.with_original_language}
+					onChange={({ value }) => {
+						setFieldValue('with_original_language', value);
+					}}
+					isMulti={false}
+					displayName='label'
+					name='with_original_language'
+					defaultValue={undefined}
+					disabled={false}
+					displayLimit={3}
+					noOptionsAvailableMessage='No countries available to choose from'
+				/>
 			</div>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
@@ -258,27 +233,6 @@ const Filters = () => {
 					value={values.certification}
 					onChange={({ value }) => {
 						setFieldValue('certification', value);
-					}}
-					options={Settings.CERTIFICATION_OPTIONS}
-					isMulti
-					displayName='label'
-					name='certification'
-					defaultValue={undefined}
-					disabled={false}
-					noOptionsAvailableMessage='No certification options available.'
-				/>
-			</label>
-
-			<label
-				htmlFor='with_original_language'
-				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
-			>
-				<span className='mb-2 block font-light'>Certification</span>
-
-				<Listbox
-					value={values.with_original_language}
-					onChange={({ value }) => {
-						setFieldValue('with_original_language', value);
 					}}
 					options={Settings.CERTIFICATION_OPTIONS}
 					isMulti
