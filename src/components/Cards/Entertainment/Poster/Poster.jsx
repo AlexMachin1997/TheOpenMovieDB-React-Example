@@ -28,7 +28,7 @@ const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 			height='300px'
 			alt={replacesSpacesWith(title, '-')}
 			src={image}
-			className='max-w-[200px] rounded-t-2xl'
+			className='aspect-square max-w-[200px] rounded-t-2xl'
 		/>
 
 		<div

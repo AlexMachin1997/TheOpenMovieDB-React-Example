@@ -17,8 +17,13 @@ const ControlledStoryTemplate = () => (
 			with_original_language: 'GB'
 		}}
 		enableReinitialize
+		style={{
+			maxWidth: '300px'
+		}}
 	>
-		<Filters />
+		<div style={{ maxWidth: '300px' }}>
+			<Filters />
+		</div>
 	</Formik>
 );
 

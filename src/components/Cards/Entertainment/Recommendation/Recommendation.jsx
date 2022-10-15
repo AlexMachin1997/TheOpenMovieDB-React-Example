@@ -31,7 +31,7 @@ const Recommendation = ({ title, releaseDate, image, rating, onClick, onKeyDown 
 				height='100%'
 				alt={replacesSpacesWith(title, '-')}
 				src={image}
-				className='rounded-t-2xl'
+				className='aspect-square rounded-t-2xl'
 			/>
 			<div className='align-center invisible absolute bottom-0 left-0 flex w-full bg-white p-2 opacity-90 group-hover:visible'>
 				<Icon className='fa-solid fa-calendar-days mr-2 text-base' />

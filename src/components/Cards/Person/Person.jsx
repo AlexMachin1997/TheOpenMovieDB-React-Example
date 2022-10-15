@@ -25,7 +25,7 @@ const Person = ({ name, image, knownFor, onKeyDown, onClick }) => (
 			}
 		}}
 	>
-		<Image width='100%' height='100%' alt={name} src={image} />
+		<Image width='100%' height='100%' alt={name} src={image} className='aspect-square' />
 		<div
 			className='p-1 shadow-xl shadow-gray-200'
 			id={generateComponentId(name, 'person-card-content-container')}

@@ -27,7 +27,7 @@ const Overview = ({ image, title, overview, releaseDate, onClick, rating, onKeyD
 			alt={replacesSpacesWith(title, '-')}
 			src={image}
 			label={`${title}-poster`}
-			className='max-w-none rounded-2xl'
+			className='aspect-square max-w-none rounded-2xl'
 		/>
 
 		<div className='flex flex-col justify-center p-4'>

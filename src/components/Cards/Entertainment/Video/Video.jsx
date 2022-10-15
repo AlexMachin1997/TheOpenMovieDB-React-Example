@@ -35,7 +35,7 @@ const Video = ({ title, overview, thumbnail, thumbnailAction }) => (
 				height='100%'
 				alt={replacesSpacesWith(title, '-')}
 				src={thumbnail}
-				className='group-hover:scale-105'
+				className='aspect-video group-hover:scale-105'
 			/>
 			<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
 				<Icon className={className('fa-solid fa-play text-3xl group-hover:text-5xl')} />
