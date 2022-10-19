@@ -23,7 +23,7 @@ const DatePicker = ({ label, id, isRow, ...props }) => (
 DatePicker.propTypes = {
 	label: PropTypes.string.isRequired,
 	id: PropTypes.string.isRequired,
-	isRow: PropTypes.string
+	isRow: PropTypes.bool
 };
 
 DatePicker.defaultProps = {

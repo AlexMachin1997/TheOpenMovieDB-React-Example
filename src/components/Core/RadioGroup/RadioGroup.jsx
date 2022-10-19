@@ -175,7 +175,7 @@ CustomRadioGroup.propTypes = {
 	addSpaceBetweenLabelAndRadioButton: PropTypes.bool,
 	getRadioLabelClassName: PropTypes.func,
 	getRadioOptionClassName: PropTypes.func,
-	iconComponent: PropTypes.node,
+	iconComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.elementType]),
 	getIconComponentClassName: PropTypes.func
 };
 
