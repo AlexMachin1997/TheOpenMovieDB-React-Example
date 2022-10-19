@@ -1,11 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-
 import { useVirtualizer } from '@tanstack/react-virtual';
+import classNames from 'classnames';
+import { usePopper } from 'react-popper';
 
 import { Combobox, Transition } from '@headlessui/react';
 
-import classNames from 'classnames';
 import Icon from '../Icon/Icon';
 
 const VirtualizedList = React.memo(
@@ -30,10 +30,7 @@ const VirtualizedList = React.memo(
 		});
 
 		return (
-			<div
-				className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
-				ref={optionsRef}
-			>
+			<div ref={optionsRef}>
 				{/* When there are no options and the query is empty */}
 				{rowVirtualizer.getVirtualItems().length === 0 && query === '' && (
 					<Combobox.Option
@@ -158,6 +155,49 @@ const CustomCombobox = ({
 	// Stores the current search term applied to the Combobox
 	const [query, setQuery] = React.useState(defaultQuery);
 
+	const [referenceElement, setReferenceElement] = React.useState();
+	const [popperElement, setPopperElement] = React.useState();
+
+	// Used to calculate the offset for the usePopper hook which provides the menu placement functionality, used to switch between top or bottom for the menu
+	const offset = React.useCallback(() => {
+		// Skidding reference: https://popper.js.org/docs/v2/modifiers/offset/#skidding-1
+		const skidding = 0;
+
+		// Distance reference: https://popper.js.org/docs/v2/modifiers/offset/#distance-1
+		// When using multiple make sure to use slightly increased distance to account for the custom output otherwise default to 25 distance
+		const distance = 10;
+
+		// When the placement is anything else ie top set the distance to 25
+		return [skidding, distance];
+	}, []);
+
+	// Used to place the menu either on the top or bottom of the Listbox button
+	const { styles, attributes } = usePopper(referenceElement, popperElement, {
+		modifiers: [
+			{
+				name: 'flip',
+				options: {
+					// Switch between top and bottom for the position of the element
+					fallbackPlacements: ['top', 'bottom']
+				}
+			},
+			{
+				name: 'offset',
+				options: {
+					// Calculate the offset for the popper, comes down to current placement and if the dropdown is multi-select or not
+					offset
+				}
+			},
+			{
+				name: 'computeStyles',
+				options: {
+					// By setting gpuAcceleration to false Popper will use top/left properties with the position: absolute and not transform translate3d
+					gpuAcceleration: false // true by default
+				}
+			}
+		]
+	});
+
 	// Filter the options based on the current search term.
 	const filteredOptions = React.useMemo(() => {
 		// When there is no query available ie when the component loads just return the options
@@ -251,7 +291,7 @@ const CustomCombobox = ({
 							setQuery(event.target.value);
 						}}
 					/>
-					<Combobox.Button className='p-2' aria-hidden='true'>
+					<Combobox.Button className='p-2' aria-hidden='true' ref={setReferenceElement}>
 						<Icon className='fa-solid fa-arrows-up-down w-5 text-gray-400' />
 					</Combobox.Button>
 				</div>
@@ -263,6 +303,20 @@ const CustomCombobox = ({
 				>
 					<Combobox.Options
 						aria-label={`A ${isMulti === true ? 'multiple' : 'single'} dropdown for ${name}`}
+						className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+						ref={setPopperElement}
+						style={{
+							// Apply the pre-generated styling from popper.js usePopper hook
+							...styles.popper,
+
+							// A hack to make the tooltip not too far to the right,
+							// TODO: Figure out the Popper way to do this, there must be a way to achieve this without this hack.
+							left: 0,
+
+							// Add margin 0 to prevent 'Popper: CSS "margin" styles cannot be used to apply padding between the popper and its reference element or boundary. To replicate margin, use the `offset` modifier, as well as the `padding` option in the `preventOverflow` and `flip` modifiers. from showing in the console warning
+							margin: 0
+						}}
+						{...attributes.popper}
 					>
 						<VirtualizedList
 							options={filteredOptions}

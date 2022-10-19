@@ -22,8 +22,6 @@ const ControlledStoryTemplate = (args) => {
 		return defaultValue;
 	});
 
-	console.log(value);
-
 	// Store the current dropdown options in state, this is so we can update them when canAddCustomItems is true
 	const [remoteOptions, setRemoteOptions] = React.useState(options);
 
