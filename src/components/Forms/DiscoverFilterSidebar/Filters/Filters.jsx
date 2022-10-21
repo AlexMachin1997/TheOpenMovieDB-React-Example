@@ -323,6 +323,29 @@ const Filters = () => {
 					labelClassName='mb-2 block font-light'
 				/>
 			</div>
+
+			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+				{/* An input component, this allows you to specify the Minimum User Votes. This handles component and label output. */}
+				<Input
+					type='number'
+					min={0}
+					max={500}
+					step={50}
+					inputMode='numeric'
+					name='vote_count.gte'
+					onChange={(event) => {
+						// Get the value as a number
+						const value = event.target.valueAsNumber;
+
+						// Update this input's value
+						setFieldValue("['vote_count.gte']", value);
+					}}
+					value={values['vote_count.gte']}
+					id='vote_count.gte'
+					label='Minimum User Votes'
+					labelClassName='mb-2 block font-light'
+				/>
+			</div>
 		</Accordion>
 	);
 };

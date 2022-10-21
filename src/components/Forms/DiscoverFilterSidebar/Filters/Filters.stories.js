@@ -17,7 +17,8 @@ const ControlledStoryTemplate = () => (
 			with_original_language: 'none',
 			region: 'US',
 			'vote_average.gte': 0,
-			'vote_average.lte': 10
+			'vote_average.lte': 10,
+			'vote_count.gte': 500
 		}}
 		enableReinitialize
 		style={{
