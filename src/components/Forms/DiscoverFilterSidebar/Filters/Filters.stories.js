@@ -15,7 +15,9 @@ const ControlledStoryTemplate = () => (
 			'release_date.lte': '',
 			'release_date.gte': '',
 			with_original_language: 'none',
-			region: 'US'
+			region: 'US',
+			'vote_average.gte': 0,
+			'vote_average.lte': 10
 		}}
 		enableReinitialize
 		style={{

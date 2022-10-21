@@ -82,7 +82,6 @@ const Filters = () => {
 					defaultValue={undefined}
 				/>
 			</label>
-
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
 				{/* label, not actually a label as the Checkbox options have individual labels */}
 				<span className='mb-2 block font-light'>Release Types</span>
@@ -114,7 +113,6 @@ const Filters = () => {
 					defaultValue={undefined}
 				/>
 			</div>
-
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
 				{/* Label, not actually a label as the input has it's own individual input */}
 				<span className='mb-2 block font-light'>Release Dates</span>
@@ -147,7 +145,6 @@ const Filters = () => {
 					/>
 				</div>
 			</div>
-
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
 				{/* Label, is actually a label as the Listbox doesn't have one */}
 				<label htmlFor='region' className='mb-2 block font-light'>
@@ -170,7 +167,6 @@ const Filters = () => {
 					noOptionsAvailableMessage='No countries available to choose from'
 				/>
 			</div>
-
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
 				{/* label, not actually a label as the Checkbox options have individual labels */}
 				<span className='mb-2 block font-light'>Availabilities</span>
@@ -202,7 +198,6 @@ const Filters = () => {
 					defaultValue={undefined}
 				/>
 			</div>
-
 			<label
 				htmlFor='with_genres'
 				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
@@ -226,7 +221,6 @@ const Filters = () => {
 					displayLimit={2}
 				/>
 			</label>
-
 			<label
 				htmlFor='certification'
 				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
@@ -250,7 +244,6 @@ const Filters = () => {
 					displayLimit={2}
 				/>
 			</label>
-
 			<label
 				htmlFor='with_original_language'
 				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
@@ -273,6 +266,63 @@ const Filters = () => {
 					noOptionsAvailableMessage='No languages available'
 				/>
 			</label>
+
+			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+				{/* Label, not actually a label as the input has it's own individual input */}
+				<span className='mb-2 block font-light'>Vote average range</span>
+
+				{/* An input component, this allows you to specify the minimum vote average score. This handles component and label output. */}
+				<Input
+					type='number'
+					min={0}
+					max={values['vote_average.lte']} // The minimum score can't go above the maximum score
+					step={1}
+					inputMode='numeric'
+					name='vote_average.gte'
+					onChange={(event) => {
+						// Get the value as a number
+						const value = event.target.valueAsNumber;
+
+						// If the minimum score value is greater than the incoming value from vote_average.lte input set the vote_average.gte to the incoming number
+						if (values['vote_average.lte'] < value) {
+							setFieldValue("['vote_average.lte']", value);
+						}
+
+						// Update this input's value
+						setFieldValue("['vote_average.gte']", value);
+					}}
+					value={values['vote_average.gte']}
+					id='vote_average.gte'
+					label='Minimum Score'
+					labelClassName='mb-2 block font-light'
+				/>
+
+				{/* An input component, this allows you to specify the maximum vote average score. This handles component and label output. */}
+				<Input
+					type='number'
+					min={0}
+					max={10}
+					step={1}
+					inputMode='numeric'
+					name='vote_average.lte'
+					onChange={(event) => {
+						// Get the value as a number
+						const value = event.target.valueAsNumber;
+
+						// If the minimum score value is greater than the incoming value from vote_average.lte input set the vote_average.gte to the incoming number
+						if (values['vote_average.gte'] > value) {
+							setFieldValue("['vote_average.gte']", value);
+						}
+
+						// Update this input's value
+						setFieldValue("['vote_average.lte']", value);
+					}}
+					value={values['vote_average.lte']}
+					id='vote_average.lte'
+					label='Maximum Score'
+					labelClassName='mb-2 block font-light'
+				/>
+			</div>
 		</Accordion>
 	);
 };
