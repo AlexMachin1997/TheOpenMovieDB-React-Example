@@ -14,7 +14,8 @@ const ControlledStoryTemplate = () => (
 			with_release_type: ['all'],
 			'release_date.lte': '',
 			'release_date.gte': '',
-			with_original_language: 'GB'
+			with_original_language: 'none',
+			region: 'US'
 		}}
 		enableReinitialize
 		style={{

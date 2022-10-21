@@ -220,6 +220,10 @@ const CustomListbox = ({
 							aria-label={`A ${isMulti === true ? 'multiple' : 'single'} dropdown for ${name}`}
 							className='absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
 							ref={setPopperElement}
+							onKeyDown={(event) => {
+								// When you type to find an option stop other event's fro occurring e.g. In Storybook certain keys trigger page actions, we don't want this.
+								event.stopPropagation();
+							}}
 							style={{
 								// Apply the pre-generated styling from popper.js usePopper hook
 								...styles.popper,

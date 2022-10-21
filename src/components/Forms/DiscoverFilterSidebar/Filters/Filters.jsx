@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik';
 import classNames from 'classnames';
 import Settings from '../../../../settings';
 
-import { Accordion, CheckboxGroup, DatePicker, Listbox, RadioGroup } from '../../../Core';
+import { Accordion, CheckboxGroup, Listbox, RadioGroup, Input } from '../../../Core';
 
 const Filters = () => {
 	const { values, setFieldValue } = useFormikContext();
@@ -47,10 +47,10 @@ const Filters = () => {
 	return (
 		<Accordion title={<h3 className='text-lg text-black'>Filters</h3>}>
 			<label htmlFor='show_me' className='block border-b-[1px] border-solid border-gray-300 pb-3'>
-				{/* Dropdown label */}
+				{/* label, is actually a label as the RadioGroup doesn't have a label */}
 				<span className='mb-2 block font-light'>Show Me</span>
 
-				{/* Dropdown component */}
+				{/* Radio group options, this allows you to select one of the "Show me" options which are used for the "Show me" filter */}
 				<RadioGroup
 					options={Settings.SHOW_ME_RADIO_OPTIONS}
 					value={values.show_me}
@@ -84,10 +84,10 @@ const Filters = () => {
 			</label>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
-				{/* Dropdown label */}
+				{/* label, not actually a label as the Checkbox options have individual labels */}
 				<span className='mb-2 block font-light'>Release Types</span>
 
-				{/* Dropdown component */}
+				{/* Checkbox group options, this allows you select multiple release types which are used for the "Release Types" filter */}
 				<CheckboxGroup
 					options={
 						values.with_release_type.includes('all') === true
@@ -116,14 +116,16 @@ const Filters = () => {
 			</div>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
-				{/* Dropdown label */}
+				{/* Label, not actually a label as the input has it's own individual input */}
 				<span className='mb-2 block font-light'>Release Dates</span>
 
-				{/* DatePicker component's */}
+				{/* Date picker's, uses the native html5 date picker's no custom solution needed */}
 				<div className='space-y-2'>
-					<DatePicker
+					<Input
+						type='date'
 						label='From'
-						isRow
+						containerClassName='flex items-center'
+						labelClassName='w-[100px] text-black'
 						id='release_date.gte'
 						onChange={(event) => {
 							setFieldValue("['release_date.gte']", event.target.value);
@@ -131,9 +133,11 @@ const Filters = () => {
 						value={values['release_date.gte']}
 						name='release_date.gte'
 					/>
-					<DatePicker
-						label='To'
-						isRow
+					<Input
+						type='date'
+						label='From'
+						containerClassName='flex items-center'
+						labelClassName='w-[100px] text-black'
 						id='release_date.lte'
 						onChange={(event) => {
 							setFieldValue("['release_date.lte']", event.target.value);
@@ -145,20 +149,21 @@ const Filters = () => {
 			</div>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
-				{/* Dropdown label */}
-				<label htmlFor='with_original_language' className='mb-2 block font-light'>
+				{/* Label, is actually a label as the Listbox doesn't have one */}
+				<label htmlFor='region' className='mb-2 block font-light'>
 					Release Region
 				</label>
 
+				{/* Dropdown component, this allows you to select a country which are used for the "Release Region" filter */}
 				<Listbox
 					options={Settings.COUNTRY_OPTIONS}
-					value={values.with_original_language}
+					value={values.region}
 					onChange={({ value }) => {
-						setFieldValue('with_original_language', value);
+						setFieldValue('region', value);
 					}}
 					isMulti={false}
 					displayName='label'
-					name='with_original_language'
+					name='region'
 					defaultValue={undefined}
 					disabled={false}
 					displayLimit={3}
@@ -167,10 +172,10 @@ const Filters = () => {
 			</div>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
-				{/* Dropdown label */}
+				{/* label, not actually a label as the Checkbox options have individual labels */}
 				<span className='mb-2 block font-light'>Availabilities</span>
 
-				{/* Dropdown component */}
+				{/* Checkbox group options, this allows you select multiple availabilities which are used for the "Availabilities" filter */}
 				<CheckboxGroup
 					options={
 						values.with_ott_monetization_types.includes('all') === true
@@ -202,10 +207,10 @@ const Filters = () => {
 				htmlFor='with_genres'
 				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
 			>
-				{/* Dropdown label */}
+				{/* Label, is actually a label as the Listbox doesn't have one */}
 				<span className='mb-2 block font-light'>Genres</span>
 
-				{/* Dropdown component */}
+				{/* Dropdown component, this allows you to select multiple genres which are used for the "Genres" filter */}
 				<Listbox
 					value={values.with_genres}
 					onChange={({ value }) => {
@@ -218,6 +223,7 @@ const Filters = () => {
 					defaultValue={undefined}
 					disabled={false}
 					noOptionsAvailableMessage='No genre options available.'
+					displayLimit={2}
 				/>
 			</label>
 
@@ -225,10 +231,10 @@ const Filters = () => {
 				htmlFor='certification'
 				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
 			>
-				{/* Dropdown label */}
+				{/* Label, is actually a label as the Listbox doesn't have one */}
 				<span className='mb-2 block font-light'>Certification</span>
 
-				{/* Dropdown component */}
+				{/* Dropdown component, this allows you to select multiple certifications which are used for the "Certification" filter */}
 				<Listbox
 					value={values.certification}
 					onChange={({ value }) => {
@@ -241,6 +247,30 @@ const Filters = () => {
 					defaultValue={undefined}
 					disabled={false}
 					noOptionsAvailableMessage='No certification options available.'
+					displayLimit={2}
+				/>
+			</label>
+
+			<label
+				htmlFor='with_original_language'
+				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
+			>
+				{/* Label, is actually a label as the Listbox doesn't have one */}
+				<span className='mb-2 block font-light'>Language</span>
+
+				{/* Dropdown component, this allows you to select a language which will be used for the "Language" filter */}
+				<Listbox
+					value={values.with_original_language}
+					onChange={({ value }) => {
+						setFieldValue('with_original_language', value);
+					}}
+					options={Settings.LANGUAGE_OPTIONS}
+					isMulti={false}
+					displayName='label'
+					name='with_original_language'
+					defaultValue={undefined}
+					disabled={false}
+					noOptionsAvailableMessage='No languages available'
 				/>
 			</label>
 		</Accordion>

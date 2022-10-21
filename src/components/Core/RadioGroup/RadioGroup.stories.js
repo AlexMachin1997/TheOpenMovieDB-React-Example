@@ -4,7 +4,6 @@ import * as React from 'react';
 import RadioGroups from './RadioGroup';
 import CountryFlag from '../../CountryFlag/CountryFlag';
 import Settings from '../../../settings';
-import settings from '../../../settings';
 
 const ControlledStoryTemplate = (args) => {
 	const { defaultValue = '', ...reset } = args;
@@ -53,7 +52,7 @@ DefaultRadioGroups.args = {
 export const CountriesExample = UncontrolledStoryTemplate.bind({});
 CountriesExample.args = {
 	...DefaultStoryArgs,
-	options: settings.COUNTRY_OPTIONS,
+	options: Settings.COUNTRY_OPTIONS,
 	displayName: 'label'
 };
 
@@ -256,7 +255,9 @@ FullyCustomStyledRadioGroup.args = {
 		})
 };
 
+// eslint-disable-next-line react/prop-types
 const CustomIcon = ({ option }) => (
+	// eslint-disable-next-line react/prop-types
 	<CountryFlag countryCode={option?.value ?? ''} className='mr-3' />
 );
 
