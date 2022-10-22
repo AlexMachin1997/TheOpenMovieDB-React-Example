@@ -1,13 +1,42 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 
 import { useFormikContext } from 'formik';
 
 import classNames from 'classnames';
 import Settings from '../../../../settings';
 
-import { Accordion, CheckboxGroup, Listbox, RadioGroup, Input } from '../../../Core';
+import { Accordion, CheckboxGroup, Listbox, RadioGroup, Input, Icon } from '../../../Core';
 
-const Filters = () => {
+const ShowMeFilterIcon = ({
+	isChecked,
+	isDisabled,
+	defaults: { checkedIcon, uncheckedIcon, iconFontFamily, disabledIconCursor, checkedIconColour }
+}) => (
+	<Icon
+		className={classNames(`fa-lg mr-2 align-[-0.15rem]`, {
+			// When the radio option is checked use the default checkedIon with a blue font colour
+			[`${checkedIcon} text-secondary`]: isChecked === true,
+
+			// When the radio option is not checked use the default uncheckIcon with the default checkedIconColour
+			[`${uncheckedIcon} ${checkedIconColour}`]: isChecked === false,
+
+			// When the Radio option or radio group is disabled use the default icon cursor with solid font-family
+			[`${disabledIconCursor} fa-solid`]: isDisabled === true,
+
+			// When the Radio option or radio group is not disabled use the default iconFontFamily
+			[`${iconFontFamily}`]: isDisabled === false
+		})}
+	/>
+);
+
+ShowMeFilterIcon.propTypes = {
+	isChecked: PropTypes.bool.isRequired,
+	isDisabled: PropTypes.bool.isRequired,
+	defaults: PropTypes.object.isRequired
+};
+
+const Filters = ({ isAuthenticated }) => {
 	const { values, setFieldValue } = useFormikContext();
 
 	const onChangeCheckboxGroup = ({
@@ -44,6 +73,21 @@ const Filters = () => {
 		return currentCheckboxValues;
 	};
 
+	const SHOW_ME_RADIO_OPTIONS = React.useMemo(() => {
+		if (isAuthenticated === true) return Settings.SHOW_ME_RADIO_OPTIONS;
+
+		return Settings.SHOW_ME_RADIO_OPTIONS?.map((d) => {
+			if (d.label !== 'Everything') {
+				return {
+					...d,
+					disabled: true
+				};
+			}
+
+			return { ...d, disabled: false };
+		});
+	}, [isAuthenticated]);
+
 	return (
 		<Accordion title={<h3 className='text-lg text-black'>Filters</h3>}>
 			<label htmlFor='show_me' className='block border-b-[1px] border-solid border-gray-300 pb-3'>
@@ -52,7 +96,7 @@ const Filters = () => {
 
 				{/* Radio group options, this allows you to select one of the "Show me" options which are used for the "Show me" filter */}
 				<RadioGroup
-					options={Settings.SHOW_ME_RADIO_OPTIONS}
+					options={SHOW_ME_RADIO_OPTIONS}
 					value={values.show_me}
 					onChange={({ value }) => {
 						setFieldValue('show_me', value);
@@ -68,17 +112,12 @@ const Filters = () => {
 							'ring-2 ring-black ring-opacity-60 ring-offset-2 ring-offset-black': isActive === true
 						})
 					}
-					getRadioLabelClassName={() => 'text-black'}
-					getIconComponentClassName={({ isChecked, className }) =>
-						classNames(
-							'fa-lg mr-2 align-[-0.15rem]',
-							{
-								'text-secondary': isChecked === true,
-								'text-gray-300': isChecked === false
-							},
-							className
-						)
+					getRadioLabelClassName={({ isDisabled }) =>
+						classNames('text-black', {
+							'cursor-not-allowed': isDisabled === true
+						})
 					}
+					iconComponent={ShowMeFilterIcon}
 					defaultValue={undefined}
 				/>
 			</label>
@@ -133,7 +172,7 @@ const Filters = () => {
 					/>
 					<Input
 						type='date'
-						label='From'
+						label='To'
 						containerClassName='flex items-center'
 						labelClassName='w-[100px] text-black'
 						id='release_date.lte'
@@ -293,8 +332,9 @@ const Filters = () => {
 					}}
 					value={values['vote_average.gte']}
 					id='vote_average.gte'
-					label='Minimum Score'
-					labelClassName='mb-2 block font-light'
+					label='Min'
+					labelClassName='mb-2 block font-light w-[100px] text-black'
+					containerClassName='flex items-center'
 				/>
 
 				{/* An input component, this allows you to specify the maximum vote average score. This handles component and label output. */}
@@ -319,8 +359,9 @@ const Filters = () => {
 					}}
 					value={values['vote_average.lte']}
 					id='vote_average.lte'
-					label='Maximum Score'
-					labelClassName='mb-2 block font-light'
+					label='Max'
+					labelClassName='mb-2 block font-light w-[100px] text-black'
+					containerClassName='flex items-center'
 				/>
 			</div>
 
@@ -342,12 +383,79 @@ const Filters = () => {
 					}}
 					value={values['vote_count.gte']}
 					id='vote_count.gte'
-					label='Minimum User Votes'
-					labelClassName='mb-2 block font-light'
+					label='Minimum User Score'
+					labelClassName='mb-2 block font-light text-black'
+				/>
+			</div>
+
+			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+				{/* Label, not actually a label as the input has it's own individual input */}
+				<span className='mb-2 block font-light'>Runtime</span>
+
+				{/* An input component, this allows you to specify the minimum runtime. This handles component and label output. */}
+				<Input
+					type='number'
+					min={0}
+					max={values['with_runtime.lte']} // The minimum score can't go above the maximum score
+					step={15}
+					inputMode='numeric'
+					name='with_runtime.gte'
+					onChange={(event) => {
+						// Get the value as a number
+						const value = event.target.valueAsNumber;
+
+						// If the minimum score value is greater than the incoming value from vote_average.lte input set the vote_average.gte to the incoming number
+						if (values['with_runtime.lte'] < value) {
+							setFieldValue("['with_runtime.lte']", value);
+						}
+
+						// Update this input's value
+						setFieldValue("['with_runtime.gte']", value);
+					}}
+					value={values['with_runtime.gte']}
+					id='with_runtime.gte'
+					label='Min'
+					labelClassName='mb-2 block font-light w-[100px] text-black'
+					containerClassName='flex items-center'
+				/>
+
+				{/* An input component, this allows you to specify the maximum runtime. This handles component and label output. */}
+				<Input
+					type='number'
+					min={0}
+					max={400}
+					step={15}
+					inputMode='numeric'
+					name='with_runtime.lte'
+					onChange={(event) => {
+						// Get the value as a number
+						const value = event.target.valueAsNumber;
+
+						// If the minimum score value is greater than the incoming value from vote_average.lte input set the vote_average.gte to the incoming number
+						if (values['with_runtime.gte'] > value) {
+							setFieldValue("['with_runtime.gte']", value);
+						}
+
+						// Update this input's value
+						setFieldValue("['with_runtime.lte']", value);
+					}}
+					value={values['with_runtime.lte']}
+					id='with_runtime.lte'
+					label='Max'
+					labelClassName='mb-2 block font-light w-[100px] text-black'
+					containerClassName='flex items-center'
 				/>
 			</div>
 		</Accordion>
 	);
+};
+
+Filters.propTypes = {
+	isAuthenticated: PropTypes.bool
+};
+
+Filters.defaultProps = {
+	isAuthenticated: false
 };
 
 export default Filters;

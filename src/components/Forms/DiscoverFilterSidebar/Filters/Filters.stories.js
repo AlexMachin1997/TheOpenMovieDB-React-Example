@@ -7,7 +7,7 @@ import Filters from './Filters';
 const ControlledStoryTemplate = () => (
 	<Formik
 		initialValues={{
-			show_me: '1',
+			show_me: '0',
 			with_ott_monetization_types: ['all'],
 			with_genres: ['28'],
 			certification: ['NR'],
@@ -18,12 +18,11 @@ const ControlledStoryTemplate = () => (
 			region: 'US',
 			'vote_average.gte': 0,
 			'vote_average.lte': 10,
-			'vote_count.gte': 500
+			'vote_count.gte': 500,
+			'with_runtime.gte': 0,
+			'with_runtime.lte': 400
 		}}
 		enableReinitialize
-		style={{
-			maxWidth: '300px'
-		}}
 	>
 		<div style={{ maxWidth: '300px' }}>
 			<Filters />

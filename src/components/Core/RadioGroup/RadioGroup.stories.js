@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import * as React from 'react';
 
 import RadioGroups from './RadioGroup';
@@ -222,37 +222,6 @@ AddSpaceBetweenLabelAndRadioButtonOnTheLeft.args = {
 	],
 	addSpaceBetweenLabelAndRadioButton: true,
 	showRadioButtonOnTheLeft: false
-};
-
-export const FullyCustomStyledRadioGroup = ControlledStoryTemplate.bind({});
-FullyCustomStyledRadioGroup.args = {
-	...DefaultStoryArgs,
-	defaultValue: '2',
-	options: [
-		{
-			name: 'Radio option 1',
-			id: 1,
-			value: '1'
-		},
-		{
-			name: 'Radio option 2',
-			id: 2,
-			value: '2'
-		},
-		{
-			name: 'Radio option 3',
-			id: 3,
-			value: '3'
-		}
-	],
-	getRadioOptionClassName: () =>
-		'cursor-pointer rounded-lg focus:outline-none bg-white relative flex',
-	getRadioLabelClassName: () => 'text-black',
-	getIconComponentClassName: ({ isChecked }) =>
-		classNames('fa-regular text-secondary', {
-			'fa-circle-dot': isChecked === true,
-			'fa-circle': isChecked === false
-		})
 };
 
 // eslint-disable-next-line react/prop-types
