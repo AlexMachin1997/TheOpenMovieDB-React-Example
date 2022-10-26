@@ -157,15 +157,19 @@ const CustomCombobox = ({
 
 	const [referenceElement, setReferenceElement] = React.useState();
 	const [popperElement, setPopperElement] = React.useState();
+	const containerRef = React.useRef();
 
 	// Used to calculate the offset for the usePopper hook which provides the menu placement functionality, used to switch between top or bottom for the menu
 	const offset = React.useCallback(() => {
+		// Get the height of the dropdown container (Used to determine how much distance should be applied to the offset)
+		const dropdownContainerHeight = containerRef?.current?.getBoundingClientRect()?.height ?? 0;
+
 		// Skidding reference: https://popper.js.org/docs/v2/modifiers/offset/#skidding-1
 		const skidding = 0;
 
 		// Distance reference: https://popper.js.org/docs/v2/modifiers/offset/#distance-1
 		// When using multiple make sure to use slightly increased distance to account for the custom output otherwise default to 25 distance
-		const distance = 10;
+		const distance = dropdownContainerHeight / 2;
 
 		// When the placement is anything else ie top set the distance to 25
 		return [skidding, distance];
@@ -283,7 +287,7 @@ const CustomCombobox = ({
 			multiple={isMulti}
 			disabled={disabled}
 		>
-			<div className='relative mt-1'>
+			<div className='relative mt-1' ref={containerRef}>
 				<div className='relative flex w-full cursor-default items-center rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
 					<Combobox.Input
 						className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0'

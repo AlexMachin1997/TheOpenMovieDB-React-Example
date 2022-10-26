@@ -13,3 +13,4 @@ export { default as RadioGroup } from './RadioGroup/RadioGroup';
 export { default as CheckboxGroup } from './CheckboxGroup';
 export { default as Accordion } from './Accordion/Accordion';
 export { default as Input } from './Input/Input';
+export { default as Switch } from './Switch/Switch';

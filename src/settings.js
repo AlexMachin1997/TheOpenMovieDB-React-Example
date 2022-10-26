@@ -2314,6 +2314,132 @@ const getCountryOptions = () => {
 	}));
 };
 
+const getProviderOptions = () => {
+	const baseOptions = [
+		{
+			display_priority: 0,
+			logo_path: '/9A1JSVmSxsyaBK4SUFsYVqbAYfW.jpg',
+			provider_name: 'Netflix',
+			provider_id: 8
+		},
+		{
+			display_priority: 1,
+			logo_path: '/68MNrwlkpF7WnmNPXLah69CR5cb.jpg',
+			provider_name: 'Amazon Prime Video',
+			provider_id: 119
+		},
+		{
+			display_priority: 1,
+			logo_path: '/68MNrwlkpF7WnmNPXLah69CR5cb.jpg',
+			provider_name: 'Amazon Prime Video',
+			provider_id: 9
+		},
+		{
+			display_priority: 1,
+			logo_path: '/49zBTsyFqE0u2hO8NxlyVmjFZDH.jpg',
+			provider_name: 'Horizon',
+			provider_id: 250
+		},
+		{
+			display_priority: 1,
+			logo_path: '/zBZrLV8mpN3lYT8VrChHlA0vNK6.jpg',
+			provider_name: 'iflix',
+			provider_id: 160
+		},
+		{
+			display_priority: 1,
+			logo_path: '/dgPueyEdOwpQ10fjuhL2WYFQwQs.jpg',
+			provider_name: 'Disney Plus',
+			provider_id: 337
+		},
+		{
+			display_priority: 2,
+			logo_path: '/q6tl6Ib6X5FT80RMlcDbexIo4St.jpg',
+			provider_name: 'Apple iTunes',
+			provider_id: 2
+		},
+		{
+			display_priority: 2,
+			logo_path: '/3zw07sM5b9FWcB1QXXt3uLpjn9r.jpg',
+			provider_name: 'HBO Go',
+			provider_id: 280
+		},
+		{
+			display_priority: 2,
+			logo_path: '/g1b38DOIuRjMmKhnBIaGkOuL8tR.jpg',
+			provider_name: 'blutv',
+			provider_id: 341
+		},
+		{
+			display_priority: 2,
+			logo_path: '/8N0DNa4BO3lH24KWv1EjJh4TxoD.jpg',
+			provider_name: 'wavve',
+			provider_id: 356
+		},
+		{
+			display_priority: 2,
+			logo_path: '/wRfIw4x22z9Zag6DZ8qLYwzpjOA.jpg',
+			provider_name: 'Neon TV',
+			provider_id: 273
+		},
+		{
+			display_priority: 2,
+			logo_path: '/2DpMZHxP9jzu3v70bph1UD3LLv3.jpg',
+			provider_name: 'Ivi',
+			provider_id: 113
+		},
+		{
+			display_priority: 3,
+			logo_path: '/p3Z12gKq2qvJaUOMeKNU2mzKVI9.jpg',
+			provider_name: 'Google Play Movies',
+			provider_id: 3
+		},
+		{
+			display_priority: 3,
+			logo_path: '/n7C8QWkrjGIz3nWHI4P30nWARAs.jpg',
+			provider_name: 'hayu',
+			provider_id: 223
+		},
+		{
+			display_priority: 3,
+			logo_path: '/qshstZQBltVh9En0AAMqv5eyKlT.jpg',
+			provider_name: 'Maxdome',
+			provider_id: 6
+		},
+		{
+			display_priority: 3,
+			logo_path: '/fkUXVCjyBEBLIB2P7nctx9uqNnz.jpg',
+			provider_name: 'Be TV Go',
+			provider_id: 311
+		},
+		{
+			display_priority: 3,
+			logo_path: '/dSBzj4T9P7PMUr015gnV7meT2LR.jpg',
+			provider_name: 'SwissCom',
+			provider_id: 150
+		},
+		{
+			display_priority: 3,
+			logo_path: '/oWdLYAsfb61wUUkGKdLifBbJinI.jpg',
+			provider_name: 'O2 TV',
+			provider_id: 308
+		},
+		{
+			display_priority: 3,
+			logo_path: '/vAtH6Z6Oq7zCmEGS3Sdu08dxvYZ.jpg',
+			provider_name: 'HBO',
+			provider_id: 118
+		}
+	];
+
+	return baseOptions.map((option) => ({
+		...option,
+		label: option.provider_name,
+		value: option.provider_id.toString(),
+		id: `${option.provider_name} - ${option.provider_id}`
+	}));
+};
+
 // Exports all the application configuration
 export default {
 	// Stores all the 'Sort By' dropdown options (Ordered based on the order property)
@@ -2339,6 +2465,9 @@ export default {
 
 	// Store all the countries used for filtering, no sorting required as it's already sorted at the time of copying this
 	COUNTRY_OPTIONS: getCountryOptions(),
+
+	// TODO: Replace this with a fetch request within the WhereToWatch component (Requires graphQL option)
+	OTT_PROVIDER_OPTIONS: getProviderOptions(),
 
 	// Stores the application url's
 	GRAPHQL_ENDPOINT_URI: 'http://localhost:4000/graphql'

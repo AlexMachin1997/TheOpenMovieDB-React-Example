@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -116,28 +117,23 @@ const CustomListbox = ({
 }) => {
 	const [referenceElement, setReferenceElement] = React.useState();
 	const [popperElement, setPopperElement] = React.useState();
+	const containerRef = React.useRef();
 
 	// Used to calculate the offset for the usePopper hook which provides the menu placement functionality, used to switch between top or bottom for the menu
-	const offset = React.useCallback(
-		({ placement }) => {
-			// Skidding reference: https://popper.js.org/docs/v2/modifiers/offset/#skidding-1
-			const skidding = 0;
+	const offset = React.useCallback(() => {
+		// Get the height of the dropdown container (Used to determine how much distance should be applied to the offset)
+		const dropdownContainerHeight = containerRef?.current?.getBoundingClientRect()?.height ?? 0;
 
-			// Distance reference: https://popper.js.org/docs/v2/modifiers/offset/#distance-1
-			// When using multiple make sure to use slightly increased distance to account for the custom output otherwise default to 25 distance
-			let distance = isMulti === true ? 35 : 25;
+		// Skidding reference: https://popper.js.org/docs/v2/modifiers/offset/#skidding-1
+		const skidding = 0;
 
-			// Variable updating for the bottom placement
-			if (placement === 'bottom') {
-				// When using multiple make sure to use slightly increased distance to account for the custom output otherwise default to 20 distance
-				distance = isMulti === true ? 30 : 20;
-			}
+		// Distance reference: https://popper.js.org/docs/v2/modifiers/offset/#distance-1
+		// When using multiple make sure to use slightly increased distance to account for the custom output otherwise default to 25 distance
+		const distance = dropdownContainerHeight / 2;
 
-			// When the placement is anything else ie top set the distance to 25
-			return [skidding, distance];
-		},
-		[isMulti]
-	);
+		// When the placement is anything else ie top set the distance to 25
+		return [skidding, distance];
+	}, []);
 
 	// Used to place the menu either on the top or bottom of the Listbox button
 	const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -184,7 +180,7 @@ const CustomListbox = ({
 			disabled={disabled}
 		>
 			{({ value: listboxInternalValue }) => (
-				<div className='relative'>
+				<div className='relative' ref={containerRef}>
 					{/* NOTE: Don't move the display value inside of the Button YOU CAN'T HAVE NESTED CONTROLS IT'S UNACCESSIBLE AND BAD PRACTICE */}
 					<div className='relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 py-3  px-3 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
 						<span className='w-full'>

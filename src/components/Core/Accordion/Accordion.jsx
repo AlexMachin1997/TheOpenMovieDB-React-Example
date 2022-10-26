@@ -6,13 +6,14 @@ import classNames from 'classnames';
 
 import Icon from '../Icon/Icon';
 
-const Accordion = ({ children, title, defaultIsOpen, isDisabled }) => (
+const Accordion = ({ children, title, defaultIsOpen, isDisabled, className, contentClassName }) => (
 	<Disclosure defaultOpen={defaultIsOpen}>
 		{({ open }) => (
-			<>
+			<div className='shadow-lg'>
 				<Disclosure.Button
 					className={classNames(
-						'flex w-full items-center justify-between rounded-tl-lg rounded-tr-lg border border-solid border-gray-300 p-4',
+						className,
+						'flex w-full items-center justify-between rounded-tl-lg rounded-tr-lg border border-solid border-gray-300 ',
 						{
 							'rounded-bl-lg': open === false,
 							'rounded-br-lg': open === false,
@@ -45,12 +46,15 @@ const Accordion = ({ children, title, defaultIsOpen, isDisabled }) => (
 				>
 					<Disclosure.Panel
 						unmount={false}
-						className='rounded-br-lg rounded-bl-lg border-b-[1px] border-l-[1px] border-r-[1px] border-solid border-gray-300 p-4'
+						className={classNames(
+							contentClassName,
+							'rounded-br-lg rounded-bl-lg border-b-[1px] border-l-[1px] border-r-[1px] border-solid border-gray-300'
+						)}
 					>
 						{children}
 					</Disclosure.Panel>
 				</Transition>
-			</>
+			</div>
 		)}
 	</Disclosure>
 );
@@ -59,14 +63,18 @@ Accordion.propTypes = {
 	children: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.number]),
 	title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 	defaultIsOpen: PropTypes.bool,
-	isDisabled: PropTypes.bool
+	isDisabled: PropTypes.bool,
+	className: PropTypes.string,
+	contentClassName: PropTypes.string
 };
 
 Accordion.defaultProps = {
 	children: null,
 	title: null,
 	defaultIsOpen: false,
-	isDisabled: false
+	isDisabled: false,
+	className: 'p-4',
+	contentClassName: 'p-4'
 };
 
 export default Accordion;

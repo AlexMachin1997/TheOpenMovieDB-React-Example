@@ -89,8 +89,8 @@ const Filters = ({ isAuthenticated }) => {
 	}, [isAuthenticated]);
 
 	return (
-		<Accordion title={<h3 className='text-lg text-black'>Filters</h3>}>
-			<label htmlFor='show_me' className='block border-b-[1px] border-solid border-gray-300 pb-3'>
+		<Accordion title={<h3 className='text-lg text-black'>Filters</h3>} contentClassName=''>
+			<label htmlFor='show_me' className='block border-b-[1px] border-solid border-gray-300 p-4'>
 				{/* label, is actually a label as the RadioGroup doesn't have a label */}
 				<span className='mb-2 block font-light'>Show Me</span>
 
@@ -121,7 +121,7 @@ const Filters = ({ isAuthenticated }) => {
 					defaultValue={undefined}
 				/>
 			</label>
-			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
 				{/* label, not actually a label as the Checkbox options have individual labels */}
 				<span className='mb-2 block font-light'>Release Types</span>
 
@@ -152,7 +152,7 @@ const Filters = ({ isAuthenticated }) => {
 					defaultValue={undefined}
 				/>
 			</div>
-			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
 				{/* Label, not actually a label as the input has it's own individual input */}
 				<span className='mb-2 block font-light'>Release Dates</span>
 
@@ -184,7 +184,8 @@ const Filters = ({ isAuthenticated }) => {
 					/>
 				</div>
 			</div>
-			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+
+			<div className='block border-b-[1px] border-solid border-gray-300 p-4'>
 				{/* Label, is actually a label as the Listbox doesn't have one */}
 				<label htmlFor='region' className='mb-2 block font-light'>
 					Release Region
@@ -206,7 +207,8 @@ const Filters = ({ isAuthenticated }) => {
 					noOptionsAvailableMessage='No countries available to choose from'
 				/>
 			</div>
-			<div className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+
+			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
 				{/* label, not actually a label as the Checkbox options have individual labels */}
 				<span className='mb-2 block font-light'>Availabilities</span>
 
@@ -239,7 +241,7 @@ const Filters = ({ isAuthenticated }) => {
 			</div>
 			<label
 				htmlFor='with_genres'
-				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
+				className='block border-b-[1px] border-solid border-gray-300 p-4 '
 			>
 				{/* Label, is actually a label as the Listbox doesn't have one */}
 				<span className='mb-2 block font-light'>Genres</span>
@@ -262,7 +264,7 @@ const Filters = ({ isAuthenticated }) => {
 			</label>
 			<label
 				htmlFor='certification'
-				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
+				className='block border-b-[1px] border-solid border-gray-300 p-4 '
 			>
 				{/* Label, is actually a label as the Listbox doesn't have one */}
 				<span className='mb-2 block font-light'>Certification</span>
@@ -285,7 +287,7 @@ const Filters = ({ isAuthenticated }) => {
 			</label>
 			<label
 				htmlFor='with_original_language'
-				className='block border-b-[1px] border-solid border-gray-300 pb-3 pt-3'
+				className='block border-b-[1px] border-solid border-gray-300 p-4 '
 			>
 				{/* Label, is actually a label as the Listbox doesn't have one */}
 				<span className='mb-2 block font-light'>Language</span>
@@ -306,7 +308,7 @@ const Filters = ({ isAuthenticated }) => {
 				/>
 			</label>
 
-			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 p-4'>
 				{/* Label, not actually a label as the input has it's own individual input */}
 				<span className='mb-2 block font-light'>Vote average range</span>
 
@@ -365,7 +367,7 @@ const Filters = ({ isAuthenticated }) => {
 				/>
 			</div>
 
-			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 p-4'>
 				{/* An input component, this allows you to specify the Minimum User Votes. This handles component and label output. */}
 				<Input
 					type='number'
@@ -388,7 +390,7 @@ const Filters = ({ isAuthenticated }) => {
 				/>
 			</div>
 
-			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 pb-3 pt-3'>
+			<div className='block space-y-2 p-4'>
 				{/* Label, not actually a label as the input has it's own individual input */}
 				<span className='mb-2 block font-light'>Runtime</span>
 

@@ -1,17 +1,19 @@
 import { Formik } from 'formik';
 import * as React from 'react';
 
-import Sort from './Sort';
+import WhereToWatch from './WhereToWatch';
 
 const ControlledStoryTemplate = () => (
 	<Formik
 		initialValues={{
-			sort_by: ''
+			restrict_services: false,
+			ott_region: 'US',
+			with_ott_providers: []
 		}}
 		enableReinitialize
 	>
 		<div style={{ maxWidth: '300px' }}>
-			<Sort />
+			<WhereToWatch />
 		</div>
 	</Formik>
 );
@@ -20,6 +22,6 @@ export const Example = ControlledStoryTemplate.bind({});
 Example.args = {};
 
 export default {
-	component: Sort,
-	title: 'Design System/Forms/Filtering/SortBy'
+	component: WhereToWatch,
+	title: 'Design System/Forms/Filtering/Where to watch'
 };
