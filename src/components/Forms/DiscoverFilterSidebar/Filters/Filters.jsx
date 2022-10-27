@@ -36,7 +36,7 @@ ShowMeFilterIcon.propTypes = {
 	defaults: PropTypes.object.isRequired
 };
 
-const Filters = ({ isAuthenticated }) => {
+const Filters = ({ isAuthenticated, mediaType }) => {
 	const { values, setFieldValue } = useFormikContext();
 
 	const onChangeCheckboxGroup = ({
@@ -71,6 +71,16 @@ const Filters = ({ isAuthenticated }) => {
 
 		// When none of the above is met then just return the current checkbox values don't do any transforming.
 		return currentCheckboxValues;
+	};
+
+	const getReleaseDateField = (filterId = '') => {
+		// When the mediaType is tv use the air_date parameter instead of release_date
+		if (mediaType === 'tv') {
+			return `air_date.${filterId}`;
+		}
+
+		// If the mediaType isn't tv then use the release_date query parameter instead of the air_date
+		return `release_date.${filterId}`;
 	};
 
 	const SHOW_ME_RADIO_OPTIONS = React.useMemo(() => {
@@ -152,9 +162,13 @@ const Filters = ({ isAuthenticated }) => {
 					defaultValue={undefined}
 				/>
 			</div>
+
+			{/* Switches between being the Release Dates (mediaType !== 'tv') and Air Dates filter (mediaType === 'tv') */}
 			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
 				{/* Label, not actually a label as the input has it's own individual input */}
-				<span className='mb-2 block font-light'>Release Dates</span>
+				<span className='mb-2 block font-light'>
+					{mediaType === 'movie' ? 'Release Dates' : 'Air Dates'}
+				</span>
 
 				{/* Date picker's, uses the native html5 date picker's no custom solution needed */}
 				<div className='space-y-2'>
@@ -163,24 +177,24 @@ const Filters = ({ isAuthenticated }) => {
 						label='From'
 						containerClassName='flex items-center'
 						labelClassName='w-[100px] text-black'
-						id='release_date.gte'
+						id={getReleaseDateField('gte')}
 						onChange={(event) => {
-							setFieldValue("['release_date.gte']", event.target.value);
+							setFieldValue(`['${getReleaseDateField('gte')}']`, event.target.value);
 						}}
-						value={values['release_date.gte']}
-						name='release_date.gte'
+						value={values[getReleaseDateField('gte')]}
+						name={getReleaseDateField('gte')}
 					/>
 					<Input
 						type='date'
 						label='To'
 						containerClassName='flex items-center'
 						labelClassName='w-[100px] text-black'
-						id='release_date.lte'
+						id={getReleaseDateField('lte')}
 						onChange={(event) => {
-							setFieldValue("['release_date.lte']", event.target.value);
+							setFieldValue(`['${getReleaseDateField('lte')}']`, event.target.value);
 						}}
-						value={values['release_date.lte']}
-						name='release_date.lte'
+						value={values[getReleaseDateField('lte')]}
+						name={getReleaseDateField('lte')}
 					/>
 				</div>
 			</div>
@@ -453,11 +467,13 @@ const Filters = ({ isAuthenticated }) => {
 };
 
 Filters.propTypes = {
-	isAuthenticated: PropTypes.bool
+	isAuthenticated: PropTypes.bool,
+	mediaType: PropTypes.string
 };
 
 Filters.defaultProps = {
-	isAuthenticated: false
+	isAuthenticated: false,
+	mediaType: 'movie'
 };
 
 export default Filters;

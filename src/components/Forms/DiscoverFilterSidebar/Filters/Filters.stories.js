@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 
 import Filters from './Filters';
 
-const ControlledStoryTemplate = () => (
+const ControlledStoryTemplate = (args) => (
 	<Formik
 		initialValues={{
 			show_me: '0',
@@ -14,6 +14,8 @@ const ControlledStoryTemplate = () => (
 			with_release_type: ['all'],
 			'release_date.lte': '',
 			'release_date.gte': '',
+			'air_date.lte': '',
+			'air_date.gte': '',
 			with_original_language: 'none',
 			region: 'US',
 			'vote_average.gte': 0,
@@ -25,13 +27,23 @@ const ControlledStoryTemplate = () => (
 		enableReinitialize
 	>
 		<div style={{ maxWidth: '300px' }}>
-			<Filters />
+			<Filters {...args} />
 		</div>
 	</Formik>
 );
 
-export const Example = ControlledStoryTemplate.bind({});
-Example.args = {};
+export const DefaultFiltersSidebar = ControlledStoryTemplate.bind({});
+DefaultFiltersSidebar.args = {};
+
+export const TVFiltersSidebar = ControlledStoryTemplate.bind({});
+TVFiltersSidebar.args = {
+	mediaType: 'tv'
+};
+
+export const AuthenticatedFiltersSidebar = ControlledStoryTemplate.bind({});
+AuthenticatedFiltersSidebar.args = {
+	isAuthenticated: true
+};
 
 export default {
 	component: Filters,
