@@ -7,7 +7,7 @@ import generateComponentId from '../../../utils/formatters/generateComponentId';
 
 const Person = ({ name, image, knownFor, onKeyDown, onClick }) => (
 	<div
-		className='h-100 w-100 max-h-[235px] max-w-[235px] cursor-pointer bg-white shadow-xl shadow-gray-200'
+		className='h-full max-h-[235px] w-full max-w-[235px] cursor-pointer bg-white shadow-xl shadow-gray-200'
 		id={generateComponentId(name, 'person-card-container')}
 		type='button'
 		role='button'

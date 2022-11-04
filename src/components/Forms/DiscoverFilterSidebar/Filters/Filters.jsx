@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import Settings from '../../../../settings';
 
 import { Accordion, CheckboxGroup, Listbox, RadioGroup, Input, Icon } from '../../../Core';
+import FilterTitle from '../FilterTitle/FilterTitle';
 
 const ShowMeFilterIcon = ({
 	isChecked,
@@ -101,10 +102,15 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 	return (
 		<Accordion title={<h3 className='text-lg text-black'>Filters</h3>} contentClassName=''>
 			<label htmlFor='show_me' className='block border-b-[1px] border-solid border-gray-300 p-4'>
-				{/* label, is actually a label as the RadioGroup doesn't have a label */}
-				<span className='mb-2 block font-light'>Show Me</span>
+				<FilterTitle
+					title='Show Me'
+					tooltip={
+						isAuthenticated === true
+							? "Filter by what you have AND/OR haven't seen"
+							: "Login in to filter by what you have AND/OR haven't seen"
+					}
+				/>
 
-				{/* Radio group options, this allows you to select one of the "Show me" options which are used for the "Show me" filter */}
 				<RadioGroup
 					options={SHOW_ME_RADIO_OPTIONS}
 					value={values.show_me}
@@ -132,10 +138,8 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 				/>
 			</label>
 			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
-				{/* label, not actually a label as the Checkbox options have individual labels */}
-				<span className='mb-2 block font-light'>Release Types</span>
+				<FilterTitle title='Release Types' tooltip='Filter by all or individual release types' />
 
-				{/* Checkbox group options, this allows you select multiple release types which are used for the "Release Types" filter */}
 				<CheckboxGroup
 					options={
 						values.with_release_type.includes('all') === true
@@ -163,12 +167,11 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 				/>
 			</div>
 
-			{/* Switches between being the Release Dates (mediaType !== 'tv') and Air Dates filter (mediaType === 'tv') */}
 			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
-				{/* Label, not actually a label as the input has it's own individual input */}
-				<span className='mb-2 block font-light'>
-					{mediaType === 'movie' ? 'Release Dates' : 'Air Dates'}
-				</span>
+				<FilterTitle
+					title={mediaType === 'movie' ? 'Release Dates' : 'Air Dates'}
+					tooltip='Filter by providing a date range'
+				/>
 
 				{/* Date picker's, uses the native html5 date picker's no custom solution needed */}
 				<div className='space-y-2'>
@@ -200,12 +203,8 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 			</div>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 p-4'>
-				{/* Label, is actually a label as the Listbox doesn't have one */}
-				<label htmlFor='region' className='mb-2 block font-light'>
-					Release Region
-				</label>
+				<FilterTitle title='Release region' tooltip='Filter by selecting a release region' />
 
-				{/* Dropdown component, this allows you to select a country which are used for the "Release Region" filter */}
 				<Listbox
 					options={Settings.COUNTRY_OPTIONS}
 					value={values.region}
@@ -223,8 +222,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 			</div>
 
 			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
-				{/* label, not actually a label as the Checkbox options have individual labels */}
-				<span className='mb-2 block font-light'>Availabilities</span>
+				<FilterTitle title='Availabilities' tooltip='Filter by all or individual availabilities' />
 
 				{/* Checkbox group options, this allows you select multiple availabilities which are used for the "Availabilities" filter */}
 				<CheckboxGroup
@@ -257,8 +255,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 				htmlFor='with_genres'
 				className='block border-b-[1px] border-solid border-gray-300 p-4 '
 			>
-				{/* Label, is actually a label as the Listbox doesn't have one */}
-				<span className='mb-2 block font-light'>Genres</span>
+				<FilterTitle title='Genres' tooltip='Filter by selecting one or more genres' />
 
 				{/* Dropdown component, this allows you to select multiple genres which are used for the "Genres" filter */}
 				<Listbox
@@ -280,8 +277,10 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 				htmlFor='certification'
 				className='block border-b-[1px] border-solid border-gray-300 p-4 '
 			>
-				{/* Label, is actually a label as the Listbox doesn't have one */}
-				<span className='mb-2 block font-light'>Certification</span>
+				<FilterTitle
+					title='Certifications'
+					tooltip='Filter by selecting one or more certifications'
+				/>
 
 				{/* Dropdown component, this allows you to select multiple certifications which are used for the "Certification" filter */}
 				<Listbox
@@ -303,8 +302,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 				htmlFor='with_original_language'
 				className='block border-b-[1px] border-solid border-gray-300 p-4 '
 			>
-				{/* Label, is actually a label as the Listbox doesn't have one */}
-				<span className='mb-2 block font-light'>Language</span>
+				<FilterTitle title='Language' tooltip='Filter by selecting a language' />
 
 				{/* Dropdown component, this allows you to select a language which will be used for the "Language" filter */}
 				<Listbox
@@ -322,67 +320,65 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 				/>
 			</label>
 
-			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 p-4'>
-				{/* Label, not actually a label as the input has it's own individual input */}
-				<span className='mb-2 block font-light'>Vote average range</span>
+			<div className='border-b-[1px] border-solid border-gray-300 p-4'>
+				<FilterTitle title='Vote average range' tooltip='Filter by providing a number range' />
 
-				{/* An input component, this allows you to specify the minimum vote average score. This handles component and label output. */}
-				<Input
-					type='number'
-					min={0}
-					max={values['vote_average.lte']} // The minimum score can't go above the maximum score
-					step={1}
-					inputMode='numeric'
-					name='vote_average.gte'
-					onChange={(event) => {
-						// Get the value as a number
-						const value = event.target.valueAsNumber;
+				<div className='space-y-2'>
+					<Input
+						type='number'
+						min={0}
+						max={values['vote_average.lte']} // The minimum score can't go above the maximum score
+						step={1}
+						inputMode='numeric'
+						name='vote_average.gte'
+						onChange={(event) => {
+							// Get the value as a number
+							const value = event.target.valueAsNumber;
 
-						// If the minimum score value is greater than the incoming value from vote_average.lte input set the vote_average.gte to the incoming number
-						if (values['vote_average.lte'] < value) {
-							setFieldValue("['vote_average.lte']", value);
-						}
+							// If the minimum score value is greater than the incoming value from vote_average.lte input set the vote_average.gte to the incoming number
+							if (values['vote_average.lte'] < value) {
+								setFieldValue("['vote_average.lte']", value);
+							}
 
-						// Update this input's value
-						setFieldValue("['vote_average.gte']", value);
-					}}
-					value={values['vote_average.gte']}
-					id='vote_average.gte'
-					label='Min'
-					labelClassName='mb-2 block font-light w-[100px] text-black'
-					containerClassName='flex items-center'
-				/>
-
-				{/* An input component, this allows you to specify the maximum vote average score. This handles component and label output. */}
-				<Input
-					type='number'
-					min={0}
-					max={10}
-					step={1}
-					inputMode='numeric'
-					name='vote_average.lte'
-					onChange={(event) => {
-						// Get the value as a number
-						const value = event.target.valueAsNumber;
-
-						// If the minimum score value is greater than the incoming value from vote_average.lte input set the vote_average.gte to the incoming number
-						if (values['vote_average.gte'] > value) {
+							// Update this input's value
 							setFieldValue("['vote_average.gte']", value);
-						}
+						}}
+						value={values['vote_average.gte']}
+						id='vote_average.gte'
+						label='Min'
+						labelClassName='mb-2 block font-light w-[100px] text-black'
+						containerClassName='flex items-center'
+					/>
 
-						// Update this input's value
-						setFieldValue("['vote_average.lte']", value);
-					}}
-					value={values['vote_average.lte']}
-					id='vote_average.lte'
-					label='Max'
-					labelClassName='mb-2 block font-light w-[100px] text-black'
-					containerClassName='flex items-center'
-				/>
+					<Input
+						type='number'
+						min={0}
+						max={10}
+						step={1}
+						inputMode='numeric'
+						name='vote_average.lte'
+						onChange={(event) => {
+							// Get the value as a number
+							const value = event.target.valueAsNumber;
+
+							// If the minimum score value is greater than the incoming value from vote_average.lte input set the vote_average.gte to the incoming number
+							if (values['vote_average.gte'] > value) {
+								setFieldValue("['vote_average.gte']", value);
+							}
+
+							// Update this input's value
+							setFieldValue("['vote_average.lte']", value);
+						}}
+						value={values['vote_average.lte']}
+						id='vote_average.lte'
+						label='Max'
+						labelClassName='mb-2 block font-light w-[100px] text-black'
+						containerClassName='flex items-center'
+					/>
+				</div>
 			</div>
 
 			<div className='block space-y-2 border-b-[1px] border-solid border-gray-300 p-4'>
-				{/* An input component, this allows you to specify the Minimum User Votes. This handles component and label output. */}
 				<Input
 					type='number'
 					min={0}
@@ -399,16 +395,16 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 					}}
 					value={values['vote_count.gte']}
 					id='vote_count.gte'
-					label='Minimum User Score'
+					label={
+						<FilterTitle title='Minimum User Score' tooltip='Filter by providing a user score' />
+					}
 					labelClassName='mb-2 block font-light text-black'
 				/>
 			</div>
 
-			<div className='block space-y-2 p-4'>
-				{/* Label, not actually a label as the input has it's own individual input */}
-				<span className='mb-2 block font-light'>Runtime</span>
+			<div className='block space-y-2 rounded-b-lg p-4'>
+				<FilterTitle title='Runtime' tooltip='Filter by providing a number range' />
 
-				{/* An input component, this allows you to specify the minimum runtime. This handles component and label output. */}
 				<Input
 					type='number'
 					min={0}

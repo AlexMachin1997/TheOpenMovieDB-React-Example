@@ -14,7 +14,7 @@ const Review = ({
 	<div className='block rounded-lg border border-solid border-gray-300 p-4 shadow-2xl shadow-gray-200 sm:flex'>
 		<div className='pr-2'>
 			{avatarPath === null || avatarPath === '' ? (
-				<p className='inline-flex rounded-full bg-gray-400 p-1 pl-2 pr-2 text-2xl uppercase text-black'>
+				<p className='inline-flex rounded-full bg-gray-400 p-1 px-2 text-2xl uppercase text-black'>
 					{name[0] ?? 'N/A'}
 				</p>
 			) : (
@@ -33,7 +33,7 @@ const Review = ({
 			<div className='flex flex-wrap items-center pb-2'>
 				<span className='text-sm font-light'>
 					Written by
-					<Link to={`/${username}`} className='mr-1 ml-1 font-bold'>
+					<Link to={`/${username}`} className='mx-1 font-bold'>
 						{username}
 					</Link>
 					{createdOn !== null && <span className='mr-1'>on {createdOn}</span>}

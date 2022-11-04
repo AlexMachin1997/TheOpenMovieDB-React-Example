@@ -182,7 +182,7 @@ const CustomListbox = ({
 			{({ value: listboxInternalValue }) => (
 				<div className='relative' ref={containerRef}>
 					{/* NOTE: Don't move the display value inside of the Button YOU CAN'T HAVE NESTED CONTROLS IT'S UNACCESSIBLE AND BAD PRACTICE */}
-					<div className='relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 py-3  px-3 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
+					<div className='relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
 						<span className='w-full'>
 							<ListboxDisplayValues
 								value={listboxInternalValue}
@@ -214,7 +214,7 @@ const CustomListbox = ({
 					>
 						<Listbox.Options
 							aria-label={`A ${isMulti === true ? 'multiple' : 'single'} dropdown for ${name}`}
-							className='absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+							className='absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm'
 							ref={setPopperElement}
 							onKeyDown={(event) => {
 								// When you type to find an option stop other event's fro occurring e.g. In Storybook certain keys trigger page actions, we don't want this.

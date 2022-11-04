@@ -54,8 +54,8 @@ const ListboxDisplayValues = ({
 			<div className='flex flex-wrap items-center'>
 				{valuesToDisplay.map((el) => (
 					<div className='mr-2 py-1' key={el}>
-						<span className='align-center ease flex w-max items-center rounded-full bg-secondary py-2 px-2 text-sm font-semibold transition duration-300 active:bg-gray-300'>
-							<p className='text-md text-white'>{getDisplayValue(el)}</p>
+						<span className='ease flex w-max items-center rounded-full bg-secondary p-2 text-sm font-semibold transition duration-300 active:bg-gray-300'>
+							<p className='text-base text-white'>{getDisplayValue(el)}</p>
 
 							{/* NOTE: You can't have buttons inside of buttons that's now allowed, hence the reason it's a div with a role attached for accessability */}
 							{showMultiDeleteButton === true && (

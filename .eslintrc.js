@@ -6,9 +6,11 @@ module.exports = {
 		'plugin:react-hooks/recommended',
 		'plugin:react/recommended',
 		'plugin:import/react',
-		'plugin:storybook/recommended'
+		'plugin:storybook/recommended',
+		'plugin:prettier/recommended',
+		'plugin:tailwindcss/recommended'
 	],
-	plugins: ['prettier', 'react'],
+	plugins: ['prettier', 'react', 'tailwindcss'],
 	globals: {
 		Atomics: 'readonly',
 		SharedArrayBuffer: 'readonly'
@@ -27,6 +29,12 @@ module.exports = {
 		es6: true
 	},
 	rules: {
+		'tailwindcss/no-custom-classname': [
+			1,
+			{
+				whitelist: ['^fa[-a-zA-Z0-9]*'] // Allows for the following custom css classnames e.g. fa-facebook, fa-2x, fa-facebook-s
+			}
+		],
 		'import/no-cycle': 'off',
 		'import/no-extraneous-dependencies': [
 			'error',

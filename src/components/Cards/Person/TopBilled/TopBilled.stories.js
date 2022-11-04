@@ -63,7 +63,7 @@ TopBilledMovieExample.args = {
 };
 
 export const MultipleCardsExampleTVExample = () => (
-	<div className='w-100 flex overflow-x-auto overflow-y-auto'>
+	<div className='flex w-full overflow-auto'>
 		<div className='mr-2'>
 			<TopBilledCard
 				actorName='Evan Rachel Wood'
@@ -95,7 +95,7 @@ export const MultipleCardsExampleTVExample = () => (
 );
 
 export const MultipleCardsExampleMovieExample = () => (
-	<div className='w-100 flex overflow-x-auto overflow-y-auto'>
+	<div className='flex w-full overflow-auto'>
 		<div className='mr-2'>
 			<TopBilledCard
 				actorName='Charlize Theron'

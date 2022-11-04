@@ -59,7 +59,7 @@ const VirtualizedList = React.memo(
 					query !== '' &&
 					canAddCustomItems === true && (
 						<Combobox.Option
-							className='text-gray-900bg-teal-600 relative cursor-default select-none py-2 pl-10 pr-4'
+							className='relative cursor-default select-none bg-teal-600 py-2 pl-10 pr-4 text-gray-900'
 							value={query}
 						>
 							<span className='block truncate font-medium'>
@@ -288,7 +288,7 @@ const CustomCombobox = ({
 			disabled={disabled}
 		>
 			<div className='relative mt-1' ref={containerRef}>
-				<div className='relative flex w-full cursor-default items-center rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
+				<div className='relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
 					<Combobox.Input
 						className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0'
 						onChange={(event) => {
@@ -307,7 +307,7 @@ const CustomCombobox = ({
 				>
 					<Combobox.Options
 						aria-label={`A ${isMulti === true ? 'multiple' : 'single'} dropdown for ${name}`}
-						className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+						className='absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm'
 						ref={setPopperElement}
 						style={{
 							// Apply the pre-generated styling from popper.js usePopper hook

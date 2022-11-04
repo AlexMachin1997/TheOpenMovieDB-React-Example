@@ -6,7 +6,7 @@ import Sort from './Sort';
 const ControlledStoryTemplate = () => (
 	<Formik
 		initialValues={{
-			sort_by: ''
+			sort_by: 'original_title.desc'
 		}}
 		enableReinitialize
 	>
@@ -21,5 +21,5 @@ Example.args = {};
 
 export default {
 	component: Sort,
-	title: 'Design System/Forms/Filtering/SortBy'
+	title: 'Design System/Forms/Filtering/Sort By'
 };

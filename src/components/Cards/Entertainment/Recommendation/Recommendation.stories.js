@@ -42,7 +42,7 @@ Rating.args = {
 };
 
 export const GroupedExample = () => (
-	<div className='w-100 flex overflow-x-auto overflow-y-auto'>
+	<div className='flex w-full overflow-auto'>
 		<RecommendationCard
 			title='Black Panther'
 			releaseDate='13/02/2018'

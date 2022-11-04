@@ -2,13 +2,13 @@ const SORT_BY_OPTIONS = [
 	{
 		label: 'Popularity Descending',
 		id: 'popularity.desc',
-		value: ' popularity.desc',
+		value: 'popularity.desc',
 		order: 1
 	},
 	{
 		label: 'Popularity Ascending',
 		id: 'popularity.asc',
-		value: ' popularity.asc',
+		value: 'popularity.asc',
 		order: 2
 	},
 	{

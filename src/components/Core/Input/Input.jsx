@@ -17,7 +17,7 @@ const Input = ({ label, id, placeholder, labelClassName, containerClassName, ...
 );
 
 Input.propTypes = {
-	label: PropTypes.string.isRequired,
+	label: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.node]).isRequired,
 	id: PropTypes.string.isRequired,
 	placeholder: PropTypes.string,
 	labelClassName: PropTypes.string,

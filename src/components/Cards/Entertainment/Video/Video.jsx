@@ -28,7 +28,7 @@ const Video = ({ title, overview, thumbnail, thumbnailAction }) => (
 	>
 		<div
 			id={generateComponentId(title, 'video-card-container-icon-container')}
-			className='w-100 group relative max-w-[300px]'
+			className='group relative w-full max-w-[300px]'
 		>
 			<Image
 				width='100%'

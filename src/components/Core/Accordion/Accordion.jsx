@@ -9,14 +9,16 @@ import Icon from '../Icon/Icon';
 const Accordion = ({ children, title, defaultIsOpen, isDisabled, className, contentClassName }) => (
 	<Disclosure defaultOpen={defaultIsOpen}>
 		{({ open }) => (
-			<div className='shadow-lg'>
+			<div className={classNames('rounded-lg shadow-lg', {})}>
 				<Disclosure.Button
 					className={classNames(
 						className,
-						'flex w-full items-center justify-between rounded-tl-lg rounded-tr-lg border border-solid border-gray-300 ',
+						'flex w-full items-center justify-between border border-solid border-gray-300',
 						{
-							'rounded-bl-lg': open === false,
-							'rounded-br-lg': open === false,
+							// 'rounded-bl-lg': open === false,
+							// 'rounded-br-lg': open === false,
+							'rounded-tr-lg rounded-tl-lg': open === true,
+							'rounded-lg': open === false,
 							'bg-slate-300': isDisabled === true,
 							'disabled:cursor-not-allowed': isDisabled === true
 						}
@@ -48,7 +50,7 @@ const Accordion = ({ children, title, defaultIsOpen, isDisabled, className, cont
 						unmount={false}
 						className={classNames(
 							contentClassName,
-							'rounded-br-lg rounded-bl-lg border-b-[1px] border-l-[1px] border-r-[1px] border-solid border-gray-300'
+							'rounded-b-lg border-x-[1px] border-b-[1px] border-solid border-gray-300'
 						)}
 					>
 						{children}

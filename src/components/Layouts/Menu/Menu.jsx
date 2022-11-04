@@ -149,7 +149,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 
 			<nav
 				id='mobile-navigation-menu'
-				className='fixed top-0 right-0 left-0 bg-primary p-4'
+				className='fixed inset-x-0 top-0 bg-primary p-4'
 				aria-label='mobile navigation menu'
 				role='navigation'
 			>
@@ -209,7 +209,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 
 			<nav
 				id='desktop-navigation-menu'
-				className='fixed top-0 right-0 left-0 bg-primary'
+				className='fixed inset-x-0 top-0 bg-primary'
 				aria-label='desktop navigation menu'
 				role='navigation'
 			>

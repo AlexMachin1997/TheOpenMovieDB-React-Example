@@ -5,6 +5,7 @@ import { useFormikContext } from 'formik';
 import Settings from '../../../../settings';
 
 import { Accordion, Listbox } from '../../../Core';
+import FiltersTitle from '../FilterTitle/FilterTitle';
 
 const Sort = () => {
 	const { values, setFieldValue } = useFormikContext();
@@ -12,10 +13,8 @@ const Sort = () => {
 	return (
 		<Accordion title={<h3 className='text-lg text-black'>Sort</h3>}>
 			<label htmlFor='sort_by'>
-				{/* Dropdown label */}
-				<span className='mb-2 block font-light'>Sort Results By</span>
+				<FiltersTitle title='Sort Results By' tooltip='Sort by selecting a sort by option' />
 
-				{/* Dropdown component */}
 				<Listbox
 					value={values.sort_by}
 					onChange={({ value }) => {

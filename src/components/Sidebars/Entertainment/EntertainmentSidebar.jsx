@@ -36,14 +36,14 @@ const EntertainmentSidebar = ({
 		{(status?.length ?? 0) > 0 && (
 			<div className='mb-4'>
 				<h3 className='text-base font-bold leading-[1]'>Status</h3>
-				<p className='font-base font-light'>{status}</p>
+				<p className='text-base font-light'>{status}</p>
 			</div>
 		)}
 
 		{entertainmentType === 'movie' && (originalLanguage?.length ?? 0) > 0 && (
 			<div className='mb-4'>
 				<h3 className='text-base font-bold leading-[1]'>Original Language</h3>
-				<p className='font-base font-light'>{originalLanguage}</p>
+				<p className='text-base font-light'>{originalLanguage}</p>
 			</div>
 		)}
 
@@ -65,28 +65,28 @@ const EntertainmentSidebar = ({
 		{entertainmentType === 'movie' && (budget?.length ?? 0) > 0 && (
 			<div className='mb-4'>
 				<h3 className='text-base font-bold leading-[1]'>Budget</h3>
-				<p className='font-base font-light'>{budget}</p>
+				<p className='text-base font-light'>{budget}</p>
 			</div>
 		)}
 
 		{entertainmentType === 'tv' && (type?.length ?? 0) > 0 && (
 			<div className='mb-4'>
 				<h3 className='text-base font-bold leading-[1]'>Type</h3>
-				<p className='font-base font-light'>{type}</p>
+				<p className='text-base font-light'>{type}</p>
 			</div>
 		)}
 
 		{entertainmentType === 'movie' && (revenue?.length ?? 0) > 0 && (
 			<div className='mb-4'>
 				<h3 className='text-base font-bold leading-[1]'>Revenue</h3>
-				<p className='font-base font-light'>{revenue}</p>
+				<p className='text-base font-light'>{revenue}</p>
 			</div>
 		)}
 
 		{entertainmentType === 'tv' && (originalLanguage?.length ?? 0) > 0 && (
 			<div className='mb-4'>
 				<h3 className='text-base font-bold leading-[1]'>Original Language</h3>
-				<p className='font-base font-light'>{originalLanguage}</p>
+				<p className='text-base font-light'>{originalLanguage}</p>
 			</div>
 		)}
 

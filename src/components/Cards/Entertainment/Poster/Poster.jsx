@@ -8,7 +8,7 @@ import generateComponentId from '../../../../utils/formatters/generateComponentI
 
 const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 	<div
-		className='shadow-card m-4 cursor-pointer rounded-2xl bg-white shadow-xl shadow-gray-200'
+		className='m-4 cursor-pointer rounded-2xl bg-white shadow-xl shadow-gray-200'
 		onClick={(event) => {
 			if (onClick) {
 				onClick(event);
@@ -42,7 +42,7 @@ const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 				<PercentageRating percentage={rating} size={40} strokeWidth={2.5} textSize='0.7rem' />
 			</div>
 			<div id={generateComponentId(title, 'poster-card-meta')}>
-				<h3 className='weight text-base font-bold text-black'>{title}</h3>
+				<h3 className='text-base font-bold text-black'>{title}</h3>
 				<p className='text-base font-light text-slate-400'>{releaseDate}</p>
 			</div>
 		</div>

@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import WhereToWatch from './WhereToWatch';
 
-const ControlledStoryTemplate = () => (
+const ControlledStoryTemplate = (args) => (
 	<Formik
 		initialValues={{
 			restrict_services: false,
@@ -13,13 +13,23 @@ const ControlledStoryTemplate = () => (
 		enableReinitialize
 	>
 		<div style={{ maxWidth: '300px' }}>
-			<WhereToWatch />
+			<WhereToWatch {...args} />
 		</div>
 	</Formik>
 );
 
-export const Example = ControlledStoryTemplate.bind({});
-Example.args = {};
+export const DefaultWhereToWatch = ControlledStoryTemplate.bind({});
+DefaultWhereToWatch.args = {};
+
+export const AuthenticatedWhereToWatch = ControlledStoryTemplate.bind({});
+AuthenticatedWhereToWatch.args = {
+	isAuthenticated: true
+};
+
+export const NoOttProviders = ControlledStoryTemplate.bind({});
+NoOttProviders.args = {
+	ottProviders: []
+};
 
 export default {
 	component: WhereToWatch,
