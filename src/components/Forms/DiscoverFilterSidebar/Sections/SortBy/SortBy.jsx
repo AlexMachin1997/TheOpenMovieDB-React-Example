@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { useFormikContext } from 'formik';
 
-import Settings from '../../../../settings';
+import Settings from '../../../../../settings';
 
-import { Accordion, Listbox } from '../../../Core';
-import FiltersTitle from '../FilterTitle/FilterTitle';
+import { Accordion, Listbox } from '../../../../Core';
+import FiltersTitle from '../../FilterTitle/FilterTitle';
 
 const Sort = () => {
 	const { values, setFieldValue } = useFormikContext();

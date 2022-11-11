@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Image, PercentageRating } from '../../../Core';
 
-import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
-import generateComponentId from '../../../../utils/formatters/generateComponentId';
+import generateComponentId from '../../../../utils/generateComponentId';
 
 const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 	<div
@@ -26,7 +25,7 @@ const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 		<Image
 			width='100%'
 			height='300px'
-			alt={replacesSpacesWith(title, '-')}
+			alt={title}
 			src={image}
 			className='aspect-square max-w-[200px] rounded-t-2xl'
 		/>

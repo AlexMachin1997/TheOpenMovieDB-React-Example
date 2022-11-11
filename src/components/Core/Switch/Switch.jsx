@@ -49,7 +49,7 @@ const CustomSwitch = ({ onChange, value, defaultValue, name, disabled, label }) 
 				)}
 			</Switch>
 			<Switch.Label
-				className={classNames({
+				className={classNames('w-full', {
 					'cursor-pointer': disabled === false,
 					'cursor-not-allowed': disabled === true
 				})}

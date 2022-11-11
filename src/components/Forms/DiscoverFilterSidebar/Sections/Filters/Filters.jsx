@@ -4,10 +4,18 @@ import PropTypes from 'prop-types';
 import { useFormikContext } from 'formik';
 
 import classNames from 'classnames';
-import Settings from '../../../../settings';
+import Settings from '../../../../../settings';
 
-import { Accordion, CheckboxGroup, Listbox, RadioGroup, Input, Icon } from '../../../Core';
-import FilterTitle from '../FilterTitle/FilterTitle';
+import {
+	Accordion,
+	CheckboxGroup,
+	Listbox,
+	RadioGroup,
+	Input,
+	Icon,
+	Switch
+} from '../../../../Core';
+import FilterTitle from '../../FilterTitle/FilterTitle';
 
 const ShowMeFilterIcon = ({
 	isChecked,
@@ -72,16 +80,6 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 
 		// When none of the above is met then just return the current checkbox values don't do any transforming.
 		return currentCheckboxValues;
-	};
-
-	const getReleaseDateField = (filterId = '') => {
-		// When the mediaType is tv use the air_date parameter instead of release_date
-		if (mediaType === 'tv') {
-			return `air_date.${filterId}`;
-		}
-
-		// If the mediaType isn't tv then use the release_date query parameter instead of the air_date
-		return `release_date.${filterId}`;
 	};
 
 	const SHOW_ME_RADIO_OPTIONS = React.useMemo(() => {
@@ -175,29 +173,71 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 
 				{/* Date picker's, uses the native html5 date picker's no custom solution needed */}
 				<div className='space-y-2'>
+					{/* When the mediaType is TV enable this filter to enable users to switch between the first air date or the release date */}
+					{mediaType === 'tv' && (
+						<Switch
+							onChange={({ value }) => {
+								setFieldValue('search_first_air_date', value);
+
+								// If you are using searching by first date clear the release date
+								if (value === true) {
+									setFieldValue(`['release_date.lte]`, '');
+									setFieldValue(`['release_date.gte']`, '');
+								}
+
+								// If you aren't searching by first date clear the air_date fields
+								if (value === false) {
+									setFieldValue(`['air_date.lte]`, '');
+									setFieldValue(`['air_date.gte']`, '');
+								}
+							}}
+							value={values.search_first_air_date}
+							defaultValue={undefined}
+							name='with_first_date'
+							disabled={false}
+							label='Search first air date?'
+						/>
+					)}
+
 					<Input
 						type='date'
 						label='From'
 						containerClassName='flex items-center'
 						labelClassName='w-[100px] text-black'
-						id={getReleaseDateField('gte')}
+						id={values.search_first_air_date === true ? 'air_date.gte' : 'release_date.gte'}
 						onChange={(event) => {
-							setFieldValue(`['${getReleaseDateField('gte')}']`, event.target.value);
+							if (values.search_first_air_date === true) {
+								setFieldValue(`['air_date.gte']`, event.target.value);
+							} else {
+								setFieldValue(`['release_date.gte']`, event.target.value);
+							}
 						}}
-						value={values[getReleaseDateField('gte')]}
-						name={getReleaseDateField('gte')}
+						value={
+							values.search_first_air_date === true
+								? values['air_date.gte']
+								: values['release_date.gte']
+						}
+						name={values.search_first_air_date === true ? 'air_date.gte' : 'release_date.gte'}
 					/>
 					<Input
 						type='date'
 						label='To'
 						containerClassName='flex items-center'
 						labelClassName='w-[100px] text-black'
-						id={getReleaseDateField('lte')}
+						id={values.search_first_air_date === true ? 'air_date.lte' : 'release_date.lte'}
 						onChange={(event) => {
-							setFieldValue(`['${getReleaseDateField('lte')}']`, event.target.value);
+							if (values.search_first_air_date === true) {
+								setFieldValue(`['air_date.lte']`, event.target.value);
+							} else {
+								setFieldValue(`['release_date.lte']`, event.target.value);
+							}
 						}}
-						value={values[getReleaseDateField('lte')]}
-						name={getReleaseDateField('lte')}
+						value={
+							values.search_first_air_date === true
+								? values['air_date.lte']
+								: values['release_date.lte']
+						}
+						name={values.search_first_air_date === true ? 'air_date.lte' : 'release_date.lte'}
 					/>
 				</div>
 			</div>

@@ -4,8 +4,7 @@ import className from 'classnames';
 
 import { Image, Icon } from '../../../Core';
 
-import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
-import generateComponentId from '../../../../utils/formatters/generateComponentId';
+import generateComponentId from '../../../../utils/generateComponentId';
 
 const Video = ({ title, overview, thumbnail, thumbnailAction }) => (
 	<div
@@ -33,7 +32,7 @@ const Video = ({ title, overview, thumbnail, thumbnailAction }) => (
 			<Image
 				width='100%'
 				height='100%'
-				alt={replacesSpacesWith(title, '-')}
+				alt={title}
 				src={thumbnail}
 				className='aspect-video group-hover:scale-105'
 			/>

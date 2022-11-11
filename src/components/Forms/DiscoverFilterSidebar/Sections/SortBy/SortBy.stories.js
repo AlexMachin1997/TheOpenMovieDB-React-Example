@@ -1,7 +1,7 @@
 import { Formik } from 'formik';
 import * as React from 'react';
 
-import Sort from './Sort';
+import Sort from './SortBy';
 
 const ControlledStoryTemplate = () => (
 	<Formik

@@ -22,7 +22,9 @@ const ControlledStoryTemplate = (args) => (
 			'vote_average.lte': 10,
 			'vote_count.gte': 500,
 			'with_runtime.gte': 0,
-			'with_runtime.lte': 400
+			'with_runtime.lte': 400,
+			// eslint-disable-next-line react/destructuring-assignment
+			search_first_air_date: args.movieType === 'tv'
 		}}
 		enableReinitialize
 	>
@@ -33,7 +35,9 @@ const ControlledStoryTemplate = (args) => (
 );
 
 export const DefaultFiltersSidebar = ControlledStoryTemplate.bind({});
-DefaultFiltersSidebar.args = {};
+DefaultFiltersSidebar.args = {
+	mediaType: 'movie'
+};
 
 export const TVFiltersSidebar = ControlledStoryTemplate.bind({});
 TVFiltersSidebar.args = {
@@ -42,7 +46,8 @@ TVFiltersSidebar.args = {
 
 export const AuthenticatedFiltersSidebar = ControlledStoryTemplate.bind({});
 AuthenticatedFiltersSidebar.args = {
-	isAuthenticated: true
+	isAuthenticated: true,
+	mediaType: 'movie'
 };
 
 export default {

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import { Image, StarsRating } from '../../../Core';
 
-import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
-
 const Overview = ({ image, title, overview, releaseDate, onClick, rating, onKeyDown }) => (
 	<div
 		className='flex flex-col rounded-2xl sm:flex-row'
@@ -24,7 +22,7 @@ const Overview = ({ image, title, overview, releaseDate, onClick, rating, onKeyD
 		<Image
 			width='150px'
 			height='100%'
-			alt={replacesSpacesWith(title, '-')}
+			alt={title}
 			src={image}
 			label={`${title}-poster`}
 			className='aspect-square max-w-none rounded-2xl'

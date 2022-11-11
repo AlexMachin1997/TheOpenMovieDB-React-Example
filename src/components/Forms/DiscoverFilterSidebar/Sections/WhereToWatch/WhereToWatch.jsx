@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import { useFormikContext } from 'formik';
 
-import Settings from '../../../../settings';
+import Settings from '../../../../../settings';
 
-import { Accordion, Listbox, Switch } from '../../../Core';
-import FilterTitle from '../FilterTitle/FilterTitle';
+import { Accordion, Listbox, Switch } from '../../../../Core';
+import FilterTitle from '../../FilterTitle/FilterTitle';
 
 const WhereToWatch = ({ isAuthenticated, ottProviders }) => {
 	const { values, setFieldValue } = useFormikContext();

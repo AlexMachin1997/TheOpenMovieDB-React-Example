@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Image, PercentageRating } from '../../../Core';
 
-import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
-import generateComponentId from '../../../../utils/formatters/generateComponentId';
+import generateComponentId from '../../../../utils/generateComponentId';
 
 const Backdrop = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 	<div
@@ -23,13 +22,7 @@ const Backdrop = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => 
 		}}
 		className='m-4 cursor-pointer rounded-lg bg-white shadow-xl shadow-gray-200'
 	>
-		<Image
-			width='100%'
-			height='250px'
-			alt={replacesSpacesWith(title, '-')}
-			src={image}
-			className='aspect-video	'
-		/>
+		<Image width='100%' height='250px' alt={title} src={image} className='aspect-video	' />
 		<div id={generateComponentId(title, 'backdrop-card-content')} className='flex items-center'>
 			<div id={generateComponentId(title, 'backdrop-card-rating')} className='p-1'>
 				<PercentageRating percentage={rating} size={50} strokeWidth={5} textSize='0.9rem' />
