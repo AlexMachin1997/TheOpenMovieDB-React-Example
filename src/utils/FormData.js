@@ -36,14 +36,21 @@ const setupDropdownFormData = ({ isMultiple = false, defaultValue, options = [] 
 	if (options.length === 0) return isMultiple === true ? [] : '';
 
 	// If the dropdown is multiple and some of the defaultValues are included in the options then get all the options which are included in the dropdown
-	if (
-		isMultiple === true &&
-		options
-			.map((option) => option.value)
-			.some((value) => defaultValue?.includes(value) ?? false) === true
-	) {
-		// Only get the filter values which are actually included in the dropdown.
-		return defaultValue?.filter((value) => options.includes(value) === true);
+	if (isMultiple === true) {
+		if (
+			options
+				.map((option) => option.value)
+				.some((value) => defaultValue?.includes(value) ?? false) === true
+		) {
+			// Return an array of option values e.g ['1', '8']
+			const formattedOptions = options?.map((option) => option.value);
+
+			// Only get the filter values which are actually included in the dropdown options.
+			return defaultValue?.filter((value) => formattedOptions.includes(value) === true) ?? [];
+		}
+
+		// If none of values are included in the options array just return the default value
+		return [];
 	}
 
 	// If it's a single select either return the found value or return an empty string
@@ -60,12 +67,16 @@ class FormData {
 		// Store "Sort By" formData properties
 		let defaultSortBy = '';
 
+		// Decide if the default sort by, top-rated or the default should be used for the sort_by
 		if (defaultValues?.sort_by?.length > 0) {
 			defaultSortBy = defaultValues?.sort_by ?? [];
 		} else if (this.resourceType === 'top-rated') {
-			defaultSortBy = settings?.find((option) => option.value === 'popularity.desc')?.value ?? '';
+			defaultSortBy = settings.SORT_BY_OPTIONS.find(
+				(option) => option.value === 'vote_average.desc'
+			).value;
 		} else {
-			defaultSortBy = settings.find((option) => option.value === 'vote_average.desc')?.value ?? '';
+			defaultSortBy =
+				settings.SORT_BY_OPTIONS.find((option) => option.value === 'popularity.desc')?.value ?? '';
 		}
 
 		this.sort_by = setupDropdownFormData({
@@ -76,25 +87,28 @@ class FormData {
 
 		// Store the "Where to Watch" formData properties
 
+		// Setup the restrict_services value (Only use the value if the value is a boolean)
 		if (typeof defaultValues.restrict_services === 'boolean') {
 			this.restrict_services = defaultValues?.restrict_services ?? false;
 		} else {
 			this.restrict_services = false;
 		}
 
+		// Setup the ott_region value
 		this.ott_region = setupDropdownFormData({
 			isMultiple: false,
 			defaultValue: defaultValues?.ott_region ?? 'US',
 			options: settings?.COUNTRY_OPTIONS ?? []
 		});
 
+		// Setup the with_ott_providers value
 		this.with_ott_providers = setupDropdownFormData({
 			isMultiple: true,
 			defaultValue: defaultValues?.with_ott_providers ?? [],
-			options: settings.OTT_PROVIDER_OPTIONS ?? []
+			options: settings?.OTT_PROVIDER_OPTIONS ?? []
 		});
 
-		// Store the "Filters" formData properties
+		// Setup the show_me value
 		if (
 			isAuthenticated === false ||
 			settings.SHOW_ME_RADIO_OPTIONS.map((option) => option.value).includes(
@@ -106,65 +120,117 @@ class FormData {
 			this.show_me = defaultValues?.show_me ?? '0';
 		}
 
+		// Setup the with_ott_monetization_types value
 		this.with_ott_monetization_types = setupCheckboxFormData({
 			defaultValue: defaultValues?.with_ott_monetization_types ?? [],
 			options: settings.AVAILABILITY_OPTIONS
 		});
 
+		// Setup the with_genres value
 		this.with_genres = setupDropdownFormData({
 			isMultiple: true,
 			defaultValue: defaultValues?.with_genres ?? [],
 			options: settings.GENRE_OPTIONS
 		});
 
+		// Setup the certification value
 		this.certification = setupDropdownFormData({
 			isMultiple: true,
 			defaultValue: defaultValues?.certification ?? [],
 			options: settings.CERTIFICATION_OPTIONS
 		});
 
+		// Setup the with_release_type value
 		this.with_release_type = setupCheckboxFormData({
 			defaultValue: defaultValues?.with_release_type ?? ['all'],
 			options: settings.RELEASE_TYPE_OPTIONS
 		});
 
+		// Setup the with_original_language value
 		this.with_original_language = setupDropdownFormData({
 			isMultiple: false,
 			defaultValue: defaultValues?.with_original_language ?? 'none',
 			options: settings.LANGUAGE_OPTIONS
 		});
 
+		// Setup the region value
 		this.region = setupDropdownFormData({
 			isMultiple: false,
 			defaultValue: defaultValues?.region ?? 'US',
 			options: settings.COUNTRY_OPTIONS
 		});
 
-		// From/Min
-		if (Number.isInteger(defaultValues?.vote_average_gte) === true) {
-			this.vote_average_gte = defaultValues?.vote_average_gte ?? 0;
-		} else {
-			this.vote_average_gte = 0;
-		}
-
-		// To/Max
+		// Setup the vote_average_lte (To)
 		if (Number.isInteger(defaultValues?.vote_average_lte) === true) {
-			if (this.vote_average_gte > defaultValues.vote_average_lte) {
-				this.vote_average_lte = this.vote_average_gte;
+			if (defaultValues?.vote_average_lte < 0) {
+				this.vote_average_lte = 10;
+			} else if (defaultValues.vote_average_lte > 10) {
+				this.vote_average_lte = 10;
+			} else if (defaultValues.vote_average_lte > defaultValues.vote_average_gte) {
+				this.vote_average_lte = 10;
 			} else {
-				this.vote_average_lte = defaultValues?.vote_average_lte ?? 10;
+				this.vote_average_lte = defaultValues?.vote_average_lte;
 			}
 		} else {
 			this.vote_average_lte = 10;
 		}
 
-		// top-rated is a special case where it needs specific values, otherwise we just the defaultValues or as a last resort fallback to the score being 500
+		// Setup the vote_average_gte (From)
+		if (Number.isInteger(defaultValues?.vote_average_gte) === true) {
+			if (defaultValues?.vote_average_gte < 0) {
+				this.vote_average_gte = 0;
+			} else if (defaultValues.vote_average_gte > 10) {
+				this.vote_average_gte = 0;
+			} else if (defaultValues.vote_average_gte > defaultValues.vote_average_lte) {
+				this.vote_average_gte = 0;
+			} else {
+				this.vote_average_gte = defaultValues.vote_average_gte;
+			}
+		} else {
+			this.vote_average_gte = 0;
+		}
+
+		// Setup the with_runtime_lte (To)
+		if (Number.isInteger(defaultValues?.with_runtime_lte) === true) {
+			if (defaultValues?.with_runtime_lte < 0) {
+				this.with_runtime_lte = 400;
+			} else if (defaultValues.with_runtime_lte > 400) {
+				this.with_runtime_lte = 400;
+			} else if (defaultValues.with_runtime_gte > defaultValues?.with_runtime_lte) {
+				this.with_runtime_lte = 400;
+			} else {
+				this.with_runtime_lte = defaultValues.with_runtime_lte;
+			}
+		} else {
+			this.with_runtime_lte = 400;
+		}
+
+		// Setup the with_runtime_gte (From)
+		if (Number.isInteger(defaultValues?.with_runtime_gte) === true) {
+			if (defaultValues.with_runtime_gte < 0) {
+				this.with_runtime_gte = 0;
+			} else if (defaultValues.with_runtime_gte > 400) {
+				this.with_runtime_gte = 0;
+			} else if (defaultValues.with_runtime_gte > defaultValues?.with_runtime_lte) {
+				this.with_runtime_gte = 0;
+			} else {
+				this.with_runtime_gte = defaultValues.with_runtime_gte;
+			}
+		} else {
+			this.with_runtime_gte = 0;
+		}
+
+		// Setup the vote_count_gte
 		if (this.resourceType === 'top-rated') {
 			this.vote_count_gte = this.mediaType === 'movie' ? 300 : 150;
 		} else if (Number.isInteger(defaultValues?.vote_count_gte ?? undefined) === true) {
-			this.vote_count_gte = Math.min(defaultValues.vote_count_gte, 500);
+			if (defaultValues?.vote_count_gte > 500) {
+				this.vote_count_gte = 0;
+			} else {
+				this.vote_count_gte = defaultValues?.vote_count_gte ?? 0;
+			}
 		} else {
-			this.vote_count_gte = 500;
+			this.vote_count_gte = 0;
 		}
 
 		// Reserved "Filters" values, automatically set to get the correct values when using the Discover filtering
@@ -174,7 +240,7 @@ class FormData {
 		this.air_date_lte = '';
 		this.search_first_air_date = defaultValues?.search_first_air_date ?? mediaType === 'tv';
 
-		// Perform initial setup when the class is setup
+		// Setup the reserved filter properties, defaultValues aren't supported this as
 		this.setDateRangeFormData();
 	}
 
@@ -220,7 +286,7 @@ class FormData {
 			const lte = format(new Date(), 'yyyy-MM-dd');
 
 			// When using the first_air fate filter set the air_date values otherwise just set the release_date
-			// NOTE: Add find out more about this filter's functionalit
+			// NOTE: Add find out more about this filter's functionality
 			if (this.search_first_air_date === true) {
 				this.air_date_gte = gte;
 				this.air_date_lte = lte;
@@ -232,8 +298,8 @@ class FormData {
 
 		// Set the release_date values for the /movie/upcoming route
 		if (this.resourceType === 'upcoming' && this.mediaType === 'movie') {
-			this.release_date_gte = format(addDays(new Date(), 2), 'yyyy-MM-dd');
-			this.release_date_lte = format(addDays(new Date(), 23), 'yyyy-MM-dd');
+			this.release_date_gte = format(addDays(new Date(), 3), 'yyyy-MM-dd');
+			this.release_date_lte = format(addDays(new Date(), 24), 'yyyy-MM-dd');
 		}
 
 		// Set the air_date values for the /tv/on-the-air route
@@ -252,13 +318,13 @@ class FormData {
 			} else {
 				this.release_date_gte = gte;
 				this.release_date_lte = lte;
-			}
+			} //
 		}
 
 		// Set the release_date values for the /movie/top-rated route
 		if (this.resourceType === 'top-rated' && this.mediaType === 'movie') {
 			this.release_date_gte = '';
-			this.release_date_lte = format(addDays(new Date(), 240), 'yyyy-MM-dd');
+			this.release_date_lte = format(addDays(new Date(), 181), 'yyyy-MM-dd');
 		}
 
 		// Set the release_date values for the /tv/top-rated route
