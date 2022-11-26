@@ -15,8 +15,6 @@ const Accordion = ({ children, title, defaultIsOpen, isDisabled, className, cont
 						className,
 						'flex w-full items-center justify-between border border-solid border-gray-300',
 						{
-							// 'rounded-bl-lg': open === false,
-							// 'rounded-br-lg': open === false,
 							'rounded-tr-lg rounded-tl-lg': open === true,
 							'rounded-lg': open === false,
 							'bg-slate-300': isDisabled === true,

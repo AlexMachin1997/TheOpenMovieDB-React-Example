@@ -33,5 +33,5 @@ NoOttProviders.args = {
 
 export default {
 	component: WhereToWatch,
-	title: 'Design System/Forms/Filtering/Where to watch'
+	title: 'Design System/Forms/Filtering/Sections/Where to watch'
 };

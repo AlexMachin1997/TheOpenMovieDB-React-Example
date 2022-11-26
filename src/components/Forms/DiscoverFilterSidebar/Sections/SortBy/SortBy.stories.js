@@ -21,5 +21,5 @@ Example.args = {};
 
 export default {
 	component: Sort,
-	title: 'Design System/Forms/Filtering/Sort By'
+	title: 'Design System/Forms/Filtering/Section/Sort By'
 };

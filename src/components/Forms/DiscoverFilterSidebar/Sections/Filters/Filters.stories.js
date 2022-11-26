@@ -52,5 +52,5 @@ AuthenticatedFiltersSidebar.args = {
 
 export default {
 	component: Filters,
-	title: 'Design System/Forms/Filtering/Filters'
+	title: 'Design System/Forms/Filtering/Section/Filters'
 };

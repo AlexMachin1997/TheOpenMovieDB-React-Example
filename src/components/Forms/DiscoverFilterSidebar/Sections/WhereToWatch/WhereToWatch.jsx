@@ -29,7 +29,10 @@ const WhereToWatch = ({ isAuthenticated, ottProviders }) => {
 	}, [isAuthenticated, ottProviders, values.restrict_services]);
 
 	return (
-		<Accordion title={<h3 className='text-lg text-black'>Where to watch</h3>} contentClassName=''>
+		<Accordion
+			title={<h3 className='text-lg text-black'>Where to watch</h3>}
+			contentClassName='mb-4'
+		>
 			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
 				<FilterTitle title='My Services' tooltip={MyServicesTooltip} />
 

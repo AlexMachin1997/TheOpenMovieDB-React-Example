@@ -42,8 +42,8 @@ module.exports = {
 			},
 
 			// Create new margin properties
-			margin: {
-				auto: '0 auto'
+			spacing: {
+				'ml-auto': 'auto'
 			}
 		}
 	},

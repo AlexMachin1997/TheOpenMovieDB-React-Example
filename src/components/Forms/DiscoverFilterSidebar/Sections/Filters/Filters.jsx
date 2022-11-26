@@ -98,7 +98,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 	}, [isAuthenticated]);
 
 	return (
-		<Accordion title={<h3 className='text-lg text-black'>Filters</h3>} contentClassName=''>
+		<Accordion title={<h3 className='text-lg text-black'>Filters</h3>} contentClassName='mb-4'>
 			<label htmlFor='show_me' className='block border-b-[1px] border-solid border-gray-300 p-4'>
 				<FilterTitle
 					title='Show Me'

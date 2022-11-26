@@ -7,7 +7,7 @@ import generateComponentId from '../../../../utils/generateComponentId';
 
 const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 	<div
-		className='m-4 cursor-pointer rounded-2xl bg-white shadow-xl shadow-gray-200'
+		className='cursor-pointer rounded-2xl bg-white shadow-xl shadow-gray-200'
 		onClick={(event) => {
 			if (onClick) {
 				onClick(event);
@@ -24,10 +24,10 @@ const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 	>
 		<Image
 			width='100%'
-			height='300px'
+			height='265px'
 			alt={title}
 			src={image}
-			className='aspect-square max-w-[200px] rounded-t-2xl'
+			className='aspect-square rounded-t-2xl'
 		/>
 
 		<div
