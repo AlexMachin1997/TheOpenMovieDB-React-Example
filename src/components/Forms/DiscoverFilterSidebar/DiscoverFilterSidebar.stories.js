@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 
 import DiscoverFilterSidebar from './DiscoverFilterSidebar';
+import DiscoverFiltersFormData from '../../../utils/DiscoverFiltersFormData';
 
 const Template = ({ mediaType, resourceType, isAuthenticated }) => {
 	const formData = React.useMemo(
