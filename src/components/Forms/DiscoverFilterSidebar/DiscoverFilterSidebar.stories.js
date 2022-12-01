@@ -7,7 +7,8 @@ import DiscoverFilterSidebar from './DiscoverFilterSidebar';
 
 const Template = ({ mediaType, resourceType, isAuthenticated }) => {
 	const formData = React.useMemo(
-		() => new FormData(mediaType, resourceType, isAuthenticated, {}).getFormikFormData(),
+		() =>
+			new DiscoverFiltersFormData(mediaType, resourceType, isAuthenticated, {}).getFormikFormData(),
 		[mediaType, resourceType, isAuthenticated]
 	);
 
