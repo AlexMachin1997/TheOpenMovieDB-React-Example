@@ -6,12 +6,11 @@ import classNameGenerator from 'classnames';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-const Tooltip = ({ children, tooltip, placement, className, title, ...props }) => (
+const Tooltip = ({ children, tooltip, placement, className, ...props }) => (
 	<Tippy
 		content={tooltip}
 		placement={placement}
 		className={classNameGenerator('inline-block', className)}
-		title={title}
 		{...props}
 	>
 		<div className='inline-flex'>{children}</div>
@@ -28,8 +27,7 @@ Tooltip.propTypes = {
 		.isRequired,
 	children: PropTypes.node.isRequired,
 	placement: PropTypes.string,
-	className: PropTypes.string,
-	title: PropTypes.string.isRequired
+	className: PropTypes.string
 };
 
 export default Tooltip;

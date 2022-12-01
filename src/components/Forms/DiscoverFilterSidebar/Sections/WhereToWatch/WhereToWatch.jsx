@@ -56,7 +56,7 @@ const WhereToWatch = ({ isAuthenticated, ottProviders }) => {
 					value={values.restrict_services}
 					defaultValue={undefined}
 					name='restrict_services'
-					disabled={ottProviders.length === 0} // Disable the switch when there are no Service Providers
+					disabled={ottProviders.length === 0 || isAuthenticated === false} // Disable the switch when there are no Service Providers
 					label='Restrict searches to my subscribed services?'
 				/>
 			</div>

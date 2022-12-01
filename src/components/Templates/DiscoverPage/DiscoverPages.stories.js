@@ -7,7 +7,15 @@ const Template = (args) => <DiscoverPage {...args} />;
 const DefaultStoryArgs = {
 	resourceType: 'popular',
 	mediaType: 'movie',
-	isAuthenticated: false
+	isAuthenticated: false,
+	resources: Array(20)
+		.fill()
+		.map(() => ({
+			title: 'Black Adam',
+			releaseDate: '21 Oct 2022',
+			rating: 69,
+			image: 'https://image.tmdb.org/t/p/original/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg'
+		}))
 };
 
 export const MoviesPopular = Template.bind({});

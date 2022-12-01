@@ -204,7 +204,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 						label='From'
 						containerClassName='flex items-center'
 						labelClassName='w-[100px] text-black'
-						id={values.search_first_air_date === true ? 'air_date.gte' : 'release_date.gte'}
+						id={values.search_first_air_date === true ? `air_date.gte` : `release_date.gte`}
 						onChange={(event) => {
 							if (values.search_first_air_date === true) {
 								setFieldValue(`['air_date.gte']`, event.target.value);
@@ -224,7 +224,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 						label='To'
 						containerClassName='flex items-center'
 						labelClassName='w-[100px] text-black'
-						id={values.search_first_air_date === true ? 'air_date.lte' : 'release_date.lte'}
+						id={values.search_first_air_date === true ? `air_date.lte` : `release_date.lte`}
 						onChange={(event) => {
 							if (values.search_first_air_date === true) {
 								setFieldValue(`['air_date.lte']`, event.target.value);

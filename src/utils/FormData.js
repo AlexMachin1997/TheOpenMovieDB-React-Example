@@ -347,9 +347,8 @@ class FormData {
 		}
 	}
 
-	getFormikFormData() {
+	getFiltersFormData() {
 		return {
-			// "Filters" section formData
 			show_me: this.show_me,
 			with_ott_monetization_types: this.with_ott_monetization_types,
 			with_genres: this.with_genres,
@@ -366,15 +365,34 @@ class FormData {
 			'vote_count.gte': this.vote_count_gte,
 			'with_runtime.gte': this.with_runtime_gte,
 			'with_runtime.lte': this.with_runtime_lte,
-			search_first_air_date: this.mediaType === 'tv',
+			search_first_air_date: this.mediaType === 'tv'
+		};
+	}
 
-			// "Sort By" section formData
-			sort_by: this.sort_by,
+	getSortByFormData() {
+		return {
+			sort_by: this.sort_by
+		};
+	}
 
-			// "Where to Watch" section formDataa
+	getWhereToWatchFormData() {
+		return {
 			restrict_services: this.restrict_services,
 			ott_region: this.ott_region,
 			with_ott_providers: this.with_ott_providers
+		};
+	}
+
+	getFormikFormData() {
+		return {
+			// "Filters" section formData
+			...this.getFiltersFormData(),
+
+			// "Sort By" section formData
+			...this.getSortByFormData(),
+
+			// "Where to Watch" section formDataa
+			...this.getWhereToWatchFormData()
 		};
 	}
 }
