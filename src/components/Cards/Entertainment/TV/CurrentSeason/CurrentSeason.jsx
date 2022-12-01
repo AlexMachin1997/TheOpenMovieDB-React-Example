@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import { Image } from '../../../../Core';
 
-import replacesSpacesWith from '../../../../../utils/formatters/replaceSpacesWith';
-
 const generateSubHeading = (episodeCount, year) => {
 	if (episodeCount === 1) {
 		return `${year} | ${episodeCount} Episode`;
@@ -18,12 +16,12 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview }) => (
 		<Image
 			width='130px'
 			height='200px'
-			alt={replacesSpacesWith(title, '-')}
+			alt={title}
 			src={image}
-			className='hidden rounded-l-xl md:flex md:p-1'
+			className='hidden aspect-square rounded-l-xl md:flex md:p-1'
 		/>
 
-		<div className='align-center flex flex-col justify-center pl-2'>
+		<div className='flex flex-col items-center justify-center pl-2'>
 			<h2 className='text-2xl font-bold text-black'>{title}</h2>
 
 			<p className='mb-4 text-base font-bold text-black md:mb-0 md:line-clamp-3'>

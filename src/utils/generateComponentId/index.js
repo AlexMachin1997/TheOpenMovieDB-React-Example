@@ -1,8 +1,6 @@
-import replaceSpacesWith from '../replaceSpacesWith';
-
-const generateComponentId = (field, additionalInfo) => {
+const generateComponentId = (field = '', additionalInfo = '') => {
 	try {
-		const id = `${replaceSpacesWith(field, '-')}-${additionalInfo}`.toLowerCase();
+		const id = `${field.replace(/\s+/g, '-')}-${additionalInfo}`.toLowerCase();
 
 		if (typeof field !== 'string' || typeof additionalInfo !== 'string') {
 			throw Error('The field provided is not a string');

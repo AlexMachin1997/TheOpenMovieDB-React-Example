@@ -77,9 +77,9 @@ const EntertainmentHeader = ({
 				style={{
 					backgroundImage: overlay
 				}}
-				className='align-center flex justify-center'
+				className='flex items-center justify-center'
 			>
-				<div className='relative top-0 left-0 block pt-4 md:flex md:max-w-[1100px] md:pt-8 md:pr-10 md:pb-8 md:pl-10'>
+				<div className='relative top-0 left-0 block pt-4 md:flex md:max-w-[1100px] md:py-8 md:px-10'>
 					<Image
 						src={posterImage}
 						width='200px'
@@ -96,10 +96,10 @@ const EntertainmentHeader = ({
 							</div>
 
 							<ol
-								className='border-t-bg-slate-800 flex flex-wrap items-center justify-center border-t border-b border-solid border-b-black border-t-black bg-slate-800 p-3	md:justify-start md:border-0 md:bg-transparent md:p-1'
+								className='flex flex-wrap items-center justify-center border-y border-t-[1px] border-solid border-slate-800 border-y-black bg-slate-800 p-3 md:justify-start md:border-0	md:bg-transparent md:p-1'
 								id={`${title} facts`}
 							>
-								<li className='mr-2 rounded-sm border border-solid border-gray-300 border-opacity-60 bg-black p-1 leading-[1] text-white opacity-60'>
+								<li className='mr-2 rounded-sm border border-solid border-gray-300/60 bg-black p-1 leading-[1] text-white opacity-60'>
 									{ageRating}
 								</li>
 								<li className='pr-2 text-white '>{releaseDate}</li>

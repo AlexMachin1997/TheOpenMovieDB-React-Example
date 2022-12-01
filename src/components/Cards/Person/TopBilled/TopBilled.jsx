@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Image } from '../../../Core';
 
-import generateComponentId from '../../../../utils/formatters/generateComponentId';
+import generateComponentId from '../../../../utils/generateComponentId';
 
 const TopBilled = ({
 	actorName,

@@ -114,7 +114,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 				id='mobile-navigation-sidebar'
 				aria-label='mobile navigation menu sidebar'
 				className={className(
-					'fixed top-[75px] bottom-0 overflow-y-scroll bg-primary p-4 opacity-90 backdrop-blur-[20px] duration-500 ease-in',
+					'fixed top-[75px] bottom-0 overflow-y-scroll bg-primary/90 p-4 backdrop-blur-[20px] duration-500 ease-in',
 					{
 						// When the menu item is active
 						'left-0': isSidebarOpen === true,
@@ -149,7 +149,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 
 			<nav
 				id='mobile-navigation-menu'
-				className='fixed top-0 right-0 left-0 bg-primary p-4'
+				className='fixed inset-x-0 top-0 bg-primary p-4'
 				aria-label='mobile navigation menu'
 				role='navigation'
 			>
@@ -209,7 +209,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 
 			<nav
 				id='desktop-navigation-menu'
-				className='fixed top-0 right-0 left-0 bg-primary'
+				className='fixed inset-x-0 top-0 bg-primary'
 				aria-label='desktop navigation menu'
 				role='navigation'
 			>

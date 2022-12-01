@@ -29,9 +29,7 @@ const PersonSidebar = ({
 				width='unset'
 				height='unset'
 			/>
-			<h3 className='mb-4 mt-4 text-center text-4xl font-bold text-black md:text-left'>
-				{actorName}
-			</h3>
+			<h3 className='my-4 text-center text-4xl font-bold text-black md:text-left'>{actorName}</h3>
 			<div className='flex justify-center md:justify-start'>
 				<SocialLinks
 					facebook={facebookLink}
@@ -46,7 +44,7 @@ const PersonSidebar = ({
 		<div className='m-auto max-w-[900px] md:max-w-none'>
 			<h4 className='pb-4 text-xl text-black'>Personal info</h4>
 
-			<ul className='grid grid-cols-2 justify-center gap-y-6 gap-x-6 md:grid-cols-1'>
+			<ul className='grid grid-cols-2 justify-center gap-6 md:grid-cols-1'>
 				<li className=''>
 					<h5 className='text-lg'>Known For</h5>
 					<p className='font-light'>{knownFor}</p>

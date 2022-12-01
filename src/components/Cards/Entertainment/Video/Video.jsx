@@ -4,8 +4,7 @@ import className from 'classnames';
 
 import { Image, Icon } from '../../../Core';
 
-import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
-import generateComponentId from '../../../../utils/formatters/generateComponentId';
+import generateComponentId from '../../../../utils/generateComponentId';
 
 const Video = ({ title, overview, thumbnail, thumbnailAction }) => (
 	<div
@@ -28,14 +27,14 @@ const Video = ({ title, overview, thumbnail, thumbnailAction }) => (
 	>
 		<div
 			id={generateComponentId(title, 'video-card-container-icon-container')}
-			className='w-100 group relative max-w-[300px]'
+			className='group relative w-full max-w-[300px]'
 		>
 			<Image
 				width='100%'
 				height='100%'
-				alt={replacesSpacesWith(title, '-')}
+				alt={title}
 				src={thumbnail}
-				className='group-hover:scale-105'
+				className='aspect-video group-hover:scale-105'
 			/>
 			<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
 				<Icon className={className('fa-solid fa-play text-3xl group-hover:text-5xl')} />

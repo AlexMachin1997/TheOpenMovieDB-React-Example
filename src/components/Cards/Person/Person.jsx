@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import { Image } from '../../Core';
 
-import generateComponentId from '../../../utils/formatters/generateComponentId';
+import generateComponentId from '../../../utils/generateComponentId';
 
 const Person = ({ name, image, knownFor, onKeyDown, onClick }) => (
 	<div
-		className='h-100 w-100 max-h-[235px] max-w-[235px] cursor-pointer bg-white shadow-xl shadow-gray-200'
+		className='h-full max-h-[235px] w-full max-w-[235px] cursor-pointer bg-white shadow-xl shadow-gray-200'
 		id={generateComponentId(name, 'person-card-container')}
 		type='button'
 		role='button'
@@ -25,7 +25,7 @@ const Person = ({ name, image, knownFor, onKeyDown, onClick }) => (
 			}
 		}}
 	>
-		<Image width='100%' height='100%' alt={name} src={image} />
+		<Image width='100%' height='100%' alt={name} src={image} className='aspect-square' />
 		<div
 			className='p-1 shadow-xl shadow-gray-200'
 			id={generateComponentId(name, 'person-card-content-container')}

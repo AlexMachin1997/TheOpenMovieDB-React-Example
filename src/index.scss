@@ -1,3 +1,6 @@
+// import "/node_modules/flag-icons/css/flag-icons.min.css";
+@import '../node_modules/flag-icons/sass/flag-icons.scss';
+
 // This is an internal font awesome sass/scss variable, we need to override to point to our webfonts (copy of the internal fonts)
 $fa-font-path: '../webfonts';
 
@@ -12,31 +15,28 @@ $fa-font-path: '../webfonts';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-// https://tailwindcss.com/docs/customizing-colors#using-css-variables
-@layer base {
-	// Stores the entertainment background image, due to tailwind limitations we have to dynamically create an image reference to use it via css classes
-	:root {
-		--entertainmentBackgroundImage: '';
-	}
+// Stores the entertainment background image, due to tailwind limitations we have to dynamically create an image reference to use it via css classes
+:root {
+	--entertainmentBackgroundImage: '';
+}
 
-	// A class for the light mode of the application with scoped css variables
-	// NOTE: These are rgb values, they are transformed in the tailwind.config.js file
-	.light {
-		--primary: 13 37 63; // #0d253f;
-		--secondary: 1 180 228; // #01b4e4;
-		--tertiary: 144 206 161; // #90cea1;
-	}
+// A class for the light mode of the application with scoped css variables
+// NOTE: These are rgb values, they are transformed in the tailwind.config.js file
+.light {
+	--primary: 13 37 63; // #0d253f;
+	--secondary: 1 180 228; // #01b4e4;
+	--tertiary: 144 206 161; // #90cea1;
+}
 
-	// A class for the dark mode of the application with scoped css variables
-	// NOTE: These are rgb values, they are transformed in the tailwind.config.js file
-	.dark {
-		--primary: 144 206 161; // #90cea1;
-		--secondary: 13 37 63; // #0d253f;
-		--tertiary: 60 179 113; // #3cb371;
-	}
+// A class for the dark mode of the application with scoped css variables
+// NOTE: These are rgb values, they are transformed in the tailwind.config.js file
+.dark {
+	--primary: 144 206 161; // #90cea1;
+	--secondary: 13 37 63; // #0d253f;
+	--tertiary: 60 179 113; // #3cb371;
+}
 
-	// Apply the Signika font-family to the entire body
-	html {
-		font-family: 'Signika', sans-serif !important;
-	}
+// Apply the Signika font-family to the entire body
+html {
+	font-family: 'Signika', sans-serif !important;
 }

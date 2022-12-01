@@ -6,9 +6,11 @@ module.exports = {
 		'plugin:react-hooks/recommended',
 		'plugin:react/recommended',
 		'plugin:import/react',
-		'plugin:storybook/recommended'
+		'plugin:storybook/recommended',
+		'plugin:prettier/recommended',
+		'plugin:tailwindcss/recommended'
 	],
-	plugins: ['prettier', 'react'],
+	plugins: ['prettier', 'react', 'tailwindcss'],
 	globals: {
 		Atomics: 'readonly',
 		SharedArrayBuffer: 'readonly'
@@ -27,6 +29,12 @@ module.exports = {
 		es6: true
 	},
 	rules: {
+		'tailwindcss/no-custom-classname': [
+			1,
+			{
+				whitelist: ['^fa[-a-zA-Z0-9]*'] // Allows for the following custom css classnames e.g. fa-facebook, fa-2x, fa-facebook-s
+			}
+		],
 		'import/no-cycle': 'off',
 		'import/no-extraneous-dependencies': [
 			'error',
@@ -79,7 +87,6 @@ module.exports = {
 		'max-len': 0,
 		'import/extensions': 0,
 		'no-underscore-dangle': 0,
-		'consistent-return': 0,
 		'react/display-name': 0,
 		'react/no-array-index-key': 0,
 		'react/react-in-jsx-scope': 2,
@@ -118,7 +125,24 @@ module.exports = {
 		],
 		'react-hooks/rules-of-hooks': 0,
 		'react-hooks/exhaustive-deps': 'error',
-		'jsx-quotes': ['error', 'prefer-single']
-	},
-	root: true
+		'jsx-quotes': ['error', 'prefer-single'],
+
+		// Can't always apply appy dom ids or additional aria-[name] to elements so we allow some nesting or an id
+		'jsx-a11y/label-has-associated-control': [
+			'error',
+			{
+				required: {
+					some: ['nesting', 'id']
+				}
+			}
+		],
+		'jsx-a11y/label-has-for': [
+			'error',
+			{
+				required: {
+					some: ['nesting', 'id']
+				}
+			}
+		]
+	}
 };

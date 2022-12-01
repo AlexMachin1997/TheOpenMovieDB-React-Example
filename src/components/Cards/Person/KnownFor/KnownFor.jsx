@@ -3,22 +3,15 @@ import PropTypes from 'prop-types';
 
 import { Image } from '../../../Core';
 
-import replacesSpacesWith from '../../../../utils/formatters/replaceSpacesWith';
-import generateComponentId from '../../../../utils/formatters/generateComponentId';
+import generateComponentId from '../../../../utils/generateComponentId';
 
 const KnownFor = ({ actorName, actorImage }) => (
 	<div
-		className='m-4 flex h-full cursor-pointer flex-col content-center items-center rounded-xl bg-white text-center shadow-xl shadow-gray-200'
+		className='m-4 flex h-full max-w-[150px] cursor-pointer flex-col content-center items-center rounded-xl bg-white text-center shadow-gray-200 line-clamp-2'
 		id={generateComponentId(actorName, 'known-for-card')}
 	>
-		<Image
-			width='100%'
-			height='195px'
-			alt={replacesSpacesWith(actorName, '-')}
-			src={actorImage}
-			className='rounded-xl'
-		/>
-		<h2 className='text-sm font-bold'>{actorName}</h2>
+		<Image width='100%' height='195px' alt={actorName} src={actorImage} className='rounded-xl' />
+		<h2 className='text-sm font-light'>{actorName}</h2>
 	</div>
 );
 
