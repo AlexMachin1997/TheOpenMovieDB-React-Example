@@ -1,26 +1,27 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
+import classNames from 'classnames';
 import { Image, PercentageRating } from '../../../Core';
 
 import generateComponentId from '../../../../utils/generateComponentId';
 
-const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
-	<div
-		className='cursor-pointer rounded-2xl bg-white shadow-xl shadow-gray-200'
-		onClick={(event) => {
-			if (onClick) {
-				onClick(event);
-			}
-		}}
+const Poster = ({
+	title,
+	releaseDate,
+	rating,
+	image,
+	linkElement: LinkElement,
+	linkElementClassName,
+	...props
+}) => (
+	<LinkElement
+		className={classNames(
+			'cursor-pointer rounded-2xl bg-white shadow-xl shadow-gray-200',
+			linkElementClassName
+		)}
 		id={generateComponentId(title, 'poster-card-container')}
-		role='button'
-		tabIndex={0}
-		onKeyDown={(event) => {
-			if (onKeyDown) {
-				onKeyDown(event);
-			}
-		}}
+		{...props}
 	>
 		<Image
 			width='100%'
@@ -45,7 +46,7 @@ const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
 				<p className='text-base font-light text-slate-400'>{releaseDate}</p>
 			</div>
 		</div>
-	</div>
+	</LinkElement>
 );
 
 Poster.defaultProps = {
@@ -53,8 +54,8 @@ Poster.defaultProps = {
 	releaseDate: 'Dec 01, 2017',
 	rating: 50,
 	image: 'https://image.tmdb.org/t/p/original/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg',
-	onClick: null,
-	onKeyDown: null
+	linkElement: 'a',
+	linkElementClassName: ''
 };
 
 Poster.propTypes = {
@@ -62,8 +63,8 @@ Poster.propTypes = {
 	releaseDate: PropTypes.string,
 	rating: PropTypes.number,
 	image: PropTypes.string,
-	onClick: PropTypes.func,
-	onKeyDown: PropTypes.func
+	linkElement: PropTypes.oneOfType([PropTypes.node, PropTypes.element, PropTypes.string]),
+	linkElementClassName: PropTypes.string
 };
 
 export default Poster;

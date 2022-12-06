@@ -449,7 +449,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 					type='number'
 					min={0}
 					max={values['with_runtime.lte']} // The minimum score can't go above the maximum score
-					step={15}
+					step={10}
 					inputMode='numeric'
 					name='with_runtime.gte'
 					onChange={(event) => {
@@ -476,7 +476,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 					type='number'
 					min={0}
 					max={400}
-					step={15}
+					step={10}
 					inputMode='numeric'
 					name='with_runtime.lte'
 					onChange={(event) => {
