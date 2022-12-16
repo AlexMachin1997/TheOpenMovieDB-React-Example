@@ -33,29 +33,18 @@ Image.args = {
 
 export const PosterWithLinkElementAsButton = Template.bind({});
 PosterWithLinkElementAsButton.args = {
-	// Pass the tag we want, in this case it's a button
-	linkElement: 'button',
-
-	// Pass a styling property to append to the default styling
-	linkElementClassName: 'text-left',
-
-	// Any unknown properties can passed to the <LinkElement/>
-	tabIndex: '0',
-	role: 'button',
-	type: 'button'
+	renderLink: ({ content }) => (
+		<button onClick={() => console.log('clicked')} type='button'>
+			{content}
+		</button>
+	)
 };
 
 export const PosterWithLinkElementAsReactRouterLink = Template.bind({});
 PosterWithLinkElementAsReactRouterLink.args = {
-	// Pass the element that is wanted
-	linkElement: Link,
-
-	// Pass a styling property to append to the default styling
-	linkElementClassName: 'text-left',
-
-	// Any unknown properties can passed to the <LinkElement/>
-	to: '/'
+	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
+
 PosterWithLinkElementAsReactRouterLink.decorators = [
 	(Story) => (
 		<MemoryRouter>
