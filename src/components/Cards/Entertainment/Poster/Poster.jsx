@@ -6,16 +6,25 @@ import { Image, PercentageRating } from '../../../Core';
 import generateComponentId from '../../../../utils/generateComponentId';
 
 const Poster = ({ title, releaseDate, rating, image, renderLink }) => {
-	// Stores the main content for the Poster, the renderLink wraps around the entire element
-	const mainContent = (
-		<>
-			<Image
-				width='100%'
-				height='265px'
-				alt={title}
-				src={image}
-				className='aspect-square rounded-t-2xl'
-			/>
+	const PosterImage = (
+		<Image
+			width='100%'
+			height='265px'
+			alt={title}
+			src={image}
+			className='aspect-square rounded-t-2xl'
+		/>
+	);
+
+	return (
+		<div
+			className='flex flex-col rounded-2xl bg-white shadow-xl shadow-gray-200'
+			id={generateComponentId(title, 'poster-card-container')}
+		>
+			{/* Either render a custom link component or fallback to just the poster image */}
+			{typeof renderLink === 'function'
+				? React.cloneElement(renderLink({ content: PosterImage }))
+				: PosterImage}
 
 			<div
 				className='relative flex flex-col p-4'
@@ -28,22 +37,19 @@ const Poster = ({ title, releaseDate, rating, image, renderLink }) => {
 					<PercentageRating percentage={rating} size={40} strokeWidth={2.5} textSize='0.7rem' />
 				</div>
 				<div id={generateComponentId(title, 'poster-card-meta')}>
-					<h3 className='text-base font-bold text-black'>{title}</h3>
+					{/* Either render a custom link component or fallback to just the poster image */}
+					{typeof renderLink === 'function' ? (
+						React.cloneElement(
+							renderLink({ content: title, className: 'text-base font-bold text-black' })
+						)
+					) : (
+						<h3 className='text-base font-bold text-black'>{title}</h3>
+					)}
+
 					<p className='text-base font-light text-slate-400'>{releaseDate}</p>
 				</div>
 			</div>
-		</>
-	);
-
-	return (
-		<>
-			{/* Either use the renderLink render prop or it defaults to just a span element */}
-			{typeof renderLink === 'function' ? (
-				renderLink({ content: mainContent })
-			) : (
-				<span className='group relative'>{mainContent}</span>
-			)}
-		</>
+		</div>
 	);
 };
 
