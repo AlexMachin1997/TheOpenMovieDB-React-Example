@@ -2,47 +2,54 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 
-import { Image, Icon } from '../../../Core';
+import { Image, Icon, Button } from '../../../Core';
 
 import generateComponentId from '../../../../utils/generateComponentId';
 
-const Video = ({ title, overview, thumbnail, thumbnailAction }) => (
+const Video = ({ title, overview, thumbnail, thumbnailAction, renderLink }) => (
 	<div
 		id={generateComponentId(title, 'video-card-container')}
 		className='relative min-w-[300px] max-w-[300px] p-4'
-		onClick={(event) => {
-			if (thumbnailAction) {
-				thumbnailAction(event);
-			}
-		}}
-		onKeyDown={(event) => {
-			if (thumbnailAction) {
-				if (event.key === 'Enter') {
-					thumbnailAction(event);
-				}
-			}
-		}}
-		tabIndex={0}
-		role='button'
 	>
-		<div
+		<Button
 			id={generateComponentId(title, 'video-card-container-icon-container')}
 			className='group relative w-full max-w-[300px]'
+			onClick={(event) => {
+				if (thumbnailAction) {
+					thumbnailAction(event);
+				}
+			}}
+			onKeyDown={(event) => {
+				if (thumbnailAction) {
+					if (event.key === 'Enter') {
+						thumbnailAction(event);
+					}
+				}
+			}}
+			tabIndex={0}
+			type='button'
 		>
 			<Image
-				width='100%'
-				height='100%'
+				width='300px'
+				height='169px'
 				alt={title}
 				src={thumbnail}
-				className='aspect-video group-hover:scale-105'
+				className='aspect-video delay-150 group-hover:scale-105'
 			/>
 			<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
-				<Icon className={className('fa-solid fa-play text-3xl group-hover:text-5xl')} />
+				<Icon className={className('fa-solid fa-play text-5xl delay-150 group-hover:text-6xl')} />
 			</div>
-		</div>
-		<div className='text-center' id={generateComponentId(title, 'video-card-content')}>
-			<h3 className='text-sm font-bold text-black'>{title}</h3>
-			<h4 className='text-sm font-light text-black'>{overview}</h4>
+		</Button>
+		<div className='py-1 text-center' id={generateComponentId(title, 'video-card-content')}>
+			{typeof renderLink === 'function' ? (
+				React.cloneElement(renderLink({ content: title }), {
+					className: 'text-xl font-bold text-black hover:text-secondary'
+				})
+			) : (
+				<h3 className='text-xl font-bold text-black'>{title}</h3>
+			)}
+
+			<h4 className='text-lg font-light text-black'>{overview}</h4>
 		</div>
 	</div>
 );
@@ -51,6 +58,7 @@ Video.defaultProps = {
 	title: 'The Umbrella Academy',
 	overview: 'The Umbrella Academy Season 2 | Official Trailer | Netflix',
 	thumbnail: 'https://image.tmdb.org/t/p/original/mE3zzMkpP8yqlkzdjPsQmJHceoe.jpg',
+	renderLink: null,
 	thumbnailAction: null
 };
 
@@ -58,7 +66,8 @@ Video.propTypes = {
 	title: PropTypes.string,
 	overview: PropTypes.string,
 	thumbnail: PropTypes.string,
-	thumbnailAction: PropTypes.func
+	thumbnailAction: PropTypes.func,
+	renderLink: PropTypes.func
 };
 
 export default Video;

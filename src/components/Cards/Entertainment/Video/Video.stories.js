@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link, MemoryRouter } from 'react-router-dom';
 
 import VideoCard from './Video';
 
@@ -36,6 +37,27 @@ export const GroupedExample = () => (
 		/>
 	</div>
 );
+
+export const VideoCardWithLinkElementAsButton = Template.bind({});
+VideoCardWithLinkElementAsButton.args = {
+	renderLink: ({ content }) => (
+		<button onClick={() => console.log('clicked')} type='button'>
+			{content}
+		</button>
+	)
+};
+
+export const VideoCardCardWithLinkElementAsReactRouterLink = Template.bind({});
+VideoCardCardWithLinkElementAsReactRouterLink.args = {
+	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+};
+VideoCardCardWithLinkElementAsReactRouterLink.decorators = [
+	(Story) => (
+		<MemoryRouter>
+			<Story />
+		</MemoryRouter>
+	)
+];
 
 export default {
 	component: VideoCard,
