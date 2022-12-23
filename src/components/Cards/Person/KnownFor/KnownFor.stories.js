@@ -49,11 +49,11 @@ KnownForWithLinkElementAsButton.args = {
 	)
 };
 
-export const KnownForWithLinkElementAsReactRouterLink = Template.bind({});
-KnownForWithLinkElementAsReactRouterLink.args = {
+export const KnownForCardWithLinkElementAsReactRouterLink = Template.bind({});
+KnownForCardWithLinkElementAsReactRouterLink.args = {
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-KnownForWithLinkElementAsReactRouterLink.decorators = [
+KnownForCardWithLinkElementAsReactRouterLink.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />

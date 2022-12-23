@@ -40,11 +40,11 @@ PosterWithLinkElementAsButton.args = {
 	)
 };
 
-export const PosterWithLinkElementAsReactRouterLink = Template.bind({});
-PosterWithLinkElementAsReactRouterLink.args = {
+export const PosterCardWithLinkElementAsReactRouterLink = Template.bind({});
+PosterCardWithLinkElementAsReactRouterLink.args = {
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-PosterWithLinkElementAsReactRouterLink.decorators = [
+PosterCardWithLinkElementAsReactRouterLink.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />

@@ -104,11 +104,11 @@ TopBilledCastMemberWithLinkElementAsButton.args = {
 	)
 };
 
-export const TopBilledCastMemberWithLinkElementAsReactRouterLink = Template.bind({});
-TopBilledCastMemberWithLinkElementAsReactRouterLink.args = {
+export const TopBilledCastMemberCardWithLinkElementAsReactRouterLink = Template.bind({});
+TopBilledCastMemberCardWithLinkElementAsReactRouterLink.args = {
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-TopBilledCastMemberWithLinkElementAsReactRouterLink.decorators = [
+TopBilledCastMemberCardWithLinkElementAsReactRouterLink.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />

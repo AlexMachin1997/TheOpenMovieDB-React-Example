@@ -78,11 +78,11 @@ PosterWithLinkElementAsButton.args = {
 	)
 };
 
-export const RecommendationWithLinkElementAsReactRouterLink = Template.bind({});
-RecommendationWithLinkElementAsReactRouterLink.args = {
+export const RecommendationCardWithLinkElementAsReactRouterLink = Template.bind({});
+RecommendationCardWithLinkElementAsReactRouterLink.args = {
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-RecommendationWithLinkElementAsReactRouterLink.decorators = [
+RecommendationCardWithLinkElementAsReactRouterLink.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />

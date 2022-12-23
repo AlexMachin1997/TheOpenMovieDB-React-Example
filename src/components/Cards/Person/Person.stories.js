@@ -31,11 +31,11 @@ PersonWithLinkElementAsButton.args = {
 	)
 };
 
-export const PersonWithLinkElementAsReactRouterLink = Template.bind({});
-PersonWithLinkElementAsReactRouterLink.args = {
+export const PersonCardWithLinkElementAsReactRouterLink = Template.bind({});
+PersonCardWithLinkElementAsReactRouterLink.args = {
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-PersonWithLinkElementAsReactRouterLink.decorators = [
+PersonCardWithLinkElementAsReactRouterLink.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />
