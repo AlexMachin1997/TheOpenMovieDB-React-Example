@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link, MemoryRouter } from 'react-router-dom';
 
 import CurrentSeasonCard from './CurrentSeason';
 
@@ -36,7 +37,28 @@ Overview.args = {
 		'It is now Spring, a few months after the end of Season 9, when our group of survivors dared to cross into Whisperer territory during the harsh winter. The collected communities are still dealing with the after effects of Alpha’s horrific display of power, reluctantly respecting the new borderlines being imposed on them, all while organising themselves into a militia-style fighting force, preparing for a battle that may be unavoidable. But the Whisperers are a threat unlike any they have ever faced. Backed by a massive horde of the dead it is seemingly a fight they cannot win.'
 };
 
+export const CurrentSeasonCardWithLinkElementAsButton = Template.bind({});
+CurrentSeasonCardWithLinkElementAsButton.args = {
+	renderLink: ({ content }) => (
+		<button onClick={() => console.log('clicked')} type='button'>
+			{content}
+		</button>
+	)
+};
+
+export const CurrentSeasonCardWithLinkElementAsReactRouterLink = Template.bind({});
+CurrentSeasonCardWithLinkElementAsReactRouterLink.args = {
+	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+};
+CurrentSeasonCardWithLinkElementAsReactRouterLink.decorators = [
+	(Story) => (
+		<MemoryRouter>
+			<Story />
+		</MemoryRouter>
+	)
+];
+
 export default {
 	component: CurrentSeasonCard,
-	title: 'Design System/Cards/Entertainment/TV/CurrentSeason'
+	title: 'Design System/Cards/Entertainment/TV/Current Season'
 };
