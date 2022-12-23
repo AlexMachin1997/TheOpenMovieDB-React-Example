@@ -1,28 +1,39 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { Image } from '../../../Core';
+import Card from '../../Card';
 
-import generateComponentId from '../../../../utils/generateComponentId';
-
-const KnownFor = ({ actorName, actorImage }) => (
-	<div
-		className='m-4 flex h-full max-w-[150px] cursor-pointer flex-col content-center items-center rounded-xl bg-white text-center shadow-gray-200 line-clamp-2'
-		id={generateComponentId(actorName, 'known-for-card')}
+const KnownFor = ({ name, image, renderLink }) => (
+	<Card
+		image={image}
+		title={name}
+		containerClassName='m-4 flex h-full max-w-[135px] min-w-[135px] cursor-pointer flex-col content-center items-center rounded-xl bg-white text-center shadow-gray-200 line-clamp-2'
+		imageHeight='195px'
+		contentClassName='p-1'
+		imageClassName='rounded-2xl'
+		renderLink={renderLink}
 	>
-		<Image width='100%' height='195px' alt={actorName} src={actorImage} className='rounded-xl' />
-		<h2 className='text-sm font-light'>{actorName}</h2>
-	</div>
+		{/* Title for the Known For Card */}
+		{typeof renderLink === 'function' ? (
+			React.cloneElement(
+				renderLink({ content: name, className: 'text-sm font-light hover:text-secondary' })
+			)
+		) : (
+			<h2 className='text-sm font-light hover:text-secondary'>{name}</h2>
+		)}
+	</Card>
 );
 
 KnownFor.defaultProps = {
-	actorName: 'Timeless',
-	actorImage: 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/wFaS9kROwztTWNxIKBbOLwIgApV.jpg'
+	name: 'Timeless',
+	image: 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/wFaS9kROwztTWNxIKBbOLwIgApV.jpg',
+	renderLink: null
 };
 
 KnownFor.propTypes = {
-	actorName: PropTypes.string,
-	actorImage: PropTypes.string
+	name: PropTypes.string,
+	image: PropTypes.string,
+	renderLink: PropTypes.func
 };
 
 export default KnownFor;

@@ -1,12 +1,9 @@
 import * as React from 'react';
+import { Link, MemoryRouter } from 'react-router-dom';
 
 import PersonCard from './Person';
 
-const Template = (args) => (
-	<div className='flex'>
-		<PersonCard {...args} />
-	</div>
-);
+const Template = (args) => <PersonCard {...args} />;
 
 export const Default = Template.bind({});
 
@@ -25,16 +22,26 @@ KnownFor.args = {
 	knownFor: [{ original_title: 'Forrest Gump' }, { original_title: 'Toy Story' }]
 };
 
-// TODO: Output this in the "Storybook" Actions tab, it's currently not outputting.....
-export const OnClick = Template.bind({});
-OnClick.args = {
-	onClick: () => 'Click'
+export const PersonWithLinkElementAsButton = Template.bind({});
+PersonWithLinkElementAsButton.args = {
+	renderLink: ({ content }) => (
+		<button onClick={() => console.log('clicked')} type='button'>
+			{content}
+		</button>
+	)
 };
 
-export const OnKeyDown = Template.bind({});
-OnKeyDown.args = {
-	onKeyDown: () => 'Click'
+export const PersonWithLinkElementAsReactRouterLink = Template.bind({});
+PersonWithLinkElementAsReactRouterLink.args = {
+	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
+PersonWithLinkElementAsReactRouterLink.decorators = [
+	(Story) => (
+		<MemoryRouter>
+			<Story />
+		</MemoryRouter>
+	)
+];
 
 export default {
 	component: PersonCard,

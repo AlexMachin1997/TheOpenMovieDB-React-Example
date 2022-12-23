@@ -1,57 +1,35 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { Image, PercentageRating } from '../../../Core';
+import { PercentageRating } from '../../../Core';
 
 import generateComponentId from '../../../../utils/generateComponentId';
 
-const Poster = ({ title, releaseDate, rating, image, renderLink }) => {
-	const PosterImage = (
-		<Image
-			width='100%'
-			height='265px'
-			alt={title}
-			src={image}
-			className='aspect-square rounded-t-2xl'
-		/>
-	);
+import Card from '../../Card';
 
-	return (
+const Poster = ({ title, releaseDate, rating, image, renderLink }) => (
+	<Card title={title} image={image} renderLink={renderLink}>
+		{/* Rating for the Poster card */}
 		<div
-			className='flex flex-col rounded-2xl bg-white shadow-xl shadow-gray-200'
-			id={generateComponentId(title, 'poster-card-container')}
+			className='absolute top-[-29px] left-[8px]'
+			id={generateComponentId(title, 'poster-card-rating')}
 		>
-			{/* Either render a custom link component or fallback to just the poster image */}
-			{typeof renderLink === 'function'
-				? React.cloneElement(renderLink({ content: PosterImage }))
-				: PosterImage}
-
-			<div
-				className='relative flex flex-col p-4'
-				id={generateComponentId(title, 'poster-card-content')}
-			>
-				<div
-					className='absolute top-[-29px] left-[8px]'
-					id={generateComponentId(title, 'poster-card-rating')}
-				>
-					<PercentageRating percentage={rating} size={40} strokeWidth={2.5} textSize='0.7rem' />
-				</div>
-				<div id={generateComponentId(title, 'poster-card-meta')}>
-					{/* Either render a custom link component or fallback to just the poster image */}
-					{typeof renderLink === 'function' ? (
-						React.cloneElement(
-							renderLink({ content: title, className: 'text-base font-bold text-black' })
-						)
-					) : (
-						<h3 className='text-base font-bold text-black'>{title}</h3>
-					)}
-
-					<p className='text-base font-light text-slate-400'>{releaseDate}</p>
-				</div>
-			</div>
+			<PercentageRating percentage={rating} size={40} strokeWidth={2.5} textSize='0.7rem' />
 		</div>
-	);
-};
+
+		{/* Title for the Poster card */}
+		{typeof renderLink === 'function' ? (
+			React.cloneElement(
+				renderLink({ content: title, className: 'text-base font-bold text-black' })
+			)
+		) : (
+			<h3 className='text-base font-bold text-black'>{title}</h3>
+		)}
+
+		{/* Release date for the Poster card */}
+		<p className='text-base font-light text-slate-400'>{releaseDate}</p>
+	</Card>
+);
 
 Poster.propTypes = {
 	title: PropTypes.string,

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link, MemoryRouter } from 'react-router-dom';
 
 import KnownForCard from './KnownFor';
 
@@ -12,32 +13,53 @@ export const Default = Template.bind({});
 
 export const ActorName = Template.bind({});
 ActorName.args = {
-	actorName: 'Aurora Teagarden Mysteries: The Disappearing Game'
+	name: 'Aurora Teagarden Mysteries: The Disappearing Game'
 };
 
 export const ActorImage = Template.bind({});
 ActorImage.args = {
-	actorImage: 'https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg'
+	image: 'https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg'
 };
 
 export const GroupedKnownFor = () => (
 	<div className='flex w-full overflow-auto'>
 		<KnownForCard
-			actorName='Fast and furious 7'
-			actorImage='https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg'
+			name='Fast and furious 7'
+			image='https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg'
 		/>
 
 		<KnownForCard
-			actorName='Fast and furious 6'
-			actorImage='https://image.tmdb.org/t/p/original/n31VRDodbaZxkrZmmzyYSFNVpW5.jpg'
+			name='Fast and furious 6'
+			image='https://image.tmdb.org/t/p/original/n31VRDodbaZxkrZmmzyYSFNVpW5.jpg'
 		/>
 
 		<KnownForCard
-			actorName='Fate Of The Furious'
-			actorImage='https://image.tmdb.org/t/p/original/dImWM7GJqryWJO9LHa3XQ8DD5NH.jpg'
+			name='Fate Of The Furious'
+			image='https://image.tmdb.org/t/p/original/dImWM7GJqryWJO9LHa3XQ8DD5NH.jpg'
 		/>
 	</div>
 );
+
+export const KnownForWithLinkElementAsButton = Template.bind({});
+KnownForWithLinkElementAsButton.args = {
+	renderLink: ({ content }) => (
+		<button onClick={() => console.log('clicked')} type='button'>
+			{content}
+		</button>
+	)
+};
+
+export const KnownForWithLinkElementAsReactRouterLink = Template.bind({});
+KnownForWithLinkElementAsReactRouterLink.args = {
+	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+};
+KnownForWithLinkElementAsReactRouterLink.decorators = [
+	(Story) => (
+		<MemoryRouter>
+			<Story />
+		</MemoryRouter>
+	)
+];
 
 export default {
 	component: KnownForCard,
