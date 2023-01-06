@@ -3,32 +3,24 @@ import { Link, MemoryRouter } from 'react-router-dom';
 
 import RecommendationCard from './Recommendation';
 
-const Template = (args) => (
-	<div className='flex'>
-		<RecommendationCard {...args} />
-	</div>
-);
-
-export const Default = Template.bind({});
-
-export const Title = Template.bind({});
-Title.args = {
-	title: 'Thor'
+export default {
+	component: RecommendationCard,
+	title: 'Design System/Cards/Entertainment/Recommendation'
 };
 
-export const ReleaseDate = Template.bind({});
-ReleaseDate.args = {
-	releaseDate: '05/3/2022'
+const Template = (args) => <RecommendationCard {...args} />;
+
+const StoryArgs = {
+	title: 'Ant Man and The Wasp',
+	releaseDate: '07/04/2020',
+	image: 'https://image.tmdb.org/t/p/original/6P3c80EOm7BodndGBUAJHHsHKrp.jpg',
+	rating: 70,
+	renderLink: null
 };
 
-export const Image = Template.bind({});
-Image.args = {
-	image: 'https://image.tmdb.org/t/p/original/kaIfm5ryEOwYg8mLbq8HkPuM1Fo.jpg'
-};
-
-export const Rating = Template.bind({});
-Rating.args = {
-	rating: 75
+export const Example = Template.bind({});
+Example.args = {
+	...StoryArgs
 };
 
 export const GroupedExample = () => (
@@ -69,28 +61,15 @@ export const GroupedExample = () => (
 	</div>
 );
 
-export const PosterWithLinkElementAsButton = Template.bind({});
-PosterWithLinkElementAsButton.args = {
-	renderLink: ({ content }) => (
-		<button onClick={() => console.log('clicked')} type='button'>
-			{content}
-		</button>
-	)
-};
-
-export const RecommendationCardWithLinkElementAsReactRouterLink = Template.bind({});
-RecommendationCardWithLinkElementAsReactRouterLink.args = {
+export const ReactRouterLinkExample = Template.bind({});
+ReactRouterLinkExample.args = {
+	...Example.args,
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-RecommendationCardWithLinkElementAsReactRouterLink.decorators = [
+ReactRouterLinkExample.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />
 		</MemoryRouter>
 	)
 ];
-
-export default {
-	component: RecommendationCard,
-	title: 'Design System/Cards/Entertainment/Recommendation'
-};

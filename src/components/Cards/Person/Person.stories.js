@@ -5,37 +5,35 @@ import PersonCard from './Person';
 
 const Template = (args) => <PersonCard {...args} />;
 
-export const Default = Template.bind({});
-
-export const ActorName = Template.bind({});
-ActorName.args = {
-	name: 'Tom Hanks'
+const StoryArgs = {
+	name: 'Bryan Cranston',
+	image: 'https://image.tmdb.org/t/p/w235_and_h235_face/7Jahy5LZX2Fo8fGJltMreAI49hC.jpg',
+	knownFor: [
+		{ original_title: 'Saving Private Ryan' },
+		{ original_title: 'Drive' },
+		{ original_title: 'Godzilla' },
+		{ original_title: 'Breaking bad' }
+	],
+	renderLink: null
 };
 
-export const ActorImage = Template.bind({});
-ActorName.args = {
-	image: 'https://image.tmdb.org/t/p/w235_and_h235_face/sQRntmQpeXiNEyrW323RANWwDeS.jpg'
+export const Example = Template.bind({});
+Example.args = {
+	...StoryArgs
 };
 
-export const KnownFor = Template.bind({});
-KnownFor.args = {
-	knownFor: [{ original_title: 'Forrest Gump' }, { original_title: 'Toy Story' }]
+export const ExampleWithoutRoles = Template.bind({});
+ExampleWithoutRoles.args = {
+	...Example.args,
+	knownFor: []
 };
 
-export const PersonWithLinkElementAsButton = Template.bind({});
-PersonWithLinkElementAsButton.args = {
-	renderLink: ({ content }) => (
-		<button onClick={() => console.log('clicked')} type='button'>
-			{content}
-		</button>
-	)
-};
-
-export const PersonCardWithLinkElementAsReactRouterLink = Template.bind({});
-PersonCardWithLinkElementAsReactRouterLink.args = {
+export const ReactRouterLinkExample = Template.bind({});
+ReactRouterLinkExample.args = {
+	...Example.args,
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-PersonCardWithLinkElementAsReactRouterLink.decorators = [
+ReactRouterLinkExample.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />

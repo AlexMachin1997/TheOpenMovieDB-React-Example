@@ -17,7 +17,7 @@ const TopBilledCastMember = ({
 		renderLink={renderLink}
 		imageHeight='175px'
 		containerClassName='pb-2 min-w-[138px] max-w-[138px] mt-[0.625rem] mb-[0.625rem] ml-[0.625rem] mr-[0.25rem] pb-[0.625rem]'
-		contentClassName='p-0 border border-solid border-gray-200 rounded-b-2xl'
+		contentClassName='p-0 border border-solid border-gray-200 rounded-b-2xl pb-2 flex flex-1'
 		imageClassName='rounded-t-lg'
 	>
 		{/* Title for the Top Billed Card */}
@@ -45,11 +45,11 @@ const TopBilledCastMember = ({
 );
 
 TopBilledCastMember.defaultProps = {
-	name: 'Elizabeth Henstridge',
-	character: 'Jemma Simmons',
-	image: 'https://image.tmdb.org/t/p/original/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
-	entertainmentType: 'tv',
-	episodeCount: 136,
+	name: '',
+	character: '',
+	image: '',
+	entertainmentType: 'movie',
+	episodeCount: 0,
 	renderLink: null
 };
 

@@ -31,21 +31,21 @@ const Collection = ({ title, subtitle, image, renderLink }) => (
 				}
 			)
 		) : (
-			<span
+			<div
 				className='mt-4 rounded-2xl bg-tertiary p-2 text-xs font-bold uppercase text-white'
 				aria-label={`View collection button for ${title}`}
 				id={`View collection button for ${title}`}
 				type='button'
 			>
 				View Collection
-			</span>
+			</div>
 		)}
 	</div>
 );
 Collection.defaultProps = {
-	title: 'The Avengers',
-	subtitle: 'Includes The Avengers, Avengers: Age of Ultron, Avengers: Infinity War',
-	image: 'https://image.tmdb.org/t/p/original/zuW6fOiusv4X9nnW3paHGfXcSll.jpg',
+	title: '',
+	subtitle: '',
+	image: '',
 	renderLink: null
 };
 

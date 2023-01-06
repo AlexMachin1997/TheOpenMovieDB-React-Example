@@ -15,9 +15,9 @@ const KnownFor = ({ name, image, renderLink }) => (
 	>
 		{/* Title for the Known For Card */}
 		{typeof renderLink === 'function' ? (
-			React.cloneElement(
-				renderLink({ content: name, className: 'text-sm font-light hover:text-secondary' })
-			)
+			React.cloneElement(renderLink({ content: name }), {
+				className: 'text-sm font-light hover:text-secondary'
+			})
 		) : (
 			<h2 className='text-sm font-light hover:text-secondary'>{name}</h2>
 		)}
@@ -25,8 +25,8 @@ const KnownFor = ({ name, image, renderLink }) => (
 );
 
 KnownFor.defaultProps = {
-	name: 'Timeless',
-	image: 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/wFaS9kROwztTWNxIKBbOLwIgApV.jpg',
+	name: '',
+	image: '',
 	renderLink: null
 };
 

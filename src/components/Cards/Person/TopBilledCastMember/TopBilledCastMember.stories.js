@@ -3,53 +3,32 @@ import { Link, MemoryRouter } from 'react-router-dom';
 
 import TopBilledCard from './TopBilledCastMember';
 
+export default {
+	component: TopBilledCard,
+	title: 'Design System/Cards/Person/Top Billed Cast Member'
+};
+
+const StoryArgs = {
+	name: 'Elizabeth Henstridge',
+	character: 'Jemma Simmons',
+	image: 'https://image.tmdb.org/t/p/original/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
+	entertainmentType: 'movie',
+	episodeCount: 136,
+	renderLink: null
+};
+
 const Template = (args) => <TopBilledCard {...args} />;
 
-export const Default = Template.bind({});
+export const Example = Template.bind({});
+Example.args = { ...StoryArgs };
 
-export const ActorName = Template.bind({});
-ActorName.args = {
-	name: 'Gregg Clark'
+export const MediaTypeTVExample = Template.bind({});
+MediaTypeTVExample.args = {
+	...Example.args,
+	mediaType: 'tv'
 };
 
-export const CharacterName = Template.bind({});
-CharacterName.args = {
-	character: 'Phil Coulson / Sarge'
-};
-
-export const Image = Template.bind({});
-Image.args = {
-	image: 'https://image.tmdb.org/t/p/w138_and_h175_face/mq686D91XoZpqkzELn0888NOiZW.jpg'
-};
-
-export const EntertainmentType = Template.bind({});
-EntertainmentType.args = {
-	entertainmentType: 'movie'
-};
-
-export const EpisodeCount = Template.bind({});
-EpisodeCount.args = {
-	episodeCount: 100
-};
-
-export const TopBilledTVExample = Template.bind({});
-TopBilledTVExample.args = {
-	name: 'Evan Rachel Wood',
-	character: 'Dolores Abernathy',
-	image: 'https://image.tmdb.org/t/p/w138_and_h175_face/g6XBBmsEd9fqP0gc4RuHsX0MXNl.jpg',
-	entertainmentType: 'tv',
-	episodeCount: 28
-};
-
-export const TopBilledMovieExample = Template.bind({});
-TopBilledMovieExample.args = {
-	name: 'Willem Dafoe',
-	character: 'Norman Osborn / Green Goblin',
-	image: 'https://www.themoviedb.org/t/p/w276_and_h350_face/ui8e4sgZAwMPi3hzEO53jyBJF9B.jpg',
-	entertainmentType: 'movie'
-};
-
-export const MultipleCardsExampleTVExample = () => (
+export const GroupedWestWorldExample = () => (
 	<div className='flex w-full overflow-auto'>
 		<TopBilledCard
 			name='Evan Rachel Wood'
@@ -77,7 +56,7 @@ export const MultipleCardsExampleTVExample = () => (
 	</div>
 );
 
-export const MultipleCardsExampleMovieExample = () => (
+export const GroupedOldGuardExample = () => (
 	<div className='flex w-full overflow-auto'>
 		<TopBilledCard
 			name='Charlize Theron'
@@ -95,28 +74,15 @@ export const MultipleCardsExampleMovieExample = () => (
 	</div>
 );
 
-export const TopBilledCastMemberWithLinkElementAsButton = Template.bind({});
-TopBilledCastMemberWithLinkElementAsButton.args = {
-	renderLink: ({ content }) => (
-		<button onClick={() => console.log('clicked')} type='button'>
-			{content}
-		</button>
-	)
-};
-
-export const TopBilledCastMemberCardWithLinkElementAsReactRouterLink = Template.bind({});
-TopBilledCastMemberCardWithLinkElementAsReactRouterLink.args = {
+export const ReactRouterLinkExample = Template.bind({});
+ReactRouterLinkExample.args = {
+	...Example.args,
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-TopBilledCastMemberCardWithLinkElementAsReactRouterLink.decorators = [
+ReactRouterLinkExample.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />
 		</MemoryRouter>
 	)
 ];
-
-export default {
-	component: TopBilledCard,
-	title: 'Design System/Cards/Person/Top Billed Cast Member'
-};

@@ -34,7 +34,7 @@ const Video = ({ title, overview, thumbnail, thumbnailAction, renderLink }) => (
 				height='169px'
 				alt={title}
 				src={thumbnail}
-				className='aspect-video delay-150 group-hover:scale-105'
+				className='aspect-video rounded-xl delay-150  group-hover:scale-105'
 			/>
 			<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
 				<Icon className={className('fa-solid fa-play text-5xl delay-150 group-hover:text-6xl')} />
@@ -55,9 +55,9 @@ const Video = ({ title, overview, thumbnail, thumbnailAction, renderLink }) => (
 );
 
 Video.defaultProps = {
-	title: 'The Umbrella Academy',
-	overview: 'The Umbrella Academy Season 2 | Official Trailer | Netflix',
-	thumbnail: 'https://image.tmdb.org/t/p/original/mE3zzMkpP8yqlkzdjPsQmJHceoe.jpg',
+	title: '',
+	overview: '',
+	thumbnail: '',
 	renderLink: null,
 	thumbnailAction: null
 };

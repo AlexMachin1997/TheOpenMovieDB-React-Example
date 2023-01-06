@@ -23,6 +23,7 @@ const Card = ({
 			alt={title}
 			src={image}
 			className={classNames('aspect-square', imageClassName)}
+			label={title}
 		/>
 	);
 

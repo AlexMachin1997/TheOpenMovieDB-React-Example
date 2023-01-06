@@ -16,17 +16,19 @@ const Person = ({ name, image, knownFor, renderLink }) => (
 		{/* Title for the Person card */}
 		{typeof renderLink === 'function' ? (
 			React.cloneElement(renderLink({ content: name }), {
-				className: 'text-base font-bold text-left'
+				className: 'text-base font-bold hover:text-gray-500 text-left'
 			})
 		) : (
-			<h3 className='text-base font-bold'>{name}</h3>
+			<h3 className='text-left text-base font-bold hover:text-gray-500'>{name}</h3>
 		)}
 
 		{/* A list of roles for person is known for, only shows x amount the rest is truncated with ellipse */}
-		{knownFor.length !== 0 && (
+		{knownFor.length !== 0 ? (
 			<h4 className='truncate text-sm font-light text-slate-500'>{`${knownFor
 				.map((item) => item.original_title)
 				.join(', ')}`}</h4>
+		) : (
+			<h4 className='truncate text-sm font-light text-slate-500'>No roles available</h4>
 		)}
 	</Card>
 );
@@ -39,14 +41,9 @@ Person.propTypes = {
 };
 
 Person.defaultProps = {
-	name: 'Bryan Cranston',
-	image: 'https://image.tmdb.org/t/p/w235_and_h235_face/7Jahy5LZX2Fo8fGJltMreAI49hC.jpg',
-	knownFor: [
-		{ original_title: 'Saving Private Ryan' },
-		{ original_title: 'Drive' },
-		{ original_title: 'Godzilla' },
-		{ original_title: 'Breaking bad' }
-	],
+	name: '',
+	image: '',
+	knownFor: [],
 	renderLink: null
 };
 

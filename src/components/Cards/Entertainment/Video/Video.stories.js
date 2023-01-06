@@ -3,24 +3,26 @@ import { Link, MemoryRouter } from 'react-router-dom';
 
 import VideoCard from './Video';
 
+export default {
+	component: VideoCard,
+	title: 'Design System/Cards/Entertainment/Video',
+	argTypes: {
+		thumbnailAction: { action: 'entertainmentVideoAction click' }
+	}
+};
+
 const Template = (args) => <VideoCard {...args} />;
 
-export const Default = Template.bind({});
-
-export const Title = Template.bind({});
-Title.args = {
-	title: 'Marvel Agents of S.H.I.E.L.D'
+const StoryArgs = {
+	title: 'The Umbrella Academy',
+	overview: 'The Umbrella Academy Season 2 | Official Trailer | Netflix',
+	thumbnail: 'https://image.tmdb.org/t/p/original/mE3zzMkpP8yqlkzdjPsQmJHceoe.jpg',
+	renderLink: null,
+	thumbnailAction: null
 };
 
-export const Overview = Template.bind({});
-Overview.args = {
-	thumbnail: 'https://image.tmdb.org/t/p/original/mUCV0W6TaAk8UWA5yAmqCywC63F.jpg'
-};
-
-export const ThumbnailAction = Template.bind({});
-ThumbnailAction.args = {
-	thumbnailAction: () => 'Click example'
-};
+export const Example = Template.bind({});
+Example.args = { ...StoryArgs };
 
 export const GroupedExample = () => (
 	<div className='flex w-full overflow-auto'>
@@ -38,31 +40,15 @@ export const GroupedExample = () => (
 	</div>
 );
 
-export const VideoCardWithLinkElementAsButton = Template.bind({});
-VideoCardWithLinkElementAsButton.args = {
-	renderLink: ({ content }) => (
-		<button onClick={() => console.log('clicked')} type='button'>
-			{content}
-		</button>
-	)
-};
-
-export const VideoCardCardWithLinkElementAsReactRouterLink = Template.bind({});
-VideoCardCardWithLinkElementAsReactRouterLink.args = {
+export const ReactRouterLinkExample = Template.bind({});
+ReactRouterLinkExample.args = {
+	...Example.args,
 	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-VideoCardCardWithLinkElementAsReactRouterLink.decorators = [
+ReactRouterLinkExample.decorators = [
 	(Story) => (
 		<MemoryRouter>
 			<Story />
 		</MemoryRouter>
 	)
 ];
-
-export default {
-	component: VideoCard,
-	title: 'Design System/Cards/Entertainment/Video',
-	argTypes: {
-		thumbnailAction: { action: 'entertainmentVideoAction click' }
-	}
-};

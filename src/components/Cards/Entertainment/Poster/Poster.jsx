@@ -14,16 +14,22 @@ const Poster = ({ title, releaseDate, rating, image, renderLink }) => (
 			className='absolute top-[-29px] left-[8px]'
 			id={generateComponentId(title, 'poster-card-rating')}
 		>
-			<PercentageRating percentage={rating} size={40} strokeWidth={2.5} textSize='0.7rem' />
+			<PercentageRating
+				percentage={rating}
+				size={45}
+				strokeWidth={2.5}
+				textSize='0.7rem'
+				textClass='text-sm'
+			/>
 		</div>
 
 		{/* Title for the Poster card */}
 		{typeof renderLink === 'function' ? (
-			React.cloneElement(
-				renderLink({ content: title, className: 'text-base font-bold text-black' })
-			)
+			React.cloneElement(renderLink({ content: title }), {
+				className: 'text-base font-bold text-black text-left'
+			})
 		) : (
-			<h3 className='text-base font-bold text-black'>{title}</h3>
+			<h3 className='text-left text-base font-bold text-black'>{title}</h3>
 		)}
 
 		{/* Release date for the Poster card */}
@@ -40,10 +46,10 @@ Poster.propTypes = {
 };
 
 Poster.defaultProps = {
-	title: 'Dark',
-	releaseDate: 'Dec 01, 2017',
-	rating: 50,
-	image: 'https://image.tmdb.org/t/p/original/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg',
+	title: '',
+	releaseDate: '',
+	rating: 0,
+	image: '',
 	renderLink: null
 };
 

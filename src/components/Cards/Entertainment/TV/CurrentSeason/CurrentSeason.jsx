@@ -34,7 +34,7 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview, renderLink 
 				{/* The title for the Current Season card */}
 				{typeof renderLink === 'function' ? (
 					React.cloneElement(renderLink({ content: title }), {
-						className: 'text-2xl font-bold text-black text-left'
+						className: 'text-2xl font-bold text-black text-left hover:text-gray-400'
 					})
 				) : (
 					<h2 className='text-2xl font-bold text-black'>{title}</h2>
@@ -53,12 +53,11 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview, renderLink 
 };
 
 CurrentSeason.defaultProps = {
-	image: 'https://image.tmdb.org/t/p/original/eFWtQwYetPum9RvCmqkUk2aiBIi.jpg',
-	title: 'Season Three: The New World',
-	year: 2020,
-	episodeCount: 8,
-	overview:
-		'Taking place immediately after the events of the second season, Dolores develops a relationship with Caleb in neo-Los Angeles, and learns how robots are treated in the real world. Meanwhile, Maeve finds herself in another Delos park, this one with a World War II theme and set in Fascist Italy.',
+	image: '',
+	title: '',
+	year: 0,
+	episodeCount: 0,
+	overview: '',
 	renderLink: null
 };
 

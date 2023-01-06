@@ -45,10 +45,10 @@ Recommendation.propTypes = {
 };
 
 Recommendation.defaultProps = {
-	title: 'Ant Man and The Wasp',
-	releaseDate: '07/04/2020',
-	image: 'https://image.tmdb.org/t/p/original/6P3c80EOm7BodndGBUAJHHsHKrp.jpg',
-	rating: 70,
+	title: '',
+	releaseDate: '',
+	image: '',
+	rating: 0,
 	renderLink: null
 };
 
