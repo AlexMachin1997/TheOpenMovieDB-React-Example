@@ -5,10 +5,7 @@ import VideoCard from './Video';
 
 export default {
 	component: VideoCard,
-	title: 'Design System/Cards/Entertainment/Video',
-	argTypes: {
-		thumbnailAction: { action: 'entertainmentVideoAction click' }
-	}
+	title: 'Design System/Cards/Entertainment/Video'
 };
 
 const Template = (args) => <VideoCard {...args} />;
