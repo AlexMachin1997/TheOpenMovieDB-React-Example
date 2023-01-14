@@ -1,69 +1,56 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { Image, PercentageRating } from '../../../Core';
+import { PercentageRating } from '../../../Core';
 
 import generateComponentId from '../../../../utils/generateComponentId';
 
-const Poster = ({ title, releaseDate, rating, image, onClick, onKeyDown }) => (
-	<div
-		className='cursor-pointer rounded-2xl bg-white shadow-xl shadow-gray-200'
-		onClick={(event) => {
-			if (onClick) {
-				onClick(event);
-			}
-		}}
-		id={generateComponentId(title, 'poster-card-container')}
-		role='button'
-		tabIndex={0}
-		onKeyDown={(event) => {
-			if (onKeyDown) {
-				onKeyDown(event);
-			}
-		}}
-	>
-		<Image
-			width='100%'
-			height='265px'
-			alt={title}
-			src={image}
-			className='aspect-square rounded-t-2xl'
-		/>
+import Card from '../../Card';
 
+const Poster = ({ title, releaseDate, rating, image, renderLink }) => (
+	<Card title={title} image={image} renderLink={renderLink}>
+		{/* Rating for the Poster card */}
 		<div
-			className='relative flex flex-col p-4'
-			id={generateComponentId(title, 'poster-card-content')}
+			className='absolute top-[-29px] left-[8px]'
+			id={generateComponentId(title, 'poster-card-rating')}
 		>
-			<div
-				className='absolute top-[-29px] left-[8px]'
-				id={generateComponentId(title, 'poster-card-rating')}
-			>
-				<PercentageRating percentage={rating} size={40} strokeWidth={2.5} textSize='0.7rem' />
-			</div>
-			<div id={generateComponentId(title, 'poster-card-meta')}>
-				<h3 className='text-base font-bold text-black'>{title}</h3>
-				<p className='text-base font-light text-slate-400'>{releaseDate}</p>
-			</div>
+			<PercentageRating
+				percentage={rating}
+				size={45}
+				strokeWidth={2.5}
+				textSize='0.7rem'
+				textClass='text-sm'
+			/>
 		</div>
-	</div>
-);
 
-Poster.defaultProps = {
-	title: 'Dark',
-	releaseDate: 'Dec 01, 2017',
-	rating: 50,
-	image: 'https://image.tmdb.org/t/p/original/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg',
-	onClick: null,
-	onKeyDown: null
-};
+		{/* Title for the Poster card */}
+		{typeof renderLink === 'function' ? (
+			React.cloneElement(renderLink({ content: title }), {
+				className: 'text-base font-bold text-black text-left'
+			})
+		) : (
+			<h3 className='text-left text-base font-bold text-black'>{title}</h3>
+		)}
+
+		{/* Release date for the Poster card */}
+		<p className='text-base font-light text-slate-400'>{releaseDate}</p>
+	</Card>
+);
 
 Poster.propTypes = {
 	title: PropTypes.string,
 	releaseDate: PropTypes.string,
 	rating: PropTypes.number,
 	image: PropTypes.string,
-	onClick: PropTypes.func,
-	onKeyDown: PropTypes.func
+	renderLink: PropTypes.func
+};
+
+Poster.defaultProps = {
+	title: '',
+	releaseDate: '',
+	rating: 0,
+	image: '',
+	renderLink: null
 };
 
 export default Poster;

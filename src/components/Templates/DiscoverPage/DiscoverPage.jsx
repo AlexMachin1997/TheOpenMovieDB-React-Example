@@ -262,7 +262,7 @@ const DiscoverPageTemplate = ({
 			}}
 		>
 			{/* noValidate prevents the form from */}
-			<FormikForm className='' style={{}} id='filters-form' noValidate>
+			<FormikForm className='' style={{}} id='filters-form'>
 				<main className='lg:m-auto lg:max-w-[90rem]'>
 					{/* Mobile filters sidebar, toggled via the Mobile Title action */}
 					<Transition.Root show={isFiltersSidebarOpen} as={React.Fragment} unmount={false}>

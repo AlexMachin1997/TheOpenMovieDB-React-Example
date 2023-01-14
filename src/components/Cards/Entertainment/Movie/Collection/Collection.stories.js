@@ -1,35 +1,34 @@
 import * as React from 'react';
+import { Link, MemoryRouter } from 'react-router-dom';
 
 import CollectionCard from './Collection';
 
-const Template = (args) => <CollectionCard {...args} />;
-
-export const Default = Template.bind({});
-
-export const Title = Template.bind({});
-Title.args = {
-	title: 'The Fast and the Furious'
-};
-
-export const Subtitle = Template.bind({});
-Subtitle.args = {
-	subtitle:
-		'Includes The Fast and the Furious, 2 Fast 2 Furious, The Fast and the Furious: Tokyo Drift'
-};
-
-export const Image = Template.bind({});
-Image.args = {
-	image: 'https://image.tmdb.org/t/p/original/z5A5W3WYJc3UVEWljSGwdjDgQ0j.jpg'
-};
-
-// TODO: Output this in the "Storybook" Actions tab, it's currently not outputting.....
-export const OnClick = Template.bind({});
-OnClick.args = {
-	onClick: () => 'Click example'
-};
-
 export default {
 	component: CollectionCard,
-	title: 'Design System/Cards/Entertainment/Movie/Collection',
-	argTypes: { onClick: { action: 'clicked' } }
+	title: 'Design System/Cards/Entertainment/Movie/Collection'
 };
+
+const Template = (args) => <CollectionCard {...args} />;
+
+const StoryArgs = {
+	title: 'The Avengers',
+	subtitle: 'Includes The Avengers, Avengers: Age of Ultron, Avengers: Infinity War',
+	image: 'https://image.tmdb.org/t/p/original/zuW6fOiusv4X9nnW3paHGfXcSll.jpg',
+	renderLink: null
+};
+
+export const Example = Template.bind({});
+Example.args = { ...StoryArgs };
+
+export const ReactRouterLinkExample = Template.bind({});
+ReactRouterLinkExample.args = {
+	...Example.args,
+	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+};
+ReactRouterLinkExample.decorators = [
+	(Story) => (
+		<MemoryRouter>
+			<Story />
+		</MemoryRouter>
+	)
+];

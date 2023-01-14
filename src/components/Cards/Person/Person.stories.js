@@ -1,40 +1,45 @@
 import * as React from 'react';
+import { Link, MemoryRouter } from 'react-router-dom';
 
 import PersonCard from './Person';
 
-const Template = (args) => (
-	<div className='flex'>
-		<PersonCard {...args} />
-	</div>
-);
+const Template = (args) => <PersonCard {...args} />;
 
-export const Default = Template.bind({});
-
-export const ActorName = Template.bind({});
-ActorName.args = {
-	name: 'Tom Hanks'
+const StoryArgs = {
+	name: 'Bryan Cranston',
+	image: 'https://image.tmdb.org/t/p/w235_and_h235_face/7Jahy5LZX2Fo8fGJltMreAI49hC.jpg',
+	knownFor: [
+		{ original_title: 'Saving Private Ryan' },
+		{ original_title: 'Drive' },
+		{ original_title: 'Godzilla' },
+		{ original_title: 'Breaking bad' }
+	],
+	renderLink: null
 };
 
-export const ActorImage = Template.bind({});
-ActorName.args = {
-	image: 'https://image.tmdb.org/t/p/w235_and_h235_face/sQRntmQpeXiNEyrW323RANWwDeS.jpg'
+export const Example = Template.bind({});
+Example.args = {
+	...StoryArgs
 };
 
-export const KnownFor = Template.bind({});
-KnownFor.args = {
-	knownFor: [{ original_title: 'Forrest Gump' }, { original_title: 'Toy Story' }]
+export const ExampleWithoutRoles = Template.bind({});
+ExampleWithoutRoles.args = {
+	...Example.args,
+	knownFor: []
 };
 
-// TODO: Output this in the "Storybook" Actions tab, it's currently not outputting.....
-export const OnClick = Template.bind({});
-OnClick.args = {
-	onClick: () => 'Click'
+export const ReactRouterLinkExample = Template.bind({});
+ReactRouterLinkExample.args = {
+	...Example.args,
+	renderLink: ({ content }) => <Link to='/'>{content}</Link>
 };
-
-export const OnKeyDown = Template.bind({});
-OnKeyDown.args = {
-	onKeyDown: () => 'Click'
-};
+ReactRouterLinkExample.decorators = [
+	(Story) => (
+		<MemoryRouter>
+			<Story />
+		</MemoryRouter>
+	)
+];
 
 export default {
 	component: PersonCard,
