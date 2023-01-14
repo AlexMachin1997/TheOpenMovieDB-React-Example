@@ -36,7 +36,7 @@
 		"client-pwa:build": "node ./src/serviceWorker/generateManifest.js",
 		"client-pwa:clean": "rimraf  -f build/precache-manifest.*.js && rimraf  -f build/service-worker.js",
 		"client:lint": "yarn run eslint ./src/**/**/*.{js,jsx} --fix",
-		"client:prettier": "prettier --write ./src"
+		"client:prettier": "prettier --write ./src/**/**/*.{js,jsx}"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.5.7",
