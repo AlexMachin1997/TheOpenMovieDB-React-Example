@@ -41,31 +41,31 @@ const useClientSideRoutes = (config) => {
 					{
 						url: '/:id',
 						element: includesElements === true ? <SingleMovie /> : null,
-						menuTitle: '',
+						label: '',
 						isMenuLink: false
 					},
 					{
 						url: '/popular',
 						element: includesElements === true ? <PopularMovies /> : null,
-						menuTitle: 'Popular',
+						label: 'Popular',
 						isMenuLink: true
 					},
 					{
 						url: '/now-playing',
 						element: includesElements === true ? <NowPlayingMovies /> : null,
-						menuTitle: 'Now Playing',
+						label: 'Now Playing',
 						isMenuLink: true
 					},
 					{
 						url: '/upcoming',
 						element: includesElements === true ? <UpcomingMovies /> : null,
-						menuTitle: 'Upcoming',
+						label: 'Upcoming',
 						isMenuLink: true
 					},
 					{
 						url: '/top-rated',
 						element: includesElements === true ? <TopRatedMovies /> : null,
-						menuTitle: 'Top Rated',
+						label: 'Top Rated',
 						isMenuLink: true
 					}
 				]
@@ -76,31 +76,31 @@ const useClientSideRoutes = (config) => {
 					{
 						url: '/:id',
 						element: includesElements === true ? <SingleShow /> : null,
-						menuTitle: '',
+						label: '',
 						isMenuLink: false
 					},
 					{
 						url: '/popular',
 						element: includesElements === true ? <PopularShows /> : null,
-						menuTitle: 'Popular',
+						label: 'Popular',
 						isMenuLink: true
 					},
 					{
 						url: '/airing-today',
 						element: includesElements === true ? <AiringToday /> : null,
-						menuTitle: 'Airing Today',
+						label: 'Airing Today',
 						isMenuLink: true
 					},
 					{
 						url: '/on-tv',
 						element: includesElements === true ? <OnTV /> : null,
-						menuTitle: 'On TV',
+						label: 'On TV',
 						isMenuLink: true
 					},
 					{
 						url: '/top-rated',
 						element: includesElements === true ? <TopRatedShows /> : null,
-						menuTitle: 'Top Rated',
+						label: 'Top Rated',
 						isMenuLink: true
 					}
 				]
@@ -111,13 +111,13 @@ const useClientSideRoutes = (config) => {
 					{
 						url: '/:id',
 						element: includesElements === true ? <SinglePerson /> : null,
-						menuTitle: '',
+						label: '',
 						isMenuLink: false
 					},
 					{
 						url: '/popular',
 						element: includesElements === true ? <PopularPeople /> : null,
-						menuTitle: 'Popular People',
+						label: 'Popular People',
 						isMenuLink: true
 					}
 				]
@@ -125,37 +125,37 @@ const useClientSideRoutes = (config) => {
 			{
 				url: '/login',
 				element: includesElements === true ? <Login /> : null,
-				menuTitle: 'Login',
+				label: 'Login',
 				isMenuLink: true
 			},
 			{
 				url: '/register',
 				element: includesElements === true ? <Register /> : null,
-				menuTitle: 'Register',
+				label: 'Register',
 				isMenuLink: true
 			},
 			{
 				url: '/forgot',
 				element: includesElements === true ? <ForgotPassword /> : null,
-				menuTitle: 'Forgot',
+				label: 'Forgot',
 				isMenuLink: false
 			},
 			{
 				url: '/reset-password',
 				element: includesElements === true ? <ResetPassword /> : null,
-				menuTitle: 'Reset Password',
+				label: 'Reset Password',
 				isMenuLink: false
 			},
 			{
 				url: '/account',
 				element: includesElements === true ? <Account /> : null,
-				menuTitle: 'Account',
+				label: 'Account',
 				isMenuLink: false
 			},
 			{
 				url: '/search',
 				element: includesElements === true ? <Search /> : null,
-				menuTitle: 'Search',
+				label: 'Search',
 				isMenuLink: false
 			}
 		],

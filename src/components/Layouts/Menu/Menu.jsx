@@ -1,30 +1,15 @@
 import * as React from 'react';
-import className from 'classnames';
 import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
+import classNames from 'classnames';
 import { Icon, Image, Dropdown, Button } from '../../Core';
 
-import SearchBar from './SearchBar/SearchBar';
-import MobileMenuDropdown from './MobileMenuDropdown/MobileMenuDropdown';
-import Links from './Links/Links';
+import MenuItem from './MenuItem/MenuItem';
+import CommandPallet from './CommandPallet';
 
 import useClientSideRoutes from '../../../hooks/useClientSideRoutes';
-
-const DropdownProps = {
-	buttonClass: 'text-white rounded-md font-bold',
-	dropdownClass: 'bg-white border-slate-300 border-[1px] rounded-2xl p-2',
-	alignment: 'left',
-	containerClass: 'pr-4'
-};
-
-const LinksProps = {
-	wrapperTag: 'div',
-	listItemClassName: 'pr-4 hover:bg-zinc-50 cursor-pointer p-2',
-	anchorClassName: 'text-black text-base p-0 m-0',
-	className: 'p-2'
-};
 
 const NavigationMenu = ({ isAuthenticated }) => {
 	// MobileSidebar state
@@ -40,18 +25,38 @@ const NavigationMenu = ({ isAuthenticated }) => {
 		includesElements: false
 	});
 
+	const moreLinks = [
+		{
+			label: 'Discussions',
+			url: ''
+		},
+		{
+			label: 'Leaderboard',
+			url: ''
+		},
+		{
+			label: 'Support',
+			url: ''
+		},
+		{
+			label: 'API',
+			url: ''
+		}
+	];
+
 	// Handles the closing of the mobile navigation bar when the screen resizes
 	React.useEffect(() => {
 		// Create the MobileSidebar resize event
 		const sidebarResizeEvent = () => {
-			if (isSidebarOpen === true && window.innerWidth > 900) {
+			// When the sidebar is open and the outerWidth (get width + padding + border and optionally the margin) is more than or equal to 788px
+			if (isSidebarOpen === true && window.outerWidth >= 788) {
 				setIsSidebarOpen(false);
 			}
 		};
 
 		const handleEscClick = (event) => {
+			// When the sidebar is open and the user clicks "Esc" key close the menu down
 			if (isSidebarOpen === true && event.key === 'Escape') {
-				// When the user clicks the Escape (esc) key close the dropdown
 				setIsSidebarOpen(false);
 			}
 		};
@@ -71,50 +76,16 @@ const NavigationMenu = ({ isAuthenticated }) => {
 		};
 	}, [isSidebarOpen]);
 
-	const externalLinks = [
-		{
-			menuTitle: 'Contribution Bible',
-			url: ''
-		},
-		{
-			menuTitle: "App's",
-			url: ''
-		},
-		{
-			menuTitle: 'Discussions',
-			url: ''
-		},
-		{
-			menuTitle: 'Leaderboard',
-			url: ''
-		},
-		{
-			menuTitle: 'Contribute',
-			url: ''
-		},
-		{
-			menuTitle: 'API',
-			url: ''
-		},
-		{
-			menuTitle: 'Support',
-			url: ''
-		},
-		{
-			menuTitle: 'About',
-			url: ''
-		}
-	];
-
 	return (
 		<div>
-			<SearchBar display={isSearchBarVisible} />
+			{/* Search bar for performing text searches */}
+			<CommandPallet isOpen={isSearchBarVisible} setIsOpen={setIsSearchBarVisible} />
 
 			<aside
 				id='mobile-navigation-sidebar'
 				aria-label='mobile navigation menu sidebar'
-				className={className(
-					'fixed top-[75px] bottom-0 overflow-y-scroll bg-primary/90 p-4 backdrop-blur-[20px] duration-500 ease-in',
+				className={classNames(
+					'fixed top-[75px] bottom-0 space-y-3 overflow-y-auto bg-primary/90 p-4 backdrop-blur-[20px] duration-500 ease-in',
 					{
 						// When the menu item is active
 						'left-0': isSidebarOpen === true,
@@ -122,7 +93,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 						// When the sidebar is not open hide it, put the menu offscreen
 						'left-[-90%]': isSidebarOpen === false,
 
-						// When the sidebar is open make it full width
+						// When the sidebar is open make it 90% width (This is so we can show content behind the sidebar)
 						'w-full': isSidebarOpen === true,
 
 						// When the sidebar is not open make the height 0
@@ -130,21 +101,79 @@ const NavigationMenu = ({ isAuthenticated }) => {
 					}
 				)}
 			>
-				<MobileMenuDropdown title='Movies' links={movieLinks} />
+				{/* Movies menu item, renders an Accordion with additional links */}
+				<MenuItem links={movieLinks} title='Movies' isSidebarItem />
 
-				<MobileMenuDropdown title='TV Shows' links={showLinks} />
+				{/* Shows menu item, renders an Accordion with additional links  */}
+				<MenuItem links={showLinks} title='Shows' isSidebarItem />
 
-				<MobileMenuDropdown title='People' links={personLinks} />
+				{/* Person menu item, renders an Accordion with additional links  */}
+				<MenuItem links={personLinks} title='Person' isSidebarItem />
 
-				<Links links={externalLinks} />
+				{/* More links, renders an Accordion with additional links  */}
+				<MenuItem links={moreLinks} title='More' isSidebarItem />
 
-				<Links
-					links={
-						isAuthenticated === true
-							? [{ menuTitle: 'Logout', url: '/' }]
-							: [{ menuTitle: 'Sign in', url: '/' }]
-					}
-				/>
+				<ul>
+					<li>
+						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
+							Contribution Bible
+						</Link>
+					</li>
+
+					<li>
+						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
+							Apps
+						</Link>
+					</li>
+
+					<li>
+						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
+							Discussions
+						</Link>
+					</li>
+
+					<li>
+						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
+							Leaderboard
+						</Link>
+					</li>
+
+					<li>
+						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
+							API
+						</Link>
+					</li>
+
+					<li>
+						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
+							Support
+						</Link>
+					</li>
+
+					<li>
+						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
+							About
+						</Link>
+					</li>
+
+					<li className='mt-3'>
+						{isAuthenticated === false ? (
+							<Link
+								to='/'
+								className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}
+							>
+								Login
+							</Link>
+						) : (
+							<Link
+								to='/'
+								className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}
+							>
+								Logout
+							</Link>
+						)}
+					</li>
+				</ul>
 			</aside>
 
 			<nav
@@ -154,6 +183,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 				role='navigation'
 			>
 				<ul className='flex items-center justify-between md:hidden'>
+					{/* The sidebar toggler */}
 					<li>
 						<Button
 							onClick={() => {
@@ -173,6 +203,8 @@ const NavigationMenu = ({ isAuthenticated }) => {
 							<Icon className='fa-solid fa-bars text-white' />
 						</Button>
 					</li>
+
+					{/* Sidebar brand logo */}
 					<li>
 						<Link to='/'>
 							<Image
@@ -184,25 +216,29 @@ const NavigationMenu = ({ isAuthenticated }) => {
 							/>
 						</Link>
 					</li>
+
+					{/* Search bar toggler and user information/actions (Only available when the sidebar isn't open) */}
 					<li>
-						<Button
-							onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-							className='m-0 flex cursor-pointer items-center p-0'
-							onKeyDown={(event) => {
-								if (event.key === 'Enter') {
-									setIsSearchBarVisible(!isSearchBarVisible);
-								}
-							}}
-							aria-hidden={isSearchBarVisible.toString()}
-							aria-label={isSearchBarVisible === true ? 'Open search bar' : 'Close search bar'}
-						>
-							<Icon
-								className={className('text-white', {
-									'fa-solid fa-xmark': isSearchBarVisible === true,
-									'fa-solid fa-magnifying-glass': isSearchBarVisible === false
-								})}
-							/>
-						</Button>
+						{isSidebarOpen === false && (
+							<Button
+								onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
+								className='m-0 flex cursor-pointer items-center p-0'
+								onKeyDown={(event) => {
+									if (event.key === 'Enter') {
+										setIsSearchBarVisible(!isSearchBarVisible);
+									}
+								}}
+								aria-hidden={isSearchBarVisible.toString()}
+								aria-label={isSearchBarVisible === true ? 'Open search bar' : 'Close search bar'}
+							>
+								<Icon
+									className={classNames('text-white', {
+										'fa-solid fa-xmark': isSearchBarVisible === true,
+										'fa-solid fa-magnifying-glass': isSearchBarVisible === false
+									})}
+								/>
+							</Button>
+						)}
 					</li>
 				</ul>
 			</nav>
@@ -215,6 +251,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 			>
 				<div className='mx-auto hidden max-w-[1400px] justify-between	p-4 md:flex'>
 					<div className='m-0 flex items-center p-0' id='desktop-navigation-menu-left'>
+						{/* Sidebar brand logo */}
 						<ul>
 							<li>
 								<Link to='/'>
@@ -229,28 +266,24 @@ const NavigationMenu = ({ isAuthenticated }) => {
 							</li>
 						</ul>
 
-						<Dropdown title='Movies' {...DropdownProps}>
-							<Links links={movieLinks} {...LinksProps} />
-						</Dropdown>
+						{/* Movies menu item, renders a dropdown with additional links */}
+						<MenuItem links={movieLinks} title='Movies' />
 
-						<Dropdown title='TV Shows' {...DropdownProps}>
-							<Links links={showLinks} {...LinksProps} />
-						</Dropdown>
+						{/* Shows menu item, renders a dropdown with additional links  */}
+						<MenuItem links={showLinks} title='Shows' />
 
-						<Dropdown title='People' {...DropdownProps}>
-							<Links links={personLinks} {...LinksProps} />
-						</Dropdown>
+						{/* Person menu item, renders a dropdown with additional links  */}
+						<MenuItem links={personLinks} title='Person' />
 
-						<Dropdown title='More' {...DropdownProps}>
-							<Links links={externalLinks} {...LinksProps} />
-						</Dropdown>
+						{/* More links, renders a dropdown with additional links  */}
+						<MenuItem links={moreLinks} title='More' />
 					</div>
 
 					{isAuthenticated === false ? (
 						<ul className='m-0 flex items-center p-0' id='desktop-navigation-menu-right'>
 							<li className='pr-3 text-base font-bold text-white'>Login</li>
 
-							<li className='pr-3 text-base font-bold text-white'>Register</li>
+							<li className='pr-3 text-base font-bold text-white'>Join TMDB</li>
 
 							<li>
 								<Button
@@ -262,7 +295,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 									}}
 								>
 									<Icon
-										className={className('text-base text-white', {
+										className={classNames('text-base text-white', {
 											'fa-solid fa-xmark': isSearchBarVisible === true,
 											'fa-solid fa-magnifying-glass': isSearchBarVisible === false
 										})}
@@ -290,37 +323,37 @@ const NavigationMenu = ({ isAuthenticated }) => {
 								</li>
 							</ul>
 
-							<div style={{ 'border-top': '1px solid lightgrey' }} />
+							<div className='border-t border-solid border-slate-300' />
 
-							<Links
+							{/* <Links
 								links={[
-									{ menuTitle: 'Discussions', url: '' },
-									{ menuTitle: 'Lists', url: '' },
-									{ menuTitle: 'Ratings', url: '' },
-									{ menuTitle: 'Watchlist', url: '' }
+									{ label: 'Discussions', url: '' },
+									{ label: 'Lists', url: '' },
+									{ label: 'Ratings', url: '' },
+									{ label: 'Watchlist', url: '' }
 								]}
 								className='bg-slate-50 p-2'
 								anchorClassName='text-black text-sm'
-							/>
+							/> */}
 
 							<div className='border-t border-solid border-slate-300' />
 
-							<Links
+							{/* <Links
 								links={[
-									{ menuTitle: 'Edit Profile', url: '' },
-									{ menuTitle: 'Settings', url: '' }
+									{ label: 'Edit Profile', url: '' },
+									{ label: 'Settings', url: '' }
 								]}
 								className='bg-slate-50 p-2'
 								anchorClassName='text-black text-sm'
-							/>
+							/> */}
 
 							<div className='border-t border-solid border-slate-300' />
 
-							<Links
-								links={[{ menuTitle: 'Logout', url: '' }]}
+							{/* <Links
+								links={[{ label: 'Logout', url: '' }]}
 								className='bg-slate-50 p-2'
 								anchorClassName='text-black text-sm'
-							/>
+							/> */}
 						</Dropdown>
 					)}
 				</div>

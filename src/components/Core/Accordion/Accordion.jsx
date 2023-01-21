@@ -6,7 +6,15 @@ import classNames from 'classnames';
 
 import Icon from '../Icon/Icon';
 
-const Accordion = ({ children, title, defaultIsOpen, isDisabled, className, contentClassName }) => (
+const Accordion = ({
+	children,
+	title,
+	defaultIsOpen,
+	isDisabled,
+	className,
+	contentClassName,
+	unmount
+}) => (
 	<Disclosure defaultOpen={defaultIsOpen}>
 		{({ open }) => (
 			<div className={classNames('rounded-lg shadow-lg', {})}>
@@ -42,10 +50,10 @@ const Accordion = ({ children, title, defaultIsOpen, isDisabled, className, cont
 					leave='transition duration-75 ease-out'
 					leaveFrom='transform scale-100 opacity-100'
 					leaveTo='transform scale-95 opacity-0'
-					unmount={false} // Prevent's unmounting of children contents, causes component values to not be lost e.g. when using an uncontrolled form
+					unmount={unmount} // Prevent's unmounting of children contents, causes component values to not be lost e.g. when using an uncontrolled form
 				>
 					<Disclosure.Panel
-						unmount={false}
+						unmount={unmount}
 						className={classNames(
 							contentClassName,
 							'rounded-b-lg border-x-[1px] border-b-[1px] border-solid border-gray-300'
@@ -65,7 +73,8 @@ Accordion.propTypes = {
 	defaultIsOpen: PropTypes.bool,
 	isDisabled: PropTypes.bool,
 	className: PropTypes.string,
-	contentClassName: PropTypes.string
+	contentClassName: PropTypes.string,
+	unmount: PropTypes.bool
 };
 
 Accordion.defaultProps = {
@@ -74,7 +83,8 @@ Accordion.defaultProps = {
 	defaultIsOpen: false,
 	isDisabled: false,
 	className: 'p-4',
-	contentClassName: 'p-4'
+	contentClassName: 'p-4',
+	unmount: false
 };
 
 export default Accordion;

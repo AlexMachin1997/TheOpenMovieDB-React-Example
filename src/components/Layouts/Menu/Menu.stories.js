@@ -18,9 +18,7 @@ export default {
 	decorators: [
 		(Story) => (
 			<MemoryRouter>
-				<div className='bg-primary opacity-90'>
-					<Story />
-				</div>
+				<Story />
 			</MemoryRouter>
 		)
 	]
