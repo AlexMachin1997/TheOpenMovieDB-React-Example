@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import classNames from 'classnames';
-import { Icon, Image, Dropdown, Button } from '../../Core';
+
+import { Icon, Image, Button } from '../../Core';
 
 import MenuItem from './MenuItem/MenuItem';
 import CommandPallet from './CommandPallet';
+import ProfileMenu from './ProfileMenu';
 
-import useClientSideRoutes from '../../../hooks/useClientSideRoutes';
+import RoutingService from '../../../services/RoutingService/RoutingService';
 
 const NavigationMenu = ({ isAuthenticated }) => {
 	// MobileSidebar state
@@ -17,32 +19,6 @@ const NavigationMenu = ({ isAuthenticated }) => {
 
 	// Search bar
 	const [isSearchBarVisible, setIsSearchBarVisible] = React.useState(false);
-
-	// Get the client side routes without the page elements
-	const {
-		menuLinks: { movieLinks, showLinks, personLinks }
-	} = useClientSideRoutes({
-		includesElements: false
-	});
-
-	const moreLinks = [
-		{
-			label: 'Discussions',
-			url: ''
-		},
-		{
-			label: 'Leaderboard',
-			url: ''
-		},
-		{
-			label: 'Support',
-			url: ''
-		},
-		{
-			label: 'API',
-			url: ''
-		}
-	];
 
 	// Handles the closing of the mobile navigation bar when the screen resizes
 	React.useEffect(() => {
@@ -76,6 +52,15 @@ const NavigationMenu = ({ isAuthenticated }) => {
 		};
 	}, [isSidebarOpen]);
 
+	const ApplicationLinks = React.useMemo(
+		() =>
+			RoutingService.getMultipleUrlGroups({
+				groups: ['Movies', 'Shows', 'People', 'More'],
+				filterOutMenuItems: true
+			}),
+		[]
+	);
+
 	return (
 		<div>
 			{/* Search bar for performing text searches */}
@@ -101,61 +86,16 @@ const NavigationMenu = ({ isAuthenticated }) => {
 					}
 				)}
 			>
-				{/* Movies menu item, renders an Accordion with additional links */}
-				<MenuItem links={movieLinks} title='Movies' isSidebarItem />
-
-				{/* Shows menu item, renders an Accordion with additional links  */}
-				<MenuItem links={showLinks} title='Shows' isSidebarItem />
-
-				{/* Person menu item, renders an Accordion with additional links  */}
-				<MenuItem links={personLinks} title='Person' isSidebarItem />
-
-				{/* More links, renders an Accordion with additional links  */}
-				<MenuItem links={moreLinks} title='More' isSidebarItem />
+				{ApplicationLinks.map((route) => (
+					<MenuItem
+						key={route.groupName}
+						links={route.children}
+						title={route.groupName}
+						isSidebarItem
+					/>
+				))}
 
 				<ul>
-					<li>
-						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
-							Contribution Bible
-						</Link>
-					</li>
-
-					<li>
-						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
-							Apps
-						</Link>
-					</li>
-
-					<li>
-						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
-							Discussions
-						</Link>
-					</li>
-
-					<li>
-						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
-							Leaderboard
-						</Link>
-					</li>
-
-					<li>
-						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
-							API
-						</Link>
-					</li>
-
-					<li>
-						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
-							Support
-						</Link>
-					</li>
-
-					<li>
-						<Link to='/' className={classNames('m-0 w-full p-2 pr-4 text-base text-gray-400', {})}>
-							About
-						</Link>
-					</li>
-
 					<li className='mt-3'>
 						{isAuthenticated === false ? (
 							<Link
@@ -266,96 +206,18 @@ const NavigationMenu = ({ isAuthenticated }) => {
 							</li>
 						</ul>
 
-						{/* Movies menu item, renders a dropdown with additional links */}
-						<MenuItem links={movieLinks} title='Movies' />
-
-						{/* Shows menu item, renders a dropdown with additional links  */}
-						<MenuItem links={showLinks} title='Shows' />
-
-						{/* Person menu item, renders a dropdown with additional links  */}
-						<MenuItem links={personLinks} title='Person' />
-
-						{/* More links, renders a dropdown with additional links  */}
-						<MenuItem links={moreLinks} title='More' />
+						{ApplicationLinks.map((route) => (
+							<MenuItem key={route.groupName} links={route.children} title={route.groupName} />
+						))}
 					</div>
 
-					{isAuthenticated === false ? (
-						<ul className='m-0 flex items-center p-0' id='desktop-navigation-menu-right'>
-							<li className='pr-3 text-base font-bold text-white'>Login</li>
-
-							<li className='pr-3 text-base font-bold text-white'>Join TMDB</li>
-
-							<li>
-								<Button
-									onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-									onKeyDown={(event) => {
-										if (event.key === 'Enter') {
-											setIsSearchBarVisible(!isSearchBarVisible);
-										}
-									}}
-								>
-									<Icon
-										className={classNames('text-base text-white', {
-											'fa-solid fa-xmark': isSearchBarVisible === true,
-											'fa-solid fa-magnifying-glass': isSearchBarVisible === false
-										})}
-									/>
-									<span className='sr-only'>Search toggle</span>
-								</Button>
-							</li>
-						</ul>
-					) : (
-						<Dropdown
-							title={
-								<>
-									<Icon className='fa-solid fa-user text-white' />
-									<span className='sr-only'>User profile</span>
-								</>
-							}
-							alignment='right'
-							dropdownClass='bg-slate-50 rounded w-[200px] border border-solid border-gray-300 drop-shadow-xl'
-							id='desktop-navigation-menu-right'
-						>
-							<ul className='p-2'>
-								<li className='text-base font-semibold text-black'>Alex Machin</li>
-								<li className='text-xs text-gray-400'>
-									<Link to='/'>View profile</Link>
-								</li>
-							</ul>
-
-							<div className='border-t border-solid border-slate-300' />
-
-							{/* <Links
-								links={[
-									{ label: 'Discussions', url: '' },
-									{ label: 'Lists', url: '' },
-									{ label: 'Ratings', url: '' },
-									{ label: 'Watchlist', url: '' }
-								]}
-								className='bg-slate-50 p-2'
-								anchorClassName='text-black text-sm'
-							/> */}
-
-							<div className='border-t border-solid border-slate-300' />
-
-							{/* <Links
-								links={[
-									{ label: 'Edit Profile', url: '' },
-									{ label: 'Settings', url: '' }
-								]}
-								className='bg-slate-50 p-2'
-								anchorClassName='text-black text-sm'
-							/> */}
-
-							<div className='border-t border-solid border-slate-300' />
-
-							{/* <Links
-								links={[{ label: 'Logout', url: '' }]}
-								className='bg-slate-50 p-2'
-								anchorClassName='text-black text-sm'
-							/> */}
-						</Dropdown>
-					)}
+					<ProfileMenu
+						isAuthenticated={isAuthenticated}
+						isSearchBarVisible={isSearchBarVisible}
+						onChange={() => {
+							setIsSearchBarVisible((prevState) => !prevState);
+						}}
+					/>
 				</div>
 			</nav>
 		</div>

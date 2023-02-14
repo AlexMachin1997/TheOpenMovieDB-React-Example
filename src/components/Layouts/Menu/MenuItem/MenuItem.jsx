@@ -32,6 +32,12 @@ const MenuItem = ({ links, title, isSidebarItem }) => {
 				options: {
 					offset: [0, 5]
 				}
+			},
+			{
+				name: 'computeStyles',
+				options: {
+					adaptive: false
+				}
 			}
 		]
 	});
@@ -49,7 +55,7 @@ const MenuItem = ({ links, title, isSidebarItem }) => {
 			>
 				<ul>
 					{links.map((link) => (
-						<li className='flex' key={link.url}>
+						<li className='flex' key={`${title}-${link.label}`}>
 							<Link
 								to={link.url}
 								className={classNames('m-0 w-full p-2 pr-4 text-base text-white', {})}
@@ -90,12 +96,17 @@ const MenuItem = ({ links, title, isSidebarItem }) => {
 						{...attributes.popper}
 					>
 						{links.map((link) => (
-							<Menu.Item className='flex p-2 pr-4' key={link.url} as='li'>
+							<Menu.Item
+								className='flex rounded-lg p-2 pr-2'
+								key={`${title}-${link.label}`}
+								as='li'
+							>
 								{({ active }) => (
 									<Link
 										to={link.url}
-										className={classNames('m-0 w-full p-2 pr-4 text-base text-black', {
-											'bg-secondary': active === true
+										className={classNames('flex w-full rounded-lg p-2 pr-2 text-sm', {
+											'bg-secondary text-white': active === true,
+											'text-gray-400': active === false
 										})}
 									>
 										{link.label}

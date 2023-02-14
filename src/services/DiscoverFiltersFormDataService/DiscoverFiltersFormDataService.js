@@ -1,5 +1,5 @@
 import { addDays, format, subDays } from 'date-fns';
-import settings from '../settings';
+import settings from '../../settings';
 
 const setupCheckboxFormData = ({ defaultValue = [], options = [] }) => {
 	// If there are more than 1 options but it's not included in the
@@ -57,7 +57,7 @@ const setupDropdownFormData = ({ isMultiple = false, defaultValue, options = [] 
 	return options.find((option) => option.value === defaultValue)?.value ?? '';
 };
 
-class DiscoverFiltersFormData {
+class DiscoverFiltersFormDataService {
 	constructor(mediaType = '', resourceType = '', isAuthenticated = false, defaultValues = {}) {
 		// Stores references to the current mediaType (movie), resourceType (popular) and isAuthenticated
 		this.mediaType = mediaType;
@@ -397,4 +397,4 @@ class DiscoverFiltersFormData {
 	}
 }
 
-export default DiscoverFiltersFormData;
+export default DiscoverFiltersFormDataService;

@@ -13,8 +13,8 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
 	},
-	"editor.cursorSmoothCaretAnimation": true,
-	"editor.fontSize": 30,
+	"editor.cursorSmoothCaretAnimation": "on",
+	"editor.fontSize": 20,
 	"editor.minimap.enabled": false,
 	"editor.tabSize": 2,
 
