@@ -1,7 +1,7 @@
-import settings from '../settings';
-import DiscoverFiltersFormData from './DiscoverFiltersFormData';
+import settings from '../../settings';
+import DiscoverFiltersFormDataService from './DiscoverFiltersFormDataService';
 
-describe('DiscoverFiltersFormData', () => {
+describe('DiscoverFiltersFormDataService', () => {
 	// Before all the unit tests when using the newDate() set it to 07/11/2022
 	beforeAll(() => {
 		jest.useFakeTimers('modern');
@@ -21,7 +21,7 @@ describe('DiscoverFiltersFormData', () => {
 		`(
 			'When the resourceType is $resourceType the sort_by should be $expectedSortBy',
 			({ resourceType, expectedSortBy }) => {
-				const formData = new DiscoverFiltersFormData('movie', resourceType, false, {});
+				const formData = new DiscoverFiltersFormDataService('movie', resourceType, false, {});
 				expect(formData.sort_by).toBe(expectedSortBy);
 			}
 		);
@@ -29,19 +29,19 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('restrict_services', () => {
 		it('When no default value is provided for the restrict_services it should default to false', () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {});
 			expect(formData.restrict_services).toBe(false);
 		});
 
 		it('When a default value is provided for the restrict_services it should default to the provided value', () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 				restrict_services: true
 			});
 			expect(formData.restrict_services).toBe(true);
 		});
 
 		it('When the default value for the restrict services is not a boolean it should default to false', () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 				restrict_services: null
 			});
 			expect(formData.restrict_services).toBe(false);
@@ -50,26 +50,26 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('show_me', () => {
 		it("When you aren't authenticated the show_me should default to '0'", () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {});
 			expect(formData.show_me).toBe('0');
 		});
 
 		it("When you aren't authenticated but you provide a default value the show me should default to '0'", () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 				show_me: '2'
 			});
 			expect(formData.show_me).toBe('0');
 		});
 
 		it("When you are authenticated but you provide an invalid value it should default to '0'", () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', true, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', true, {
 				show_me: '10'
 			});
 			expect(formData.show_me).toBe('0');
 		});
 
 		it('When you are authenticated and you provide a valid default value it should default to the provided value', () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', true, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', true, {
 				show_me: '1'
 			});
 			expect(formData.show_me).toBe('1');
@@ -78,7 +78,7 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('with_ott_monetization_types', () => {
 		it('When an invalid value is provided it should default to all', () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', true, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', true, {
 				with_ott_monetization_types: ['some-random-option']
 			});
 
@@ -93,7 +93,7 @@ describe('DiscoverFiltersFormData', () => {
 				settings.AVAILABILITY_OPTIONS[4].value
 			];
 
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', true, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', true, {
 				with_ott_monetization_types: [...availabilityOptionsFormData]
 			});
 
@@ -109,7 +109,7 @@ describe('DiscoverFiltersFormData', () => {
 				settings.AVAILABILITY_OPTIONS[4].value
 			];
 
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', true, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', true, {
 				with_ott_monetization_types: [...availabilityOptionsFormData]
 			});
 
@@ -122,19 +122,19 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('with_genres', () => {
 		it('By default the with_genres should be an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {});
 			expect(formData.with_genres).toStrictEqual([]);
 		});
 
 		it('When an invalid with_genres value is provided it should be set to an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				with_genres: ['INVALID-VALUE']
 			});
 			expect(formData.with_genres).toStrictEqual([]);
 		});
 
 		it('When a valid with_genres value is provided it should be set to the provided value', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				with_genres: [settings.GENRE_OPTIONS[0].value]
 			});
 			expect(formData.with_genres).toStrictEqual(['28']);
@@ -143,19 +143,19 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('certification', () => {
 		it('By default the certification should be an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {});
 			expect(formData.certification).toStrictEqual([]);
 		});
 
 		it('When an invalid certification value is provided it should be set to an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				certification: ['INVALID-VALUE']
 			});
 			expect(formData.certification).toStrictEqual([]);
 		});
 
 		it('When a valid certification value is provided it should be set to the provided value', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				certification: [settings.CERTIFICATION_OPTIONS[0].value]
 			});
 			expect(formData.certification).toStrictEqual(['NR']);
@@ -164,7 +164,7 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('with_release_type', () => {
 		it('When an invalid value is provided it should default to all', () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', true, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', true, {
 				with_release_type: ['some-random-option']
 			});
 
@@ -179,7 +179,7 @@ describe('DiscoverFiltersFormData', () => {
 				settings.RELEASE_TYPE_OPTIONS[4].value
 			];
 
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', true, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', true, {
 				with_release_type: [...availabilityOptionsFormData]
 			});
 
@@ -195,7 +195,7 @@ describe('DiscoverFiltersFormData', () => {
 				settings.RELEASE_TYPE_OPTIONS[4].value
 			];
 
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', true, {
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', true, {
 				with_release_type: [...availabilityOptionsFormData]
 			});
 
@@ -208,19 +208,19 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('with_original_language', () => {
 		it('By default the with_original_language should be an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {});
 			expect(formData.with_original_language).toBe('none');
 		});
 
 		it('When an invalid with_original_language value is provided it should be set to an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				with_original_language: 'INVALID-VALUE'
 			});
 			expect(formData.with_original_language).toBe('');
 		});
 
 		it('When a valid with_original_language value is provided it should be set to the provided value', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				with_original_language: settings.LANGUAGE_OPTIONS[1].value
 			});
 
@@ -230,19 +230,19 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('region', () => {
 		it('By default the region should be an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {});
 			expect(formData.region).toBe('US');
 		});
 
 		it('When an invalid region value is provided it should be set to an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				region: 'INVALID-VALUE'
 			});
 			expect(formData.region).toBe('');
 		});
 
 		it('When a valid region value is provided it should be set to the provided value', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				region: settings.COUNTRY_OPTIONS[0].value
 			});
 
@@ -252,12 +252,12 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('ott_region', () => {
 		it("By default the ott_region should be 'US'", () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {});
 			expect(formData.ott_region).toBe('US');
 		});
 
 		it('When a custom ottProvider is provided it should set the ott_region to the provided value', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				ott_region: 'GB'
 			});
 
@@ -267,19 +267,19 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('with_ott_providers', () => {
 		it('By default the with_ott_providers should be an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {});
 			expect(formData.with_ott_providers).toStrictEqual([]);
 		});
 
 		it('When an invalid value for with_ott_providers is provided it should be set to an empty array', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				with_ott_providers: ['INVALID-VALUE']
 			});
 			expect(formData.with_ott_providers).toStrictEqual([]);
 		});
 
 		it('When a valid with_ott_providers value is provided it should be set to the provided value', () => {
-			const formData = new DiscoverFiltersFormData('movie', 'top-rated', false, {
+			const formData = new DiscoverFiltersFormDataService('movie', 'top-rated', false, {
 				with_ott_providers: [settings.OTT_PROVIDER_OPTIONS[0].value]
 			});
 			expect(formData.with_ott_providers).toStrictEqual(['8']);
@@ -301,7 +301,7 @@ describe('DiscoverFiltersFormData', () => {
 		`(
 			'When the resourceType is $resourceType and the mediaType is $mediaType the $field should be $expectedDate',
 			({ field, expectedDate, mediaType, resourceType }) => {
-				const formData = new DiscoverFiltersFormData(mediaType, resourceType, false, {});
+				const formData = new DiscoverFiltersFormDataService(mediaType, resourceType, false, {});
 				expect(formData[field]).toBe(expectedDate);
 			}
 		);
@@ -328,7 +328,7 @@ describe('DiscoverFiltersFormData', () => {
 		`(
 			'When the resourceType is $resourceType and the mediaType is $mediaType the $field should be $expectedDate',
 			({ field, expectedDate, mediaType, resourceType, searchByFirstAirDate }) => {
-				const formData = new DiscoverFiltersFormData(mediaType, resourceType, false, {
+				const formData = new DiscoverFiltersFormDataService(mediaType, resourceType, false, {
 					search_first_air_date: searchByFirstAirDate
 				});
 				expect(formData[field]).toBe(expectedDate);
@@ -339,21 +339,21 @@ describe('DiscoverFiltersFormData', () => {
 	describe('vote_average', () => {
 		describe('vote_average_lte (To)', () => {
 			it('When the vote_average_lte (To) is less than 0 it should be capped at 10', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_lte: -100
 				});
 				expect(formData.vote_average_lte).toBe(10);
 			});
 
 			it('When the vote_average_lte (To) is more than 400 it should be capped at 10', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_lte: 405
 				});
 				expect(formData.vote_average_lte).toBe(10);
 			});
 
 			it('When the vote_average_gte (From) is more than the vote_average_lte (To) it should be capped at 10', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_lte: 10,
 					vote_average_gte: 15
 				});
@@ -361,14 +361,14 @@ describe('DiscoverFiltersFormData', () => {
 			});
 
 			it('When the vote_average_gte (From) is valid it should be set to whatever was provided', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_lte: 8
 				});
 				expect(formData.vote_average_lte).toBe(8);
 			});
 
 			it('When the vote_average_gte (From) it not a number it should default to 400', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_lte: null
 				});
 				expect(formData.vote_average_lte).toBe(10);
@@ -377,21 +377,21 @@ describe('DiscoverFiltersFormData', () => {
 
 		describe('vote_average_gte (From)', () => {
 			it('When the vote_average_gte (To) is less than 0 it should be capped at 0', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_gte: -100
 				});
 				expect(formData.vote_average_gte).toBe(0);
 			});
 
 			it('When the vote_average_gte (To) is more than 400 it should be capped at 0', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_gte: 15
 				});
 				expect(formData.vote_average_gte).toBe(0);
 			});
 
 			it('When the vote_average_lte (To) is more than the vote_average_gte (From) it should be capped at 10', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_lte: 15,
 					vote_average_gte: 10
 				});
@@ -399,14 +399,14 @@ describe('DiscoverFiltersFormData', () => {
 			});
 
 			it('When the  vote_average_gte (To) is valid it should be set to whatever was provided', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_lte: 8
 				});
 				expect(formData.vote_average_lte).toBe(8);
 			});
 
 			it('When the vote_average_gte (To) it not a number it should default to 400', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					vote_average_lte: null
 				});
 				expect(formData.vote_average_lte).toBe(10);
@@ -417,21 +417,21 @@ describe('DiscoverFiltersFormData', () => {
 	describe('runtime', () => {
 		describe('with_runtime_lte (To)', () => {
 			it('When the with_runtime_lte (To) is less than 0 it should be capped at 400', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_lte: -100
 				});
 				expect(formData.with_runtime_lte).toBe(400);
 			});
 
 			it('When the with_runtime_lte (To) is more than 400 it should be capped at 400', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_lte: 405
 				});
 				expect(formData.with_runtime_lte).toBe(400);
 			});
 
 			it('When the with_runtime_gte (From) is more than the with_runtime_lte (To) it should be capped at 400', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_gte: 400,
 					with_runtime_lte: 405
 				});
@@ -439,14 +439,14 @@ describe('DiscoverFiltersFormData', () => {
 			});
 
 			it('When the with_runtime_lte (To) is valid it should be set to whatever was provided', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_lte: 250
 				});
 				expect(formData.with_runtime_lte).toBe(250);
 			});
 
 			it('When the with_runtime_lte (To) it not a number it should default to 400', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_lte: null
 				});
 				expect(formData.with_runtime_lte).toBe(400);
@@ -455,21 +455,21 @@ describe('DiscoverFiltersFormData', () => {
 
 		describe('with_runtime_gte (From)', () => {
 			it('When the with_runtime_gte (From) is less than 0 it should be capped at 0', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_gte: -100
 				});
 				expect(formData.with_runtime_gte).toBe(0);
 			});
 
 			it('When the with_runtime_gte (From) is more than 400 it should be capped at 0', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_gte: 405
 				});
 				expect(formData.with_runtime_gte).toBe(0);
 			});
 
 			it('When the with_runtime_gte (From) is more than the with_runtime_lte (To) it should be capped at 400', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_gte: 405,
 					with_runtime_lte: 400
 				});
@@ -477,14 +477,14 @@ describe('DiscoverFiltersFormData', () => {
 			});
 
 			it('When the with_runtime_gte (From) is valid it should be set to whatever was provided', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_gte: 250
 				});
 				expect(formData.with_runtime_gte).toBe(250);
 			});
 
 			it('When the with_runtime_gte (From) it not a number it should default to 0', () => {
-				const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {
+				const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {
 					with_runtime_gte: null
 				});
 				expect(formData.with_runtime_gte).toBe(0);
@@ -503,7 +503,7 @@ describe('DiscoverFiltersFormData', () => {
 		`(
 			'When the resourceType is $resourceType the vote_count_gte should be $vote_count_gte',
 			({ mediaType, vote_count_gte, resourceType, defaultValue }) => {
-				const formData = new DiscoverFiltersFormData(mediaType, resourceType, false, {
+				const formData = new DiscoverFiltersFormDataService(mediaType, resourceType, false, {
 					vote_count_gte: defaultValue
 				});
 				expect(formData.vote_count_gte).toBe(vote_count_gte);
@@ -513,7 +513,7 @@ describe('DiscoverFiltersFormData', () => {
 
 	describe('getFormikFormData', () => {
 		it("When the resourceType is 'popular' and the mediaType is 'movie'", () => {
-			const formData = new DiscoverFiltersFormData('movie', 'popular', true, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'popular', true, {});
 
 			const expectedFormData = {
 				show_me: '0',
@@ -543,7 +543,7 @@ describe('DiscoverFiltersFormData', () => {
 		});
 
 		it("When the resourceType is 'now-playing' and the mediaType is 'movie'", () => {
-			const formData = new DiscoverFiltersFormData('movie', 'now-playing', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'now-playing', false, {});
 
 			const expectedFormData = {
 				show_me: '0',
@@ -573,7 +573,7 @@ describe('DiscoverFiltersFormData', () => {
 		});
 
 		it("When the resourceType is 'upcoming' and the mediaType is 'movie'", () => {
-			const formData = new DiscoverFiltersFormData('movie', 'upcoming', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'upcoming', false, {});
 
 			const expectedFormData = {
 				show_me: '0',
@@ -603,7 +603,7 @@ describe('DiscoverFiltersFormData', () => {
 		});
 
 		it("When the resourceType is 'top-rated' and the mediaType is 'movie'", () => {
-			const formData = new DiscoverFiltersFormData('movie', 'upcoming', false, {});
+			const formData = new DiscoverFiltersFormDataService('movie', 'upcoming', false, {});
 
 			const expectedFormData = {
 				show_me: '0',
@@ -633,7 +633,7 @@ describe('DiscoverFiltersFormData', () => {
 		});
 
 		it("When the resourceType is 'popular' and the mediaType is 'tv'", () => {
-			const formData = new DiscoverFiltersFormData('tv', 'popular', false, {});
+			const formData = new DiscoverFiltersFormDataService('tv', 'popular', false, {});
 
 			const expectedFormData = {
 				show_me: '0',
@@ -663,7 +663,7 @@ describe('DiscoverFiltersFormData', () => {
 		});
 
 		it("When the resourceType is 'airing-today' and the mediaType is 'tv'", () => {
-			const formData = new DiscoverFiltersFormData('tv', 'airing-today', false, {});
+			const formData = new DiscoverFiltersFormDataService('tv', 'airing-today', false, {});
 
 			const expectedFormData = {
 				show_me: '0',
@@ -693,7 +693,7 @@ describe('DiscoverFiltersFormData', () => {
 		});
 
 		it("When the resourceType is 'on-the-air' and the mediaType is 'tv'", () => {
-			const formData = new DiscoverFiltersFormData('tv', 'airing-today', false, {});
+			const formData = new DiscoverFiltersFormDataService('tv', 'airing-today', false, {});
 
 			const expectedFormData = {
 				show_me: '0',
@@ -723,7 +723,7 @@ describe('DiscoverFiltersFormData', () => {
 		});
 
 		it("When the resourceType is 'top-rated' and the mediaType is 'tv'", () => {
-			const formData = new DiscoverFiltersFormData('tv', 'top-rated', false, {});
+			const formData = new DiscoverFiltersFormDataService('tv', 'top-rated', false, {});
 
 			const expectedFormData = {
 				show_me: '0',

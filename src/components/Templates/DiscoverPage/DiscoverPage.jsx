@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import DiscoverFilterSidebar from '../../Forms/DiscoverFilterSidebar/DiscoverFilterSidebar';
 import { EntertainmentPosterCard } from '../../Cards/Entertainment';
 
-import DiscoverFiltersFormData from '../../../utils/DiscoverFiltersFormData';
+import DiscoverFiltersFormDataService from '../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 import { Button, Icon, Tooltip } from '../../Core';
 
 const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
@@ -44,8 +44,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
 										'text-gray-500': active === false
 									})}
 									onClick={() => {
-										// Re-setup the DiscoverFiltersFormData class to get the original "Sort By" formData
-										const NewSortByFormData = new DiscoverFiltersFormData(
+										// Re-setup the DiscoverFiltersFormDataService class to get the original "Sort By" formData
+										const NewSortByFormData = new DiscoverFiltersFormDataService(
 											mediaType,
 											resourceType,
 											isAuthenticated
@@ -56,8 +56,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
 									}}
 									onKeyDown={(event) => {
 										if (event.key === 'Enter') {
-											// Re-setup the DiscoverFiltersFormData class to get the original "Sort By" formData
-											const NewSortByFormData = new DiscoverFiltersFormData(
+											// Re-setup the DiscoverFiltersFormDataService class to get the original "Sort By" formData
+											const NewSortByFormData = new DiscoverFiltersFormDataService(
 												mediaType,
 												resourceType,
 												isAuthenticated
@@ -81,8 +81,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
 										'text-gray-500': active === false
 									})}
 									onClick={() => {
-										// Re-setup the DiscoverFiltersFormData class to get the original "Filters" formData
-										const NewFiltersFormData = new DiscoverFiltersFormData(
+										// Re-setup the DiscoverFiltersFormDataService class to get the original "Filters" formData
+										const NewFiltersFormData = new DiscoverFiltersFormDataService(
 											mediaType,
 											resourceType,
 											isAuthenticated
@@ -93,8 +93,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
 									}}
 									onKeyDown={(event) => {
 										if (event.key === 'Enter') {
-											// Re-setup the DiscoverFiltersFormData class to get the original "Filters" formData
-											const NewFiltersFormData = new DiscoverFiltersFormData(
+											// Re-setup the DiscoverFiltersFormDataService class to get the original "Filters" formData
+											const NewFiltersFormData = new DiscoverFiltersFormDataService(
 												mediaType,
 												resourceType,
 												isAuthenticated
@@ -118,8 +118,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
 										'text-gray-500': active === false
 									})}
 									onClick={() => {
-										// Re-setup the DiscoverFiltersFormData class to get the original "Where To Watch" formData
-										const NewWhereToWatchFormData = new DiscoverFiltersFormData(
+										// Re-setup the DiscoverFiltersFormDataService class to get the original "Where To Watch" formData
+										const NewWhereToWatchFormData = new DiscoverFiltersFormDataService(
 											mediaType,
 											resourceType,
 											isAuthenticated
@@ -130,8 +130,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
 									}}
 									onKeyDown={(event) => {
 										if (event.key === 'Enter') {
-											// Re-setup the DiscoverFiltersFormData class to get the original "Where To Watch" formData
-											const NewWhereToWatchFormData = new DiscoverFiltersFormData(
+											// Re-setup the DiscoverFiltersFormDataService class to get the original "Where To Watch" formData
+											const NewWhereToWatchFormData = new DiscoverFiltersFormDataService(
 												mediaType,
 												resourceType,
 												isAuthenticated
@@ -157,8 +157,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
 										'text-gray-500': active === false
 									})}
 									onClick={() => {
-										// Re-setup the DiscoverFiltersFormData class to get the original formData
-										const NewFormData = new DiscoverFiltersFormData(
+										// Re-setup the DiscoverFiltersFormDataService class to get the original formData
+										const NewFormData = new DiscoverFiltersFormDataService(
 											mediaType,
 											resourceType,
 											isAuthenticated
@@ -169,8 +169,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated }) => {
 									}}
 									onKeyDown={(event) => {
 										if (event.key === 'Enter') {
-											// Re-setup the DiscoverFiltersFormData class to get the original formData
-											const NewFormData = new DiscoverFiltersFormData(
+											// Re-setup the DiscoverFiltersFormDataService class to get the original formData
+											const NewFormData = new DiscoverFiltersFormDataService(
 												mediaType,
 												resourceType,
 												isAuthenticated
@@ -210,7 +210,7 @@ const DiscoverPageTemplate = ({
 	// Generate the Discover Filters Sidebar formData
 	const formData = React.useMemo(
 		() =>
-			new DiscoverFiltersFormData(mediaType, resourceType, isAuthenticated, {
+			new DiscoverFiltersFormDataService(mediaType, resourceType, isAuthenticated, {
 				...defaultValues
 			}).getFormikFormData(),
 		[mediaType, resourceType, isAuthenticated, defaultValues]
@@ -392,7 +392,7 @@ const DiscoverPageTemplate = ({
 
 						{/* Displays the page results */}
 						<div
-							id={`${mediaType} results`}
+							id={`${mediaType}-results`}
 							className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5'
 						>
 							{resources.map((resource, resourceIndex) => (

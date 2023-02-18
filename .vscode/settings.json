@@ -13,7 +13,7 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
 	},
-	"editor.cursorSmoothCaretAnimation": true,
+	"editor.cursorSmoothCaretAnimation": "on",
 	"editor.fontSize": 20,
 	"editor.minimap.enabled": false,
 	"editor.tabSize": 2,
@@ -21,7 +21,7 @@
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 
-	"workbench.sideBar.location": "left",
+	"workbench.sideBar.location": "right",
 
 	"javascript.updateImportsOnFileMove.enabled": "always",
 
@@ -63,5 +63,8 @@
 	"files.associations": {
 		"*.react.js": "javascriptreact",
 		"*.jsx": "javascriptreact"
-	}
+	},
+	"terminal.integrated.fontSize": 20,
+	"screencastMode.fontSize": 59,
+	"scm.inputFontSize": 20
 }

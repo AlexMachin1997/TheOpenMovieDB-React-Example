@@ -26,8 +26,6 @@ const FooterComponent = () => {
 		{ text: 'Privacy Policy', link: 'https://www.themoviedb.org/privacy-policy' }
 	];
 
-	const headingClassNames = `text-white text-base font-bold uppercase mb-3 underline-offset-1	underline`;
-
 	return (
 		<footer className='grid bg-primary xl:place-content-center'>
 			<div className='grid max-w-[1300px] grid-cols-1 gap-x-3 bg-primary p-8 xl:grid-cols-5'>
@@ -52,7 +50,9 @@ const FooterComponent = () => {
 				</div>
 
 				<div>
-					<h3 className={headingClassNames}>The Basics</h3>
+					<h3 className='mb-3 text-base font-bold uppercase text-white underline	underline-offset-1'>
+						The Basics
+					</h3>
 
 					{TheBasics.map((section, index) => (
 						<a className='mb-3 block font-light text-white' key={index} href={section.link}>
@@ -62,7 +62,9 @@ const FooterComponent = () => {
 				</div>
 
 				<div>
-					<h3 className={headingClassNames}>Get Involved</h3>
+					<h3 className='mb-3 text-base font-bold uppercase text-white underline	underline-offset-1'>
+						Get Involved
+					</h3>
 
 					{GetInvolved.map((section, index) => (
 						<a className='mb-3 block font-light text-white' key={index} href={section.link}>
@@ -72,7 +74,9 @@ const FooterComponent = () => {
 				</div>
 
 				<div>
-					<h3 className={headingClassNames}>Community</h3>
+					<h3 className='mb-3 text-base font-bold uppercase text-white underline	underline-offset-1'>
+						Community
+					</h3>
 
 					{Community.map((section, index) => (
 						<a className='mb-3 block font-light text-white' key={index} href={section.link}>
@@ -82,7 +86,9 @@ const FooterComponent = () => {
 				</div>
 
 				<div>
-					<h3 className={headingClassNames}>Legal</h3>
+					<h3 className='mb-3 text-base font-bold uppercase text-white underline	underline-offset-1'>
+						Legal
+					</h3>
 
 					{Legal.map((section, index) => (
 						<a className='mb-3 block font-light text-white' key={index} href={section.link}>

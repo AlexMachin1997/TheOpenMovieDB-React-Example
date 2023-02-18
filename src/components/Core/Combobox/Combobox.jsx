@@ -150,7 +150,9 @@ const CustomCombobox = ({
 	defaultValue,
 	disabled,
 	noOptionsForSearchTermMessage,
-	noOptionsAvailableMessage
+	noOptionsAvailableMessage,
+	flipIconPosition,
+	containerClassName
 }) => {
 	// Stores the current search term applied to the Combobox
 	const [query, setQuery] = React.useState(defaultQuery);
@@ -288,16 +290,28 @@ const CustomCombobox = ({
 			disabled={disabled}
 		>
 			<div className='relative mt-1' ref={containerRef}>
-				<div className='relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
+				<div
+					className={classNames(
+						'relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 pl-0 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm',
+						containerClassName
+					)}
+				>
+					{flipIconPosition === true && (
+						<Combobox.Button className='p-2' aria-hidden='true' ref={setReferenceElement}>
+							<Icon className='fa-solid fa-arrows-up-down w-5 text-gray-400' />
+						</Combobox.Button>
+					)}
 					<Combobox.Input
 						className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0'
 						onChange={(event) => {
 							setQuery(event.target.value);
 						}}
 					/>
-					<Combobox.Button className='p-2' aria-hidden='true' ref={setReferenceElement}>
-						<Icon className='fa-solid fa-arrows-up-down w-5 text-gray-400' />
-					</Combobox.Button>
+					{flipIconPosition === false && (
+						<Combobox.Button className='p-2' aria-hidden='true' ref={setReferenceElement}>
+							<Icon className='fa-solid fa-arrows-up-down w-5 text-gray-400' />
+						</Combobox.Button>
+					)}
 				</div>
 				<Transition
 					as={React.Fragment}
@@ -359,7 +373,9 @@ CustomCombobox.propTypes = {
 	canAddCustomItems: PropTypes.bool,
 	disabled: PropTypes.bool,
 	noOptionsForSearchTermMessage: PropTypes.string,
-	noOptionsAvailableMessage: PropTypes.string
+	noOptionsAvailableMessage: PropTypes.string,
+	flipIconPosition: PropTypes.bool,
+	containerClassName: PropTypes.string
 };
 
 CustomCombobox.defaultProps = {
@@ -379,7 +395,9 @@ CustomCombobox.defaultProps = {
 	canAddCustomItems: false,
 	disabled: false,
 	noOptionsForSearchTermMessage: 'No options available for your current search term.',
-	noOptionsAvailableMessage: 'No options currently available.'
+	noOptionsAvailableMessage: 'No options currently available.',
+	flipIconPosition: false,
+	containerClassName: ''
 };
 
 export default CustomCombobox;
