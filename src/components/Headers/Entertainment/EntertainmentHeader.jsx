@@ -77,13 +77,13 @@ const EntertainmentHeader = ({
 				style={{
 					backgroundImage: overlay
 				}}
-				className='flex items-center justify-center'
+				className='flex items-center'
 			>
-				<div className='relative top-0 left-0 block pt-4 md:flex md:max-w-[1100px] md:py-8 md:px-10'>
+				<div className='relative top-0 left-0 block p-5 pt-4 md:flex md:max-w-[1100px] md:px-10'>
 					<Image
 						src={posterImage}
-						width='200px'
-						height='350px'
+						width='300px'
+						height='450px'
 						alt={`${title} Poster Image`}
 						className='m-auto rounded-lg md:m-0'
 					/>

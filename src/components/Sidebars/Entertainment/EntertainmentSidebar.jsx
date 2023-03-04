@@ -22,7 +22,7 @@ const EntertainmentSidebar = ({
 	entertainmentName
 }) => (
 	<>
-		<div className='mb-4'>
+		<div className='my-4'>
 			<SocialLinks
 				facebook={facebookLink}
 				twitter={twitterLink}

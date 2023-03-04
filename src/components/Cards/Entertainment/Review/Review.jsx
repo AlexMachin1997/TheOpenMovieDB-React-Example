@@ -21,7 +21,7 @@ const Review = ({
 			) : (
 				<Image
 					src={avatarPath}
-					className='h-16 w-16 max-w-none rounded-full pr-2'
+					className='h-16 w-16 max-w-none rounded-full px-2'
 					width='4rem'
 					height='4rem'
 					alt={`A photo of ${name}`}
