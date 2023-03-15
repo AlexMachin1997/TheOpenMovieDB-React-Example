@@ -91,7 +91,7 @@
 		"postcss": "^8.4.16",
 		"prettier": "^2.5.1",
 		"prettier-plugin-tailwindcss": "^0.1.13",
-		"webpack": "5.74.0"
+		"webpack": "5.76.0"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
