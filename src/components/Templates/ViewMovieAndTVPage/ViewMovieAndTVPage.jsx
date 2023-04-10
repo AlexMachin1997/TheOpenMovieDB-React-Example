@@ -6,7 +6,8 @@ import { EntertainmentHeader } from '../../Headers';
 import {
 	TopBilledCastMember,
 	EntertainmentRecommendationCard,
-	EntertainmentReviewCard
+	EntertainmentReviewCard,
+	MovieCollectionCard
 } from '../../Cards';
 import { Tabs } from '../../Core';
 
@@ -33,12 +34,14 @@ MediaImage.propTypes = {
 };
 
 const ViewMovieAndTVPage = ({
+	entertainmentType,
 	topBilledCastMembers,
 	recommendations,
 	header,
 	review,
 	media,
-	sidebar
+	sidebar,
+	collection
 }) => (
 	<>
 		<EntertainmentHeader {...header} />
@@ -163,6 +166,22 @@ const ViewMovieAndTVPage = ({
 					/>
 				</section>
 
+				{/* Collection section, only shown when entertainmentType === 'movie' and there is a collection available */}
+				{entertainmentType === 'movie' && collection !== null && (
+					<section className='border-b border-solid border-gray-400 pt-4' id='collection'>
+						<h2 className='pb-4 text-2xl font-bold'>Collection</h2>
+
+						<div className='pb-4'>
+							<MovieCollectionCard
+								title={collection?.title ?? ''}
+								subtitle={collection?.subtitle ?? ''}
+								image={collection?.image ?? ''}
+								renderLink={null}
+							/>
+						</div>
+					</section>
+				)}
+
 				{/* Recommendations section, outputs either movie or tv show you may like */}
 				<section className='border-b border-solid border-gray-400 pt-4' id='recommendations'>
 					<h2 className='pb-4 text-2xl font-bold'>Recommendations</h2>
@@ -190,6 +209,7 @@ const ViewMovieAndTVPage = ({
 );
 
 ViewMovieAndTVPage.propTypes = {
+	entertainmentType: PropTypes.oneOf(['movie', 'tv']).isRequired,
 	topBilledCastMembers: PropTypes.arrayOf(
 		PropTypes.shape({
 			name: PropTypes.string,
@@ -274,6 +294,11 @@ ViewMovieAndTVPage.propTypes = {
 				isDefault: PropTypes.bool
 			})
 		)
+	}),
+	collection: PropTypes.shape({
+		title: PropTypes.string,
+		subtitle: PropTypes.string,
+		image: PropTypes.string
 	})
 };
 
@@ -283,7 +308,8 @@ ViewMovieAndTVPage.defaultProps = {
 	header: {},
 	sidebar: {},
 	review: {},
-	media: {}
+	media: {},
+	collection: null
 };
 
 export default ViewMovieAndTVPage;

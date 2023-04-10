@@ -62,6 +62,9 @@ const Template = (args) => <ViewMoviePage {...args} />;
 
 export const ProjectPowerExample = Template.bind({});
 ProjectPowerExample.args = {
+	// Define the movie type so we can hide or show specific components
+	entertainmentType: 'movie',
+
 	// Cast members
 	topBilledCastMembers: [
 		{
@@ -266,5 +269,11 @@ ProjectPowerExample.args = {
 	media: {
 		posters: generateMovieImages('posters'),
 		backdrops: generateMovieImages('backdrops')
+	},
+
+	collection: {
+		title: 'Avatar',
+		subtitle: 'Includes Avatar, Avatar: The Way of Water, Avatar 3, Avatar 4, and Avatar 5',
+		image: 'https://image.tmdb.org/t/p/w1440_and_h320_multi_faces/iaEsDbQPE45hQU2EGiNjXD2KWuF.jpg'
 	}
 };
