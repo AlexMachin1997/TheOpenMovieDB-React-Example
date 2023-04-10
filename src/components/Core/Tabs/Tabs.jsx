@@ -3,32 +3,24 @@ import PropTypes from 'prop-types';
 
 import { Tab } from '@headlessui/react';
 import classNames from 'classnames';
+
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 
-export const TabPanel = ({ children }) => (
-	<Tab.Panel
-		className={classNames(
-			'rounded-xl bg-white',
-			'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
-		)}
-	>
-		{children}
-	</Tab.Panel>
-);
+const Tabs = ({ tabs, tabClassName, activeTabClassName }) => {
+	// Only show the tabs which are enabled and has content
+	const enabledTabs = React.useMemo(
+		() => tabs.filter((tab) => (tab?.enabled ?? true) === true && tab.content !== undefined),
+		[tabs]
+	);
 
-TabPanel.propTypes = {
-	children: PropTypes.node.isRequired
-};
-
-const Tabs = ({ tabs, children, tabClassName, activeTabClassName }) => (
-	<div className='w-full'>
-		<Tab.Group as='nav' className=''>
-			<Tab.List className='flex space-x-4' as='ul'>
-				{tabs.map((tab) => (
-					<Tab key={tab.id} as='li'>
-						{({ selected }) => (
-							<>
+	return (
+		<div className='w-full'>
+			<Tab.Group as='nav' className=''>
+				<Tab.List className='flex space-x-4' as='ul'>
+					{enabledTabs.map((tab) => (
+						<Tab key={`${tab.id}-tab`} as='li'>
+							{({ selected }) => (
 								<Button
 									className={classNames(
 										tabClassName,
@@ -39,30 +31,41 @@ const Tabs = ({ tabs, children, tabClassName, activeTabClassName }) => (
 									)}
 								>
 									<>
-										{/* When provided render an Icon via the font-awesome className */}
-										{(tab?.icon?.length ?? 0) > 0 && (
-											<Icon className={classNames(tab.icon, 'mr-2')} />
+										{/* When provided render an tabIcon via the font-awesome className */}
+										{(tab?.tabIcon?.length ?? 0) > 0 && (
+											<Icon className={classNames(tab.tabIcon, 'mr-2')} />
 										)}
 
-										{/* Tab section label */}
-										{tab?.label ?? ''}
+										{/* Tab section tabLabel */}
+										{tab?.tabLabel ?? ''}
 									</>
 								</Button>
-								{tab?.children ?? null}
-							</>
-						)}
-					</Tab>
-				))}
-			</Tab.List>
+							)}
+						</Tab>
+					))}
+				</Tab.List>
 
-			<Tab.Panels className='mt-2'>{children}</Tab.Panels>
-		</Tab.Group>
-	</div>
-);
+				{/* For each of the tabs generation a section */}
+				<Tab.Panels className='mt-2'>
+					{enabledTabs.map((tab) => (
+						<Tab.Panel
+							className={classNames(
+								'rounded-xl bg-white',
+								'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+							)}
+							key={`${tab.id}-section`}
+						>
+							{tab.content}
+						</Tab.Panel>
+					))}
+				</Tab.Panels>
+			</Tab.Group>
+		</div>
+	);
+};
 
 Tabs.propTypes = {
 	tabs: PropTypes.array.isRequired,
-	children: PropTypes.node.isRequired,
 	tabClassName: PropTypes.string,
 	activeTabClassName: PropTypes.string
 };

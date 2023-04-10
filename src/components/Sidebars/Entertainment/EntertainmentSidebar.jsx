@@ -21,7 +21,7 @@ const EntertainmentSidebar = ({
 	entertainmentType,
 	entertainmentName
 }) => (
-	<>
+	<aside className='md:pl-4'>
 		<div className='my-4'>
 			<SocialLinks
 				facebook={facebookLink}
@@ -91,12 +91,12 @@ const EntertainmentSidebar = ({
 		)}
 
 		{(keywords?.length ?? 0) > 0 && (
-			<div>
+			<div className='border-b border-solid border-gray-400 pb-4'>
 				<h3 className='text-base font-bold leading-[1]'>Keywords</h3>
 				<Keywords keywords={keywords} />
 			</div>
 		)}
-	</>
+	</aside>
 );
 
 EntertainmentSidebar.propTypes = {
@@ -106,7 +106,12 @@ EntertainmentSidebar.propTypes = {
 	homePageLink: PropTypes.string,
 	status: PropTypes.string,
 	type: PropTypes.string,
-	keywords: PropTypes.arrayOf(PropTypes.string),
+	keywords: PropTypes.arrayOf(
+		PropTypes.shape({
+			name: PropTypes.string,
+			id: PropTypes.number
+		})
+	),
 	originalLanguage: PropTypes.string,
 	budget: PropTypes.string,
 	revenue: PropTypes.string,

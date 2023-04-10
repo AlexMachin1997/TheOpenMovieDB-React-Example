@@ -25,7 +25,7 @@ const Keywords = ({ keywords, mediaType, ...props }) => (
 			<Link
 				to={generateResourceUrl(keyword?.name ?? null, keyword?.id ?? null, mediaType)}
 				key={keyword.id}
-				className='mr-2 mt-2 rounded-2xl bg-slate-200 p-2 lowercase text-black'
+				className='mr-2 mt-2 rounded-lg border border-solid border-gray-400 bg-slate-200 px-3 py-1 lowercase text-black'
 			>
 				{keyword.name}
 			</Link>

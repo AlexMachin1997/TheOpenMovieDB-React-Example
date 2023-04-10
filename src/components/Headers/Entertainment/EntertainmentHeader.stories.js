@@ -10,7 +10,7 @@ const ProjectPowerProps = {
 	backgroundImage: 'https://image.tmdb.org/t/p/original/qVygtf2vU15L2yKS4Ke44U4oMdD.jpg',
 	title: 'Project Power',
 	releaseDate: '14/08/2020 (ES)',
-	releaseYear: '2020',
+	releaseYear: 2020,
 	genres: [
 		{
 			id: 'action',
