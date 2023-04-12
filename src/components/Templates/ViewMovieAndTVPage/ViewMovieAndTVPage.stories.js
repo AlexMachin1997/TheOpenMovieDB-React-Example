@@ -16,19 +16,22 @@ export default {
 };
 const generateMovieImages = (type) => {
 	switch (type) {
-		case 'posters': {
+		case 'posters':
+		case 'videos': {
 			return [...Array(5).keys()].map((value) => ({
 				id: `poster-${value}`,
 				images: [
 					{
 						key: 'w220_and_h330_face',
 						url: 'https://image.tmdb.org/t/p/w220_and_h330_bestv2/TnOeov4w0sTtV2gqICqIxVi74V.jpg',
-						isFallback: false
+						isFallback: false,
+						type
 					},
 					{
 						key: 'w94_and_h141_face',
 						url: 'https://image.tmdb.org/t/p/w94_and_h141_bestv2/TnOeov4w0sTtV2gqICqIxVi74V.jpg',
-						isFallback: true
+						isFallback: true,
+						type
 					}
 				]
 			}));
@@ -268,9 +271,11 @@ ProjectPowerExample.args = {
 	// Media sections e.g. posters, videos, popular etc
 	media: {
 		posters: generateMovieImages('posters'),
-		backdrops: generateMovieImages('backdrops')
+		backdrops: generateMovieImages('backdrops'),
+		videos: generateMovieImages('videos')
 	},
 
+	// Collection, only applicable for
 	collection: {
 		title: 'Avatar',
 		subtitle: 'Includes Avatar, Avatar: The Way of Water, Avatar 3, Avatar 4, and Avatar 5',

@@ -9,28 +9,47 @@ import {
 	EntertainmentReviewCard,
 	MovieCollectionCard
 } from '../../Cards';
-import { Tabs } from '../../Core';
+import { Icon, Tabs } from '../../Core';
 
-const MediaImage = ({ id, images }) => (
-	<picture key={id} className='shrink-0'>
-		{images?.map((posterImage) => {
-			// Internal react key -> 1-w220_and_h330_face-image (Keys should be unique and there should be no duplicate dimensions)
-			const key = `${id}-${posterImage.key}-image`;
+const MediaImage = ({ id, images, type }) => {
+	// Generate the "pictures" element (Handles switching between different image sizes)
+	const pictures = (
+		<picture key={id} className='shrink-0'>
+			{images?.map((posterImage) => {
+				// Internal react key -> 1-w220_and_h330_face-image (Keys should be unique and there should be no duplicate dimensions)
+				const key = `${id}-${posterImage.key}-image`;
 
-			// When the image isn't a fallback use the source tag
-			if (posterImage.isFallback === false) {
-				return <source srcSet={posterImage.url} media='(min-width:768px)' key={key} />;
-			}
+				// When the image isn't a fallback use the source tag
+				if (posterImage.isFallback === false) {
+					return <source srcSet={posterImage.url} media='(min-width:768px)' key={key} />;
+				}
 
-			// When the poster image isn't a fallback use the img tag (Used when none of the queries defined in the <source/> are met)
-			return <img src={posterImage.url} alt='Poster' key={key} className='lg:h-[300px]' />;
-		}) ?? null}
-	</picture>
-);
+				// When the poster image isn't a fallback use the img tag (Used when none of the queries defined in the <source/> are met)
+				return <img src={posterImage.url} alt='Poster' key={key} className='lg:h-[300px]' />;
+			}) ?? null}
+		</picture>
+	);
+
+	// When the type is "video" wrap the image in an icon, this will be used to trigger additional actions e.g. opening a youtube iframe
+	if (type === 'video') {
+		return (
+			<div key={id} className='relative'>
+				<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
+					<Icon className='fa-solid fa-play cursor-pointer text-5xl delay-150' />
+				</div>
+				{pictures}
+			</div>
+		);
+	}
+
+	// When it's not of type "video" just return the picture
+	return pictures;
+};
 
 MediaImage.propTypes = {
 	id: PropTypes.string.isRequired,
-	images: PropTypes.array.isRequired
+	images: PropTypes.array.isRequired,
+	type: PropTypes.string.isRequired
 };
 
 const ViewMovieAndTVPage = ({
@@ -112,8 +131,36 @@ const ViewMovieAndTVPage = ({
 
 					<Tabs
 						tabs={[
-							{ tabLabel: 'Videos', id: 'Videos', content: 'Videos' },
-							{ tabLabel: 'Most Popular', id: 'MostPopular', content: 'Most Popular' },
+							{
+								tabLabel: 'Videos',
+								id: 'Videos',
+								content: (
+									<>
+										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 scrollbar'>
+											{media?.videos?.map((poster) => (
+												<MediaImage
+													id={poster?.id ?? ''}
+													images={poster?.images ?? []}
+													key={poster?.id ?? ''}
+													type='video'
+												/>
+											)) ?? null}
+										</div>
+										<a
+											href='https://www.themoviedb.org/movie/605116-project-power/images/posters'
+											className='inline-flex items-center py-4 text-base font-bold text-black hover:underline'
+										>
+											View All Posters
+										</a>
+									</>
+								)
+							},
+							{
+								tabLabel: 'Most Popular',
+								id: 'MostPopular',
+								content: 'Most Popular',
+								enabled: false
+							},
 							{
 								tabLabel: 'Posters',
 								id: 'Posters',
@@ -125,6 +172,7 @@ const ViewMovieAndTVPage = ({
 													id={poster?.id ?? ''}
 													images={poster?.images ?? []}
 													key={poster?.id ?? ''}
+													type='poster'
 												/>
 											)) ?? null}
 										</div>
@@ -148,6 +196,7 @@ const ViewMovieAndTVPage = ({
 													id={backdrop?.id ?? ''}
 													images={backdrop?.images ?? []}
 													key={backdrop?.id ?? ''}
+													type='backdrop'
 												/>
 											)) ?? null}
 										</div>
@@ -166,7 +215,7 @@ const ViewMovieAndTVPage = ({
 					/>
 				</section>
 
-				{/* Collection section, only shown when entertainmentType === 'movie' and there is a collection available */}
+				{/* Collection section, only shown when entertainmentType === 'movie' and there is a collection */}
 				{entertainmentType === 'movie' && collection !== null && (
 					<section className='border-b border-solid border-gray-400 pt-4' id='collection'>
 						<h2 className='pb-4 text-2xl font-bold'>Collection</h2>
@@ -289,6 +338,12 @@ ViewMovieAndTVPage.propTypes = {
 			})
 		),
 		backdrops: PropTypes.arrayOf(
+			PropTypes.shape({
+				url: PropTypes.string,
+				isDefault: PropTypes.bool
+			})
+		),
+		videos: PropTypes.arrayOf(
 			PropTypes.shape({
 				url: PropTypes.string,
 				isDefault: PropTypes.bool
