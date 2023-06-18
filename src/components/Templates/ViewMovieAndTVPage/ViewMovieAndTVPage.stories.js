@@ -216,9 +216,10 @@ ProjectPowerExample.args = {
 				name: 'Mattson Tomlin',
 				roles: 'Writer'
 			}
-		],
-		isAuthenticated: false
+		]
 	},
+
+	isAuthenticated: false,
 
 	// Sidebar data
 	sidebar: {
@@ -275,10 +276,21 @@ ProjectPowerExample.args = {
 		videos: generateMovieImages('videos')
 	},
 
-	// Collection, only applicable for
+	// Collection, only applicable for tv shows
 	collection: {
 		title: 'Avatar',
 		subtitle: 'Includes Avatar, Avatar: The Way of Water, Avatar 3, Avatar 4, and Avatar 5',
 		image: 'https://image.tmdb.org/t/p/w1440_and_h320_multi_faces/iaEsDbQPE45hQU2EGiNjXD2KWuF.jpg'
+	},
+
+	// Last Season, only applicable for tv shows
+	season: {
+		image: 'https://image.tmdb.org/t/p/original/eFWtQwYetPum9RvCmqkUk2aiBIi.jpg',
+		title: 'Season Three: The New World',
+		year: 2020,
+		episodeCount: 8,
+		overview:
+			'Taking place immediately after the events of the second season, Dolores develops a relationship with Caleb in neo-Los Angeles, and learns how robots are treated in the real world. Meanwhile, Maeve finds herself in another Delos park, this one with a World War II theme and set in Fascist Italy.',
+		isStillAiring: false
 	}
 };

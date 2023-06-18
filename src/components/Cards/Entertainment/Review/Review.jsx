@@ -12,7 +12,7 @@ const Review = ({
 	renderLink
 }) => {
 	const AvatarContent = (
-		<div className='mx-1'>
+		<>
 			{/* When the avatarPath is empty the image should be replaced with the first letter of the users "name" otherwise use the avatar */}
 			{avatarPath === null || avatarPath === '' ? (
 				<h3 className='mr-2 rounded-full bg-gray-400 p-1 px-2 text-center text-2xl uppercase text-black'>
@@ -21,13 +21,13 @@ const Review = ({
 			) : (
 				<Image
 					src={avatarPath}
-					className='h-16 w-16 max-w-none rounded-full px-2'
+					className='h-16 w-16 max-w-none rounded-full pr-2'
 					width='4rem'
 					height='4rem'
 					alt={`A photo of ${name}`}
 				/>
 			)}
-		</div>
+		</>
 	);
 
 	return (

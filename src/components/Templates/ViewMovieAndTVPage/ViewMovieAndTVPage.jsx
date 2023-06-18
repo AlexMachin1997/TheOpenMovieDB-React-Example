@@ -7,7 +7,8 @@ import {
 	TopBilledCastMember,
 	EntertainmentRecommendationCard,
 	EntertainmentReviewCard,
-	MovieCollectionCard
+	MovieCollectionCard,
+	TVCurrentSeasonCard
 } from '../../Cards';
 import { Icon, Tabs } from '../../Core';
 
@@ -33,7 +34,7 @@ const MediaImage = ({ id, images, type }) => {
 	// When the type is "video" wrap the image in an icon, this will be used to trigger additional actions e.g. opening a youtube iframe
 	if (type === 'video') {
 		return (
-			<div key={id} className='relative'>
+			<div key={id} className='relative shrink-0'>
 				<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
 					<Icon className='fa-solid fa-play cursor-pointer text-5xl delay-150' />
 				</div>
@@ -60,10 +61,26 @@ const ViewMovieAndTVPage = ({
 	review,
 	media,
 	sidebar,
-	collection
+	collection,
+	season
 }) => (
 	<>
-		<EntertainmentHeader {...header} />
+		<EntertainmentHeader
+			posterImage={header?.posterImage ?? ''}
+			backgroundImage={header?.backgroundImage ?? ''}
+			title={header?.title ?? ''}
+			releaseDate={header?.releaseDate ?? ''}
+			releaseYear={header?.releaseYear ?? 0}
+			genres={header?.genres ?? []}
+			runtime={header?.runtime ?? ''}
+			rating={header?.rating ?? ''}
+			// trailerLink={header?.trailerLink ?? ""}
+			tagline={header?.tagline ?? ''}
+			overview={header?.overview ?? ''}
+			featuredCrew={header?.featuredCrew ?? ''}
+			ageRating={header?.ageRating ?? ''}
+			isAuthenticated={false}
+		/>
 
 		<main className='relative p-4'>
 			<div className='space-y-2 lg:mr-[21rem]'>
@@ -91,6 +108,21 @@ const ViewMovieAndTVPage = ({
 					</a>
 				</section>
 
+				<section className='border-b border-solid border-gray-400 pt-4' id='social'>
+					<h2 className='py-4 text-2xl font-bold'>Last Season</h2>
+
+					<div className='pb-3'>
+						<TVCurrentSeasonCard
+							image={season?.image ?? null}
+							title={season?.title ?? null}
+							year={season?.year ?? null}
+							episodeCount={season?.episodeCount ?? 0}
+							overview={season?.overview ?? null}
+							renderLink={null}
+						/>
+					</div>
+				</section>
+
 				{/* Social section, includes the review and the discussions */}
 				<section className='border-b border-solid border-gray-400 pt-4' id='social'>
 					<h2 className='pb-4 text-2xl font-bold'>Social</h2>
@@ -102,8 +134,13 @@ const ViewMovieAndTVPage = ({
 								id: 'Reviews',
 								content: (
 									<>
-										<EntertainmentReviewCard {...review} />
-
+										<EntertainmentReviewCard
+											author={review?.author ?? {}}
+											isFeatured={review?.isFeatured ?? false}
+											content={review?.content ?? ''}
+											createdOn={review?.createdOn ?? ''}
+											renderLink={null}
+										/>
 										<a
 											href='https://www.themoviedb.org/movie/605116-project-power/reviews'
 											className='inline-flex py-4 text-base font-bold text-black hover:underline'
@@ -251,7 +288,21 @@ const ViewMovieAndTVPage = ({
 
 			{/* Sidebar, for mobile it's part of the content and for desktop it's on the right hand side */}
 			<div className='lg:absolute lg:inset-y-0 lg:right-0 lg:mt-4 lg:bg-white lg:pt-4'>
-				<EntertainmentSidebar {...sidebar} />
+				<EntertainmentSidebar
+					facebookLink={sidebar?.facebookLink ?? ''}
+					twitterLink={sidebar?.twitterLink ?? ''}
+					instagramLink={sidebar?.instagramLink ?? ''}
+					homePageLink={sidebar?.homepageLink ?? ''}
+					status={sidebar?.status ?? ''}
+					type={sidebar?.type ?? ''}
+					keywords={sidebar?.keywords ?? []}
+					originalLanguage={sidebar?.originalLanguage ?? ''}
+					budget={sidebar?.budget ?? ''}
+					revenue={sidebar?.revenue ?? ''}
+					networkImage={sidebar?.networkImage ?? ''}
+					entertainmentName={sidebar?.entertainmentName ?? ''}
+					entertainmentType={entertainmentType}
+				/>
 			</div>
 		</main>
 	</>
@@ -354,6 +405,13 @@ ViewMovieAndTVPage.propTypes = {
 		title: PropTypes.string,
 		subtitle: PropTypes.string,
 		image: PropTypes.string
+	}),
+	season: PropTypes.shape({
+		image: PropTypes.string,
+		title: PropTypes.string,
+		year: PropTypes.number,
+		episodeCount: PropTypes.number,
+		overview: PropTypes.string
 	})
 };
 
@@ -362,9 +420,10 @@ ViewMovieAndTVPage.defaultProps = {
 	recommendations: [],
 	header: {},
 	sidebar: {},
-	review: {},
+	review: null,
 	media: {},
-	collection: null
+	collection: null,
+	season: null
 };
 
 export default ViewMovieAndTVPage;
