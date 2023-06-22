@@ -2,7 +2,6 @@
 import * as React from 'react';
 
 import RadioGroups from './RadioGroup';
-import CountryFlag from '../../CountryFlag/CountryFlag';
 import Settings from '../../../settings';
 
 const ControlledStoryTemplate = (args) => {
@@ -222,20 +221,6 @@ AddSpaceBetweenLabelAndRadioButtonOnTheLeft.args = {
 	],
 	addSpaceBetweenLabelAndRadioButton: true,
 	showRadioButtonOnTheLeft: false
-};
-
-// eslint-disable-next-line react/prop-types
-const CustomIcon = ({ option }) => (
-	// eslint-disable-next-line react/prop-types
-	<CountryFlag countryCode={option?.value ?? ''} className='mr-3' />
-);
-
-export const CustomIconComponent = ControlledStoryTemplate.bind({});
-CustomIconComponent.args = {
-	...DefaultStoryArgs,
-	options: [Settings.COUNTRY_OPTIONS[0], Settings.COUNTRY_OPTIONS[1], Settings.COUNTRY_OPTIONS[2]],
-	displayName: 'label',
-	iconComponent: CustomIcon
 };
 
 export default { component: RadioGroups, title: 'Design System/Core/RadioGroup' };

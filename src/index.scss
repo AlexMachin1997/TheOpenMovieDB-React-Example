@@ -40,7 +40,3 @@ $fa-font-path: '../webfonts';
 html {
 	font-family: 'Signika', sans-serif !important;
 }
-
-.scrollbar {
-	@apply scrollbar-thin scrollbar-track-gray-300 scrollbar-thumb-gray-500 scrollbar-track-rounded-full scrollbar-thumb-rounded-full;
-}

@@ -104,7 +104,7 @@ const EntertainmentHeader = ({
 									{ageRating}
 								</li>
 								<li className='pr-2 text-white '>{releaseDate}</li>
-								<li className='flex items-center pr-1 text-white '>
+								<li className='flex items-center pr-2 text-white '>
 									<Icon className='fa-solid fa-circle text-[0.4rem] leading-[0]' />
 								</li>
 								<li className='pr-2 text-white '>
@@ -128,15 +128,12 @@ const EntertainmentHeader = ({
 								<li className='flex items-center pr-2 text-white '>
 									<Icon className='fa-solid fa-circle text-[0.4rem] leading-[0]' />
 								</li>
-								<li className='inline-flex items-center text-white '>
-									<Icon className='fa-solid fa-clock-two ' />
-									<p>{runtime}</p>
-								</li>
+								<li className='inline-flex items-center text-white '>{runtime}</li>
 							</ol>
 						</div>
 
 						<ol
-							className='m-0 flex list-none items-center justify-around py-3 md:justify-start'
+							className='m-0 flex list-none flex-wrap items-center justify-around py-3 md:justify-start'
 							id={`${title} meta`}
 						>
 							<li className='mr-3 flex items-center'>

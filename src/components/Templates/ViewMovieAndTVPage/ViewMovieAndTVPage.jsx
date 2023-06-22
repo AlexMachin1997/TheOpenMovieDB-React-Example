@@ -88,7 +88,7 @@ const ViewMovieAndTVPage = ({
 				<section className='border-b border-solid border-gray-400 pt-4' id='cast-members'>
 					<h2 className='py-4 text-2xl font-bold'>Top Billed Cast Member</h2>
 
-					<div className='flex w-full overflow-auto overflow-y-scroll pb-3 scrollbar'>
+					<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
 						{topBilledCastMembers?.map((castMember) => (
 							<TopBilledCastMember
 								key={castMember.name}
@@ -173,7 +173,7 @@ const ViewMovieAndTVPage = ({
 								id: 'Videos',
 								content: (
 									<>
-										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 scrollbar'>
+										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
 											{media?.videos?.map((poster) => (
 												<MediaImage
 													id={poster?.id ?? ''}
@@ -203,7 +203,7 @@ const ViewMovieAndTVPage = ({
 								id: 'Posters',
 								content: (
 									<>
-										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 scrollbar'>
+										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
 											{media?.posters?.map((poster) => (
 												<MediaImage
 													id={poster?.id ?? ''}
@@ -227,7 +227,7 @@ const ViewMovieAndTVPage = ({
 								id: 'Backdrops',
 								content: (
 									<>
-										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 scrollbar'>
+										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
 											{media?.backdrops?.map((backdrop) => (
 												<MediaImage
 													id={backdrop?.id ?? ''}
@@ -272,7 +272,7 @@ const ViewMovieAndTVPage = ({
 				<section className='border-b border-solid border-gray-400 pt-4' id='recommendations'>
 					<h2 className='pb-4 text-2xl font-bold'>Recommendations</h2>
 
-					<div className='flex w-full space-x-4 overflow-auto pb-3 scrollbar'>
+					<div className='flex w-full space-x-4 overflow-auto pb-3 '>
 						{recommendations.map((movie) => (
 							<EntertainmentRecommendationCard
 								key={movie.title}

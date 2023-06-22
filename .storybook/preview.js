@@ -4,8 +4,6 @@ import '../src/index.scss';
 
 document.body.classList.add('light');
 
-document.body.classList.add('scrollbar');
-
 export const decorators = [
 	(Story) => {
 		return (

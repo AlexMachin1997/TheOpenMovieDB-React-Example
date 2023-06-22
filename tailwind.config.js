@@ -46,15 +46,5 @@ module.exports = {
 				'ml-auto': 'auto'
 			}
 		}
-	},
-
-	variants: {
-		scrollbar: ['rounded']
-	},
-
-	plugins: [
-		// Enables to use the line clamp functionality, you can easily specifiy the number of lines you want to use.
-		require('@tailwindcss/line-clamp'),
-		require('tailwind-scrollbar')
-	]
+	}
 };
