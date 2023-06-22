@@ -60,8 +60,8 @@ MovieActingTableExample.args = {
 
 export const MovieAndTVExample = () => {
 	// Generate a table for each credit year e.g. 2021, 2022(Credits are grouped into years)
-	const ActingCreditTables = ActingGroupData.map((data, index) => (
-		<CreditsTable credits={data.credits} year={data.year} key={index} />
+	const ActingCreditTables = ActingGroupData.map((data) => (
+		<CreditsTable credits={data.credits} year={data.year} key={data.year} />
 	));
 
 	return (

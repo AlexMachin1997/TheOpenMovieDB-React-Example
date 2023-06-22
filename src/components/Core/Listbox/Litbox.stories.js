@@ -37,7 +37,7 @@ const ControlledStoryTemplate = (args) => {
 
 const UncontrolledStoryTemplate = (args) => {
 	// Get the "controlled" props, just to demonstrate what properties are required
-	// eslint-disable-next-line no-unused-vars
+
 	const { name = '', defaultValue = undefined, ...rest } = args;
 
 	return (

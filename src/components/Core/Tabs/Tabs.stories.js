@@ -10,6 +10,7 @@ const Template = ({ tabs, children, tabClassName, activeTabClassName }) => (
 );
 
 Template.propTypes = {
+	// eslint-disable-next-line react/forbid-prop-types
 	tabs: PropTypes.array.isRequired,
 	children: PropTypes.node.isRequired,
 	tabClassName: PropTypes.string,

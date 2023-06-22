@@ -6,9 +6,9 @@ import TableRow from './TableRow/TableRow';
 const CreditsTable = ({ credits, year }) => (
 	<table className='m-0 w-full border-collapse border border-solid border-gray-300 p-2'>
 		<tbody className='bg-white'>
-			{credits.map((data, index) => (
+			{credits.map((data) => (
 				<TableRow
-					key={index}
+					key={data.title}
 					year={year}
 					mediaType={data.mediaType}
 					title={data.title}

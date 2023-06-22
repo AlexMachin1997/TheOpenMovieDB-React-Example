@@ -1,7 +1,0 @@
-node_modules/*
-
-./src/ServiceWorker/*.js
-
-package-lock.json
-
-./.github/workflows/**/*.yml
