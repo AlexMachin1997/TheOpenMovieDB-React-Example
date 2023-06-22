@@ -11,7 +11,7 @@ const Poster = ({ title, releaseDate, rating, image, renderLink }) => (
 	<Card title={title} image={image} renderLink={renderLink}>
 		{/* Rating for the Poster card */}
 		<div
-			className='absolute top-[-29px] left-[8px]'
+			className='absolute left-[8px] top-[-29px]'
 			id={generateComponentId(title, 'poster-card-rating')}
 		>
 			<PercentageRating

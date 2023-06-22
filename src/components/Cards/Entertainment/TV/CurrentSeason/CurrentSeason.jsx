@@ -41,12 +41,12 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview, renderLink 
 				)}
 
 				{/* Subtitle for the Current Season card */}
-				<p className='md:line-clamp-3 mb-0 text-base font-bold text-black'>
+				<p className='mb-0 text-base font-bold text-black md:line-clamp-3'>
 					{generateSubtitle(episodeCount, year)}
 				</p>
 
 				{/* Overview for the Current Season card */}
-				<p className='line-clamp-6 md:line-clamp-3 text-base leading-8 text-black'>{overview}</p>
+				<p className='line-clamp-6 text-base leading-8 text-black md:line-clamp-3'>{overview}</p>
 			</div>
 		</div>
 	);

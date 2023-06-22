@@ -79,7 +79,7 @@ const EntertainmentHeader = ({
 				}}
 				className='flex items-center'
 			>
-				<div className='relative top-0 left-0 block p-5 pt-4 md:flex md:max-w-[1100px] md:px-10'>
+				<div className='relative left-0 top-0 block p-5 pt-4 md:flex md:max-w-[1100px] md:px-10'>
 					<Image
 						src={posterImage}
 						width='300px'

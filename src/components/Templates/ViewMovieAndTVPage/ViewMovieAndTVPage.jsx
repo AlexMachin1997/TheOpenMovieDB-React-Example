@@ -35,7 +35,7 @@ const MediaImage = ({ id, images, type }) => {
 	if (type === 'video') {
 		return (
 			<div key={id} className='relative shrink-0'>
-				<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
+				<div className='absolute left-0 top-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
 					<Icon className='fa-solid fa-play cursor-pointer text-5xl delay-150' />
 				</div>
 				{pictures}
