@@ -46,7 +46,7 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview, renderLink 
 				</p>
 
 				{/* Overview for the Current Season card */}
-				<p className='text-base leading-8 text-black line-clamp-6 md:line-clamp-3'>{overview}</p>
+				<p className='line-clamp-6 text-base leading-8 text-black md:line-clamp-3'>{overview}</p>
 			</div>
 		</div>
 	);

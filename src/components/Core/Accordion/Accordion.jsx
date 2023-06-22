@@ -23,7 +23,7 @@ const Accordion = ({
 						className,
 						'flex w-full items-center justify-between border border-solid border-gray-300',
 						{
-							'rounded-tr-lg rounded-tl-lg': open === true,
+							'rounded-tl-lg rounded-tr-lg': open === true,
 							'rounded-lg': open === false,
 							'bg-slate-300': isDisabled === true,
 							'disabled:cursor-not-allowed': isDisabled === true

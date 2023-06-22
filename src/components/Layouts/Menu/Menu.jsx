@@ -70,7 +70,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 				id='mobile-navigation-sidebar'
 				aria-label='mobile navigation menu sidebar'
 				className={classNames(
-					'fixed top-[75px] bottom-0 space-y-3 overflow-y-auto bg-primary/90 p-4 backdrop-blur-[20px] duration-500 ease-in',
+					'fixed bottom-0 top-[75px] space-y-3 overflow-y-auto bg-primary/90 p-4 backdrop-blur-[20px] duration-500 ease-in',
 					{
 						// When the menu item is active
 						'left-0': isSidebarOpen === true,

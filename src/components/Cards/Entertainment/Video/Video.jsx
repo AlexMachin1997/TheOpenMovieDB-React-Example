@@ -36,7 +36,7 @@ const Video = ({ title, overview, thumbnail, thumbnailAction, renderLink }) => (
 				src={thumbnail}
 				className='aspect-video rounded-xl delay-150  group-hover:scale-105'
 			/>
-			<div className='absolute top-0 left-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
+			<div className='absolute left-0 top-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
 				<Icon className={className('fa-solid fa-play text-5xl delay-150 group-hover:text-6xl')} />
 			</div>
 		</Button>

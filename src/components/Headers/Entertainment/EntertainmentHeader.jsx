@@ -77,15 +77,16 @@ const EntertainmentHeader = ({
 				style={{
 					backgroundImage: overlay
 				}}
-				className='flex items-center justify-center'
+				className='flex items-center'
 			>
-				<div className='relative top-0 left-0 block pt-4 md:flex md:max-w-[1100px] md:py-8 md:px-10'>
+				<div className='relative left-0 top-0 block p-5 pt-4 md:flex md:max-w-[1100px] md:px-10'>
 					<Image
 						src={posterImage}
-						width='200px'
-						height='350px'
+						width='300px'
+						height='450px'
 						alt={`${title} Poster Image`}
 						className='m-auto rounded-lg md:m-0'
+						loading='eager'
 					/>
 
 					<div className='flex flex-col justify-center md:flex-wrap md:pl-5'>
@@ -103,11 +104,11 @@ const EntertainmentHeader = ({
 									{ageRating}
 								</li>
 								<li className='pr-2 text-white '>{releaseDate}</li>
-								<li className='flex items-center pr-1 text-white '>
+								<li className='flex items-center pr-2 text-white '>
 									<Icon className='fa-solid fa-circle text-[0.4rem] leading-[0]' />
 								</li>
 								<li className='pr-2 text-white '>
-									{genres.map((genre, genreIndex) => {
+									{genres?.map((genre, genreIndex) => {
 										// Is the current item the last item ? This is used to decide if a comma needs to be added to the Link element
 										const isLastItem = genreIndex === genres.length - 1;
 
@@ -122,19 +123,19 @@ const EntertainmentHeader = ({
 												{isLastItem === false ? ', ' : ''}
 											</React.Fragment>
 										);
-									})}
+									}) ?? null}
 								</li>
 								<li className='flex items-center pr-2 text-white '>
 									<Icon className='fa-solid fa-circle text-[0.4rem] leading-[0]' />
 								</li>
-								<li className='inline-flex items-center text-white '>
-									<Icon className='fa-solid fa-clock-two ' />
-									<p>{runtime}</p>
-								</li>
+								<li className='inline-flex items-center text-white '>{runtime}</li>
 							</ol>
 						</div>
 
-						<ol className='m-0 hidden list-none items-center py-3 md:flex' id={`${title} meta`}>
+						<ol
+							className='m-0 flex list-none flex-wrap items-center justify-around py-3 md:justify-start'
+							id={`${title} meta`}
+						>
 							<li className='mr-3 flex items-center'>
 								<span onMouseEnter={() => {}} onMouseLeave={() => {}}>
 									<PercentageRating
@@ -150,7 +151,7 @@ const EntertainmentHeader = ({
 								</div>
 							</li>
 
-							<li className='mr-4'>
+							<li className='mr-4 hidden md:flex'>
 								<Tooltip
 									tooltip={
 										isAuthenticated === false
@@ -168,7 +169,7 @@ const EntertainmentHeader = ({
 								</Tooltip>
 							</li>
 
-							<li className='mr-4'>
+							<li className='mr-4 hidden md:flex'>
 								<Tooltip
 									tooltip={
 										isAuthenticated === false
@@ -186,7 +187,7 @@ const EntertainmentHeader = ({
 								</Tooltip>
 							</li>
 
-							<li className='mr-4'>
+							<li className='mr-4 hidden md:flex'>
 								<Tooltip
 									tooltip={
 										isAuthenticated === false
@@ -204,7 +205,7 @@ const EntertainmentHeader = ({
 								</Tooltip>
 							</li>
 
-							<li className='mr-4'>
+							<li className='mr-4 hidden md:flex'>
 								<Tooltip
 									tooltip={isAuthenticated === false ? 'Login to rate this title' : 'Rate it'}
 									placement='bottom'
@@ -219,6 +220,7 @@ const EntertainmentHeader = ({
 								<p className='text-base text-white group-hover:text-gray-400'>Play Trailer</p>
 							</li>
 						</ol>
+
 						<div className='p-4 md:p-0'>
 							<div className='mb-3'>
 								<p className='text-base font-bold italic text-white opacity-70'>{tagline}</p>
@@ -251,7 +253,7 @@ EntertainmentHeader.propTypes = {
 	backgroundImage: PropTypes.string.isRequired,
 	title: PropTypes.string.isRequired,
 	releaseDate: PropTypes.string.isRequired,
-	releaseYear: PropTypes.string.isRequired,
+	releaseYear: PropTypes.number.isRequired,
 	genres: PropTypes.arrayOf(
 		PropTypes.shape({
 			id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

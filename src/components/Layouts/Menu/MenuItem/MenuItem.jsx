@@ -96,11 +96,7 @@ const MenuItem = ({ links, title, isSidebarItem }) => {
 						{...attributes.popper}
 					>
 						{links.map((link) => (
-							<Menu.Item
-								className='flex rounded-lg p-2 pr-2'
-								key={`${title}-${link.label}`}
-								as='li'
-							>
+							<Menu.Item className='flex rounded-lg p-2' key={`${title}-${link.label}`} as='li'>
 								{({ active }) => (
 									<Link
 										to={link.url}

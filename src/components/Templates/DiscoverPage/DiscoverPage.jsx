@@ -318,7 +318,7 @@ const DiscoverPageTemplate = ({
 										<div className='flex content-center items-center border border-solid border-t-gray-300'>
 											<Button
 												type='submit'
-												className='m-4 my-4 w-full rounded-2xl bg-secondary  px-4 py-2 text-center text-white hover:bg-secondary/75'
+												className='m-4 w-full rounded-2xl bg-secondary px-4  py-2 text-center text-white hover:bg-secondary/75'
 												form='filters-form'
 											>
 												Apply Filters
@@ -331,7 +331,7 @@ const DiscoverPageTemplate = ({
 					</Transition.Root>
 
 					{/* Desktop filters sidebar */}
-					<aside className='fixed top-5 bottom-2 hidden w-80 lg:block'>
+					<aside className='fixed bottom-2 top-5 hidden w-80 lg:block'>
 						<div className='relative ml-auto flex h-full w-full max-w-xs flex-col bg-white shadow-xl'>
 							<div className='flex items-center justify-between border border-solid border-b-gray-300 px-4 py-2'>
 								<h2 className='text-lg font-medium text-gray-900'>{title}</h2>
@@ -352,7 +352,7 @@ const DiscoverPageTemplate = ({
 							<div className='flex content-center items-center border border-solid border-t-gray-300'>
 								<Button
 									type='submit'
-									className='m-4 my-4 w-full rounded-2xl bg-secondary  px-4 py-2 text-center text-white hover:bg-secondary/75'
+									className='m-4 w-full rounded-2xl bg-secondary px-4  py-2 text-center text-white hover:bg-secondary/75'
 									form='filters-form'
 								>
 									Apply Filters

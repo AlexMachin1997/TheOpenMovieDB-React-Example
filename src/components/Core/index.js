@@ -14,3 +14,4 @@ export { default as CheckboxGroup } from './CheckboxGroup';
 export { default as Accordion } from './Accordion/Accordion';
 export { default as Input } from './Input/Input';
 export { default as Switch } from './Switch/Switch';
+export { default as Tabs } from './Tabs/Tabs';
