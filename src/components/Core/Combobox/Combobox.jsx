@@ -292,7 +292,7 @@ const CustomCombobox = ({
 			<div className='relative mt-1' ref={containerRef}>
 				<div
 					className={classNames(
-						'relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 pl-0 text-left shadow-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 hover:bg-gray-300 sm:text-sm',
+						'relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 pl-0 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm',
 						containerClassName
 					)}
 				>

@@ -29,7 +29,7 @@ const Recommendation = ({ title, releaseDate, image, rating, renderLink }) => {
 				<span className='group relative'>{linkContent}</span>
 			)}
 			<div className='flex items-center justify-between px-2 pb-1'>
-				<p className='text-base text-black line-clamp-1'>{title}</p>
+				<p className='line-clamp-1 text-base text-black'>{title}</p>
 				<p className='text-base text-black'>{rating}%</p>
 			</div>
 		</div>
