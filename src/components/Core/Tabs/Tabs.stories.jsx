@@ -22,45 +22,40 @@ Template.defaultProps = {
 	activeTabClassName: undefined
 };
 
-export const TheOpenMovieDatabaseTabsExample = Template.bind({});
-TheOpenMovieDatabaseTabsExample.args = {
-	tabs: [
-		{ label: 'Reviews', id: 'Reviews', content: 'Reviews' },
-		{ label: 'Discussions', id: 'Discussions', content: 'Discussions' }
-	],
-	activeTabClassName: 'underline text-black',
-	tabClassName: 'bg-white'
+export const TheOpenMovieDatabaseTabsExample = {
+	render: Template,
+
+	args: {
+		tabs: [
+			{ label: 'Reviews', id: 'Reviews', content: 'Reviews' },
+			{ label: 'Discussions', id: 'Discussions', content: 'Discussions' }
+		],
+		activeTabClassName: 'underline text-black',
+		tabClassName: 'bg-white'
+	}
 };
 
-export const TheOpenMovieDatabaseTabsWithIconExample = Template.bind({});
-TheOpenMovieDatabaseTabsWithIconExample.args = {
-	tabs: [
-		{ label: 'Reviews', id: 'Reviews', icon: 'fa-solid fa-book', content: 'Reviews' },
-		{
-			label: 'Discussions',
-			id: 'Discussions',
-			icon: 'fa-solid fa-walkie-talkie',
-			content: 'Discussions'
-		}
-	],
-	activeTabClassName: 'underline text-black',
-	tabClassName: 'bg-white'
+export const TheOpenMovieDatabaseTabsWithIconExample = {
+	render: Template,
+
+	args: {
+		tabs: [
+			{ label: 'Reviews', id: 'Reviews', icon: 'fa-solid fa-book', content: 'Reviews' },
+			{
+				label: 'Discussions',
+				id: 'Discussions',
+				icon: 'fa-solid fa-walkie-talkie',
+				content: 'Discussions',
+				enabled: false
+			}
+		],
+		activeTabClassName: 'underline text-black',
+		tabClassName: 'bg-white'
+	}
 };
 
-export const TheOpenMovieDatabaseTabsWithDisabledTabs = Template.bind({});
-TheOpenMovieDatabaseTabsWithIconExample.args = {
-	tabs: [
-		{ label: 'Reviews', id: 'Reviews', icon: 'fa-solid fa-book', content: 'Reviews' },
-		{
-			label: 'Discussions',
-			id: 'Discussions',
-			icon: 'fa-solid fa-walkie-talkie',
-			content: 'Discussions',
-			enabled: false
-		}
-	],
-	activeTabClassName: 'underline text-black',
-	tabClassName: 'bg-white'
+export const TheOpenMovieDatabaseTabsWithDisabledTabs = {
+	render: Template
 };
 
 export default {

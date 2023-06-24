@@ -33,11 +33,13 @@ const CheckboxGroup = ({ value, onChange, disabled, children, name, defaultValue
 };
 
 CheckboxGroup.propTypes = {
+	// eslint-disable-next-line react/forbid-prop-types
 	value: PropTypes.array,
 	onChange: PropTypes.func,
 	disabled: PropTypes.bool,
 	children: PropTypes.node.isRequired,
 	name: PropTypes.string.isRequired,
+	// eslint-disable-next-line react/forbid-prop-types
 	defaultValue: PropTypes.array
 };
 

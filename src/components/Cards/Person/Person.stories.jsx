@@ -3,8 +3,6 @@ import { Link, MemoryRouter } from 'react-router-dom';
 
 import PersonCard from './Person';
 
-const Template = (args) => <PersonCard {...args} />;
-
 const StoryArgs = {
 	name: 'Bryan Cranston',
 	image: 'https://image.tmdb.org/t/p/w235_and_h235_face/7Jahy5LZX2Fo8fGJltMreAI49hC.jpg',
@@ -17,29 +15,33 @@ const StoryArgs = {
 	renderLink: null
 };
 
-export const Example = Template.bind({});
-Example.args = {
-	...StoryArgs
+export const Example = {
+	args: {
+		...StoryArgs
+	}
 };
 
-export const ExampleWithoutRoles = Template.bind({});
-ExampleWithoutRoles.args = {
-	...Example.args,
-	knownFor: []
+export const ExampleWithoutRoles = {
+	args: {
+		...Example.args,
+		knownFor: []
+	}
 };
 
-export const ReactRouterLinkExample = Template.bind({});
-ReactRouterLinkExample.args = {
-	...Example.args,
-	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+export const ReactRouterLinkExample = {
+	args: {
+		...Example.args,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
 };
-ReactRouterLinkExample.decorators = [
-	(Story) => (
-		<MemoryRouter>
-			<Story />
-		</MemoryRouter>
-	)
-];
 
 export default {
 	component: PersonCard,

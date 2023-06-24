@@ -37,13 +37,19 @@ const DefaultStoryArgs = {
 	label: 'Example label'
 };
 
-export const DefaultControlledExample = ControlledStoryTemplate.bind({});
-DefaultControlledExample.args = { ...DefaultStoryArgs, defaultValue: true };
+export const DefaultControlledExample = {
+	render: ControlledStoryTemplate,
+	args: { ...DefaultStoryArgs, defaultValue: true }
+};
 
-export const DefaultUncontrolledExample = UncontrolledStoryTemplate.bind({});
-DefaultUncontrolledExample.args = { ...DefaultStoryArgs, defaultValue: true };
+export const DefaultUncontrolledExample = {
+	render: UncontrolledStoryTemplate,
+	args: { ...DefaultStoryArgs, defaultValue: true }
+};
 
-export const DisabledSwitch = ControlledStoryTemplate.bind({});
-DisabledSwitch.args = { ...DefaultStoryArgs, disabled: true };
+export const DisabledSwitch = {
+	render: ControlledStoryTemplate,
+	args: { ...DefaultStoryArgs, disabled: true }
+};
 
 export default { component: Switch, title: 'Design System/Core/Switch' };

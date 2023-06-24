@@ -8,8 +8,6 @@ export default {
 	title: 'Design System/Cards/Entertainment/TV/Current Season'
 };
 
-const Template = (args) => <CurrentSeasonCard {...args} />;
-
 const StoryArgs = {
 	image: 'https://image.tmdb.org/t/p/original/eFWtQwYetPum9RvCmqkUk2aiBIi.jpg',
 	title: 'Season Three: The New World',
@@ -20,18 +18,21 @@ const StoryArgs = {
 	renderLink: null
 };
 
-export const Example = Template.bind({});
-Example.args = { ...StoryArgs };
-
-export const ReactRouterLinkExample = Template.bind({});
-ReactRouterLinkExample.args = {
-	...ReactRouterLinkExample.args,
-	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+export const Example = {
+	args: { ...StoryArgs }
 };
-ReactRouterLinkExample.decorators = [
-	(Story) => (
-		<MemoryRouter>
-			<Story />
-		</MemoryRouter>
-	)
-];
+
+export const ReactRouterLinkExample = {
+	args: {
+		...StoryArgs,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
+};

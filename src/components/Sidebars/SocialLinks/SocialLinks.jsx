@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import classNames from 'classnames';
-import { Tooltip, Icon } from '../../Core';
+import { Icon, Tooltip } from '../../Core';
 
 const SocialLinks = ({ facebook, twitter, instagram, homepage, addBorderToHomepage }) => (
 	<ul className='flex list-none flex-row flex-wrap space-x-4'>

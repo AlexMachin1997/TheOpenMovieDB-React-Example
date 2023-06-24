@@ -3,8 +3,6 @@ import { MemoryRouter } from 'react-router-dom';
 
 import EntertainmentHeader from './EntertainmentHeader';
 
-const Template = (args) => <EntertainmentHeader {...args} />;
-
 const ProjectPowerProps = {
 	posterImage: 'https://image.tmdb.org/t/p/original/TnOeov4w0sTtV2gqICqIxVi74V.jpg',
 	backgroundImage: 'https://image.tmdb.org/t/p/original/qVygtf2vU15L2yKS4Ke44U4oMdD.jpg',
@@ -49,15 +47,17 @@ const ProjectPowerProps = {
 	isAuthenticated: false
 };
 
-export const ProjectPowerExample = Template.bind({});
-ProjectPowerExample.args = {
-	...ProjectPowerProps
+export const ProjectPowerExample = {
+	args: {
+		...ProjectPowerProps
+	}
 };
 
-export const ProjectPowerAuthenticatedExample = Template.bind({});
-ProjectPowerAuthenticatedExample.args = {
-	...ProjectPowerProps,
-	isAuthenticated: true
+export const ProjectPowerAuthenticatedExample = {
+	args: {
+		...ProjectPowerProps,
+		isAuthenticated: true
+	}
 };
 
 export default {

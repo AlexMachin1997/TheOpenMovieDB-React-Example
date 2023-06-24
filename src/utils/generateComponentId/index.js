@@ -9,6 +9,7 @@ const generateComponentId = (field = '', additionalInfo = '') => {
 		return id;
 	} catch (err) {
 		console.log(`[generateComponentId failed], ${err.message}`);
+
 		return '';
 	}
 };

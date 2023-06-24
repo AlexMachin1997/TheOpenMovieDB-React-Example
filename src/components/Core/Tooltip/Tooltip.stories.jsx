@@ -8,32 +8,47 @@ const Template = (args) => (
 	<Tooltip tooltip='Custom tooltip message' title='Custom title' {...args} />
 );
 
-export const Default = Template.bind({});
-Default.args = {
-	children: <Icon className='fa-brands fa-facebook-f' />
+export const Default = {
+	render: Template,
+
+	args: {
+		children: <Icon className='fa-brands fa-facebook-f' />
+	}
 };
 
-export const Placement = Template.bind({});
-Placement.args = {
-	placement: 'bottom',
-	children: <Icon className='fa-brands fa-facebook-f' />
+export const Placement = {
+	render: Template,
+
+	args: {
+		placement: 'bottom',
+		children: <Icon className='fa-brands fa-facebook-f' />
+	}
 };
 
-export const Children = Template.bind({});
-Children.args = {
-	children: <p>Custom children</p>
+export const Children = {
+	render: Template,
+
+	args: {
+		children: <p>Custom children</p>
+	}
 };
 
-export const MaxWidth = Template.bind({});
-MaxWidth.args = {
-	children: <p>Custom children</p>,
-	maxWidth: 100
+export const MaxWidth = {
+	render: Template,
+
+	args: {
+		children: <p>Custom children</p>,
+		maxWidth: 100
+	}
 };
 
-export const Title = Template.bind({});
-Title.args = {
-	children: <Icon className='fa-brands fa-facebook-f' />,
-	title: 'My awesome title'
+export const Title = {
+	render: Template,
+
+	args: {
+		children: <Icon className='fa-brands fa-facebook-f' />,
+		title: 'My awesome title'
+	}
 };
 
 export default {

@@ -8,8 +8,6 @@ export default {
 	title: 'Design System/Cards/Entertainment/Video'
 };
 
-const Template = (args) => <VideoCard {...args} />;
-
 const StoryArgs = {
 	title: 'The Umbrella Academy',
 	overview: 'The Umbrella Academy Season 2 | Official Trailer | Netflix',
@@ -18,8 +16,9 @@ const StoryArgs = {
 	thumbnailAction: null
 };
 
-export const Example = Template.bind({});
-Example.args = { ...StoryArgs };
+export const Example = {
+	args: { ...StoryArgs }
+};
 
 export const GroupedExample = () => (
 	<div className='flex w-full overflow-auto'>
@@ -37,15 +36,17 @@ export const GroupedExample = () => (
 	</div>
 );
 
-export const ReactRouterLinkExample = Template.bind({});
-ReactRouterLinkExample.args = {
-	...Example.args,
-	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+export const ReactRouterLinkExample = {
+	args: {
+		...Example.args,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
 };
-ReactRouterLinkExample.decorators = [
-	(Story) => (
-		<MemoryRouter>
-			<Story />
-		</MemoryRouter>
-	)
-];

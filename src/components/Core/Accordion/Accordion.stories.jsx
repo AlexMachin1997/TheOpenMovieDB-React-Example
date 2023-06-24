@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import Accordion from './Accordion';
 
 const DefaultStoryArgs = {
@@ -7,23 +5,24 @@ const DefaultStoryArgs = {
 	title: 'What is refund your refund policy'
 };
 
-const Template = (args) => <Accordion {...args} />;
-
-export const DefaultIsOpen = Template.bind({});
-DefaultIsOpen.args = {
-	...DefaultStoryArgs,
-	defaultIsOpen: true
+export const DefaultIsOpen = {
+	args: {
+		...DefaultStoryArgs,
+		defaultIsOpen: true
+	}
 };
 
-export const IsDisabled = Template.bind({});
-IsDisabled.args = {
-	...DefaultStoryArgs,
-	isDisabled: true
+export const IsDisabled = {
+	args: {
+		...DefaultStoryArgs,
+		isDisabled: true
+	}
 };
 
-export const FullExample = Template.bind({});
-FullExample.args = {
-	...DefaultStoryArgs
+export const FullExample = {
+	args: {
+		...DefaultStoryArgs
+	}
 };
 
 export default {

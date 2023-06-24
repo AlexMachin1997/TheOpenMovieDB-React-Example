@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import classNames from 'classnames';
 
-import { Icon, Image, Button } from '../../Core';
+import { Button, Icon, Image } from '../../Core';
 
 import MenuItem from './MenuItem/MenuItem';
 import CommandPallet from './CommandPallet';

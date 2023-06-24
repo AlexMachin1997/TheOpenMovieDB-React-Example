@@ -3,8 +3,6 @@ import { Link, MemoryRouter } from 'react-router-dom';
 
 import ReviewCard from './Review';
 
-const Template = (args) => <ReviewCard {...args} />;
-
 const StoryArgs = {
 	author: {
 		name: 'Cat Ellington',
@@ -19,33 +17,37 @@ const StoryArgs = {
 	renderLink: null
 };
 
-export const FeaturedReviewExample = Template.bind({});
-FeaturedReviewExample.args = {
-	...StoryArgs,
-	isFeatured: true
-};
-
-export const NoAvatarPathExample = Template.bind({});
-NoAvatarPathExample.args = {
-	...StoryArgs,
-	author: {
-		...StoryArgs.author,
-		avatarPath: null
+export const FeaturedReviewExample = {
+	args: {
+		...StoryArgs,
+		isFeatured: true
 	}
 };
 
-export const ReactRouterLinkExample = Template.bind({});
-ReactRouterLinkExample.args = {
-	...StoryArgs,
-	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+export const NoAvatarPathExample = {
+	args: {
+		...StoryArgs,
+		author: {
+			...StoryArgs.author,
+			avatarPath: null
+		}
+	}
 };
-ReactRouterLinkExample.decorators = [
-	(Story) => (
-		<MemoryRouter>
-			<Story />
-		</MemoryRouter>
-	)
-];
+
+export const ReactRouterLinkExample = {
+	args: {
+		...StoryArgs,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
+};
 
 export default {
 	title: ' Design System/Cards/Entertainment/Review',

@@ -29,6 +29,7 @@ module.exports = {
 			}
 		}
 	},
+	ignorePatterns: ['**/*.scss'],
 	rules: {
 		'react-refresh/only-export-components': 'warn',
 		'prettier/prettier': 'error',

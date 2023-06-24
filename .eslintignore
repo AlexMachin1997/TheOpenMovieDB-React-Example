@@ -11,3 +11,7 @@ src/setupTests.js
 ./.github/workflows/**/*.yml
 
 build/*.js
+
+*.png
+
+./webfonts/

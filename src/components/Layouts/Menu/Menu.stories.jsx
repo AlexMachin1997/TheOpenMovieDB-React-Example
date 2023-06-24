@@ -3,13 +3,12 @@ import { MemoryRouter } from 'react-router-dom';
 
 import Menu from './Menu';
 
-const Template = (args) => <Menu {...args} />;
+export const Default = {};
 
-export const Default = Template.bind({});
-
-export const IsAuthenticated = Template.bind({});
-IsAuthenticated.args = {
-	isAuthenticated: true
+export const IsAuthenticated = {
+	args: {
+		isAuthenticated: true
+	}
 };
 
 export default {

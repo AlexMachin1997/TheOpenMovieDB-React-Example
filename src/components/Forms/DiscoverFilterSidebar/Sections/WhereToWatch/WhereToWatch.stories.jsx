@@ -18,17 +18,25 @@ const ControlledStoryTemplate = (args) => (
 	</Formik>
 );
 
-export const DefaultWhereToWatch = ControlledStoryTemplate.bind({});
-DefaultWhereToWatch.args = {};
-
-export const AuthenticatedWhereToWatch = ControlledStoryTemplate.bind({});
-AuthenticatedWhereToWatch.args = {
-	isAuthenticated: true
+export const DefaultWhereToWatch = {
+	render: ControlledStoryTemplate,
+	args: {}
 };
 
-export const NoOttProviders = ControlledStoryTemplate.bind({});
-NoOttProviders.args = {
-	ottProviders: []
+export const AuthenticatedWhereToWatch = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		isAuthenticated: true
+	}
+};
+
+export const NoOttProviders = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		ottProviders: []
+	}
 };
 
 export default {

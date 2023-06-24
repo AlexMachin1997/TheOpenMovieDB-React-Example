@@ -12,37 +12,57 @@ const Template = (args) => (
 	</table>
 );
 
-export const Default = Template.bind({});
-
-export const Year = Template.bind({});
-Year.args = {
-	year: '2022'
+export const Default = {
+	render: Template
 };
 
-export const MediaType = Template.bind({});
-MediaType.args = {
-	mediaType: 'tv'
+export const Year = {
+	render: Template,
+
+	args: {
+		year: '2022'
+	}
 };
 
-export const Title = Template.bind({});
-Title.args = {
-	title: 'Black Widow'
+export const MediaType = {
+	render: Template,
+
+	args: {
+		mediaType: 'tv'
+	}
 };
 
-export const EpisodeCount = Template.bind({});
-EpisodeCount.args = {
-	mediaType: 'tv',
-	episodeCount: 100
+export const Title = {
+	render: Template,
+
+	args: {
+		title: 'Black Widow'
+	}
 };
 
-export const Character = Template.bind({});
-Character.args = {
-	character: 'Herself'
+export const EpisodeCount = {
+	render: Template,
+
+	args: {
+		mediaType: 'tv',
+		episodeCount: 100
+	}
 };
 
-export const Id = Template.bind({});
-Id.args = {
-	id: '747188'
+export const Character = {
+	render: Template,
+
+	args: {
+		character: 'Herself'
+	}
+};
+
+export const Id = {
+	render: Template,
+
+	args: {
+		id: '747188'
+	}
 };
 
 export default {

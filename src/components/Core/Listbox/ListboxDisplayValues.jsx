@@ -97,6 +97,7 @@ ListboxDisplayValues.propTypes = {
 	onChange: PropTypes.func,
 	displayLimit: PropTypes.number,
 	showMultiDeleteButton: PropTypes.bool,
+	// eslint-disable-next-line react/forbid-prop-types
 	options: PropTypes.array,
 	displayName: PropTypes.string
 };

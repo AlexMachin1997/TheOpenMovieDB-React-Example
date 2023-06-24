@@ -4,13 +4,9 @@ import { createRoot } from 'react-dom/client';
 
 // React application entry point
 import { BrowserRouter } from 'react-router-dom';
-import { ApolloProvider } from '@apollo/client';
 
 // Get the app, the part where the routes for the app are created
 import App from './src/App';
-
-// Get the pre-defined Apollo client configuration
-import ApolloClient from './src/apollo';
 
 const element = document.getElementById('root');
 
@@ -25,10 +21,8 @@ if (element !== null) {
 
 	// Render the React Application (Router is used to allow a custom useLocation hook)
 	root.render(
-		<ApolloProvider client={ApolloClient}>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		</ApolloProvider>
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
 	);
 }

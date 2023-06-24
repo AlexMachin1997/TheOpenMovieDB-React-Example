@@ -17,15 +17,15 @@ const StoryArgs = {
 	renderLink: null
 };
 
-const Template = (args) => <TopBilledCard {...args} />;
+export const Example = {
+	args: { ...StoryArgs }
+};
 
-export const Example = Template.bind({});
-Example.args = { ...StoryArgs };
-
-export const MediaTypeTVExample = Template.bind({});
-MediaTypeTVExample.args = {
-	...Example.args,
-	mediaType: 'tv'
+export const MediaTypeTVExample = {
+	args: {
+		...Example.args,
+		mediaType: 'tv'
+	}
 };
 
 export const GroupedWestWorldExample = () => (
@@ -74,15 +74,17 @@ export const GroupedOldGuardExample = () => (
 	</div>
 );
 
-export const ReactRouterLinkExample = Template.bind({});
-ReactRouterLinkExample.args = {
-	...Example.args,
-	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+export const ReactRouterLinkExample = {
+	args: {
+		...Example.args,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
 };
-ReactRouterLinkExample.decorators = [
-	(Story) => (
-		<MemoryRouter>
-			<Story />
-		</MemoryRouter>
-	)
-];

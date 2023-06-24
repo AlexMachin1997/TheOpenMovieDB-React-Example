@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { Image, Icon } from '../../../Core';
+import { Icon, Image } from '../../../Core';
 
 const Recommendation = ({ title, releaseDate, image, rating, renderLink }) => {
 	const linkContent = (

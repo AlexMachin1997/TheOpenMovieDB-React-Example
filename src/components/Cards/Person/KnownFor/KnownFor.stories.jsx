@@ -8,16 +8,15 @@ export default {
 	title: 'Design System/Cards/Person/Know for'
 };
 
-const Template = (args) => <KnownForCard {...args} />;
-
 const StoryArgs = {
 	name: 'Timeless',
 	image: 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/wFaS9kROwztTWNxIKBbOLwIgApV.jpg',
 	renderLink: null
 };
 
-export const Example = Template.bind({});
-Example.args = { ...StoryArgs };
+export const Example = {
+	args: { ...StoryArgs }
+};
 
 export const GroupedExample = () => (
 	<div className='flex w-full overflow-auto'>
@@ -38,15 +37,17 @@ export const GroupedExample = () => (
 	</div>
 );
 
-export const ReactRouterLinkExample = Template.bind({});
-ReactRouterLinkExample.args = {
-	...Example.args,
-	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+export const ReactRouterLinkExample = {
+	args: {
+		...Example.args,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
 };
-ReactRouterLinkExample.decorators = [
-	(Story) => (
-		<MemoryRouter>
-			<Story />
-		</MemoryRouter>
-	)
-];

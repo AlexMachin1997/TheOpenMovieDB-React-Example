@@ -7,7 +7,7 @@ import { usePopper } from 'react-popper';
 import { Link } from 'react-router-dom';
 
 import RoutingService from '../../../services/RoutingService/RoutingService';
-import { Icon, Button } from '../../Core';
+import { Button, Icon } from '../../Core';
 
 const UnauthenticatedUserProfile = ({ onChange, isOpen }) => (
 	<ul className='m-0 flex items-center p-0' id='desktop-navigation-menu-right'>

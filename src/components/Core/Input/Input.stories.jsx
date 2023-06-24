@@ -10,36 +10,45 @@ const ControlledTemplate = (args) => {
 	return <Input onChange={(event) => setValue(event.target.value)} value={value} {...reset} />;
 };
 
-export const TextInput = ControlledTemplate.bind({});
-TextInput.args = {
-	label: 'From',
-	id: 'From',
-	name: 'From',
-	defaultValue: 'AlexMachin'
+export const TextInput = {
+	render: ControlledTemplate,
+
+	args: {
+		label: 'From',
+		id: 'From',
+		name: 'From',
+		defaultValue: 'AlexMachin'
+	}
 };
 
-export const NumberInput = ControlledTemplate.bind({});
-NumberInput.args = {
-	type: 'number',
-	min: 0,
-	max: 100,
-	step: 5,
-	inputMode: 'numeric',
-	name: 'number',
-	defaultValue: 150,
-	label: 'User Score',
-	id: 'number'
+export const NumberInput = {
+	render: ControlledTemplate,
+
+	args: {
+		type: 'number',
+		min: 0,
+		max: 100,
+		step: 5,
+		inputMode: 'numeric',
+		name: 'number',
+		defaultValue: 150,
+		label: 'User Score',
+		id: 'number'
+	}
 };
 
-export const DatePicker = ControlledTemplate.bind({});
-DatePicker.args = {
-	type: 'date',
-	label: 'Date range',
-	id: 'date',
-	containerClassName: 'flex items-center',
-	labelClassName: 'w-[100px] text-black',
-	name: 'date',
-	defaultValue: '2022-10-20' // Must only be the date in this specific format, it can't include the time as well otherwise the defaultValue won't be used by the input
+export const DatePicker = {
+	render: ControlledTemplate,
+
+	args: {
+		type: 'date',
+		label: 'Date range',
+		id: 'date',
+		containerClassName: 'flex items-center',
+		labelClassName: 'w-[100px] text-black',
+		name: 'date',
+		defaultValue: '2022-10-20' // Must only be the date in this specific format, it can't include the time as well otherwise the defaultValue won't be used by the input
+	}
 };
 
 export default {

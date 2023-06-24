@@ -16,8 +16,10 @@ const ControlledStoryTemplate = () => (
 	</Formik>
 );
 
-export const Example = ControlledStoryTemplate.bind({});
-Example.args = {};
+export const Example = {
+	render: ControlledStoryTemplate,
+	args: {}
+};
 
 export default {
 	component: Sort,

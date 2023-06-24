@@ -19,6 +19,7 @@ const CreditsTable = ({ credits, year }) => (
 		</tbody>
 	</table>
 );
+
 CreditsTable.defaultProps = {
 	year: '-',
 	credits: []

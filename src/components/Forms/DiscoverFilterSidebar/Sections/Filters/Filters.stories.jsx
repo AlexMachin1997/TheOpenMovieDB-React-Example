@@ -34,20 +34,29 @@ const ControlledStoryTemplate = (args) => (
 	</Formik>
 );
 
-export const DefaultFiltersSidebar = ControlledStoryTemplate.bind({});
-DefaultFiltersSidebar.args = {
-	mediaType: 'movie'
+export const DefaultFiltersSidebar = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		mediaType: 'movie'
+	}
 };
 
-export const TVFiltersSidebar = ControlledStoryTemplate.bind({});
-TVFiltersSidebar.args = {
-	mediaType: 'tv'
+export const TVFiltersSidebar = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		mediaType: 'tv'
+	}
 };
 
-export const AuthenticatedFiltersSidebar = ControlledStoryTemplate.bind({});
-AuthenticatedFiltersSidebar.args = {
-	isAuthenticated: true,
-	mediaType: 'movie'
+export const AuthenticatedFiltersSidebar = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		isAuthenticated: true,
+		mediaType: 'movie'
+	}
 };
 
 export default {

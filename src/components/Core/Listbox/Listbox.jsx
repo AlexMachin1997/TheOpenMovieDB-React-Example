@@ -97,6 +97,7 @@ const VirtualizedList = React.memo(
 );
 
 VirtualizedList.propTypes = {
+	// eslint-disable-next-line react/forbid-prop-types
 	options: PropTypes.array.isRequired,
 	noOptionsAvailableMessage: PropTypes.string.isRequired,
 	isMulti: PropTypes.bool.isRequired,
@@ -261,6 +262,7 @@ CustomListbox.propTypes = {
 
 	// General properties to provide additional functionality like chips, custom messages, displayLimit etc
 	name: PropTypes.string,
+	// eslint-disable-next-line react/forbid-prop-types
 	options: PropTypes.array,
 	isMulti: PropTypes.bool,
 	displayName: PropTypes.string,

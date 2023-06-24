@@ -8,8 +8,6 @@ export default {
 	title: 'Design System/Cards/Entertainment/Recommendation'
 };
 
-const Template = (args) => <RecommendationCard {...args} />;
-
 const StoryArgs = {
 	title: 'Ant Man and The Wasp',
 	releaseDate: '07/04/2020',
@@ -18,9 +16,10 @@ const StoryArgs = {
 	renderLink: null
 };
 
-export const Example = Template.bind({});
-Example.args = {
-	...StoryArgs
+export const Example = {
+	args: {
+		...StoryArgs
+	}
 };
 
 export const GroupedExample = () => (
@@ -61,15 +60,17 @@ export const GroupedExample = () => (
 	</div>
 );
 
-export const ReactRouterLinkExample = Template.bind({});
-ReactRouterLinkExample.args = {
-	...Example.args,
-	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+export const ReactRouterLinkExample = {
+	args: {
+		...Example.args,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
 };
-ReactRouterLinkExample.decorators = [
-	(Story) => (
-		<MemoryRouter>
-			<Story />
-		</MemoryRouter>
-	)
-];

@@ -3,7 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { Dialog, Menu, Transition } from '@headlessui/react';
-import { Formik, useFormikContext, Form as FormikForm } from 'formik';
+import { Formik, Form as FormikForm, useFormikContext } from 'formik';
 
 import classNames from 'classnames';
 import DiscoverFilterSidebar from '../../Forms/DiscoverFilterSidebar/DiscoverFilterSidebar';
@@ -223,6 +223,7 @@ const DiscoverPageTemplate = ({
 			if (mediaType === 'tv') {
 				return 'Popular TV Shows';
 			}
+
 			return 'Popular Movies';
 		}
 
@@ -395,13 +396,13 @@ const DiscoverPageTemplate = ({
 							id={`${mediaType}-results`}
 							className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5'
 						>
-							{resources.map((resource, resourceIndex) => (
+							{resources.map((resource) => (
 								<EntertainmentPosterCard
 									title={resource.title}
 									releaseDate={resource.releaseDate}
 									rating={resource.rating}
 									image={resource.image}
-									key={`${resource.title} ${resourceIndex}`}
+									key={`${resource.title} ${resource.releaseDate}`}
 								/>
 							))}
 						</div>
@@ -416,7 +417,9 @@ DiscoverPageTemplate.propTypes = {
 	mediaType: PropTypes.string.isRequired,
 	resourceType: PropTypes.string.isRequired,
 	isAuthenticated: PropTypes.bool.isRequired,
+	// eslint-disable-next-line react/forbid-prop-types
 	defaultValues: PropTypes.object,
+	// eslint-disable-next-line react/forbid-prop-types
 	resources: PropTypes.array
 };
 

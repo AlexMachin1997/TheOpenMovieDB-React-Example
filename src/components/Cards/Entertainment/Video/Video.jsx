@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 
-import { Image, Icon, Button } from '../../../Core';
+import { Button, Icon, Image } from '../../../Core';
 
 import generateComponentId from '../../../../utils/generateComponentId';
 

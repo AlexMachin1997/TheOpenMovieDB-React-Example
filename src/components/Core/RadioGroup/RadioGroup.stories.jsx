@@ -43,184 +43,214 @@ const DefaultStoryArgs = {
 	defaultValue: ''
 };
 
-export const DefaultRadioGroups = UncontrolledStoryTemplate.bind({});
-DefaultRadioGroups.args = {
-	...DefaultStoryArgs
+export const DefaultRadioGroups = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs
+	}
 };
 
-export const CountriesExample = UncontrolledStoryTemplate.bind({});
-CountriesExample.args = {
-	...DefaultStoryArgs,
-	options: Settings.COUNTRY_OPTIONS,
-	displayName: 'label'
+export const CountriesExample = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		options: Settings.COUNTRY_OPTIONS,
+		displayName: 'label'
+	}
 };
 
-export const UncontrolledRadioGroup = UncontrolledStoryTemplate.bind({});
-UncontrolledRadioGroup.args = {
-	...DefaultStoryArgs,
-	defaultValue: '1',
-	options: [
-		{
-			name: 'Radio option 1',
-			id: 1,
-			value: '1'
-		},
-		{
-			name: 'Radio option 2',
-			id: 2,
-			value: '2'
-		},
-		{
-			name: 'Radio option 3',
-			id: 3,
-			value: '3'
-		}
-	]
+export const UncontrolledRadioGroup = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		defaultValue: '1',
+		options: [
+			{
+				name: 'Radio option 1',
+				id: 1,
+				value: '1'
+			},
+			{
+				name: 'Radio option 2',
+				id: 2,
+				value: '2'
+			},
+			{
+				name: 'Radio option 3',
+				id: 3,
+				value: '3'
+			}
+		]
+	}
 };
 
-export const ControlledRadioGroup = ControlledStoryTemplate.bind({});
-ControlledRadioGroup.args = {
-	...DefaultStoryArgs,
-	defaultValue: '2',
-	options: [
-		{
-			name: 'Radio option 1',
-			id: 1,
-			value: '1'
-		},
-		{
-			name: 'Radio option 2',
-			id: 2,
-			value: '2'
-		},
-		{
-			name: 'Radio option 3',
-			id: 3,
-			value: '3'
-		}
-	]
+export const ControlledRadioGroup = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		defaultValue: '2',
+		options: [
+			{
+				name: 'Radio option 1',
+				id: 1,
+				value: '1'
+			},
+			{
+				name: 'Radio option 2',
+				id: 2,
+				value: '2'
+			},
+			{
+				name: 'Radio option 3',
+				id: 3,
+				value: '3'
+			}
+		]
+	}
 };
 
-export const CustomDisplayName = UncontrolledStoryTemplate.bind({});
-CustomDisplayName.args = {
-	...DefaultStoryArgs,
-	displayName: 'label',
-	options: [
-		{
-			label: 'Radio option 1',
-			id: 1,
-			value: '1'
-		},
-		{
-			label: 'Radio option 2',
-			id: 2,
-			value: '2'
-		},
-		{
-			label: 'Radio option 3',
-			id: 3,
-			value: '3'
-		}
-	]
+export const CustomDisplayName = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		displayName: 'label',
+		options: [
+			{
+				label: 'Radio option 1',
+				id: 1,
+				value: '1'
+			},
+			{
+				label: 'Radio option 2',
+				id: 2,
+				value: '2'
+			},
+			{
+				label: 'Radio option 3',
+				id: 3,
+				value: '3'
+			}
+		]
+	}
 };
 
-export const CustomNoOptionsAvailableMessage = ControlledStoryTemplate.bind({});
-CustomNoOptionsAvailableMessage.args = {
-	...DefaultStoryArgs,
-	noOptionsAvailableMessage: 'My custom no options message'
+export const CustomNoOptionsAvailableMessage = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		noOptionsAvailableMessage: 'My custom no options message'
+	}
 };
 
-export const DisabledGroup = UncontrolledStoryTemplate.bind({});
-DisabledGroup.args = {
-	...DefaultStoryArgs,
-	disabled: true,
-	options: [
-		{
-			name: 'Radio option 1',
-			id: 1,
-			value: '1'
-		},
-		{
-			name: 'Radio option 2',
-			id: 2,
-			value: '2'
-		},
-		{
-			name: 'Radio option 3',
-			id: 3,
-			value: '3'
-		}
-	]
+export const DisabledGroup = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		disabled: true,
+		options: [
+			{
+				name: 'Radio option 1',
+				id: 1,
+				value: '1'
+			},
+			{
+				name: 'Radio option 2',
+				id: 2,
+				value: '2'
+			},
+			{
+				name: 'Radio option 3',
+				id: 3,
+				value: '3'
+			}
+		]
+	}
 };
 
-export const ShowRadioButtonOnTheRight = UncontrolledStoryTemplate.bind({});
-ShowRadioButtonOnTheRight.args = {
-	...DefaultStoryArgs,
-	options: [
-		{
-			name: 'Radio option 1',
-			id: 1,
-			value: '1'
-		},
-		{
-			name: 'Radio option 2',
-			id: 2,
-			value: '2'
-		},
-		{
-			name: 'Radio option 3',
-			id: 3,
-			value: '3'
-		}
-	],
-	showRadioButtonOnTheLeft: false
+export const ShowRadioButtonOnTheRight = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		options: [
+			{
+				name: 'Radio option 1',
+				id: 1,
+				value: '1'
+			},
+			{
+				name: 'Radio option 2',
+				id: 2,
+				value: '2'
+			},
+			{
+				name: 'Radio option 3',
+				id: 3,
+				value: '3'
+			}
+		],
+		showRadioButtonOnTheLeft: false
+	}
 };
 
-export const AddSpaceBetweenLabelAndRadioButtonOnTheRight = UncontrolledStoryTemplate.bind({});
-AddSpaceBetweenLabelAndRadioButtonOnTheRight.args = {
-	...DefaultStoryArgs,
-	options: [
-		{
-			name: 'Radio option 1',
-			id: 1,
-			value: '1'
-		},
-		{
-			name: 'Radio option 2',
-			id: 2,
-			value: '2'
-		},
-		{
-			name: 'Radio option 3',
-			id: 3,
-			value: '3'
-		}
-	],
-	addSpaceBetweenLabelAndRadioButton: true
+export const AddSpaceBetweenLabelAndRadioButtonOnTheRight = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		options: [
+			{
+				name: 'Radio option 1',
+				id: 1,
+				value: '1'
+			},
+			{
+				name: 'Radio option 2',
+				id: 2,
+				value: '2'
+			},
+			{
+				name: 'Radio option 3',
+				id: 3,
+				value: '3'
+			}
+		],
+		addSpaceBetweenLabelAndRadioButton: true
+	}
 };
 
-export const AddSpaceBetweenLabelAndRadioButtonOnTheLeft = UncontrolledStoryTemplate.bind({});
-AddSpaceBetweenLabelAndRadioButtonOnTheLeft.args = {
-	...DefaultStoryArgs,
-	options: [
-		{
-			name: 'Radio option 1',
-			id: 1,
-			value: '1'
-		},
-		{
-			name: 'Radio option 2',
-			id: 2,
-			value: '2'
-		},
-		{
-			name: 'Radio option 3',
-			id: 3,
-			value: '3'
-		}
-	],
-	addSpaceBetweenLabelAndRadioButton: true,
-	showRadioButtonOnTheLeft: false
+export const AddSpaceBetweenLabelAndRadioButtonOnTheLeft = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		options: [
+			{
+				name: 'Radio option 1',
+				id: 1,
+				value: '1'
+			},
+			{
+				name: 'Radio option 2',
+				id: 2,
+				value: '2'
+			},
+			{
+				name: 'Radio option 3',
+				id: 3,
+				value: '3'
+			}
+		],
+		addSpaceBetweenLabelAndRadioButton: true,
+		showRadioButtonOnTheLeft: false
+	}
 };
 
 export default { component: RadioGroups, title: 'Design System/Core/RadioGroup' };

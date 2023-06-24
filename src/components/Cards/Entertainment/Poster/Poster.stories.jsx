@@ -22,27 +22,39 @@ const StoryArgs = {
 	renderLink: null
 };
 
-export const Example = Template.bind({});
-Example.args = { ...StoryArgs };
-
-export const BadRatingExample = Template.bind({});
-BadRatingExample.args = { ...Example.args, rating: 10 };
-
-export const MediumRatingExample = Template.bind({});
-MediumRatingExample.args = { ...Example.args, rating: 50 };
-
-export const GoodRatingExample = Template.bind({});
-GoodRatingExample.args = { ...Example.args, rating: 100 };
-
-export const ReactRouterLinkExample = Template.bind({});
-ReactRouterLinkExample.args = {
-	...Example.args,
-	renderLink: ({ content }) => <Link to='/'>{content}</Link>
+export const Example = {
+	render: Template,
+	args: { ...StoryArgs }
 };
-ReactRouterLinkExample.decorators = [
-	(Story) => (
-		<MemoryRouter>
-			<Story />
-		</MemoryRouter>
-	)
-];
+
+export const BadRatingExample = {
+	render: Template,
+	args: { ...Example.args, rating: 10 }
+};
+
+export const MediumRatingExample = {
+	render: Template,
+	args: { ...Example.args, rating: 50 }
+};
+
+export const GoodRatingExample = {
+	render: Template,
+	args: { ...Example.args, rating: 100 }
+};
+
+export const ReactRouterLinkExample = {
+	render: Template,
+
+	args: {
+		...Example.args,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+
+	decorators: [
+		(Story) => (
+			<MemoryRouter>
+				<Story />
+			</MemoryRouter>
+		)
+	]
+};

@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import EntertainmentSidebar from '../../Sidebars/Entertainment/EntertainmentSidebar';
 import { EntertainmentHeader } from '../../Headers';
 import {
-	TopBilledCastMember,
 	EntertainmentRecommendationCard,
 	EntertainmentReviewCard,
 	MovieCollectionCard,
-	TVCurrentSeasonCard
+	TVCurrentSeasonCard,
+	TopBilledCastMember
 } from '../../Cards';
 import { Icon, Tabs } from '../../Core';
 
@@ -49,6 +49,7 @@ const MediaImage = ({ id, images, type }) => {
 
 MediaImage.propTypes = {
 	id: PropTypes.string.isRequired,
+	// eslint-disable-next-line react/forbid-prop-types
 	images: PropTypes.array.isRequired,
 	type: PropTypes.string.isRequired
 };
@@ -173,7 +174,7 @@ const ViewMovieAndTVPage = ({
 								id: 'Videos',
 								content: (
 									<>
-										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
+										<div className='flex w-full overflow-x-scroll pb-3 '>
 											{media?.videos?.map((poster) => (
 												<MediaImage
 													id={poster?.id ?? ''}
@@ -203,7 +204,7 @@ const ViewMovieAndTVPage = ({
 								id: 'Posters',
 								content: (
 									<>
-										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
+										<div className='flex w-full overflow-x-scroll pb-3 '>
 											{media?.posters?.map((poster) => (
 												<MediaImage
 													id={poster?.id ?? ''}
@@ -227,7 +228,7 @@ const ViewMovieAndTVPage = ({
 								id: 'Backdrops',
 								content: (
 									<>
-										<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
+										<div className='flex w-full overflow-x-scroll pb-3 '>
 											{media?.backdrops?.map((backdrop) => (
 												<MediaImage
 													id={backdrop?.id ?? ''}

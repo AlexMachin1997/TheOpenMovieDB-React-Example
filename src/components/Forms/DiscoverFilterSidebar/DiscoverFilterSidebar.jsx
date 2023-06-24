@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { SortBySection, FiltersSection, WhereToWatchSection } from './Sections';
+import { FiltersSection, SortBySection, WhereToWatchSection } from './Sections';
 
 const DiscoverFilterSidebar = ({ isAuthenticated, tag: Tag, ...props }) => (
 	<Tag className='max-w-sm space-y-2' {...props}>

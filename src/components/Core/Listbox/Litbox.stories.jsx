@@ -60,93 +60,117 @@ const DefaultStoryArgs = {
 	noOptionsAvailableMessage: 'No options currently available.'
 };
 
-export const DefaultDropdown = UncontrolledStoryTemplate.bind({});
-DefaultDropdown.args = {
-	...DefaultStoryArgs
+export const DefaultDropdown = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs
+	}
 };
 
-export const UncontrolledMultipleValues = UncontrolledStoryTemplate.bind({});
-UncontrolledMultipleValues.args = {
-	name: 'people',
-	options: [
-		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
-	],
-	defaultValue: ['Durward Reynolds'],
-	isMulti: true
+export const UncontrolledMultipleValues = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		name: 'people',
+		options: [
+			{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+			{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+			{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+			{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+			{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
+		],
+		defaultValue: ['Durward Reynolds'],
+		isMulti: true
+	}
 };
 
-export const UncontrolledSingleValue = UncontrolledStoryTemplate.bind({});
-UncontrolledSingleValue.args = {
-	name: 'people',
-	options: [
-		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
-	],
-	defaultValue: 'Durward Reynolds',
-	isMulti: false
+export const UncontrolledSingleValue = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		name: 'people',
+		options: [
+			{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+			{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+			{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+			{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+			{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
+		],
+		defaultValue: 'Durward Reynolds',
+		isMulti: false
+	}
 };
 
-export const ControlledSingleValue = ControlledStoryTemplate.bind({});
-ControlledSingleValue.args = {
-	...DefaultStoryArgs,
-	options: [
-		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
-	],
-	isMulti: false,
-	defaultValue: 'Durward Reynolds'
+export const ControlledSingleValue = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		options: [
+			{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+			{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+			{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+			{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+			{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
+		],
+		isMulti: false,
+		defaultValue: 'Durward Reynolds'
+	}
 };
 
-export const ControlledMultipleValues = ControlledStoryTemplate.bind({});
-ControlledMultipleValues.args = {
-	...DefaultStoryArgs,
-	isMulti: true,
-	options: [
-		{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
-		{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
-		{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
-		{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
-		{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
-	],
-	defaultValue: ['Benedict Kessler', 'Katelyn Rohan']
+export const ControlledMultipleValues = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		isMulti: true,
+		options: [
+			{ id: 1, name: 'Durward Reynolds', value: 'Durward Reynolds' },
+			{ id: 2, name: 'Kenton Towne', value: 'Kenton Towne' },
+			{ id: 3, name: 'Therese Wunsch', value: 'Therese Wunsch' },
+			{ id: 4, name: 'Benedict Kessler', value: 'Benedict Kessler' },
+			{ id: 5, name: 'Katelyn Rohan', value: 'Katelyn Rohan' }
+		],
+		defaultValue: ['Benedict Kessler', 'Katelyn Rohan']
+	}
 };
 
-export const CustomDisplayName = UncontrolledStoryTemplate.bind({});
-CustomDisplayName.args = {
-	...DefaultStoryArgs,
-	isMulti: false,
-	options: [
-		{ id: 1, label: 'Durward Reynolds', value: 'Durward Reynolds' },
-		{ id: 2, label: 'Kenton Towne', value: 'Kenton Towne' },
-		{ id: 3, label: 'Therese Wunsch', value: 'Therese Wunsch' },
-		{ id: 4, label: 'Benedict Kessler', value: 'Benedict Kessler' },
-		{ id: 5, label: 'Katelyn Rohan', value: 'Katelyn Rohan' }
-	],
-	displayName: 'label'
+export const CustomDisplayName = {
+	render: UncontrolledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		isMulti: false,
+		options: [
+			{ id: 1, label: 'Durward Reynolds', value: 'Durward Reynolds' },
+			{ id: 2, label: 'Kenton Towne', value: 'Kenton Towne' },
+			{ id: 3, label: 'Therese Wunsch', value: 'Therese Wunsch' },
+			{ id: 4, label: 'Benedict Kessler', value: 'Benedict Kessler' },
+			{ id: 5, label: 'Katelyn Rohan', value: 'Katelyn Rohan' }
+		],
+		displayName: 'label'
+	}
 };
 
-export const CustomNoOptionsAvailableMessage = ControlledStoryTemplate.bind({});
-CustomNoOptionsAvailableMessage.args = {
-	...DefaultStoryArgs,
-	noOptionsAvailableMessage: 'My custom no options message'
+export const CustomNoOptionsAvailableMessage = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		noOptionsAvailableMessage: 'My custom no options message'
+	}
 };
 
-export const MassiveListOfCountries = ControlledStoryTemplate.bind({});
-MassiveListOfCountries.args = {
-	...DefaultStoryArgs,
-	isMulti: true,
-	options: settings.COUNTRY_OPTIONS,
-	displayName: 'label'
+export const MassiveListOfCountries = {
+	render: ControlledStoryTemplate,
+
+	args: {
+		...DefaultStoryArgs,
+		isMulti: true,
+		options: settings.COUNTRY_OPTIONS,
+		displayName: 'label'
+	}
 };
 
 export default {

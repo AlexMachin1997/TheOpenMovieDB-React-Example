@@ -114,6 +114,7 @@ CheckboxGroupOption.propTypes = {
 	disabled: PropTypes.bool,
 	id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 	value: PropTypes.string,
+	// eslint-disable-next-line react/forbid-prop-types
 	options: PropTypes.arrayOf(PropTypes.object)
 };
 

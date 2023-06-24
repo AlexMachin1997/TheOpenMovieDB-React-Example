@@ -1,13 +1,11 @@
-import * as React from 'react';
 import Loader from './Loader';
 
-const Template = (args) => <Loader {...args} />;
+export const Default = {};
 
-export const Default = Template.bind({});
-
-export const IsFixed = Template.bind({});
-IsFixed.args = {
-	isFixed: false
+export const IsFixed = {
+	args: {
+		isFixed: false
+	}
 };
 
 export default {

@@ -28,9 +28,6 @@ $fa-font-path: '../webfonts';
 // A class for the dark mode of the application with scoped css variables
 // NOTE: These are rgb values, they are transformed in the tailwind.config.js file
 .dark {
-	// --primary: 144 206 161; // #90cea1;
-	// --secondary: 13 37 63; // #0d253f;
-	// --tertiary: 60 179 113; // #3cb371;
 	--primary: 13 37 63; // #0d253f;
 	--secondary: 1 180 228; // #01b4e4;
 	--tertiary: 144 206 161; // #90cea1;
