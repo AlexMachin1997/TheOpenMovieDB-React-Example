@@ -9,10 +9,10 @@ import Settings from '../../../../../settings';
 import {
 	Accordion,
 	CheckboxGroup,
+	Icon,
+	Input,
 	Listbox,
 	RadioGroup,
-	Input,
-	Icon,
 	Switch
 } from '../../../../Core';
 import FilterTitle from '../../FilterTitle/FilterTitle';
@@ -42,6 +42,7 @@ const ShowMeFilterIcon = ({
 ShowMeFilterIcon.propTypes = {
 	isChecked: PropTypes.bool.isRequired,
 	isDisabled: PropTypes.bool.isRequired,
+	// eslint-disable-next-line react/forbid-prop-types
 	defaults: PropTypes.object.isRequired
 };
 

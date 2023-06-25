@@ -42,6 +42,7 @@ const Collection = ({ title, subtitle, image, renderLink }) => (
 		)}
 	</div>
 );
+
 Collection.defaultProps = {
 	title: '',
 	subtitle: '',

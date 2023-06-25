@@ -54,8 +54,8 @@ const FooterComponent = () => {
 						The Basics
 					</h3>
 
-					{TheBasics.map((section, index) => (
-						<a className='mb-3 block font-light text-white' key={index} href={section.link}>
+					{TheBasics.map((section) => (
+						<a className='mb-3 block font-light text-white' key={section.text} href={section.link}>
 							{section.text}
 						</a>
 					))}
@@ -66,8 +66,8 @@ const FooterComponent = () => {
 						Get Involved
 					</h3>
 
-					{GetInvolved.map((section, index) => (
-						<a className='mb-3 block font-light text-white' key={index} href={section.link}>
+					{GetInvolved.map((section) => (
+						<a className='mb-3 block font-light text-white' key={section.text} href={section.link}>
 							{section.text}
 						</a>
 					))}
@@ -78,8 +78,8 @@ const FooterComponent = () => {
 						Community
 					</h3>
 
-					{Community.map((section, index) => (
-						<a className='mb-3 block font-light text-white' key={index} href={section.link}>
+					{Community.map((section) => (
+						<a className='mb-3 block font-light text-white' key={section.text} href={section.link}>
 							{section.text}
 						</a>
 					))}
@@ -90,8 +90,8 @@ const FooterComponent = () => {
 						Legal
 					</h3>
 
-					{Legal.map((section, index) => (
-						<a className='mb-3 block font-light text-white' key={index} href={section.link}>
+					{Legal.map((section) => (
+						<a className='mb-3 block font-light text-white' key={section.text} href={section.link}>
 							{section.text}
 						</a>
 					))}

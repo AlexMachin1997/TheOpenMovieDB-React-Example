@@ -118,6 +118,7 @@ const MenuItem = ({ links, title, isSidebarItem }) => {
 };
 
 MenuItem.propTypes = {
+	// eslint-disable-next-line react/forbid-prop-types
 	links: PropTypes.array,
 	title: PropTypes.string,
 	isSidebarItem: PropTypes.bool

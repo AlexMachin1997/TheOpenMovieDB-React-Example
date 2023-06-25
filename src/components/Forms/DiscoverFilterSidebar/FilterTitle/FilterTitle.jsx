@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { Tooltip, Icon } from '../../../Core';
+import { Icon, Tooltip } from '../../../Core';
 
 const FilterTitle = ({ title, tooltip }) => (
 	<div className='mb-2 flex justify-between'>

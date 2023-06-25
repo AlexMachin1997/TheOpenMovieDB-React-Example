@@ -65,6 +65,7 @@ const Tabs = ({ tabs, tabClassName, activeTabClassName }) => {
 };
 
 Tabs.propTypes = {
+	// eslint-disable-next-line react/forbid-prop-types
 	tabs: PropTypes.array.isRequired,
 	tabClassName: PropTypes.string,
 	activeTabClassName: PropTypes.string

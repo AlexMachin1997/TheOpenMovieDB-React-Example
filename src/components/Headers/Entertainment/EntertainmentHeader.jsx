@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import { Image, PercentageRating, Icon, Tooltip } from '../../Core';
+import { Icon, Image, PercentageRating, Tooltip } from '../../Core';
 
 const EntertainmentHeader = ({
 	posterImage,

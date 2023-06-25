@@ -52,13 +52,16 @@ const CustomCheckboxGroup = ({
 );
 
 CustomCheckboxGroup.propTypes = {
+	// eslint-disable-next-line react/forbid-prop-types
 	options: PropTypes.array,
+	// eslint-disable-next-line react/forbid-prop-types
 	value: PropTypes.any,
 	onChange: PropTypes.func,
 	displayName: PropTypes.string,
 	noOptionsAvailableMessage: PropTypes.string,
 	disabled: PropTypes.bool,
 	name: PropTypes.string.isRequired,
+	// eslint-disable-next-line react/forbid-prop-types
 	defaultValue: PropTypes.array
 };
 

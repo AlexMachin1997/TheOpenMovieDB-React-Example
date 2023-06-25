@@ -175,6 +175,7 @@ CustomRadioGroup.propTypes = {
 
 	// General properties to provide additional functionality options, displayName etc
 	name: PropTypes.string,
+	// eslint-disable-next-line react/forbid-prop-types
 	options: PropTypes.array,
 	displayName: PropTypes.string,
 	noOptionsAvailableMessage: PropTypes.string,
