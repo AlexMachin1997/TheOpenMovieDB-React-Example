@@ -82,7 +82,8 @@ module.exports = {
 		'@typescript-eslint/no-var-requires': 0,
 		'react/jsx-props-no-spreading': 0,
 		// 'react/jsx-filename-extension': [1, { extensions: ['.jsx', '.tsx',] }], TODO: Re-enable once the files have been converted to typescript
-		'react/jsx-filename-extension': 0
+		'react/jsx-filename-extension': 0,
+		'react/require-default-props': 0
 	}
 	// "root": true
 };

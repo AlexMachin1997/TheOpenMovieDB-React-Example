@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "vite",
 		"build": "tsc && vite build",
-		"lint": "yarn run eslint ./src/** --ext js,jsx,ts,tsx --fix",
+		"lint": "yarn run eslint ./src/** --ext js,jsx,ts,tsx --fix && tsc",
 		"prettier": "prettier --write ./src",
 		"storybook": "storybook dev -p 6006 --disable-telemetry",
 		"build-storybook": "storybook build"

@@ -1,20 +1,27 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-
 import { Disclosure, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 
 import Icon from '../Icon/Icon';
 
+type AccordionProps = {
+	children: React.ReactNode;
+	title: React.ReactNode | string;
+	defaultIsOpen?: boolean;
+	isDisabled?: boolean;
+	className?: string;
+	contentClassName?: string;
+	unmount?: boolean;
+};
+
 const Accordion = ({
 	children,
 	title,
-	defaultIsOpen,
+	defaultIsOpen = false,
 	isDisabled,
-	className,
-	contentClassName,
-	unmount
-}) => (
+	className = 'p-4',
+	contentClassName = 'p-4',
+	unmount = false
+}: AccordionProps) => (
 	<Disclosure defaultOpen={defaultIsOpen}>
 		{({ open }) => (
 			<div className={classNames('rounded-lg shadow-lg', {})}>
@@ -66,25 +73,5 @@ const Accordion = ({
 		)}
 	</Disclosure>
 );
-
-Accordion.propTypes = {
-	children: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.number]),
-	title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-	defaultIsOpen: PropTypes.bool,
-	isDisabled: PropTypes.bool,
-	className: PropTypes.string,
-	contentClassName: PropTypes.string,
-	unmount: PropTypes.bool
-};
-
-Accordion.defaultProps = {
-	children: null,
-	title: null,
-	defaultIsOpen: false,
-	isDisabled: false,
-	className: 'p-4',
-	contentClassName: 'p-4',
-	unmount: false
-};
 
 export default Accordion;
