@@ -1,8 +1,19 @@
 import * as React from 'react';
 
-import PropTypes from 'prop-types';
+interface Props extends React.ComponentPropsWithoutRef<'img'> {
+	label: string;
+}
 
-const Image = ({ width, height, alt, label, src, className, ...props }) => {
+const Image = ({
+	width = '200px',
+	height = '200px',
+	alt = '',
+	label = '',
+	src = '',
+	className = '',
+	loading = 'lazy',
+	...props
+}: Props) => {
 	const [error, setError] = React.useState(false);
 
 	return (
@@ -11,7 +22,7 @@ const Image = ({ width, height, alt, label, src, className, ...props }) => {
 				width,
 				height
 			}}
-			loading='lazy'
+			loading={loading}
 			alt={error === true ? 'Failed to load the image, this is a fallback' : alt}
 			onError={() => setError(true)}
 			decoding='async'
@@ -24,24 +35,6 @@ const Image = ({ width, height, alt, label, src, className, ...props }) => {
 			{...props}
 		/>
 	);
-};
-
-Image.defaultProps = {
-	width: '200px',
-	height: '200px',
-	alt: 'Default',
-	label: 'Default',
-	src: 'https://via.placeholder.com/200x200?text=Default+Image',
-	className: ''
-};
-
-Image.propTypes = {
-	width: PropTypes.string,
-	height: PropTypes.string,
-	className: PropTypes.string,
-	alt: PropTypes.string,
-	label: PropTypes.string,
-	src: PropTypes.string
 };
 
 export default Image;
