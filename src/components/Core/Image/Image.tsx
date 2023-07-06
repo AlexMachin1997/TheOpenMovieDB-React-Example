@@ -19,8 +19,8 @@ const Image = ({
 	return (
 		<img
 			style={{
-				width,
-				height
+				width: typeof width === 'string' ? width : `${width}px`,
+				height: typeof height === 'string' ? height : `${height}px`
 			}}
 			loading={loading}
 			alt={error === true ? 'Failed to load the image, this is a fallback' : alt}
