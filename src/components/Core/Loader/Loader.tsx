@@ -1,6 +1,3 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-
 import className from 'classnames';
 
 type Props = {
@@ -24,13 +21,5 @@ const Loader = ({ isFixed = true }: Props) => (
 		/>
 	</div>
 );
-
-Loader.defaultProps = {
-	isFixed: true
-};
-
-Loader.propTypes = {
-	isFixed: PropTypes.bool
-};
 
 export default Loader;

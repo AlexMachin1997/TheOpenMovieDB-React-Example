@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import { Tab } from '@headlessui/react';
 import classNames from 'classnames';
@@ -7,7 +6,23 @@ import classNames from 'classnames';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 
-const Tabs = ({ tabs, tabClassName, activeTabClassName }) => {
+type Props = {
+	tabs: {
+		enabled?: boolean;
+		content?: React.ReactNode;
+		id: string;
+		icon?: string;
+		label: string;
+	}[];
+	tabClassName?: string;
+	activeTabClassName?: string;
+};
+
+const Tabs = ({
+	tabs,
+	tabClassName = 'text-gray-500 hover:text-gray-700',
+	activeTabClassName = 'bg-gray-100 text-gray-700'
+}: Props) => {
 	// Only show the tabs which are enabled and has content
 	const enabledTabs = React.useMemo(
 		() => tabs.filter((tab) => (tab?.enabled ?? true) === true && tab.content !== undefined),
@@ -32,12 +47,12 @@ const Tabs = ({ tabs, tabClassName, activeTabClassName }) => {
 								>
 									<>
 										{/* When provided render an tabIcon via the font-awesome className */}
-										{(tab?.tabIcon?.length ?? 0) > 0 && (
-											<Icon className={classNames(tab.tabIcon, 'mr-2')} />
+										{(tab?.icon?.length ?? 0) > 0 && (
+											<Icon className={classNames(tab.icon, 'mr-2')} />
 										)}
 
 										{/* Tab section tabLabel */}
-										{tab?.tabLabel ?? ''}
+										{tab?.label ?? ''}
 									</>
 								</Button>
 							)}
@@ -62,18 +77,6 @@ const Tabs = ({ tabs, tabClassName, activeTabClassName }) => {
 			</Tab.Group>
 		</div>
 	);
-};
-
-Tabs.propTypes = {
-	// eslint-disable-next-line react/forbid-prop-types
-	tabs: PropTypes.array.isRequired,
-	tabClassName: PropTypes.string,
-	activeTabClassName: PropTypes.string
-};
-
-Tabs.defaultProps = {
-	tabClassName: 'text-gray-500 hover:text-gray-700',
-	activeTabClassName: 'bg-gray-100 text-gray-700'
 };
 
 export default Tabs;
