@@ -249,5 +249,5 @@ export const MassiveListOfCountriesA = {
 
 export default {
 	component: Combobox,
-	title: 'Design System/Core/Combobox'
+	title: 'Core/Combobox'
 };

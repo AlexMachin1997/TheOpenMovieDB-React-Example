@@ -7,7 +7,7 @@ import Settings from '../../../settings';
 
 const meta: Meta<typeof RadioGroups> = {
 	component: RadioGroups,
-	title: 'Design System/Core/Radio Group'
+	title: 'Core/Radio Group'
 };
 
 export default meta;

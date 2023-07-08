@@ -4,7 +4,7 @@ import Percentage from './Percentage';
 
 const meta: Meta<typeof Percentage> = {
 	component: Percentage,
-	title: 'Design System/Core/Percentage'
+	title: 'Core/Percentage'
 };
 
 export default meta;

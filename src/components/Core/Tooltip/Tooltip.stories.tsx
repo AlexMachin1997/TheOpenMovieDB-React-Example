@@ -5,7 +5,7 @@ import Icon from '../Icon/Icon';
 
 const meta: Meta<typeof Tooltip> = {
 	component: Tooltip,
-	title: 'Design System/Core/Tooltip'
+	title: 'Core/Tooltip'
 };
 
 export default meta;

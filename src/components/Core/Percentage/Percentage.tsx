@@ -35,7 +35,7 @@ const Rating = ({ size = 75, strokeWidth = 7, percentage = 0, textClass = 'text-
 			viewBox={`${`0 0 ${size} ${size}`}`} // Defines the position and dimension, in user space, of an SVG viewport (min-x, min-y, width and height)
 		>
 			<circle
-				className='fill-[none] stroke-[#767656]'
+				className='fill-none stroke-[#767656]'
 				cx={size / 2} // Defines the x coordinates of the circle
 				cy={size / 2} // Defines the y coordinates of the circle
 				r={radius} // Defines the radius of the circle

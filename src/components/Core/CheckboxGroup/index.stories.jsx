@@ -186,4 +186,4 @@ export const DisableCertainOptions = {
 	}
 };
 
-export default { component: CheckboxGroup, title: 'Design System/Core/CheckboxGroup' };
+export default { component: CheckboxGroup, title: 'Core/CheckboxGroup' };

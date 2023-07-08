@@ -4,7 +4,7 @@ import Loader from './Loader';
 
 const meta: Meta<typeof Loader> = {
 	component: Loader,
-	title: 'Design System/Core/Loader'
+	title: 'Core/Loader'
 };
 
 export default meta;

@@ -6,7 +6,7 @@ import Input from './Input';
 
 const meta: Meta<typeof Input> = {
 	component: Input,
-	title: 'Design System/Core/Input'
+	title: 'Core/Input'
 };
 
 export default meta;

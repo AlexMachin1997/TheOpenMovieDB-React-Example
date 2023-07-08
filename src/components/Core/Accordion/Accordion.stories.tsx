@@ -4,7 +4,7 @@ import Accordion from './Accordion';
 
 const meta: Meta<typeof Accordion> = {
 	component: Accordion,
-	title: 'Design System/Core/Accordion'
+	title: 'Core/Accordion'
 };
 
 export default meta;

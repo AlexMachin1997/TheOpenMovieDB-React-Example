@@ -175,5 +175,5 @@ export const MassiveListOfCountries = {
 
 export default {
 	component: Listbox,
-	title: 'Design System/Core/Listbox'
+	title: 'Core/Listbox'
 };

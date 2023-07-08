@@ -4,7 +4,7 @@ import Image from './Image';
 
 const meta: Meta<typeof Image> = {
 	component: Image,
-	title: 'Design System/Core/Image'
+	title: 'Core/Image'
 };
 
 export default meta;

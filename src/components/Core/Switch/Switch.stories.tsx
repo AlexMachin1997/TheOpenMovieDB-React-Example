@@ -6,7 +6,7 @@ import Switch from './Switch';
 
 const meta: Meta<typeof Switch> = {
 	component: Switch,
-	title: 'Design System/Core/Switch'
+	title: 'Core/Switch'
 };
 
 export default meta;
