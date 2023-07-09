@@ -58,7 +58,7 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-react": "^7.27.0",
 		"eslint-plugin-react-hooks": "^4.6.0",
-		"eslint-plugin-react-refresh": "^0.4.1",
+		"eslint-plugin-react-refresh": "^0.4.2",
 		"eslint-plugin-storybook": "^0.6.12",
 		"eslint-plugin-tailwindcss": "^3.12.1",
 		"postcss": "^8.4.25",
@@ -66,7 +66,7 @@
 		"prettier-plugin-tailwindcss": "^0.3.0",
 		"storybook": "7.0.26",
 		"typescript": "^5.0.2",
-		"vite": "^4.4.1"
+		"vite": "^4.4.2"
 	},
 	"bugs": {
 		"url": "https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/issues"

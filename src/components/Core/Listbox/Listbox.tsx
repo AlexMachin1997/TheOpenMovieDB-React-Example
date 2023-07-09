@@ -1,23 +1,24 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-unused-vars */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { usePopper } from 'react-popper';
 
+import { usePopper } from 'react-popper';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Listbox, Transition } from '@headlessui/react';
 
 import Icon from '../Icon/Icon';
 import ListboxDisplayValues from './ListboxDisplayValues';
+import { ListboxProps, VirtualizedListProps } from '../../../types/DropdownElementTypes';
 
 const VirtualizedList = React.memo(
-	({ options, noOptionsAvailableMessage, isMulti, displayName }) => {
+	({ options, noOptionsAvailableMessage, isMultiSelect }: VirtualizedListProps) => {
 		// This will store the reference to the options list (Wrapper for the options)
-		const optionsRef = React.useRef();
+		const optionsRef = React.useRef<HTMLDivElement>(null);
 
 		// Virtualize the List, improves the performance for bigger lists e.g. 250 countries being rendered.
 		const rowVirtualizer = useVirtualizer({
-			count: options?.length,
+			count: options?.length ?? 0,
 			getScrollElement: () => optionsRef.current,
 			estimateSize: React.useCallback(() => 35, []),
 			overscan: 5
@@ -31,6 +32,7 @@ const VirtualizedList = React.memo(
 						disabled
 						aria-disabled
 						className='relative cursor-default select-none py-2 pl-3 text-gray-700'
+						value=''
 					>
 						{noOptionsAvailableMessage}
 					</Listbox.Option>
@@ -47,20 +49,20 @@ const VirtualizedList = React.memo(
 					>
 						{rowVirtualizer.getVirtualItems().map((virtualRow) => {
 							// Get the current option
-							const option = options[virtualRow.index];
+							const option = options?.at(virtualRow.index);
 
 							return (
 								<Listbox.Option
-									key={option.id}
+									key={`${option?.label}-${virtualRow.index}`}
 									className={({ active }) =>
 										classNames('relative cursor-default select-none py-2 pr-4', {
 											'bg-secondary text-white': active === true,
 											'text-gray-900': active === false,
-											'pl-10': isMulti === true,
-											'pl-3': isMulti === false
+											'pl-10': isMultiSelect === true,
+											'pl-3': isMultiSelect === false
 										})
 									}
-									value={option.value}
+									value={option}
 									style={{
 										position: 'absolute',
 										top: 0,
@@ -72,14 +74,24 @@ const VirtualizedList = React.memo(
 								>
 									{({ selected, active }) => (
 										<>
-											<span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
-												{option[displayName]}
+											<span
+												className={classNames('block truncate', {
+													'font-bold': selected === true,
+													'font-normal': selected === false
+												})}
+											>
+												{option?.label}
 											</span>
-											{selected === true && isMulti === true && (
+
+											{selected === true && isMultiSelect === true && (
 												<span
-													className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-														active ? 'text-white' : 'text-teal-600'
-													}`}
+													className={classNames(
+														'absolute inset-y-0 left-0 flex items-center pl-3',
+														{
+															'text-white': active === true,
+															'text-teal-600': active === false
+														}
+													)}
 												>
 													<Icon className='fa-solid fa-check' aria-hidden='true' />
 												</span>
@@ -96,29 +108,20 @@ const VirtualizedList = React.memo(
 	}
 );
 
-VirtualizedList.propTypes = {
-	// eslint-disable-next-line react/forbid-prop-types
-	options: PropTypes.array.isRequired,
-	noOptionsAvailableMessage: PropTypes.string.isRequired,
-	isMulti: PropTypes.bool.isRequired,
-	displayName: PropTypes.string.isRequired
-};
-
 const CustomListbox = ({
-	options,
-	value,
-	onChange,
-	isMulti,
-	displayName,
+	options = [],
+	value = undefined,
+	onChange = null,
+	isMultiSelect = false,
 	name,
-	defaultValue,
-	disabled,
-	displayLimit,
-	noOptionsAvailableMessage
-}) => {
-	const [referenceElement, setReferenceElement] = React.useState();
-	const [popperElement, setPopperElement] = React.useState();
-	const containerRef = React.useRef();
+	defaultValue = undefined,
+	disabled = false,
+	displayLimit = 3,
+	noOptionsAvailableMessage = 'No options available'
+}: ListboxProps) => {
+	const [referenceElement, setReferenceElement] = React.useState<HTMLElement>();
+	const [popperElement, setPopperElement] = React.useState<HTMLDivElement>();
+	const containerRef = React.useRef<HTMLDivElement | null>(null);
 
 	// Used to calculate the offset for the usePopper hook which provides the menu placement functionality, used to switch between top or bottom for the menu
 	const offset = React.useCallback(() => {
@@ -133,7 +136,8 @@ const CustomListbox = ({
 		const distance = dropdownContainerHeight / 2;
 
 		// When the placement is anything else ie top set the distance to 25
-		return [skidding, distance];
+		// NOTE: Force typescript to read these as numbers, when you use a static value is reads it as the literal value which is undesired
+		return [skidding, distance] as [number, number];
 	}, []);
 
 	// Used to place the menu either on the top or bottom of the Listbox button
@@ -177,8 +181,9 @@ const CustomListbox = ({
 			name={name}
 			defaultValue={defaultValue}
 			// Other general properties made available to the component
-			multiple={isMulti}
+			multiple={isMultiSelect}
 			disabled={disabled}
+			by='value'
 		>
 			{({ value: listboxInternalValue }) => (
 				<div className='relative' ref={containerRef}>
@@ -187,7 +192,7 @@ const CustomListbox = ({
 						<span className='w-full'>
 							<ListboxDisplayValues
 								value={listboxInternalValue}
-								isMulti={isMulti}
+								isMultiSelect={isMultiSelect}
 								onChange={({ value: newListboxValue }) => {
 									//  If the onChange for the Listbox component is provided then update the current value
 									if (onChange) {
@@ -195,13 +200,12 @@ const CustomListbox = ({
 									}
 								}}
 								displayLimit={displayLimit}
-								showMultiDeleteButton={isMulti === true && value !== undefined} // Don't show the delete button if the value is not undefined ie were in control mode (We control the state)
-								options={options}
-								displayName={displayName}
+								showMultiDeleteButton={isMultiSelect === true && value !== undefined} // Don't show the delete button if the value is not undefined ie were in control mode (We control the state)
 							/>
 						</span>
 
 						{/* Separate button toggler must not contain the values, it can be accessed via keyboard actions e.g. tabbing */}
+						{/* @ts-ignore */}
 						<Listbox.Button aria-label='Listbox dropdown button' ref={setReferenceElement}>
 							<Icon className='fa-solid fa-arrows-up-down w-5 text-black' />
 						</Listbox.Button>
@@ -214,9 +218,18 @@ const CustomListbox = ({
 						leaveTo='opacity-0'
 					>
 						<Listbox.Options
-							aria-label={`A ${isMulti === true ? 'multiple' : 'single'} dropdown for ${name}`}
-							className='absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm'
+							// Forces the dropdown list to re-render whenever the value changes, forces popper to adjust it's calculations to get the menu in the right position.
+							key={JSON.stringify(
+								Array.isArray(listboxInternalValue)
+									? listboxInternalValue?.length ?? 0
+									: listboxInternalValue
+							)}
+							// @ts-ignore
 							ref={setPopperElement}
+							aria-label={`A ${
+								isMultiSelect === true ? 'multiple' : 'single'
+							} dropdown for ${name}`}
+							className='absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm'
 							onKeyDown={(event) => {
 								// When you type to find an option stop other event's fro occurring e.g. In Storybook certain keys trigger page actions, we don't want this.
 								event.stopPropagation();
@@ -237,8 +250,7 @@ const CustomListbox = ({
 							<VirtualizedList
 								options={options}
 								noOptionsAvailableMessage={noOptionsAvailableMessage}
-								isMulti={isMulti}
-								displayName={displayName}
+								isMultiSelect={isMultiSelect}
 							/>
 						</Listbox.Options>
 					</Transition>
@@ -246,47 +258,6 @@ const CustomListbox = ({
 			)}
 		</Listbox>
 	);
-};
-
-CustomListbox.propTypes = {
-	// These are our controlled properties, these values are used to control the value manually via some state
-	value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
-	onChange: PropTypes.func,
-
-	// These are our uncontrolled properties, these values are used when there is no state or onChange, instead the component controls it's own state
-	defaultValue: PropTypes.oneOfType([
-		PropTypes.arrayOf(PropTypes.string),
-		PropTypes.object,
-		PropTypes.string
-	]),
-
-	// General properties to provide additional functionality like chips, custom messages, displayLimit etc
-	name: PropTypes.string,
-	// eslint-disable-next-line react/forbid-prop-types
-	options: PropTypes.array,
-	isMulti: PropTypes.bool,
-	displayName: PropTypes.string,
-	disabled: PropTypes.bool,
-	displayLimit: PropTypes.number,
-	noOptionsAvailableMessage: PropTypes.string
-};
-
-CustomListbox.defaultProps = {
-	// These are our controlled properties, these values are used to control the value manually via some state
-	value: undefined,
-	onChange: null,
-
-	// These are our uncontrolled properties, these values are used when there is no state or onChange, instead the component controls it's own state
-	defaultValue: undefined,
-
-	// General properties to provide additional functionality like chips, custom messages, displayLimit etc
-	name: 'name',
-	options: [],
-	isMulti: false,
-	displayName: 'name',
-	disabled: false,
-	displayLimit: 3,
-	noOptionsAvailableMessage: 'No options currently available.'
 };
 
 export default CustomListbox;
