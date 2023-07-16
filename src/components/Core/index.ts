@@ -7,7 +7,7 @@ export { default as Tooltip } from './Tooltip/Tooltip';
 export { default as Listbox } from './Listbox/Listbox';
 export { default as Combobox } from './Combobox/Combobox';
 export { default as RadioGroup } from './RadioGroup/RadioGroup';
-export { default as CheckboxGroup } from './CheckboxGroup';
+export { default as CheckboxGroup } from './CheckboxGroup/CheckboxGroup';
 export { default as Accordion } from './Accordion/Accordion';
 export { default as Input } from './Input/Input';
 export { default as Switch } from './Switch/Switch';
