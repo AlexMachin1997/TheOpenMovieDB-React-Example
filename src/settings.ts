@@ -1291,10 +1291,8 @@ const getLanguageOptions = () => {
 		// Don't format the 'none' option no need to.
 		if (languageOption.name === 'none') {
 			return {
-				...languageOption,
 				value: languageOption.iso_639_1,
-				label: languageOption.label,
-				name: languageOption.name
+				label: languageOption.label
 			};
 		}
 
@@ -1302,8 +1300,7 @@ const getLanguageOptions = () => {
 		return {
 			...languageOption,
 			value: languageOption.iso_639_1,
-			label: `${languageOption.label} (${languageOption.iso_639_1.toUpperCase()})`,
-			id: `${languageOption.iso_639_1} - ${languageOption.label}`
+			label: `${languageOption.label} (${languageOption.iso_639_1.toUpperCase()})`
 		};
 	});
 

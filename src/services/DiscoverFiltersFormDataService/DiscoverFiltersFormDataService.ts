@@ -74,12 +74,12 @@ type DefaultValues = {
 	sort_by?: string;
 	ott_region?: string;
 	restrict_services?: boolean;
-	with_ott_providers: string;
+	with_ott_providers?: string[];
 	show_me?: string;
 	with_ott_monetization_types?: string[];
 	with_genres?: string[];
-	certification?: string[];
-	with_release_type?: string[];
+	certifications?: string[];
+	with_release_types?: string[];
 	with_original_language?: string;
 	region?: string;
 	vote_average_lte?: string;
@@ -91,8 +91,8 @@ type DefaultValues = {
 	search_first_air_date?: boolean;
 };
 
-type MediaType = 'movie' | 'tv';
-type ResourceType =
+export type MediaType = 'movie' | 'tv';
+export type ResourceType =
 	| 'top-rated'
 	| 'popular'
 	| 'now-playing'
@@ -121,9 +121,9 @@ class DiscoverFiltersFormDataService {
 
 	private with_genres: SelectOption[];
 
-	private certification: SelectOption | null;
+	private certifications: SelectOption[];
 
-	private with_release_type: string[];
+	private with_release_types: string[];
 
 	private with_original_language: SelectOption | null;
 
@@ -242,16 +242,16 @@ class DiscoverFiltersFormDataService {
 
 		const certificationValue = setupDropdownFormData({
 			isMultiple: true,
-			defaultValue: defaultValues?.certification ?? [],
+			defaultValue: defaultValues?.certifications ?? [],
 			options: settings.CERTIFICATION_OPTIONS
 		});
 
-		this.certification = !Array.isArray(certificationValue) ? certificationValue : null;
+		this.certifications = Array.isArray(certificationValue) ? certificationValue : [];
 
-		// Setup the with_release_type value
+		// Setup the with_release_types value
 
-		this.with_release_type = setupCheckboxFormData({
-			defaultValue: defaultValues?.with_release_type ?? ['all'],
+		this.with_release_types = setupCheckboxFormData({
+			defaultValue: defaultValues?.with_release_types ?? ['all'],
 			options: settings.RELEASE_TYPE_OPTIONS
 		});
 
@@ -271,7 +271,7 @@ class DiscoverFiltersFormDataService {
 
 		const regionValue = setupDropdownFormData({
 			isMultiple: false,
-			defaultValue: defaultValues?.region ?? 'US',
+			defaultValue: defaultValues?.region ?? 'US', // TODO: Default to the users device locale instead of defaulting to US (Should default to US if the local isn't founded or provided)
 			options: settings.COUNTRY_OPTIONS
 		});
 
@@ -307,7 +307,7 @@ class DiscoverFiltersFormDataService {
 
 		if (withRuntimeLte < 0) {
 			this.with_runtime_lte = 400;
-		} else if (withRuntimeGte > 400) {
+		} else if (withRuntimeLte > 400) {
 			this.with_runtime_lte = 400;
 		} else if (withRuntimeGte > withRuntimeLte) {
 			this.with_runtime_lte = 400;
@@ -326,16 +326,16 @@ class DiscoverFiltersFormDataService {
 		}
 
 		// Setup the vote_count_gte
-		const voteCountGte = parseInt(defaultValues?.vote_average_gte ?? '0', 10);
+		const voteCountGte = parseInt(defaultValues?.vote_count_gte ?? '0', 10);
 
-		if (this.resourceType === 'top-rated' && this.mediaType === 'movie') {
+		if (this.mediaType === 'movie' && this.resourceType === 'top-rated') {
 			this.vote_count_gte = 300;
-		} else if (this.resourceType === 'top-rated' && this.mediaType === 'tv') {
+		} else if (this.mediaType === 'tv' && this.resourceType === 'top-rated') {
 			this.vote_count_gte = 150;
 		} else if (voteCountGte > 500) {
 			this.vote_count_gte = 0;
 		} else {
-			this.vote_average_gte = voteCountGte;
+			this.vote_count_gte = voteCountGte;
 		}
 
 		// Reserved "Filters" values, automatically set to get the correct values when using the Discover filtering
@@ -344,7 +344,6 @@ class DiscoverFiltersFormDataService {
 		this.air_date_gte = '';
 		this.air_date_lte = '';
 		this.search_first_air_date = defaultValues?.search_first_air_date ?? mediaType === 'tv';
-		this.vote_count_gte = 0;
 
 		// Setup the reserved filter properties, defaultValues aren't supported this as
 		this.setDateRangeFormData();
@@ -357,6 +356,7 @@ class DiscoverFiltersFormDataService {
 		// Set the release_date values for the /movie/popular route
 		if (this.resourceType === 'popular' && this.mediaType === 'movie') {
 			this.release_date_gte = '';
+			console.log(new Date());
 			this.release_date_lte = format(addDays(new Date(), 181), 'yyyy-MM-dd'); // Add 181 days to the "To" label value
 		}
 
@@ -458,8 +458,8 @@ class DiscoverFiltersFormDataService {
 			show_me: this.show_me,
 			with_ott_monetization_types: this.with_ott_monetization_types,
 			with_genres: this.with_genres,
-			certification: this.certification,
-			with_release_type: this.with_release_type,
+			certifications: this.certifications,
+			with_release_types: this.with_release_types,
 			'release_date.lte': this.release_date_lte,
 			'release_date.gte': this.release_date_gte,
 			'air_date.lte': this.air_date_lte,
