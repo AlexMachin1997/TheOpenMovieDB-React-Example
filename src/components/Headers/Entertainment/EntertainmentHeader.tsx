@@ -1,10 +1,25 @@
-/* eslint-disable no-unused-vars */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
 import { Icon, Image, PercentageRating, Tooltip } from '../../Core';
+
+type Props = {
+	posterImage: string;
+	backgroundImage: string;
+	title: string;
+	releaseDate: string;
+	releaseYear: number;
+	genres: { id: string | number; name: string }[];
+	runtime: string;
+	rating: number;
+	// trailerLink?: string;
+	tagline: string;
+	overview: string;
+	featuredCrew: { name: string; roles: string }[];
+	ageRating: string;
+	isAuthenticated?: boolean;
+};
 
 const EntertainmentHeader = ({
 	posterImage,
@@ -20,8 +35,8 @@ const EntertainmentHeader = ({
 	overview,
 	featuredCrew,
 	ageRating,
-	isAuthenticated
-}) => {
+	isAuthenticated = false
+}: Props) => {
 	// Stores the overlay property, this is used by the inner container to apply a linear-gradient
 	const [overlay, setOverlay] = React.useState('');
 
@@ -79,7 +94,7 @@ const EntertainmentHeader = ({
 				}}
 				className='flex items-center'
 			>
-				<div className='relative left-0 top-0 block p-5 pt-4 md:flex md:max-w-[1100px] md:px-10'>
+				<div className='relative left-0 top-0 block pt-4 md:flex md:max-w-[1100px] md:p-5 md:px-10'>
 					<Image
 						src={posterImage}
 						width='300px'
@@ -87,6 +102,7 @@ const EntertainmentHeader = ({
 						alt={`${title} Poster Image`}
 						className='m-auto rounded-lg md:m-0'
 						loading='eager'
+						label={`Poster image for ${title}`}
 					/>
 
 					<div className='flex flex-col justify-center md:flex-wrap md:pl-5'>
@@ -137,14 +153,12 @@ const EntertainmentHeader = ({
 							id={`${title} meta`}
 						>
 							<li className='mr-3 flex items-center'>
-								<span onMouseEnter={() => {}} onMouseLeave={() => {}}>
-									<PercentageRating
-										size={50}
-										textSize='0.9rem'
-										percentage={rating}
-										strokeWidth={5}
-									/>
-								</span>
+								<PercentageRating
+									size={50}
+									textClass='text-md'
+									percentage={rating}
+									strokeWidth={3}
+								/>
 								<div className='ml-1'>
 									<p className='text-sm font-bold text-white'>User</p>
 									<p className='text-sm font-bold text-white'>Score</p>
@@ -159,11 +173,6 @@ const EntertainmentHeader = ({
 											: 'Add to list'
 									}
 									placement='bottom'
-									title={
-										isAuthenticated === false
-											? 'Login to create and edit custom lists'
-											: 'Add to list'
-									}
 								>
 									<Icon className='fa-solid fa-list-ol cursor-pointer rounded-full bg-primary p-3 text-white	' />
 								</Tooltip>
@@ -177,11 +186,6 @@ const EntertainmentHeader = ({
 											: 'Mark as favorite'
 									}
 									placement='bottom'
-									title={
-										isAuthenticated === false
-											? 'Login to create and add it to your favorites list'
-											: 'Mark as favorite'
-									}
 								>
 									<Icon className='fa-solid fa-heart cursor-pointer rounded-full bg-primary p-3 text-white	' />
 								</Tooltip>
@@ -195,11 +199,6 @@ const EntertainmentHeader = ({
 											: 'Add to your watchlist'
 									}
 									placement='bottom'
-									title={
-										isAuthenticated === false
-											? 'Login to create and add it to your watch list'
-											: 'Add to your watchlist'
-									}
 								>
 									<Icon className='fa-solid fa-bookmark cursor-pointer rounded-full bg-primary p-3 text-white' />
 								</Tooltip>
@@ -209,7 +208,6 @@ const EntertainmentHeader = ({
 								<Tooltip
 									tooltip={isAuthenticated === false ? 'Login to rate this title' : 'Rate it'}
 									placement='bottom'
-									title={isAuthenticated === false ? 'Login to rate this title' : 'Rate it'}
 								>
 									<Icon className='fa-solid fa-star cursor-pointer rounded-full bg-primary p-3 text-white' />
 								</Tooltip>
@@ -246,37 +244,6 @@ const EntertainmentHeader = ({
 			</div>
 		</div>
 	);
-};
-
-EntertainmentHeader.propTypes = {
-	posterImage: PropTypes.string.isRequired,
-	backgroundImage: PropTypes.string.isRequired,
-	title: PropTypes.string.isRequired,
-	releaseDate: PropTypes.string.isRequired,
-	releaseYear: PropTypes.number.isRequired,
-	genres: PropTypes.arrayOf(
-		PropTypes.shape({
-			id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-			name: PropTypes.string
-		}).isRequired
-	).isRequired,
-	runtime: PropTypes.string.isRequired,
-	rating: PropTypes.number.isRequired,
-	// trailerLink: PropTypes.string.isRequired,
-	tagline: PropTypes.string.isRequired,
-	overview: PropTypes.string.isRequired,
-	featuredCrew: PropTypes.arrayOf(
-		PropTypes.shape({
-			name: PropTypes.string,
-			roles: PropTypes.string
-		}).isRequired
-	).isRequired,
-	ageRating: PropTypes.string.isRequired,
-	isAuthenticated: PropTypes.bool
-};
-
-EntertainmentHeader.defaultProps = {
-	isAuthenticated: false
 };
 
 export default EntertainmentHeader;
