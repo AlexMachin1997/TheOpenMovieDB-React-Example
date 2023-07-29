@@ -74,7 +74,7 @@ const UserProfile = ({ name }) => {
 		]
 	});
 
-	const MenuLinks = React.useMemo(() => RoutingService.generateMenuSections(), []);
+	const MenuLinks = React.useMemo(() => RoutingService.generateUserProfileLinks(), []);
 
 	return (
 		<Menu className='relative mr-4 inline-flex items-center text-left' as='ul'>
@@ -103,44 +103,57 @@ const UserProfile = ({ name }) => {
 						as='ul'
 						{...attributes.popper}
 					>
-						<div className='p-1'>
-							{/* Show the users profile name */}
-							<li>
-								<p className='p-1 text-base font-semibold text-black'>{name}</p>
-							</li>
-
-							{/* A quick access link to the users profile */}
-							<Menu.Item as='li'>
-								{({ active }) => (
-									<Link
-										to='/'
-										className={classNames('block p-1 text-xs text-gray-400 hover:text-white', {
-											'bg-secondary': active === true
-										})}
-									>
-										View Profile
-									</Link>
-								)}
-							</Menu.Item>
-						</div>
-
 						{/* Render the Profile menu items */}
 						{MenuLinks?.map((group) => (
-							<div className='p-1' key={`profile-menu-${group.groupName}`}>
-								{group.children.map((child) => (
-									<Menu.Item as='li' key={`Profile-Menu-${child.label}`}>
-										{({ active }) => (
-											<Link
-												to={child.url}
-												className={classNames('block p-1 text-sm text-gray-400 hover:text-white', {
-													'bg-secondary': active === true
-												})}
-											>
-												{child.label}
-											</Link>
-										)}
-									</Menu.Item>
-								))}
+							<div className='p-1' key={`profile-menu-${group.menuGroup}`}>
+								{group.children.map((child) => {
+									// Special output for the View Profile button
+									if (child.label === 'View Profile') {
+										return (
+											<div className='border-b-2 border-solid border-gray-200'>
+												{/* Show the users profile name */}
+												<li>
+													<p className='p-1 text-base font-semibold text-black'>{name}</p>
+												</li>
+
+												{/* A quick access link to the users profile */}
+												<Menu.Item as='li'>
+													{({ active }) => (
+														<Link
+															to='/'
+															className={classNames(
+																'block p-1 text-xs text-gray-400 hover:text-white',
+																{
+																	'bg-secondary': active === true
+																}
+															)}
+														>
+															View Profile
+														</Link>
+													)}
+												</Menu.Item>
+											</div>
+										);
+									}
+
+									return (
+										<Menu.Item as='li' key={`Profile-Menu-${child.label}`}>
+											{({ active }) => (
+												<Link
+													to={child.url}
+													className={classNames(
+														'block p-1 text-sm text-gray-400 hover:text-white',
+														{
+															'bg-secondary': active === true
+														}
+													)}
+												>
+													{child.label}
+												</Link>
+											)}
+										</Menu.Item>
+									);
+								})}
 							</div>
 						))}
 					</Menu.Items>

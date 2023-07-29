@@ -1,6 +1,7 @@
 import { addDays, format, subDays } from 'date-fns';
 import settings from '../../settings';
 import { SelectOption } from '../../types/DropdownElementTypes';
+import { MediaType, ResourceType } from '../../types/RoutingTypes';
 
 const setupCheckboxFormData = ({
 	defaultValue = [],
@@ -90,15 +91,6 @@ type DefaultValues = {
 	vote_count_gte?: string;
 	search_first_air_date?: boolean;
 };
-
-export type MediaType = 'movie' | 'tv';
-export type ResourceType =
-	| 'top-rated'
-	| 'popular'
-	| 'now-playing'
-	| 'upcoming'
-	| 'airing-today'
-	| 'on-the-air';
 
 class DiscoverFiltersFormDataService {
 	private readonly mediaType: MediaType;
