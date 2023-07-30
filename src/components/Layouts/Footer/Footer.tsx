@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { Image } from '../../Core';
 
 const FooterComponent = () => {
@@ -36,6 +34,7 @@ const FooterComponent = () => {
 							alt='TMBDb Logo'
 							width='140px'
 							height='140px'
+							label='The Open Movie Database Logo'
 						/>
 					</div>
 

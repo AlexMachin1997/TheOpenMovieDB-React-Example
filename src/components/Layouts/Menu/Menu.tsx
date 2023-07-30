@@ -1,24 +1,15 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-
 import { Link } from 'react-router-dom';
-
 import classNames from 'classnames';
 
 import { Button, Icon, Image } from '../../Core';
-
-import MenuItem from './MenuItem/MenuItem';
-import CommandPallet from './CommandPallet';
+import MenuItem from './MenuItem';
 import ProfileMenu from './ProfileMenu';
-
 import RoutingService from '../../../services/RoutingService/RoutingService';
 
-const NavigationMenu = ({ isAuthenticated }) => {
+const NavigationMenu = ({ isAuthenticated = false }: { isAuthenticated?: boolean }) => {
 	// MobileSidebar state
 	const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-
-	// Search bar
-	const [isSearchBarVisible, setIsSearchBarVisible] = React.useState(false);
 
 	// Handles the closing of the mobile navigation bar when the screen resizes
 	React.useEffect(() => {
@@ -30,7 +21,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 			}
 		};
 
-		const handleEscClick = (event) => {
+		const handleEscClick = (event: KeyboardEvent) => {
 			// When the sidebar is open and the user clicks "Esc" key close the menu down
 			if (isSidebarOpen === true && event.key === 'Escape') {
 				setIsSidebarOpen(false);
@@ -55,17 +46,13 @@ const NavigationMenu = ({ isAuthenticated }) => {
 	const ApplicationLinks = React.useMemo(
 		() =>
 			RoutingService.getMultipleUrlGroups({
-				groups: ['Movies', 'Shows', 'People', 'More'],
-				filterOutMenuItems: true
+				groups: ['Movies', 'Shows', 'People', 'More']
 			}),
 		[]
 	);
 
 	return (
 		<div>
-			{/* Search bar for performing text searches */}
-			<CommandPallet isOpen={isSearchBarVisible} setIsOpen={setIsSearchBarVisible} />
-
 			<aside
 				id='mobile-navigation-sidebar'
 				aria-label='mobile navigation menu sidebar'
@@ -88,9 +75,9 @@ const NavigationMenu = ({ isAuthenticated }) => {
 			>
 				{ApplicationLinks.map((route) => (
 					<MenuItem
-						key={route.groupName}
+						key={route.menuGroup}
 						links={route.children}
-						title={route.groupName}
+						title={route.menuGroup}
 						isSidebarItem
 					/>
 				))}
@@ -128,16 +115,14 @@ const NavigationMenu = ({ isAuthenticated }) => {
 						<Button
 							onClick={() => {
 								setIsSidebarOpen(!isSidebarOpen);
-								setIsSearchBarVisible(false);
 							}}
 							onKeyDown={(event) => {
 								if (event.key === 'Enter') {
 									setIsSidebarOpen(!isSidebarOpen);
-									setIsSearchBarVisible(false);
 								}
 							}}
 							className='m-0 flex cursor-pointer items-center p-0'
-							aria-hidden={isSidebarOpen.toString()}
+							aria-hidden={isSidebarOpen}
 							aria-label={isSidebarOpen === true ? 'Open sidebar' : 'Close sidebar'}
 						>
 							<Icon className='fa-solid fa-bars text-white' />
@@ -153,6 +138,7 @@ const NavigationMenu = ({ isAuthenticated }) => {
 								width='75px'
 								height='40px'
 								className='cursor-pointer'
+								label='The Open Movie Database Logo'
 							/>
 						</Link>
 					</li>
@@ -160,23 +146,8 @@ const NavigationMenu = ({ isAuthenticated }) => {
 					{/* Search bar toggler and user information/actions (Only available when the sidebar isn't open) */}
 					<li>
 						{isSidebarOpen === false && (
-							<Button
-								onClick={() => setIsSearchBarVisible(!isSearchBarVisible)}
-								className='m-0 flex cursor-pointer items-center p-0'
-								onKeyDown={(event) => {
-									if (event.key === 'Enter') {
-										setIsSearchBarVisible(!isSearchBarVisible);
-									}
-								}}
-								aria-hidden={isSearchBarVisible.toString()}
-								aria-label={isSearchBarVisible === true ? 'Open search bar' : 'Close search bar'}
-							>
-								<Icon
-									className={classNames('text-white', {
-										'fa-solid fa-xmark': isSearchBarVisible === true,
-										'fa-solid fa-magnifying-glass': isSearchBarVisible === false
-									})}
-								/>
+							<Button className='m-0 flex cursor-pointer items-center p-0'>
+								<Icon className={classNames('fa-solid fa-magnifying-glass text-white')} />
 							</Button>
 						)}
 					</li>
@@ -201,35 +172,22 @@ const NavigationMenu = ({ isAuthenticated }) => {
 										width='190px'
 										height='20px'
 										className='cursor-pointer'
+										label='The Open Movie Database Logo'
 									/>
 								</Link>
 							</li>
 						</ul>
 
 						{ApplicationLinks.map((route) => (
-							<MenuItem key={route.groupName} links={route.children} title={route.groupName} />
+							<MenuItem key={route.menuGroup} links={route.children} title={route.menuGroup} />
 						))}
 					</div>
 
-					<ProfileMenu
-						isAuthenticated={isAuthenticated}
-						isSearchBarVisible={isSearchBarVisible}
-						onChange={() => {
-							setIsSearchBarVisible((prevState) => !prevState);
-						}}
-					/>
+					<ProfileMenu isAuthenticated={isAuthenticated} isSearchBarVisible={false} />
 				</div>
 			</nav>
 		</div>
 	);
-};
-
-NavigationMenu.propTypes = {
-	isAuthenticated: PropTypes.bool
-};
-
-NavigationMenu.defaultProps = {
-	isAuthenticated: false
 };
 
 export default NavigationMenu;

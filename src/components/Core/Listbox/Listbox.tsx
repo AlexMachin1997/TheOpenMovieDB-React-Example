@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable no-unused-vars */
 import * as React from 'react';
 import classNames from 'classnames';
-
 import { usePopper } from 'react-popper';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Listbox as HeadlessUIListbox, Transition } from '@headlessui/react';

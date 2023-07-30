@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
 import { Menu, Transition } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 import { Link } from 'react-router-dom';
@@ -9,7 +8,12 @@ import { Link } from 'react-router-dom';
 import RoutingService from '../../../services/RoutingService/RoutingService';
 import { Button, Icon } from '../../Core';
 
-const UnauthenticatedUserProfile = ({ onChange, isOpen }) => (
+type UnauthenticatedUserProfileProps = {
+	onChange: null | (() => void);
+	isOpen: boolean;
+};
+
+const UnauthenticatedUserProfile = ({ onChange, isOpen }: UnauthenticatedUserProfileProps) => (
 	<ul className='m-0 flex items-center p-0' id='desktop-navigation-menu-right'>
 		<li className='pr-3 text-base font-bold text-white'>Login</li>
 
@@ -17,9 +21,13 @@ const UnauthenticatedUserProfile = ({ onChange, isOpen }) => (
 
 		<li>
 			<Button
-				onClick={onChange}
+				onClick={() => {
+					if (typeof onChange === 'function') {
+						onChange();
+					}
+				}}
 				onKeyDown={(event) => {
-					if (event.key === 'Enter') {
+					if (event.key === 'Enter' && typeof onChange === 'function') {
 						onChange();
 					}
 				}}
@@ -36,17 +44,16 @@ const UnauthenticatedUserProfile = ({ onChange, isOpen }) => (
 	</ul>
 );
 
-UnauthenticatedUserProfile.propTypes = {
-	onChange: PropTypes.func.isRequired,
-	isOpen: PropTypes.bool.isRequired
+type UserProfileProps = {
+	name: string;
 };
 
-const UserProfile = ({ name }) => {
+const UserProfile = ({ name }: UserProfileProps) => {
 	// Store the reference element reference (The popup trigger e.g. button), it's state so usePopper know the element has changed
-	const [referenceElement, setReferenceElement] = React.useState(null);
+	const [referenceElement, setReferenceElement] = React.useState<HTMLElement>();
 
 	// Store the popper element reference (The actual popup content), it's state so usePopper know the element has changed
-	const [popperElement, setPopperElement] = React.useState(null);
+	const [popperElement, setPopperElement] = React.useState<HTMLDivElement>();
 
 	// Used to place the menu either on the top or bottom of the Listbox button
 	const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -80,6 +87,7 @@ const UserProfile = ({ name }) => {
 		<Menu className='relative mr-4 inline-flex items-center text-left' as='ul'>
 			<>
 				<Menu.Button
+					// @ts-ignore
 					ref={setReferenceElement}
 					className='inline-flex w-full justify-center rounded-md text-base font-medium text-white'
 				>
@@ -98,9 +106,10 @@ const UserProfile = ({ name }) => {
 				>
 					<Menu.Items
 						className='w-52 divide-y-2 divide-gray-100 rounded-md bg-white p-1 shadow-lg ring-1 ring-black/5 focus:outline-none'
-						ref={setPopperElement}
 						style={styles.popper}
 						as='ul'
+						// @ts-ignore
+						ref={setPopperElement}
 						{...attributes.popper}
 					>
 						{/* Render the Profile menu items */}
@@ -110,7 +119,7 @@ const UserProfile = ({ name }) => {
 									// Special output for the View Profile button
 									if (child.label === 'View Profile') {
 										return (
-											<div className='border-b-2 border-solid border-gray-200'>
+											<div className='border-b-2 border-solid border-gray-200 py-1'>
 												{/* Show the users profile name */}
 												<li>
 													<p className='p-1 text-base font-semibold text-black'>{name}</p>
@@ -121,12 +130,10 @@ const UserProfile = ({ name }) => {
 													{({ active }) => (
 														<Link
 															to='/'
-															className={classNames(
-																'block p-1 text-xs text-gray-400 hover:text-white',
-																{
-																	'bg-secondary': active === true
-																}
-															)}
+															className={classNames('block p-1 text-xs ', {
+																'bg-secondary text-white': active === true,
+																'text-gray-400': active === false
+															})}
 														>
 															View Profile
 														</Link>
@@ -137,16 +144,14 @@ const UserProfile = ({ name }) => {
 									}
 
 									return (
-										<Menu.Item as='li' key={`Profile-Menu-${child.label}`}>
+										<Menu.Item as='li' key={`Profile-Menu-${child.label}`} className='py-1'>
 											{({ active }) => (
 												<Link
 													to={child.url}
-													className={classNames(
-														'block p-1 text-sm text-gray-400 hover:text-white',
-														{
-															'bg-secondary': active === true
-														}
-													)}
+													className={classNames('block p-1 text-sm', {
+														'bg-secondary text-white': active === true,
+														'text-gray-400': active === false
+													})}
 												>
 													{child.label}
 												</Link>
@@ -163,26 +168,22 @@ const UserProfile = ({ name }) => {
 	);
 };
 
-UserProfile.propTypes = {
-	name: PropTypes.string
+type ProfileMenuProps = {
+	isAuthenticated?: boolean;
+	isSearchBarVisible?: boolean;
+	onChange?: null | (() => void);
 };
 
-UserProfile.defaultProps = {
-	name: 'N/A'
-};
-
-const ProfileMenu = ({ isAuthenticated, isSearchBarVisible, onChange }) => {
+const ProfileMenu = ({
+	isAuthenticated = false,
+	isSearchBarVisible = false,
+	onChange = null
+}: ProfileMenuProps) => {
 	if (isAuthenticated === false) {
 		return <UnauthenticatedUserProfile onChange={onChange} isOpen={isSearchBarVisible} />;
 	}
 
 	return <UserProfile name='Alex Machin' />;
-};
-
-ProfileMenu.propTypes = {
-	isAuthenticated: PropTypes.bool.isRequired,
-	isSearchBarVisible: PropTypes.bool.isRequired,
-	onChange: PropTypes.func.isRequired
 };
 
 export default ProfileMenu;

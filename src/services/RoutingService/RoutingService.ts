@@ -6,7 +6,7 @@ type BaseRoute = {
 	menuGroup: MenuGroup;
 };
 
-interface MenuItemRoute extends BaseRoute {
+export interface MenuItemRoute extends BaseRoute {
 	type: 'menu-item';
 	profileMenuOrder: number;
 	profileMenuSectionId: number;
@@ -327,7 +327,8 @@ class RoutingService {
 		);
 
 		// This will store the generated menu sections, used to to generate the popout profile menu in the Menu component
-		const generatedMenuSections: { order: number; children: Route[]; menuGroup: string }[] = [];
+		const generatedMenuSections: { order: number; children: MenuItemRoute[]; menuGroup: string }[] =
+			[];
 
 		// Loop through all the available section ids and generate a menu section for them
 		// Example: {menuGroup: '1', groupIndex: 1, children: [{urL: 'profile/logout', label: 'Label'}]}
