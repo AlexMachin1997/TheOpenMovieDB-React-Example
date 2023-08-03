@@ -1,9 +1,21 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-
 import { Image } from '../../Core';
 
-import SocialLinks from '../SocialLinks/SocialLinks';
+import SocialLinks from '../SocialLinks';
+
+type Props = {
+	actorName: string;
+	actorImage: string;
+	knownFor: string;
+	knownCredits: string;
+	gender: string;
+	birthday: string;
+	placeOfBirth: string;
+	knownAs: string[];
+	facebookLink: string;
+	twitterLink: string;
+	instagramLink: string;
+	homepageLink: string;
+};
 
 const PersonSidebar = ({
 	actorName,
@@ -18,9 +30,10 @@ const PersonSidebar = ({
 	twitterLink,
 	instagramLink,
 	homepageLink
-}) => (
+}: Props) => (
 	<>
 		<div className='flex flex-col justify-center pb-4 md:justify-start'>
+			{/* TODO: Replace with a picture element to support multiple image sizes and less hacks to get it working as intended.... No more unset this unset that... */}
 			<Image
 				src={actorImage}
 				alt={`${actorImage} profile`}
@@ -28,6 +41,7 @@ const PersonSidebar = ({
 				title={actorName}
 				width='unset'
 				height='unset'
+				label={`A profile photo of ${actorName}`}
 			/>
 			<h3 className='my-4 text-center text-4xl font-bold text-black md:text-left'>{actorName}</h3>
 			<div className='flex justify-center md:justify-start'>
@@ -36,7 +50,6 @@ const PersonSidebar = ({
 					twitter={twitterLink}
 					instagram={instagramLink}
 					homepage={homepageLink}
-					addBorderToHomepage={false}
 				/>
 			</div>
 		</div>
@@ -47,71 +60,43 @@ const PersonSidebar = ({
 			<ul className='grid grid-cols-2 justify-center gap-6 md:grid-cols-1'>
 				<li className=''>
 					<h5 className='text-lg'>Known For</h5>
-					<p className='font-light'>{knownFor}</p>
+					<p className='font-light'>{knownFor.length > 0 ? knownFor : 'N/A'}</p>
 				</li>
 
 				<li className=''>
 					<h5 className='text-lg'>Gender</h5>
-					<p className='font-light'>{gender}</p>
+					<p className='font-light'>{gender.length > 0 ? gender : 'N/A'}</p>
 				</li>
 
 				<li className=''>
 					<h5 className='text-lg'>Birthday</h5>
-					<p className='font-light'>{birthday}</p>
+					<p className='font-light'>{birthday.length > 0 ? birthday : 'N/A'}</p>
 				</li>
 
 				<li className=''>
 					<h5 className='text-lg'>Know Credits</h5>
-					<p className='font-light'>{knownCredits}</p>
+					<p className='font-light'>{knownCredits.length > 0 ? knownFor : 'N/A'}</p>
 				</li>
 
 				<li className=''>
 					<h5 className='text-lg'>Place of Birth</h5>
-					<p className='font-light'>{placeOfBirth}</p>
+					<p className='font-light'>{placeOfBirth.length > 0 ? placeOfBirth : 'N/A'}</p>
 				</li>
 
 				<li className='hidden md:block'>
 					<h5 className='text-lg'>Known As</h5>
 
-					{knownAs?.map((word) => (
-						<p className='font-light' key={word}>
-							{word}
-						</p>
-					))}
+					{knownAs.length > 0
+						? knownAs?.map((word) => (
+								<p className='font-light' key={word}>
+									{word}
+								</p>
+						  ))
+						: 'N/A'}
 				</li>
 			</ul>
 		</div>
 	</>
 );
-
-PersonSidebar.defaultProps = {
-	actorName: '',
-	actorImage: '',
-	knownFor: '',
-	knownCredits: 0,
-	gender: '',
-	birthday: '',
-	placeOfBirth: '',
-	knownAs: '',
-	facebookLink: '',
-	twitterLink: '',
-	instagramLink: '',
-	homepageLink: ''
-};
-
-PersonSidebar.propTypes = {
-	actorName: PropTypes.string,
-	actorImage: PropTypes.string,
-	knownFor: PropTypes.string,
-	knownCredits: PropTypes.number,
-	gender: PropTypes.string,
-	birthday: PropTypes.string,
-	placeOfBirth: PropTypes.string,
-	knownAs: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-	facebookLink: PropTypes.string,
-	twitterLink: PropTypes.string,
-	instagramLink: PropTypes.string,
-	homepageLink: PropTypes.string
-};
 
 export default PersonSidebar;

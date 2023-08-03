@@ -1,9 +1,7 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-
 import { Link } from 'react-router-dom';
+import { MediaType } from '../../../types/RoutingTypes';
 
-const generateResourceUrl = (title = '', id = '', mediaType = '') => {
+const generateResourceUrl = (title: string, id: string, mediaType: MediaType) => {
 	// Split the title at each capital letter
 	const splitTitle = title.split(/(?=[A-Z])/);
 
@@ -19,32 +17,23 @@ const generateResourceUrl = (title = '', id = '', mediaType = '') => {
 	return `/keyword/${id}-${lowercaseTitle}/${mediaType}`;
 };
 
-const Keywords = ({ keywords, mediaType, ...props }) => (
+interface Props extends React.ComponentPropsWithoutRef<'ul'> {
+	keywords?: { name: string; id: string }[];
+	mediaType: MediaType;
+}
+
+const Keywords = ({ keywords = [], mediaType, ...props }: Props) => (
 	<ul className='flex h-full w-full flex-row flex-wrap p-0' {...props}>
-		{keywords?.map((keyword) => (
+		{keywords.map((keyword) => (
 			<Link
-				to={generateResourceUrl(keyword?.name ?? null, keyword?.id ?? null, mediaType)}
+				to={generateResourceUrl(keyword.name, keyword.id, mediaType)}
 				key={keyword.id}
 				className='mr-2 mt-2 rounded-lg border border-solid border-gray-400 bg-slate-200 px-3 py-1 lowercase text-black'
 			>
 				{keyword.name}
 			</Link>
-		)) ?? null}
+		))}
 	</ul>
 );
-
-Keywords.propTypes = {
-	keywords: PropTypes.arrayOf(
-		PropTypes.shape({
-			id: PropTypes.number.isRequired,
-			name: PropTypes.string.isRequired
-		})
-	).isRequired,
-	mediaType: PropTypes.string
-};
-
-Keywords.defaultProps = {
-	mediaType: 'movie'
-};
 
 export default Keywords;
