@@ -1,12 +1,13 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
-import className from 'classnames';
-
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { Icon } from '../../../Core';
 
-const generateResourceUrl = (title = '', id = '', mediaType = '') => {
+import { MediaType } from '../../../types/RoutingTypes';
+import { Icon } from '../../Core';
+import { Credit } from './types';
+
+const generateResourceUrl = (title: string, id: string, mediaType: MediaType) => {
 	// Split the title at each capital letter
 	const splitTitle = title.split(/(?=[A-Z])/);
 
@@ -17,11 +18,11 @@ const generateResourceUrl = (title = '', id = '', mediaType = '') => {
 	return `/${mediaType}/${id}-${lowercaseTitle.join('-').toLowerCase()}`;
 };
 
-const TableRow = ({ year, mediaType, title, episodeCount, character, id }) => {
+const TableRow = ({ year, title, character, ...props }: Credit) => {
 	const [isCircleIconFocussed, setIsCircleIconFocussed] = React.useState(false);
 
 	return (
-		<tr className='flex items-center pl-2' tabIndex='0'>
+		<tr className='flex items-center pl-2' tabIndex={0}>
 			<td className='mr-2 text-left align-top font-light'>{year}</td>
 			<td
 				className='mr-2 hidden p-0 align-top text-black sm:block'
@@ -33,7 +34,7 @@ const TableRow = ({ year, mediaType, title, episodeCount, character, id }) => {
 				}}
 			>
 				<Icon
-					className={className('fa-regular', {
+					className={classNames('fa-regular', {
 						'fa-circle': isCircleIconFocussed === false,
 						'fa-circle-dot': isCircleIconFocussed === true
 					})}
@@ -42,13 +43,14 @@ const TableRow = ({ year, mediaType, title, episodeCount, character, id }) => {
 			<td className='inline-flex flex-wrap py-2'>
 				<Link
 					className='mr-2 text-base font-semibold text-black'
-					to={generateResourceUrl(title, id, mediaType)}
+					to={generateResourceUrl(title, `${title}-${year}`, props.mediaType)}
 				>
 					{title}
 				</Link>
-				{mediaType === 'tv' && (
+
+				{props.mediaType === 'tv' && (
 					<p className='mr-2 font-light text-gray-400'>
-						{`(${episodeCount} ${episodeCount > 1 ? 'episodes' : 'episode'}) `}
+						{`(${props.episodeCount} ${props.episodeCount > 1 ? 'episodes' : 'episode'}) `}
 					</p>
 				)}
 				<span className='mr-2 text-base font-light text-gray-400'>as</span>
@@ -58,22 +60,35 @@ const TableRow = ({ year, mediaType, title, episodeCount, character, id }) => {
 	);
 };
 
-TableRow.propTypes = {
-	year: PropTypes.string,
-	mediaType: PropTypes.string,
-	title: PropTypes.string,
-	episodeCount: PropTypes.string,
-	character: PropTypes.string,
-	id: PropTypes.string
-};
+const CreditsTable = ({ credits, year }: { credits: Credit[]; year: number }) => (
+	<table className='m-0 w-full border-collapse border border-solid border-gray-300 p-2'>
+		<tbody className='bg-white'>
+			{credits?.map((credit) => {
+				if (credit.mediaType === 'tv') {
+					return (
+						<TableRow
+							key={credit.title}
+							year={year}
+							mediaType='tv'
+							title={credit.title}
+							episodeCount={credit.episodeCount}
+							character={credit.character}
+						/>
+					);
+				}
 
-TableRow.defaultProps = {
-	year: '2020',
-	mediaType: 'movie',
-	title: 'Black Widow',
-	episodeCount: '10',
-	character: 'Natasha Romanoff / Black Widow',
-	id: '0'
-};
+				return (
+					<TableRow
+						key={credit.title}
+						year={year}
+						mediaType='movie'
+						title={credit.title}
+						character={credit.character}
+					/>
+				);
+			})}
+		</tbody>
+	</table>
+);
 
-export default TableRow;
+export default CreditsTable;
