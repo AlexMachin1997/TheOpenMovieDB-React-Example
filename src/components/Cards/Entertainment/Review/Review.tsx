@@ -1,16 +1,16 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import Icon from '../../../Core/Icon/Icon';
 import Image from '../../../Core/Image/Image';
+import { ReviewCardProps } from '../../types';
 
 const Review = ({
-	author: { name = '', username = '', avatarPath = '', rating = null },
-	content,
-	createdOn,
-	isFeatured,
-	renderLink
-}) => {
+	author: { name = '', username = '', avatarPath = '', rating = null } = {},
+	content = null,
+	createdOn = '',
+	isFeatured = false,
+	renderLink = null
+}: ReviewCardProps) => {
 	const AvatarContent = (
 		<>
 			{/* When the avatarPath is empty the image should be replaced with the first letter of the users "name" otherwise use the avatar */}
@@ -25,6 +25,7 @@ const Review = ({
 					width='4rem'
 					height='4rem'
 					alt={`A photo of ${name}`}
+					label={`A photo of ${name}`}
 				/>
 			)}
 		</>
@@ -90,27 +91,6 @@ const Review = ({
 			</div>
 		</div>
 	);
-};
-
-Review.propTypes = {
-	author: PropTypes.shape({
-		name: PropTypes.string,
-		username: PropTypes.string,
-		avatarPath: PropTypes.string,
-		rating: PropTypes.number
-	}),
-	content: PropTypes.string,
-	createdOn: PropTypes.string,
-	isFeatured: PropTypes.bool,
-	renderLink: PropTypes.func
-};
-
-Review.defaultProps = {
-	author: {},
-	content: null,
-	createdOn: null,
-	isFeatured: false,
-	renderLink: null
 };
 
 export default Review;

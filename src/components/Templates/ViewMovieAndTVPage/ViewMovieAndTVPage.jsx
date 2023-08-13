@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import EntertainmentSidebar from '../../Sidebars/Entertainment/EntertainmentSidebar';
+import EntertainmentSidebar from '../../Sidebars/EntertainmentSidebar/EntertainmentSidebar';
 import { EntertainmentHeader } from '../../Headers';
 import {
 	EntertainmentRecommendationCard,

@@ -1,8 +1,14 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { Button } from '../../../../Core';
 
-const Collection = ({ title, subtitle, image, renderLink }) => (
+import { Button } from '../../../../Core';
+import { CollectionCardProps } from '../../../types';
+
+const Collection = ({
+	title = '',
+	subtitle = '',
+	image = '',
+	renderLink = null
+}: CollectionCardProps) => (
 	<div className='relative flex h-[240px] flex-col items-start justify-center rounded-2xl bg-gradient-to-r from-primary/100 to-primary/60 p-4'>
 		{/* Tailwind doesn't have built in support for images for gradients, so use the image tag with absolute with z-index set to -1 to put it behind the gradient */}
 		<img
@@ -42,19 +48,5 @@ const Collection = ({ title, subtitle, image, renderLink }) => (
 		)}
 	</div>
 );
-
-Collection.defaultProps = {
-	title: '',
-	subtitle: '',
-	image: '',
-	renderLink: null
-};
-
-Collection.propTypes = {
-	title: PropTypes.string,
-	subtitle: PropTypes.string,
-	image: PropTypes.string,
-	renderLink: PropTypes.func
-};
 
 export default Collection;

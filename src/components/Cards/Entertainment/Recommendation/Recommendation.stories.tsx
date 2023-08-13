@@ -1,25 +1,39 @@
-import * as React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
+
 import { Link, MemoryRouter } from 'react-router-dom';
 
 import RecommendationCard from './Recommendation';
 
-export default {
+const meta: Meta<typeof RecommendationCard> = {
 	component: RecommendationCard,
-	title: 'Design System/Cards/Entertainment/Recommendation'
+	title: 'Cards/Entertainment/Recommendation'
 };
 
-const StoryArgs = {
-	title: 'Ant Man and The Wasp',
-	releaseDate: '07/04/2020',
-	image: 'https://image.tmdb.org/t/p/original/6P3c80EOm7BodndGBUAJHHsHKrp.jpg',
-	rating: 70,
-	renderLink: null
-};
+export default meta;
 
-export const Example = {
+type Story = StoryObj<typeof RecommendationCard>;
+
+export const Simple = {
 	args: {
-		...StoryArgs
+		title: 'Ant Man and The Wasp',
+		releaseDate: '07/04/2020',
+		image: 'https://image.tmdb.org/t/p/original/6P3c80EOm7BodndGBUAJHHsHKrp.jpg',
+		rating: 70
 	}
+};
+
+export const RenderLink: Story = {
+	args: {
+		...Simple.args,
+		renderLink: ({ content }) => <Link to='/'>{content}</Link>
+	},
+	decorators: [
+		(StoryComponent) => (
+			<MemoryRouter>
+				<StoryComponent />
+			</MemoryRouter>
+		)
+	]
 };
 
 export const GroupedExample = () => (
@@ -59,18 +73,3 @@ export const GroupedExample = () => (
 		/>
 	</div>
 );
-
-export const ReactRouterLinkExample = {
-	args: {
-		...Example.args,
-		renderLink: ({ content }) => <Link to='/'>{content}</Link>
-	},
-
-	decorators: [
-		(Story) => (
-			<MemoryRouter>
-				<Story />
-			</MemoryRouter>
-		)
-	]
-};

@@ -1,17 +1,16 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import { Image } from '../../../../Core';
+import { CurrentSeasonCardProps } from '../../../types';
 
-const generateSubtitle = (episodeCount, year) => {
-	if (episodeCount === 1) {
-		return `${year} | ${episodeCount} Episode`;
-	}
-
-	return `${year} | ${episodeCount} Episodes`;
-};
-
-const CurrentSeason = ({ image, title, year, episodeCount, overview, renderLink }) => {
+const CurrentSeason = ({
+	image = '',
+	title = '',
+	year = 0,
+	episodeCount = 0,
+	overview = '',
+	renderLink = null
+}: CurrentSeasonCardProps) => {
 	const CurrentSeasonImage = (
 		<Image
 			width='130px'
@@ -19,6 +18,7 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview, renderLink 
 			alt={title}
 			src={image}
 			className='hidden aspect-square max-w-[130px] rounded-l-2xl md:block'
+			label={`A poster for the current season of ${title}`}
 		/>
 	);
 
@@ -42,7 +42,7 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview, renderLink 
 
 				{/* Subtitle for the Current Season card */}
 				<p className='mb-0 text-base font-bold text-black md:line-clamp-3'>
-					{generateSubtitle(episodeCount, year)}
+					{year} | {episodeCount} {episodeCount === 1 ? 'Episode' : 'Episodes'}
 				</p>
 
 				{/* Overview for the Current Season card */}
@@ -50,24 +50,6 @@ const CurrentSeason = ({ image, title, year, episodeCount, overview, renderLink 
 			</div>
 		</div>
 	);
-};
-
-CurrentSeason.defaultProps = {
-	image: '',
-	title: '',
-	year: 0,
-	episodeCount: 0,
-	overview: '',
-	renderLink: null
-};
-
-CurrentSeason.propTypes = {
-	image: PropTypes.string,
-	title: PropTypes.string,
-	year: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-	episodeCount: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-	overview: PropTypes.string,
-	renderLink: PropTypes.func
 };
 
 export default CurrentSeason;

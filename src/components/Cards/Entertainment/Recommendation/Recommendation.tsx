@@ -1,9 +1,15 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import { Icon, Image } from '../../../Core';
+import { RecommendationCardProps } from '../../types';
 
-const Recommendation = ({ title, releaseDate, image, rating, renderLink }) => {
+const Recommendation = ({
+	title = '',
+	releaseDate = '',
+	image = '',
+	rating = 0,
+	renderLink = null
+}: RecommendationCardProps) => {
 	const linkContent = (
 		<>
 			<Image
@@ -12,6 +18,7 @@ const Recommendation = ({ title, releaseDate, image, rating, renderLink }) => {
 				alt={title}
 				src={image}
 				className='aspect-square rounded-2xl'
+				label={`Poster for ${title}`}
 			/>
 			<div className='invisible absolute bottom-0 left-0 flex w-full items-center bg-white p-2 opacity-90 group-hover:visible'>
 				<Icon className='fa-solid fa-calendar-days mr-2 text-base' />
@@ -34,22 +41,6 @@ const Recommendation = ({ title, releaseDate, image, rating, renderLink }) => {
 			</div>
 		</div>
 	);
-};
-
-Recommendation.propTypes = {
-	title: PropTypes.string,
-	releaseDate: PropTypes.string,
-	image: PropTypes.string,
-	rating: PropTypes.number,
-	renderLink: PropTypes.func
-};
-
-Recommendation.defaultProps = {
-	title: '',
-	releaseDate: '',
-	image: '',
-	rating: 0,
-	renderLink: null
 };
 
 export default Recommendation;

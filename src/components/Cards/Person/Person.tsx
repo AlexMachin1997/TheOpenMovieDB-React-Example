@@ -1,9 +1,9 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import Card from '../Card';
+import { PersonCardProps } from '../types';
 
-const Person = ({ name, image, knownFor, renderLink }) => (
+const Person = ({ name = '', image = '', knownFor = [], renderLink = null }: PersonCardProps) => (
 	<Card
 		image={image}
 		title={name}
@@ -32,19 +32,5 @@ const Person = ({ name, image, knownFor, renderLink }) => (
 		)}
 	</Card>
 );
-
-Person.propTypes = {
-	name: PropTypes.string,
-	image: PropTypes.string,
-	knownFor: PropTypes.arrayOf(PropTypes.shape({ original_title: PropTypes.string })),
-	renderLink: PropTypes.func
-};
-
-Person.defaultProps = {
-	name: '',
-	image: '',
-	knownFor: [],
-	renderLink: null
-};
 
 export default Person;

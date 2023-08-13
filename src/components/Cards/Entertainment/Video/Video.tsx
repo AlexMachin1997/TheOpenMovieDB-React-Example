@@ -1,12 +1,17 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import className from 'classnames';
 
 import { Button, Icon, Image } from '../../../Core';
 
 import generateComponentId from '../../../../utils/generateComponentId';
+import { VideoCardProps } from '../../types';
 
-const Video = ({ title, overview, thumbnail, thumbnailAction, renderLink }) => (
+const Video = ({
+	title = '',
+	subtitle = '',
+	image = '',
+	thumbnailAction = null,
+	renderLink = null
+}: VideoCardProps) => (
 	<div
 		id={generateComponentId(title, 'video-card-container')}
 		className='relative min-w-[300px] max-w-[300px] p-4'
@@ -26,18 +31,17 @@ const Video = ({ title, overview, thumbnail, thumbnailAction, renderLink }) => (
 					}
 				}
 			}}
-			tabIndex={0}
-			type='button'
 		>
 			<Image
 				width='300px'
 				height='169px'
 				alt={title}
-				src={thumbnail}
+				src={image}
 				className='aspect-video rounded-xl delay-150  group-hover:scale-105'
+				label={`A thumbnail poster for ${title}`}
 			/>
 			<div className='absolute left-0 top-0 flex h-[100%] w-[100%] items-center justify-center text-white'>
-				<Icon className={className('fa-solid fa-play text-5xl delay-150 group-hover:text-6xl')} />
+				<Icon className='fa-solid fa-play text-5xl delay-150 group-hover:text-6xl' />
 			</div>
 		</Button>
 		<div className='py-1 text-center' id={generateComponentId(title, 'video-card-content')}>
@@ -49,25 +53,9 @@ const Video = ({ title, overview, thumbnail, thumbnailAction, renderLink }) => (
 				<h3 className='text-xl font-bold text-black'>{title}</h3>
 			)}
 
-			<h4 className='text-lg font-light text-black'>{overview}</h4>
+			<h4 className='text-lg font-light text-black'>{subtitle}</h4>
 		</div>
 	</div>
 );
-
-Video.defaultProps = {
-	title: '',
-	overview: '',
-	thumbnail: '',
-	renderLink: null,
-	thumbnailAction: null
-};
-
-Video.propTypes = {
-	title: PropTypes.string,
-	overview: PropTypes.string,
-	thumbnail: PropTypes.string,
-	thumbnailAction: PropTypes.func,
-	renderLink: PropTypes.func
-};
 
 export default Video;

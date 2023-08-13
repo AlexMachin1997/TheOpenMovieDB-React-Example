@@ -1,9 +1,9 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import Card from '../../Card';
+import { KnownForCardProps } from '../../types';
 
-const KnownFor = ({ name, image, renderLink }) => (
+const KnownFor = ({ name = '', image = '', renderLink = null }: KnownForCardProps) => (
 	<Card
 		image={image}
 		title={name}
@@ -23,17 +23,5 @@ const KnownFor = ({ name, image, renderLink }) => (
 		)}
 	</Card>
 );
-
-KnownFor.defaultProps = {
-	name: '',
-	image: '',
-	renderLink: null
-};
-
-KnownFor.propTypes = {
-	name: PropTypes.string,
-	image: PropTypes.string,
-	renderLink: PropTypes.func
-};
 
 export default KnownFor;

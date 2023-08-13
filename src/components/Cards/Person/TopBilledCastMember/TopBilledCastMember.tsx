@@ -1,16 +1,15 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import Card from '../../Card';
+import { TopBilledCastMemberCardProps } from '../../types';
 
 const TopBilledCastMember = ({
+	image,
 	name,
 	character,
-	image,
-	entertainmentType,
-	episodeCount,
-	renderLink
-}) => (
+	renderLink,
+	...props
+}: TopBilledCastMemberCardProps) => (
 	<Card
 		image={image}
 		title={name}
@@ -36,30 +35,12 @@ const TopBilledCastMember = ({
 		<p className='px-[0.625rem] text-[0.9rem] font-light text-black'>{character}</p>
 
 		{/* When viewing a tv series show the episode count for the top billed cast member */}
-		{entertainmentType === 'tv' && (
-			<p className='px-[0.625rem] pb-[0.625rem] text-sm font-light italic text-black'>{`${episodeCount} ${
-				episodeCount === 1 ? 'episode' : 'episodes'
-			}`}</p>
+		{props.mediaType === 'tv' && (
+			<p className='px-[0.625rem] pb-[0.625rem] text-sm font-light italic text-black'>{`${
+				props.episodeCount
+			} ${props.episodeCount === 1 ? 'episode' : 'episodes'}`}</p>
 		)}
 	</Card>
 );
-
-TopBilledCastMember.defaultProps = {
-	name: '',
-	character: '',
-	image: '',
-	entertainmentType: 'movie',
-	episodeCount: 0,
-	renderLink: null
-};
-
-TopBilledCastMember.propTypes = {
-	name: PropTypes.string,
-	character: PropTypes.string,
-	image: PropTypes.string,
-	entertainmentType: PropTypes.string,
-	episodeCount: PropTypes.number,
-	renderLink: PropTypes.func
-};
 
 export default TopBilledCastMember;
