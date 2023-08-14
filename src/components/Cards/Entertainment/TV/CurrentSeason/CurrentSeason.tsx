@@ -8,7 +8,7 @@ const CurrentSeason = ({
 	title = '',
 	year = 0,
 	episodeCount = 0,
-	overview = '',
+	subtitle = '',
 	renderLink = null
 }: CurrentSeasonCardProps) => {
 	const CurrentSeasonImage = (
@@ -46,7 +46,7 @@ const CurrentSeason = ({
 				</p>
 
 				{/* Overview for the Current Season card */}
-				<p className='line-clamp-6 text-base leading-8 text-black md:line-clamp-3'>{overview}</p>
+				<p className='line-clamp-6 text-base leading-8 text-black md:line-clamp-3'>{subtitle}</p>
 			</div>
 		</div>
 	);

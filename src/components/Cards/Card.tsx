@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Image } from '../Core';
 
 import generateComponentId from '../../utils/generateComponentId';
-import { BaseCardProps } from './types';
+import { CardComponentProps } from './types';
 
 const Card = ({
 	title,
@@ -16,7 +16,7 @@ const Card = ({
 	imageClassName = 'rounded-t-2xl',
 	contentClassName = 'p-4',
 	containerClassName = 'rounded-2xl border border-solid border-gray-200'
-}: BaseCardProps) => {
+}: CardComponentProps) => {
 	const PosterImage = (
 		<Image
 			width='100%'

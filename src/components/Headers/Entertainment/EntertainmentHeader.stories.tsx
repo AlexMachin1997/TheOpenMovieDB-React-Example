@@ -51,15 +51,15 @@ export const ProjectPowerExample: Story = {
 		featuredCrew: [
 			{
 				name: 'Henry Joost',
-				roles: 'Director'
+				role: 'Director'
 			},
 			{
 				name: 'Ariel Schulman',
-				roles: 'Director'
+				role: 'Director'
 			},
 			{
 				name: 'Mattson Tomlin',
-				roles: 'Writer'
+				role: 'Writer'
 			}
 		],
 		isAuthenticated: false

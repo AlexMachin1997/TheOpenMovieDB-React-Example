@@ -20,7 +20,6 @@ type Media = {
 };
 
 type BaseViewMovieAndTVPageProps = {
-	topBilledCastMembers: { name: string; character: string; headshotUrl: string }[];
 	recommendations: { name: string; releaseDate: string; backgroundUrl: string; rating: number }[];
 	header: {
 		posterImageUrl: string;
@@ -65,7 +64,7 @@ type BaseViewMovieAndTVPageProps = {
 		author?: {
 			name: string;
 			username: string;
-			avatarPathUrl: string;
+			avatarUrl: string;
 			rating: number;
 		} | null;
 		createdOn: string;
@@ -85,10 +84,23 @@ type BaseViewMovieAndTVPageProps = {
 };
 
 interface ViewMovieProps extends BaseViewMovieAndTVPageProps {
+	topBilledCastMembers: {
+		name: string;
+		character: string;
+		headshotUrl: string;
+		entertainmentType: 'movie';
+	}[];
 	entertainmentType: 'movie';
 }
 
 interface ViewTVShowProps extends BaseViewMovieAndTVPageProps {
+	topBilledCastMembers: {
+		name: string;
+		character: string;
+		headshotUrl: string;
+		episodeCount: number;
+		entertainmentType: 'tv';
+	}[];
 	entertainmentType: 'tv';
 	season: {
 		posterUrl: string;
@@ -186,15 +198,32 @@ const ViewEntertainmentResource = ({
 					<h2 className='py-4 text-2xl font-bold'>Top Billed Cast Member</h2>
 
 					<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
-						{topBilledCastMembers?.map((castMember) => (
-							<TopBilledCastMember
-								key={castMember.name}
-								name={castMember.name}
-								character={castMember.character}
-								image={castMember.headshotUrl}
-								mediaType={props.entertainmentType}
-							/>
-						)) ?? null}
+						{topBilledCastMembers?.map((topBilledCastMember) => {
+							if (topBilledCastMember.entertainmentType === 'movie') {
+								return (
+									<TopBilledCastMember
+										key={topBilledCastMember.name}
+										image={topBilledCastMember.headshotUrl}
+										mediaType='movie'
+										subtitle={topBilledCastMember.character}
+										title={topBilledCastMember.name}
+										renderLink={({ content }) => <Link to='/'>{content}</Link>}
+									/>
+								);
+							}
+
+							return (
+								<TopBilledCastMember
+									key={topBilledCastMember.name}
+									image={topBilledCastMember.headshotUrl}
+									mediaType='tv'
+									subtitle={topBilledCastMember.character}
+									title={topBilledCastMember.name}
+									renderLink={({ content }) => <Link to='/'>{content}</Link>}
+									episodeCount={topBilledCastMember.episodeCount}
+								/>
+							);
+						}) ?? null}
 					</div>
 
 					<a
@@ -211,12 +240,12 @@ const ViewEntertainmentResource = ({
 
 						<div className='pb-3'>
 							<TVCurrentSeasonCard
-								image={props.season?.posterUrl ?? null}
-								title={props.season?.name ?? null}
-								year={props.season?.releaseYear ?? null}
+								image={props.season?.posterUrl ?? ''}
+								title={props.season?.name ?? ''}
+								year={props.season?.releaseYear ?? ''}
 								episodeCount={props.season?.episodeCount ?? 0}
-								overview={props.season?.overview ?? null}
-								renderLink={null}
+								subtitle={props.season?.overview ?? ''}
+								renderLink={({ content }) => <Link to='/'>{content}</Link>}
 							/>
 						</div>
 					</section>
@@ -372,13 +401,13 @@ const ViewEntertainmentResource = ({
 					<h2 className='pb-4 text-2xl font-bold'>Recommendations</h2>
 
 					<div className='flex w-full space-x-4 overflow-auto pb-3 '>
-						{recommendations.map((movie) => (
+						{recommendations.map((recommendation) => (
 							<EntertainmentRecommendationCard
-								key={movie.name}
-								title={movie.name}
-								releaseDate={movie.releaseDate}
-								image={movie.backgroundUrl}
-								rating={movie.rating}
+								key={recommendation.name}
+								title={recommendation.name}
+								releaseDate={recommendation.releaseDate}
+								image={recommendation.backgroundUrl}
+								subtitle={`${recommendation.rating}%`}
 							/>
 						))}
 					</div>

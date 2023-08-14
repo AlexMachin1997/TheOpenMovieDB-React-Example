@@ -77,47 +77,56 @@ export const ProjectPowerExample: Story = {
 			{
 				name: 'Jamie Fox',
 				character: 'Art',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/hPwCMEq6jLAidsXAX5BfoYgIfg2.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/hPwCMEq6jLAidsXAX5BfoYgIfg2.jpg',
+				entertainmentType: 'movie'
 			},
 			{
 				name: 'Joseph Gordon-Levitt',
 				character: 'Frank',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/lDlo5LFmrxrxa3iXqiwwNj1w52X.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/lDlo5LFmrxrxa3iXqiwwNj1w52X.jpg',
+				entertainmentType: 'movie'
 			},
 			{
 				name: 'Dominique Fishback',
 				character: 'Robin',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/zduC0PM7xKzFX4F7DH8CCt5gt6O.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/zduC0PM7xKzFX4F7DH8CCt5gt6O.jpg',
+				entertainmentType: 'movie'
 			},
 			{
 				name: 'Rodrigo Santoro',
 				character: 'Biggie',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/d3MaF9SPHDn2PMYHuqdnO0Csik6.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/d3MaF9SPHDn2PMYHuqdnO0Csik6.jpg',
+				entertainmentType: 'movie'
 			},
 			{
 				name: 'Courtney B. Vance',
 				character: 'Captain Craine',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/q4oCmhqEPXKSRK2hTZzTz2Zt4Ba.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/q4oCmhqEPXKSRK2hTZzTz2Zt4Ba.jpg',
+				entertainmentType: 'movie'
 			},
 			{
 				name: 'Amy Landecker',
 				character: 'Gardner',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/3woCLCbumhHOxrkeVOT7ylWi7Lg.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/3woCLCbumhHOxrkeVOT7ylWi7Lg.jpg',
+				entertainmentType: 'movie'
 			},
 			{
 				name: 'Machine Gun Kelly',
 				character: 'Newt',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/astSdaQqoYyI4p694WEllO6q3aN.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/astSdaQqoYyI4p694WEllO6q3aN.jpg',
+				entertainmentType: 'movie'
 			},
 			{
 				name: 'Tait Fletcher',
 				character: 'Wallace',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/zAVsHT2GBLPaQ4RpTopnHvIrCbv.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/zAVsHT2GBLPaQ4RpTopnHvIrCbv.jpg',
+				entertainmentType: 'movie'
 			},
 			{
 				name: 'Allen Maldonado',
 				character: 'Landry',
-				headshotUrl: 'https://image.tmdb.org/t/p/original/rl8YFsk4XsFZqCZO5jHNwP0Qoog.jpg'
+				headshotUrl: 'https://image.tmdb.org/t/p/original/rl8YFsk4XsFZqCZO5jHNwP0Qoog.jpg',
+				entertainmentType: 'movie'
 			}
 		],
 
@@ -264,7 +273,7 @@ export const ProjectPowerExample: Story = {
 			author: {
 				name: 'Cat Ellington',
 				username: 'CatEllington',
-				avatarPathUrl:
+				avatarUrl:
 					'https://www.themoviedb.org/t/p/w64_and_h64_face/yHGV91jVzmqpFOtRSHF0avBZmPm.jpg',
 				rating: 5
 			},

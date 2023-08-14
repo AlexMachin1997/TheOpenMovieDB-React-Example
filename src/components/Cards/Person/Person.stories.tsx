@@ -15,21 +15,16 @@ type Story = StoryObj<typeof PersonCard>;
 
 export const Simple: Story = {
 	args: {
-		name: 'Bryan Cranston',
+		title: 'Bryan Cranston',
 		image: 'https://image.tmdb.org/t/p/w235_and_h235_face/7Jahy5LZX2Fo8fGJltMreAI49hC.jpg',
-		knownFor: [
-			{ original_title: 'Saving Private Ryan' },
-			{ original_title: 'Drive' },
-			{ original_title: 'Godzilla' },
-			{ original_title: 'Breaking bad' }
-		]
+		subtitle: 'Saving Private Ryan, Drive, Godzilla, Breaking Bad'
 	}
 };
 
 export const NoKnownForRolesAvailable: Story = {
 	args: {
 		...Simple.args,
-		knownFor: []
+		subtitle: ''
 	}
 };
 

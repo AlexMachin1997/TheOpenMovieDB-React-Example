@@ -7,10 +7,10 @@ const Recommendation = ({
 	title = '',
 	releaseDate = '',
 	image = '',
-	rating = 0,
+	subtitle = '',
 	renderLink = null
 }: RecommendationCardProps) => {
-	const linkContent = (
+	const LinkContent = (
 		<>
 			<Image
 				width='250px'
@@ -31,13 +31,13 @@ const Recommendation = ({
 		<div className='min-w-[250px] max-w-[250px] cursor-pointer' title={title}>
 			{/* Either use the renderLink render prop or it defaults to just a span element */}
 			{typeof renderLink === 'function' ? (
-				React.cloneElement(renderLink({ content: linkContent }), { className: 'group relative' })
+				React.cloneElement(renderLink({ content: LinkContent }), { className: 'group relative' })
 			) : (
-				<span className='group relative'>{linkContent}</span>
+				<span className='group relative'>{LinkContent}</span>
 			)}
 			<div className='flex items-center justify-between px-2 pb-1'>
 				<p className='line-clamp-1 text-base text-black'>{title}</p>
-				<p className='text-base text-black'>{rating}%</p>
+				<p className='text-base text-black'>{subtitle}</p>
 			</div>
 		</div>
 	);

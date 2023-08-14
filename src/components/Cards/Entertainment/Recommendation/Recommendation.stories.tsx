@@ -13,12 +13,12 @@ export default meta;
 
 type Story = StoryObj<typeof RecommendationCard>;
 
-export const Simple = {
+export const Simple: Story = {
 	args: {
 		title: 'Ant Man and The Wasp',
 		releaseDate: '07/04/2020',
 		image: 'https://image.tmdb.org/t/p/original/6P3c80EOm7BodndGBUAJHHsHKrp.jpg',
-		rating: 70
+		subtitle: '70%'
 	}
 };
 
@@ -42,34 +42,19 @@ export const GroupedExample = () => (
 			title='Black Panther'
 			releaseDate='13/02/2018'
 			image='https://image.tmdb.org/t/p/original/6ELJEzQJ3Y45HczvreC3dg0GV5R.jpg'
-			rating={50}
-			renderLink={({ content }) => (
-				<button onClick={() => console.log('clicked')} type='button'>
-					{content}
-				</button>
-			)}
+			subtitle='50%'
 		/>
 		<RecommendationCard
 			title='Deadpool 2'
-			releaseDate='0/5/10/2018'
+			releaseDate='05/10/2018'
 			image='https://image.tmdb.org/t/p/original/3P52oz9HPQWxcwHOwxtyrVV1LKi.jpg'
-			rating={64}
-			renderLink={({ content }) => (
-				<button onClick={() => console.log('clicked')} type='button'>
-					{content}
-				</button>
-			)}
+			subtitle='64%'
 		/>
 		<RecommendationCard
 			title='Spider-man: Homecoming'
 			releaseDate='05/07/2018'
 			image='https://image.tmdb.org/t/p/original/vc8bCGjdVp0UbMNLzHnHSLRbBWQ.jpg'
-			rating={45}
-			renderLink={({ content }) => (
-				<button onClick={() => console.log('clicked')} type='button'>
-					{content}
-				</button>
-			)}
+			subtitle='45%'
 		/>
 	</div>
 );

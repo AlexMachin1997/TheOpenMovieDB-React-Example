@@ -23,7 +23,7 @@ type Story = StoryObj<typeof PosterCard>;
 export const Simple: Story = {
 	args: {
 		title: 'Dark',
-		releaseDate: 'Dec 01, 2017',
+		subtitle: 'Dec 01, 2017',
 		rating: 50,
 		image: 'https://image.tmdb.org/t/p/original/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg',
 		renderLink: null

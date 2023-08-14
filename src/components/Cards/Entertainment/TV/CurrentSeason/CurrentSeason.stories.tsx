@@ -19,7 +19,7 @@ export const Simple: Story = {
 		title: 'Season Three: The New World',
 		year: 2020,
 		episodeCount: 8,
-		overview:
+		subtitle:
 			'Taking place immediately after the events of the second season, Dolores develops a relationship with Caleb in neo-Los Angeles, and learns how robots are treated in the real world. Meanwhile, Maeve finds herself in another Delos park, this one with a World War II theme and set in Fascist Italy.'
 	}
 };

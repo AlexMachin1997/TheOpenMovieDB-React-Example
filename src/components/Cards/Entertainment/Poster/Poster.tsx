@@ -9,7 +9,7 @@ import { PosterCardProps } from '../../types';
 
 const Poster = ({
 	title = '',
-	releaseDate = '',
+	subtitle = '',
 	rating = 0,
 	image = '',
 	renderLink = null
@@ -33,7 +33,7 @@ const Poster = ({
 		)}
 
 		{/* Release date for the Poster card */}
-		<p className='text-base font-light text-slate-400'>{releaseDate}</p>
+		<p className='text-base font-light text-slate-400'>{subtitle}</p>
 	</Card>
 );
 

@@ -1,5 +1,6 @@
 export type BaseCardProps = {
 	title: string;
+	subtitle?: string;
 	renderLink?: null | ((renderLinkArgs: { content: React.ReactNode }) => JSX.Element);
 	image: string;
 	children: React.ReactNode;
@@ -9,21 +10,19 @@ export type BaseCardProps = {
 	containerClassName?: string;
 };
 
-export interface KnownForCardProps extends Pick<BaseCardProps, 'renderLink' | 'image'> {
-	name: string;
-}
+// The Card component wrapper that goes around vast majority of the cards, it extends the base but omits 'subtitle' as the subtitle isn't needed for this part of the component that is handled elsewhere
+export type CardComponentProps = Omit<BaseCardProps, 'subtitle'>;
+
+export type KnownForCardProps = Pick<BaseCardProps, 'renderLink' | 'image' | 'title'>;
 
 export interface TopBilledCastMemberMovieMediaTypeProps
-	extends Pick<BaseCardProps, 'renderLink' | 'image'> {
-	name?: string;
-	character?: string;
+	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title'> {
+	subtitle: string;
 	mediaType: 'movie';
 }
 
 export interface TopBilledCastMemberTVMediaTypeProps
-	extends Pick<BaseCardProps, 'renderLink' | 'image'> {
-	name?: string;
-	character?: string;
+	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title' | 'subtitle'> {
 	mediaType: 'tv';
 	episodeCount?: number;
 }
@@ -32,42 +31,43 @@ export type TopBilledCastMemberCardProps =
 	| TopBilledCastMemberTVMediaTypeProps
 	| TopBilledCastMemberMovieMediaTypeProps;
 
-export interface PersonCardProps extends Pick<BaseCardProps, 'renderLink' | 'image'> {
-	name?: string;
-	knownFor: { original_title: string }[];
-}
+export type PersonCardProps = Pick<BaseCardProps, 'renderLink' | 'image' | 'title' | 'subtitle'>;
 
-export interface PosterCardProps extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title'> {
-	releaseDate: string;
+export interface PosterCardProps
+	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title' | 'subtitle'> {
 	rating: number;
 }
 
-export type RecommendationCardProps = PosterCardProps;
-
-export interface CollectionCardProps extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title'> {
-	subtitle: string;
+export interface RecommendationCardProps
+	extends Pick<BaseCardProps, 'title' | 'subtitle' | 'image' | 'renderLink'> {
+	releaseDate: string;
 }
 
+export type CollectionCardProps = Pick<
+	BaseCardProps,
+	'renderLink' | 'image' | 'title' | 'subtitle'
+>;
+
+export interface CurrentSeasonCardProps
+	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title' | 'subtitle'> {
+	episodeCount?: number;
+	year?: number;
+}
+
+export interface VideoCardProps
+	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title' | 'subtitle'> {
+	thumbnailAction?: null | ((event: React.MouseEvent | React.KeyboardEvent) => void);
+}
+
+// Very specific props for this custom component as it's not as simple as the others ie it requires additional props such as author which has the avatar image url
 export interface ReviewCardProps extends Pick<BaseCardProps, 'renderLink'> {
 	author?: {
 		name?: string;
 		username?: string;
-		avatarPathUrl?: string | null;
+		avatarUrl?: string | null;
 		rating?: number | null;
 	};
 	content?: string | null;
 	createdOn?: string;
 	isFeatured?: boolean;
-}
-
-export interface CurrentSeasonCardProps
-	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title'> {
-	overview?: string;
-	episodeCount?: number;
-	year?: number;
-}
-
-export interface VideoCardProps extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title'> {
-	subtitle?: string;
-	thumbnailAction?: null | ((event: React.MouseEvent | React.KeyboardEvent) => void);
 }

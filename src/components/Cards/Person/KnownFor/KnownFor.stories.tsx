@@ -15,7 +15,7 @@ type Story = StoryObj<typeof KnownForCard>;
 
 export const Simple: Story = {
 	args: {
-		name: 'Timeless',
+		title: 'Timeless',
 		image: 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/wFaS9kROwztTWNxIKBbOLwIgApV.jpg'
 	}
 };
@@ -38,17 +38,17 @@ export const GroupedExample: Story = {
 	render: () => (
 		<div className='flex w-full overflow-auto'>
 			<KnownForCard
-				name='Fast and furious 7'
+				title='Fast and furious 7'
 				image='https://image.tmdb.org/t/p/original/d9jZ2bKZw3ptTuxAyVHA6olPAVs.jpg'
 			/>
 
 			<KnownForCard
-				name='Fast and furious 6'
+				title='Fast and furious 6'
 				image='https://image.tmdb.org/t/p/original/n31VRDodbaZxkrZmmzyYSFNVpW5.jpg'
 			/>
 
 			<KnownForCard
-				name='Fate Of The Furious'
+				title='Fate Of The Furious'
 				image='https://image.tmdb.org/t/p/original/dImWM7GJqryWJO9LHa3XQ8DD5NH.jpg'
 			/>
 		</div>

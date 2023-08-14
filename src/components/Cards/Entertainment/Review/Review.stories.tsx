@@ -18,7 +18,7 @@ export const Simple: Story = {
 		author: {
 			name: 'Cat Ellington',
 			username: 'CatEllington',
-			avatarPath: 'https://www.themoviedb.org/t/p/w64_and_h64_face/yHGV91jVzmqpFOtRSHF0avBZmPm.jpg',
+			avatarUrl: 'https://www.themoviedb.org/t/p/w64_and_h64_face/yHGV91jVzmqpFOtRSHF0avBZmPm.jpg',
 			rating: 5
 		},
 		isFeatured: false,
@@ -40,7 +40,7 @@ export const NoAvatarPathExample: Story = {
 		...Simple.args,
 		author: {
 			...(Simple?.args?.author ?? {}),
-			avatarPath: null
+			avatarUrl: null
 		}
 	}
 };

@@ -5,14 +5,14 @@ import { TopBilledCastMemberCardProps } from '../../types';
 
 const TopBilledCastMember = ({
 	image,
-	name,
-	character,
+	title,
+	subtitle,
 	renderLink,
 	...props
 }: TopBilledCastMemberCardProps) => (
 	<Card
 		image={image}
-		title={name}
+		title={title}
 		renderLink={renderLink}
 		imageHeight='175px'
 		containerClassName='min-w-[138px] max-w-[138px] mt-[0.625rem] rounded-2xl mb-[0.625rem] ml-[0.625rem] mr-[0.25rem] border border-solid border-gray-200'
@@ -21,18 +21,18 @@ const TopBilledCastMember = ({
 	>
 		{/* Title for the Top Billed Card */}
 		{typeof renderLink === 'function' ? (
-			React.cloneElement(renderLink({ content: name }), {
+			React.cloneElement(renderLink({ content: title }), {
 				className:
 					'px-[0.625rem] pt-[0.625rem] text-base font-bold text-black hover:text-gray-500 text-left'
 			})
 		) : (
 			<h3 className='px-[0.625rem] pt-[0.625rem] text-base font-bold text-black hover:text-gray-500'>
-				{name}
+				{title}
 			</h3>
 		)}
 
 		{/* Character Information for the Top Billed Card */}
-		<p className='px-[0.625rem] text-[0.9rem] font-light text-black'>{character}</p>
+		<p className='px-[0.625rem] text-[0.9rem] font-light text-black'>{subtitle}</p>
 
 		{/* When viewing a tv series show the episode count for the top billed cast member */}
 		{props.mediaType === 'tv' && (
