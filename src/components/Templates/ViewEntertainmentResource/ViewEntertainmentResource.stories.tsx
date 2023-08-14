@@ -1,20 +1,26 @@
-import * as React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
+
 import { MemoryRouter } from 'react-router-dom';
 
-import ViewMoviePage from './ViewMovieAndTVPage';
+import ViewEntertainmentResource from './ViewEntertainmentResource';
 
-export default {
-	title: 'Design System/Templates/View movie page',
-	component: ViewMoviePage,
+const meta: Meta<typeof ViewEntertainmentResource> = {
+	title: 'Page Templates/View Movie OR TV Show',
+	component: ViewEntertainmentResource,
 	decorators: [
-		(Story) => (
+		(StoryComponent) => (
 			<MemoryRouter>
-				<Story />
+				<StoryComponent />
 			</MemoryRouter>
 		)
 	]
 };
-const generateMovieImages = (type) => {
+
+export default meta;
+
+type Story = StoryObj<typeof ViewEntertainmentResource>;
+
+const generateMovieImages = (type: 'posters' | 'videos' | 'backdrops') => {
 	switch (type) {
 		case 'posters':
 		case 'videos': {
@@ -61,7 +67,7 @@ const generateMovieImages = (type) => {
 	}
 };
 
-export const ProjectPowerExample = {
+export const ProjectPowerExample: Story = {
 	args: {
 		// Define the movie type so we can hide or show specific components
 		entertainmentType: 'movie',
@@ -70,113 +76,114 @@ export const ProjectPowerExample = {
 		topBilledCastMembers: [
 			{
 				name: 'Jamie Fox',
-				characterName: 'Art',
-				image: 'https://image.tmdb.org/t/p/original/hPwCMEq6jLAidsXAX5BfoYgIfg2.jpg'
+				character: 'Art',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/hPwCMEq6jLAidsXAX5BfoYgIfg2.jpg'
 			},
 			{
 				name: 'Joseph Gordon-Levitt',
-				characterName: 'Frank',
-				image: 'https://image.tmdb.org/t/p/original/lDlo5LFmrxrxa3iXqiwwNj1w52X.jpg'
+				character: 'Frank',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/lDlo5LFmrxrxa3iXqiwwNj1w52X.jpg'
 			},
 			{
 				name: 'Dominique Fishback',
-				characterName: 'Robin',
-				image: 'https://image.tmdb.org/t/p/original/zduC0PM7xKzFX4F7DH8CCt5gt6O.jpg'
+				character: 'Robin',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/zduC0PM7xKzFX4F7DH8CCt5gt6O.jpg'
 			},
 			{
 				name: 'Rodrigo Santoro',
-				characterName: 'Biggie',
-				image: 'https://image.tmdb.org/t/p/original/d3MaF9SPHDn2PMYHuqdnO0Csik6.jpg'
+				character: 'Biggie',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/d3MaF9SPHDn2PMYHuqdnO0Csik6.jpg'
 			},
 			{
 				name: 'Courtney B. Vance',
-				characterName: 'Captain Craine',
-				image: 'https://image.tmdb.org/t/p/original/q4oCmhqEPXKSRK2hTZzTz2Zt4Ba.jpg'
+				character: 'Captain Craine',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/q4oCmhqEPXKSRK2hTZzTz2Zt4Ba.jpg'
 			},
 			{
 				name: 'Amy Landecker',
-				characterName: 'Gardner',
-				image: 'https://image.tmdb.org/t/p/original/3woCLCbumhHOxrkeVOT7ylWi7Lg.jpg'
+				character: 'Gardner',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/3woCLCbumhHOxrkeVOT7ylWi7Lg.jpg'
 			},
 			{
 				name: 'Machine Gun Kelly',
-				characterName: 'Newt',
-				image: 'https://image.tmdb.org/t/p/original/astSdaQqoYyI4p694WEllO6q3aN.jpg'
+				character: 'Newt',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/astSdaQqoYyI4p694WEllO6q3aN.jpg'
 			},
 			{
 				name: 'Tait Fletcher',
-				characterName: 'Wallace',
-				image: 'https://image.tmdb.org/t/p/original/zAVsHT2GBLPaQ4RpTopnHvIrCbv.jpg'
+				character: 'Wallace',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/zAVsHT2GBLPaQ4RpTopnHvIrCbv.jpg'
 			},
 			{
 				name: 'Allen Maldonado',
-				characterName: 'Landry',
-				image: 'https://image.tmdb.org/t/p/original/rl8YFsk4XsFZqCZO5jHNwP0Qoog.jpg'
+				character: 'Landry',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/rl8YFsk4XsFZqCZO5jHNwP0Qoog.jpg'
 			}
 		],
 
 		// Film/TV Recommendations
 		recommendations: [
 			{
-				title: 'The Old Guard',
+				name: 'The Old Guard',
 				releaseDate: '10/07/2020',
-				image: 'https://image.tmdb.org/t/p/original/m0ObOaJBerZ3Unc74l471ar8Iiy.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/m0ObOaJBerZ3Unc74l471ar8Iiy.jpg',
 				rating: 72
 			},
 			{
-				title: 'Tenet',
+				name: 'Tenet',
 				releaseDate: '22/08/2020',
-				image: 'https://image.tmdb.org/t/p/original/yY76zq9XSuJ4nWyPDuwkdV7Wt0c.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/yY76zq9XSuJ4nWyPDuwkdV7Wt0c.jpg',
 				rating: 72
 			},
 			{
-				title: 'Ava',
+				name: 'Ava',
 				releaseDate: '02/07/2020',
-				image: 'https://image.tmdb.org/t/p/original/il9nvQH3f92n5bBKJfpjfaHXFYi.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/il9nvQH3f92n5bBKJfpjfaHXFYi.jpg',
 				rating: 50
 			},
 			{
-				title: 'Enola Holmes',
+				name: 'Enola Holmes',
 				releaseDate: '25/08/2020',
-				image: 'https://image.tmdb.org/t/p/original/pQQggUuDMleFSl2tQYxzTmKIiLU.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/pQQggUuDMleFSl2tQYxzTmKIiLU.jpg',
 				rating: 50
 			},
 			{
-				title: 'One Night in Bangkok',
+				name: 'One Night in Bangkok',
 				releaseDate: '23/09/2020',
-				image: 'https://image.tmdb.org/t/p/original/riDrpqQtZpXGeiJdlmfcwwPH7nN.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/riDrpqQtZpXGeiJdlmfcwwPH7nN.jpg',
 				rating: 69
 			},
 			{
-				title: 'Spenser Confidential',
+				name: 'Spenser Confidential',
 				releaseDate: '06/09/2020',
-				image: 'https://image.tmdb.org/t/p/original/ftODZXaXpWtV5XFD8gS9n9KwLDr.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/ftODZXaXpWtV5XFD8gS9n9KwLDr.jpg',
 				rating: 65
 			},
 			{
-				title: 'Santana',
+				name: 'Santana',
 				releaseDate: '28/08/2020',
-				image: 'https://image.tmdb.org/t/p/original/7fvdg211A2L0mHddvzyArRuRalp.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/7fvdg211A2L0mHddvzyArRuRalp.jpg',
 				rating: 56
 			},
 			{
-				title: 'The Sleepover',
+				name: 'The Sleepover',
 				releaseDate: '21/08/2020',
-				image: 'https://image.tmdb.org/t/p/original/mQngZ4DtXqdkX9fOQRsm9iym5OW.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/mQngZ4DtXqdkX9fOQRsm9iym5OW.jpg',
 				rating: 64
 			},
 			{
-				title: 'The Tax Collector',
+				name: 'The Tax Collector',
 				releaseDate: '07/08/2020',
-				image: 'https://image.tmdb.org/t/p/original/zogWnCSztU8xvabaepQnAwsOtOt.jpg',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/zogWnCSztU8xvabaepQnAwsOtOt.jpg',
 				rating: 64
 			}
 		],
 
 		// Header data
 		header: {
-			posterImage: 'https://image.tmdb.org/t/p/original/TnOeov4w0sTtV2gqICqIxVi74V.jpg',
-			backgroundImage: 'https://image.tmdb.org/t/p/original/qVygtf2vU15L2yKS4Ke44U4oMdD.jpg',
+			trailerLink: '',
+			posterImageUrl: 'https://image.tmdb.org/t/p/original/TnOeov4w0sTtV2gqICqIxVi74V.jpg',
+			backgroundImageUrl: 'https://image.tmdb.org/t/p/original/qVygtf2vU15L2yKS4Ke44U4oMdD.jpg',
 			title: 'Project Power',
 			releaseDate: '14/08/2020 (ES)',
 			releaseYear: 2020,
@@ -204,15 +211,15 @@ export const ProjectPowerExample = {
 			featuredCrew: [
 				{
 					name: 'Henry Joost',
-					roles: 'Director'
+					role: 'Director'
 				},
 				{
 					name: 'Ariel Schulman',
-					roles: 'Director'
+					role: 'Director'
 				},
 				{
 					name: 'Mattson Tomlin',
-					roles: 'Writer'
+					role: 'Writer'
 				}
 			]
 		},
@@ -224,32 +231,31 @@ export const ProjectPowerExample = {
 			facebookLink: '',
 			twitterLink: '',
 			instagramLink: '',
-			homePageLink: 'http://www.netflix.com/projectpower',
+			homepageLink: 'http://www.netflix.com/projectpower',
 			status: 'Released',
 			type: '',
 			keywords: [
 				{
 					name: 'drugs',
-					id: 14964
+					id: '14964'
 				},
 				{
 					name: 'super power',
-					id: 33637
+					id: '33637'
 				},
 				{
 					name: 'force',
-					id: 33728
+					id: '33728'
 				},
 				{
 					name: 'pills',
-					id: 255064
+					id: '255064'
 				}
 			],
 			originalLanguage: 'English',
 			budget: '-',
 			revenue: '-',
-			networkImage: '',
-			entertainmentType: 'movie',
+			networkImageUrl: '',
 			entertainmentName: ''
 		},
 
@@ -258,7 +264,7 @@ export const ProjectPowerExample = {
 			author: {
 				name: 'Cat Ellington',
 				username: 'CatEllington',
-				avatarPath:
+				avatarPathUrl:
 					'https://www.themoviedb.org/t/p/w64_and_h64_face/yHGV91jVzmqpFOtRSHF0avBZmPm.jpg',
 				rating: 5
 			},
@@ -277,20 +283,10 @@ export const ProjectPowerExample = {
 
 		// Collection, only applicable for tv shows
 		collection: {
-			title: 'Avatar',
-			subtitle: 'Includes Avatar, Avatar: The Way of Water, Avatar 3, Avatar 4, and Avatar 5',
-			image: 'https://image.tmdb.org/t/p/w1440_and_h320_multi_faces/iaEsDbQPE45hQU2EGiNjXD2KWuF.jpg'
-		},
-
-		// Last Season, only applicable for tv shows
-		season: {
-			image: 'https://image.tmdb.org/t/p/original/eFWtQwYetPum9RvCmqkUk2aiBIi.jpg',
-			title: 'Season Three: The New World',
-			year: 2020,
-			episodeCount: 8,
-			overview:
-				'Taking place immediately after the events of the second season, Dolores develops a relationship with Caleb in neo-Los Angeles, and learns how robots are treated in the real world. Meanwhile, Maeve finds herself in another Delos park, this one with a World War II theme and set in Fascist Italy.',
-			isStillAiring: false
+			name: 'Avatar',
+			includes: 'Includes Avatar, Avatar: The Way of Water, Avatar 3, Avatar 4, and Avatar 5',
+			posterUrl:
+				'https://image.tmdb.org/t/p/w1440_and_h320_multi_faces/iaEsDbQPE45hQU2EGiNjXD2KWuF.jpg'
 		}
 	}
 };

@@ -16,7 +16,7 @@ type Props = {
 	// trailerLink?: string;
 	tagline: string;
 	overview: string;
-	featuredCrew: { name: string; roles: string }[];
+	featuredCrew: { name: string; role: string }[];
 	ageRating: string;
 	isAuthenticated?: boolean;
 };
@@ -234,7 +234,7 @@ const EntertainmentHeader = ({
 										<Link to='/' className='text-base font-bold text-white hover:text-gray-400'>
 											{crewMember.name}
 										</Link>
-										<p className='text-base text-white'>{crewMember.roles}</p>
+										<p className='text-base text-white'>{crewMember.role}</p>
 									</li>
 								))}
 							</ol>

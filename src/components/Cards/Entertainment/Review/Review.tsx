@@ -5,7 +5,7 @@ import Image from '../../../Core/Image/Image';
 import { ReviewCardProps } from '../../types';
 
 const Review = ({
-	author: { name = '', username = '', avatarPath = '', rating = null } = {},
+	author: { name = '', username = '', avatarPathUrl = '', rating = null } = {},
 	content = null,
 	createdOn = '',
 	isFeatured = false,
@@ -13,14 +13,14 @@ const Review = ({
 }: ReviewCardProps) => {
 	const AvatarContent = (
 		<>
-			{/* When the avatarPath is empty the image should be replaced with the first letter of the users "name" otherwise use the avatar */}
-			{avatarPath === null || avatarPath === '' ? (
+			{/* When the avatarPathUrl is empty the image should be replaced with the first letter of the users "name" otherwise use the avatar */}
+			{avatarPathUrl === null || avatarPathUrl === '' ? (
 				<h3 className='mr-2 rounded-full bg-gray-400 p-1 px-2 text-center text-2xl uppercase text-black'>
 					{name[0] ?? 'N/A'}
 				</h3>
 			) : (
 				<Image
-					src={avatarPath}
+					src={avatarPathUrl}
 					className='h-16 w-16 max-w-none rounded-full pr-2'
 					width='4rem'
 					height='4rem'

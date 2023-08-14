@@ -1,6 +1,4 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-
+import { Link } from 'react-router-dom';
 import EntertainmentSidebar from '../../Sidebars/EntertainmentSidebar/EntertainmentSidebar';
 import { EntertainmentHeader } from '../../Headers';
 import {
@@ -12,7 +10,111 @@ import {
 } from '../../Cards';
 import { Icon, Tabs } from '../../Core';
 
-const MediaImage = ({ id, images, type }) => {
+type Media = {
+	id: string;
+	images: {
+		key: string;
+		url: string;
+		isFallback: boolean;
+	}[];
+};
+
+type BaseViewMovieAndTVPageProps = {
+	topBilledCastMembers: { name: string; character: string; headshotUrl: string }[];
+	recommendations: { name: string; releaseDate: string; backgroundUrl: string; rating: number }[];
+	header: {
+		posterImageUrl: string;
+		backgroundImageUrl: string;
+		title: string;
+		releaseDate: string;
+		releaseYear: number;
+		genres: {
+			id: string;
+			name: string;
+		}[];
+		runtime: string;
+		rating: number;
+		ageRating: string;
+		trailerLink: string;
+		tagline: string;
+		overview: string;
+		featuredCrew: {
+			name: string;
+			role: string;
+		}[];
+	};
+	isAuthenticated?: boolean;
+	sidebar: {
+		facebookLink: string;
+		twitterLink: string;
+		instagramLink: string;
+		homepageLink: string;
+		status: string;
+		type: string;
+		keywords: {
+			name: string;
+			id: string;
+		}[];
+		originalLanguage: string;
+		budget: string;
+		revenue: string;
+		networkImageUrl: string;
+		entertainmentName: string;
+	};
+	review: {
+		author?: {
+			name: string;
+			username: string;
+			avatarPathUrl: string;
+			rating: number;
+		} | null;
+		createdOn: string;
+		isFeatured?: boolean;
+		content?: string | null;
+	};
+	media: {
+		posters: Media[];
+		backdrops: Media[];
+		videos: Media[];
+	};
+	collection?: {
+		name: string;
+		includes: string;
+		posterUrl: string;
+	} | null;
+};
+
+interface ViewMovieProps extends BaseViewMovieAndTVPageProps {
+	entertainmentType: 'movie';
+}
+
+interface ViewTVShowProps extends BaseViewMovieAndTVPageProps {
+	entertainmentType: 'tv';
+	season: {
+		posterUrl: string;
+		name: string;
+		releaseYear: number;
+		episodeCount: number;
+		overview: string;
+		isStillAiring: string;
+	};
+}
+
+type ViewEntertainmentResourceProps = ViewMovieProps | ViewTVShowProps;
+
+const MediaImage = ({
+	id,
+	images,
+	type
+}: {
+	id: string;
+	images: {
+		key: string;
+		url: string;
+		isFallback: boolean;
+	}[];
+	type: 'video' | 'poster' | 'backdrop';
+}) => {
 	// Generate the "pictures" element (Handles switching between different image sizes)
 	const pictures = (
 		<picture key={id} className='shrink-0'>
@@ -47,28 +149,22 @@ const MediaImage = ({ id, images, type }) => {
 	return pictures;
 };
 
-MediaImage.propTypes = {
-	id: PropTypes.string.isRequired,
-	// eslint-disable-next-line react/forbid-prop-types
-	images: PropTypes.array.isRequired,
-	type: PropTypes.string.isRequired
-};
-
-const ViewMovieAndTVPage = ({
-	entertainmentType,
+const ViewEntertainmentResource = ({
 	topBilledCastMembers,
 	recommendations,
 	header,
 	review,
 	media,
 	sidebar,
-	collection,
-	season
-}) => (
+	// collection,
+	// season,
+	isAuthenticated = false,
+	...props
+}: ViewEntertainmentResourceProps) => (
 	<>
 		<EntertainmentHeader
-			posterImage={header?.posterImage ?? ''}
-			backgroundImage={header?.backgroundImage ?? ''}
+			posterImage={header?.posterImageUrl ?? ''}
+			backgroundImage={header?.backgroundImageUrl ?? ''}
 			title={header?.title ?? ''}
 			releaseDate={header?.releaseDate ?? ''}
 			releaseYear={header?.releaseYear ?? 0}
@@ -80,7 +176,7 @@ const ViewMovieAndTVPage = ({
 			overview={header?.overview ?? ''}
 			featuredCrew={header?.featuredCrew ?? ''}
 			ageRating={header?.ageRating ?? ''}
-			isAuthenticated={false}
+			isAuthenticated={isAuthenticated}
 		/>
 
 		<main className='relative p-4'>
@@ -94,9 +190,9 @@ const ViewMovieAndTVPage = ({
 							<TopBilledCastMember
 								key={castMember.name}
 								name={castMember.name}
-								character={castMember.characterName}
-								image={castMember.image}
-								entertainmentType='movie'
+								character={castMember.character}
+								image={castMember.headshotUrl}
+								mediaType={props.entertainmentType}
 							/>
 						)) ?? null}
 					</div>
@@ -109,20 +205,22 @@ const ViewMovieAndTVPage = ({
 					</a>
 				</section>
 
-				<section className='border-b border-solid border-gray-400 pt-4' id='social'>
-					<h2 className='py-4 text-2xl font-bold'>Last Season</h2>
+				{props.entertainmentType === 'tv' && (
+					<section className='border-b border-solid border-gray-400 pt-4' id='social'>
+						<h2 className='py-4 text-2xl font-bold'>Last Season</h2>
 
-					<div className='pb-3'>
-						<TVCurrentSeasonCard
-							image={season?.image ?? null}
-							title={season?.title ?? null}
-							year={season?.year ?? null}
-							episodeCount={season?.episodeCount ?? 0}
-							overview={season?.overview ?? null}
-							renderLink={null}
-						/>
-					</div>
-				</section>
+						<div className='pb-3'>
+							<TVCurrentSeasonCard
+								image={props.season?.posterUrl ?? null}
+								title={props.season?.name ?? null}
+								year={props.season?.releaseYear ?? null}
+								episodeCount={props.season?.episodeCount ?? 0}
+								overview={props.season?.overview ?? null}
+								renderLink={null}
+							/>
+						</div>
+					</section>
+				)}
 
 				{/* Social section, includes the review and the discussions */}
 				<section className='border-b border-solid border-gray-400 pt-4' id='social'>
@@ -131,7 +229,7 @@ const ViewMovieAndTVPage = ({
 					<Tabs
 						tabs={[
 							{
-								tabLabel: 'Reviews',
+								label: 'Reviews',
 								id: 'Reviews',
 								content: (
 									<>
@@ -152,7 +250,7 @@ const ViewMovieAndTVPage = ({
 								)
 							},
 							{
-								tabLabel: 'Discussions',
+								label: 'Discussions',
 								id: 'Discussions',
 								content: 'Discussions coming soon',
 								enabled: false
@@ -170,7 +268,7 @@ const ViewMovieAndTVPage = ({
 					<Tabs
 						tabs={[
 							{
-								tabLabel: 'Videos',
+								label: 'Videos',
 								id: 'Videos',
 								content: (
 									<>
@@ -194,13 +292,13 @@ const ViewMovieAndTVPage = ({
 								)
 							},
 							{
-								tabLabel: 'Most Popular',
+								label: 'Most Popular',
 								id: 'MostPopular',
 								content: 'Most Popular',
 								enabled: false
 							},
 							{
-								tabLabel: 'Posters',
+								label: 'Posters',
 								id: 'Posters',
 								content: (
 									<>
@@ -224,7 +322,7 @@ const ViewMovieAndTVPage = ({
 								)
 							},
 							{
-								tabLabel: 'Backdrops',
+								label: 'Backdrops',
 								id: 'Backdrops',
 								content: (
 									<>
@@ -254,16 +352,16 @@ const ViewMovieAndTVPage = ({
 				</section>
 
 				{/* Collection section, only shown when entertainmentType === 'movie' and there is a collection */}
-				{entertainmentType === 'movie' && collection !== null && (
+				{props.entertainmentType === 'movie' && props.collection !== null && (
 					<section className='border-b border-solid border-gray-400 pt-4' id='collection'>
 						<h2 className='pb-4 text-2xl font-bold'>Collection</h2>
 
 						<div className='pb-4'>
 							<MovieCollectionCard
-								title={collection?.title ?? ''}
-								subtitle={collection?.subtitle ?? ''}
-								image={collection?.image ?? ''}
-								renderLink={null}
+								title={props.collection?.name ?? ''}
+								subtitle={props.collection?.includes ?? ''}
+								image={props.collection?.posterUrl ?? ''}
+								renderLink={({ content }) => <Link to='/'>{content}</Link>}
 							/>
 						</div>
 					</section>
@@ -276,10 +374,10 @@ const ViewMovieAndTVPage = ({
 					<div className='flex w-full space-x-4 overflow-auto pb-3 '>
 						{recommendations.map((movie) => (
 							<EntertainmentRecommendationCard
-								key={movie.title}
-								title={movie.title}
+								key={movie.name}
+								title={movie.name}
 								releaseDate={movie.releaseDate}
-								image={movie.image}
+								image={movie.backgroundUrl}
 								rating={movie.rating}
 							/>
 						))}
@@ -300,131 +398,13 @@ const ViewMovieAndTVPage = ({
 					originalLanguage={sidebar?.originalLanguage ?? ''}
 					budget={sidebar?.budget ?? ''}
 					revenue={sidebar?.revenue ?? ''}
-					networkImage={sidebar?.networkImage ?? ''}
+					networkImage={sidebar?.networkImageUrl ?? ''}
 					entertainmentName={sidebar?.entertainmentName ?? ''}
-					entertainmentType={entertainmentType}
+					entertainmentType={props.entertainmentType}
 				/>
 			</div>
 		</main>
 	</>
 );
 
-ViewMovieAndTVPage.propTypes = {
-	entertainmentType: PropTypes.oneOf(['movie', 'tv']).isRequired,
-	topBilledCastMembers: PropTypes.arrayOf(
-		PropTypes.shape({
-			name: PropTypes.string,
-			characterName: PropTypes.string,
-			image: PropTypes.string
-		})
-	),
-	recommendations: PropTypes.arrayOf(
-		PropTypes.shape({
-			title: PropTypes.string,
-			releaseDate: PropTypes.string,
-			image: PropTypes.string,
-			rating: PropTypes.number
-		})
-	),
-	header: PropTypes.shape({
-		posterImage: PropTypes.string,
-		backgroundImage: PropTypes.string,
-		title: PropTypes.string,
-		releaseDate: PropTypes.string,
-		releaseYear: PropTypes.number,
-		genres: PropTypes.arrayOf(
-			PropTypes.shape({
-				id: PropTypes.string,
-				name: PropTypes.string
-			})
-		),
-		runtime: PropTypes.string,
-		rating: PropTypes.number,
-		ageRating: PropTypes.string,
-		tagline: PropTypes.string,
-		overview: PropTypes.string,
-		featuredCrew: PropTypes.arrayOf(
-			PropTypes.shape({
-				name: PropTypes.string,
-				role: PropTypes.string
-			})
-		),
-		isAuthenticated: PropTypes.bool
-	}),
-	sidebar: PropTypes.shape({
-		facebookLink: PropTypes.string,
-		twitterLink: PropTypes.string,
-		instagramLink: PropTypes.string,
-		homepageLink: PropTypes.string,
-		status: PropTypes.string,
-		type: PropTypes.string,
-		keywords: PropTypes.arrayOf(
-			PropTypes.shape({
-				name: PropTypes.string,
-				id: PropTypes.number
-			})
-		),
-		originalLanguage: PropTypes.string,
-		budget: PropTypes.string,
-		revenue: PropTypes.string,
-		networkImage: PropTypes.string,
-		entertainmentType: PropTypes.string,
-		entertainmentName: PropTypes.string
-	}),
-	review: PropTypes.shape({
-		author: PropTypes.shape({
-			name: PropTypes.string,
-			username: PropTypes.string,
-			avatarPath: PropTypes.string,
-			rating: PropTypes.number
-		}),
-		isFeatured: PropTypes.bool,
-		content: PropTypes.string,
-		createdOn: PropTypes.string
-	}),
-	media: PropTypes.shape({
-		posters: PropTypes.arrayOf(
-			PropTypes.shape({
-				url: PropTypes.string,
-				isDefault: PropTypes.bool
-			})
-		),
-		backdrops: PropTypes.arrayOf(
-			PropTypes.shape({
-				url: PropTypes.string,
-				isDefault: PropTypes.bool
-			})
-		),
-		videos: PropTypes.arrayOf(
-			PropTypes.shape({
-				url: PropTypes.string,
-				isDefault: PropTypes.bool
-			})
-		)
-	}),
-	collection: PropTypes.shape({
-		title: PropTypes.string,
-		subtitle: PropTypes.string,
-		image: PropTypes.string
-	}),
-	season: PropTypes.shape({
-		image: PropTypes.string,
-		title: PropTypes.string,
-		year: PropTypes.number,
-		episodeCount: PropTypes.number,
-		overview: PropTypes.string
-	})
-};
-
-ViewMovieAndTVPage.defaultProps = {
-	topBilledCastMembers: [],
-	recommendations: [],
-	header: {},
-	sidebar: {},
-	review: null,
-	media: {},
-	collection: null,
-	season: null
-};
-
-export default ViewMovieAndTVPage;
+export default ViewEntertainmentResource;

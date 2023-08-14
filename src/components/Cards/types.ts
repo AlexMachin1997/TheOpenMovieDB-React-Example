@@ -13,14 +13,15 @@ export interface KnownForCardProps extends Pick<BaseCardProps, 'renderLink' | 'i
 	name: string;
 }
 
-interface TopBilledCastMemberMovieMediaTypeProps
+export interface TopBilledCastMemberMovieMediaTypeProps
 	extends Pick<BaseCardProps, 'renderLink' | 'image'> {
 	name?: string;
 	character?: string;
 	mediaType: 'movie';
 }
 
-interface TopBilledCastMemberTVMediaTypeProps extends Pick<BaseCardProps, 'renderLink' | 'image'> {
+export interface TopBilledCastMemberTVMediaTypeProps
+	extends Pick<BaseCardProps, 'renderLink' | 'image'> {
 	name?: string;
 	character?: string;
 	mediaType: 'tv';
@@ -51,7 +52,7 @@ export interface ReviewCardProps extends Pick<BaseCardProps, 'renderLink'> {
 	author?: {
 		name?: string;
 		username?: string;
-		avatarPath?: string | null;
+		avatarPathUrl?: string | null;
 		rating?: number | null;
 	};
 	content?: string | null;
