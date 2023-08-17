@@ -3,6 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { Link, MemoryRouter } from 'react-router-dom';
 
 import TopBilledCastMember from './TopBilledCastMember';
+import { MEDIA_TYPE } from '../../../../types/RoutingTypes';
 
 const meta: Meta<typeof TopBilledCastMember> = {
 	component: TopBilledCastMember,
@@ -18,14 +19,14 @@ export const MediaTypeMovie: Story = {
 		title: 'Elizabeth Henstridge',
 		subtitle: 'Jemma Simmons',
 		image: 'https://image.tmdb.org/t/p/original/ohoSW1kYL3GMlFgGWuLEC1IzjmE.jpg',
-		mediaType: 'movie'
+		mediaType: MEDIA_TYPE.MOVIE
 	}
 };
 
 export const MediaTypeTV: Story = {
 	args: {
 		...(MediaTypeMovie.args ?? {}),
-		mediaType: 'tv',
+		mediaType: MEDIA_TYPE.TV,
 		episodeCount: 150
 	}
 };
@@ -51,7 +52,7 @@ export const GroupedWestWorldExample: Story = {
 				title='Evan Rachel Wood'
 				subtitle='Delores Abernathy, Christina'
 				image='https://image.tmdb.org/t/p/original/g6XBBmsEd9fqP0gc4RuHsX0MXNl.jpg'
-				mediaType='tv'
+				mediaType={MEDIA_TYPE.TV}
 				episodeCount={28}
 			/>
 
@@ -59,7 +60,7 @@ export const GroupedWestWorldExample: Story = {
 				title='Thandie Newton'
 				subtitle='Maeve Millay'
 				image='https://image.tmdb.org/t/p/original/hZQLvxj7nV7pBrRyWTvWVz1CDi8.jpg'
-				mediaType='tv'
+				mediaType={MEDIA_TYPE.TV}
 				episodeCount={28}
 			/>
 
@@ -67,7 +68,7 @@ export const GroupedWestWorldExample: Story = {
 				title='Jeffrey Wright'
 				subtitle='Bernard Lowe'
 				image='https://image.tmdb.org/t/p/original/npJjOiFiAP4wiRDNjKsO8ho03Mg.jpg'
-				mediaType='tv'
+				mediaType={MEDIA_TYPE.TV}
 				episodeCount={28}
 			/>
 		</div>
@@ -81,14 +82,14 @@ export const GroupedOldGuardExample: Story = {
 				title='Charlize Theron'
 				subtitle='Andromache of Scythia / Andy'
 				image='https://image.tmdb.org/t/p/original/1HloWLLhL3iTrmDtMigiitLB9Qx.jpg'
-				mediaType='movie'
+				mediaType={MEDIA_TYPE.MOVIE}
 			/>
 
 			<TopBilledCastMember
 				title='Kiki Layne'
 				subtitle='Nille Freeman'
 				image='https://image.tmdb.org/t/p/original/aqQNDmRLlpJvbmbpqpU4bYRXEtb.jpg'
-				mediaType='movie'
+				mediaType={MEDIA_TYPE.MOVIE}
 			/>
 		</div>
 	)

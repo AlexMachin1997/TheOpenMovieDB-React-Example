@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import CreditsTable from './CreditsTable';
 import ActingGroupData from './ActingGroupData';
 import CreditsTableTitle from './CreditsTableTitle';
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 
 const meta: Meta<typeof CreditsTable> = {
 	component: CreditsTable,
@@ -62,14 +63,14 @@ export const TVActingTableExample: Story = {
 				year: 2020,
 				title: 'The Late Show with Stephen Colbert',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Self'
 			},
 			{
 				year: 2020,
 				title: 'Close Up with The Hollywood Reporter',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Self'
 			}
 		]
@@ -84,13 +85,13 @@ export const MovieActingTableExample: Story = {
 			{
 				year: 2021,
 				title: 'Black Widow',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2021,
 				title: 'Sing 2',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Ash (voice)'
 			}
 		]

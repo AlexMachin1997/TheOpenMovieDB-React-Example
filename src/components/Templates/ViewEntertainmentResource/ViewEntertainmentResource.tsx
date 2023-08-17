@@ -9,6 +9,7 @@ import {
 	TopBilledCastMember
 } from '../../Cards';
 import { Icon, Tabs } from '../../Core';
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 
 type Media = {
 	id: string;
@@ -88,9 +89,9 @@ interface ViewMovieProps extends BaseViewMovieAndTVPageProps {
 		name: string;
 		character: string;
 		headshotUrl: string;
-		entertainmentType: 'movie';
+		mediaType: MEDIA_TYPE.MOVIE;
 	}[];
-	entertainmentType: 'movie';
+	mediaType: MEDIA_TYPE.MOVIE;
 }
 
 interface ViewTVShowProps extends BaseViewMovieAndTVPageProps {
@@ -99,9 +100,9 @@ interface ViewTVShowProps extends BaseViewMovieAndTVPageProps {
 		character: string;
 		headshotUrl: string;
 		episodeCount: number;
-		entertainmentType: 'tv';
+		mediaType: MEDIA_TYPE.TV;
 	}[];
-	entertainmentType: 'tv';
+	mediaType: MEDIA_TYPE.TV;
 	season: {
 		posterUrl: string;
 		name: string;
@@ -199,12 +200,12 @@ const ViewEntertainmentResource = ({
 
 					<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
 						{topBilledCastMembers?.map((topBilledCastMember) => {
-							if (topBilledCastMember.entertainmentType === 'movie') {
+							if (topBilledCastMember.mediaType === MEDIA_TYPE.MOVIE) {
 								return (
 									<TopBilledCastMember
 										key={topBilledCastMember.name}
 										image={topBilledCastMember.headshotUrl}
-										mediaType='movie'
+										mediaType={MEDIA_TYPE.MOVIE}
 										subtitle={topBilledCastMember.character}
 										title={topBilledCastMember.name}
 										renderLink={({ content }) => <Link to='/'>{content}</Link>}
@@ -216,7 +217,7 @@ const ViewEntertainmentResource = ({
 								<TopBilledCastMember
 									key={topBilledCastMember.name}
 									image={topBilledCastMember.headshotUrl}
-									mediaType='tv'
+									mediaType={MEDIA_TYPE.TV}
 									subtitle={topBilledCastMember.character}
 									title={topBilledCastMember.name}
 									renderLink={({ content }) => <Link to='/'>{content}</Link>}
@@ -234,7 +235,7 @@ const ViewEntertainmentResource = ({
 					</a>
 				</section>
 
-				{props.entertainmentType === 'tv' && (
+				{props.mediaType === MEDIA_TYPE.TV && (
 					<section className='border-b border-solid border-gray-400 pt-4' id='social'>
 						<h2 className='py-4 text-2xl font-bold'>Last Season</h2>
 
@@ -380,8 +381,8 @@ const ViewEntertainmentResource = ({
 					/>
 				</section>
 
-				{/* Collection section, only shown when entertainmentType === 'movie' and there is a collection */}
-				{props.entertainmentType === 'movie' && props.collection !== null && (
+				{/* Collection section, only shown when entertainmentType is 'movie' and there is a collection */}
+				{props.mediaType === MEDIA_TYPE.MOVIE && props.collection !== null && (
 					<section className='border-b border-solid border-gray-400 pt-4' id='collection'>
 						<h2 className='pb-4 text-2xl font-bold'>Collection</h2>
 
@@ -429,7 +430,7 @@ const ViewEntertainmentResource = ({
 					revenue={sidebar?.revenue ?? ''}
 					networkImage={sidebar?.networkImageUrl ?? ''}
 					entertainmentName={sidebar?.entertainmentName ?? ''}
-					entertainmentType={props.entertainmentType}
+					mediaType={props.mediaType}
 				/>
 			</div>
 		</main>

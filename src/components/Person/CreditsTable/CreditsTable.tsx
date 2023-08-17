@@ -3,11 +3,11 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
-import { MediaType } from '../../../types/RoutingTypes';
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 import { Icon } from '../../Core';
 import { Credit } from './types';
 
-const generateResourceUrl = (title: string, id: string, mediaType: MediaType) => {
+const generateResourceUrl = (title: string, id: string, mediaType: MEDIA_TYPE) => {
 	// Split the title at each capital letter
 	const splitTitle = title.split(/(?=[A-Z])/);
 
@@ -69,7 +69,7 @@ const CreditsTable = ({ credits, year }: { credits: Credit[]; year: number }) =>
 						<TableRow
 							key={credit.title}
 							year={year}
-							mediaType='tv'
+							mediaType={MEDIA_TYPE.TV}
 							title={credit.title}
 							episodeCount={credit.episodeCount}
 							character={credit.character}
@@ -81,7 +81,7 @@ const CreditsTable = ({ credits, year }: { credits: Credit[]; year: number }) =>
 					<TableRow
 						key={credit.title}
 						year={year}
-						mediaType='movie'
+						mediaType={MEDIA_TYPE.MOVIE}
 						title={credit.title}
 						character={credit.character}
 					/>

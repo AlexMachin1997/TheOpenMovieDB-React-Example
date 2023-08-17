@@ -1,3 +1,4 @@
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 import { Credit } from './types';
 
 const data: { year: number; credits: Credit[] }[] = [
@@ -7,13 +8,13 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2021,
 				title: 'Black Widow',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2021,
 				title: 'Sing 2',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Ash (voice)'
 			}
 		]
@@ -24,19 +25,19 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2020,
 				title: 'VOMO: Vote or Miss Out',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Self'
 			},
 			{
 				year: 2020,
 				title: 'Chadwick Boseman:  A Tribute for a King',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Self - Actress, "Avengers: Endgame" (archive footage)'
 			},
 			{
 				year: 2020,
 				title: '420 Awards - 2nd Annual Event',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself (archive footage)'
 			}
 		]
@@ -48,42 +49,42 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 2019,
 				title: 'Marriage Story',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Nicole Barber'
 			},
 			{
 				year: 2019,
 				title: 'Marriage Story: From the Pages to the Performances',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2019,
 				title: 'Jojo Rabbit',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Rosie Betzler'
 			},
 			{
 				year: 2019,
 				title: 'Avengers: Endgame',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2019,
 				title: "Celebrating Marvel's Stan Lee",
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Black Widow'
 			},
 			{
 				year: 2019,
 				title: 'Captain Marvel',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow (uncredited)'
 			}
 		]
@@ -95,19 +96,19 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 2018,
 				title: 'Avengers: Infinity War',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2018,
 				title: 'Marvel Studios: The First Ten Years - The Evolution of Heroes',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2018,
 				title: 'Isle of Dogs',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Nutmeg (voice)'
 			}
 		]
@@ -118,28 +119,28 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2017,
 				title: 'Rough Night',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Jess Thayer'
 			},
 			{
 				year: 2017,
 				title: 'Ghost in the Shell',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Major Mira Killian / Motoko Kusanagi'
 			},
 			{
 				year: 2017,
 				title: 'Art as Dialogue',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2017,
 				title: 'Thor: Ragnarok',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow (archive footage / uncredited)'
 			}
 		]
@@ -151,42 +152,42 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 2016,
 				title: 'Captain America: Civil War',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2016,
 				title: 'The Jungle Book',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Kaa (voice)'
 			},
 			{
 				year: 2016,
 				title: 'Hail, Caesar!',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'DeeAnna Moran'
 			},
 			{
 				year: 2016,
 				title: 'Sing',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Ash (voice)'
 			},
 			{
 				year: 2016,
 				title: 'Floyd Norman: An Animated Life',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2016,
 				title: "United We Stand, Divided We Fall: The Making of 'Captain America: Civil War'",
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: ''
 			}
 		]
@@ -197,28 +198,28 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2016,
 				title: 'Avengers: Age of Ultron',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2016,
 				title: 'The Late Show with Stephen Colbert',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Self'
 			},
 			{
 				year: 2016,
 				title: 'Close Up with The Hollywood Reporter',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Self'
 			},
 			{
 				year: 2016,
 				title: 'Hot Ones',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -229,56 +230,56 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2014,
 				title: 'Lucy',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Lucy Miller'
 			},
 			{
 				year: 2014,
 				title: 'Captain America: The Winter Soldier',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2014,
 				title: 'Deep Down',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Narrator (voice)'
 			},
 			{
 				year: 2014,
 				title: 'Marvel Studios: Assembling a Universe',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2014,
 				title: 'On the Front Line',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2014,
 				title: 'Marvel: 75 Years, From Pulp to Pop!',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2014,
 				title: 'Chef',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Molly'
 			},
 			{
 				year: 2014,
 				title: 'The Tonight Show Starring Jimmy Fallon',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -290,28 +291,28 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 2013,
 				title: 'Under the Skin',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'The Female'
 			},
 			{
 				year: 2013,
 				title: 'Her',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Samantha (voice)'
 			},
 			{
 				year: 2013,
 				title: 'Don Jon',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Barbara Sugarman'
 			},
 			{
 				year: 2013,
 				title: 'The Queen Latifah Show',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -322,33 +323,33 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2012,
 				title: 'Hitchcock',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Janet Leigh'
 			},
 			{
 				year: 2012,
 				title: 'The Avengers',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2012,
 				title: 'The Avengers: A Visual Journey',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2012,
 				title: 'Building the Dream: Assembling the Avengers',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2012,
 				title: 'Buenas noches y Buenafuente',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself - Interviewee'
 			}
 		]
@@ -359,19 +360,19 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2011,
 				title: 'We Bought a Zoo',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Kelly Foster'
 			},
 			{
 				year: 2011,
 				title: 'Woody Allen: A Documentary',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2011,
 				title: 'Bert Stern: Original Madman',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself (archive footage)'
 			}
 		]
@@ -382,14 +383,14 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2010,
 				title: 'Iron Man 2',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Natalie Rushman / Natasha Romanoff / Black Widow'
 			},
 			{
 				year: 2010,
 				title: 'Daybreak',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -401,14 +402,14 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 2009,
 				title: "He's Just Not That Into You",
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Anna Marks'
 			},
 			{
 				year: 2009,
 				title: 'Saturday Night Live: The Best of Amy Poehler',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself (archive footage)'
 			}
 		]
@@ -419,38 +420,38 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2008,
 				title: 'Vicky Cristina Barcelona',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Cristina'
 			},
 			{
 				year: 2008,
 				title: 'The Spirit',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Silken Floss'
 			},
 			{
 				year: 2008,
 				title: 'The Other Boleyn Girl',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Mary Boleyn'
 			},
 			{
 				year: 2008,
 				title: 'Yes We Can',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2008,
 				title: 'Translating History to Screen',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2008,
 				title: 'Stand Up to Cancer',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -461,21 +462,21 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2007,
 				title: 'The Nanny Diaries',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Annie Braddock'
 			},
 			{
 				year: 2007,
 				title: 'Up Close with Carrie Keagan',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2007,
 				title: 'Guys Choice Awards',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -487,33 +488,33 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 2006,
 				title: 'The Black Dahlia',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Kay Lake'
 			},
 			{
 				year: 2006,
 				title: 'Scoop',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Sondra Pransky'
 			},
 			{
 				year: 2006,
 				title: 'The Prestige',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Olivia Wenscombe'
 			},
 			{
 				year: 2006,
 				title: 'Close Up',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2006,
 				title: 'Made in Hollywood: Teen Edition',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -525,35 +526,35 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 2005,
 				title: 'Match Point',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Nola Rice'
 			},
 			{
 				year: 2005,
 				title: 'The Island',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Jordan Two Delta / Sarah Jordan'
 			},
 			{
 				year: 2005,
 				title: 'Made in Hollywood',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2005,
 				title: 'Showbiz Tonight',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2005,
 				title: 'The Late Late Show with Craig Ferguson',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -564,59 +565,59 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2004,
 				title: 'In Good Company',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Alex Foreman'
 			},
 			{
 				year: 2004,
 				title: 'A Love Song for Bobby Long',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Pursy Will'
 			},
 			{
 				year: 2004,
 				title: 'A Good Woman',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Meg Windermere'
 			},
 			{
 				year: 2004,
 				title: 'The Perfect Score',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Francesca Curtis'
 			},
 			{
 				year: 2004,
 				title: "Lost on Location: Behind the Scenes of 'Lost in Translation'",
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Herself'
 			},
 			{
 				year: 2004,
 				title: 'The SpongeBob SquarePants Movie',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Princess Mindy (voice)'
 			},
 			{
 				year: 2004,
 				title: 'Entourage',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2004,
 				title: 'Le Grand Journal',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2004,
 				title: 'omg! Insider',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -628,35 +629,35 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 2003,
 				title: 'Girl with a Pearl Earring',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Griet'
 			},
 			{
 				year: 2003,
 				title: 'Lost in Translation',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Charlotte'
 			},
 			{
 				year: 2003,
 				title: 'The Sharon Osbourne Show',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2003,
 				title: 'Jimmy Kimmel Live!',
 				episodeCount: 3,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2003,
 				title: 'The Ellen DeGeneres Show',
 				episodeCount: 3,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -667,35 +668,35 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2002,
 				title: 'Eight Legged Freaks',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Ashley Parker'
 			},
 			{
 				year: 2002,
 				title: 'Silenci?',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2002,
 				title: 'E! Live from the Red Carpet',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2002,
 				title: 'Tinseltown TV',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 2002,
 				title: "Ant & Dec's Saturday Night Takeaway",
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -706,26 +707,26 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2001,
 				title: 'An American Rhapsody',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Suzanne Sandor'
 			},
 			{
 				year: 2001,
 				title: 'Ghost World',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Rebecca'
 			},
 			{
 				year: 2001,
 				title: "The Man Who Wasn't There",
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Birdy Abundas'
 			},
 			{
 				year: 2001,
 				title: 'Anatomy of a Scene',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -736,28 +737,28 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 1999,
 				title: 'My Brother the Pig',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Kathy Caldwell'
 			},
 			{
 				year: 1999,
 				title: 'The Early Show',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1999,
 				title: 'Teen Choice Awards',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1999,
 				title: 'The Late Late Show with Craig Kilborn',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -768,7 +769,7 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 1998,
 				title: 'The Horse Whisperer',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Grace MacLean'
 			}
 		]
@@ -779,13 +780,13 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 1997,
 				title: 'Fall',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Little Girl'
 			},
 			{
 				year: 1997,
 				title: 'Home Alone 3',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Molly Pruitt'
 			}
 		]
@@ -797,34 +798,34 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1996,
 				title: 'Manny & Lo',
 
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Amanda'
 			},
 			{
 				year: 1996,
 				title: 'If Lucy Fell',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Emily'
 			},
 			{
 				year: 1996,
 				title: "The Rosie O'Donnell Show",
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: ''
 			},
 			{
 				year: 1996,
 				title: 'The Daily Show with Trevor Noah',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1996,
 				title: "Critics' Choice Movie Awards",
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -835,14 +836,14 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 1995,
 				title: 'Just Cause',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Kate Armstrong'
 			},
 			{
 				year: 1995,
 				title: 'The Client',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Jenna Halliwell'
 			}
 		]
@@ -853,21 +854,21 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 1994,
 				title: 'North',
-				mediaType: 'movie',
+				mediaType: MEDIA_TYPE.MOVIE,
 				character: 'Laura Nelson'
 			},
 			{
 				year: 1994,
 				title: 'Cartelera',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1994,
 				title: 'Extra',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -879,21 +880,21 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1993,
 				title: "Late Night with Conan O'Brien",
 				episodeCount: 4,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1993,
 				title: 'Good Day L.A.',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1993,
 				title: 'Late Show with David Letterman',
 				episodeCount: 3,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -905,28 +906,28 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1992,
 				title: 'Gomorron',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1992,
 				title: 'HBO First Look',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1992,
 				title: 'MTV Movie & TV Awards',
 				episodeCount: 3,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1992,
 				title: 'The Tonight Show with Jay Leno',
 				episodeCount: 8,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -938,7 +939,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1991,
 				title: 'Días de cine',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -950,7 +951,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1987,
 				title: 'Biography',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -962,7 +963,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1986,
 				title: 'American Masters',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -974,7 +975,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1984,
 				title: 'Cinema 3',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -986,7 +987,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1983,
 				title: 'Live with Regis and Kathie Lee',
 				episodeCount: 5,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -998,7 +999,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1979,
 				title: 'CBS News Sunday Morning',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -1010,7 +1011,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1977,
 				title: 'Brit Awards',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -1022,35 +1023,35 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1975,
 				title: 'Saturday Night Live',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Self'
 			},
 			{
 				year: 1975,
 				title: 'Good Morning America',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			},
 			{
 				year: 1975,
 				title: 'Saturday Night Live',
 				episodeCount: 5,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Self - Host'
 			},
 			{
 				year: 1975,
 				title: 'Saturday Night Live',
 				episodeCount: 2,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Ivanka Trump (uncredited)'
 			},
 			{
 				year: 1975,
 				title: 'Saturday Night Live',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: ''
 			}
 		]
@@ -1062,7 +1063,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1973,
 				title: 'Fantastic',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -1074,7 +1075,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1966,
 				title: 'Goldene Kamera Verleihung',
 				episodeCount: 1,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'herself'
 			}
 		]
@@ -1086,7 +1087,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1956,
 				title: 'Tony Awards',
 				episodeCount: 3,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -1098,7 +1099,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1953,
 				title: 'The Academy Awards',
 				episodeCount: 5,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]
@@ -1110,7 +1111,7 @@ const data: { year: number; credits: Credit[] }[] = [
 				year: 1952,
 				title: 'Today',
 				episodeCount: 4,
-				mediaType: 'tv',
+				mediaType: MEDIA_TYPE.TV,
 				character: 'Herself'
 			}
 		]

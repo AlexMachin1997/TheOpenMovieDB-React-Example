@@ -1,3 +1,5 @@
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+
 type BaseCredit = {
 	title: string;
 	character: string;
@@ -5,11 +7,11 @@ type BaseCredit = {
 };
 
 interface MovieCredit extends BaseCredit {
-	mediaType: 'movie';
+	mediaType: MEDIA_TYPE.MOVIE;
 }
 
 interface TVCredit extends BaseCredit {
-	mediaType: 'tv';
+	mediaType: MEDIA_TYPE.TV;
 	episodeCount: number;
 }
 

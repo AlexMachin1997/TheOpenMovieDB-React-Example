@@ -3,6 +3,7 @@ import { Image } from '../../Core';
 
 import Keywords from './Keywords';
 import SocialLinks from '../SocialLinks';
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 
 type SharedSidebarProps = {
 	facebookLink: string;
@@ -16,13 +17,13 @@ type SharedSidebarProps = {
 };
 
 interface ShowSidebarProps extends SharedSidebarProps {
-	entertainmentType: 'tv';
+	mediaType: MEDIA_TYPE.TV;
 	networkImage: string;
 	type: string;
 }
 
 interface MovieSidebarProps extends SharedSidebarProps {
-	entertainmentType: 'movie';
+	mediaType: MEDIA_TYPE.MOVIE;
 	budget: string;
 	revenue: string;
 }
@@ -31,7 +32,7 @@ type Props = ShowSidebarProps | MovieSidebarProps;
 
 const EntertainmentSidebar = (props: Props) => {
 	// Explicity check the entertainment type is is 'tv' (Typescript can correctly narrow the types down then to include props relevant for this mode)
-	if (props.entertainmentType === 'tv') {
+	if (props.mediaType === MEDIA_TYPE.TV) {
 		const {
 			facebookLink,
 			twitterLink,
@@ -95,7 +96,7 @@ const EntertainmentSidebar = (props: Props) => {
 				{keywords.length > 0 && (
 					<div className='border-b border-solid border-gray-400 pb-4'>
 						<h3 className='text-base font-bold leading-[1]'>Keywords</h3>
-						<Keywords keywords={keywords} mediaType='tv' />
+						<Keywords keywords={keywords} mediaType={MEDIA_TYPE.TV} />
 					</div>
 				)}
 			</aside>
@@ -156,7 +157,7 @@ const EntertainmentSidebar = (props: Props) => {
 			{keywords.length > 0 && (
 				<div className='border-b border-solid border-gray-400 pb-4'>
 					<h3 className='text-base font-bold leading-[1]'>Keywords</h3>
-					<Keywords keywords={keywords} mediaType='movie' />
+					<Keywords keywords={keywords} mediaType={MEDIA_TYPE.MOVIE} />
 				</div>
 			)}
 		</aside>

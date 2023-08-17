@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import EntertainmentSidebar from './EntertainmentSidebar';
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 
 const meta: Meta<typeof EntertainmentSidebar> = {
 	component: EntertainmentSidebar,
@@ -48,14 +49,14 @@ export const MediaTypeTV: Story = {
 			}
 		],
 		originalLanguage: 'English',
-		entertainmentType: 'tv',
+		mediaType: MEDIA_TYPE.TV,
 		entertainmentName: 'Rick and Morty'
 	}
 };
 
 export const MediaTypeMovie: Story = {
 	args: {
-		entertainmentType: 'movie',
+		mediaType: MEDIA_TYPE.MOVIE,
 		facebookLink: 'https://www.facebook.com/RickandMorty',
 		twitterLink: 'https://www.twitter.com/RickandMorty',
 		instagramLink: 'https://www.instagram.com/rickandmorty/',

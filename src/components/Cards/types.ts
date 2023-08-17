@@ -1,3 +1,5 @@
+import { MEDIA_TYPE } from '../../types/RoutingTypes';
+
 export type BaseCardProps = {
 	title: string;
 	subtitle?: string;
@@ -18,12 +20,12 @@ export type KnownForCardProps = Pick<BaseCardProps, 'renderLink' | 'image' | 'ti
 export interface TopBilledCastMemberMovieMediaTypeProps
 	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title'> {
 	subtitle: string;
-	mediaType: 'movie';
+	mediaType: MEDIA_TYPE.MOVIE;
 }
 
 export interface TopBilledCastMemberTVMediaTypeProps
 	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title' | 'subtitle'> {
-	mediaType: 'tv';
+	mediaType: MEDIA_TYPE.TV;
 	episodeCount?: number;
 }
 

@@ -1,7 +1,7 @@
 import { addDays, format, subDays } from 'date-fns';
 import settings from '../../settings';
 import { SelectOption } from '../../types/DropdownElementTypes';
-import { MediaType, ResourceType } from '../../types/RoutingTypes';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '../../types/RoutingTypes';
 
 const setupCheckboxFormData = ({
 	defaultValue = [],
@@ -93,9 +93,9 @@ type DefaultValues = {
 };
 
 class DiscoverFiltersFormDataService {
-	private readonly mediaType: MediaType;
+	private readonly mediaType: MEDIA_TYPE;
 
-	private readonly resourceType: ResourceType;
+	private readonly resourceType: RESOURCE_TYPE;
 
 	private readonly isAuthenticated: boolean;
 
@@ -142,8 +142,8 @@ class DiscoverFiltersFormDataService {
 	private search_first_air_date: boolean;
 
 	constructor(
-		mediaType: MediaType,
-		resourceType: ResourceType,
+		mediaType: MEDIA_TYPE,
+		resourceType: RESOURCE_TYPE,
 		isAuthenticated: boolean,
 		defaultValues: DefaultValues
 	) {
@@ -320,7 +320,7 @@ class DiscoverFiltersFormDataService {
 		// Setup the vote_count_gte
 		const voteCountGte = parseInt(defaultValues?.vote_count_gte ?? '0', 10);
 
-		if (this.mediaType === 'movie' && this.resourceType === 'top-rated') {
+		if (this.mediaType === MEDIA_TYPE.MOVIE && this.resourceType === 'top-rated') {
 			this.vote_count_gte = 300;
 		} else if (this.mediaType === 'tv' && this.resourceType === 'top-rated') {
 			this.vote_count_gte = 150;
@@ -346,14 +346,14 @@ class DiscoverFiltersFormDataService {
 		// lte - "To"
 
 		// Set the release_date values for the /movie/popular route
-		if (this.resourceType === 'popular' && this.mediaType === 'movie') {
+		if (this.resourceType === 'popular' && this.mediaType === MEDIA_TYPE.MOVIE) {
 			this.release_date_gte = '';
 			console.log(new Date());
 			this.release_date_lte = format(addDays(new Date(), 181), 'yyyy-MM-dd'); // Add 181 days to the "To" label value
 		}
 
 		// Set the air_date values for the /tv/popular route
-		if (this.resourceType === 'popular' && this.mediaType === 'tv') {
+		if (this.resourceType === 'popular' && this.mediaType === MEDIA_TYPE.TV) {
 			// Get the "From" value (gte)
 			const gte = '';
 
@@ -370,13 +370,13 @@ class DiscoverFiltersFormDataService {
 		}
 
 		// Set the release_date values for the /tv/now-playing route
-		if (this.resourceType === 'now-playing' && this.mediaType === 'movie') {
+		if (this.resourceType === 'now-playing' && this.mediaType === MEDIA_TYPE.MOVIE) {
 			this.release_date_gte = format(subDays(new Date(), 40), 'yyyy-MM-dd');
 			this.release_date_lte = format(addDays(new Date(), 2), 'yyyy-MM-dd');
 		}
 
 		// Set the air_date values for the /tv/airing-today route
-		if (this.resourceType === 'airing-today' && this.mediaType === 'tv') {
+		if (this.resourceType === RESOURCE_TYPE.AIRING_TODAY && this.mediaType === MEDIA_TYPE.TV) {
 			// Get the "From" value (gte)
 			const gte = format(new Date(), 'yyyy-MM-dd');
 
@@ -395,13 +395,13 @@ class DiscoverFiltersFormDataService {
 		}
 
 		// Set the release_date values for the /movie/upcoming route
-		if (this.resourceType === 'upcoming' && this.mediaType === 'movie') {
+		if (this.resourceType === RESOURCE_TYPE.UPCOMING && this.mediaType === MEDIA_TYPE.MOVIE) {
 			this.release_date_gte = format(addDays(new Date(), 3), 'yyyy-MM-dd');
 			this.release_date_lte = format(addDays(new Date(), 24), 'yyyy-MM-dd');
 		}
 
 		// Set the air_date values for the /tv/on-the-air route
-		if (this.resourceType === 'on-the-air' && this.mediaType === 'tv') {
+		if (this.resourceType === RESOURCE_TYPE.ON_THE_AIR && this.mediaType === MEDIA_TYPE.TV) {
 			// Get the "From" value (gte)
 			const gte = format(new Date(), 'yyyy-MM-dd');
 
@@ -420,13 +420,13 @@ class DiscoverFiltersFormDataService {
 		}
 
 		// Set the release_date values for the /movie/top-rated route
-		if (this.resourceType === 'top-rated' && this.mediaType === 'movie') {
+		if (this.resourceType === RESOURCE_TYPE.TOP_RATED && this.mediaType === MEDIA_TYPE.MOVIE) {
 			this.release_date_gte = '';
 			this.release_date_lte = format(addDays(new Date(), 181), 'yyyy-MM-dd');
 		}
 
 		// Set the release_date values for the /tv/top-rated route
-		if (this.resourceType === 'top-rated' && this.mediaType === 'tv') {
+		if (this.resourceType === RESOURCE_TYPE.TOP_RATED && this.mediaType === MEDIA_TYPE.TV) {
 			// Get the "From" value (gte)
 			const gte = '';
 

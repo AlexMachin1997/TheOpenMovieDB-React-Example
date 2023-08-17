@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { MediaType } from '../../../types/RoutingTypes';
 
-const generateResourceUrl = (title: string, id: string, mediaType: MediaType) => {
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+
+const generateResourceUrl = (title: string, id: string, mediaType: MEDIA_TYPE) => {
 	// Split the title at each capital letter
 	const splitTitle = title.split(/(?=[A-Z])/);
 
@@ -17,12 +18,12 @@ const generateResourceUrl = (title: string, id: string, mediaType: MediaType) =>
 	return `/keyword/${id}-${lowercaseTitle}/${mediaType}`;
 };
 
-interface Props extends React.ComponentPropsWithoutRef<'ul'> {
+interface KeywordsProps extends React.ComponentPropsWithoutRef<'ul'> {
 	keywords?: { name: string; id: string }[];
-	mediaType: MediaType;
+	mediaType: MEDIA_TYPE;
 }
 
-const Keywords = ({ keywords = [], mediaType, ...props }: Props) => (
+const Keywords = ({ keywords = [], mediaType, ...props }: KeywordsProps) => (
 	<ul className='flex h-full w-full flex-row flex-wrap p-0' {...props}>
 		{keywords.map((keyword) => (
 			<Link
