@@ -71,7 +71,7 @@ const setupDropdownFormData = ({
 	return options.find((option) => option.value === defaultValue) ?? null;
 };
 
-type DefaultValues = {
+export type DefaultValues = {
 	sort_by?: string;
 	ott_region?: string;
 	restrict_services?: boolean;
@@ -145,7 +145,7 @@ class DiscoverFiltersFormDataService {
 		mediaType: MEDIA_TYPE,
 		resourceType: RESOURCE_TYPE,
 		isAuthenticated: boolean,
-		defaultValues: DefaultValues
+		defaultValues?: DefaultValues
 	) {
 		// Stores references to the current mediaType (movie), resourceType (popular) and isAuthenticated
 		this.mediaType = mediaType;
