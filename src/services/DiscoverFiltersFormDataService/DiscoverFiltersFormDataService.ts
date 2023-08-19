@@ -348,7 +348,6 @@ class DiscoverFiltersFormDataService {
 		// Set the release_date values for the /movie/popular route
 		if (this.resourceType === 'popular' && this.mediaType === MEDIA_TYPE.MOVIE) {
 			this.release_date_gte = '';
-			console.log(new Date());
 			this.release_date_lte = format(addDays(new Date(), 181), 'yyyy-MM-dd'); // Add 181 days to the "To" label value
 		}
 

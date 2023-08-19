@@ -336,8 +336,6 @@ describe('DiscoverFiltersFormDataService', () => {
 				}
 			);
 
-			console.log(formData.getFiltersFormData().with_original_language);
-
 			expect(formData.getFiltersFormData().with_original_language).toBeNull();
 		});
 

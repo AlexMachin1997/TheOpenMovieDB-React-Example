@@ -19,13 +19,13 @@ module.exports = {
 	parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
 	plugins: ['prettier', 'react', 'react-hooks', '@typescript-eslint', 'react-refresh'],
 	settings: {
-		'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
+		'import/extensions': ['.ts', '.tsx'],
 		'import/parsers': {
 			'@typescript-eslint/parser': ['.ts', '.tsx']
 		},
 		'import/resolver': {
 			node: {
-				extensions: ['.js', '.jsx', '.ts', '.tsx']
+				extensions: ['.ts', '.tsx']
 			}
 		}
 	},

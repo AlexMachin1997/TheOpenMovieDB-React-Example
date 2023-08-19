@@ -6,7 +6,7 @@ import ViewEntertainmentResource from './ViewEntertainmentResource';
 import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 
 const meta: Meta<typeof ViewEntertainmentResource> = {
-	title: 'Page Templates/View Movie OR TV Show',
+	title: 'Templates/View Movie OR TV Show',
 	component: ViewEntertainmentResource,
 	decorators: [
 		(StoryComponent) => (

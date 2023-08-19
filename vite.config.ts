@@ -32,9 +32,6 @@ export default defineConfig({
 
 	test: {
 		globals: false,
-		watch: false,
-		include: [
-			'./src/services/DiscoverFiltersFormDataService//DiscoverFiltersFormDataService.test.ts'
-		]
+		watch: false
 	}
 });

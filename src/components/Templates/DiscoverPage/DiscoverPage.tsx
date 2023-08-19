@@ -10,6 +10,7 @@ import DiscoverFiltersFormDataService, {
 import { Button, Icon, Tooltip } from '../../Core';
 import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../types/RoutingTypes';
 import FormSettings from './FormSettings';
+import settings from '../../../settings';
 
 type DiscoverPageTemplateProps = {
 	mediaType?: MEDIA_TYPE;
@@ -134,7 +135,10 @@ const DiscoverPageTemplate = ({
 
 										{/* Filters */}
 										<div className='h-full overflow-y-auto p-4'>
-											<DiscoverPageFilters isAuthenticated={isAuthenticated} />
+											<DiscoverPageFilters
+												isAuthenticated={isAuthenticated}
+												ottProviders={settings.OTT_PROVIDER_OPTIONS}
+											/>
 										</div>
 
 										<div className='flex content-center items-center border border-solid border-t-gray-300'>
@@ -168,7 +172,10 @@ const DiscoverPageTemplate = ({
 
 							{/* Filters */}
 							<div className='h-full overflow-y-auto p-4'>
-								<DiscoverPageFilters isAuthenticated={isAuthenticated} />
+								<DiscoverPageFilters
+									isAuthenticated={isAuthenticated}
+									ottProviders={settings.OTT_PROVIDER_OPTIONS}
+								/>
 							</div>
 
 							<div className='flex content-center items-center border border-solid border-t-gray-300'>
@@ -215,7 +222,7 @@ const DiscoverPageTemplate = ({
 						{/* Displays the page results */}
 						<div
 							id={`${mediaType}-results`}
-							className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5'
+							className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4'
 						>
 							{resources.map((resource) => (
 								<EntertainmentPosterCard

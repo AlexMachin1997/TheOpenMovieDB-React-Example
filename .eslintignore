@@ -1,12 +1,6 @@
 ./README.md
 
-src/ServiceWorker/*.js
-
 node_modules/*
-
-*.test.js
-
-src/setupTests.js
 
 ./.github/workflows/**/*.yml
 
