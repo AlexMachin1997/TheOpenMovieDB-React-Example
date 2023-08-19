@@ -28,7 +28,7 @@ const ControlledStoryTemplate = (args: Story['args']) => {
 
 	return (
 		<form>
-			<label htmlFor='name'>
+			<label htmlFor={args?.name ?? 'people'}>
 				A dropdown label
 				<Listbox
 					options={args?.options ?? []}
@@ -51,16 +51,19 @@ const ControlledStoryTemplate = (args: Story['args']) => {
 
 const UncontrolledStoryTemplate = (args: Story['args']) => (
 	<form>
-		<Listbox
-			options={args?.options ?? []}
-			value={undefined}
-			isMultiSelect={args?.isMultiSelect}
-			name={args?.name ?? 'people'}
-			defaultValue={args?.defaultValue ?? undefined}
-			disabled={args?.disabled}
-			displayLimit={args?.displayLimit}
-			noOptionsAvailableMessage={args?.noOptionsAvailableMessage}
-		/>
+		<label htmlFor={args?.name ?? 'people'}>
+			A dropdown label
+			<Listbox
+				options={args?.options ?? []}
+				value={undefined}
+				isMultiSelect={args?.isMultiSelect}
+				name={args?.name ?? 'people'}
+				defaultValue={args?.defaultValue ?? undefined}
+				disabled={args?.disabled}
+				displayLimit={args?.displayLimit}
+				noOptionsAvailableMessage={args?.noOptionsAvailableMessage}
+			/>
+		</label>
 	</form>
 );
 
@@ -132,5 +135,45 @@ export const UncontrolledDisplayLimit: Story = {
 		isMultiSelect: true,
 		options: settings.COUNTRY_OPTIONS,
 		displayLimit: 5
+	}
+};
+
+export const ControlledSingleValuePlaceholder: Story = {
+	render: ControlledStoryTemplate,
+	args: {
+		options,
+		isMultiSelect: false,
+		defaultValue: null,
+		placeholder: 'Please select a person'
+	}
+};
+
+export const ControlledMultipleValuesPlaceholder: Story = {
+	render: ControlledStoryTemplate,
+	args: {
+		options,
+		isMultiSelect: true,
+		defaultValue: [],
+		placeholder: 'Please select a person'
+	}
+};
+
+export const UncontrolledSingleValuePlaceholder: Story = {
+	render: UncontrolledStoryTemplate,
+	args: {
+		options,
+		isMultiSelect: false,
+		defaultValue: null,
+		placeholder: 'Please select a person'
+	}
+};
+
+export const UncontrolledMultipleValuesPlaceholder: Story = {
+	render: UncontrolledStoryTemplate,
+	args: {
+		options,
+		isMultiSelect: true,
+		defaultValue: [],
+		placeholder: 'Please select a person'
 	}
 };

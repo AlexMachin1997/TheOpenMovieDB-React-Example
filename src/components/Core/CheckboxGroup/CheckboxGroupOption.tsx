@@ -87,7 +87,7 @@ const CheckboxGroupOption = ({ label, disabled, id, value }: Props) => {
 		<div className='flex items-center'>
 			<input
 				{...checkboxProps}
-				className='h-4 w-4 cursor-pointer rounded-2xl border-gray-300 bg-gray-100 text-blue-600 disabled:cursor-not-allowed'
+				className='h-4 w-4 rounded-2xl border-gray-300 bg-gray-100 text-blue-600 enabled:cursor-pointer disabled:cursor-not-allowed'
 			/>
 			<label htmlFor={id} className='ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
 				{label}

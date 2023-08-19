@@ -1,5 +1,13 @@
 export type SelectOption = { value: string; label: string };
 
+export type CheckboxOption = {
+	label: string;
+	id: string;
+	value: string;
+	order: number;
+	name: string;
+};
+
 type BaseDropdownProps = {
 	options?: SelectOption[];
 	value?: null | SelectOption | SelectOption[];
@@ -12,6 +20,7 @@ type BaseDropdownProps = {
 	disabled?: boolean;
 	noOptionsAvailableMessage?: string;
 	displayLimit?: number;
+	placeholder?: string;
 };
 
 export type ListboxProps = BaseDropdownProps;
@@ -22,7 +31,10 @@ export type VirtualizedListProps = Pick<
 >;
 
 export interface ListboxDisplayValueProps
-	extends Pick<ListboxProps, 'value' | 'isMultiSelect' | 'onChange' | 'displayLimit'> {
+	extends Pick<
+		ListboxProps,
+		'value' | 'isMultiSelect' | 'onChange' | 'displayLimit' | 'placeholder'
+	> {
 	showMultiDeleteButton?: boolean;
 }
 

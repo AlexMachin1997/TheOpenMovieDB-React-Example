@@ -1,3 +1,5 @@
+import { CheckboxOption } from './types/DropdownElementTypes';
+
 const SORT_BY_OPTIONS = [
 	{
 		label: 'Popularity Descending',
@@ -94,7 +96,7 @@ const SHOW_ME_OPTIONS = [
 	}
 ];
 
-const AVAILABILITY_OPTIONS = [
+const AVAILABILITY_OPTIONS: CheckboxOption[] = [
 	{
 		label: 'Search all availabilities',
 		id: 'Search-All-Availabilities-Option',
@@ -295,7 +297,7 @@ const CERTIFICATION_OPTIONS = [
 	}
 ];
 
-const RELEASE_TYPE_OPTIONS = [
+const RELEASE_TYPE_OPTIONS: CheckboxOption[] = [
 	{
 		label: 'Search all releases',
 		id: 'Search-All-Releases',
@@ -307,37 +309,43 @@ const RELEASE_TYPE_OPTIONS = [
 		label: 'Premiere',
 		id: 'Premiere-Option',
 		value: '1',
-		order: 2
+		order: 2,
+		name: 'premiere'
 	},
 	{
 		label: 'Theatrical (Limited)',
 		id: 'Theatrical-Limited-Option',
 		value: '2',
-		order: 3
+		order: 3,
+		name: 'theatrical-ltd'
 	},
 	{
 		label: 'Theatrical',
 		id: 'Theatrical-Option',
 		value: '3',
-		order: 4
+		order: 4,
+		name: 'theatrical'
 	},
 	{
 		label: 'Digital',
 		id: 'Digital-Option',
 		value: '4',
-		order: 5
+		order: 5,
+		name: 'digital'
 	},
 	{
 		label: 'Physical',
 		id: 'Physical-Option',
 		value: '5',
-		order: 6
+		order: 6,
+		name: 'physical'
 	},
 	{
 		label: 'TV',
 		id: 'TV-Option',
 		value: '6',
-		order: 7
+		order: 7,
+		name: 'tv'
 	}
 ];
 

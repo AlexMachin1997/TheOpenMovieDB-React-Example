@@ -64,14 +64,12 @@ const CustomRadioGroup = React.memo<Props>(
 									key={option.id}
 									value={option.value}
 									className={({ active }) =>
-										classNames(
-											'relative flex cursor-pointer rounded-lg bg-white p-2 focus:outline-none',
-											{
-												'ring-1 ring-black ring-opacity-60 ring-offset-2 ring-offset-black':
-													active === true,
-												'cursor-not-allowed': disabled === true || option.disabled === true
-											}
-										)
+										classNames('relative flex rounded-lg bg-white p-2 focus:outline-none', {
+											'ring-1 ring-black ring-opacity-60 ring-offset-2 ring-offset-black':
+												active === true,
+											'cursor-not-allowed': disabled === true || option.disabled === true,
+											'cursor-pointer': disabled === false && option.disabled === false
+										})
 									}
 									disabled={option.disabled}
 								>

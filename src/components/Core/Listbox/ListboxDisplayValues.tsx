@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { ListboxDisplayValueProps, SelectOption } from '../../../types/DropdownElementTypes';
 import Icon from '../Icon/Icon';
 
@@ -5,7 +6,8 @@ const ListboxDisplayValues = ({
 	value = null,
 	onChange = null,
 	displayLimit = 3,
-	showMultiDeleteButton = false
+	showMultiDeleteButton = false,
+	placeholder = 'Please select'
 }: ListboxDisplayValueProps) => {
 	const onDeleteItem = (event: React.KeyboardEvent | React.MouseEvent, option: SelectOption) => {
 		if (typeof onChange === 'function' && Array.isArray(value)) {
@@ -13,9 +15,29 @@ const ListboxDisplayValues = ({
 			event.stopPropagation();
 
 			// Since the delete button has been clicked make sure to pass back every item expect for the one we clicked
-			onChange({ value: value.filter((el2) => option.value !== el2.value) });
+			onChange({
+				value: value.filter((valueFromDropdown) => option.value !== valueFromDropdown.value)
+			});
 		}
 	};
+
+	// Handle empty state, this should show if a default or controlled value is empty
+	if ((Array.isArray(value) && value.length === 0) || (!Array.isArray(value) && value === null)) {
+		return (
+			<div className='mr-2'>
+				<span
+					className={classNames(
+						'ease flex w-max items-center rounded-full text-sm font-semibold transition duration-300 active:bg-gray-300',
+						{
+							'p-2': Array.isArray(value) && value.length === 0
+						}
+					)}
+				>
+					<p className='text-base text-gray-500'>{placeholder}</p>
+				</span>
+			</div>
+		);
+	}
 
 	// When it's a single select Listbox just output the value provided e.g. "Popularly (A-Z)"
 	if (!Array.isArray(value)) {
@@ -37,10 +59,10 @@ const ListboxDisplayValues = ({
 
 		return (
 			<div className='flex flex-wrap items-center'>
-				{valuesToDisplay.map((el) => (
-					<div className='mr-2 py-1' key={el.value}>
+				{valuesToDisplay.map((valueToDisplay) => (
+					<div className='mr-2' key={valueToDisplay.value}>
 						<span className='ease flex w-max items-center rounded-full bg-secondary p-2 text-sm font-semibold transition duration-300 active:bg-gray-300'>
-							<p className='text-base text-white'>{el.label}</p>
+							<p className='text-base text-white'>{valueToDisplay.label}</p>
 
 							{/* NOTE: You can't have buttons inside of buttons that's now allowed, hence the reason it's a div with a role attached for accessability */}
 							{showMultiDeleteButton === true && (
@@ -48,12 +70,12 @@ const ListboxDisplayValues = ({
 									role='button'
 									tabIndex={0}
 									className='mx-2 bg-transparent text-black'
-									onClick={(event) => onDeleteItem(event, el)}
+									onClick={(event) => onDeleteItem(event, valueToDisplay)}
 									onKeyDown={(event) => {
 										// When the user clicks the enter button
-										if (event.key === 'Enter') onDeleteItem(event, el);
+										if (event.key === 'Enter') onDeleteItem(event, valueToDisplay);
 									}}
-									aria-label={`${el} deletion button`}
+									aria-label={`${valueToDisplay} deletion button`}
 								>
 									<Icon className='fa-sharp fa-solid fa-xmark' />
 								</div>

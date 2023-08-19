@@ -1,15 +1,21 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-
 import { useFormikContext } from 'formik';
 
 import Settings from '../../../../../settings';
-
 import { Accordion, Listbox, Switch } from '../../../../Core';
-import FilterTitle from '../../FilterTitle/FilterTitle';
+import FilterTitle from '../../FilterTitle';
+import { SelectOption } from '../../../../../types/DropdownElementTypes';
+import DiscoverFiltersFormDataService from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 
-const WhereToWatch = ({ isAuthenticated, ottProviders }) => {
-	const { values, setFieldValue } = useFormikContext();
+type WhereToWatchProps = {
+	isAuthenticated?: boolean;
+	ottProviders?: SelectOption[];
+};
+
+const WhereToWatch = ({ isAuthenticated = false, ottProviders = [] }: WhereToWatchProps) => {
+	// Access the templates current from values, the return type is inferred from the return of getFormikFormData
+	const { values, setFieldValue } =
+		useFormikContext<ReturnType<DiscoverFiltersFormDataService['getFormikFormData']>>();
 
 	const MyServicesTooltip = React.useMemo(() => {
 		// No Ott Providers available
@@ -58,6 +64,7 @@ const WhereToWatch = ({ isAuthenticated, ottProviders }) => {
 					name='restrict_services'
 					disabled={ottProviders.length === 0 || isAuthenticated === false} // Disable the switch when there are no Service Providers
 					label='Restrict searches to my subscribed services?'
+					showLabelOnTheRight={false}
 				/>
 			</div>
 
@@ -74,8 +81,7 @@ const WhereToWatch = ({ isAuthenticated, ottProviders }) => {
 						onChange={({ value }) => {
 							setFieldValue('ott_region', value);
 						}}
-						isMulti={false}
-						displayName='label'
+						isMultiSelect={false}
 						name='ott_region'
 						defaultValue={undefined}
 						disabled={false}
@@ -91,13 +97,12 @@ const WhereToWatch = ({ isAuthenticated, ottProviders }) => {
 					/>
 
 					<Listbox
-						options={Settings.OTT_PROVIDER_OPTIONS}
+						options={ottProviders}
 						value={values.with_ott_providers}
 						onChange={({ value }) => {
 							setFieldValue('with_ott_providers', value);
 						}}
-						isMulti
-						displayName='label'
+						isMultiSelect
 						name='with_ott_providers'
 						defaultValue={undefined}
 						disabled={false}
@@ -108,23 +113,6 @@ const WhereToWatch = ({ isAuthenticated, ottProviders }) => {
 			</div>
 		</Accordion>
 	);
-};
-
-WhereToWatch.propTypes = {
-	isAuthenticated: PropTypes.bool,
-	ottProviders: PropTypes.arrayOf(PropTypes.string)
-};
-
-WhereToWatch.defaultProps = {
-	isAuthenticated: false,
-	ottProviders: [
-		Settings.OTT_PROVIDER_OPTIONS[5].value,
-		Settings.OTT_PROVIDER_OPTIONS[8].value,
-		Settings.OTT_PROVIDER_OPTIONS[9].value,
-		Settings.OTT_PROVIDER_OPTIONS[10].value,
-		Settings.OTT_PROVIDER_OPTIONS[15].value,
-		Settings.OTT_PROVIDER_OPTIONS[4].value
-	]
 };
 
 export default WhereToWatch;

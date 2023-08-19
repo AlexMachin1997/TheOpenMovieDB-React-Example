@@ -1,11 +1,9 @@
 import * as React from 'react';
-
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 
-import DiscoverFilterSidebar from '../../Forms/DiscoverFilterSidebar/DiscoverFilterSidebar';
+import DiscoverPageFilters from '../../Forms/DiscoverPageFilters/DiscoverPageFilters';
 import { EntertainmentPosterCard } from '../../Cards/Entertainment';
-
 import DiscoverFiltersFormDataService, {
 	DefaultValues
 } from '../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
@@ -136,7 +134,7 @@ const DiscoverPageTemplate = ({
 
 										{/* Filters */}
 										<div className='h-full overflow-y-auto p-4'>
-											<DiscoverFilterSidebar isAuthenticated={isAuthenticated} />
+											<DiscoverPageFilters isAuthenticated={isAuthenticated} />
 										</div>
 
 										<div className='flex content-center items-center border border-solid border-t-gray-300'>
@@ -170,7 +168,7 @@ const DiscoverPageTemplate = ({
 
 							{/* Filters */}
 							<div className='h-full overflow-y-auto p-4'>
-								<DiscoverFilterSidebar isAuthenticated={isAuthenticated} />
+								<DiscoverPageFilters isAuthenticated={isAuthenticated} />
 							</div>
 
 							<div className='flex content-center items-center border border-solid border-t-gray-300'>

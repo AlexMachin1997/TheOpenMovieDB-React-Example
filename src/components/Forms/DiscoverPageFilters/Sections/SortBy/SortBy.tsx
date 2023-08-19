@@ -1,14 +1,14 @@
-import * as React from 'react';
-
 import { useFormikContext } from 'formik';
 
 import Settings from '../../../../../settings';
-
 import { Accordion, Listbox } from '../../../../Core';
-import FiltersTitle from '../../FilterTitle/FilterTitle';
+import FiltersTitle from '../../FilterTitle';
+import DiscoverFiltersFormDataService from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 
 const Sort = () => {
-	const { values, setFieldValue } = useFormikContext();
+	// Access the templates current from values, the return type is inferred from the return of getFormikFormData
+	const { values, setFieldValue } =
+		useFormikContext<ReturnType<DiscoverFiltersFormDataService['getFormikFormData']>>();
 
 	return (
 		<Accordion
@@ -25,8 +25,7 @@ const Sort = () => {
 						setFieldValue('sort_by', value);
 					}}
 					options={Settings.SORT_BY_OPTIONS}
-					isMulti={false}
-					displayName='label'
+					isMultiSelect={false}
 					name='sort_by'
 					defaultValue={undefined}
 					disabled={false}

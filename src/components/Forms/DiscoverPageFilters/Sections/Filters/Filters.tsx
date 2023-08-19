@@ -1,91 +1,69 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-
 import { useFormikContext } from 'formik';
 
-import classNames from 'classnames';
 import Settings from '../../../../../settings';
+import { Accordion, CheckboxGroup, Input, Listbox, RadioGroup, Switch } from '../../../../Core';
+import FilterTitle from '../../FilterTitle';
+import { MEDIA_TYPE } from '../../../../../types/RoutingTypes';
+import DiscoverFiltersFormDataService from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import { CheckboxOption } from '../../../../../types/DropdownElementTypes';
 
-import {
-	Accordion,
-	CheckboxGroup,
-	Icon,
-	Input,
-	Listbox,
-	RadioGroup,
-	Switch
-} from '../../../../Core';
-import FilterTitle from '../../FilterTitle/FilterTitle';
-
-const ShowMeFilterIcon = ({
-	isChecked,
-	isDisabled,
-	defaults: { checkedIcon, uncheckedIcon, iconFontFamily, disabledIconCursor, checkedIconColour }
-}) => (
-	<Icon
-		className={classNames(`fa-lg mr-2 align-[-0.15rem]`, {
-			// When the radio option is checked use the default checkedIon with a blue font colour
-			[`${checkedIcon} text-secondary`]: isChecked === true,
-
-			// When the radio option is not checked use the default uncheckIcon with the default checkedIconColour
-			[`${uncheckedIcon} ${checkedIconColour}`]: isChecked === false,
-
-			// When the Radio option or radio group is disabled use the default icon cursor with solid font-family
-			[`${disabledIconCursor} fa-solid`]: isDisabled === true,
-
-			// When the Radio option or radio group is not disabled use the default iconFontFamily
-			[`${iconFontFamily}`]: isDisabled === false
-		})}
-	/>
-);
-
-ShowMeFilterIcon.propTypes = {
-	isChecked: PropTypes.bool.isRequired,
-	isDisabled: PropTypes.bool.isRequired,
-	// eslint-disable-next-line react/forbid-prop-types
-	defaults: PropTypes.object.isRequired
+type FiltersProps = {
+	isAuthenticated?: boolean;
+	mediaType?: MEDIA_TYPE;
 };
 
-const Filters = ({ isAuthenticated, mediaType }) => {
-	const { values, setFieldValue } = useFormikContext();
+const onChangeCheckboxGroup = ({
+	idOfTheCheckboxElement = '',
+	checkboxOptions = [],
+	newCheckboxValues = [],
+	currentCheckboxValues = []
+}: {
+	idOfTheCheckboxElement: string;
+	checkboxOptions: CheckboxOption[];
+	newCheckboxValues: string[];
+	currentCheckboxValues: string[];
+}) => {
+	// The find 'all' option element id, used to check if we clicked the all option
+	const allOptionId = checkboxOptions?.find((el) => el.value === 'all')?.id ?? '';
 
-	const onChangeCheckboxGroup = ({
-		idOfTheCheckboxElement = '',
-		checkboxOptions = [],
-		newCheckboxValues = [],
-		currentCheckboxValues = []
-	}) => {
-		// The find 'all' option element id, used to check if we clicked the all option
-		const allOptionId = checkboxOptions?.find((el) => el.value === 'all')?.id ?? '';
+	// Does the current value include 'all' ?
+	const doesYourCurrentSetOfValuesIncludeAll = currentCheckboxValues.includes('all') === true;
 
-		// Does the current value include 'all' ?
-		const doesYourCurrentSetOfValuesIncludeAll = currentCheckboxValues.includes('all') === true;
+	// 1. You have clicked the "All" option and your values don't include 'All'
+	if (idOfTheCheckboxElement === allOptionId && doesYourCurrentSetOfValuesIncludeAll === false) {
+		// Add all the options which are 'all' (It should only ever be one option)
+		return checkboxOptions.filter((el) => el.value === 'all').map((el) => el.value);
+	}
 
-		// 1. You have clicked the "All" option and your values don't include 'All'
-		if (idOfTheCheckboxElement === allOptionId && doesYourCurrentSetOfValuesIncludeAll === false) {
-			// Add all the options which are 'all' (It should only ever be one option)
-			return checkboxOptions.filter((el) => el.value === 'all').map((el) => el.value);
-		}
+	// 2. You clicked the "All" option and your values include 'All'
+	if (idOfTheCheckboxElement === allOptionId && doesYourCurrentSetOfValuesIncludeAll === true) {
+		// Add all the options which aren't the all value
+		return checkboxOptions.filter((el) => el.value !== 'all').map((el) => el.value);
+	}
 
-		// 2. You clicked the "All" option and your values include 'All'
-		if (idOfTheCheckboxElement === allOptionId && doesYourCurrentSetOfValuesIncludeAll === true) {
-			// Add all the options which aren't the all value
-			return checkboxOptions.filter((el) => el.value !== 'all').map((el) => el.value);
-		}
+	// 3. You've clicked an option which isn't 'all' so just override the current value with the new array provided by the component
+	if (idOfTheCheckboxElement !== allOptionId) {
+		// Add all the options which aren't the all value
+		return newCheckboxValues;
+	}
 
-		// 3. You've clicked an option which isn't 'all' so just override the current value with the new array provided by the component
-		if (idOfTheCheckboxElement !== allOptionId) {
-			// Add all the options which aren't the all value
-			return newCheckboxValues;
-		}
+	// When none of the above is met then just return the current checkbox values don't do any transforming.
+	return currentCheckboxValues;
+};
 
-		// When none of the above is met then just return the current checkbox values don't do any transforming.
-		return currentCheckboxValues;
-	};
+const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
+	// Access the templates current from values, the return type is inferred from the return of getFormikFormData
+	const { values, setFieldValue } =
+		useFormikContext<ReturnType<DiscoverFiltersFormDataService['getFormikFormData']>>();
 
 	const SHOW_ME_RADIO_OPTIONS = React.useMemo(() => {
-		if (isAuthenticated === true) return Settings.SHOW_ME_RADIO_OPTIONS;
+		// When the user is authenticated enable all the "Show Me" field options
+		if (isAuthenticated === true) {
+			return Settings.SHOW_ME_RADIO_OPTIONS.map((d) => ({ ...d, disabled: false }));
+		}
 
+		// If the user is not authenticated disable every option
 		return Settings.SHOW_ME_RADIO_OPTIONS?.map((d) => {
 			if (d.label !== 'Everything') {
 				return {
@@ -116,23 +94,10 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 					onChange={({ value }) => {
 						setFieldValue('show_me', value);
 					}}
-					displayName='label'
 					noOptionsAvailableMessage="Looks like there are now 'Show Me' options available"
 					disabled={false}
-					showRadioButtonOnTheLeft
-					addSpaceBetweenLabelAndRadioButton={false}
+					labelPosition='left'
 					name='show_me'
-					getRadioOptionClassName={({ isActive }) =>
-						classNames('cursor-pointer rounded-lg focus:outline-none bg-white relative flex', {
-							'ring-2 ring-black ring-opacity-60 ring-offset-2 ring-offset-black': isActive === true
-						})
-					}
-					getRadioLabelClassName={({ isDisabled }) =>
-						classNames('text-black', {
-							'cursor-not-allowed': isDisabled === true
-						})
-					}
-					iconComponent={ShowMeFilterIcon}
 					defaultValue={undefined}
 				/>
 			</label>
@@ -141,27 +106,26 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 
 				<CheckboxGroup
 					options={
-						values.with_release_type.includes('all') === true
+						values.with_release_types.includes('all') === true
 							? [Settings.RELEASE_TYPE_OPTIONS[0]]
 							: Settings.RELEASE_TYPE_OPTIONS
 					}
-					value={values.with_release_type}
+					value={values.with_release_types}
 					onChange={({ value, elementClicked }) => {
 						// Get the new checkbox group value
 						const newCheckboxValues = onChangeCheckboxGroup({
 							idOfTheCheckboxElement: elementClicked,
 							checkboxOptions: Settings.RELEASE_TYPE_OPTIONS,
 							newCheckboxValues: value,
-							currentCheckboxValues: values.with_release_type
+							currentCheckboxValues: values.with_release_types
 						});
 
 						// // Update Formik state with the new options
-						setFieldValue('with_release_type', [...newCheckboxValues]);
+						setFieldValue('with_release_types', [...newCheckboxValues]);
 					}}
-					displayName='label'
 					noOptionsAvailableMessage='No release type options available'
 					disabled={false}
-					name='with_release_type'
+					name='with_release_types'
 					defaultValue={undefined}
 				/>
 			</div>
@@ -252,8 +216,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 					onChange={({ value }) => {
 						setFieldValue('region', value);
 					}}
-					isMulti={false}
-					displayName='label'
+					isMultiSelect={false}
 					name='region'
 					defaultValue={undefined}
 					disabled={false}
@@ -285,7 +248,6 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 						// Update Formik state with the new options
 						setFieldValue('with_ott_monetization_types', [...newCheckboxGroupOptions]);
 					}}
-					displayName='label'
 					noOptionsAvailableMessage='No availability options available'
 					disabled={false}
 					name='with_ott_monetization_types'
@@ -305,8 +267,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 						setFieldValue('with_genres', value);
 					}}
 					options={Settings.GENRE_OPTIONS}
-					isMulti
-					displayName='label'
+					isMultiSelect
 					name='with_genres'
 					defaultValue={undefined}
 					disabled={false}
@@ -325,14 +286,13 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 
 				{/* Dropdown component, this allows you to select multiple certifications which are used for the "Certification" filter */}
 				<Listbox
-					value={values.certification}
+					value={values.certifications}
 					onChange={({ value }) => {
-						setFieldValue('certification', value);
+						setFieldValue('certifications', value);
 					}}
 					options={Settings.CERTIFICATION_OPTIONS}
-					isMulti
-					displayName='label'
-					name='certification'
+					isMultiSelect
+					name='certifications'
 					defaultValue={undefined}
 					disabled={false}
 					noOptionsAvailableMessage='No certification options available.'
@@ -352,8 +312,7 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 						setFieldValue('with_original_language', value);
 					}}
 					options={Settings.LANGUAGE_OPTIONS}
-					isMulti={false}
-					displayName='label'
+					isMultiSelect={false}
 					name='with_original_language'
 					defaultValue={undefined}
 					disabled={false}
@@ -501,16 +460,6 @@ const Filters = ({ isAuthenticated, mediaType }) => {
 			</div>
 		</Accordion>
 	);
-};
-
-Filters.propTypes = {
-	isAuthenticated: PropTypes.bool,
-	mediaType: PropTypes.string
-};
-
-Filters.defaultProps = {
-	isAuthenticated: false,
-	mediaType: 'movie'
 };
 
 export default Filters;
