@@ -88,23 +88,22 @@ const DiscoverPageTemplate = ({
 			<Form className='' style={{}} id='filters-form'>
 				<main className='lg:m-auto lg:max-w-[90rem]'>
 					{/* Mobile filters sidebar, toggled via the Mobile Title action */}
-					<Transition.Root show={isFiltersSidebarOpen} as={React.Fragment} unmount={false}>
+					<Transition.Root show={isFiltersSidebarOpen} as={React.Fragment}>
 						<Dialog
 							as='div'
 							className='relative z-40 lg:hidden'
 							onClose={() => setIsFiltersSidebarOpen((prevState) => !prevState)}
-							unmount={false}
 						>
 							<Transition.Child
 								as={React.Fragment}
-								enter='transition-opacity ease-linear duration-300'
+								enter='ease-in-out duration-500'
 								enterFrom='opacity-0'
 								enterTo='opacity-100'
-								leave='transition-opacity ease-linear duration-300'
+								leave='ease-in-out duration-500'
 								leaveFrom='opacity-100'
 								leaveTo='opacity-0'
 							>
-								<div className='fixed inset-0 bg-black/25' />
+								<div className='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity' />
 							</Transition.Child>
 
 							<div className='fixed inset-0 z-40 flex'>
@@ -118,7 +117,7 @@ const DiscoverPageTemplate = ({
 									leaveTo='translate-x-full'
 									unmount={false}
 								>
-									<Dialog.Panel className='relative ml-auto flex h-full w-full max-w-xs flex-col bg-white shadow-xl'>
+									<Dialog.Panel className='relative ml-auto flex h-full w-full max-w-md flex-col bg-white shadow-xl'>
 										<div className='flex items-center justify-between border border-solid border-b-gray-300 px-4 py-2'>
 											<h2 className='text-lg font-medium text-gray-900'>Filters</h2>
 											<div>
@@ -134,7 +133,7 @@ const DiscoverPageTemplate = ({
 										</div>
 
 										{/* Filters */}
-										<div className='h-full overflow-y-auto p-4'>
+										<div className='h-full overflow-y-auto px-2 py-4'>
 											<DiscoverPageFilters
 												isAuthenticated={isAuthenticated}
 												ottProviders={settings.OTT_PROVIDER_OPTIONS}
@@ -159,8 +158,8 @@ const DiscoverPageTemplate = ({
 					{/* Desktop filters sidebar */}
 					<aside className='fixed bottom-2 top-5 hidden w-80 lg:block'>
 						<div className='relative ml-auto flex h-full w-full max-w-xs flex-col bg-white shadow-xl'>
-							<div className='flex items-center justify-between border border-solid border-b-gray-300 px-4 py-2'>
-								<h2 className='text-lg font-medium text-gray-900'>{title}</h2>
+							<div className='flex items-center justify-between rounded-t-lg border border-solid border-b-gray-300 p-4'>
+								<h1 className='text-lg font-bold text-gray-900'>{title}</h1>
 								<div>
 									<FormSettings
 										resourceType={resourceType}
@@ -171,14 +170,14 @@ const DiscoverPageTemplate = ({
 							</div>
 
 							{/* Filters */}
-							<div className='h-full overflow-y-auto p-4'>
+							<div className='h-full overflow-y-auto px-3 py-3'>
 								<DiscoverPageFilters
 									isAuthenticated={isAuthenticated}
 									ottProviders={settings.OTT_PROVIDER_OPTIONS}
 								/>
 							</div>
 
-							<div className='flex content-center items-center border border-solid border-t-gray-300'>
+							<div className='flex content-center items-center rounded-b-lg border border-solid border-t-gray-300'>
 								<Button
 									type='submit'
 									className='m-4 w-full rounded-2xl bg-secondary px-4  py-2 text-center text-white hover:bg-secondary/75'
@@ -192,7 +191,7 @@ const DiscoverPageTemplate = ({
 					<section className='px-4 pb-4 lg:ml-80 lg:pr-8'>
 						{/* Mobile title and actions header */}
 						<div className='flex items-center justify-between py-4 lg:hidden'>
-							<h1 className='text-2xl'>{title}</h1>
+							<h1 className='text-3xl font-bold'>{title}</h1>
 							<div className='flex items-center'>
 								<Button
 									onClick={() => {
@@ -222,7 +221,7 @@ const DiscoverPageTemplate = ({
 						{/* Displays the page results */}
 						<div
 							id={`${mediaType}-results`}
-							className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4'
+							className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5'
 						>
 							{resources.map((resource) => (
 								<EntertainmentPosterCard

@@ -10,10 +10,10 @@ const DiscoverFilterSidebar = ({
 	isAuthenticated = false,
 	ottProviders = []
 }: DiscoverFilterSidebar) => (
-	<div className='max-w-sm space-y-2'>
+	<div className='max-w-md space-y-2'>
 		<SortBySection />
-		<FiltersSection isAuthenticated={isAuthenticated} />
 		<WhereToWatchSection isAuthenticated={isAuthenticated} ottProviders={ottProviders} />
+		<FiltersSection isAuthenticated={isAuthenticated} />
 	</div>
 );
 

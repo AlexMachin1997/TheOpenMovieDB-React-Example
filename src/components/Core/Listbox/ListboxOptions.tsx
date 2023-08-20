@@ -70,7 +70,7 @@ const VirtualizedList = React.memo(
 									{({ selected, active }) => (
 										<>
 											<span
-												className={classNames('block truncate', {
+												className={classNames('truncate', {
 													'font-bold': selected === true,
 													'font-normal': selected === false
 												})}

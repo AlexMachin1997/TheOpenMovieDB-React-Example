@@ -2,7 +2,7 @@ import { useFormikContext } from 'formik';
 
 import Settings from '../../../../../settings';
 import { Accordion, Listbox } from '../../../../Core';
-import FiltersTitle from '../../FilterTitle';
+import FilterTitle from '../../FilterTitle';
 import DiscoverFiltersFormDataService from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 
 const Sort = () => {
@@ -17,7 +17,7 @@ const Sort = () => {
 			defaultIsOpen
 		>
 			<label htmlFor='sort_by' className='block p-4'>
-				<FiltersTitle title='Sort Results By' tooltip='Sort by selecting a sort by option' />
+				<FilterTitle title='Sort Results By' tooltip='Sort by selecting a sort by option' />
 
 				<Listbox
 					value={values.sort_by}
