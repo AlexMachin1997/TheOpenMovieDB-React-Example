@@ -6,6 +6,7 @@
 	"scripts": {
 		"start": "vite",
 		"build": "tsc && vite build",
+		"ts-validate": "tsc",
 		"lint": "yarn run eslint ./src/** --ext js,jsx,ts,tsx --fix && tsc",
 		"prettier": "prettier --write ./src",
 		"storybook": "storybook dev -p 6006 --disable-telemetry",
@@ -68,7 +69,8 @@
 		"storybook": "7.3.2",
 		"typescript": "^5.0.2",
 		"vite": "^4.4.9",
-		"vitest": "^0.33.0"
+		"vitest": "^0.33.0",
+		"husky": "^8.0.0"
 	},
 	"bugs": {
 		"url": "https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/issues"

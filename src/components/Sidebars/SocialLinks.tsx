@@ -1,13 +1,13 @@
 import { Icon, Tooltip } from '../Core';
 
-type Props = {
+type SocialLinks = {
 	facebook: string;
 	twitter: string;
 	instagram: string;
 	homepage: string;
 };
 
-const SocialLinks = ({ facebook, twitter, instagram, homepage }: Props) => (
+const SocialLinks = ({ facebook, twitter, instagram, homepage }: SocialLinks) => (
 	<ul className='flex list-none flex-row flex-wrap space-x-4'>
 		{(facebook?.length ?? 0) > 0 && (
 			<li>

@@ -1,14 +1,19 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-type Props = {
+type PercentageProps = {
 	size?: number;
 	strokeWidth?: number;
 	percentage?: number;
 	textClass?: string;
 };
 
-const Rating = ({ size = 75, strokeWidth = 7, percentage = 0, textClass = 'text-lg' }: Props) => {
+const Rating = ({
+	size = 75,
+	strokeWidth = 7,
+	percentage = 0,
+	textClass = 'text-lg'
+}: PercentageProps) => {
 	const radius = (size - strokeWidth) / 2;
 	const dashArray = radius * Math.PI * 2;
 	const dashOffset = dashArray - (dashArray * percentage) / 100;

@@ -2,7 +2,7 @@ import { Image } from '../../Core';
 
 import SocialLinks from '../SocialLinks';
 
-type Props = {
+type PersonSidebarProps = {
 	actorName: string;
 	actorImage: string;
 	knownFor: string;
@@ -30,7 +30,7 @@ const PersonSidebar = ({
 	twitterLink,
 	instagramLink,
 	homepageLink
-}: Props) => (
+}: PersonSidebarProps) => (
 	<>
 		<div className='flex flex-col justify-center pb-4 md:justify-start'>
 			{/* TODO: Replace with a picture element to support multiple image sizes and less hacks to get it working as intended.... No more unset this unset that... */}

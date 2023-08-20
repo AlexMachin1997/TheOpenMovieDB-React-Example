@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { Icon, Image, PercentageRating, Tooltip } from '../../Core';
 
-type Props = {
+type EntertainmentHeaderProps = {
 	posterImage: string;
 	backgroundImage: string;
 	title: string;
@@ -36,7 +36,7 @@ const EntertainmentHeader = ({
 	featuredCrew,
 	ageRating,
 	isAuthenticated = false
-}: Props) => {
+}: EntertainmentHeaderProps) => {
 	// Stores the overlay property, this is used by the inner container to apply a linear-gradient
 	const [overlay, setOverlay] = React.useState('');
 

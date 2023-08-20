@@ -38,6 +38,7 @@ const WhereToWatch = ({ isAuthenticated = false, ottProviders = [] }: WhereToWat
 		<Accordion
 			title={<h3 className='text-lg text-black'>Where to watch</h3>}
 			contentClassName='mb-4'
+			containerClassName='z-[3]'
 		>
 			<div className='block border-b-[1px] border-solid border-gray-300 p-4 '>
 				<FilterTitle title='My Services' tooltip={MyServicesTooltip} />
@@ -87,6 +88,7 @@ const WhereToWatch = ({ isAuthenticated = false, ottProviders = [] }: WhereToWat
 						disabled={false}
 						displayLimit={3}
 						noOptionsAvailableMessage='No countries available to choose from'
+						truncateText={false}
 					/>
 				</label>
 
@@ -108,6 +110,7 @@ const WhereToWatch = ({ isAuthenticated = false, ottProviders = [] }: WhereToWat
 						disabled={false}
 						displayLimit={1}
 						noOptionsAvailableMessage='No providers available to choose from for your current region'
+						truncateText={false}
 					/>
 				</label>
 			</div>

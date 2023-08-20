@@ -77,8 +77,15 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 	}, [isAuthenticated]);
 
 	return (
-		<Accordion title={<h3 className='text-lg text-black'>Filters</h3>} contentClassName='mb-4'>
-			<label htmlFor='show_me' className='block border-b-[1px] border-solid border-gray-300 p-4'>
+		<Accordion
+			title={<h3 className='text-lg text-black'>Filters</h3>}
+			contentClassName='mb-4'
+			containerClassName='z-[2]'
+		>
+			<label
+				htmlFor='show_me'
+				className='relative block border-b-[1px] border-solid border-gray-300 p-4'
+			>
 				<FilterTitle
 					title='Show Me'
 					tooltip={
@@ -222,6 +229,7 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 					disabled={false}
 					displayLimit={3}
 					noOptionsAvailableMessage='No countries available to choose from'
+					truncateText={false}
 				/>
 			</div>
 
@@ -273,6 +281,7 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 					disabled={false}
 					noOptionsAvailableMessage='No genre options available.'
 					displayLimit={2}
+					truncateText={false}
 				/>
 			</label>
 			<label
@@ -297,6 +306,7 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 					disabled={false}
 					noOptionsAvailableMessage='No certification options available.'
 					displayLimit={2}
+					truncateText={false}
 				/>
 			</label>
 			<label
@@ -317,6 +327,7 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 					defaultValue={undefined}
 					disabled={false}
 					noOptionsAvailableMessage='No languages available'
+					truncateText={false}
 				/>
 			</label>
 

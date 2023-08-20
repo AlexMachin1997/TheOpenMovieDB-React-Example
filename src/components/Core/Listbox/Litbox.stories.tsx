@@ -27,7 +27,11 @@ const ControlledStoryTemplate = (args: Story['args']) => {
 	});
 
 	return (
-		<form>
+		<form
+			onSubmit={(event) => {
+				console.log(event);
+			}}
+		>
 			<label htmlFor={args?.name ?? 'people'}>
 				A dropdown label
 				<Listbox
@@ -45,12 +49,27 @@ const ControlledStoryTemplate = (args: Story['args']) => {
 					}}
 				/>
 			</label>
+
+			<button type='submit'>Submit</button>
 		</form>
 	);
 };
 
 const UncontrolledStoryTemplate = (args: Story['args']) => (
-	<form>
+	<form
+		onSubmit={(event) => {
+			// Don't submit the form
+			event.preventDefault();
+
+			// Get the current form element
+			const target = event.target as HTMLFormElement;
+
+			// Get the formData from the html form element (Contains )
+			const uncontrolledFormData = Object.fromEntries(new FormData(target));
+
+			console.log(uncontrolledFormData);
+		}}
+	>
 		<label htmlFor={args?.name ?? 'people'}>
 			A dropdown label
 			<Listbox
@@ -64,6 +83,8 @@ const UncontrolledStoryTemplate = (args: Story['args']) => (
 				noOptionsAvailableMessage={args?.noOptionsAvailableMessage}
 			/>
 		</label>
+
+		<button type='submit'>Submit</button>
 	</form>
 );
 

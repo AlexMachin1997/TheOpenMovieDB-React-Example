@@ -18,7 +18,8 @@ const Listbox = ({
 	disabled = false,
 	displayLimit = 3,
 	noOptionsAvailableMessage = 'No options available',
-	placeholder = undefined
+	placeholder = undefined,
+	truncateText = true
 }: ListboxProps) => {
 	// Handles the menu placement, it decides if the dropdown needs to be on the top or bottom depending on where it is on the screen
 	const {
@@ -37,10 +38,10 @@ const Listbox = ({
 
 	return (
 		<HeadlessUIListbox
-			// Used when using the "uncontrolled" component ie using your own form management solution with state ()
+			// Used when using the "controlled" component ie using your own form management solution with state ()
 			value={value}
 			onChange={(dropdownValue) => handleChange(dropdownValue)}
-			// Used when using the "controlled" component ie using the native html form formData object
+			// Used when using the "uncontrolled" component ie using the native html form formData object
 			name={name}
 			defaultValue={defaultValue}
 			// Other general properties made available to the component
@@ -51,7 +52,7 @@ const Listbox = ({
 			{({ value: listboxInternalValue }) => (
 				<div className='relative' ref={containerRef}>
 					{/* NOTE: Don't move the display value inside of the Button YOU CAN'T HAVE NESTED CONTROLS IT'S UNACCESSIBLE AND BAD PRACTICE */}
-					<div className='relative flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
+					<div className='flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
 						<span className='w-full'>
 							<ListboxDisplayValues
 								value={listboxInternalValue}
@@ -118,6 +119,7 @@ const Listbox = ({
 								options={options}
 								noOptionsAvailableMessage={noOptionsAvailableMessage}
 								isMultiSelect={isMultiSelect}
+								truncateText={truncateText}
 							/>
 						</HeadlessUIListbox.Options>
 					</Transition>

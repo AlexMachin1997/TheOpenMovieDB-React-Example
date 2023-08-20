@@ -21,13 +21,14 @@ type BaseDropdownProps = {
 	noOptionsAvailableMessage?: string;
 	displayLimit?: number;
 	placeholder?: string;
+	truncateText?: boolean;
 };
 
 export type ListboxProps = BaseDropdownProps;
 
 export type VirtualizedListProps = Pick<
 	ListboxProps,
-	'options' | 'noOptionsAvailableMessage' | 'isMultiSelect'
+	'options' | 'noOptionsAvailableMessage' | 'isMultiSelect' | 'truncateText'
 >;
 
 export interface ListboxDisplayValueProps

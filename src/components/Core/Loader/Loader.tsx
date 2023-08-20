@@ -1,10 +1,10 @@
 import className from 'classnames';
 
-type Props = {
+type LoaderProps = {
 	isFixed?: boolean;
 };
 
-const Loader = ({ isFixed = true }: Props) => (
+const Loader = ({ isFixed = true }: LoaderProps) => (
 	<div
 		className={className('flex h-[500px] items-center justify-center bg-inherit', {
 			'fixed bottom-0 left-0 right-0 top-0': isFixed

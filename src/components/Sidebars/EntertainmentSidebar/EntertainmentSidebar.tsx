@@ -28,9 +28,9 @@ interface MovieSidebarProps extends SharedSidebarProps {
 	revenue: string;
 }
 
-type Props = ShowSidebarProps | MovieSidebarProps;
+type EntertainmentSideProps = ShowSidebarProps | MovieSidebarProps;
 
-const EntertainmentSidebar = (props: Props) => {
+const EntertainmentSidebar = (props: EntertainmentSideProps) => {
 	// Explicity check the entertainment type is is 'tv' (Typescript can correctly narrow the types down then to include props relevant for this mode)
 	if (props.mediaType === MEDIA_TYPE.TV) {
 		const {

@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 
-type Props = {
+type TabProps = {
 	tabs: {
 		enabled?: boolean;
 		content?: React.ReactNode;
@@ -22,7 +22,7 @@ const Tabs = ({
 	tabs,
 	tabClassName = 'text-gray-500 hover:text-gray-700',
 	activeTabClassName = 'bg-gray-100 text-gray-700'
-}: Props) => {
+}: TabProps) => {
 	// Only show the tabs which are enabled and has content
 	const enabledTabs = React.useMemo(
 		() => tabs.filter((tab) => (tab?.enabled ?? true) === true && tab.content !== undefined),

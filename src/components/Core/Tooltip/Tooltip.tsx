@@ -4,11 +4,11 @@ import classnames from 'classnames';
 import Tippy, { TippyProps } from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-interface Props extends TippyProps {
+interface TooltipProps extends TippyProps {
 	tooltip: React.ReactNode;
 }
 
-const Tooltip = ({ children, tooltip, placement = 'auto', className, ...props }: Props) => (
+const Tooltip = ({ children, tooltip, placement = 'auto', className, ...props }: TooltipProps) => (
 	<Tippy
 		content={tooltip}
 		placement={placement}

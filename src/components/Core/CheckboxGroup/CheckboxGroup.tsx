@@ -1,7 +1,7 @@
 import CheckboxGroupContextProvider from './CheckboxGroupContext';
 import CheckboxGroupOption from './CheckboxGroupOption';
 
-type Props = {
+type CheckboxGroupProps = {
 	options: { id: string; disabled?: boolean; value: string; label: string }[];
 	value?: string[];
 	defaultValue?: string[];
@@ -25,13 +25,11 @@ const CheckboxGroup = ({
 	disabled = false,
 	name,
 	defaultValue = undefined
-}: Props) => (
+}: CheckboxGroupProps) => (
 	<div className='w-full'>
 		<div className='mx-auto w-full'>
 			{(options?.length ?? 0) === 0 && (
-				<p className='relative cursor-default select-none py-2 text-gray-700'>
-					{noOptionsAvailableMessage}
-				</p>
+				<p className='cursor-default select-none py-2 text-gray-700'>{noOptionsAvailableMessage}</p>
 			)}
 
 			<div className='space-y-2'>

@@ -2,14 +2,14 @@ import * as React from 'react';
 
 import { useCheckboxGroup } from './CheckboxGroupContext';
 
-type Props = {
+type CheckboxGroupOptionProps = {
 	label: string;
 	disabled: boolean;
 	id: string;
 	value: string;
 };
 
-const CheckboxGroupOption = ({ label, disabled, id, value }: Props) => {
+const CheckboxGroupOption = ({ label, disabled, id, value }: CheckboxGroupOptionProps) => {
 	// Get the options provided by CheckboxGroup component (React Context provider)
 	const {
 		value: checkedItems = [],

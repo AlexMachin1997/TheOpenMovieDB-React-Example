@@ -15,6 +15,7 @@ const Sort = () => {
 			title={<h3 className='text-lg text-black'>Sort</h3>}
 			contentClassName='mb-4'
 			defaultIsOpen
+			containerClassName='z-[1]'
 		>
 			<label htmlFor='sort_by' className='block p-4'>
 				<FilterTitle title='Sort Results By' tooltip='Sort by selecting a sort by option' />
@@ -30,6 +31,7 @@ const Sort = () => {
 					defaultValue={undefined}
 					disabled={false}
 					noOptionsAvailableMessage='No sort by options available at this time.'
+					truncateText={false}
 				/>
 			</label>
 		</Accordion>

@@ -7,7 +7,7 @@ import { VirtualizedListProps } from '../../../types/DropdownElementTypes';
 import Icon from '../Icon/Icon';
 
 const VirtualizedList = React.memo(
-	({ options, noOptionsAvailableMessage, isMultiSelect }: VirtualizedListProps) => {
+	({ options, noOptionsAvailableMessage, isMultiSelect, truncateText }: VirtualizedListProps) => {
 		// This will store the reference to the options list (Wrapper for the options)
 		const optionsRef = React.useRef<HTMLDivElement>(null);
 
@@ -26,7 +26,7 @@ const VirtualizedList = React.memo(
 					<HeadlessUIListbox.Option
 						disabled
 						aria-disabled
-						className='relative cursor-default select-none py-2 pl-3 text-gray-700'
+						className='cursor-default select-none py-2 pl-3 text-gray-700'
 						value=''
 					>
 						{noOptionsAvailableMessage}
@@ -50,7 +50,7 @@ const VirtualizedList = React.memo(
 								<HeadlessUIListbox.Option
 									key={`${option?.label}-${virtualRow.index}`}
 									className={({ active }) =>
-										classNames('relative cursor-default select-none py-2 pr-4', {
+										classNames('cursor-default select-none py-2 pr-4', {
 											'bg-secondary text-white': active === true,
 											'text-gray-900': active === false,
 											'pl-10': isMultiSelect === true,
@@ -70,9 +70,10 @@ const VirtualizedList = React.memo(
 									{({ selected, active }) => (
 										<>
 											<span
-												className={classNames('truncate', {
+												className={classNames({
 													'font-bold': selected === true,
-													'font-normal': selected === false
+													'font-normal': selected === false,
+													truncate: truncateText === true
 												})}
 											>
 												{option?.label}

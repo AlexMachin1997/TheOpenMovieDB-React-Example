@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface Props extends React.ComponentPropsWithoutRef<'img'> {
+interface ImageProps extends React.ComponentPropsWithoutRef<'img'> {
 	label: string;
 }
 
@@ -13,7 +13,7 @@ const Image = ({
 	className = '',
 	loading = 'lazy',
 	...props
-}: Props) => {
+}: ImageProps) => {
 	const [error, setError] = React.useState(false);
 
 	return (

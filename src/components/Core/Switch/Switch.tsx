@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Switch } from '@headlessui/react';
 import classNames from 'classnames';
 
-type Props = {
+type SwitchProps = {
 	onChange?: null | ((data: { value: boolean }) => void);
 	value?: boolean;
 	defaultValue?: boolean;
@@ -21,7 +21,7 @@ const CustomSwitch = ({
 	disabled = false,
 	label,
 	showLabelOnTheRight = true
-}: Props) => (
+}: SwitchProps) => (
 	<Switch.Group>
 		<div className='flex items-center'>
 			{showLabelOnTheRight === false && <Switch.Label>{label}</Switch.Label>}

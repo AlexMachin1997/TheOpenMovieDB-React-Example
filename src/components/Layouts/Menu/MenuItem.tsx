@@ -9,13 +9,13 @@ import { Link } from 'react-router-dom';
 import Accordion from '../../Core/Accordion/Accordion';
 import { MenuItemRoute } from '../../../services/RoutingService/RoutingService';
 
-type Props = {
+type MenuItemProps = {
 	links: MenuItemRoute[];
 	title: string;
 	isSidebarItem?: boolean;
 };
 
-const MenuItem = ({ links = [], title = '', isSidebarItem = false }: Props) => {
+const MenuItem = ({ links = [], title = '', isSidebarItem = false }: MenuItemProps) => {
 	// Store the reference element reference (The popup trigger e.g. button), it's state so usePopper know the element has changed
 	const [referenceElement, setReferenceElement] = React.useState<HTMLElement>();
 

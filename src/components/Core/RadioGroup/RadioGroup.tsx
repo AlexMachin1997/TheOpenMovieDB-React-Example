@@ -13,7 +13,7 @@ type Option = {
 	disabled?: boolean;
 };
 
-type Props = {
+type RadioGroupProps = {
 	options: Option[];
 	value?: string;
 	defaultValue?: string;
@@ -24,7 +24,7 @@ type Props = {
 	name: string;
 };
 
-const CustomRadioGroup = React.memo<Props>(
+const CustomRadioGroup = React.memo<RadioGroupProps>(
 	({
 		options = [],
 		value = undefined,
@@ -38,7 +38,7 @@ const CustomRadioGroup = React.memo<Props>(
 		<div className='w-full'>
 			<div className='mx-auto w-full'>
 				{(options?.length ?? 0) === 0 && (
-					<p className='relative cursor-default select-none py-2 text-gray-700'>
+					<p className='cursor-default select-none py-2 text-gray-700'>
 						{noOptionsAvailableMessage}
 					</p>
 				)}
@@ -58,13 +58,13 @@ const CustomRadioGroup = React.memo<Props>(
 						// Other general properties made available to the component
 						disabled={disabled}
 					>
-						<div className='space-y-1'>
+						<div className='z-10 space-y-1'>
 							{options.map((option) => (
 								<RadioGroup.Option
 									key={option.id}
 									value={option.value}
 									className={({ active }) =>
-										classNames('relative flex rounded-lg bg-white p-2 focus:outline-none', {
+										classNames('flex rounded-lg bg-white p-2 focus:outline-none', {
 											'ring-1 ring-black ring-opacity-60 ring-offset-2 ring-offset-black':
 												active === true,
 											'cursor-not-allowed': disabled === true || option.disabled === true,

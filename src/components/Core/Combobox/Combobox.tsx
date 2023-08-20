@@ -93,7 +93,8 @@ const Combobox = ({
 			onChange={(dropdownValue) => handleChange(dropdownValue)}
 			name={name}
 			defaultValue={defaultValue}
-			multiple={isMultiSelect}
+			// @ts-ignore
+			multiple={isMultiSelect === true}
 			disabled={disabled}
 			by='value'
 		>

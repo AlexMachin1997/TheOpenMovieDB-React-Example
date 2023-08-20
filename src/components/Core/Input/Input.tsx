@@ -1,4 +1,4 @@
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	label?: string | React.ReactNode | JSX.Element;
 	labelClassName?: string;
 	containerClassName?: string;
@@ -12,7 +12,7 @@ const Input = ({
 	labelClassName = '',
 	containerClassName = '',
 	...props
-}: Props) => (
+}: InputProps) => (
 	<div className={containerClassName}>
 		<label htmlFor={id} className={labelClassName}>
 			{label}

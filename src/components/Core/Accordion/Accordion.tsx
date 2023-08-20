@@ -11,6 +11,7 @@ type AccordionProps = {
 	className?: string;
 	contentClassName?: string;
 	unmount?: boolean;
+	containerClassName?: string;
 };
 
 const Accordion = ({
@@ -20,11 +21,12 @@ const Accordion = ({
 	isDisabled,
 	className = 'p-4',
 	contentClassName = 'p-4',
-	unmount = false
+	unmount = false,
+	containerClassName = ''
 }: AccordionProps) => (
 	<Disclosure defaultOpen={defaultIsOpen}>
 		{({ open }) => (
-			<div className={classNames('rounded-lg shadow-lg', {})}>
+			<div className={classNames('rounded-lg shadow-lg', containerClassName)}>
 				<Disclosure.Button
 					className={classNames(
 						className,
