@@ -80,9 +80,12 @@ const ComboboxOptions = React.memo(
 							// Get the current option
 							const option = options?.at(virtualRow.index);
 
+							// The unique react key value, a combination of the label and index to prevent duplicate labels from erroring
+							const key = `${option?.label}-${virtualRow.index}`;
+
 							return (
 								<HeadlessUICombobox.Option
-									key={`${option?.label}-${virtualRow.index}`}
+									key={key}
 									className={({ active }) =>
 										classNames('relative cursor-default select-none py-2 pr-4', {
 											'bg-teal-600 text-white': active === true,
@@ -92,6 +95,8 @@ const ComboboxOptions = React.memo(
 										})
 									}
 									value={option}
+									data-index={key}
+									ref={rowVirtualizer.measureElement}
 									style={{
 										position: 'absolute',
 										top: 0,

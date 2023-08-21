@@ -46,9 +46,12 @@ const VirtualizedList = React.memo(
 							// Get the current option
 							const option = options?.at(virtualRow.index);
 
+							// The unique react key value, a combination of the label and index to prevent duplicate labels from erroring
+							const key = `${option?.label}-${virtualRow.index}`;
+
 							return (
 								<HeadlessUIListbox.Option
-									key={`${option?.label}-${virtualRow.index}`}
+									key={key}
 									className={({ active }) =>
 										classNames('cursor-default select-none py-2 pr-4', {
 											'bg-secondary text-white': active === true,
@@ -57,7 +60,7 @@ const VirtualizedList = React.memo(
 											'pl-3': isMultiSelect === false
 										})
 									}
-									data-index={virtualRow.index}
+									data-index={key}
 									ref={rowVirtualizer.measureElement}
 									value={option}
 									style={{
