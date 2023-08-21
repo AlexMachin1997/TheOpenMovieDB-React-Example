@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 import classNames from 'classnames';
 import { Image } from '../Core';
@@ -8,9 +7,9 @@ import generateComponentId from '../../utils/generateComponentId';
 import { CardComponentProps } from './types';
 
 const Card = ({
-	title,
-	image,
-	renderLink,
+	title = '',
+	image = '',
+	renderLink = null,
 	children,
 	imageHeight = '265px',
 	imageClassName = 'rounded-t-2xl',
@@ -47,27 +46,6 @@ const Card = ({
 			</div>
 		</div>
 	);
-};
-
-Card.propTypes = {
-	title: PropTypes.string,
-	image: PropTypes.string,
-	renderLink: PropTypes.func,
-	children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]).isRequired,
-	imageHeight: PropTypes.string,
-	imageClassName: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-	contentClassName: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-	containerClassName: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
-};
-
-Card.defaultProps = {
-	title: 'Dark',
-	image: 'https://image.tmdb.org/t/p/original/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg',
-	renderLink: null,
-	imageHeight: '265px',
-	imageClassName: 'rounded-t-2xl',
-	contentClassName: 'p-4',
-	containerClassName: 'rounded-2xl border border-solid border-gray-200'
 };
 
 export default Card;

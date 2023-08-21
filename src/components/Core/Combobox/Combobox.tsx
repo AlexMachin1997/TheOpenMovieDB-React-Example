@@ -89,16 +89,20 @@ const Combobox = ({
 
 	return (
 		<HeadlessUICombobox
+			// Used when using the "controlled" component ie using your own form management solution with state ()
 			value={value}
 			onChange={(dropdownValue) => handleChange(dropdownValue)}
+			// Used when using the "uncontrolled" component ie using the native html form formData object
 			name={name}
 			defaultValue={defaultValue}
+			// Other general properties made available to the component
 			// @ts-ignore
 			multiple={isMultiSelect === true}
 			disabled={disabled}
 			by='value'
 		>
-			{({ value: listboxInternalValue }) => (
+			<>
+				{/* @ts-ignore */}
 				<div className='relative' ref={containerRef}>
 					<div
 						className={classNames(
@@ -117,7 +121,7 @@ const Combobox = ({
 							</HeadlessUICombobox.Button>
 						)}
 
-						<input
+						<HeadlessUICombobox.Input
 							type='text'
 							className='w-full border-none p-4 text-sm leading-5 text-gray-900 focus:ring-0'
 							onChange={(event) => {
@@ -144,12 +148,6 @@ const Combobox = ({
 						leaveTo='opacity-0'
 					>
 						<HeadlessUICombobox.Options
-							// Forces the dropdown list to re-render whenever the value changes, forces popper to adjust it's calculations to get the menu in the right position.
-							key={JSON.stringify(
-								Array.isArray(listboxInternalValue)
-									? listboxInternalValue?.length ?? 0
-									: listboxInternalValue
-							)}
 							// @ts-ignore
 							ref={setPopperElement}
 							aria-label={`A ${
@@ -179,7 +177,7 @@ const Combobox = ({
 						</HeadlessUICombobox.Options>
 					</Transition>
 				</div>
-			)}
+			</>
 		</HeadlessUICombobox>
 	);
 };

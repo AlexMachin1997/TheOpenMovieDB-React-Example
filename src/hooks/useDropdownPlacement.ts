@@ -2,14 +2,15 @@ import * as React from 'react';
 import { usePopper } from 'react-popper';
 
 const useDropdownPlacement = () => {
+	// Popper values, they are stored in state so the component can re-adjust itself as value/s are selected/added
 	const [referenceElement, setReferenceElement] = React.useState<HTMLElement>();
 	const [popperElement, setPopperElement] = React.useState<HTMLDivElement>();
-	const containerRef = React.useRef<HTMLDivElement | null>(null);
+	const [containerElement, setContainerElement] = React.useState<HTMLDivElement>();
 
 	// Used to calculate the offset for the usePopper hook which provides the menu placement functionality, used to switch between top or bottom for the menu
 	const offset = React.useCallback(() => {
 		// Get the height of the dropdown container (Used to determine how much distance should be applied to the offset)
-		const dropdownContainerHeight = containerRef?.current?.getBoundingClientRect()?.height ?? 0;
+		const dropdownContainerHeight = containerElement?.getBoundingClientRect()?.height ?? 0;
 
 		// Skidding reference: https://popper.js.org/docs/v2/modifiers/offset/#skidding-1
 		const skidding = 0;
@@ -21,9 +22,9 @@ const useDropdownPlacement = () => {
 		// When the placement is anything else ie top set the distance to 25
 		// NOTE: Force typescript to read these as numbers, when you use a static value is reads it as the literal value which is undesired
 		return [skidding, distance] as [number, number];
-	}, []);
+	}, [containerElement]);
 
-	// Used to place the menu either on the top or bottom of the Listbox button
+	// Used to place the dropdown menu either on the top or the bottom of the Listbox/Combobox
 	const popper = usePopper(referenceElement, popperElement, {
 		modifiers: [
 			{
@@ -56,7 +57,7 @@ const useDropdownPlacement = () => {
 		popperElement,
 		setPopperElement,
 		popper,
-		containerRef
+		containerRef: setContainerElement
 	};
 };
 

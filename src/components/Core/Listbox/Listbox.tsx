@@ -50,24 +50,20 @@ const Listbox = ({
 			by='value'
 		>
 			{({ value: listboxInternalValue }) => (
+				// @ts-ignore
 				<div className='relative' ref={containerRef}>
 					{/* NOTE: Don't move the display value inside of the Button YOU CAN'T HAVE NESTED CONTROLS IT'S UNACCESSIBLE AND BAD PRACTICE */}
 					<div className='flex w-full cursor-default content-between items-center rounded-lg border border-solid border-gray-400 bg-gray-200 p-3 text-left shadow-lg transition-all duration-200 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
-						<span className='w-full'>
-							<ListboxDisplayValues
-								value={listboxInternalValue}
-								isMultiSelect={isMultiSelect}
-								onChange={({ value: newListboxValue }) => {
-									//  If the onChange for the Listbox component is provided then update the current value
-									if (onChange) {
-										onChange({ value: newListboxValue });
-									}
-								}}
-								displayLimit={displayLimit}
-								showMultiDeleteButton={isMultiSelect === true && value !== undefined} // Don't show the delete button if the value is not undefined ie were in control mode (We control the state)
-								placeholder={placeholder}
-							/>
-						</span>
+						<ListboxDisplayValues
+							value={listboxInternalValue}
+							isMultiSelect={isMultiSelect}
+							onChange={({ value: newListboxValue }) => {
+								handleChange(newListboxValue);
+							}}
+							displayLimit={displayLimit}
+							showMultiDeleteButton={isMultiSelect === true && value !== undefined}
+							placeholder={placeholder}
+						/>
 
 						{/* Separate button toggler must not contain the values, it can be accessed via keyboard actions e.g. tabbing */}
 						<HeadlessUIListbox.Button
@@ -86,13 +82,6 @@ const Listbox = ({
 						leaveTo='opacity-0'
 					>
 						<HeadlessUIListbox.Options
-							// Forces the dropdown list to re-render whenever the value changes, forces popper to adjust it's calculations to get the menu in the right position.
-							// Every time you select an option in multi-select mode it will reset the scroll position, that's just how the DOM work's sadly https://github.com/facebook/react/issues/21675
-							key={JSON.stringify(
-								Array.isArray(listboxInternalValue)
-									? listboxInternalValue?.length ?? 0
-									: listboxInternalValue
-							)}
 							// @ts-ignore
 							ref={setPopperElement}
 							aria-label={`A ${

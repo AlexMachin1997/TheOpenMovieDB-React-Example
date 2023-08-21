@@ -24,7 +24,7 @@ const ListboxDisplayValues = ({
 	// Handle empty state, this should show if a default or controlled value is empty
 	if ((Array.isArray(value) && value.length === 0) || (!Array.isArray(value) && value === null)) {
 		return (
-			<div className='mr-2'>
+			<div className='mr-2 w-full'>
 				<span
 					className={classNames(
 						'ease flex w-max items-center rounded-full text-sm font-semibold transition duration-300 active:bg-gray-300',
@@ -41,7 +41,11 @@ const ListboxDisplayValues = ({
 
 	// When it's a single select Listbox just output the value provided e.g. "Popularly (A-Z)"
 	if (!Array.isArray(value)) {
-		return <p className='text-black'>{value?.label}</p>;
+		return (
+			<div className='w-full'>
+				<p className='text-black'>{value?.label}</p>
+			</div>
+		);
 	}
 
 	// When it's a multi-select Listbox provide additional functionality via the Chips's
@@ -58,7 +62,7 @@ const ListboxDisplayValues = ({
 		}
 
 		return (
-			<div className='flex flex-wrap items-center'>
+			<div className='flex w-full flex-wrap items-center'>
 				{valuesToDisplay.map((valueToDisplay) => (
 					<div className='mr-2' key={valueToDisplay.value}>
 						<span className='ease flex w-max items-center rounded-full bg-secondary p-2 text-sm font-semibold transition duration-300 active:bg-gray-300'>
