@@ -21,7 +21,7 @@ const VirtualizedList = React.memo(
 
 		return (
 			<div ref={optionsRef}>
-				{/* When there are no options and the query is empty */}
+				{/* When there are no options and the query is empty render the no options available block */}
 				{rowVirtualizer.getVirtualItems().length === 0 && (
 					<HeadlessUIListbox.Option
 						disabled
@@ -33,7 +33,7 @@ const VirtualizedList = React.memo(
 					</HeadlessUIListbox.Option>
 				)}
 
-				{/* When there are options render the options */}
+				{/* When there no options and the query isn't empty render the add item block */}
 				{rowVirtualizer.getVirtualItems().length > 0 && (
 					<div
 						style={{

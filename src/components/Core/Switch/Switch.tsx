@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Switch } from '@headlessui/react';
+import { Switch as HeadlessUISwitch } from '@headlessui/react';
 import classNames from 'classnames';
 
 type SwitchProps = {
@@ -13,7 +13,7 @@ type SwitchProps = {
 	showLabelOnTheRight?: boolean;
 };
 
-const CustomSwitch = ({
+const Switch = ({
 	onChange = null,
 	value = undefined,
 	defaultValue = undefined,
@@ -22,11 +22,11 @@ const CustomSwitch = ({
 	label,
 	showLabelOnTheRight = true
 }: SwitchProps) => (
-	<Switch.Group>
+	<HeadlessUISwitch.Group>
 		<div className='flex items-center'>
-			{showLabelOnTheRight === false && <Switch.Label>{label}</Switch.Label>}
+			{showLabelOnTheRight === false && <HeadlessUISwitch.Label>{label}</HeadlessUISwitch.Label>}
 
-			<Switch
+			<HeadlessUISwitch
 				// Used when wanting to rely on the formData object provided by native html forms (uncontrolled mode)
 				defaultChecked={defaultValue}
 				// Used when wanting to rely on external state stored outside this component (Controlled mode)
@@ -40,14 +40,15 @@ const CustomSwitch = ({
 				name={name}
 				as={React.Fragment}
 			>
-				{({ checked }) => (
+				{({ checked: switchInternalValue }) => (
 					<button
 						className={classNames(
-							'relative inline-flex h-6 w-[4.75rem] items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
+							'relative inline-flex h-[30px] w-[74px] shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75',
 							{
-								'bg-secondary/60': checked === true,
-								'bg-gray-200': checked === false,
-								'cursor-not-allowed': disabled === true,
+								'bg-secondary': switchInternalValue === true && disabled === false,
+								'bg-secondary/50': switchInternalValue === false && disabled === false,
+								'cursor-not-allowed bg-gray-400': disabled === true,
+								'cursor-pointer': disabled === false,
 								'mr-3': showLabelOnTheRight === true,
 								'ml-3': showLabelOnTheRight === false
 							}
@@ -57,21 +58,21 @@ const CustomSwitch = ({
 					>
 						<span
 							className={classNames(
-								'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+								'pointer-events-none inline-block h-[25px] w-[40%] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out',
 								{
-									'translate-x-6': checked === true,
-									'translate-x-1': checked === false,
+									'translate-x-10': switchInternalValue === true,
+									'translate-x-1': switchInternalValue === false,
 									'cursor-not-allowed': disabled === true
 								}
 							)}
 						/>
 					</button>
 				)}
-			</Switch>
+			</HeadlessUISwitch>
 
-			{showLabelOnTheRight === true && <Switch.Label>{label}</Switch.Label>}
+			{showLabelOnTheRight === true && <HeadlessUISwitch.Label>{label}</HeadlessUISwitch.Label>}
 		</div>
-	</Switch.Group>
+	</HeadlessUISwitch.Group>
 );
 
-export default CustomSwitch;
+export default Switch;
