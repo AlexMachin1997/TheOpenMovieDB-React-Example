@@ -5,7 +5,7 @@ import { Listbox as HeadlessUIListbox, Transition } from '@headlessui/react';
 import Icon from '../Icon/Icon';
 import ListboxDisplayValues from './ListboxDisplayValues';
 import { ListboxProps, SelectOption } from '../../../types/DropdownElementTypes';
-import VirtualizedList from './ListboxOptions';
+import ListboxOptions from './ListboxOptions';
 import { useDropdownPlacement } from '../../../hooks';
 
 const Listbox = ({
@@ -104,7 +104,7 @@ const Listbox = ({
 							}}
 							{...attributes.popper}
 						>
-							<VirtualizedList
+							<ListboxOptions
 								options={options}
 								noOptionsAvailableMessage={noOptionsAvailableMessage}
 								isMultiSelect={isMultiSelect}

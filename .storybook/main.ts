@@ -11,7 +11,10 @@ const config: StorybookConfig = {
 	},
 	docs: {
 		autodocs: 'tag'
-	}
+	},
+
+	// Load static assets, this allows stuff such as the favicon to be displayed in the browser tab
+	staticDirs: ['../public/']
 };
 
 export default config;
