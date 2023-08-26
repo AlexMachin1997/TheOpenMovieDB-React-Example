@@ -5,7 +5,7 @@ export { default as EntertainmentVideoCard } from './Video/Video';
 export { default as EntertainmentReviewCard } from './Review/Review';
 
 // TV specific cards
-export { default as TVCurrentSeasonCard } from './TV/CurrentSeason/CurrentSeason';
+export { default as MostRecentEpisodeCard } from './TV/MostRecentEpisode/MostRecentEpisode';
 
 // Movie specific cards
 export { default as MovieCollectionCard } from './Movie/Collection/Collection';

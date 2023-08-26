@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import Icon from '../../../Core/Icon/Icon';
 import Image from '../../../Core/Image/Image';
 import { ReviewCardProps } from '../../types';
+import RatingBlock from '../shared/RatingBlock';
 
 const Review = ({
 	author: { name = '', username = '', avatarUrl = null, rating = null } = {},
@@ -52,14 +52,9 @@ const Review = ({
 							  )
 							: `A review by ${username}`}
 
-						{rating !== null ? (
-							<span className='ml-1 inline-flex items-center bg-black px-2 text-white md:ml-4'>
-								<Icon className='fa-xs fa-solid fa-star mr-1' />
-								<p>{rating}</p>
-							</span>
-						) : (
-							<span className='ml-1 inline-flex items-center bg-black px-2 md:ml-4'>Not rated</span>
-						)}
+						<div className='ml-1'>
+							<RatingBlock rating={rating} />
+						</div>
 					</span>
 
 					<span className='inline-flex flex-wrap items-center text-sm font-light'>

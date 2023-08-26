@@ -3,6 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import EntertainmentHeader from './EntertainmentHeader';
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 
 type Story = StoryObj<typeof EntertainmentHeader>;
 
@@ -22,8 +23,9 @@ export default meta;
 
 export const ProjectPowerExample: Story = {
 	args: {
-		posterImage: 'https://image.tmdb.org/t/p/original/TnOeov4w0sTtV2gqICqIxVi74V.jpg',
-		backgroundImage: 'https://image.tmdb.org/t/p/original/qVygtf2vU15L2yKS4Ke44U4oMdD.jpg',
+		mediaType: MEDIA_TYPE.MOVIE,
+		posterImageUrl: 'https://image.tmdb.org/t/p/original/TnOeov4w0sTtV2gqICqIxVi74V.jpg',
+		backgroundImageUrl: 'https://image.tmdb.org/t/p/original/qVygtf2vU15L2yKS4Ke44U4oMdD.jpg',
 		title: 'Project Power',
 		releaseDate: '14/08/2020 (ES)',
 		releaseYear: 2020,

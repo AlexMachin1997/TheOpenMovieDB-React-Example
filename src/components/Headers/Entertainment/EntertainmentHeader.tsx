@@ -3,15 +3,14 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Icon, Image, PercentageRating, Tooltip } from '../../Core';
+import { MEDIA_TYPE } from '../../../types/RoutingTypes';
 
-type EntertainmentHeaderProps = {
-	posterImage: string;
-	backgroundImage: string;
+type BaseEntertainmentHeaderProps = {
+	posterImageUrl: string;
+	backgroundImageUrl: string;
 	title: string;
-	releaseDate: string;
 	releaseYear: number;
 	genres: { id: string | number; name: string }[];
-	runtime: string;
 	rating: number;
 	// trailerLink?: string;
 	tagline: string;
@@ -21,21 +20,32 @@ type EntertainmentHeaderProps = {
 	isAuthenticated?: boolean;
 };
 
+export interface TVHeaderProps extends BaseEntertainmentHeaderProps {
+	mediaType: MEDIA_TYPE.TV;
+}
+
+export interface MovieHeaderProps extends BaseEntertainmentHeaderProps {
+	mediaType: MEDIA_TYPE.MOVIE;
+	runtime: string;
+	releaseDate: string;
+}
+
+export type EntertainmentHeaderProps = TVHeaderProps | MovieHeaderProps;
+
 const EntertainmentHeader = ({
-	posterImage,
-	backgroundImage,
+	posterImageUrl,
+	backgroundImageUrl,
 	title,
-	releaseDate,
 	releaseYear,
 	genres,
-	runtime,
 	rating,
 	// trailerLink,
 	tagline,
 	overview,
 	featuredCrew,
 	ageRating,
-	isAuthenticated = false
+	isAuthenticated = false,
+	...props
 }: EntertainmentHeaderProps) => {
 	// Stores the overlay property, this is used by the inner container to apply a linear-gradient
 	const [overlay, setOverlay] = React.useState('');
@@ -51,14 +61,14 @@ const EntertainmentHeader = ({
 	React.useEffect(() => {
 		document.documentElement.style.setProperty(
 			'--entertainmentBackgroundImage',
-			`url(${backgroundImage})`
+			`url(${backgroundImageUrl})`
 		);
 
 		// When the EntertainmentHeader unmounts ie navigating away from the current screen then reset the css variable back to it's original value ie an empty string
 		return () => {
 			document.documentElement.style.setProperty('--entertainmentBackgroundImage', ``);
 		};
-	}, [backgroundImage]);
+	}, [backgroundImageUrl]);
 
 	// Handles the overlay functionality, listens for a screen size and checks the resolution (Check's if the screen size is greater than 768px aka desktop and not mobile)
 	React.useEffect(() => {
@@ -96,7 +106,7 @@ const EntertainmentHeader = ({
 			>
 				<div className='relative left-0 top-0 block pt-4 md:flex md:max-w-[1100px] md:p-5 md:px-10'>
 					<Image
-						src={posterImage}
+						src={posterImageUrl}
 						width='300px'
 						height='450px'
 						alt={`${title} Poster Image`}
@@ -119,10 +129,11 @@ const EntertainmentHeader = ({
 								<li className='mr-2 rounded-sm border border-solid border-gray-300/60 bg-black p-1 leading-[1] text-white opacity-60'>
 									{ageRating}
 								</li>
-								<li className='pr-2 text-white '>{releaseDate}</li>
-								<li className='flex items-center pr-2 text-white '>
-									<Icon className='fa-solid fa-circle text-[0.4rem] leading-[0]' />
-								</li>
+
+								{props.mediaType === MEDIA_TYPE.MOVIE && props.releaseDate !== '' && (
+									<li className='pr-2 text-white'>{props.releaseDate}</li>
+								)}
+
 								<li className='pr-2 text-white '>
 									{genres?.map((genre, genreIndex) => {
 										// Is the current item the last item ? This is used to decide if a comma needs to be added to the Link element
@@ -141,10 +152,10 @@ const EntertainmentHeader = ({
 										);
 									}) ?? null}
 								</li>
-								<li className='flex items-center pr-2 text-white '>
-									<Icon className='fa-solid fa-circle text-[0.4rem] leading-[0]' />
-								</li>
-								<li className='inline-flex items-center text-white '>{runtime}</li>
+
+								{props.mediaType === MEDIA_TYPE.MOVIE && props.runtime !== '' && (
+									<li className='inline-flex items-center text-white '>{props.runtime}</li>
+								)}
 							</ol>
 						</div>
 
@@ -155,9 +166,9 @@ const EntertainmentHeader = ({
 							<li className='mr-3 flex items-center'>
 								<PercentageRating
 									size={50}
-									textClass='text-md'
+									textClass='text-sm'
 									percentage={rating}
-									strokeWidth={3}
+									strokeWidth={5}
 								/>
 								<div className='ml-1'>
 									<p className='text-sm font-bold text-white'>User</p>

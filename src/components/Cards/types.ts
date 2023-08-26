@@ -50,10 +50,16 @@ export type CollectionCardProps = Pick<
 	'renderLink' | 'image' | 'title' | 'subtitle'
 >;
 
-export interface CurrentSeasonCardProps
-	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title' | 'subtitle'> {
-	episodeCount?: number;
-	year?: number;
+export interface MostRecentEpisodeCardProps
+	extends Pick<BaseCardProps, 'renderLink' | 'image' | 'title'> {
+	numberOfEpisodesInTheSeason?: number | null;
+	hasFinalEpisodeAir?: boolean | null;
+	releaseYear?: number;
+	rating?: number | null;
+	episodeName?: string | null;
+	episodeAndSeason?: string | null;
+	airDate?: string | null;
+	overview?: string | null;
 }
 
 export interface VideoCardProps

@@ -13,22 +13,22 @@ type SharedSidebarProps = {
 	originalLanguage: string;
 	keywords: { name: string; id: string }[];
 	status: string;
-	entertainmentName: string;
 };
 
-interface ShowSidebarProps extends SharedSidebarProps {
+export interface TVSidebarProps extends SharedSidebarProps {
 	mediaType: MEDIA_TYPE.TV;
-	networkImage: string;
+	networkImageUrl: string;
 	type: string;
+	entertainmentName: string;
 }
 
-interface MovieSidebarProps extends SharedSidebarProps {
+export interface MovieSidebarProps extends SharedSidebarProps {
 	mediaType: MEDIA_TYPE.MOVIE;
 	budget: string;
 	revenue: string;
 }
 
-type EntertainmentSideProps = ShowSidebarProps | MovieSidebarProps;
+export type EntertainmentSideProps = MovieSidebarProps | TVSidebarProps;
 
 const EntertainmentSidebar = (props: EntertainmentSideProps) => {
 	// Explicity check the entertainment type is is 'tv' (Typescript can correctly narrow the types down then to include props relevant for this mode)
@@ -42,7 +42,7 @@ const EntertainmentSidebar = (props: EntertainmentSideProps) => {
 			entertainmentName,
 			keywords,
 			originalLanguage,
-			networkImage,
+			networkImageUrl,
 			type
 		} = props;
 
@@ -66,11 +66,11 @@ const EntertainmentSidebar = (props: EntertainmentSideProps) => {
 					</div>
 				)}
 
-				{entertainmentName.length > 0 && networkImage.length > 0 && (
+				{entertainmentName.length > 0 && networkImageUrl.length > 0 && (
 					<div className='mb-4'>
 						<h3 className='text-base font-bold leading-[1]'>Network</h3>
 						<Image
-							src={networkImage}
+							src={networkImageUrl}
 							width='50px'
 							height='30px'
 							alt='Network logo'
@@ -103,65 +103,69 @@ const EntertainmentSidebar = (props: EntertainmentSideProps) => {
 		);
 	}
 
-	const {
-		facebookLink,
-		twitterLink,
-		homePageLink,
-		instagramLink,
-		status,
-		keywords,
-		budget,
-		originalLanguage,
-		revenue
-	} = props;
+	if (props.mediaType === MEDIA_TYPE.MOVIE) {
+		const {
+			facebookLink,
+			twitterLink,
+			homePageLink,
+			instagramLink,
+			status,
+			keywords,
+			budget,
+			originalLanguage,
+			revenue
+		} = props;
 
-	return (
-		<aside className='md:pl-4'>
-			<div className='my-4'>
-				<SocialLinks
-					facebook={facebookLink}
-					twitter={twitterLink}
-					instagram={instagramLink}
-					homepage={homePageLink}
-				/>
-			</div>
-
-			{status.length > 0 && (
-				<div className='mb-4'>
-					<h3 className='text-base font-bold leading-[1]'>Status</h3>
-					<p className='text-base font-light'>{status}</p>
+		return (
+			<aside className='md:pl-4'>
+				<div className='my-4'>
+					<SocialLinks
+						facebook={facebookLink}
+						twitter={twitterLink}
+						instagram={instagramLink}
+						homepage={homePageLink}
+					/>
 				</div>
-			)}
 
-			{originalLanguage.length > 0 && (
-				<div className='mb-4'>
-					<h3 className='text-base font-bold leading-[1]'>Original Language</h3>
-					<p className='text-base font-light'>{originalLanguage}</p>
-				</div>
-			)}
+				{status.length > 0 && (
+					<div className='mb-4'>
+						<h3 className='text-base font-bold leading-[1]'>Status</h3>
+						<p className='text-base font-light'>{status}</p>
+					</div>
+				)}
 
-			{budget.length > 0 && (
-				<div className='mb-4'>
-					<h3 className='text-base font-bold leading-[1]'>Budget</h3>
-					<p className='text-base font-light'>{budget}</p>
-				</div>
-			)}
+				{originalLanguage.length > 0 && (
+					<div className='mb-4'>
+						<h3 className='text-base font-bold leading-[1]'>Original Language</h3>
+						<p className='text-base font-light'>{originalLanguage}</p>
+					</div>
+				)}
 
-			{revenue?.length > 0 && (
-				<div className='mb-4'>
-					<h3 className='text-base font-bold leading-[1]'>Revenue</h3>
-					<p className='text-base font-light'>{revenue}</p>
-				</div>
-			)}
+				{budget.length > 0 && (
+					<div className='mb-4'>
+						<h3 className='text-base font-bold leading-[1]'>Budget</h3>
+						<p className='text-base font-light'>{budget}</p>
+					</div>
+				)}
 
-			{keywords.length > 0 && (
-				<div className='border-b border-solid border-gray-400 pb-4'>
-					<h3 className='text-base font-bold leading-[1]'>Keywords</h3>
-					<Keywords keywords={keywords} mediaType={MEDIA_TYPE.MOVIE} />
-				</div>
-			)}
-		</aside>
-	);
+				{revenue?.length > 0 && (
+					<div className='mb-4'>
+						<h3 className='text-base font-bold leading-[1]'>Revenue</h3>
+						<p className='text-base font-light'>{revenue}</p>
+					</div>
+				)}
+
+				{keywords.length > 0 && (
+					<div className='border-b border-solid border-gray-400 pb-4'>
+						<h3 className='text-base font-bold leading-[1]'>Keywords</h3>
+						<Keywords keywords={keywords} mediaType={MEDIA_TYPE.MOVIE} />
+					</div>
+				)}
+			</aside>
+		);
+	}
+
+	return null;
 };
 
 export default EntertainmentSidebar;

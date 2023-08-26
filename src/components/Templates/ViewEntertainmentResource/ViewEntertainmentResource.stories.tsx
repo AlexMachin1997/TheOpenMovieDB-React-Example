@@ -191,7 +191,8 @@ export const ProjectPowerExample: Story = {
 
 		// Header data
 		header: {
-			trailerLink: '',
+			mediaType: MEDIA_TYPE.MOVIE,
+			// trailerLink: '',
 			posterImageUrl: 'https://image.tmdb.org/t/p/original/TnOeov4w0sTtV2gqICqIxVi74V.jpg',
 			backgroundImageUrl: 'https://image.tmdb.org/t/p/original/qVygtf2vU15L2yKS4Ke44U4oMdD.jpg',
 			title: 'Project Power',
@@ -238,12 +239,12 @@ export const ProjectPowerExample: Story = {
 
 		// Sidebar data
 		sidebar: {
+			mediaType: MEDIA_TYPE.MOVIE,
 			facebookLink: '',
 			twitterLink: '',
 			instagramLink: '',
-			homepageLink: 'http://www.netflix.com/projectpower',
+			homePageLink: 'http://www.netflix.com/projectpower',
 			status: 'Released',
-			type: '',
 			keywords: [
 				{
 					name: 'drugs',
@@ -263,10 +264,8 @@ export const ProjectPowerExample: Story = {
 				}
 			],
 			originalLanguage: 'English',
-			budget: '-',
-			revenue: '-',
-			networkImageUrl: '',
-			entertainmentName: ''
+			budget: '',
+			revenue: ''
 		},
 
 		// Random review for the current show
@@ -289,14 +288,257 @@ export const ProjectPowerExample: Story = {
 			posters: generateMovieImages('posters'),
 			backdrops: generateMovieImages('backdrops'),
 			videos: generateMovieImages('videos')
+		}
+	}
+};
+
+export const GameOfThronesExample: Story = {
+	args: {
+		// Define the movie type so we can hide or show specific components
+		mediaType: MEDIA_TYPE.TV,
+
+		// Cast members
+		topBilledCastMembers: [
+			{
+				name: 'Kit Harington',
+				character: 'Jon Snow',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/htGBMno71BJAEGF3Y9f62MdA3Yt.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 79
+			},
+			{
+				name: 'Peter Dinklage',
+				character: "Tyrion 'The Halfman' Lannister",
+				headshotUrl: 'https://image.tmdb.org/t/p/original/9CAd7wr8QZyIN0E7nm8v1B6WkGn.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 73
+			},
+			{
+				name: 'Nikolaj Coster-Waldau',
+				character: "Sir Jaime 'Kingslayer' Lannister",
+				headshotUrl: 'https://image.tmdb.org/t/p/original/9FIP8NqMuMfmXloq7f1L45czPX0.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 73
+			},
+			{
+				name: 'Emilia Clarke',
+				character: 'Daenerys Targaryen',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/puWXJbe5ZGnOqJhVr9lEgstvygy.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 73
+			},
+			{
+				name: 'Maisie Williams',
+				character: 'Arya Stark',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/q4oCmhqEPXKSRK2hTZzTz2Zt4Ba.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 73
+			},
+			{
+				name: 'Sophie Turner',
+				character: 'Sansa Stark',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/zopxZsUZmxZ4sGEfm4cRr7FVoM4.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 73
+			},
+			{
+				name: 'John Bradley',
+				character: "Samwell 'Sam' Tarly",
+				headshotUrl: 'https://image.tmdb.org/t/p/original/eLcisM9qqCLWnf0iImHuSn08FOi.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 72
+			},
+			{
+				name: 'Isaac Hempstead-Wright',
+				character: "Brandon 'Bran' Stark",
+				headshotUrl: 'https://image.tmdb.org/t/p/original/gabehMRu2XPnmjLA1XQ8oYNwnG5.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 68
+			},
+			{
+				name: 'Lena Headey',
+				character: 'Cersei Lannister',
+				headshotUrl: 'https://image.tmdb.org/t/p/original/rKoDN3VOIkvoubUsuYXgMe93hJW.jpg',
+				mediaType: MEDIA_TYPE.TV,
+				episodeCount: 67
+			}
+		],
+
+		// Film/TV Recommendations
+		recommendations: [
+			{
+				name: 'The Old Guard',
+				releaseDate: '10/07/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/m0ObOaJBerZ3Unc74l471ar8Iiy.jpg',
+				rating: 72
+			},
+			{
+				name: 'Tenet',
+				releaseDate: '22/08/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/yY76zq9XSuJ4nWyPDuwkdV7Wt0c.jpg',
+				rating: 72
+			},
+			{
+				name: 'Ava',
+				releaseDate: '02/07/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/il9nvQH3f92n5bBKJfpjfaHXFYi.jpg',
+				rating: 50
+			},
+			{
+				name: 'Enola Holmes',
+				releaseDate: '25/08/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/pQQggUuDMleFSl2tQYxzTmKIiLU.jpg',
+				rating: 50
+			},
+			{
+				name: 'One Night in Bangkok',
+				releaseDate: '23/09/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/riDrpqQtZpXGeiJdlmfcwwPH7nN.jpg',
+				rating: 69
+			},
+			{
+				name: 'Spenser Confidential',
+				releaseDate: '06/09/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/ftODZXaXpWtV5XFD8gS9n9KwLDr.jpg',
+				rating: 65
+			},
+			{
+				name: 'Santana',
+				releaseDate: '28/08/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/7fvdg211A2L0mHddvzyArRuRalp.jpg',
+				rating: 56
+			},
+			{
+				name: 'The Sleepover',
+				releaseDate: '21/08/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/mQngZ4DtXqdkX9fOQRsm9iym5OW.jpg',
+				rating: 64
+			},
+			{
+				name: 'The Tax Collector',
+				releaseDate: '07/08/2020',
+				backgroundUrl: 'https://image.tmdb.org/t/p/original/zogWnCSztU8xvabaepQnAwsOtOt.jpg',
+				rating: 64
+			}
+		],
+
+		// Header data
+		header: {
+			mediaType: MEDIA_TYPE.TV,
+			// trailerLink: '',
+			posterImageUrl: 'https://image.tmdb.org/t/p/original/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg',
+			backgroundImageUrl: 'https://image.tmdb.org/t/p/original/2OMB0ynKlyIenMJWI2Dy9IWT4c.jpg',
+			title: 'Game of Thrones',
+			releaseYear: 2011,
+			genres: [
+				{
+					id: 'action',
+					name: 'Sci-Fi & Fantasy'
+				},
+				{
+					id: 'crime',
+					name: 'Drama'
+				},
+				{
+					id: 'science-fiction',
+					name: 'Action & Adventure'
+				}
+			],
+			rating: 84,
+			ageRating: 'TV-MA',
+			// trailerLink: '',
+			tagline: 'What would you risk for five minutes of pure power?',
+			overview:
+				"Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
+			featuredCrew: [
+				{
+					name: 'David Benioff',
+					role: 'Creator'
+				},
+				{
+					name: 'D.B. Weiss',
+					role: 'Creator'
+				}
+			]
 		},
 
-		// Collection, only applicable for tv shows
-		collection: {
-			name: 'Avatar',
-			includes: 'Includes Avatar, Avatar: The Way of Water, Avatar 3, Avatar 4, and Avatar 5',
+		isAuthenticated: true,
+
+		// Sidebar data
+		sidebar: {
+			entertainmentName: 'Game of thrones',
+			mediaType: MEDIA_TYPE.TV,
+			facebookLink: 'https://www.facebook.com/GameOfThrones',
+			twitterLink: 'https://twitter.com/GameOfThrones',
+			instagramLink: 'https://instagram.com/gameofthrones/',
+			homePageLink: 'http://www.hbo.com/game-of-thrones',
+			status: 'Ended',
+			type: '',
+			keywords: [
+				{
+					name: 'based on novel or book',
+					id: '14964'
+				},
+				{
+					name: 'kingdom',
+					id: '33637'
+				},
+				{
+					name: 'dragon',
+					id: '33728'
+				},
+				{
+					name: 'king',
+					id: '255064'
+				},
+				{
+					name: 'intrigue',
+					id: '255065'
+				},
+				{
+					name: 'fantasy world',
+					id: '255066'
+				}
+			],
+			originalLanguage: 'English',
+			networkImageUrl: 'https://www.themoviedb.org/t/p/h30/tuomPhY2UtuPTqqFnKMVHvSb724.png'
+		},
+
+		// Random review for the current show
+		review: {
+			author: {
+				name: 'Vlad Ulbricht',
+				username: 'Vlad Ulbricht',
+				avatarUrl:
+					'https://www.themoviedb.org/t/p/w45_and_h45_face/srVsbbWgrmA4lmpqsrIYRYxJerc.jpg',
+				rating: 9
+			},
+			isFeatured: false,
+			content:
+				'Cruel, bloody, vulgar, Machiavellian, unrepentant. And that is just the writing. The camera angles, the score, the pacing mesh together for grand storytelling: a mix of horror, swords and sorcery, and endless treachery.',
+			createdOn: 'May 11, 2017'
+		},
+
+		// Media sections e.g. posters, videos, popular etc
+		media: {
+			posters: generateMovieImages('posters'),
+			backdrops: generateMovieImages('backdrops'),
+			videos: generateMovieImages('videos')
+		},
+
+		mostRecentEpisode: {
+			seasonTitle: 'Season 8',
 			posterUrl:
-				'https://image.tmdb.org/t/p/w1440_and_h320_multi_faces/iaEsDbQPE45hQU2EGiNjXD2KWuF.jpg'
+				'https://www.themoviedb.org/t/p/w130_and_h195_bestv2/3OcQhbrecf4F4pYss2gSirTGPvD.jpg',
+			releaseYear: 2019,
+			numberOfEpisodesInTheSeason: 6,
+			episodeRating: 6.5,
+			episodeAirDate: '19 May 2019',
+			episodeAndSeason: '8x6',
+			episodeName: 'The Iron Throne',
+			hasFinalEpisodeAir: true,
+			episodeOverview:
+				"The Great War has come, the Wall has fallen and the Night King's army of the dead marches towards Westeros. The end is here, but who will take the Iron Throne?"
 		}
 	}
 };

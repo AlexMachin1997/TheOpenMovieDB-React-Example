@@ -1,15 +1,18 @@
 import { Link } from 'react-router-dom';
-import EntertainmentSidebar from '../../Sidebars/EntertainmentSidebar/EntertainmentSidebar';
+import EntertainmentSidebar, {
+	EntertainmentSideProps
+} from '../../Sidebars/EntertainmentSidebar/EntertainmentSidebar';
 import { EntertainmentHeader } from '../../Headers';
 import {
 	EntertainmentRecommendationCard,
 	EntertainmentReviewCard,
 	MovieCollectionCard,
-	TVCurrentSeasonCard,
+	MostRecentEpisodeCard,
 	TopBilledCastMember
 } from '../../Cards';
 import { Icon, Tabs } from '../../Core';
 import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+import { EntertainmentHeaderProps } from '../../Headers/Entertainment/EntertainmentHeader';
 
 type Media = {
 	id: string;
@@ -22,45 +25,9 @@ type Media = {
 
 type BaseViewMovieAndTVPageProps = {
 	recommendations: { name: string; releaseDate: string; backgroundUrl: string; rating: number }[];
-	header: {
-		posterImageUrl: string;
-		backgroundImageUrl: string;
-		title: string;
-		releaseDate: string;
-		releaseYear: number;
-		genres: {
-			id: string;
-			name: string;
-		}[];
-		runtime: string;
-		rating: number;
-		ageRating: string;
-		trailerLink: string;
-		tagline: string;
-		overview: string;
-		featuredCrew: {
-			name: string;
-			role: string;
-		}[];
-	};
 	isAuthenticated?: boolean;
-	sidebar: {
-		facebookLink: string;
-		twitterLink: string;
-		instagramLink: string;
-		homepageLink: string;
-		status: string;
-		type: string;
-		keywords: {
-			name: string;
-			id: string;
-		}[];
-		originalLanguage: string;
-		budget: string;
-		revenue: string;
-		networkImageUrl: string;
-		entertainmentName: string;
-	};
+	header: EntertainmentHeaderProps;
+	sidebar: EntertainmentSideProps;
 	review: {
 		author?: {
 			name: string;
@@ -77,24 +44,25 @@ type BaseViewMovieAndTVPageProps = {
 		backdrops: Media[];
 		videos: Media[];
 	};
-	collection?: {
-		name: string;
-		includes: string;
-		posterUrl: string;
-	} | null;
 };
 
 interface ViewMovieProps extends BaseViewMovieAndTVPageProps {
+	mediaType: MEDIA_TYPE.MOVIE;
 	topBilledCastMembers: {
 		name: string;
 		character: string;
 		headshotUrl: string;
 		mediaType: MEDIA_TYPE.MOVIE;
 	}[];
-	mediaType: MEDIA_TYPE.MOVIE;
+	collection?: {
+		name: string;
+		includes: string;
+		posterUrl: string;
+	} | null;
 }
 
 interface ViewTVShowProps extends BaseViewMovieAndTVPageProps {
+	mediaType: MEDIA_TYPE.TV;
 	topBilledCastMembers: {
 		name: string;
 		character: string;
@@ -102,15 +70,18 @@ interface ViewTVShowProps extends BaseViewMovieAndTVPageProps {
 		episodeCount: number;
 		mediaType: MEDIA_TYPE.TV;
 	}[];
-	mediaType: MEDIA_TYPE.TV;
-	season: {
+	mostRecentEpisode: {
+		seasonTitle: string;
 		posterUrl: string;
-		name: string;
 		releaseYear: number;
-		episodeCount: number;
-		overview: string;
-		isStillAiring: string;
-	};
+		numberOfEpisodesInTheSeason: number;
+		episodeRating: number;
+		episodeAirDate: string;
+		episodeAndSeason: string;
+		episodeName: string;
+		hasFinalEpisodeAir: boolean;
+		episodeOverview: string;
+	} | null;
 }
 
 type ViewEntertainmentResourceProps = ViewMovieProps | ViewTVShowProps;
@@ -169,36 +140,55 @@ const ViewEntertainmentResource = ({
 	review,
 	media,
 	sidebar,
-	// collection,
-	// season,
 	isAuthenticated = false,
 	...props
 }: ViewEntertainmentResourceProps) => (
 	<>
-		<EntertainmentHeader
-			posterImage={header?.posterImageUrl ?? ''}
-			backgroundImage={header?.backgroundImageUrl ?? ''}
-			title={header?.title ?? ''}
-			releaseDate={header?.releaseDate ?? ''}
-			releaseYear={header?.releaseYear ?? 0}
-			genres={header?.genres ?? []}
-			runtime={header?.runtime ?? ''}
-			rating={header?.rating ?? ''}
-			// trailerLink={header?.trailerLink ?? ""}
-			tagline={header?.tagline ?? ''}
-			overview={header?.overview ?? ''}
-			featuredCrew={header?.featuredCrew ?? ''}
-			ageRating={header?.ageRating ?? ''}
-			isAuthenticated={isAuthenticated}
-		/>
+		{header.mediaType === MEDIA_TYPE.MOVIE && (
+			<EntertainmentHeader
+				mediaType={MEDIA_TYPE.MOVIE}
+				posterImageUrl={header?.posterImageUrl ?? ''}
+				backgroundImageUrl={header?.backgroundImageUrl ?? ''}
+				title={header?.title ?? ''}
+				releaseDate={header?.releaseDate ?? ''}
+				releaseYear={header?.releaseYear ?? 0}
+				genres={header?.genres ?? []}
+				runtime={header?.runtime ?? ''}
+				rating={header?.rating ?? ''}
+				// trailerLink={header?.trailerLink ?? ""}
+				tagline={header?.tagline ?? ''}
+				overview={header?.overview ?? ''}
+				featuredCrew={header?.featuredCrew ?? ''}
+				ageRating={header?.ageRating ?? ''}
+				isAuthenticated={isAuthenticated}
+			/>
+		)}
 
-		<main className='relative p-4'>
-			<div className='space-y-2 lg:mr-[21rem]'>
+		{header.mediaType === MEDIA_TYPE.TV && (
+			<EntertainmentHeader
+				mediaType={MEDIA_TYPE.TV}
+				posterImageUrl={header?.posterImageUrl ?? ''}
+				backgroundImageUrl={header?.backgroundImageUrl ?? ''}
+				title={header?.title ?? ''}
+				releaseYear={header?.releaseYear ?? 0}
+				genres={header?.genres ?? []}
+				rating={header?.rating ?? ''}
+				// trailerLink={header?.trailerLink ?? ""}
+				tagline={header?.tagline ?? ''}
+				overview={header?.overview ?? ''}
+				featuredCrew={header?.featuredCrew ?? ''}
+				ageRating={header?.ageRating ?? ''}
+				isAuthenticated={isAuthenticated}
+			/>
+		)}
+
+		<main className='relative px-2 py-4'>
+			<div className='space-y-2 lg:mr-[23rem]'>
 				{/* Top billed cast members section, outputs the top billed cast for the movie or show */}
 				<section className='border-b border-solid border-gray-400 pt-4' id='cast-members'>
 					<h2 className='py-4 text-2xl font-bold'>Top Billed Cast Member</h2>
 
-					<div className='flex w-full overflow-auto overflow-y-scroll pb-3 '>
+					<div className='flex w-full overflow-y-auto pb-3 '>
 						{topBilledCastMembers?.map((topBilledCastMember) => {
 							if (topBilledCastMember.mediaType === MEDIA_TYPE.MOVIE) {
 								return (
@@ -237,16 +227,25 @@ const ViewEntertainmentResource = ({
 
 				{props.mediaType === MEDIA_TYPE.TV && (
 					<section className='border-b border-solid border-gray-400 pt-4' id='social'>
-						<h2 className='py-4 text-2xl font-bold'>Last Season</h2>
+						<h2 className='py-4 text-2xl font-bold'>
+							{props.mostRecentEpisode?.hasFinalEpisodeAir === false
+								? 'Next Season'
+								: 'Last Season'}
+						</h2>
 
 						<div className='pb-3'>
-							<TVCurrentSeasonCard
-								image={props.season?.posterUrl ?? ''}
-								title={props.season?.name ?? ''}
-								year={props.season?.releaseYear ?? ''}
-								episodeCount={props.season?.episodeCount ?? 0}
-								subtitle={props.season?.overview ?? ''}
+							<MostRecentEpisodeCard
 								renderLink={({ content }) => <Link to='/'>{content}</Link>}
+								image={props.mostRecentEpisode?.posterUrl ?? ''}
+								title={props.mostRecentEpisode?.seasonTitle ?? ''}
+								releaseYear={props.mostRecentEpisode?.releaseYear}
+								numberOfEpisodesInTheSeason={props.mostRecentEpisode?.numberOfEpisodesInTheSeason}
+								rating={props.mostRecentEpisode?.episodeRating}
+								airDate={props.mostRecentEpisode?.episodeAirDate}
+								episodeAndSeason={props.mostRecentEpisode?.episodeAndSeason}
+								episodeName={props.mostRecentEpisode?.episodeName}
+								hasFinalEpisodeAir={props.mostRecentEpisode?.hasFinalEpisodeAir}
+								overview={props.mostRecentEpisode?.episodeOverview}
 							/>
 						</div>
 					</section>
@@ -398,7 +397,7 @@ const ViewEntertainmentResource = ({
 				)}
 
 				{/* Recommendations section, outputs either movie or tv show you may like */}
-				<section className='border-b border-solid border-gray-400 pt-4' id='recommendations'>
+				<section className='border-b border-solid border-gray-400 py-4' id='recommendations'>
 					<h2 className='pb-4 text-2xl font-bold'>Recommendations</h2>
 
 					<div className='flex w-full space-x-4 overflow-auto pb-3 '>
@@ -417,21 +416,36 @@ const ViewEntertainmentResource = ({
 
 			{/* Sidebar, for mobile it's part of the content and for desktop it's on the right hand side */}
 			<div className='lg:absolute lg:inset-y-0 lg:right-0 lg:mt-4 lg:bg-white lg:pt-4'>
-				<EntertainmentSidebar
-					facebookLink={sidebar?.facebookLink ?? ''}
-					twitterLink={sidebar?.twitterLink ?? ''}
-					instagramLink={sidebar?.instagramLink ?? ''}
-					homePageLink={sidebar?.homepageLink ?? ''}
-					status={sidebar?.status ?? ''}
-					type={sidebar?.type ?? ''}
-					keywords={sidebar?.keywords ?? []}
-					originalLanguage={sidebar?.originalLanguage ?? ''}
-					budget={sidebar?.budget ?? ''}
-					revenue={sidebar?.revenue ?? ''}
-					networkImage={sidebar?.networkImageUrl ?? ''}
-					entertainmentName={sidebar?.entertainmentName ?? ''}
-					mediaType={props.mediaType}
-				/>
+				{sidebar.mediaType === MEDIA_TYPE.MOVIE && (
+					<EntertainmentSidebar
+						mediaType={MEDIA_TYPE.MOVIE}
+						facebookLink={sidebar?.facebookLink ?? ''}
+						twitterLink={sidebar?.twitterLink ?? ''}
+						instagramLink={sidebar?.instagramLink ?? ''}
+						homePageLink={sidebar?.homePageLink ?? ''}
+						status={sidebar?.status ?? ''}
+						keywords={sidebar?.keywords ?? []}
+						originalLanguage={sidebar?.originalLanguage ?? ''}
+						budget={sidebar?.budget ?? ''}
+						revenue={sidebar?.revenue ?? ''}
+					/>
+				)}
+
+				{sidebar.mediaType === MEDIA_TYPE.TV && (
+					<EntertainmentSidebar
+						mediaType={MEDIA_TYPE.TV}
+						entertainmentName=''
+						facebookLink={sidebar?.facebookLink ?? ''}
+						twitterLink={sidebar?.twitterLink ?? ''}
+						instagramLink={sidebar?.instagramLink ?? ''}
+						homePageLink={sidebar?.homePageLink ?? ''}
+						status={sidebar?.status ?? ''}
+						type={sidebar?.type ?? ''}
+						keywords={sidebar?.keywords ?? []}
+						originalLanguage={sidebar?.originalLanguage ?? ''}
+						networkImageUrl={sidebar?.networkImageUrl ?? ''}
+					/>
+				)}
 			</div>
 		</main>
 	</>

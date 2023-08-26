@@ -29,7 +29,7 @@ export const MediaTypeTV: Story = {
 		instagramLink: 'https://www.instagram.com/rickandmorty/',
 		homePageLink: 'https://www.adultswim.com/videos/rick-and-morty',
 		status: 'Returning Series',
-		networkImage: 'https://image.tmdb.org/t/p/h30/9AKyspxVzywuaMuZ1Bvilu8sXly.png',
+		networkImageUrl: 'https://image.tmdb.org/t/p/h30/9AKyspxVzywuaMuZ1Bvilu8sXly.png',
 		type: 'Scripted',
 		keywords: [
 			{ name: 'Egypt', id: '1' },
@@ -81,7 +81,6 @@ export const MediaTypeMovie: Story = {
 			}
 		],
 		originalLanguage: 'English',
-		entertainmentName: 'My Spy',
 		revenue: '£20,000,000'
 	}
 };
