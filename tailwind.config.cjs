@@ -9,6 +9,10 @@ module.exports = {
 	// Provide properties to override/extend the default Tailwind theme
 	theme: {
 		extend: {
+			screens: {
+				xs: '400px'
+			},
+
 			/*
 
 			Tailwind "colors" theme config:

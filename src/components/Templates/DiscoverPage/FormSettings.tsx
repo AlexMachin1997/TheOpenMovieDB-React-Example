@@ -43,7 +43,7 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated = false }: Form
 							{({ active }) => (
 								<Button
 									className={classNames('group flex w-full items-center rounded-md p-2 text-sm', {
-										'bg-secondary': active === true,
+										'bg-secondary text-white': active === true,
 										'text-gray-500': active === false
 									})}
 									onClick={() => {
@@ -80,7 +80,7 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated = false }: Form
 							{({ active }) => (
 								<Button
 									className={classNames('group flex w-full items-center rounded-md p-2 text-sm', {
-										'bg-secondary': active === true,
+										'bg-secondary text-white': active === true,
 										'text-gray-500': active === false
 									})}
 									onClick={() => {
@@ -117,7 +117,7 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated = false }: Form
 							{({ active }) => (
 								<Button
 									className={classNames('group flex w-full items-center rounded-md p-2 text-sm', {
-										'bg-secondary': active === true,
+										'bg-secondary text-white': active === true,
 										'text-gray-500': active === false
 									})}
 									onClick={() => {
@@ -156,7 +156,7 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated = false }: Form
 							{({ active }) => (
 								<Button
 									className={classNames('group flex w-full items-center rounded-md p-2 text-sm', {
-										'bg-secondary': active === true,
+										'bg-secondary text-white': active === true,
 										'text-gray-500': active === false
 									})}
 									onClick={() => {

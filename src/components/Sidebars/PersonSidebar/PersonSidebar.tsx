@@ -59,32 +59,32 @@ const PersonSidebar = ({
 
 			<ul className='grid grid-cols-2 justify-center gap-6 md:grid-cols-1'>
 				<li className=''>
-					<h5 className='text-lg'>Known For</h5>
+					<h5 className='text-lg font-bold'>Known For</h5>
 					<p className='font-light'>{knownFor.length > 0 ? knownFor : 'N/A'}</p>
 				</li>
 
 				<li className=''>
-					<h5 className='text-lg'>Gender</h5>
+					<h5 className='text-lg font-bold'>Gender</h5>
 					<p className='font-light'>{gender.length > 0 ? gender : 'N/A'}</p>
 				</li>
 
 				<li className=''>
-					<h5 className='text-lg'>Birthday</h5>
+					<h5 className='text-lg font-bold'>Birthday</h5>
 					<p className='font-light'>{birthday.length > 0 ? birthday : 'N/A'}</p>
 				</li>
 
 				<li className=''>
-					<h5 className='text-lg'>Know Credits</h5>
+					<h5 className='text-lg font-bold'>Know Credits</h5>
 					<p className='font-light'>{knownCredits.length > 0 ? knownFor : 'N/A'}</p>
 				</li>
 
 				<li className=''>
-					<h5 className='text-lg'>Place of Birth</h5>
+					<h5 className='text-lg font-bold'>Place of Birth</h5>
 					<p className='font-light'>{placeOfBirth.length > 0 ? placeOfBirth : 'N/A'}</p>
 				</li>
 
 				<li className='hidden md:block'>
-					<h5 className='text-lg'>Known As</h5>
+					<h5 className='text-lg font-bold'>Known As</h5>
 
 					{knownAs.length > 0
 						? knownAs?.map((word) => (
