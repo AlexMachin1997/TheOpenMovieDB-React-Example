@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { VirtualizedListProps } from '../../../types/DropdownElementTypes';
 import Icon from '../Icon/Icon';
 
-const VirtualizedList = React.memo(
+const ListboxOptions = React.memo(
 	({ options, noOptionsAvailableMessage, isMultiSelect, truncateText }: VirtualizedListProps) => {
 		// This will store the reference to the options list (Wrapper for the options)
 		const optionsRef = React.useRef<HTMLDivElement>(null);
@@ -108,4 +108,4 @@ const VirtualizedList = React.memo(
 	}
 );
 
-export default VirtualizedList;
+export default ListboxOptions;
