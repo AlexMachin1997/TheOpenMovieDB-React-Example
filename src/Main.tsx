@@ -1,11 +1,8 @@
-// React dependencies
 import * as React from 'react';
+// eslint-disable-next-line import/no-unresolved
 import { createRoot } from 'react-dom/client';
-
-// React application entry point
 import { BrowserRouter } from 'react-router-dom';
 
-// Get the app, the part where the routes for the app are created
 import App from './App';
 
 const element = document.getElementById('root');

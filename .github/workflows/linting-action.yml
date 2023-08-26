@@ -45,3 +45,4 @@ jobs:
           eslint: true # Enables eslint
           prettier: true # Enables prettier to prettieifer the code when commiting and spots any violations
           auto_fix: false # Auto fixes an prettier or eslint violations
+          eslint_extensions: ts,tsx

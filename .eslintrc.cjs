@@ -19,13 +19,13 @@ module.exports = {
 	parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
 	plugins: ['prettier', 'react', 'react-hooks', '@typescript-eslint', 'react-refresh'],
 	settings: {
-		'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
+		'import/extensions': ['.ts', '.tsx'],
 		'import/parsers': {
 			'@typescript-eslint/parser': ['.ts', '.tsx']
 		},
 		'import/resolver': {
 			node: {
-				extensions: ['.js', '.jsx', '.ts', '.tsx']
+				extensions: ['.ts', '.tsx']
 			}
 		}
 	},
@@ -82,7 +82,9 @@ module.exports = {
 		'@typescript-eslint/no-var-requires': 0,
 		'react/jsx-props-no-spreading': 0,
 		// 'react/jsx-filename-extension': [1, { extensions: ['.jsx', '.tsx',] }], TODO: Re-enable once the files have been converted to typescript
-		'react/jsx-filename-extension': 0
+		'react/jsx-filename-extension': 0,
+		'react/require-default-props': 0,
+		'react/prop-types': 0
 	}
 	// "root": true
 };

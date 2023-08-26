@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 /// <reference types="vite/client" />
 
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
@@ -27,5 +28,10 @@ export default defineConfig({
 	build: {
 		// By default this is dist, were updating it to use the react-scripts build folder
 		outDir: 'build'
+	},
+
+	test: {
+		globals: false,
+		watch: false
 	}
 });

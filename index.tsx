@@ -1,5 +1,6 @@
 // React dependencies
 import * as React from 'react';
+// eslint-disable-next-line import/no-unresolved
 import { createRoot } from 'react-dom/client';
 
 // React application entry point
