@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 import ViewEntertainmentResource from './ViewEntertainmentResource';
 import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+import { SOCIAL } from '../../../types/Social';
 
 const meta: Meta<typeof ViewEntertainmentResource> = {
 	title: 'Templates/View Movie OR TV Show',
@@ -240,10 +241,13 @@ export const ProjectPowerExample: Story = {
 		// Sidebar data
 		sidebar: {
 			mediaType: MEDIA_TYPE.MOVIE,
-			facebookLink: '',
-			twitterLink: '',
-			instagramLink: '',
-			homePageLink: 'http://www.netflix.com/projectpower',
+			socials: [
+				{ type: SOCIAL.HOMEPAGE, link: 'http://www.netflix.com/projectpower' },
+				{
+					type: SOCIAL.JUST_WATCH,
+					link: 'https://www.justwatch.com/us/movie/project-power'
+				}
+			],
 			status: 'Released',
 			keywords: [
 				{
@@ -468,10 +472,28 @@ export const GameOfThronesExample: Story = {
 		sidebar: {
 			entertainmentName: 'Game of thrones',
 			mediaType: MEDIA_TYPE.TV,
-			facebookLink: 'https://www.facebook.com/GameOfThrones',
-			twitterLink: 'https://twitter.com/GameOfThrones',
-			instagramLink: 'https://instagram.com/gameofthrones/',
-			homePageLink: 'http://www.hbo.com/game-of-thrones',
+			socials: [
+				{
+					type: SOCIAL.FACEBOOK,
+					link: 'https://www.facebook.com/GameOfThrones'
+				},
+				{
+					type: SOCIAL.TWITTER,
+					link: 'https://twitter.com/GameOfThrones'
+				},
+				{
+					type: SOCIAL.INSTAGRAM,
+					link: 'https://instagram.com/gameofthrones/'
+				},
+				{
+					type: SOCIAL.JUST_WATCH,
+					link: 'https://www.justwatch.com/us/tv-show/game-of-thrones'
+				},
+				{
+					type: SOCIAL.HOMEPAGE,
+					link: 'http://www.hbo.com/game-of-thrones'
+				}
+			],
 			status: 'Ended',
 			type: '',
 			keywords: [

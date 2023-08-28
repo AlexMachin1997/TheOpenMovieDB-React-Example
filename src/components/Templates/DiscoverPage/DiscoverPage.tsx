@@ -188,6 +188,7 @@ const DiscoverPageTemplate = ({
 							</div>
 						</div>
 					</aside>
+
 					<section className='px-4 pb-4 lg:ml-80 lg:pr-8'>
 						{/* Mobile title and actions header */}
 						<div className='flex items-center justify-between py-4 lg:hidden'>
