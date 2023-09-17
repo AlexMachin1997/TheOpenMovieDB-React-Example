@@ -14,8 +14,7 @@
 		"build-storybook": "storybook build",
 		"test": "vitest",
 		"coverage": "vitest run --coverage",
-		"prepare": "husky install",
-		"circular-deps-check": "skott"
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^6.4.2",
@@ -35,7 +34,6 @@
 		"react-router-dom": "^6.15.0",
 		"react-virtual": "^2.10.4",
 		"sass": "^1.65.1",
-		"skott": "^0.29.0",
 		"tailwindcss": "^3.3.2",
 		"tippy.js": "^6.3.7"
 	},
