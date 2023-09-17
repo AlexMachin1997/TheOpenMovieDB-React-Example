@@ -34,7 +34,7 @@ const Dropdown = ({ title, onClick = null, options = [] }: DropdownProps) => {
 				name: 'flip',
 				options: {
 					// Switch between top and bottom for the position of the element
-					fallbackPlacements: ['bottom-end']
+					fallbackPlacements: ['bottom-end', 'top']
 				}
 			},
 			{

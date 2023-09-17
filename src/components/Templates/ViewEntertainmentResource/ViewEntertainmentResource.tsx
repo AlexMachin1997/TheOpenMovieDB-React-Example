@@ -186,7 +186,7 @@ const ViewEntertainmentResource = ({
 			<div className='space-y-2 lg:mr-[23rem]'>
 				{/* Top billed cast members section, outputs the top billed cast for the movie or show */}
 				<section className='border-b border-solid border-gray-400 pt-4' id='cast-members'>
-					<h2 className='py-4 text-2xl font-bold'>Top Billed Cast Member</h2>
+					<h3 className='py-4 text-2xl font-bold'>Top Billed Cast Member</h3>
 
 					<div className='flex w-full overflow-y-auto pb-3 '>
 						{topBilledCastMembers?.map((topBilledCastMember) => {
@@ -227,11 +227,11 @@ const ViewEntertainmentResource = ({
 
 				{props.mediaType === MEDIA_TYPE.TV && (
 					<section className='border-b border-solid border-gray-400 pt-4' id='social'>
-						<h2 className='py-4 text-2xl font-bold'>
+						<h3 className='py-4 text-2xl font-bold'>
 							{props.mostRecentEpisode?.hasFinalEpisodeAir === false
 								? 'Next Season'
 								: 'Last Season'}
-						</h2>
+						</h3>
 
 						<div className='pb-3'>
 							<MostRecentEpisodeCard
@@ -253,7 +253,7 @@ const ViewEntertainmentResource = ({
 
 				{/* Social section, includes the review and the discussions */}
 				<section className='border-b border-solid border-gray-400 pt-4' id='social'>
-					<h2 className='pb-4 text-2xl font-bold'>Social</h2>
+					<h3 className='pb-4 text-2xl font-bold'>Social</h3>
 
 					<Tabs
 						tabs={[
@@ -292,7 +292,7 @@ const ViewEntertainmentResource = ({
 
 				{/* Media section, includes the videos, popular, posters and backdrop */}
 				<section className='border-b border-solid border-gray-400 pt-4' id='media'>
-					<h2 className='pb-4 text-2xl font-bold'>Media</h2>
+					<h3 className='pb-4 text-2xl font-bold'>Media</h3>
 
 					<Tabs
 						tabs={[
@@ -383,7 +383,7 @@ const ViewEntertainmentResource = ({
 				{/* Collection section, only shown when entertainmentType is 'movie' and there is a collection */}
 				{props.mediaType === MEDIA_TYPE.MOVIE && props.collection !== null && (
 					<section className='border-b border-solid border-gray-400 pt-4' id='collection'>
-						<h2 className='pb-4 text-2xl font-bold'>Collection</h2>
+						<h3 className='pb-4 text-2xl font-bold'>Collection</h3>
 
 						<div className='pb-4'>
 							<MovieCollectionCard
@@ -398,7 +398,7 @@ const ViewEntertainmentResource = ({
 
 				{/* Recommendations section, outputs either movie or tv show you may like */}
 				<section className='border-b border-solid border-gray-400 py-4' id='recommendations'>
-					<h2 className='pb-4 text-2xl font-bold'>Recommendations</h2>
+					<h3 className='pb-4 text-2xl font-bold'>Recommendations</h3>
 
 					<div className='flex w-full space-x-4 overflow-auto pb-3 '>
 						{recommendations.map((recommendation) => (
@@ -419,10 +419,7 @@ const ViewEntertainmentResource = ({
 				{sidebar.mediaType === MEDIA_TYPE.MOVIE && (
 					<EntertainmentSidebar
 						mediaType={MEDIA_TYPE.MOVIE}
-						facebookLink={sidebar?.facebookLink ?? ''}
-						twitterLink={sidebar?.twitterLink ?? ''}
-						instagramLink={sidebar?.instagramLink ?? ''}
-						homePageLink={sidebar?.homePageLink ?? ''}
+						socials={sidebar?.socials ?? []}
 						status={sidebar?.status ?? ''}
 						keywords={sidebar?.keywords ?? []}
 						originalLanguage={sidebar?.originalLanguage ?? ''}
@@ -434,11 +431,8 @@ const ViewEntertainmentResource = ({
 				{sidebar.mediaType === MEDIA_TYPE.TV && (
 					<EntertainmentSidebar
 						mediaType={MEDIA_TYPE.TV}
-						entertainmentName=''
-						facebookLink={sidebar?.facebookLink ?? ''}
-						twitterLink={sidebar?.twitterLink ?? ''}
-						instagramLink={sidebar?.instagramLink ?? ''}
-						homePageLink={sidebar?.homePageLink ?? ''}
+						entertainmentName={header?.title ?? ''}
+						socials={sidebar?.socials ?? []}
 						status={sidebar?.status ?? ''}
 						type={sidebar?.type ?? ''}
 						keywords={sidebar?.keywords ?? []}

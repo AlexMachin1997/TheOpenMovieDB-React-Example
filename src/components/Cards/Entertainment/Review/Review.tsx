@@ -52,7 +52,7 @@ const Review = ({
 							  )
 							: `A review by ${username}`}
 
-						<div className='ml-1'>
+						<div className='md:ml-1'>
 							<RatingBlock rating={rating} />
 						</div>
 					</span>

@@ -67,7 +67,7 @@ const CreditsTable = ({ credits, year }: { credits: Credit[]; year: number }) =>
 				if (credit.mediaType === 'tv') {
 					return (
 						<TableRow
-							key={credit.title}
+							key={`${credit.title}-${credit.year}-${credit.character}`}
 							year={year}
 							mediaType={MEDIA_TYPE.TV}
 							title={credit.title}

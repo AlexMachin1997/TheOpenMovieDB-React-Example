@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import PersonSidebar from './PersonSidebar';
+import { SOCIAL } from '../../../types/Social';
 
 const meta: Meta<typeof PersonSidebar> = {
 	component: PersonSidebar,
@@ -23,10 +24,10 @@ type Story = StoryObj<typeof PersonSidebar>;
 
 export const TheRockSidebar: Story = {
 	args: {
-		actorName: 'Dwayne Johnson',
-		actorImage: 'https://image.tmdb.org/t/p/original/kuqFzlYMc2IrsOyPznMd1FroeGq.jpg',
-		knownFor: 'Acting',
-		knownCredits: '256',
+		name: 'Dwayne Johnson',
+		headshotUrl: 'https://image.tmdb.org/t/p/original/kuqFzlYMc2IrsOyPznMd1FroeGq.jpg',
+		knownForDepartment: 'Acting',
+		numberOfCredits: 256,
 		gender: 'Male',
 		birthday: '1972-05-02 (48 years old)',
 		placeOfBirth: 'Hayward, California, USA',
@@ -47,26 +48,34 @@ export const TheRockSidebar: Story = {
 			'Dwayne ‘The Rock’ Johnson',
 			'The Corporate Champion'
 		],
-		facebookLink: 'https://www.facebook.com/DwayneJohnson',
-		twitterLink: 'https://twitter.com/therock',
-		instagramLink: 'https://instagram.com/therock/',
-		homepageLink: 'https://www.wwe.com/superstars/the-rock'
+		socials: [
+			{
+				type: SOCIAL.FACEBOOK,
+				link: 'https://www.facebook.com/DwayneJohnson'
+			},
+			{
+				type: SOCIAL.TWITTER,
+				link: 'https://twitter.com/therock'
+			},
+			{
+				type: SOCIAL.INSTAGRAM,
+				link: 'https://instagram.com/therock/'
+			},
+			{
+				type: SOCIAL.HOMEPAGE,
+				link: 'https://www.wwe.com/superstars/the-rock'
+			}
+		]
 	}
 };
 
 export const EmptyFields: Story = {
 	args: {
-		actorName: 'Dwayne Johnson',
-		actorImage: 'https://image.tmdb.org/t/p/original/kuqFzlYMc2IrsOyPznMd1FroeGq.jpg',
-		knownFor: 'Acting',
-		knownCredits: '0',
-		gender: '',
+		...TheRockSidebar.args,
+		numberOfCredits: null,
 		birthday: '1972-05-02 (48 years old)',
 		placeOfBirth: 'Hayward, California, USA',
 		knownAs: [],
-		facebookLink: '',
-		twitterLink: 'https://twitter.com/therock',
-		instagramLink: '',
-		homepageLink: ''
+		socials: []
 	}
 };

@@ -4,15 +4,13 @@ import { Image } from '../../Core';
 import Keywords from './Keywords';
 import SocialLinks from '../SocialLinks';
 import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+import { SocialLink } from '../../../types/Social';
 
 type SharedSidebarProps = {
-	facebookLink: string;
-	twitterLink: string;
-	instagramLink: string;
-	homePageLink: string;
 	originalLanguage: string;
 	keywords: { name: string; id: string }[];
 	status: string;
+	socials: SocialLink[];
 };
 
 export interface TVSidebarProps extends SharedSidebarProps {
@@ -30,31 +28,21 @@ export interface MovieSidebarProps extends SharedSidebarProps {
 
 export type EntertainmentSideProps = MovieSidebarProps | TVSidebarProps;
 
-const EntertainmentSidebar = (props: EntertainmentSideProps) => {
+const EntertainmentSidebar = ({
+	status,
+	keywords = [],
+	originalLanguage = '',
+	socials = [],
+	...props
+}: EntertainmentSideProps) => {
 	// Explicity check the entertainment type is is 'tv' (Typescript can correctly narrow the types down then to include props relevant for this mode)
 	if (props.mediaType === MEDIA_TYPE.TV) {
-		const {
-			facebookLink,
-			twitterLink,
-			homePageLink,
-			instagramLink,
-			status,
-			entertainmentName,
-			keywords,
-			originalLanguage,
-			networkImageUrl,
-			type
-		} = props;
+		const { entertainmentName, networkImageUrl, type } = props;
 
 		return (
 			<aside className='md:pl-4'>
 				<div className='my-4'>
-					<SocialLinks
-						facebook={facebookLink}
-						twitter={twitterLink}
-						instagram={instagramLink}
-						homepage={homePageLink}
-					/>
+					<SocialLinks socials={socials} />
 				</div>
 
 				<h3 className='mb-4 text-2xl font-bold leading-[1]'>Facts</h3>
@@ -68,11 +56,11 @@ const EntertainmentSidebar = (props: EntertainmentSideProps) => {
 
 				{entertainmentName.length > 0 && networkImageUrl.length > 0 && (
 					<div className='mb-4'>
-						<h3 className='text-base font-bold leading-[1]'>Network</h3>
+						<h3 className='mb-2 text-base font-bold leading-[1]'>Network</h3>
 						<Image
 							src={networkImageUrl}
-							width='50px'
-							height='30px'
+							width='80px'
+							height='40px'
 							alt='Network logo'
 							label={`The network logo for ${entertainmentName}`}
 						/>
@@ -104,27 +92,12 @@ const EntertainmentSidebar = (props: EntertainmentSideProps) => {
 	}
 
 	if (props.mediaType === MEDIA_TYPE.MOVIE) {
-		const {
-			facebookLink,
-			twitterLink,
-			homePageLink,
-			instagramLink,
-			status,
-			keywords,
-			budget,
-			originalLanguage,
-			revenue
-		} = props;
+		const { budget, revenue } = props;
 
 		return (
 			<aside className='md:pl-4'>
 				<div className='my-4'>
-					<SocialLinks
-						facebook={facebookLink}
-						twitter={twitterLink}
-						instagram={instagramLink}
-						homepage={homePageLink}
-					/>
+					<SocialLinks socials={socials} />
 				</div>
 
 				{status.length > 0 && (
