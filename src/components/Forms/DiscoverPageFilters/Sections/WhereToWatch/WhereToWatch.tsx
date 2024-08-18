@@ -36,7 +36,7 @@ const WhereToWatch = ({ isAuthenticated = false, ottProviders = [] }: WhereToWat
 
 	return (
 		<Accordion
-			title={<h3 className='text-lg text-black'>Where to watch</h3>}
+			title={<h2 className='text-lg text-black'>Where to watch</h2>}
 			contentClassName='mb-4'
 			containerClassName='z-[3]'
 		>

@@ -40,6 +40,7 @@ const Template = ({
 			<DiscoverFilterSidebar
 				isAuthenticated={isAuthenticated}
 				ottProviders={settings.OTT_PROVIDER_OPTIONS}
+				mediaType={mediaType}
 			/>
 		</Formik>
 	);

@@ -52,7 +52,7 @@ const SocialLinks = ({ socials }: { socials: SocialLink[] }) => {
 					key={socialLink.type}
 					id={`${socialLink.type}-link`}
 					className={classNames({
-						'border-l border-solid border-l-gray-300':
+						'[&:not(:first-child)]border-solid [&:not(:first-child)]:border-l [&:not(:first-child)]:border-l-gray-300':
 							(socialLink.type === SOCIAL.HOMEPAGE || socialLink.type === SOCIAL.JUST_WATCH) &&
 							socialsWithLinks.length > 1
 					})}
@@ -64,6 +64,7 @@ const SocialLinks = ({ socials }: { socials: SocialLink[] }) => {
 						className={classNames({
 							'ml-3': socialLink.type === SOCIAL.HOMEPAGE || socialLink.type === SOCIAL.JUST_WATCH
 						})}
+						aria-label={`A social link for ${socialLink.type}`}
 					>
 						<Tooltip tooltip={`Visit ${socialLink.type}`} placement='top'>
 							<SocialIcon type={socialLink.type} />

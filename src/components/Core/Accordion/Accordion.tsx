@@ -65,7 +65,7 @@ const Accordion = ({
 						unmount={unmount}
 						className={classNames(
 							contentClassName,
-							'rounded-b-lg border-x-[1px] border-b-[1px] border-solid border-gray-300'
+							'rounded-b-lg border-x-2 border-b-2 border-solid border-gray-300'
 						)}
 					>
 						{children}

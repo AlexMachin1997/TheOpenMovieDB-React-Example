@@ -78,7 +78,7 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 
 	return (
 		<Accordion
-			title={<h3 className='text-lg text-black'>Filters</h3>}
+			title={<h2 className='text-lg text-black'>Filters</h2>}
 			contentClassName='mb-4'
 			containerClassName='z-[2]'
 		>

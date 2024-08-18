@@ -20,7 +20,7 @@ const Recommendation = ({
 				className='aspect-square rounded-2xl'
 				label={`Poster for ${title}`}
 			/>
-			<div className='invisible absolute bottom-0 left-0 flex w-full items-center bg-white p-2 opacity-90 group-hover:visible'>
+			<div className='visible absolute bottom-0 left-0 flex w-full items-center bg-white p-2 opacity-90 transition-all lg:invisible lg:group-hover:visible'>
 				<Icon className='fa-solid fa-calendar-days mr-2 text-base' />
 				<p className='text-base font-bold text-black'>{releaseDate}</p>
 			</div>

@@ -7,7 +7,7 @@ import { EntertainmentPosterCard } from '../../Cards/Entertainment';
 import DiscoverFiltersFormDataService, {
 	DefaultValues
 } from '../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
-import { Button, Icon, Tooltip } from '../../Core';
+import { Button, Icon } from '../../Core';
 import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../types/RoutingTypes';
 import FormSettings from './FormSettings';
 import settings from '../../../settings';
@@ -137,6 +137,7 @@ const DiscoverPageTemplate = ({
 											<DiscoverPageFilters
 												isAuthenticated={isAuthenticated}
 												ottProviders={settings.OTT_PROVIDER_OPTIONS}
+												mediaType={mediaType}
 											/>
 										</div>
 
@@ -174,6 +175,7 @@ const DiscoverPageTemplate = ({
 								<DiscoverPageFilters
 									isAuthenticated={isAuthenticated}
 									ottProviders={settings.OTT_PROVIDER_OPTIONS}
+									mediaType={mediaType}
 								/>
 							</div>
 
@@ -203,10 +205,9 @@ const DiscoverPageTemplate = ({
 											setIsFiltersSidebarOpen(true);
 										}
 									}}
+									aria-label='Show advanced filters'
 								>
-									<Tooltip tooltip='Click to show the advanced filter controls'>
-										<Icon className='fa-solid fa-filter' aria-hidden='true' />
-									</Tooltip>
+									<Icon className='fa-solid fa-filter' aria-hidden='true' />
 								</Button>
 
 								<div>
@@ -222,7 +223,7 @@ const DiscoverPageTemplate = ({
 						{/* Displays the page results */}
 						<div
 							id={`${mediaType}-results`}
-							className='grid grid-cols-1 space-x-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4'
+							className='grid grid-cols-1 space-x-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5'
 						>
 							{resources.map((resource) => (
 								<EntertainmentPosterCard

@@ -6,7 +6,6 @@ import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
-import Accordion from '../../Core/Accordion/Accordion';
 import { MenuItemRoute } from '../../../services/RoutingService/RoutingService';
 
 type MenuItemProps = {
@@ -51,14 +50,9 @@ const MenuItem = ({ links = [], title = '', isSidebarItem = false }: MenuItemPro
 	// When this component is used within a sidebar make sure to use the Accordion instead
 	if (isSidebarItem === true) {
 		return (
-			<Accordion
-				title={title}
-				defaultIsOpen={false}
-				isDisabled={false}
-				className='border-2 p-2 text-white'
-				contentClassName='border-x-2 border-b-2'
-				unmount
-			>
+			<div>
+				<h3 className='text-2xl font-bold text-white'>{title}</h3>
+
 				<ul>
 					{links.map((link) => (
 						<li className='flex' key={`${title}-${link.label}`}>
@@ -71,7 +65,7 @@ const MenuItem = ({ links = [], title = '', isSidebarItem = false }: MenuItemPro
 						</li>
 					))}
 				</ul>
-			</Accordion>
+			</div>
 		);
 	}
 

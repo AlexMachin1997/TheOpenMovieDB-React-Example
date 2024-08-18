@@ -101,7 +101,7 @@ const MediaImage = ({
 }) => {
 	// Generate the "pictures" element (Handles switching between different image sizes)
 	const pictures = (
-		<picture key={id} className='shrink-0'>
+		<picture key={id} className='flex shrink-0 flex-row'>
 			{images?.map((posterImage) => {
 				// Internal react key -> 1-w220_and_h330_face-image (Keys should be unique and there should be no duplicate dimensions)
 				const key = `${id}-${posterImage.key}-image`;
@@ -112,7 +112,9 @@ const MediaImage = ({
 				}
 
 				// When the poster image isn't a fallback use the img tag (Used when none of the queries defined in the <source/> are met)
-				return <img src={posterImage.url} alt='Poster' key={key} className='lg:h-[300px]' />;
+				return (
+					<img src={posterImage.url} alt='Poster' key={key} className='h-[200px] lg:h-[300px]' />
+				);
 			}) ?? null}
 		</picture>
 	);
@@ -381,7 +383,7 @@ const ViewEntertainmentResource = ({
 				</section>
 
 				{/* Collection section, only shown when entertainmentType is 'movie' and there is a collection */}
-				{props.mediaType === MEDIA_TYPE.MOVIE && props.collection !== null && (
+				{props.mediaType === MEDIA_TYPE.MOVIE && (props?.collection ?? null) !== null && (
 					<section className='border-b border-solid border-gray-400 pt-4' id='collection'>
 						<h3 className='pb-4 text-2xl font-bold'>Collection</h3>
 

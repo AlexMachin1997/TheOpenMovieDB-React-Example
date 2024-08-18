@@ -115,7 +115,7 @@ const EntertainmentHeader = ({
 						label={`Poster image for ${title}`}
 					/>
 
-					<div className='flex flex-col justify-center md:flex-wrap md:pl-5'>
+					<div className='flex flex-col justify-center gap-4 md:flex-wrap md:pl-5'>
 						<div>
 							<div className='flex flex-wrap items-center justify-center p-4 md:mb-2 md:flex-nowrap md:items-center md:justify-start md:p-0'>
 								<h1 className='mr-2 text-2xl font-bold leading-none text-white'>{title}</h1>
@@ -230,8 +230,8 @@ const EntertainmentHeader = ({
 							</li>
 						</ol>
 
-						<div className='p-4 md:p-0'>
-							<div className='mb-3'>
+						<div className='flex flex-col gap-4 p-4 md:p-0'>
+							<div className='mb-3 flex flex-col gap-0'>
 								<p className='text-base font-bold italic text-white opacity-70'>{tagline}</p>
 								<div style={{ margin: '0.7rem 0' }}>
 									<h2 className='text-lg font-bold text-white'>Overview</h2>
@@ -239,7 +239,7 @@ const EntertainmentHeader = ({
 								<p className='text-base font-bold text-white'>{overview}</p>
 							</div>
 
-							<ol className='grid list-none grid-cols-2 p-0 md:grid-cols-3'>
+							<ol className='md:grid-cols- grid list-none grid-cols-2 gap-4 p-0'>
 								{featuredCrew?.map((crewMember) => (
 									<li key={crewMember.name}>
 										<Link to='/' className='text-base font-bold text-white hover:text-gray-400'>

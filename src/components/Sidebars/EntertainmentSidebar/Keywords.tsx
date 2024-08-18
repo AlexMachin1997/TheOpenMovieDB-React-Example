@@ -26,13 +26,15 @@ interface KeywordsProps extends React.ComponentPropsWithoutRef<'ul'> {
 const Keywords = ({ keywords = [], mediaType, ...props }: KeywordsProps) => (
 	<ul className='flex h-full w-full flex-row flex-wrap p-0 lg:max-w-[350px]' {...props}>
 		{keywords.map((keyword) => (
-			<Link
-				to={generateResourceUrl(keyword.name, keyword.id, mediaType)}
-				key={keyword.id}
-				className='mr-2 mt-2 rounded-lg border border-solid border-gray-400 bg-slate-200 px-3 py-1 lowercase text-black'
-			>
-				{keyword.name}
-			</Link>
+			<li className='mr-2 mt-2 '>
+				<Link
+					to={generateResourceUrl(keyword.name, keyword.id, mediaType)}
+					key={keyword.id}
+					className='rounded-lg border border-solid border-gray-400 bg-slate-200 px-3 py-1 lowercase text-black'
+				>
+					{keyword.name}
+				</Link>
+			</li>
 		))}
 	</ul>
 );

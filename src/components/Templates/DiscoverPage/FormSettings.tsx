@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { useFormikContext } from 'formik';
 
 import classNames from 'classnames';
-import { Tooltip, Button, Icon } from '../../Core';
+import { Button, Icon } from '../../Core';
 import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../types/RoutingTypes';
 import DiscoverFiltersFormDataService from '../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 
@@ -21,10 +21,8 @@ const FormSettings = ({ mediaType, resourceType, isAuthenticated = false }: Form
 	return (
 		<Menu className='relative inline-block text-left' as='div'>
 			<div className='pl-4'>
-				<Menu.Button>
-					<Tooltip tooltip='Click to perform page actions e.g. resetting sort by, filters etc'>
-						<Icon className='fa-solid fa-gear' aria-hidden='true' />
-					</Tooltip>
+				<Menu.Button aria-label='Advanced filter settings'>
+					<Icon className='fa-solid fa-gear' aria-hidden='true' />
 				</Menu.Button>
 			</div>
 

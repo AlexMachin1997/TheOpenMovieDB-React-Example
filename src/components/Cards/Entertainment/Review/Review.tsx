@@ -12,38 +12,36 @@ const Review = ({
 	renderLink = null
 }: ReviewCardProps) => {
 	const AvatarContent = (
-		<>
+		<div>
 			{/* When the avatarPathUrl is empty the image should be replaced with the first letter of the users "name" otherwise use the avatar */}
 			{avatarUrl === null || avatarUrl === '' ? (
-				<h3 className='mr-2 rounded-full bg-gray-400 p-1 px-2 text-center text-2xl uppercase text-black'>
-					{name[0] ?? 'N/A'}
-				</h3>
+				<span className='flex h-16 w-16 max-w-none items-center justify-center rounded-full bg-gray-400'>
+					<h3 className='text-2xl font-bold'>{name[0] ?? 'N/A'}</h3>
+				</span>
 			) : (
 				<Image
 					src={avatarUrl}
-					className='h-16 w-16 max-w-none rounded-full pr-2'
+					className='h-16 w-16 max-w-none rounded-full'
 					width='4rem'
 					height='4rem'
 					alt={`A photo of ${name}`}
 					label={`A photo of ${name}`}
 				/>
 			)}
-		</>
+		</div>
 	);
 
 	return (
 		<div className='rounded-lg border border-solid border-gray-300 p-4 shadow-2xl shadow-gray-200'>
 			<div className='items-center md:flex'>
-				<div className='w-16'>
-					{typeof renderLink === 'function'
-						? React.cloneElement(renderLink({ content: AvatarContent }))
-						: AvatarContent}
-				</div>
+				{typeof renderLink === 'function'
+					? React.cloneElement(renderLink({ content: AvatarContent }))
+					: AvatarContent}
 
 				<div className='space-y-2'>
 					{isFeatured === true && <h4 className='text-base'>Featured Review</h4>}
 
-					<span className='block text-base font-bold sm:flex sm:flex-wrap sm:items-center'>
+					<span className='block gap-4 text-base font-bold sm:flex sm:flex-wrap sm:items-center'>
 						{typeof renderLink === 'function'
 							? React.cloneElement(
 									renderLink({

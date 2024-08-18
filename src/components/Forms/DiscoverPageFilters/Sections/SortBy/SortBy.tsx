@@ -12,7 +12,7 @@ const Sort = () => {
 
 	return (
 		<Accordion
-			title={<h3 className='text-lg text-black'>Sort</h3>}
+			title={<h2 className='text-lg text-black'>Sort</h2>}
 			contentClassName='mb-4'
 			defaultIsOpen
 			containerClassName='z-[1]'

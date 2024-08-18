@@ -84,7 +84,7 @@ const UserProfile = ({ name }: UserProfileProps) => {
 	const MenuLinks = React.useMemo(() => RoutingService.generateUserProfileLinks(), []);
 
 	return (
-		<Menu className='relative mr-4 inline-flex items-center text-left' as='ul'>
+		<Menu className='relative mr-4 inline-flex items-center text-left' as='div'>
 			<>
 				<Menu.Button
 					// @ts-ignore
@@ -119,7 +119,10 @@ const UserProfile = ({ name }: UserProfileProps) => {
 									// Special output for the View Profile button
 									if (child.label === 'View Profile') {
 										return (
-											<div className='border-b-2 border-solid border-gray-200 py-1'>
+											<div
+												className='border-b-2 border-solid border-gray-200 py-1'
+												key={child.label}
+											>
 												{/* Show the users profile name */}
 												<li>
 													<p className='p-1 text-base font-semibold text-black'>{name}</p>
