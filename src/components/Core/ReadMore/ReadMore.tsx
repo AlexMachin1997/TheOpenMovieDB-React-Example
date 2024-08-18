@@ -33,7 +33,7 @@ const ReadMore = ({
 			<div
 				ref={contentRef}
 				style={{ maxHeight: isExpanded ? `${contentHeight}px` : `${initialMaximumHeight}px` }}
-				className={classNames(' overflow-hidden transition-max-height duration-1000 ease-in-out', {
+				className={classNames(' transition-max-height overflow-hidden duration-1000 ease-in-out', {
 					'read-more': isOverflowing === true
 				})}
 			>
