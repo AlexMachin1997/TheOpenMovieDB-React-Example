@@ -48,10 +48,6 @@ module.exports = {
 			// Create new margin properties
 			spacing: {
 				'ml-auto': 'auto'
-			},
-
-			transitionProperty: {
-				'max-height': 'max-height'
 			}
 		}
 	}
