@@ -150,18 +150,6 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 						<Switch
 							onChange={({ value }) => {
 								setFieldValue('search_first_air_date', value);
-
-								// If you are using searching by first date clear the release date
-								if (value === true) {
-									setFieldValue(`['release_date.lte]`, '');
-									setFieldValue(`['release_date.gte']`, '');
-								}
-
-								// If you aren't searching by first date clear the air_date fields
-								if (value === false) {
-									setFieldValue(`['air_date.lte]`, '');
-									setFieldValue(`['air_date.gte']`, '');
-								}
 							}}
 							value={values.search_first_air_date}
 							defaultValue={undefined}

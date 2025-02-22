@@ -28,7 +28,6 @@ const DiscoverPageTemplate = ({
 	resources = []
 }: DiscoverPageTemplateProps) => {
 	const [isFiltersSidebarOpen, setIsFiltersSidebarOpen] = React.useState(false);
-
 	// Generate the Discover Filters Sidebar formData
 	const formData = React.useMemo(
 		() =>
@@ -124,7 +123,11 @@ const DiscoverPageTemplate = ({
 												<Button
 													className='-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white text-gray-400'
 													onClick={() => setIsFiltersSidebarOpen(false)}
-													onKeyDown={() => setIsFiltersSidebarOpen(false)}
+													onKeyDown={(event) => {
+														if (event.key === 'Enter') {
+															setIsFiltersSidebarOpen(false);
+														}
+													}}
 												>
 													<span className='sr-only'>Close menu</span>
 													<Icon className='fa-solid fa-xmark' aria-hidden='true' />
