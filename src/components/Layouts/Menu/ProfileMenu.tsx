@@ -120,7 +120,7 @@ const UserProfile = ({ name }: UserProfileProps) => {
 									if (child.label === 'View Profile') {
 										return (
 											<div
-												className='border-b-2 border-solid border-gray-200 py-1'
+												className='rounded-lg border-b-2 border-solid border-gray-200 py-1'
 												key={child.label}
 											>
 												{/* Show the users profile name */}
@@ -133,7 +133,7 @@ const UserProfile = ({ name }: UserProfileProps) => {
 													{({ active }) => (
 														<Link
 															to='/'
-															className={classNames('block p-1 text-xs ', {
+															className={classNames('block rounded-lg p-1 text-xs', {
 																'bg-secondary text-white': active === true,
 																'text-gray-400': active === false
 															})}

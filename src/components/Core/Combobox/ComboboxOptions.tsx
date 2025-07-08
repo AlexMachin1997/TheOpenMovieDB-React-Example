@@ -79,7 +79,7 @@ const ComboboxOptions = React.memo(
 					>
 						{rowVirtualizer.getVirtualItems().map((virtualRow) => {
 							// Get the current option
-							const option = options?.at(virtualRow.index);
+							const option = options?.[virtualRow.index];
 
 							// The unique react key value, a combination of the label and index to prevent duplicate labels from erroring
 							const key = `${option?.label}-${virtualRow.index}`;

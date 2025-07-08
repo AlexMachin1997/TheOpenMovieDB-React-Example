@@ -55,6 +55,7 @@ const Switch = ({
 						)}
 						type='button'
 						disabled={disabled}
+						aria-label={label}
 					>
 						<span
 							className={classNames(

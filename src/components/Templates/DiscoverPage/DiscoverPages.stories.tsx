@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 import DiscoverPage from './DiscoverPage';
 import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../types/RoutingTypes';
