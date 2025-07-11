@@ -1120,7 +1120,7 @@ describe('DiscoverFiltersFormDataService', () => {
 				with_ott_providers: []
 			};
 
-			expect(expectedFormData).toStrictEqual(expectedFormData);
+			expect(expectedFormData).toStrictEqual(generatedFormData);
 		});
 
 		it('When the resourceType is RESOURCE_TYPE.TOP_RATED and the mediaType is MEDIA_TYPE.TV', () => {

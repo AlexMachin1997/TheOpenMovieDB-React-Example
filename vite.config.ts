@@ -36,6 +36,7 @@ export default defineConfig({
 
 	build: {
 		outDir: 'build',
+		target: 'ES2022',
 		// Enable chunk size warnings
 		chunkSizeWarningLimit: 1000,
 		rollupOptions: {

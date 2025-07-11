@@ -1,4 +1,4 @@
-/* eslint-disable no-shadow */
+ 
 export enum MEDIA_TYPE {
 	MOVIE = 'movie',
 	TV = 'tv',

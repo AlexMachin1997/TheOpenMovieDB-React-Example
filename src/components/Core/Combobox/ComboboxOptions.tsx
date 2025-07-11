@@ -134,4 +134,5 @@ const ComboboxOptions = React.memo(
 	}
 );
 
+ComboboxOptions.displayName = 'ComboboxOptions';
 export default ComboboxOptions;

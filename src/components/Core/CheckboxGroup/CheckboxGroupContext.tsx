@@ -13,7 +13,7 @@ type Context = {
 	disabled?: boolean;
 	name: string;
 	// This property is used within the Context and is not a component property.
-	// eslint-disable-next-line react/no-unused-prop-types
+	 
 	isControlled?: boolean;
 };
 

@@ -1,4 +1,4 @@
-/* eslint-disable react/destructuring-assignment */
+ 
 import { Image } from '../../Core';
 
 import Keywords from './Keywords';

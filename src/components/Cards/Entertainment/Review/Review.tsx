@@ -73,7 +73,7 @@ const Review = ({
 				{content !== null ? (
 					<p
 						className='whitespace-pre-line text-black'
-						// eslint-disable-next-line react/no-danger
+						 
 						dangerouslySetInnerHTML={{
 							__html: content
 						}}

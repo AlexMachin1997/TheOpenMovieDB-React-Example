@@ -123,4 +123,5 @@ const CustomRadioGroup = React.memo<RadioGroupProps>(
 	)
 );
 
+CustomRadioGroup.displayName = 'CustomRadioGroup';
 export default CustomRadioGroup;

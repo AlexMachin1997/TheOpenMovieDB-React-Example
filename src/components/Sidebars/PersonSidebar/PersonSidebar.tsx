@@ -1,4 +1,4 @@
-/* eslint-disable react/no-array-index-key */
+ 
 import { SocialLink } from '../../../types/Social';
 import { Image } from '../../Core';
 
