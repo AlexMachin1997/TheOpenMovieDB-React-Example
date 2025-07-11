@@ -39,13 +39,7 @@ export default tseslint.config({
 		parserOptions: {
 			ecmaFeatures: {
 				jsx: true
-			},
-			// Performance optimizations for TypeScript parser
-			project: './tsconfig.json',
-			tsconfigRootDir: import.meta.dirname,
-			// Disable expensive type-aware rules for better performance
-			experimentalDecorators: true,
-			emitDecoratorMetadata: true
+			}
 		}
 	},
 	plugins: {
