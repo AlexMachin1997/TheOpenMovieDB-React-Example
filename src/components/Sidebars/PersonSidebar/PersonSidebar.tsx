@@ -1,4 +1,3 @@
- 
 import { SocialLink } from '../../../types/Social';
 import { Image } from '../../Core';
 

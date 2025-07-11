@@ -1,4 +1,3 @@
- 
 export enum SOCIAL {
 	FACEBOOK = 'Facebook',
 	TWITTER = 'Twitter',

@@ -73,7 +73,6 @@ const Review = ({
 				{content !== null ? (
 					<p
 						className='whitespace-pre-line text-black'
-						 
 						dangerouslySetInnerHTML={{
 							__html: content
 						}}

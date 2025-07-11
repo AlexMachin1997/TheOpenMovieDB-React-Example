@@ -13,7 +13,7 @@ type Context = {
 	disabled?: boolean;
 	name: string;
 	// This property is used within the Context and is not a component property.
-	 
+
 	isControlled?: boolean;
 };
 
