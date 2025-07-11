@@ -15,9 +15,7 @@ const preview: Preview = {
 			},
 			defaultTheme: 'light'
 		})
-	],
-
-	tags: ['autodocs', 'autodocs']
+	]
 };
 
 export default preview;
