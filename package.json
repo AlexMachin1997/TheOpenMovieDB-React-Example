@@ -1,5 +1,5 @@
 {
-	"name": "TheOpenMovieDatabaseUserInterfaceClone",
+	"name": "the-open-movie-database",
 	"private": true,
 	"scripts": {
 		"build": "turbo run build",

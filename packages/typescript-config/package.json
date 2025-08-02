@@ -6,8 +6,6 @@
 	"files": [
 		"base.json",
 		"react.json",
-		"react-library.json",
-		"nextjs.json",
 		"node.json"
 	],
 	"publishConfig": {
