@@ -1,14 +1,29 @@
 {
 	"$schema": "https://turborepo.com/schema.json",
+	"ui": "tui",
 	"tasks": {
 		"build": {
-			"outputs": ["dist/**"]
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+		},
+		"lint": {
+			"dependsOn": ["^lint"]
+		},
+		"prettier": {
+			"dependsOn": ["^prettier"]
 		},
 		"check-types": {
 			"dependsOn": ["^check-types"]
 		},
-		"dev": {
-			"persistent": true,
+		"ts-validate": {
+			"dependsOn": ["^ts-validate"]
+		},
+		"test": {
+			"dependsOn": ["^test"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"]
+		},
+		"clean": {
 			"cache": false
 		}
 	}
