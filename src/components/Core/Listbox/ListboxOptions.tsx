@@ -108,4 +108,5 @@ const ListboxOptions = React.memo(
 	}
 );
 
+ListboxOptions.displayName = 'ListboxOptions';
 export default ListboxOptions;

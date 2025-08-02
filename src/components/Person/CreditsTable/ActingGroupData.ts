@@ -290,9 +290,8 @@ const data: { year: number; credits: Credit[] }[] = [
 			{
 				year: 2013,
 				title: 'Under the Skin',
-
 				mediaType: MEDIA_TYPE.MOVIE,
-				character: 'The Female'
+				character: ''
 			},
 			{
 				year: 2013,

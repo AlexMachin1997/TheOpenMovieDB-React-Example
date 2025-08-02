@@ -59,6 +59,7 @@ const Dropdown = ({ title, onClick = null, options = [] }: DropdownProps) => {
 					// @ts-ignore
 					ref={setReferenceElement}
 					className='inline-flex w-full items-center justify-center rounded-md text-base font-medium text-white'
+					as='li'
 				>
 					{({ open }) => (
 						<>
@@ -68,7 +69,7 @@ const Dropdown = ({ title, onClick = null, options = [] }: DropdownProps) => {
 									'fa-arrow-up': open === true
 								})}
 							/>
-							<p className='text-sm text-black'>{title}</p>
+							<span className='text-sm text-black'>{title}</span>
 						</>
 					)}
 				</Menu.Button>
@@ -138,7 +139,7 @@ const CreditsTableTitle = ({
 							onChange({ type: 'CLEAR_ALL' });
 						}
 					}}
-					className='text-sm text-blue-400 hover:text-green-400'
+					className='text-sm text-blue-950 hover:text-green-700'
 				>
 					Clear All
 				</button>

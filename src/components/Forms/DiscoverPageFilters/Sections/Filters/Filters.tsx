@@ -78,7 +78,7 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 
 	return (
 		<Accordion
-			title={<h3 className='text-lg text-black'>Filters</h3>}
+			title={<h2 className='text-lg text-black'>Filters</h2>}
 			contentClassName='mb-4'
 			containerClassName='z-[2]'
 		>
@@ -150,18 +150,6 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 						<Switch
 							onChange={({ value }) => {
 								setFieldValue('search_first_air_date', value);
-
-								// If you are using searching by first date clear the release date
-								if (value === true) {
-									setFieldValue(`['release_date.lte]`, '');
-									setFieldValue(`['release_date.gte']`, '');
-								}
-
-								// If you aren't searching by first date clear the air_date fields
-								if (value === false) {
-									setFieldValue(`['air_date.lte]`, '');
-									setFieldValue(`['air_date.gte']`, '');
-								}
 							}}
 							value={values.search_first_air_date}
 							defaultValue={undefined}

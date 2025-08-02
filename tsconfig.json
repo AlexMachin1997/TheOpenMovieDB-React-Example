@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"target": "ES2020",
+		"target": "ES2022",
 		"useDefineForClassFields": true,
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipLibCheck": true,
 
@@ -18,8 +18,19 @@
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true
+		"noFallthroughCasesInSwitch": true,
+
+		/* Types */
+		"types": ["vitest/globals", "@testing-library/jest-dom"]
 	},
-	"include": ["src"],
+	"include": [
+		"src",
+		"src/**/*.test.ts",
+		"src/**/*.test.tsx",
+		"src/**/*.spec.ts",
+		"src/**/*.spec.tsx",
+		".storybook/*.ts",
+		".storybook/**/*.ts"
+	],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

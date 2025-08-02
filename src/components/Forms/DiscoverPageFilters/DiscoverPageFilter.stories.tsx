@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import { Formik } from 'formik';
 
 import DiscoverFilterSidebar from './DiscoverPageFilters';
@@ -40,6 +40,7 @@ const Template = ({
 			<DiscoverFilterSidebar
 				isAuthenticated={isAuthenticated}
 				ottProviders={settings.OTT_PROVIDER_OPTIONS}
+				mediaType={mediaType}
 			/>
 		</Formik>
 	);

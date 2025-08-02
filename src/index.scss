@@ -1,16 +1,16 @@
 // This is an internal font awesome sass/scss variable, we need to override to point to our webfonts (copy of the internal fonts)
 $fa-font-path: '../webfonts';
 
-// Import all the font-awesome icons
-@import '../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
-@import '../node_modules/@fortawesome/fontawesome-free/scss/solid';
-@import '../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
-@import '../node_modules/@fortawesome/fontawesome-free/scss/regular.scss';
+// Import all the font-awesome icons using @use instead of @import
+@use '../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@use '../node_modules/@fortawesome/fontawesome-free/scss/solid';
+@use '../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
+@use '../node_modules/@fortawesome/fontawesome-free/scss/regular.scss';
 
-// Import the tailwind styling
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+// Import the tailwind styling using @use
+@use 'tailwindcss/base';
+@use 'tailwindcss/components';
+@use 'tailwindcss/utilities';
 
 // Stores the entertainment background image, due to tailwind limitations we have to dynamically create an image reference to use it via css classes
 :root {

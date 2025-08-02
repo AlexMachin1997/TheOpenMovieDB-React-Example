@@ -13,7 +13,7 @@ type Context = {
 	disabled?: boolean;
 	name: string;
 	// This property is used within the Context and is not a component property.
-	// eslint-disable-next-line react/no-unused-prop-types
+
 	isControlled?: boolean;
 };
 
@@ -21,6 +21,7 @@ interface ContextProviderProps extends Context {
 	children: React.ReactNode;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const CheckboxGroupContext = React.createContext<Context | null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components

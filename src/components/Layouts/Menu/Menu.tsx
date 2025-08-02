@@ -57,7 +57,7 @@ const NavigationMenu = ({ isAuthenticated = false }: { isAuthenticated?: boolean
 				id='mobile-navigation-sidebar'
 				aria-label='mobile navigation menu sidebar'
 				className={classNames(
-					'fixed bottom-0 top-[75px] space-y-3 overflow-y-auto bg-primary/90 p-4 backdrop-blur-[20px] duration-500 ease-in',
+					'fixed bottom-0 top-[70px] flex flex-col gap-4 space-y-3 overflow-y-auto bg-primary/90 p-4 backdrop-blur-[20px] duration-500 ease-in',
 					{
 						// When the menu item is active
 						'left-0': isSidebarOpen === true,
@@ -114,16 +114,20 @@ const NavigationMenu = ({ isAuthenticated = false }: { isAuthenticated?: boolean
 					<li>
 						<Button
 							onClick={() => {
-								setIsSidebarOpen(!isSidebarOpen);
+								setIsSidebarOpen((prevState) => !prevState);
 							}}
 							onKeyDown={(event) => {
 								if (event.key === 'Enter') {
-									setIsSidebarOpen(!isSidebarOpen);
+									// The onClick and onKeyDown event trigger at the same time
+									event.stopPropagation();
+
+									setIsSidebarOpen((prevState) => !prevState);
 								}
 							}}
 							className='m-0 flex cursor-pointer items-center p-0'
 							aria-hidden={isSidebarOpen}
 							aria-label={isSidebarOpen === true ? 'Open sidebar' : 'Close sidebar'}
+							tabIndex={0}
 						>
 							<Icon className='fa-solid fa-bars text-white' />
 						</Button>
@@ -145,11 +149,12 @@ const NavigationMenu = ({ isAuthenticated = false }: { isAuthenticated?: boolean
 
 					{/* Search bar toggler and user information/actions (Only available when the sidebar isn't open) */}
 					<li>
-						{isSidebarOpen === false && (
-							<Button className='m-0 flex cursor-pointer items-center p-0'>
-								<Icon className={classNames('fa-solid fa-magnifying-glass text-white')} />
-							</Button>
-						)}
+						<Button
+							className={classNames('m-0 flex cursor-pointer items-center p-0')}
+							aria-label='Search for movies, tv shows or people'
+						>
+							<Icon className={classNames('fa-solid fa-magnifying-glass text-white')} />
+						</Button>
 					</li>
 				</ul>
 			</nav>
@@ -163,20 +168,17 @@ const NavigationMenu = ({ isAuthenticated = false }: { isAuthenticated?: boolean
 				<div className='mx-auto hidden max-w-[1400px] justify-between	p-4 md:flex'>
 					<div className='m-0 flex items-center p-0' id='desktop-navigation-menu-left'>
 						{/* Sidebar brand logo */}
-						<ul>
-							<li>
-								<Link to='/'>
-									<Image
-										src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg'
-										alt='TMBDb Logo'
-										width='190px'
-										height='20px'
-										className='cursor-pointer'
-										label='The Open Movie Database Logo'
-									/>
-								</Link>
-							</li>
-						</ul>
+
+						<Link to='/'>
+							<Image
+								src='https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg'
+								alt='TMBDb Logo'
+								width='190px'
+								height='20px'
+								className='cursor-pointer'
+								label='The Open Movie Database Logo'
+							/>
+						</Link>
 
 						{ApplicationLinks.map((route) => (
 							<MenuItem key={route.menuGroup} links={route.children} title={route.menuGroup} />

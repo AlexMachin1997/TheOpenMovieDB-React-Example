@@ -4,6 +4,7 @@ import PersonSidebar from '../../Sidebars/PersonSidebar/PersonSidebar';
 import { PersonKnownForCard } from '../../Cards';
 import { SocialLink } from '../../../types/Social';
 import { Credit } from '../../Person/CreditsTable/types';
+import ReadMore from '../../Core/ReadMore/ReadMore';
 
 type ViewPersonResourceProps = {
 	person: {
@@ -45,10 +46,12 @@ const ViewPersonResource = ({ person, knownFor = [], credits = [] }: ViewPersonR
 				</h3>
 			</section>
 
-			<section id='biography'>
-				<h3 className='py-4 text-2xl font-bold'>Biography</h3>
+			<section id='biography' className='relative'>
+				<h3 className='py-2 text-2xl font-bold'>Biography</h3>
 
-				<p>{person?.biography}</p>
+				<ReadMore>
+					<p className='whitespace-break-spaces text-base'>{person?.biography}</p>
+				</ReadMore>
 			</section>
 
 			<section className='border-b border-solid border-gray-400 pt-4' id='known-for'>
@@ -60,6 +63,7 @@ const ViewPersonResource = ({ person, knownFor = [], credits = [] }: ViewPersonR
 							title={resource.title}
 							image={resource.posterUrl}
 							key={resource?.title}
+							renderLink={(props) => <a href='/'>{props.content}</a>}
 						/>
 					)) ?? null}
 				</div>

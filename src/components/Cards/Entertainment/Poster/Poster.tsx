@@ -14,7 +14,12 @@ const Poster = ({
 	image = '',
 	renderLink = null
 }: PosterCardProps) => (
-	<Card title={title} image={image} renderLink={renderLink}>
+	<Card
+		title={title}
+		image={image}
+		renderLink={renderLink}
+		containerClassName='rounded-2xl border border-solid border-gray-20'
+	>
 		{/* Rating for the Poster card */}
 		<div
 			className='absolute left-[8px] top-[-29px]'
