@@ -2,9 +2,11 @@ import * as React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { Formik } from 'formik';
 
-import SortBy from './SortBy';
+import SortBy from '~/components/Forms/DiscoverPageFilters/Sections/SortBy/SortBy';
 import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
-import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import DiscoverFiltersFormDataService, {
+	DefaultValues
+} from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 import settings from '~/settings';
 
 const meta: Meta<typeof SortBy> = {
@@ -55,7 +57,7 @@ export const PreDefinedValue = {
 			mediaType={MEDIA_TYPE.MOVIE}
 			isAuthenticated
 			defaultValues={{
-				sort_by: settings.SORT_BY_OPTIONS[7].value
+				sort_by: settings.SORT_BY_OPTIONS[7]?.value
 			}}
 		/>
 	)

@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Formik } from 'formik';
 
-import Filters from './Filters';
+import Filters from '~/components/Forms/DiscoverPageFilters/Sections/Filters/Filters';
 import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
 

@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router-dom';
 
-import Menu from './Menu';
+import Menu from '~/components/Layouts/Menu/Menu';
 
 const meta: Meta<typeof Menu> = {
 	component: Menu,

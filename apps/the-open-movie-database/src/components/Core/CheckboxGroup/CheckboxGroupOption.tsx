@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useCheckboxGroup } from './CheckboxGroupContext';
+import { useCheckboxGroup } from '~/components/Core/CheckboxGroup/CheckboxGroupContext';
 
 type CheckboxGroupOptionProps = {
 	label: string;

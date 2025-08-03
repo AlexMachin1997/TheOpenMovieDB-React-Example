@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import RecommendationCard from './Recommendation';
+import RecommendationCard from '~/components/Cards/Entertainment/Recommendation/Recommendation';
 
 const meta: Meta<typeof RecommendationCard> = {
 	component: RecommendationCard,

@@ -1,1 +1,1 @@
-export { default as useDropdownPlacement } from './useDropdownPlacement';
+export { default as useDropdownPlacement } from '~/hooks/useDropdownPlacement';

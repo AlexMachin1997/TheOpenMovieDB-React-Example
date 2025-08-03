@@ -1,3 +1,3 @@
-export { default as DiscoverPageTemplate } from './DiscoverPage/DiscoverPage';
+export { default as DiscoverPageTemplate } from '~/components/Templates/DiscoverPage/DiscoverPage';
 
-export { default as ViewEntertainmentResourceTemplate } from './ViewEntertainmentResource/ViewEntertainmentResource';
+export { default as ViewEntertainmentResourceTemplate } from '~/components/Templates/ViewEntertainmentResource/ViewEntertainmentResource';

@@ -1,5 +1,5 @@
-export { default as PersonKnownForCard } from './KnownFor/KnownFor';
+export { default as PersonKnownForCard } from '~/components/Cards/Person/KnownFor/KnownFor';
 
-export { default as TopBilledCastMember } from './TopBilledCastMember/TopBilledCastMember';
+export { default as TopBilledCastMember } from '~/components/Cards/Person/TopBilledCastMember/TopBilledCastMember';
 
-export { default as PersonCard } from './Person';
+export { default as PersonCard } from '~/components/Cards/Person/Person';

@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import PersonCard from './Person';
+import PersonCard from '~/components/Cards/Person/Person';
 
 const meta: Meta<typeof PersonCard> = {
 	component: PersonCard,

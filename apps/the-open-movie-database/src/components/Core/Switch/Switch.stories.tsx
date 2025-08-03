@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Meta, StoryObj } from '@storybook/react-vite';
 
-import Switch from './Switch';
+import Switch from '~/components/Core/Switch/Switch';
 
 const meta: Meta<typeof Switch> = {
 	component: Switch,

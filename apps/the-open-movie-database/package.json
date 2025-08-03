@@ -5,15 +5,16 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "pnpm run es-validate && vite build",
-		"ts-validate": "tsc",
+		"build": "pnpm run ts-validate && vite build",
+		"ts-validate": "tsc --noEmit",
 		"lint": "eslint ./src/** --ext ts,tsx --fix",
 		"prettier": "prettier --write ./src",
 		"validate": "pnpm run ts-validate && pnpm run prettier && pnpm run lint",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
 		"test": "vitest",
-		"coverage": "vitest run --coverage"
+		"coverage": "vitest run --coverage",
+		"clean": "rm -rf dist node_modules/.cache"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^6.4.2",

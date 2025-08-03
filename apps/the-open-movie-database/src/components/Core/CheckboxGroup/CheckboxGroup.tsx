@@ -1,5 +1,5 @@
-import CheckboxGroupContextProvider from './CheckboxGroupContext';
-import CheckboxGroupOption from './CheckboxGroupOption';
+import CheckboxGroupContextProvider from '~/components/Core/CheckboxGroup/CheckboxGroupContext';
+import CheckboxGroupOption from '~/components/Core/CheckboxGroup/CheckboxGroupOption';
 import { CheckboxOption } from '~/types/DropdownElementTypes';
 
 type CheckboxGroupProps = {

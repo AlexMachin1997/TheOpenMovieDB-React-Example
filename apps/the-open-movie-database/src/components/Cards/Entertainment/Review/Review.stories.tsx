@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import ReviewCard from './Review';
+import ReviewCard from '~/components/Cards/Entertainment/Review/Review';
 
 const meta: Meta<typeof ReviewCard> = {
 	title: 'Cards/Entertainment/Review',

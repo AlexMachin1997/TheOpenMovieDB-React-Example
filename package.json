@@ -8,7 +8,9 @@
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"check-types": "turbo run check-types",
 		"test": "turbo run test",
-		"clean": "turbo run clean && rm -rf node_modules"
+		"validate": "turbo run validate",
+		"clean": "turbo run clean && rm -rf node_modules",
+		"type-check": "turbo run ts-validate"
 	},
 	"devDependencies": {
 		"prettier": "^3.6.2",

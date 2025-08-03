@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import settings from '~/settings';
 
-import Combobox from './Combobox';
+import Combobox from '~/components/Core/Combobox/Combobox';
 import { SelectOption } from '~/types/DropdownElementTypes';
 
 const meta: Meta<typeof Combobox> = {
@@ -96,7 +96,7 @@ export const UncontrolledMultipleValues: Story = {
 	args: {
 		name: 'people',
 		options,
-		defaultValue: [options[3]],
+		defaultValue: [options[3]!],
 		isMultiSelect: true
 	}
 };
@@ -106,7 +106,7 @@ export const UncontrolledSingleValue: Story = {
 	args: {
 		name: 'people',
 		options,
-		defaultValue: options[2],
+		defaultValue: options[2]!,
 		isMultiSelect: false
 	}
 };
@@ -124,7 +124,7 @@ export const ControlledSingleValue: Story = {
 	args: {
 		options,
 		isMultiSelect: false,
-		defaultValue: options[2]
+		defaultValue: options[2]!
 	}
 };
 
@@ -133,7 +133,7 @@ export const MultipleValueDropdown: Story = {
 	args: {
 		isMultiSelect: true,
 		options,
-		defaultValue: [options[1], options[0]]
+		defaultValue: [options[1]!, options[0]!]
 	}
 };
 

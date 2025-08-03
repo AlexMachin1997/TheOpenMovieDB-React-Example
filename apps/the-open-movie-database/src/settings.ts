@@ -1,4 +1,4 @@
-import { CheckboxOption, SelectOption } from './types/DropdownElementTypes';
+import { CheckboxOption, SelectOption } from '~/types/DropdownElementTypes';
 
 const SORT_BY_OPTIONS = [
 	{

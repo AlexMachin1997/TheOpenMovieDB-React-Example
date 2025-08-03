@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import CollectionCard from './Collection';
+import CollectionCard from '~/components/Cards/Entertainment/Movie/Collection/Collection';
 
 const meta: Meta<typeof CollectionCard> = {
 	component: CollectionCard,

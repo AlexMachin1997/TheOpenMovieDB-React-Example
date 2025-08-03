@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import * as React from 'react';
 
-import Input from './Input';
+import Input from '~/components/Core/Input/Input';
 
 const meta: Meta<typeof Input> = {
 	component: Input,

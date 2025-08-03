@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import VideoCard from './Video';
+import VideoCard from '~/components/Cards/Entertainment/Video/Video';
 
 const meta: Meta<typeof VideoCard> = {
 	component: VideoCard,

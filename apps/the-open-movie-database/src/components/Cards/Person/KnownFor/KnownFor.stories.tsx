@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import KnownForCard from './KnownFor';
+import KnownForCard from '~/components/Cards/Person/KnownFor/KnownFor';
 
 const meta: Meta<typeof KnownForCard> = {
 	component: KnownForCard,

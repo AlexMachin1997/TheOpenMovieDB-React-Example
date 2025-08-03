@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import Percentage from './Percentage';
+import Percentage from '~/components/Core/Percentage/Percentage';
 
 const meta: Meta<typeof Percentage> = {
 	component: Percentage,

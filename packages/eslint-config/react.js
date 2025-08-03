@@ -52,7 +52,7 @@ export const config = [
 			...pluginReactHooks.configs.recommended.rules,
 			'react-hooks/rules-of-hooks': 'error',
 			'react-hooks/exhaustive-deps': 'error',
-			'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+			'react-refresh/only-export-components': ['error', { allowConstantExport: true }],
 			'react/function-component-definition': [
 				2,
 				{

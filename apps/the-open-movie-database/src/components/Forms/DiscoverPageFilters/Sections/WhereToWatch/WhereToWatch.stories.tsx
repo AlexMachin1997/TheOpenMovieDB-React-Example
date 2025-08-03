@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { Formik } from 'formik';
 
-import WhereToWatch from './WhereToWatch';
+import WhereToWatch from '~/components/Forms/DiscoverPageFilters/Sections/WhereToWatch/WhereToWatch';
 import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
 import DiscoverFiltersFormDataService, {
 	DefaultValues as IDefaultValues

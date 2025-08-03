@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import MostRecentEpisode from './MostRecentEpisode';
+import MostRecentEpisode from '~/components/Cards/Entertainment/TV/MostRecentEpisode/MostRecentEpisode';
 
 const meta: Meta<typeof MostRecentEpisode> = {
 	component: MostRecentEpisode,

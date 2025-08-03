@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import settings from '~/settings';
 
-import Listbox from './Listbox';
+import Listbox from '~/components/Core/Listbox/Listbox';
 import { SelectOption } from '~/types/DropdownElementTypes';
 
 const meta: Meta<typeof Listbox> = {
@@ -101,7 +101,7 @@ export const UncontrolledMultipleValues: Story = {
 	args: {
 		name: 'people',
 		options,
-		defaultValue: [options[2], options[1]],
+		defaultValue: [options[2]!, options[1]!],
 		isMultiSelect: true
 	}
 };
@@ -111,7 +111,7 @@ export const UncontrolledSingleValue: Story = {
 	args: {
 		name: 'people',
 		options,
-		defaultValue: options[1],
+		defaultValue: options[1]!,
 		isMultiSelect: false
 	}
 };
@@ -130,7 +130,7 @@ export const ControlledMultipleValues: Story = {
 	args: {
 		isMultiSelect: true,
 		options,
-		defaultValue: [options[0], options[2]]
+		defaultValue: [options[0]!, options[2]!]
 	}
 };
 

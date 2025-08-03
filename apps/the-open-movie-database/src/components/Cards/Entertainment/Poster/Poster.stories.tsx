@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import PosterCard from './Poster';
+import PosterCard from '~/components/Cards/Entertainment/Poster/Poster';
 
 const meta: Meta<typeof PosterCard> = {
 	title: 'Cards/Entertainment/Poster',
