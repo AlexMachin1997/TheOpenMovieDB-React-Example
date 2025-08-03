@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import classNames from 'classnames';
-import { Image } from '../Core';
+import { Image } from '~/components/Core';
 
-import generateComponentId from '../../utils/generateComponentId';
-import { CardComponentProps } from './types';
+import generateComponentId from '~/utils/generateComponentId';
+import { CardComponentProps } from '~/components/Cards/types';
 
 const Card = ({
 	title = '',

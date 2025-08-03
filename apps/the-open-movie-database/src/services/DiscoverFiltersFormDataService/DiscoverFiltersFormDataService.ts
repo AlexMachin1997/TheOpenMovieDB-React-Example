@@ -1,7 +1,7 @@
 import { addDays, format, subDays } from 'date-fns';
-import settings from '../../settings';
-import { SelectOption } from '../../types/DropdownElementTypes';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../types/RoutingTypes';
+import settings from '~/settings';
+import { SelectOption } from '~/types/DropdownElementTypes';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
 
 const setupCheckboxFormData = ({
 	defaultValue = [],

@@ -1,10 +1,10 @@
-import CreditsTableTitle from '../../Person/CreditsTable/CreditsTableTitle';
-import { CreditsTable } from '../../Person';
-import PersonSidebar from '../../Sidebars/PersonSidebar/PersonSidebar';
-import { PersonKnownForCard } from '../../Cards';
-import { SocialLink } from '../../../types/Social';
-import { Credit } from '../../Person/CreditsTable/types';
-import ReadMore from '../../Core/ReadMore/ReadMore';
+import { CreditsTable } from '~/components/Person';
+import { PersonKnownForCard } from '~/components/Cards';
+import ReadMore from '~/components/Core/ReadMore/ReadMore';
+import CreditsTableTitle from '~/components/Person/CreditsTable/CreditsTableTitle';
+import { Credit } from '~/components/Person/CreditsTable/types';
+import PersonSidebar from '~/components/Sidebars/PersonSidebar/PersonSidebar';
+import { SocialLink } from '~/types/Social';
 
 type ViewPersonResourceProps = {
 	person: {

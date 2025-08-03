@@ -1,1 +1,1 @@
-export { default as EntertainmentHeader } from './Entertainment/EntertainmentHeader';
+export { default as EntertainmentHeader } from '~/components/Headers/Entertainment/EntertainmentHeader';

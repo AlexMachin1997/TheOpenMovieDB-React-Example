@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { Icon, Image } from '../../../../Core';
-import { MostRecentEpisodeCardProps } from '../../../types';
-import RatingBlock from '../../shared/RatingBlock';
+import { Icon, Image } from '~/components/Core';
+import { MostRecentEpisodeCardProps } from '~/components/Cards/types';
+import RatingBlock from '~/components/Cards/Entertainment/shared/RatingBlock';
 
 const MostRecentEpisode = ({
 	image = '',

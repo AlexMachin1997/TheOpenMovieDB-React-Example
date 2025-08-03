@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
-import { Credit } from './types';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
+import { Credit } from '~/components/Person/CreditsTable/types';
 
 const generateResourceUrl = (title: string, id: string, mediaType: MEDIA_TYPE) => {
 	// Split the title at each capital letter

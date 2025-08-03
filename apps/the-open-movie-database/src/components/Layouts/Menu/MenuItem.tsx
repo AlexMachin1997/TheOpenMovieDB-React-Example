@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as React from 'react';
-
 import { usePopper } from 'react-popper';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-
-import { MenuItemRoute } from '../../../services/RoutingService/RoutingService';
+import { MenuItemRoute } from '~/services/RoutingService/RoutingService';
 
 type MenuItemProps = {
 	links: MenuItemRoute[];

@@ -1,5 +1,5 @@
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
-import { Credit } from './types';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
+import { Credit } from '~/components/Person/CreditsTable/types';
 
 const data: { year: number; credits: Credit[] }[] = [
 	{

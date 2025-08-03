@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 import * as React from 'react';
 
-import RadioGroups from './RadioGroup';
-import Settings from '../../../settings';
+import RadioGroup from './RadioGroup';
+import Settings from '~/settings';
 
-const meta: Meta<typeof RadioGroups> = {
-	component: RadioGroups,
+const meta: Meta<typeof RadioGroup> = {
+	component: RadioGroup,
 	title: 'Core/Radio Group'
 };
 
 export default meta;
 
-type Story = StoryObj<typeof RadioGroups>;
+type Story = StoryObj<typeof RadioGroup>;
 
 const ControlledStoryTemplate = (args: Story['args'] = {}) => {
 	const [value, setValue] = React.useState(args?.defaultValue ?? '');
 
 	return (
-		<RadioGroups
+		<RadioGroup
 			options={args?.options ?? []}
 			name={args?.name ?? 'name'}
 			disabled={args?.disabled ?? false}
@@ -35,7 +35,7 @@ const ControlledStoryTemplate = (args: Story['args'] = {}) => {
 
 const UncontrolledStoryTemplate = (args: Story['args'] = {}) => (
 	<form>
-		<RadioGroups
+		<RadioGroup
 			options={args?.options ?? []}
 			name={args?.name ?? 'name'}
 			disabled={args?.disabled ?? false}

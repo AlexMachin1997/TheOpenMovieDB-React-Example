@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import Card from '../Card';
-import { PersonCardProps } from '../types';
+import { PersonCard, type PersonCardProps } from '~/components/Cards';
 
 const Person = ({ title = '', image = '', subtitle = '', renderLink = null }: PersonCardProps) => (
 	<Card

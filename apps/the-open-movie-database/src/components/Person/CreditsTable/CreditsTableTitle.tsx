@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 import classNames from 'classnames';
-import { Icon } from '../../Core';
-import { SelectOption } from '../../../types/DropdownElementTypes';
+import { Icon } from '~/components/Core';
+import { SelectOption } from '~/types/DropdownElementTypes';
 
 type CreditsTableTitleProps = {
 	onChange?: null | ((data: { type: 'CLEAR_ALL' | 'CHANGE_DEPARTMENT' | 'CHANGE_ALL' }) => void);

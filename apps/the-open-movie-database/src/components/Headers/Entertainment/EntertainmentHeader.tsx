@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { Icon, Image, PercentageRating, Tooltip } from '../../Core';
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+import { Icon, Image, PercentageRating, Tooltip } from '~/components/Core';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
 
 type BaseEntertainmentHeaderProps = {
 	posterImageUrl: string;

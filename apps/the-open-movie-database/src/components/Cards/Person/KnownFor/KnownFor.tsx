@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import Card from '../../Card';
-import { KnownForCardProps } from '../../types';
+import { Card, type KnownForCardProps } from '~/components/Cards';
 
 const KnownFor = ({ title = '', image = '', renderLink = null }: KnownForCardProps) => (
 	<Card

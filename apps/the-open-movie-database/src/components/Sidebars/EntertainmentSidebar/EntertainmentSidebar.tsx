@@ -1,9 +1,8 @@
-import { Image } from '../../Core';
-
-import Keywords from './Keywords';
-import SocialLinks from '../SocialLinks';
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
-import { SocialLink } from '../../../types/Social';
+import { Image } from '~/components/Core';
+import Keywords from '~/components/Sidebars/EntertainmentSidebar/Keywords';
+import SocialLinks from '~/components/Sidebars/SocialLinks';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
+import { SocialLink } from '~/types/Social';
 
 type SharedSidebarProps = {
 	originalLanguage: string;

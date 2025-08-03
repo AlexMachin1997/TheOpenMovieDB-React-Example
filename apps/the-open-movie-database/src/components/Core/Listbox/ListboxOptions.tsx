@@ -3,8 +3,8 @@ import * as React from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Listbox as HeadlessUIListbox } from '@headlessui/react';
 import classNames from 'classnames';
-import { VirtualizedListProps } from '../../../types/DropdownElementTypes';
-import Icon from '../Icon/Icon';
+import { Icon } from '~/components/Core';
+import { VirtualizedListProps } from '~/types/DropdownElementTypes';
 
 const ListboxOptions = React.memo(
 	({ options, noOptionsAvailableMessage, isMultiSelect, truncateText }: VirtualizedListProps) => {

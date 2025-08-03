@@ -3,8 +3,16 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"]
+			"~/*": ["./src/*"],
+			"~/components/*": ["./src/components/*"],
+			"~/hooks/*": ["./src/hooks/*"],
+			"~/services/*": ["./src/services/*"],
+			"~/types/*": ["./src/types/*"],
+			"~/utils/*": ["./src/utils/*"],
+			"~/assets/*": ["./src/assets/*"],
+			"~/test/*": ["./src/test/*"]
 		}
 	},
+	"include": ["src/**/*"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,4 +1,4 @@
-import Icon from '../../../Core/Icon/Icon';
+import { Icon } from '~/components/Core';
 
 type RatingBlockProps = {
 	rating?: number | null;

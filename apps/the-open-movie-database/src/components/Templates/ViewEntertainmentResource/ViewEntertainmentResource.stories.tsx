@@ -1,10 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
-
 import { MemoryRouter } from 'react-router-dom';
-
-import ViewEntertainmentResource from './ViewEntertainmentResource';
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
-import { SOCIAL } from '../../../types/Social';
+import ViewEntertainmentResource from '~/components/Templates/ViewEntertainmentResource/ViewEntertainmentResource';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
+import { SOCIAL } from '~/types/Social';
 
 const meta: Meta<typeof ViewEntertainmentResource> = {
 	title: 'Templates/View Movie OR TV Show',

@@ -1,4 +1,4 @@
-import { Icon, Tooltip } from '../../Core';
+import { Icon, Tooltip } from '~/components/Core';
 
 type FilterTitleProps = {
 	title: string;

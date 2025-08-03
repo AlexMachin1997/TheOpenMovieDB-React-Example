@@ -1,9 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
-
 import { Link, MemoryRouter } from 'react-router-dom';
 
-import TopBilledCastMember from './TopBilledCastMember';
-import { MEDIA_TYPE } from '../../../../types/RoutingTypes';
+import TopBilledCastMember from '~/components/Cards/Person/TopBilledCastMember/TopBilledCastMember';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
 
 const meta: Meta<typeof TopBilledCastMember> = {
 	component: TopBilledCastMember,

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useFormikContext } from 'formik';
 
-import Settings from '../../../../../settings';
-import { Accordion, Listbox, Switch } from '../../../../Core';
-import FilterTitle from '../../FilterTitle';
-import { SelectOption } from '../../../../../types/DropdownElementTypes';
-import DiscoverFiltersFormDataService from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import Settings from '~/settings';
+import { Accordion, Listbox, Switch } from '~/components/Core';
+import FilterTitle from '~/components/Forms/DiscoverPageFilters/FilterTitle';
+import { SelectOption } from '~/types/DropdownElementTypes';
+import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 
 type WhereToWatchProps = {
 	isAuthenticated?: boolean;

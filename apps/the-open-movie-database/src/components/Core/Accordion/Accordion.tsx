@@ -1,7 +1,6 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-
-import Icon from '../Icon/Icon';
+import { Icon } from '~/components/Core';
 
 type AccordionProps = {
 	children: React.ReactNode;

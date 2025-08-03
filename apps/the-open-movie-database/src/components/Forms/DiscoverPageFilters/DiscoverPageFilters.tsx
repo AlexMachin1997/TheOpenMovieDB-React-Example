@@ -1,6 +1,10 @@
-import { SelectOption } from '../../../types/DropdownElementTypes';
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
-import { FiltersSection, SortBySection, WhereToWatchSection } from './Sections';
+import { SelectOption } from '~/types/DropdownElementTypes';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
+import {
+	FiltersSection,
+	SortBySection,
+	WhereToWatchSection
+} from '~/components/Forms/DiscoverPageFilters/Sections';
 
 type DiscoverFilterSidebar = {
 	isAuthenticated?: boolean;

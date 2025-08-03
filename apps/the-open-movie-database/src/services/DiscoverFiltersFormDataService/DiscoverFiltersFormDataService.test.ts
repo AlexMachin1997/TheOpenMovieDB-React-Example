@@ -1,8 +1,7 @@
-import { describe, beforeAll, vi, afterAll, expect, it } from 'vitest';
-import settings from '../../settings';
-import DiscoverFiltersFormDataService from './DiscoverFiltersFormDataService';
-import { SelectOption } from '../../types/DropdownElementTypes';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../types/RoutingTypes';
+import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
+import { SelectOption } from '~/types/DropdownElementTypes';
+import settings from '~/settings';
 
 describe('DiscoverFiltersFormDataService', () => {
 	beforeAll(() => {
@@ -1104,7 +1103,7 @@ describe('DiscoverFiltersFormDataService', () => {
 				with_release_types: ['all'],
 				'release_date.lte': '',
 				'release_date.gte': '',
-				'air_date.lte': '2022-11-07',
+				'air_date.lte': '2022-11-14',
 				'air_date.gte': '2022-11-07',
 				with_original_language: WITH_ORIGINAL_LANGUAGE_NONE,
 				region: REGION_US,

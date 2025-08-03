@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Button } from '../../../../Core';
-import { CollectionCardProps } from '../../../types';
+import { Button } from '~/components/Core';
+import { CollectionCardProps } from '~/components/Cards/types';
 
 const Collection = ({
 	title = '',

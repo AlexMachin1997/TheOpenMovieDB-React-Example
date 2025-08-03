@@ -3,9 +3,9 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { Formik } from 'formik';
 
 import DiscoverFilterSidebar from './DiscoverPageFilters';
-import DiscoverFiltersFormData from '../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../types/RoutingTypes';
-import settings from '../../../settings';
+import DiscoverFiltersFormData from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
+import settings from '~/settings';
 
 type Story = StoryObj<typeof DiscoverFilterSidebar>;
 

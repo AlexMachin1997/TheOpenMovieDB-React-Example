@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { useFormikContext } from 'formik';
-
 import classNames from 'classnames';
-import { Button, Icon } from '../../Core';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../types/RoutingTypes';
-import DiscoverFiltersFormDataService from '../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import { Button, Icon } from '~/components/Core';
+import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
 
 type FormSettingsProps = {
 	mediaType: MEDIA_TYPE;

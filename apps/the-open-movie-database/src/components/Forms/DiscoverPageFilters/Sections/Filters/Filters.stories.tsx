@@ -4,8 +4,8 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { Formik } from 'formik';
 
 import Filters from './Filters';
-import DiscoverFiltersFormDataService from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../../../types/RoutingTypes';
+import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
 
 const meta: Meta<typeof Filters> = {
 	component: Filters,

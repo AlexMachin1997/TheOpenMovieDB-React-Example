@@ -1,7 +1,6 @@
-import { SocialLink } from '../../../types/Social';
-import { Image } from '../../Core';
-
-import SocialLinks from '../SocialLinks';
+import { Image } from '~/components/Core';
+import SocialLinks from '~/components/Sidebars/SocialLinks';
+import { SocialLink } from '~/types/Social';
 
 export type PersonSidebarProps = {
 	name?: string;

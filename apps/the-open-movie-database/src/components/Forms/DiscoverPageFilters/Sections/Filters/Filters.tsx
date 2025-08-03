@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useFormikContext } from 'formik';
 
-import Settings from '../../../../../settings';
-import { Accordion, CheckboxGroup, Input, Listbox, RadioGroup, Switch } from '../../../../Core';
-import FilterTitle from '../../FilterTitle';
-import { MEDIA_TYPE } from '../../../../../types/RoutingTypes';
-import DiscoverFiltersFormDataService from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
-import { CheckboxOption } from '../../../../../types/DropdownElementTypes';
+import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import Settings from '~/settings';
+import { Accordion, CheckboxGroup, Input, Listbox, RadioGroup, Switch } from '~/components/Core';
+import FilterTitle from '~/components/Forms/DiscoverPageFilters/FilterTitle';
+import { CheckboxOption } from '~/types/DropdownElementTypes';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
 
 type FiltersProps = {
 	isAuthenticated?: boolean;
@@ -114,7 +114,7 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 				<CheckboxGroup
 					options={
 						values.with_release_types.includes('all') === true
-							? [Settings.RELEASE_TYPE_OPTIONS[0]]
+							? Settings.RELEASE_TYPE_OPTIONS.slice(0, 1)
 							: Settings.RELEASE_TYPE_OPTIONS
 					}
 					value={values.with_release_types}
@@ -228,7 +228,7 @@ const Filters = ({ isAuthenticated, mediaType }: FiltersProps) => {
 				<CheckboxGroup
 					options={
 						values.with_ott_monetization_types.includes('all') === true
-							? [Settings.AVAILABILITY_OPTIONS[0]]
+							? Settings.AVAILABILITY_OPTIONS.slice(0, 1)
 							: Settings.AVAILABILITY_OPTIONS
 					}
 					value={values.with_ott_monetization_types}

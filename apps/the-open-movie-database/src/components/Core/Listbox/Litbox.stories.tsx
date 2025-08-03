@@ -2,10 +2,10 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 
 import * as React from 'react';
 
-import settings from '../../../settings';
+import settings from '~/settings';
 
 import Listbox from './Listbox';
-import { SelectOption } from '../../../types/DropdownElementTypes';
+import { SelectOption } from '~/types/DropdownElementTypes';
 
 const meta: Meta<typeof Listbox> = {
 	component: Listbox,

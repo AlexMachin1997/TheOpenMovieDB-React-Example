@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-
-import { Button, Icon, Image } from '../../Core';
-import MenuItem from './MenuItem';
-import ProfileMenu from './ProfileMenu';
-import RoutingService from '../../../services/RoutingService/RoutingService';
+import { Button, Icon, Image } from '~/components/Core';
+import MenuItem from '~/components/Layouts/Menu/MenuItem';
+import ProfileMenu from '~/components/Layouts/Menu/ProfileMenu';
+import RoutingService from '~/services/RoutingService/RoutingService';
 
 const NavigationMenu = ({ isAuthenticated = false }: { isAuthenticated?: boolean }) => {
 	// MobileSidebar state

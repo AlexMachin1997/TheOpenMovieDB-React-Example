@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import Image from '../../../Core/Image/Image';
-import { ReviewCardProps } from '../../types';
-import RatingBlock from '../shared/RatingBlock';
+import { Image } from '~/components/Core';
+import { ReviewCardProps } from '~/components/Cards/types';
+import RatingBlock from '~/components/Cards/Entertainment/shared/RatingBlock';
 
 const Review = ({
 	author: { name = '', username = '', avatarUrl = null, rating = null } = {},

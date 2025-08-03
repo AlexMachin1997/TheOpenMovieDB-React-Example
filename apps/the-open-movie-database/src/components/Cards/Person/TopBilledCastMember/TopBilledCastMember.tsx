@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import Card from '../../Card';
-import { TopBilledCastMemberCardProps } from '../../types';
+import { Card, type TopBilledCastMemberCardProps } from '~/components/Cards';
 
 const TopBilledCastMember = ({
 	image,

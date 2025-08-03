@@ -1,11 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
-
 import { MemoryRouter } from 'react-router-dom';
-
-import CreditsTable from './CreditsTable';
-import ActingGroupData from './ActingGroupData';
-import CreditsTableTitle from './CreditsTableTitle';
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+import ActingGroupData from '~/components/Person/CreditsTable/ActingGroupData';
+import CreditsTable from '~/components/Person/CreditsTable/CreditsTable';
+import CreditsTableTitle from '~/components/Person/CreditsTable/CreditsTableTitle';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
 
 const meta: Meta<typeof CreditsTable> = {
 	component: CreditsTable,

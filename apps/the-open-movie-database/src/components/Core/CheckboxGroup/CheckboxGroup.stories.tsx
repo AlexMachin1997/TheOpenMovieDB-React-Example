@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
 
 import CheckboxGroup from './CheckboxGroup';
-import settings from '../../../settings';
+import settings from '~/settings';
 
 const meta: Meta<typeof CheckboxGroup> = {
 	component: CheckboxGroup,

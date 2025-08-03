@@ -1,4 +1,4 @@
-import { Image } from '../../Core';
+import { Image } from '~/components/Core';
 
 const TheBasics = [
 	{ text: 'About TMDb', link: 'https://www.themoviedb.org/about' },

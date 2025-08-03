@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as React from 'react';
 import { Listbox as HeadlessUIListbox, Transition } from '@headlessui/react';
-
-import Icon from '../Icon/Icon';
-import ListboxDisplayValues from './ListboxDisplayValues';
-import { ListboxProps, SelectOption } from '../../../types/DropdownElementTypes';
-import ListboxOptions from './ListboxOptions';
-import { useDropdownPlacement } from '../../../hooks';
+import ListboxDisplayValues from '~/components/Core/Listbox/ListboxDisplayValues';
+import ListboxOptions from '~/components/Core/Listbox/ListboxOptions';
+import { Icon } from '~/components/Core';
+import { useDropdownPlacement } from '~/hooks';
+import { ListboxProps, SelectOption } from '~/types/DropdownElementTypes';
 
 const Listbox = ({
 	options = [],

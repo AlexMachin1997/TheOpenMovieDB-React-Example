@@ -1,9 +1,8 @@
 import { useFormikContext } from 'formik';
-
-import Settings from '../../../../../settings';
-import { Accordion, Listbox } from '../../../../Core';
-import FilterTitle from '../../FilterTitle';
-import DiscoverFiltersFormDataService from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import Settings from '~/settings';
+import { Accordion, Listbox } from '~/components/Core';
+import FilterTitle from '~/components/Forms/DiscoverPageFilters/FilterTitle';
+import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
 
 const Sort = () => {
 	// Access the templates current from values, the return type is inferred from the return of getFormikFormData

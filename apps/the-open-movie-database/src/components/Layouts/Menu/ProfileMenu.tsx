@@ -4,9 +4,8 @@ import classNames from 'classnames';
 import { Menu, Transition } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 import { Link } from 'react-router-dom';
-
-import RoutingService from '../../../services/RoutingService/RoutingService';
-import { Button, Icon } from '../../Core';
+import { Button, Icon } from '~/components/Core';
+import RoutingService from '~/services/RoutingService/RoutingService';
 
 type UnauthenticatedUserProfileProps = {
 	onChange: null | (() => void);

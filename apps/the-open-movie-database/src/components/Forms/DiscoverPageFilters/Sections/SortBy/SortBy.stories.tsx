@@ -3,11 +3,9 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { Formik } from 'formik';
 
 import SortBy from './SortBy';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../../../types/RoutingTypes';
-import DiscoverFiltersFormDataService, {
-	DefaultValues
-} from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
-import settings from '../../../../../settings';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
+import DiscoverFiltersFormDataService from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import settings from '~/settings';
 
 const meta: Meta<typeof SortBy> = {
 	component: SortBy,

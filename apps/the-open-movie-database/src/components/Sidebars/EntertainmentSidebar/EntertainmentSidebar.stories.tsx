@@ -1,9 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router-dom';
-
-import EntertainmentSidebar from './EntertainmentSidebar';
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
-import { SOCIAL } from '../../../types/Social';
+import EntertainmentSidebar from '~/components/Sidebars/EntertainmentSidebar/EntertainmentSidebar';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
+import { SOCIAL } from '~/types/Social';
 
 const meta: Meta<typeof EntertainmentSidebar> = {
 	component: EntertainmentSidebar,

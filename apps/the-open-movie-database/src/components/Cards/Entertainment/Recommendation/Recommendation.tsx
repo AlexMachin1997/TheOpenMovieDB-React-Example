@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Icon, Image } from '../../../Core';
-import { RecommendationCardProps } from '../../types';
+import { Icon, Image } from '~/components/Core';
+import { RecommendationCardProps } from '~/components/Cards/types';
 
 const Recommendation = ({
 	title = '',

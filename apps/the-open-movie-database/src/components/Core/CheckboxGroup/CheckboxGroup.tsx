@@ -1,8 +1,9 @@
 import CheckboxGroupContextProvider from './CheckboxGroupContext';
 import CheckboxGroupOption from './CheckboxGroupOption';
+import { CheckboxOption } from '~/types/DropdownElementTypes';
 
 type CheckboxGroupProps = {
-	options: { id: string; disabled?: boolean; value: string; label: string }[];
+	options: CheckboxOption[];
 	value?: string[];
 	defaultValue?: string[];
 	onChange?:

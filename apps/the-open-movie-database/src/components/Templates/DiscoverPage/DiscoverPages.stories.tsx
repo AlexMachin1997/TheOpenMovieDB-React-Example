@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 
-import DiscoverPage from './DiscoverPage';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../types/RoutingTypes';
+import DiscoverPage from '~/components/Templates/DiscoverPage/DiscoverPage';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
 
 const meta: Meta<typeof DiscoverPage> = {
 	component: DiscoverPage,

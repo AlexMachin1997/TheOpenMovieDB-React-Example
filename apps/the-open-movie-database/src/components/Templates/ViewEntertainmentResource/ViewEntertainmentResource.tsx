@@ -1,18 +1,18 @@
 import { Link } from 'react-router-dom';
 import EntertainmentSidebar, {
 	EntertainmentSideProps
-} from '../../Sidebars/EntertainmentSidebar/EntertainmentSidebar';
-import { EntertainmentHeader } from '../../Headers';
+} from '~/components/Sidebars/EntertainmentSidebar/EntertainmentSidebar';
+import { EntertainmentHeader } from '~/components/Headers';
 import {
 	EntertainmentRecommendationCard,
 	EntertainmentReviewCard,
 	MovieCollectionCard,
 	MostRecentEpisodeCard,
 	TopBilledCastMember
-} from '../../Cards';
-import { Icon, Tabs } from '../../Core';
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
-import { EntertainmentHeaderProps } from '../../Headers/Entertainment/EntertainmentHeader';
+} from '~/components/Cards';
+import { Icon, Tabs } from '~/components/Core';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
+import { EntertainmentHeaderProps } from '~/components/Headers/Entertainment/EntertainmentHeader';
 
 type Media = {
 	id: string;

@@ -1,8 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router-dom';
 
-import PersonSidebar from './PersonSidebar';
-import { SOCIAL } from '../../../types/Social';
+import PersonSidebar from '~/components/Sidebars/PersonSidebar/PersonSidebar';
+import { SOCIAL } from '~/types/Social';
 
 const meta: Meta<typeof PersonSidebar> = {
 	component: PersonSidebar,

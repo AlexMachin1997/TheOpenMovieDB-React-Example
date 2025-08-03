@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { PercentageRating } from '../../../Core';
+import { PercentageRating } from '~/components/Core';
 
-import generateComponentId from '../../../../utils/generateComponentId';
+import generateComponentId from '~/utils/generateComponentId';
 
-import Card from '../../Card';
-import { PosterCardProps } from '../../types';
+import Card from '~/components/Cards/Card';
+import { PosterCardProps } from '~/components/Cards/types';
 
 const Poster = ({
 	title = '',

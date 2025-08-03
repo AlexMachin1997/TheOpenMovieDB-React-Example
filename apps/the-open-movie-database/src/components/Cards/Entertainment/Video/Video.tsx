@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { Button, Icon, Image } from '../../../Core';
+import { Button, Icon, Image } from '~/components/Core';
 
-import generateComponentId from '../../../../utils/generateComponentId';
-import { VideoCardProps } from '../../types';
+import generateComponentId from '~/utils/generateComponentId';
+import { VideoCardProps } from '~/components/Cards/types';
 
 const Video = ({
 	title = '',

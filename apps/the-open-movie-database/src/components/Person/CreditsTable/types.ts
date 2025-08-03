@@ -1,4 +1,4 @@
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
 
 type BaseCredit = {
 	title: string;

@@ -1,4 +1,4 @@
-import { CheckboxOption } from './types/DropdownElementTypes';
+import { CheckboxOption, SelectOption } from './types/DropdownElementTypes';
 
 const SORT_BY_OPTIONS = [
 	{
@@ -349,7 +349,7 @@ const RELEASE_TYPE_OPTIONS: CheckboxOption[] = [
 	}
 ];
 
-const getLanguageOptions = () => {
+const getLanguageOptions = (): SelectOption[] => {
 	// Store all the language options
 	const languageOptions = [
 		{
@@ -1295,7 +1295,7 @@ const getLanguageOptions = () => {
 	];
 
 	// Format the language options
-	const formattedLanguageOptions = languageOptions.map((languageOption) => {
+	const formattedLanguageOptions: SelectOption[] = languageOptions.map((languageOption) => {
 		// Don't format the 'none' option no need to.
 		if (languageOption.name === 'none') {
 			return {
@@ -1306,17 +1306,22 @@ const getLanguageOptions = () => {
 
 		// If the option isn't all then do this formatting instead
 		return {
-			...languageOption,
 			value: languageOption.iso_639_1,
 			label: `${languageOption.label} (${languageOption.iso_639_1.toUpperCase()})`
 		};
 	});
 
-	// Get the first value from the language options (Should be the 'None Selected' option)
-	const [firstValue, ...reset] = formattedLanguageOptions;
+	// Sort with 'none' option always at the top, everything else alphabetically
+	return formattedLanguageOptions.sort((a, b) => {
+		// If a is the 'none' option, it should come first
+		if (a.value === 'none') return -1;
 
-	// Insert the 'None Selected' and sort all the oother options in alphabetical order
-	return [firstValue, ...reset.sort((a, b) => a.label.localeCompare(b.label))];
+		// If b is the 'none' option, it should come first
+		if (b.value === 'none') return 1;
+
+		// Otherwise sort alphabetically by label
+		return a.label.localeCompare(b.label);
+	});
 };
 
 const getCountryOptions = () => {

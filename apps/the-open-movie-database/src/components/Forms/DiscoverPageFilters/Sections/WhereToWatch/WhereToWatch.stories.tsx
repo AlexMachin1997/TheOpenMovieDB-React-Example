@@ -3,12 +3,12 @@ import { Meta, StoryObj } from '@storybook/react-vite';
 import { Formik } from 'formik';
 
 import WhereToWatch from './WhereToWatch';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../../../types/RoutingTypes';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
 import DiscoverFiltersFormDataService, {
 	DefaultValues as IDefaultValues
-} from '../../../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
-import { SelectOption } from '../../../../../types/DropdownElementTypes';
-import settings from '../../../../../settings';
+} from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import { SelectOption } from '~/types/DropdownElementTypes';
+import settings from '~/settings';
 
 type Story = StoryObj<typeof WhereToWatch>;
 

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { SOCIAL, SocialLink } from '../../types/Social';
-import { Icon, Tooltip } from '../Core';
+import { Icon, Tooltip } from '~/components/Core';
+import { SOCIAL, SocialLink } from '~/types/Social';
 
 const SocialIcon = ({ type }: { type: SOCIAL }) => {
 	switch (type) {

@@ -1,4 +1,4 @@
-import { MEDIA_TYPE } from '../../types/RoutingTypes';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
 
 export type BaseCardProps = {
 	title: string;

@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Combobox as HeadlessUICombobox } from '@headlessui/react';
-
 import classNames from 'classnames';
-import { ComboboxVirtualizedProps } from '../../../types/DropdownElementTypes';
-import Icon from '../Icon/Icon';
+import { Icon } from '~/components/Core';
+import { ComboboxVirtualizedProps } from '~/types/DropdownElementTypes';
 
 const ComboboxOptions = React.memo(
 	({

@@ -1,9 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
-
 import { MemoryRouter } from 'react-router-dom';
-
-import EntertainmentHeader from './EntertainmentHeader';
-import { MEDIA_TYPE } from '../../../types/RoutingTypes';
+import EntertainmentHeader from '~/components/Headers/Entertainment/EntertainmentHeader';
+import { MEDIA_TYPE } from '~/types/RoutingTypes';
 
 type Story = StoryObj<typeof EntertainmentHeader>;
 

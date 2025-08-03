@@ -3,10 +3,10 @@ import * as React from 'react';
 import { Combobox as HeadlessUICombobox, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 
-import Icon from '../Icon/Icon';
-import { ComboboxProps, SelectOption } from '../../../types/DropdownElementTypes';
-import ComboboxOptions from './ComboboxOptions';
-import { useDropdownPlacement } from '../../../hooks';
+import ComboboxOptions from '~/components/Core/Combobox/ComboboxOptions';
+import { Icon } from '~/components/Core';
+import { useDropdownPlacement } from '~/hooks';
+import { ComboboxProps, SelectOption } from '~/types/DropdownElementTypes';
 
 const Combobox = ({
 	options = [],

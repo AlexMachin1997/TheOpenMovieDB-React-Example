@@ -2,15 +2,15 @@ import * as React from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 
-import DiscoverPageFilters from '../../Forms/DiscoverPageFilters/DiscoverPageFilters';
-import { EntertainmentPosterCard } from '../../Cards/Entertainment';
+import DiscoverPageFilters from '~/components/Forms/DiscoverPageFilters/DiscoverPageFilters';
+import { EntertainmentPosterCard } from '~/components/Cards/Entertainment';
 import DiscoverFiltersFormDataService, {
 	DefaultValues
-} from '../../../services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
-import { Button, Icon } from '../../Core';
-import { MEDIA_TYPE, RESOURCE_TYPE } from '../../../types/RoutingTypes';
-import FormSettings from './FormSettings';
-import settings from '../../../settings';
+} from '~/services/DiscoverFiltersFormDataService/DiscoverFiltersFormDataService';
+import { Button, Icon } from '~/components/Core';
+import { MEDIA_TYPE, RESOURCE_TYPE } from '~/types/RoutingTypes';
+import FormSettings from '~/components/Templates/DiscoverPage/FormSettings';
+import settings from '~/settings';
 
 type DiscoverPageTemplateProps = {
 	mediaType?: MEDIA_TYPE;

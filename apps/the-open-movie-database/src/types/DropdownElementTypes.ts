@@ -6,6 +6,7 @@ export type CheckboxOption = {
 	value: string;
 	order: number;
 	name: string;
+	disabled?: boolean;
 };
 
 type BaseDropdownProps = {

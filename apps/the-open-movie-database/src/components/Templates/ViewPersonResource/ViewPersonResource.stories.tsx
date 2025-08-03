@@ -1,9 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router-dom';
-
-import ViewPersonResource from './ViewPersonResource';
-import { SOCIAL } from '../../../types/Social';
-import ActingGroupData from '../../Person/CreditsTable/ActingGroupData';
+import ActingGroupData from '~/components/Person/CreditsTable/ActingGroupData';
+import ViewPersonResource from '~/components/Templates/ViewPersonResource/ViewPersonResource';
+import { SOCIAL } from '~/types/Social';
 
 const meta: Meta<typeof ViewPersonResource> = {
 	title: 'Templates/View Person',

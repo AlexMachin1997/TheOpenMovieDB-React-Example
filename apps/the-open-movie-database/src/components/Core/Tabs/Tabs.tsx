@@ -1,10 +1,7 @@
 import * as React from 'react';
-
 import { Tab } from '@headlessui/react';
 import classNames from 'classnames';
-
-import Button from '../Button/Button';
-import Icon from '../Icon/Icon';
+import { Button, Icon } from '~/components/Core';
 
 type TabProps = {
 	tabs: {

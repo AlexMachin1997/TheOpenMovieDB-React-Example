@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { ListboxDisplayValueProps, SelectOption } from '../../../types/DropdownElementTypes';
-import Icon from '../Icon/Icon';
+import { Icon } from '~/components/Core';
+import { ListboxDisplayValueProps, SelectOption } from '~/types/DropdownElementTypes';
 
 const ListboxDisplayValues = ({
 	value = null,

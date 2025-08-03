@@ -1,9 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
-
 import { RadioGroup } from '@headlessui/react';
-
-import Icon from '../Icon/Icon';
+import { Icon } from '~/components/Core';
 
 type Option = {
 	label: string;
