@@ -16,7 +16,7 @@ const ReadMore = ({
 
 	// Setup the Read More functionality
 	React.useEffect(() => {
-		if (contentRef.current) {
+		if (contentRef.current?.children[0]?.scrollHeight) {
 			// Get the height of the text element provided outside of the ReadMore component (Passed in via children props)
 			const paragraphHeight = contentRef.current.children[0].scrollHeight;
 

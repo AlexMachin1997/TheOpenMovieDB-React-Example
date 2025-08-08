@@ -87,19 +87,25 @@ export const DisableCertainOptions: Story = {
 				label: 'Checkbox 1',
 				id: '1',
 				disabled: false,
-				value: '1'
+				value: '1',
+				order: 1,
+				name: 'Checkbox 1'
 			},
 			{
 				label: 'Checkbox 2',
 				id: '2',
 				disabled: true,
-				value: '2'
+				value: '2',
+				order: 2,
+				name: 'Checkbox 2'
 			},
 			{
 				label: 'Checkbox 3',
 				id: '3',
 				disabled: true,
-				value: '3'
+				value: '3',
+				order: 3,
+				name: 'Checkbox 3'
 			}
 		]
 	}

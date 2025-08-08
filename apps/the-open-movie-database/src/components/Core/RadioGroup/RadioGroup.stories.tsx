@@ -56,7 +56,7 @@ export const CountriesExample: Story = {
 	render: UncontrolledStoryTemplate,
 	args: {
 		options: Settings.COUNTRY_OPTIONS.slice(0, 10),
-		defaultValue: Settings.COUNTRY_OPTIONS[0].value
+		defaultValue: Settings.COUNTRY_OPTIONS.at(0)?.value ?? ''
 	}
 };
 

@@ -60,10 +60,10 @@ export const PreDefinedValues: Story = {
 			defaultValues={{
 				restrict_services: true,
 				with_ott_providers: [
-					settings.OTT_PROVIDER_OPTIONS[5].value,
-					settings.OTT_PROVIDER_OPTIONS[3].value
+					settings.OTT_PROVIDER_OPTIONS.at(5)?.value ?? '',
+					settings.OTT_PROVIDER_OPTIONS.at(3)?.value ?? ''
 				],
-				ott_region: settings.COUNTRY_OPTIONS[5].value
+				ott_region: settings.COUNTRY_OPTIONS.at(5)?.value
 			}}
 		/>
 	),
