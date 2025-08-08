@@ -17,12 +17,12 @@
 		"check-types": {
 			"dependsOn": ["^check-types"]
 		},
-		"ts-validate": {
-			"dependsOn": ["^ts-validate"]
-		},
 		"test": {
 			"dependsOn": ["^test"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"]
+		},
+		"coverage": {
+			"dependsOn": ["^coverage"]
 		},
 		"clean": {
 			"cache": false

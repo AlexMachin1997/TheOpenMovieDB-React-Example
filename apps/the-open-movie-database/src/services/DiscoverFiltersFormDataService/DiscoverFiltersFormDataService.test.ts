@@ -27,8 +27,8 @@ describe('DiscoverFiltersFormDataService', () => {
 			},
 			{
 				resourceType: RESOURCE_TYPE.NOW_PLAYING,
-				expectedSortBy: settings.SORT_BY_OPTIONS[3].value,
-				defaultSortBy: settings.SORT_BY_OPTIONS[3].value
+				expectedSortBy: settings.SORT_BY_OPTIONS[3]!.value,
+				defaultSortBy: settings.SORT_BY_OPTIONS[3]!.value
 			}
 		])(
 			'When the resourceType is $resourceType and the default sortBy is $defaultSortBy the sort_by should be $expectedSortBy',
@@ -130,10 +130,10 @@ describe('DiscoverFiltersFormDataService', () => {
 
 		it("When there is no 'all' options but there are other valid values it should set it to the provided values", () => {
 			const availabilityOptionsFormData = [
-				settings.AVAILABILITY_OPTIONS[1].value,
-				settings.AVAILABILITY_OPTIONS[2].value,
-				settings.AVAILABILITY_OPTIONS[3].value,
-				settings.AVAILABILITY_OPTIONS[4].value
+				settings.AVAILABILITY_OPTIONS[1]!.value,
+				settings.AVAILABILITY_OPTIONS[2]!.value,
+				settings.AVAILABILITY_OPTIONS[3]!.value,
+				settings.AVAILABILITY_OPTIONS[4]!.value
 			];
 
 			const formData = new DiscoverFiltersFormDataService(
@@ -152,11 +152,11 @@ describe('DiscoverFiltersFormDataService', () => {
 
 		it("When there is an 'all' option and other options it should filter out the 'all' option", () => {
 			const availabilityOptionsFormData = [
-				settings.AVAILABILITY_OPTIONS[0].value,
-				settings.AVAILABILITY_OPTIONS[1].value,
-				settings.AVAILABILITY_OPTIONS[2].value,
-				settings.AVAILABILITY_OPTIONS[3].value,
-				settings.AVAILABILITY_OPTIONS[4].value
+				settings.AVAILABILITY_OPTIONS[0]!.value,
+				settings.AVAILABILITY_OPTIONS[1]!.value,
+				settings.AVAILABILITY_OPTIONS[2]!.value,
+				settings.AVAILABILITY_OPTIONS[3]!.value,
+				settings.AVAILABILITY_OPTIONS[4]!.value
 			];
 
 			const formData = new DiscoverFiltersFormDataService(
@@ -205,7 +205,7 @@ describe('DiscoverFiltersFormDataService', () => {
 				RESOURCE_TYPE.TOP_RATED,
 				false,
 				{
-					with_genres: [settings.GENRE_OPTIONS[0].value]
+					with_genres: [settings.GENRE_OPTIONS[0]!.value]
 				}
 			);
 			expect(formData.getFiltersFormData().with_genres).toStrictEqual([
@@ -243,7 +243,7 @@ describe('DiscoverFiltersFormDataService', () => {
 				RESOURCE_TYPE.TOP_RATED,
 				false,
 				{
-					certifications: [settings.CERTIFICATION_OPTIONS[0].value]
+					certifications: [settings.CERTIFICATION_OPTIONS[0]!.value]
 				}
 			);
 			expect(formData.getFiltersFormData().certifications).toStrictEqual([
@@ -268,10 +268,10 @@ describe('DiscoverFiltersFormDataService', () => {
 
 		it("When there is no 'all' options but there are other valid values it should set it to the provided values", () => {
 			const availabilityOptionsFormData = [
-				settings.RELEASE_TYPE_OPTIONS[1].value,
-				settings.RELEASE_TYPE_OPTIONS[2].value,
-				settings.RELEASE_TYPE_OPTIONS[3].value,
-				settings.RELEASE_TYPE_OPTIONS[4].value
+				settings.RELEASE_TYPE_OPTIONS[1]!.value,
+				settings.RELEASE_TYPE_OPTIONS[2]!.value,
+				settings.RELEASE_TYPE_OPTIONS[3]!.value,
+				settings.RELEASE_TYPE_OPTIONS[4]!.value
 			];
 
 			const formData = new DiscoverFiltersFormDataService(
@@ -290,11 +290,11 @@ describe('DiscoverFiltersFormDataService', () => {
 
 		it("When there is an 'all' option and other options it should filter out the 'all' option", () => {
 			const availabilityOptionsFormData = [
-				settings.RELEASE_TYPE_OPTIONS[0].value,
-				settings.RELEASE_TYPE_OPTIONS[1].value,
-				settings.RELEASE_TYPE_OPTIONS[2].value,
-				settings.RELEASE_TYPE_OPTIONS[3].value,
-				settings.RELEASE_TYPE_OPTIONS[4].value
+				settings.RELEASE_TYPE_OPTIONS[0]!.value,
+				settings.RELEASE_TYPE_OPTIONS[1]!.value,
+				settings.RELEASE_TYPE_OPTIONS[2]!.value,
+				settings.RELEASE_TYPE_OPTIONS[3]!.value,
+				settings.RELEASE_TYPE_OPTIONS[4]!.value
 			];
 
 			const formData = new DiscoverFiltersFormDataService(
@@ -344,7 +344,7 @@ describe('DiscoverFiltersFormDataService', () => {
 				RESOURCE_TYPE.TOP_RATED,
 				false,
 				{
-					with_original_language: settings.LANGUAGE_OPTIONS[1].value
+					with_original_language: settings.LANGUAGE_OPTIONS[1]!.value
 				}
 			);
 
@@ -385,7 +385,7 @@ describe('DiscoverFiltersFormDataService', () => {
 				RESOURCE_TYPE.TOP_RATED,
 				false,
 				{
-					region: settings.COUNTRY_OPTIONS[0].value
+					region: settings.COUNTRY_OPTIONS[0]!.value
 				}
 			);
 
@@ -463,7 +463,7 @@ describe('DiscoverFiltersFormDataService', () => {
 				RESOURCE_TYPE.TOP_RATED,
 				false,
 				{
-					with_ott_providers: [settings.OTT_PROVIDER_OPTIONS[0].value]
+					with_ott_providers: [settings.OTT_PROVIDER_OPTIONS[0]!.value]
 				}
 			);
 			expect(formData.getWhereToWatchFormData().with_ott_providers).toStrictEqual([

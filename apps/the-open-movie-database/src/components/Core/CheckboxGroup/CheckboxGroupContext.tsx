@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as React from 'react';
 
 type Context = {
@@ -21,10 +22,8 @@ interface ContextProviderProps extends Context {
 	children: React.ReactNode;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const CheckboxGroupContext = React.createContext<Context | null>(null);
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useCheckboxGroup = () => {
 	const context = React.useContext(CheckboxGroupContext);
 
