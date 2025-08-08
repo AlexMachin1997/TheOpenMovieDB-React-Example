@@ -169,7 +169,7 @@ describe('DiscoverFiltersFormDataService', () => {
 			);
 
 			// Remove (destructure) the first element ('all') and then get the rest via the spread operator
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 			const [_, ...rest] = availabilityOptionsFormData;
 
 			expect(formData.getFiltersFormData().with_ott_monetization_types).toStrictEqual([...rest]);
@@ -307,7 +307,7 @@ describe('DiscoverFiltersFormDataService', () => {
 			);
 
 			// Remove (destructure) the first element ('all') and then get the rest via the spread operator
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 			const [_, ...rest] = availabilityOptionsFormData;
 
 			expect(formData.getFiltersFormData().with_release_types).toStrictEqual([...rest]);
