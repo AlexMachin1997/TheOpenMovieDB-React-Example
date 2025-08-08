@@ -9,9 +9,7 @@
 		"check-types": "echo 'No type checking needed for config package'",
 		"validate": "echo 'No validation needed for config package'",
 		"test": "echo 'No tests for config package'",
-		"coverage": "echo 'No coverage for config package'",
-		"build": "echo 'No build needed for config package'",
-		"clean": "echo 'No cleanup needed for config package'"
+		"build": "echo 'No build needed for config package'"
 	},
 	"exports": {
 		"./base": "./base.js",

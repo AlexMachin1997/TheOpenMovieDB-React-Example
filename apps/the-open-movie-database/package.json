@@ -11,9 +11,7 @@
 		"prettier": "prettier --write ./src",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
-		"test": "vitest",
-		"coverage": "vitest run --coverage",
-		"clean": "rm -rf dist node_modules/.cache"
+		"test": "vitest"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^6.4.2",

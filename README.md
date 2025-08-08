@@ -163,7 +163,6 @@ pnpm lint          # Run ESLint across all packages
 pnpm prettier      # Format code with Prettier
 pnpm check-types   # Run TypeScript type checking
 pnpm test          # Run tests across all packages
-pnpm clean         # Clean all build artifacts and node_modules
 ```
 
 ### App-specific Commands
@@ -175,7 +174,6 @@ pnpm dev          # Start Vite development server
 pnpm build        # Build for production
 pnpm storybook    # Start Storybook development server
 pnpm test         # Run tests with Vitest
-pnpm coverage     # Generate test coverage report
 ```
 
 ## 🧪 Development

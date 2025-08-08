@@ -20,9 +20,6 @@
 		"test": {
 			"dependsOn": ["^test"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"]
-		},
-		"clean": {
-			"cache": false
 		}
 	}
 }

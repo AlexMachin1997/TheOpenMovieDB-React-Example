@@ -9,7 +9,6 @@
 		"check-types": "turbo run check-types",
 		"test": "turbo run test",
 		"validate": "turbo run validate",
-		"clean": "turbo run clean && rm -rf node_modules",
 		"type-check": "turbo run ts-validate"
 	},
 	"devDependencies": {
