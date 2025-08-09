@@ -1,0 +1,15 @@
+import type { StorybookConfig } from '@storybook/react-vite';
+
+const config: StorybookConfig = {
+	stories: ['../src/**/*.stories.@(jsx|tsx)'],
+	addons: ['@storybook/addon-a11y', '@chromatic-com/storybook', '@storybook/addon-docs'],
+	framework: {
+		name: '@storybook/react-vite',
+		options: {
+			strictMode: true
+		}
+	},
+	staticDirs: ['../public/']
+};
+
+export default config;

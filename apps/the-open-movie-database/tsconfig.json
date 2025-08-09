@@ -1,0 +1,26 @@
+{
+	"extends": "@repo/typescript-config/react.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["./src/*"],
+			"~/components/*": ["./src/components/*"],
+			"~/hooks/*": ["./src/hooks/*"],
+			"~/services/*": ["./src/services/*"],
+			"~/types/*": ["./src/types/*"],
+			"~/utils/*": ["./src/utils/*"],
+			"~/assets/*": ["./src/assets/*"],
+			"~/test/*": ["./src/test/*"]
+		},
+		"types": ["@repo/typescript-config/types"]
+	},
+	"include": [
+		"index.tsx",
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"src/**/*.test.ts",
+		"src/**/*.test.tsx",
+		"../../packages/typescript-config/types/index.d.ts"
+	],
+	"references": [{ "path": "./tsconfig.node.json" }]
+}

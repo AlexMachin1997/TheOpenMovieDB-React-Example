@@ -1,9 +1,11 @@
+# TheOpenMovieDB-React-Example
+
 <h1 align="center">
     <img alt="TheOpenMovieDB-React-Example" title="TheOpenMovieDB-React-Example" src=".github/logo.png" width="250px" />
 </h1>
 
 <h2 align="center">
-	:construction: &nbsp;&nbsp;TheOpenMovieDB-React-Example 🚀&nbsp;&nbsp; In progress.. :construction:
+	🎬 The Open Movie Database Clone - React Monorepo 🚀
 </h2>
 
 <h3 align="center">
@@ -16,7 +18,7 @@
     <img alt="Github Dev Dependencies Status" src="https://david-dm.org/AlexMachin1997/TheOpenMovieDB-React-Example/dev-status.svg">
   </a>
 
-  <a href="https://github.com/AlexMachin1997/TheOpenMovieDB-Graphql-Example/commits/master" target="_blank">
+  <a href="https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/commits/master" target="_blank">
     <img alt="Last commit" src="https://img.shields.io/github/last-commit/AlexMachin1997/TheOpenMovieDB-React-Example.svg">
   </a>
 
@@ -33,139 +35,229 @@
   <img alt="Linting status" src="https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/workflows/Application%20Linting/badge.svg">
 </h3>
 
-## About the project
+## 📖 About
 
-This project contains of all the source code for my current personal project, [The Open Movie DB](https://www.themoviedb.org/) clone.
+A modern React-based clone of [The Movie Database (TMDB)](https://www.themoviedb.org/) built as a monorepo using [Turborepo](https://turbo.build/repo) and [pnpm](https://pnpm.io/). This project demonstrates best practices for building scalable React applications with shared configurations and components.
 
-**This project will only contain the front-end code, the back-end code will be stored in a separate repository which can be found [here](https://github.com/AlexMachin1997/TheOpenMovieDB-Graphql-Example)**
-
-<h3 align="left">
+<h3 align="center">
     <img alt="Example of The OpenMovieDB Web App" src="./.github/screenshot.png" width="500px" />
 </h3>
 
-## README contents
+## 🏗️ Project Structure
 
-As part of the README file it will describe and explain the following sections:
+This monorepo is organized using [Turborepo](https://turbo.build/repo) for efficient build orchestration and [pnpm](https://pnpm.io/) for package management.
 
-- Purpose
-- Core features
-- Technologies used
-- Getting started
-- Reporting issues
-- Feature requests
-- Project information
+```
+TheOpenMovieDB-React-Example/
+├── apps/
+│   └── the-open-movie-database/     # Main React application
+├── packages/
+│   ├── eslint-config/               # Shared ESLint configurations
+│   └── typescript-config/          # Shared TypeScript configurations
+├── turbo.json                       # Turbo configuration
+├── pnpm-workspace.yaml             # pnpm workspace configuration
+└── package.json                    # Root package.json
+```
 
-## Purpose
+## 🚀 Features
 
-The whole idea by this web application is to allow me to develop a PWA using some of the latest and best technologies around, some of which include React, Apollo, Graphql etc. However, while it is primarily for me to push my skills further it will also allow users to search for the very latest movies, tv shows, people and more all through a single web application.
+### Core Functionality
 
-## Core features
+- **Movie & TV Show Search**: Comprehensive search across movies, TV shows, and celebrities
+- **Category Browsing**: Browse by Popular, Airing Today, Upcoming, and more
+- **Detailed Views**: Rich detail pages for movies, TV shows, and celebrities
+- **Advanced Filtering**: Filter celebrities by media type and department
+- **Discovery System**: Interactive sidebar with advanced filtering options
+- **Offline Support**: Apollo InMemoryCache for offline content viewing
+- **Theme Switching**: Dark and light theme support
 
-As of the current version of the API, it is currently capable of performing the following tasks:
+### Development Features
 
-- Search for Movies, TV Shows and Celebrities via a search bar
+- **Monorepo Architecture**: Efficient development with shared configurations
+- **Component Library**: Storybook for component development and documentation
+- **Type Safety**: Full TypeScript support across the project
+- **Code Quality**: ESLint and Prettier for consistent code style
+- **Testing**: Comprehensive test suite with Vitest
+- **Modern Build**: Vite for fast development and optimized builds
 
-- Search for Movies, TV Shows and Celebrities via individual categories like Popular, Airing Today, Upcoming etc
+## 🛠️ Technology Stack
 
-- View individual Movies, TV Shows and celebrities
+### Core Technologies
 
-- Filter through a celebrities backlog by media type (shows or movies or all) and department (Writing, Acting, Production etc).
+- **[React 18](https://react.dev/)** - Modern React with concurrent features
+- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
+- **[Vite](https://vitejs.dev/)** - Fast build tool and dev server
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[React Router](https://reactrouter.com/)** - Client-side routing
 
-- Discover the latest Movies and TV Shows via an interactive sidebar. Users will be able to filter by rating, release date, genre, score, keywords and where to watch, this won't be available for Celebrities.
+### State Management & Data
 
-- View content offline (Apollo InMemoryCache will store content in the cache once the user has visited it before. Later on the cache will be persisted, but for now it will be on a per session basis)
+- **[Apollo Client](https://www.apollographql.com/docs/react/)** - GraphQL client with caching
+- **[GraphQL](https://graphql.org/)** - Data query language
+- **[React Helmet](https://github.com/nfl/react-helmet)** - Document head management
 
-- Switch between dark and light theme (Will be stored in Apollo cache, no custom React Provider/Context will be used)
+### UI & Components
 
-## Technologies used:
+- **[Headless UI](https://headlessui.com/)** - Unstyled, accessible UI components
+- **[Tippy.js](https://atomiks.github.io/tippyjs/)** - Tooltip library
+- **[Font Awesome](https://fontawesome.com/)** - Icon library
+- **[Storybook](https://storybook.js.org/)** - Component development environment
 
-### Core Dependencies
+### Development Tools
 
-- [apollo-client](https://www.npmjs.com/package/apollo-client)
-- [@fortawesome/fontawesome-free](https://www.npmjs.com/package/@fortawesome/fontawesome-free)
-- [@tailwindcss/line-clamp](https://www.npmjs.com/package/@tailwindcss/line-clamp)
-- [@tippy/react](https://www.npmjs.com/package/@tippyjs/react)
-- [classnames](https://www.npmjs.com/package/classnames)
-- [font-awesome](https://www.npmjs.com/package/font-awesome)
-- [graphql](https://www.npmjs.com/package/graphql)
-- [prop-types](https://www.npmjs.com/package/prop-types)
-- [react](https://www.npmjs.com/package/react)
-- [react-dom](https://www.npmjs.com/package/react-dom)
-- [react-helmet](https://www.npmjs.com/package/react-helmet)
-- [react-router-dom](https://reactrouter.com/docs/en/v6/getting-started/overview)
-- [react-scripts](https://www.npmjs.com/package/react-scripts)
-- [sass](https://www.npmjs.com/package/sass)
-- [tailwindcss](https://www.npmjs.com/package/tailwindcss)
-- [tippy.js](https://www.npmjs.com/package/tippy.js)
-- [workbox-build](https://www.npmjs.com/package/workbox-build)
+- **[Turborepo](https://turbo.build/repo)** - High-performance build system
+- **[pnpm](https://pnpm.io/)** - Fast, disk space efficient package manager
+- **[ESLint](https://eslint.org/)** - Code linting
+- **[Prettier](https://prettier.io/)** - Code formatting
+- **[Vitest](https://vitest.dev/)** - Unit testing framework
 
-### Development Dependencies
+### Shared Packages
 
-- [@storybook/addon-a11y](https://www.npmjs.com/package/@storybook/addon-a11y)
-- [@storybook/addon-actions](https://www.npmjs.com/package/@storybook/addon-actions)
-- [@storybook/addon-docs](https://www.npmjs.com/package/@storybook/addon-docs)
-- [@storybook/addon-knobs](https://www.npmjs.com/package/@storybook/addon-knobs)
-- [@storybook/addons](https://www.npmjs.com/package/@storybook/addons)
-- [@storybook/builder-webpack5](https://www.npmjs.com/package/@storybook/builder-webpack5)
-- [@storybook/manager-webpack5](https://www.npmjs.com/package/@storybook/manager-webpack5)
-- [@storybook/preset-create-react-app](https://www.npmjs.com/package/@storybook/preset-create-react-app)
-- [@storybook/react](https://www.npmjs.com/package/@storybook/react)
-- [@testing-library/jest-dom](https://www.npmjs.com/package/@testing-library/jest-dom)
-- [@testing-library/react](https://www.npmjs.com/package/@testing-library/react)
-- [@testing-library/user-event](https://www.npmjs.com/package/@testing-library/user-event)
-- [eslint](https://www.npmjs.com/package/eslint)
-- [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb)
-- [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier)
-- [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import)
-- [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
-- [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier)
-- [eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
-- [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
-- [eslint-plugin-storybook](https://www.npmjs.com/package/eslint-plugin-storybook)
-- [eslint-webpack-plugin](https://www.npmjs.com/package/eslint-webpack-plugin)
-- [prettier](https://www.npmjs.com/package/prettier)
-- [webpack](https://www.npmjs.com/package/webpack)
-- [autoprefixer](https://www.npmjs.com/package/autoprefixer)
-- [postcss](https://www.npmjs.com/package/postcss)
-- [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss)
+- **[@repo/eslint-config](./packages/eslint-config/)** - Shared ESLint configurations
+- **[@repo/typescript-config](./packages/typescript-config/)** - Shared TypeScript configurations
 
-## Getting started
+## 🚀 Getting Started
 
-- Clone the project to your development environment by using `git clone https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example.git`
+### Prerequisites
 
-- Once the project is cloned be sure to install of the project's dependencies, this will install both core and development dependencies
+- **Node.js** >= 18
+- **pnpm** >= 9.0.0
 
-- With the project dependencies you can now run the project by using the `client:start` command. NOTE: The GraphQL API which can be found [here](https://github.com/AlexMachin1997/TheOpenMovieDB-GraphQL-Example)
+### Installation
 
-## Contributing
+1. **Clone the repository**
 
-### Reporting issues
+   ```bash
+   git clone https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example.git
+   cd TheOpenMovieDB-React-Example
+   ```
 
-If you find any problems while using the API, report them [here](https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/issues), and I will address them as quick as I can.
+2. **Install dependencies**
 
-### Feature requests
+   ```bash
+   pnpm install
+   ```
 
-If you would like to request features for future versions of the application again, please post them [here](https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/issues). When posting ideas ensure the functionality is explained to provide any developers contributing to the project know what to implement.
+3. **Start the development server**
 
-### Implementing features
+   ```bash
+   pnpm dev
+   ```
 
-If you would like to implement a feature in the issues list or refactor existing code (Without breaking existing functionality), feel free to form the repo and submit a [PR](https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/pulls) detailing all the changes made.
+4. **Open your browser**
+   Navigate to `http://localhost:5173`
 
-# Project Information
+### Backend Setup
 
-### Author information
+This frontend application requires the GraphQL backend to be running. The backend repository can be found at:
+**[TheOpenMovieDB-GraphQL-Example](https://github.com/AlexMachin1997/TheOpenMovieDB-GraphQL-Example)**
 
-Alex Machin
+## 📜 Available Scripts
 
-If you want to connect with me on my professional social network platforms feel free to use the links located below, but please don't abuse them.
+### Root Commands
 
-- [LinkedIn](https://www.linkedin.com/in/alex-machin/)
-- [Twitter](https://twitter.com/AlexMachin97)
+```bash
+pnpm dev          # Start development server
+pnpm build         # Build all packages and applications
+pnpm lint          # Run ESLint across all packages
+pnpm prettier      # Format code with Prettier
+pnpm check-types   # Run TypeScript type checking
+pnpm test          # Run tests across all packages
+```
 
-### Application Versioning
+### App-specific Commands
 
-The application is currently at version 0.1.0, with each feature added it will increment based on these [guidelines](https://docs.npmjs.com/about-semantic-versioning)
+```bash
+cd apps/the-open-movie-database
 
-### Project License information
+pnpm dev          # Start Vite development server
+pnpm build        # Build for production
+pnpm storybook    # Start Storybook development server
+pnpm test         # Run tests with Vitest
+```
 
-This project is licensed under the MIT License, for more details about the PWA refer to the LICENSE.md file located within the project.
+## 🧪 Development
+
+### Component Development
+
+This project uses [Storybook](https://storybook.js.org/) for component development:
+
+```bash
+pnpm storybook
+```
+
+Navigate to `http://localhost:6006` to view the component library.
+
+### Code Quality
+
+- **ESLint**: Configured with shared rules from `@repo/eslint-config`
+- **Prettier**: Automatic code formatting
+- **TypeScript**: Strict type checking across the project
+
+### Testing
+
+- **Vitest**: Fast unit testing framework
+- **Testing Library**: React component testing utilities
+- **Coverage**: Built-in coverage reporting
+
+## 📚 Documentation
+
+### Package Documentation
+
+- **[ESLint Config](./packages/eslint-config/README.md)** - Shared ESLint configurations
+- **[TypeScript Config](./packages/typescript-config/README.md)** - Shared TypeScript configurations
+
+### External Resources
+
+- **[Turborepo Documentation](https://turbo.build/repo/docs)** - Monorepo build system
+- **[Vite Documentation](https://vitejs.dev/guide/)** - Build tool and dev server
+- **[React Documentation](https://react.dev/)** - React library
+- **[Tailwind CSS Documentation](https://tailwindcss.com/docs)** - CSS framework
+- **[Storybook Documentation](https://storybook.js.org/docs/react/get-started/introduction)** - Component development
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### How to Contribute
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Commit your changes** (`git commit -m 'Add some amazing feature'`)
+4. **Push to the branch** (`git push origin feature/amazing-feature`)
+5. **Open a Pull Request**
+
+### Reporting Issues
+
+Found a bug? Please report it [here](https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/issues).
+
+### Feature Requests
+
+Have an idea for a new feature? Please share it [here](https://github.com/AlexMachin1997/TheOpenMovieDB-React-Example/issues).
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## 👨‍💻 Author
+
+**Alex Machin**
+
+- **LinkedIn**: [Alex Machin](https://www.linkedin.com/in/alex-machin/)
+- **Twitter**: [@AlexMachin97](https://twitter.com/AlexMachin97)
+
+## 🙏 Acknowledgments
+
+- **[The Movie Database (TMDB)](https://www.themoviedb.org/)** - For the inspiration and API
+- **[Turborepo](https://turbo.build/repo)** - For the excellent monorepo tooling
+- **[Vite](https://vitejs.dev/)** - For the fast development experience
+- **[Storybook](https://storybook.js.org/)** - For component development tools
+
+## 📈 Version History
+
+- **v0.1.0** - Initial release with basic functionality
+- Future versions will follow [Semantic Versioning](https://semver.org/)
+
+---
+
+⭐ **Star this repository if you found it helpful!**

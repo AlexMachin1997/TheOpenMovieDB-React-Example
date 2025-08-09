@@ -1,0 +1,10 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "./base.json",
+	"compilerOptions": {
+		"composite": true,
+		"allowSyntheticDefaultImports": true,
+		"lib": ["ES2022"],
+		"types": ["@total-typescript/ts-reset", "node"]
+	}
+}
