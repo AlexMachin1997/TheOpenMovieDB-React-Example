@@ -17,6 +17,6 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
 		"moduleDetection": "force",
-		"types": ["@total-typescript/ts-reset"]
+		"types": ["@repo/typescript-config/types"]
 	}
 }

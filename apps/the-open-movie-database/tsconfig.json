@@ -12,15 +12,14 @@
 			"~/assets/*": ["./src/assets/*"],
 			"~/test/*": ["./src/test/*"]
 		},
-		"typeRoots": ["../../packages/typescript-config/types", "./node_modules/@types"],
-		"types": ["@total-typescript/ts-reset", "@testing-library/jest-dom"]
+		"types": ["@repo/typescript-config/types"]
 	},
 	"include": [
 		"src/**/*.ts",
 		"src/**/*.tsx",
 		"src/**/*.test.ts",
 		"src/**/*.test.tsx",
-		"../../packages/typescript-config/types/**/*.d.ts"
+		"../../packages/typescript-config/types/index.d.ts"
 	],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }
