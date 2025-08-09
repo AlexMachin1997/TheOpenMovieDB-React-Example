@@ -13,7 +13,7 @@
 			"~/test/*": ["./src/test/*"]
 		},
 		"typeRoots": ["../../packages/typescript-config/types", "./node_modules/@types"],
-		"types": ["@total-typescript/ts-reset", "vitest/globals", "@testing-library/jest-dom"]
+		"types": ["@total-typescript/ts-reset", "@testing-library/jest-dom"]
 	},
 	"include": [
 		"src/**/*.ts",
