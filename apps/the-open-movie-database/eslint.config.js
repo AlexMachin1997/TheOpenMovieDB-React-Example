@@ -11,6 +11,7 @@ export default [
 		// Exclude large static files that slow down linting (replaces .eslintignore for ESLint 9+)
 		ignores: [
 			'src/settings.ts', // 2,485 lines of static data - major performance bottleneck
+			'src/assets/**', // Asset files (images, fonts, etc.) don't need linting
 			'**/*.min.js',
 			'**/dist/**',
 			'**/build/**',
