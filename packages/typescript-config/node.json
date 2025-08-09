@@ -5,6 +5,6 @@
 		"composite": true,
 		"allowSyntheticDefaultImports": true,
 		"lib": ["ES2022"],
-		"types": ["node"]
+		"types": ["@total-typescript/ts-reset", "node"]
 	}
 }

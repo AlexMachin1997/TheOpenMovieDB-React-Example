@@ -3,20 +3,34 @@
 	"version": "0.0.0",
 	"private": true,
 	"license": "MIT",
+	"main": "index.js",
+	"types": "types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./types/index.d.ts"
+		},
+		"./base.json": "./base.json",
+		"./react.json": "./react.json",
+		"./node.json": "./node.json",
+		"./types": "./types/index.d.ts",
+		"./types/*": "./types/*"
+	},
 	"scripts": {
 		"lint": "echo 'No linting needed for config package'",
 		"prettier": "echo 'No formatting needed for config package'",
 		"check-types": "echo 'No type checking needed for config package'",
 		"validate": "echo 'No validation needed for config package'",
 		"test": "echo 'No tests for config package'",
-		"coverage": "echo 'No coverage for config package'",
-		"build": "echo 'No build needed for config package'",
-		"clean": "echo 'No cleanup needed for config package'"
+		"build": "echo 'No build needed for config package'"
+	},
+	"dependencies": {
+		"@total-typescript/ts-reset": "^0.6.1"
 	},
 	"files": [
 		"base.json",
 		"react.json",
-		"node.json"
+		"node.json",
+		"types/"
 	],
 	"publishConfig": {
 		"access": "public"

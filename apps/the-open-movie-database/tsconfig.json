@@ -11,8 +11,16 @@
 			"~/utils/*": ["./src/utils/*"],
 			"~/assets/*": ["./src/assets/*"],
 			"~/test/*": ["./src/test/*"]
-		}
+		},
+		"typeRoots": ["../../packages/typescript-config/types", "./node_modules/@types"],
+		"types": ["@total-typescript/ts-reset", "vitest/globals", "@testing-library/jest-dom"]
 	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.test.ts", "src/**/*.test.tsx"],
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"src/**/*.test.ts",
+		"src/**/*.test.tsx",
+		"../../packages/typescript-config/types/**/*.d.ts"
+	],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

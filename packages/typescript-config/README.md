@@ -60,6 +60,19 @@ In your package's `tsconfig.json`:
 }
 ```
 
+### TypeScript Reset Integration
+
+This package automatically includes `@total-typescript/ts-reset` for enhanced TypeScript types. No additional setup is required!
+
+Projects extending from these configurations automatically get improved type safety for:
+
+- `Array.includes()` and `Array.indexOf()`
+- `Object.keys()` and `Object.entries()`
+- `JSON.parse()`
+- And many other built-in JavaScript methods
+
+The reset types are automatically included when you extend from any of our configurations.
+
 ### Advanced Setup
 
 For more complex configurations, you can extend and customize:

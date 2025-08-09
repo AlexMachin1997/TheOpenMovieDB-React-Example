@@ -3,7 +3,7 @@
 	"extends": "./base.json",
 	"compilerOptions": {
 		"jsx": "react-jsx",
-		"types": ["vitest/globals", "@testing-library/jest-dom"]
+		"types": ["@total-typescript/ts-reset"]
 	},
 	"include": [
 		"src",
