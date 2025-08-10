@@ -17,6 +17,6 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
 		"moduleDetection": "force",
-		"types": ["@repo/typescript-config/types"]
+		"types": ["@repo/typescript-config/types", "react", "react-dom"]
 	}
 }

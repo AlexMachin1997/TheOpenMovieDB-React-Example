@@ -1,0 +1,10 @@
+{
+	"extends": "@repo/typescript-config/node.json",
+	"compilerOptions": {
+		"composite": true,
+		"noEmit": false,
+		"allowImportingTsExtensions": false,
+		"types": []
+	},
+	"include": ["vite.config.ts", "@repo/typescript-config/ts-reset.d.ts"]
+}

@@ -2,8 +2,7 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": "./base.json",
 	"compilerOptions": {
-		"jsx": "react-jsx",
-		"types": ["@total-typescript/ts-reset"]
+		"jsx": "react-jsx"
 	},
 	"include": [
 		"src",
