@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './button';
+import Button from './button';
 
 const meta: Meta<typeof Button> = {
 	title: 'Components/Button',
@@ -7,7 +7,6 @@ const meta: Meta<typeof Button> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		variant: {
 			control: { type: 'select' },
@@ -29,14 +28,12 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Default story
 export const Default: Story = {
 	args: {
 		children: 'Button'
 	}
 };
 
-// All variants
 export const Variants: Story = {
 	render: () => (
 		<div className='flex flex-wrap gap-4'>
@@ -50,7 +47,6 @@ export const Variants: Story = {
 	)
 };
 
-// All sizes
 export const Sizes: Story = {
 	render: () => (
 		<div className='flex items-center gap-4'>
@@ -62,7 +58,6 @@ export const Sizes: Story = {
 	)
 };
 
-// With icons
 export const WithIcons: Story = {
 	render: () => (
 		<div className='flex flex-wrap gap-4'>
