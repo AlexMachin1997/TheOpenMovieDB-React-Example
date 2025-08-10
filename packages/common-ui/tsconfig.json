@@ -5,9 +5,10 @@
 		"paths": {
 			"~/*": ["./src/*"],
 			"~/components/*": ["./src/components/*"],
-			"~/lib/*": ["./src/lib/*"],
 			"~/styles/*": ["./src/styles/*"],
-			"@components/*": ["./src/components/*"]
+			"~/hooks/*": ["./src/hooks/*"],
+			"~/types/*": ["./src/types/*"],
+			"~/utils/*": ["./src/utils/*"]
 		},
 		"declaration": true,
 		"outDir": "dist"
