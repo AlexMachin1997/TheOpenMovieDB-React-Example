@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { CheckIcon } from 'lucide-react';
-
 import { cn } from '~/utils/className';
+import { Label } from '~/components/label/label';
 
 type Option = {
 	label: string;
@@ -216,7 +216,7 @@ type CheckboxLabelProps = {
 
 const CheckboxLabel = ({ htmlFor, disabled = false, children, className }: CheckboxLabelProps) => {
 	return (
-		<label
+		<Label
 			htmlFor={htmlFor}
 			className={cn(
 				'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
@@ -228,7 +228,7 @@ const CheckboxLabel = ({ htmlFor, disabled = false, children, className }: Check
 			)}
 		>
 			{children}
-		</label>
+		</Label>
 	);
 };
 
