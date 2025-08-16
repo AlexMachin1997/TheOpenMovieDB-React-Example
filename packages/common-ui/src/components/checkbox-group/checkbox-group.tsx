@@ -3,14 +3,7 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { CheckIcon } from 'lucide-react';
 import { cn } from '~/utils/className';
 import { Label } from '~/components/label/label';
-
-type Option = {
-	label: string;
-	id: string;
-	value: string;
-	order?: number;
-	disabled?: boolean;
-};
+import { Option } from '~/types/Option';
 
 type CheckboxGroupProps = {
 	options?: Option[];
@@ -238,4 +231,4 @@ Checkbox.displayName = 'Checkbox';
 CheckboxLabel.displayName = 'CheckboxLabel';
 
 export { CheckboxGroup, Checkbox };
-export type { CheckboxGroupProps, Option };
+export type { CheckboxGroupProps };

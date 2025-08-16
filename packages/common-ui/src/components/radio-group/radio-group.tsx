@@ -3,14 +3,7 @@ import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { CircleIcon } from 'lucide-react';
 import { cn } from '~/utils/className';
 import { Label } from '~/components/label/label';
-
-type Option = {
-	label: string;
-	id: string;
-	value: string;
-	order?: number;
-	disabled?: boolean;
-};
+import { Option } from '~/types/Option';
 
 type RadioGroupProps = {
 	options?: Option[];
@@ -211,4 +204,4 @@ RadioLabel.displayName = 'RadioLabel';
 RadioGroupItem.displayName = 'RadioGroupItem';
 
 export { RadioGroup };
-export type { RadioGroupProps, Option };
+export type { RadioGroupProps };

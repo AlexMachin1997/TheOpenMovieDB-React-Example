@@ -2,7 +2,7 @@ import type { Preview } from '@storybook/react-vite';
 
 import { withThemeByClassName } from '@storybook/addon-themes';
 
-import '~/index.scss';
+import '../src/index.scss';
 
 const preview: Preview = {
 	decorators: [

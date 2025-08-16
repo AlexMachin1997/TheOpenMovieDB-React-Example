@@ -196,7 +196,7 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       date-fns:
-        specifier: ^2.29.3
+        specifier: ^2.30.0
         version: 2.30.0
       lucide-react:
         specifier: ^0.539.0
