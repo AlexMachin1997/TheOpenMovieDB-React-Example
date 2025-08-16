@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { motion, AnimatePresence } from 'motion/react';
-
 import { cn } from '~/utils/className';
 
 const Tabs = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) => {

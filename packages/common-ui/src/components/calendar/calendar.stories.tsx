@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
-import { Calendar } from './calendar';
+import { Calendar } from '~/components/calendar/calendar';
 
 const meta: Meta<typeof Calendar> = {
 	title: 'Components/Calendar',

@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { CalendarIcon, InfoIcon, SettingsIcon, UserIcon } from 'lucide-react';
-
-import Button from '~/components/button/button';
+import { Button } from '~/components/button/button';
 import { Input } from '~/components/input/input';
 import { Label } from '~/components/label/label';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/popover/popover';

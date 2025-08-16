@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { cn } from '~/utils/className';
 
 const Input = ({ className, type, ...props }: React.ComponentProps<'input'>) => {

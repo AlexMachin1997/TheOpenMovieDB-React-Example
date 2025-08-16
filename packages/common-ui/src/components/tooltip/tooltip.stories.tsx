@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from './tooltip';
-import Button from '~/components/button/button';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+	TooltipProvider
+} from '~/components/tooltip/tooltip';
+import { Button } from '~/components/button/button';
 
 const meta: Meta<typeof Tooltip> = {
 	title: 'Components/Tooltip',
