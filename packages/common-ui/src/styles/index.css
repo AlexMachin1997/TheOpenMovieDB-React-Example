@@ -118,3 +118,18 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+@layer utilities {
+	.animate-slide {
+		animation: slide 2s ease-in-out infinite;
+	}
+}
+
+@keyframes slide {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
