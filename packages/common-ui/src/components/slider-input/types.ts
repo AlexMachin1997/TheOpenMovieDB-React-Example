@@ -1,41 +1,59 @@
-type SliderValue = {
-	value: number;
-	label: string;
-};
-
 type SliderMode = 'single' | 'dual';
 
 type BaseSliderInputProps = {
 	min?: number;
 	max?: number;
 	step?: number;
-	formatLabel?: (value: number, index?: number) => string;
 	disabled?: boolean;
 	className?: string;
 	name?: string;
 	id?: string;
+	children: React.ReactNode;
 };
 
-type SingleSliderInputProps = BaseSliderInputProps & {
+type SingleValue = [number];
+type DualValue = [number, number];
+
+interface SingleSliderInputProps extends BaseSliderInputProps {
 	mode: 'single';
-	defaultValue?: number;
-	value?: number;
-	onChange?: (value: SliderValue) => void;
-};
+	value: SingleValue;
+	onChange: (value: SingleValue) => void;
+}
 
-type DualSliderInputProps = BaseSliderInputProps & {
+interface DualSliderInputProps extends BaseSliderInputProps {
 	mode: 'dual';
-	defaultValue?: [number, number];
-	value?: [number, number];
-	onChange?: (values: [SliderValue, SliderValue]) => void;
-};
+	value: DualValue;
+	onChange: (values: DualValue) => void;
+}
 
 type SliderInputProps = SingleSliderInputProps | DualSliderInputProps;
+
+type BaseSliderTooltipInputProps = {
+	trackerRef: React.RefObject<HTMLDivElement | null>;
+	min: number;
+	max: number;
+};
+
+interface SingleTooltipSliderInputProps extends BaseSliderTooltipInputProps {
+	mode: 'single';
+	value: SingleValue;
+	children: React.ReactNode;
+}
+
+interface DualTooltipSliderInputProps extends BaseSliderTooltipInputProps {
+	mode: 'dual';
+	value: DualValue;
+	children: React.ReactNode;
+}
+
+type SliderTooltipInputProps = SingleTooltipSliderInputProps | DualTooltipSliderInputProps;
 
 export type {
 	SliderInputProps,
 	SingleSliderInputProps,
 	DualSliderInputProps,
-	SliderValue,
-	SliderMode
+	SingleValue,
+	DualValue,
+	SliderMode,
+	SliderTooltipInputProps
 };

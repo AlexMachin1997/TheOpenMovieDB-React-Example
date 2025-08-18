@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import * as React from 'react';
-import { SliderInput, SliderValue } from '~/components/slider-input/slider-input';
+import { SliderInput } from '~/components/slider-input/slider-input';
+import { DualValue, SingleValue } from './types';
 
 const meta: Meta = {
 	title: 'Components/SliderInput',
@@ -20,15 +21,17 @@ export default meta;
 type Story = StoryObj;
 
 const SingleHandleExample = () => {
-	const [value, setValue] = React.useState<number>(25);
+	const [value, setValue] = React.useState<[number]>([25]);
 
-	const handleChange = React.useCallback((data: SliderValue) => {
-		setValue(data.value);
+	const handleChange = React.useCallback((data: [number]) => {
+		setValue(data);
 	}, []);
 
 	return (
 		<div className='space-y-4'>
-			<SliderInput mode='single' min={0} max={100} step={1} value={value} onChange={handleChange} />
+			<SliderInput mode='single' min={0} max={100} step={1} value={value} onChange={handleChange}>
+				{value}
+			</SliderInput>
 			<p className='text-sm text-gray-600'>Current value: {value}</p>
 		</div>
 	);
@@ -41,16 +44,15 @@ export const SingleHandle: Story = {
 const DualHandleExample = () => {
 	const [values, setValues] = React.useState<[number, number]>([25, 75]);
 
-	const handleChange = React.useCallback((data: [SliderValue, SliderValue]) => {
-		setValues([data[0].value, data[1].value]);
+	const handleChange = React.useCallback((data: [number, number]) => {
+		setValues(data);
 	}, []);
 
 	return (
 		<div className='space-y-4'>
-			<SliderInput mode='dual' min={0} max={100} step={1} value={values} onChange={handleChange} />
-			<p className='text-sm text-gray-600'>
-				Current range: {values[0]} - {values[1]}
-			</p>
+			<SliderInput mode='dual' min={0} max={100} step={1} value={values} onChange={handleChange}>
+				{values[0]} - {values[1]}
+			</SliderInput>
 		</div>
 	);
 };
@@ -62,30 +64,15 @@ export const DualHandle: Story = {
 const PriceRangeExample = () => {
 	const [values, setValues] = React.useState<[number, number]>([100, 500]);
 
-	const handleChange = React.useCallback((data: [SliderValue, SliderValue]) => {
-		setValues([data[0].value, data[1].value]);
-	}, []);
-
-	const formatLabel = React.useCallback((value: number, index?: number) => {
-		if (index === 0) return `Min: $${value}`;
-		if (index === 1) return `Max: $${value}`;
-		return `$${value}`;
+	const handleChange = React.useCallback((data: [number, number]) => {
+		setValues(data);
 	}, []);
 
 	return (
 		<div className='space-y-4'>
-			<SliderInput
-				mode='dual'
-				min={0}
-				max={1000}
-				step={10}
-				value={values}
-				onChange={handleChange}
-				formatLabel={formatLabel}
-			/>
-			<p className='text-sm text-gray-600'>
-				Price range: ${values[0]} - ${values[1]}
-			</p>
+			<SliderInput mode='dual' min={0} max={1000} step={10} value={values} onChange={handleChange}>
+				Min: ${values[0]} - Max: ${values[1]}
+			</SliderInput>
 		</div>
 	);
 };
@@ -97,30 +84,17 @@ export const PriceRange: Story = {
 const AgeRangeExample = () => {
 	const [values, setValues] = React.useState<[number, number]>([25, 45]);
 
-	const handleChange = React.useCallback((data: [SliderValue, SliderValue]) => {
-		setValues([data[0].value, data[1].value]);
-	}, []);
-
-	const formatLabel = React.useCallback((value: number, index?: number) => {
-		if (index === 0) return `Min Age: ${value}`;
-		if (index === 1) return `Max Age: ${value}`;
-		return `${value} years`;
+	const handleChange = React.useCallback((data: [number, number]) => {
+		setValues(data);
 	}, []);
 
 	return (
 		<div className='space-y-4'>
-			<SliderInput
-				mode='dual'
-				min={18}
-				max={65}
-				step={1}
-				value={values}
-				onChange={handleChange}
-				formatLabel={formatLabel}
-			/>
-			<p className='text-sm text-gray-600'>
-				Age range: {values[0]} - {values[1]} years
-			</p>
+			<SliderInput mode='dual' min={18} max={65} step={1} value={values} onChange={handleChange}>
+				<p className='text-sm text-white'>
+					Age range: {values[0]} - {values[1]} years
+				</p>
+			</SliderInput>
 		</div>
 	);
 };
@@ -130,27 +104,16 @@ export const AgeRange: Story = {
 };
 
 const VolumeControlExample = () => {
-	const [value, setValue] = React.useState<number>(50);
+	const [value, setValue] = React.useState<[number]>([50]);
 
-	const handleChange = React.useCallback((data: SliderValue) => {
-		setValue(data.value);
+	const handleChange = React.useCallback((data: SingleValue) => {
+		setValue(data);
 	}, []);
 
-	const formatLabel = React.useCallback((value: number) => `Volume: ${value}%`, []);
-
 	return (
-		<div className='space-y-4'>
-			<SliderInput
-				mode='single'
-				min={0}
-				max={100}
-				step={5}
-				value={value}
-				onChange={handleChange}
-				formatLabel={formatLabel}
-			/>
-			<p className='text-sm text-gray-600'>Volume: {value}%</p>
-		</div>
+		<SliderInput mode='single' min={0} max={100} step={5} value={value} onChange={handleChange}>
+			<p className='text-sm text-white'>Volume: {value}%</p>
+		</SliderInput>
 	);
 };
 
@@ -159,10 +122,10 @@ export const VolumeControl: Story = {
 };
 
 const DisabledExample = () => {
-	const [values, setValues] = React.useState<[number, number]>([30, 70]);
+	const [values, setValues] = React.useState<DualValue>([30, 70]);
 
-	const handleChange = React.useCallback((data: [SliderValue, SliderValue]) => {
-		setValues([data[0].value, data[1].value]);
+	const handleChange = React.useCallback((data: DualValue) => {
+		setValues(data);
 	}, []);
 
 	return (
@@ -175,10 +138,11 @@ const DisabledExample = () => {
 				value={values}
 				onChange={handleChange}
 				disabled={true}
-			/>
-			<p className='text-sm text-gray-600'>
-				Disabled slider - Current range: {values[0]} - {values[1]}
-			</p>
+			>
+				<p className='text-sm text-white'>
+					Disabled slider - Current range: {values[0]} - {values[1]}
+				</p>
+			</SliderInput>
 		</div>
 	);
 };
@@ -188,32 +152,19 @@ export const Disabled: Story = {
 };
 
 const TemperatureRangeExample = () => {
-	const [values, setValues] = React.useState<[number, number]>([15, 25]);
+	const [values, setValues] = React.useState<DualValue>([15, 25]);
 
-	const handleChange = React.useCallback((data: [SliderValue, SliderValue]) => {
-		setValues([data[0].value, data[1].value]);
-	}, []);
-
-	const formatLabel = React.useCallback((value: number, index?: number) => {
-		if (index === 0) return `Min: ${value}°C`;
-		if (index === 1) return `Max: ${value}°C`;
-		return `${value}°C`;
+	const handleChange = React.useCallback((data: DualValue) => {
+		setValues(data);
 	}, []);
 
 	return (
 		<div className='space-y-4'>
-			<SliderInput
-				mode='dual'
-				min={-20}
-				max={50}
-				step={1}
-				value={values}
-				onChange={handleChange}
-				formatLabel={formatLabel}
-			/>
-			<p className='text-sm text-gray-600'>
-				Temperature range: {values[0]}°C - {values[1]}°C
-			</p>
+			<SliderInput mode='dual' min={-20} max={50} step={1} value={values} onChange={handleChange}>
+				<p className='text-sm text-white'>
+					Temperature range: {values[0]}°C - {values[1]}°C
+				</p>
+			</SliderInput>
 		</div>
 	);
 };
@@ -222,85 +173,21 @@ export const TemperatureRange: Story = {
 	render: () => <TemperatureRangeExample />
 };
 
-const ControlledExample = () => {
-	const [singleValue, setSingleValue] = React.useState<number>(30);
-	const [rangeValues, setRangeValues] = React.useState<[number, number]>([20, 80]);
-
-	const handleSingleChange = React.useCallback((data: SliderValue) => {
-		setSingleValue(data.value);
-	}, []);
-
-	const handleRangeChange = React.useCallback((data: [SliderValue, SliderValue]) => {
-		setRangeValues([data[0].value, data[1].value]);
-	}, []);
-
-	const formatLabel = React.useCallback((value: number, index?: number) => {
-		if (index === 0) return `Min: ${value}`;
-		if (index === 1) return `Max: ${value}`;
-		return `${value}`;
-	}, []);
-
-	return (
-		<div className='space-y-8 w-full max-w-2xl'>
-			<div>
-				<h3 className='text-lg font-semibold mb-4'>Controlled Single Handle</h3>
-				<SliderInput
-					mode='single'
-					min={0}
-					max={100}
-					step={1}
-					value={singleValue}
-					onChange={handleSingleChange}
-					formatLabel={formatLabel}
-				/>
-				<p className='mt-2 text-sm text-gray-600'>Current value: {singleValue}</p>
-			</div>
-
-			<div>
-				<h3 className='text-lg font-semibold mb-4'>Controlled Dual Handle</h3>
-				<SliderInput
-					mode='dual'
-					min={0}
-					max={100}
-					step={1}
-					value={rangeValues}
-					onChange={handleRangeChange}
-					formatLabel={formatLabel}
-				/>
-				<p className='mt-2 text-sm text-gray-600'>
-					Current range: {rangeValues[0]} - {rangeValues[1]}
-				</p>
-			</div>
-		</div>
-	);
-};
-
-export const Controlled: Story = {
-	render: () => <ControlledExample />
-};
-
-// Form integration example - proper React component for hooks
 const FormIntegrationExample = () => {
 	const [formData, setFormData] = React.useState<{
-		budget: number;
-		ageRange: [number, number];
+		budget: SingleValue;
+		ageRange: DualValue;
 	}>({
-		budget: 500,
-		ageRange: [25, 40] as [number, number]
+		budget: [500],
+		ageRange: [25, 40]
 	});
 
-	const handleBudgetChange = React.useCallback((data: SliderValue) => {
-		setFormData((prev) => ({ ...prev, budget: data.value }));
+	const handleBudgetChange = React.useCallback((data: SingleValue) => {
+		setFormData((prev) => ({ ...prev, budget: data }));
 	}, []);
 
-	const handleAgeRangeChange = React.useCallback((data: [SliderValue, SliderValue]) => {
-		setFormData((prev) => ({ ...prev, ageRange: [data[0].value, data[1].value] }));
-	}, []);
-
-	const formatLabel = React.useCallback((value: number, index?: number) => {
-		if (index === 0) return `Min: ${value}`;
-		if (index === 1) return `Max: ${value}`;
-		return `${value}`;
+	const handleAgeRangeChange = React.useCallback((data: DualValue) => {
+		setFormData((prev) => ({ ...prev, ageRange: data }));
 	}, []);
 
 	return (
@@ -319,9 +206,9 @@ const FormIntegrationExample = () => {
 					step={50}
 					value={formData.budget}
 					onChange={handleBudgetChange}
-					formatLabel={(value) => `$${value}`}
-					name='budget'
-				/>
+				>
+					<p className='text-sm text-white'>Budget: ${formData.budget}</p>
+				</SliderInput>
 			</div>
 
 			<div>
@@ -336,9 +223,11 @@ const FormIntegrationExample = () => {
 					step={1}
 					value={formData.ageRange}
 					onChange={handleAgeRangeChange}
-					formatLabel={formatLabel}
-					name='ageRange'
-				/>
+				>
+					<p className='text-sm text-white'>
+						Age range: {formData.ageRange[0]} - {formData.ageRange[1]} years
+					</p>
+				</SliderInput>
 			</div>
 
 			<div className='p-4 bg-gray-100 rounded-md'>
