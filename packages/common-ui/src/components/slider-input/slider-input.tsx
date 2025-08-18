@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Slider from '@radix-ui/react-slider';
 import { Label } from '~/components/label/label';
 import {
 	SliderInputProps,
@@ -13,6 +12,8 @@ import {
 	TooltipProvider,
 	TooltipTrigger
 } from '~/components/tooltip/tooltip';
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/slider/slider';
+import { cn } from '~/utils/className';
 
 const SliderTooltipContent = ({ mode, value, formatSliderTooltip }: SliderTooltipContentProps) => {
 	if (mode === 'single') {
@@ -38,7 +39,7 @@ export const SliderInput = (props: SliderInputProps) => {
 	}, []);
 
 	return (
-		<div className='flex flex-col gap-4 w-80'>
+		<div className={cn('flex flex-col gap-4', props.className)}>
 			<Label htmlFor={props.id}>{props.label}</Label>
 
 			{props.mode === 'single' ? (
@@ -66,8 +67,8 @@ export const SliderInput = (props: SliderInputProps) => {
 				<Tooltip open={isDragging}>
 					<TooltipTrigger asChild>
 						<div className='relative'>
-							<Slider.Root
-								className='relative flex items-center w-full h-5'
+							<SliderRoot
+								className={props.rootClassName}
 								value={props.value}
 								onPointerDown={handleDragStart}
 								onPointerUp={handleDragEnd}
@@ -85,29 +86,37 @@ export const SliderInput = (props: SliderInputProps) => {
 									}
 								}}
 							>
-								<Slider.Track className='bg-gray-200 relative flex-1 rounded-full h-1'>
-									<Slider.Range className='absolute bg-blue-500 rounded-full h-full' />
-								</Slider.Track>
+								<SliderTrack className={props.trackClassName}>
+									<SliderRange className={props.rangeClassName} />
+								</SliderTrack>
 
 								{props.value?.map((thumbValue, i) => (
 									<Tooltip key={i}>
 										<TooltipTrigger asChild>
-											<Slider.Thumb className='block w-4 h-4 bg-white border border-gray-300 rounded-full shadow hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400' />
+											<SliderThumb className={props.thumbClassName} />
 										</TooltipTrigger>
 										<TooltipContent
 											side='top'
 											sideOffset={8}
-											className='bg-black text-white border-0 text-xs'
+											className={cn(
+												'bg-black text-white border-0 text-xs',
+												props.thumbTooltipClassName
+											)}
+											arrowClassName={cn('bg-black fill-black', props.thumbTooltipArrowClassName)}
 										>
 											{props.formatThumbTooltip(thumbValue)}
 										</TooltipContent>
 									</Tooltip>
 								)) ?? null}
-							</Slider.Root>
+							</SliderRoot>
 						</div>
 					</TooltipTrigger>
 
-					<TooltipContent className='bg-black text-white border-0'>
+					<TooltipContent
+						data-slot='slider-tooltip'
+						className={cn('bg-black text-white border-0', props.sliderTooltipClassName)}
+						arrowClassName={cn('bg-black fill-black', props.sliderTooltipArrowClassName)}
+					>
 						{props.mode === 'single' ? (
 							<SliderTooltipContent
 								mode='single'

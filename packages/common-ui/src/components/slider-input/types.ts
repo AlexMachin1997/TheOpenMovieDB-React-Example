@@ -110,6 +110,15 @@ interface SliderInputPropsBase<M extends SliderMode> extends BaseSliderInputProp
 	onChange: (value: SliderValue<M>) => void;
 	formatThumbTooltip: ThumbTooltipFormatter;
 	formatSliderTooltip: SliderTooltipFormatter<M>;
+
+	rootClassName?: string;
+	trackClassName?: string;
+	rangeClassName?: string;
+	thumbClassName?: string;
+	thumbTooltipClassName?: string;
+	thumbTooltipArrowClassName?: string;
+	sliderTooltipClassName?: string;
+	sliderTooltipArrowClassName?: string;
 }
 
 /**

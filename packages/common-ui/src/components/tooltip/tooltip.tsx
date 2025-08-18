@@ -31,8 +31,10 @@ const TooltipTrigger = ({ ...props }: React.ComponentProps<typeof TooltipPrimiti
 
 const TooltipContent = React.forwardRef<
 	React.ElementRef<typeof TooltipPrimitive.Content>,
-	React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 0, children, ...props }, ref) => {
+	React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> & {
+		arrowClassName?: string;
+	}
+>(({ className, sideOffset = 0, children, arrowClassName, ...props }, ref) => {
 	return (
 		<TooltipPrimitive.Portal>
 			<TooltipPrimitive.Content
@@ -46,7 +48,13 @@ const TooltipContent = React.forwardRef<
 				{...props}
 			>
 				{children}
-				<TooltipPrimitive.Arrow className='bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]' />
+				<TooltipPrimitive.Arrow
+					data-slot='tooltip-arrow'
+					className={cn(
+						'bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]',
+						arrowClassName
+					)}
+				/>
 			</TooltipPrimitive.Content>
 		</TooltipPrimitive.Portal>
 	);
