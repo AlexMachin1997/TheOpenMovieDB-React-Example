@@ -80,9 +80,11 @@ export const SliderInput = (props: SliderInputProps) => {
 								minStepsBetweenThumbs={0}
 								onValueChange={(value) => {
 									if (props.mode === 'single') {
-										props.onChange(value as SingleValue);
+										const singleValue: SingleValue = [value?.at(0) ?? 0];
+										props.onChange(singleValue);
 									} else {
-										props.onChange(value as DualValue);
+										const dualValue: DualValue = [value?.at(0) ?? 0, value?.at(1) ?? 0];
+										props.onChange(dualValue);
 									}
 								}}
 							>
