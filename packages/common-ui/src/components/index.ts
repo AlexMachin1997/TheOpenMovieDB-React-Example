@@ -8,7 +8,7 @@ export * from '~/components/label/label';
 export * from '~/components/popover/popover';
 export * from '~/components/progress/progress';
 export * from '~/components/radio-group/radio-group';
-export * from '~/components/slider-input/slider-input';
+export * from '~/components/sliders/single-slider/single-slider';
 export * from '~/components/slider/slider';
 export * from '~/components/switch/switch';
 export * from '~/components/tabs/tabs';

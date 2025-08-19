@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import * as React from 'react';
-import { SliderInput } from '~/components/slider-input/slider-input';
-import { DualValue, SingleValue } from '~/components/slider-input/types';
+import { RangeSlider } from '~/components/sliders/range-slider/range-slider';
+import { RangeValue } from '~/components/sliders/range-slider/range-slider-types';
 import { cn } from '~/utils/className';
 
 const meta: Meta = {
-	title: 'Components/SliderInput',
+	title: 'Components/Sliders/Range Slider',
 	parameters: {
 		layout: 'centered',
 		docs: {
@@ -21,54 +21,31 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-const SingleHandleExample = () => {
-	const [value, setValue] = React.useState<SingleValue>([25]);
-
-	const handleChange = React.useCallback((data: SingleValue) => {
-		setValue(data);
-	}, []);
-
-	return (
-		<SliderInput
-			label='Single Handle'
-			name='single-handle'
-			id='single-handle'
-			mode='single'
-			min={0}
-			max={100}
-			step={1}
-			value={value}
-			onChange={handleChange}
-			formatThumbTooltip={(value) => `${value}%`}
-			formatSliderTooltip={(value) => `Volume: ${value}%`}
-		/>
-	);
-};
-
-export const SingleHandle: Story = {
-	render: () => <SingleHandleExample />
-};
-
 const DualHandleExample = () => {
-	const [values, setValues] = React.useState<DualValue>([25, 75]);
+	const [values, setValues] = React.useState<RangeValue>([25, 75]);
 
-	const handleChange = React.useCallback((data: DualValue) => {
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
+	const formatThumbTooltip = React.useCallback((value: number) => `${value}%`, []);
+	const formatSliderTooltip = React.useCallback(
+		(values: RangeValue) => `Range: ${values[0]}% - ${values[1]}%`,
+		[]
+	);
+
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Dual Handle'
 			name='dual-handle'
 			id='dual-handle'
-			mode='dual'
 			min={0}
 			max={100}
 			step={1}
 			value={values}
 			onChange={handleChange}
-			formatThumbTooltip={(value) => `${value}%`}
-			formatSliderTooltip={(values) => `Range: ${values[0]}% - ${values[1]}%`}
+			formatThumbTooltip={formatThumbTooltip}
+			formatSliderTooltip={formatSliderTooltip}
 			className={cn('w-80')}
 		/>
 	);
@@ -79,25 +56,30 @@ export const DualHandle: Story = {
 };
 
 const PriceRangeExample = () => {
-	const [values, setValues] = React.useState<DualValue>([100, 500]);
+	const [values, setValues] = React.useState<RangeValue>([100, 500]);
 
-	const handleChange = React.useCallback((data: DualValue) => {
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
+	const formatThumbTooltip = React.useCallback((value: number) => `$${value}`, []);
+	const formatSliderTooltip = React.useCallback(
+		(values: RangeValue) => `Price range: $${values[0]} - $${values[1]}`,
+		[]
+	);
+
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Price Range'
 			name='price-range'
 			id='price-range'
-			mode='dual'
 			min={0}
 			max={1000}
 			step={10}
 			value={values}
 			onChange={handleChange}
-			formatThumbTooltip={(value) => `$${value}`}
-			formatSliderTooltip={(values) => `Price range: $${values[0]} - $${values[1]}`}
+			formatThumbTooltip={formatThumbTooltip}
+			formatSliderTooltip={formatSliderTooltip}
 			className={cn('w-80')}
 		/>
 	);
@@ -108,25 +90,30 @@ export const PriceRange: Story = {
 };
 
 const AgeRangeExample = () => {
-	const [values, setValues] = React.useState<DualValue>([25, 45]);
+	const [values, setValues] = React.useState<RangeValue>([25, 45]);
 
-	const handleChange = React.useCallback((data: DualValue) => {
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
+	const formatThumbTooltip = React.useCallback((value: number) => `${value} years`, []);
+	const formatSliderTooltip = React.useCallback(
+		(values: RangeValue) => `Age range: ${values[0]} - ${values[1]} years`,
+		[]
+	);
+
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Age Range'
 			name='age-range'
 			id='age-range'
-			mode='dual'
 			min={18}
 			max={65}
 			step={1}
 			value={values}
 			onChange={handleChange}
-			formatThumbTooltip={(value) => `${value} years`}
-			formatSliderTooltip={(values) => `Age range: ${values[0]} - ${values[1]} years`}
+			formatThumbTooltip={formatThumbTooltip}
+			formatSliderTooltip={formatSliderTooltip}
 			className={cn('w-80')}
 		/>
 	);
@@ -136,58 +123,33 @@ export const AgeRange: Story = {
 	render: () => <AgeRangeExample />
 };
 
-const VolumeControlExample = () => {
-	const [value, setValue] = React.useState<SingleValue>([50]);
-
-	const handleChange = React.useCallback((data: SingleValue) => {
-		setValue(data);
-	}, []);
-
-	return (
-		<SliderInput
-			label='Volume Control'
-			name='volume-control'
-			id='volume-control'
-			mode='single'
-			min={0}
-			max={100}
-			step={5}
-			value={value}
-			onChange={handleChange}
-			formatThumbTooltip={(value) => `${value}%`}
-			formatSliderTooltip={(value) => `Volume: ${value[0]}%`}
-			className={cn('w-80')}
-		/>
-	);
-};
-
-export const VolumeControl: Story = {
-	render: () => <VolumeControlExample />
-};
-
 const DisabledExample = () => {
-	const [values, setValues] = React.useState<DualValue>([30, 70]);
+	const [values, setValues] = React.useState<RangeValue>([30, 70]);
 
-	const handleChange = React.useCallback((data: DualValue) => {
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
+	const formatThumbTooltip = React.useCallback((value: number) => `${value}%`, []);
+
+	const formatSliderTooltip = React.useCallback(
+		(values: RangeValue) => `Disabled slider - Current range: ${values[0]}% - ${values[1]}%`,
+		[]
+	);
+
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Disabled Slider'
 			name='disabled-slider'
 			id='disabled-slider'
-			mode='dual'
 			min={0}
 			max={100}
 			step={1}
 			value={values}
 			onChange={handleChange}
 			disabled={true}
-			formatThumbTooltip={(value) => `${value}%`}
-			formatSliderTooltip={(values) =>
-				`Disabled slider - Current range: ${values[0]}% - ${values[1]}%`
-			}
+			formatThumbTooltip={formatThumbTooltip}
+			formatSliderTooltip={formatSliderTooltip}
 			className={cn('w-80')}
 		/>
 	);
@@ -198,25 +160,30 @@ export const Disabled: Story = {
 };
 
 const TemperatureRangeExample = () => {
-	const [values, setValues] = React.useState<DualValue>([15, 25]);
+	const [values, setValues] = React.useState<RangeValue>([15, 25]);
 
-	const handleChange = React.useCallback((data: DualValue) => {
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
+	const formatThumbTooltip = React.useCallback((value: number) => `${value}°C`, []);
+	const formatSliderTooltip = React.useCallback(
+		(values: RangeValue) => `Temperature range: ${values[0]}°C - ${values[1]}°C`,
+		[]
+	);
+
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Temperature Range'
 			name='temperature-range'
 			id='temperature-range'
-			mode='dual'
 			min={-20}
 			max={50}
 			step={1}
 			value={values}
 			onChange={handleChange}
-			formatThumbTooltip={(value) => `${value}°C`}
-			formatSliderTooltip={(values) => `Temperature range: ${values[0]}°C - ${values[1]}°C`}
+			formatThumbTooltip={formatThumbTooltip}
+			formatSliderTooltip={formatSliderTooltip}
 			className={cn('w-80')}
 		/>
 	);
@@ -227,34 +194,37 @@ export const TemperatureRange: Story = {
 };
 
 const CurrencyFormattingExample = () => {
-	const [values, setValues] = React.useState<DualValue>([1000, 5000]);
+	const [values, setValues] = React.useState<RangeValue>([1000, 5000]);
 
-	const handleChange = React.useCallback((data: DualValue) => {
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
+	const formatThumbTooltip = React.useCallback((value: number) => {
+		return new Intl.NumberFormat('en-US', {
+			style: 'currency',
+			currency: 'USD',
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 0
+		}).format(value);
+	}, []);
+
+	const formatSliderTooltip = React.useCallback((values: RangeValue) => {
+		return `Range: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(values[0])} - ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(values[1])}`;
+	}, []);
+
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Currency Range'
 			name='currency-range'
 			id='currency-range'
-			mode='dual'
 			min={0}
 			max={10000}
 			step={100}
 			value={values}
 			onChange={handleChange}
-			formatThumbTooltip={(value) =>
-				new Intl.NumberFormat('en-US', {
-					style: 'currency',
-					currency: 'USD',
-					minimumFractionDigits: 0,
-					maximumFractionDigits: 0
-				}).format(value)
-			}
-			formatSliderTooltip={(values) =>
-				`Range: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(values[0])} - ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(values[1])}`
-			}
+			formatThumbTooltip={formatThumbTooltip}
+			formatSliderTooltip={formatSliderTooltip}
 			className={cn('w-80')}
 		/>
 	);
@@ -265,33 +235,40 @@ export const CurrencyFormatting: Story = {
 };
 
 const TimeRangeExample = () => {
-	const [values, setValues] = React.useState<DualValue>([9, 17]);
+	const [values, setValues] = React.useState<RangeValue>([9, 17]);
 
-	const handleChange = React.useCallback((data: DualValue) => {
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
-	const formatTime = (hour: number) => {
-		const period = hour >= 12 ? 'PM' : 'AM';
-		const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+	const formatSliderTooltip = React.useCallback((values: RangeValue) => {
+		const formattedValues = values.map((value) => {
+			const period = value >= 12 ? 'PM' : 'AM';
+			const displayHour = value === 0 ? 12 : value > 12 ? value - 12 : value;
+			return `${displayHour}${period}`;
+		});
+
+		return `Business hours: ${formattedValues[0]} - ${formattedValues[1]}`;
+	}, []);
+
+	const formatThumbTooltip = React.useCallback((value: number) => {
+		const period = value >= 12 ? 'PM' : 'AM';
+		const displayHour = value === 0 ? 12 : value > 12 ? value - 12 : value;
 		return `${displayHour}${period}`;
-	};
+	}, []);
 
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Business Hours'
 			name='business-hours'
 			id='business-hours'
-			mode='dual'
 			min={0}
 			max={23}
 			step={1}
 			value={values}
 			onChange={handleChange}
-			formatThumbTooltip={formatTime}
-			formatSliderTooltip={(values) =>
-				`Business hours: ${formatTime(values[0])} - ${formatTime(values[1])}`
-			}
+			formatThumbTooltip={formatThumbTooltip}
+			formatSliderTooltip={formatSliderTooltip}
 			className={cn('w-80')}
 		/>
 	);
@@ -302,27 +279,32 @@ export const TimeRange: Story = {
 };
 
 const DecimalFormattingExample = () => {
-	const [values, setValues] = React.useState<DualValue>([1.5, 4.2]);
+	const [values, setValues] = React.useState<RangeValue>([1.5, 4.2]);
 
-	const handleChange = React.useCallback((data: DualValue) => {
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
+	const formatThumbTooltip = React.useCallback((value: number) => {
+		return value.toFixed(1);
+	}, []);
+
+	const formatSliderTooltip = React.useCallback((values: RangeValue) => {
+		return `Rating range: ${values[0].toFixed(1)} - ${values[1].toFixed(1)}`;
+	}, []);
+
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Rating Range'
 			name='rating-range'
 			id='rating-range'
-			mode='dual'
 			min={0}
 			max={10}
 			step={0.1}
 			value={values}
 			onChange={handleChange}
-			formatThumbTooltip={(value) => value.toFixed(1)}
-			formatSliderTooltip={(values) =>
-				`Rating range: ${values[0].toFixed(1)} - ${values[1].toFixed(1)}`
-			}
+			formatThumbTooltip={formatThumbTooltip}
+			formatSliderTooltip={formatSliderTooltip}
 			className={cn('w-80')}
 		/>
 	);
@@ -334,26 +316,20 @@ export const DecimalFormatting: Story = {
 
 const FormDataAPIExample = () => {
 	const [formData, setFormData] = React.useState<{
-		volume: SingleValue;
-		priceRange: DualValue;
-		temperature: DualValue;
+		priceRange: RangeValue;
+		temperature: RangeValue;
 	}>({
-		volume: [50],
 		priceRange: [100, 500],
 		temperature: [15, 25]
 	});
 
 	const [submittedData, setSubmittedData] = React.useState<string>('');
 
-	const handleVolumeChange = React.useCallback((data: SingleValue) => {
-		setFormData((prev) => ({ ...prev, volume: data }));
-	}, []);
-
-	const handlePriceRangeChange = React.useCallback((data: DualValue) => {
+	const handlePriceRangeChange = React.useCallback((data: RangeValue) => {
 		setFormData((prev) => ({ ...prev, priceRange: data }));
 	}, []);
 
-	const handleTemperatureChange = React.useCallback((data: DualValue) => {
+	const handleTemperatureChange = React.useCallback((data: RangeValue) => {
 		setFormData((prev) => ({ ...prev, temperature: data }));
 	}, []);
 
@@ -370,6 +346,22 @@ const FormDataAPIExample = () => {
 		setSubmittedData(JSON.stringify(data, null, 2));
 	};
 
+	const formatPriceRangeThumbTooltip = React.useCallback((value: number) => {
+		return `$${value}`;
+	}, []);
+
+	const formatPriceRangeSliderTooltip = React.useCallback((values: RangeValue) => {
+		return `Price: $${values[0]} - $${values[1]}`;
+	}, []);
+
+	const formatTemperatureRangeThumbTooltip = React.useCallback((value: number) => {
+		return `${value}°C`;
+	}, []);
+
+	const formatTemperatureRangeSliderTooltip = React.useCallback((values: RangeValue) => {
+		return `Temperature: ${values[0]}°C - ${values[1]}°C`;
+	}, []);
+
 	return (
 		<div className='space-y-6 w-full max-w-lg'>
 			<h3 className='text-lg font-semibold'>Form Data API Example</h3>
@@ -379,48 +371,31 @@ const FormDataAPIExample = () => {
 			</p>
 
 			<form onSubmit={handleSubmit} className='space-y-4'>
-				<SliderInput
-					label='Volume Control'
-					name='volume'
-					id='volume-slider'
-					mode='single'
-					min={0}
-					max={100}
-					step={5}
-					value={formData.volume}
-					onChange={handleVolumeChange}
-					formatThumbTooltip={(value) => `${value}%`}
-					formatSliderTooltip={(value) => `Volume: ${value}%`}
-					className={cn('w-80')}
-				/>
-
-				<SliderInput
+				<RangeSlider
 					label='Price Range'
 					name='price-range'
 					id='price-range-slider'
-					mode='dual'
 					min={0}
 					max={1000}
 					step={10}
 					value={formData.priceRange}
 					onChange={handlePriceRangeChange}
-					formatThumbTooltip={(value) => `$${value}`}
-					formatSliderTooltip={(values) => `Price: $${values[0]} - $${values[1]}`}
+					formatThumbTooltip={formatPriceRangeThumbTooltip}
+					formatSliderTooltip={formatPriceRangeSliderTooltip}
 					className={cn('w-80')}
 				/>
 
-				<SliderInput
+				<RangeSlider
 					label='Temperature Range'
 					name='temperature'
 					id='temperature-slider'
-					mode='dual'
 					min={-20}
 					max={50}
 					step={1}
 					value={formData.temperature}
 					onChange={handleTemperatureChange}
-					formatThumbTooltip={(value) => `${value}°C`}
-					formatSliderTooltip={(values) => `Temperature: ${values[0]}°C - ${values[1]}°C`}
+					formatThumbTooltip={formatTemperatureRangeThumbTooltip}
+					formatSliderTooltip={formatTemperatureRangeSliderTooltip}
 					className={cn('w-80')}
 				/>
 
@@ -462,33 +437,39 @@ export const FormDataAPI: Story = {
 	render: () => <FormDataAPIExample />
 };
 
-const CustomFormattingExample = () => {
-	const [values, setValues] = React.useState<DualValue>([3, 6]);
+const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 
-	const handleChange = React.useCallback((data: DualValue) => {
+const CustomFormattingExample = () => {
+	const [values, setValues] = React.useState<RangeValue>([3, 6]);
+
+	const handleChange = React.useCallback((data: RangeValue) => {
 		setValues(data);
 	}, []);
 
-	const formatSize = (value: number) => {
-		const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+	const formatSizeRangeThumbTooltip = React.useCallback((value: number) => {
 		return sizes[value] || 'N/A';
-	};
+	}, []);
+
+	const formatSizeRangeSliderTooltip = React.useCallback((values: RangeValue) => {
+		const formattedValues = values.map((value) => {
+			return sizes[value] || 'N/A';
+		});
+
+		return `Size range: ${formattedValues[0]} - ${formattedValues[1]}`;
+	}, []);
 
 	return (
-		<SliderInput
+		<RangeSlider
 			label='Size Range'
 			name='size-range'
 			id='size-range'
-			mode='dual'
 			min={0}
 			max={6}
 			step={1}
 			value={values}
 			onChange={handleChange}
-			formatSliderTooltip={(values) =>
-				`Size range: ${formatSize(values[0])} - ${formatSize(values[1])}`
-			}
-			formatThumbTooltip={(value) => formatSize(value)}
+			formatSliderTooltip={formatSizeRangeSliderTooltip}
+			formatThumbTooltip={formatSizeRangeThumbTooltip}
 			className={cn('w-80')}
 		/>
 	);
