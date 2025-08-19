@@ -1,24 +1,11 @@
 import { CalendarIcon } from 'lucide-react';
-import { DateRange } from 'react-day-picker';
-import type { Locale } from 'date-fns';
-
+import React from 'react';
 import { cn } from '~/utils/className';
-import { formatDateRange, type DateFormatKey } from '~/utils/dates';
+import { formatDateRange } from '~/utils/dates';
 import { Button } from '~/components/button/button';
 import { Calendar } from '~/components/calendar/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/popover/popover';
-
-export interface DateRangePickerProps {
-	dateRange?: DateRange;
-	onDateRangeChange?: (dateRange: DateRange | undefined) => void;
-	placeholder?: string;
-	disabled?: boolean;
-	className?: string;
-	fromYear?: number;
-	toYear?: number;
-	locale?: Locale;
-	dateFormat?: DateFormatKey;
-}
+import type { DateRangePickerProps } from '~/components/date-pickers/range-date-picker/range-date-picker-types';
 
 export const DateRangePicker = ({
 	dateRange,
@@ -33,8 +20,9 @@ export const DateRangePicker = ({
 }: DateRangePickerProps) => {
 	const startMonth = new Date(fromYear, 0);
 	const endMonth = new Date(toYear, 11);
-	const getFormattedRange = () => {
-		const formattedRange = formatDateRange({
+
+	const formattedRange = React.useMemo(() => {
+		return formatDateRange({
 			startDate: dateRange?.from,
 			endDate: dateRange?.to,
 			formatKey: dateFormat,
@@ -43,9 +31,7 @@ export const DateRangePicker = ({
 			singleDatePrefix: 'From ',
 			showFromPrefix: true
 		});
-
-		return formattedRange || placeholder;
-	};
+	}, [dateRange, dateFormat, locale]);
 
 	return (
 		<div className={cn(className)}>
@@ -60,7 +46,11 @@ export const DateRangePicker = ({
 						)}
 					>
 						<CalendarIcon className='mr-2 h-4 w-4' />
-						<span>{getFormattedRange()}</span>
+						{dateRange?.from && dateRange?.to ? (
+							<span>{formattedRange}</span>
+						) : (
+							<span>{placeholder}</span>
+						)}
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent

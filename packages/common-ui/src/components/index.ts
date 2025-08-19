@@ -2,7 +2,7 @@ export * from '~/components/accordion/accordion';
 export * from '~/components/button/button';
 export * from '~/components/calendar/calendar';
 export * from '~/components/checkbox-group/checkbox-group';
-export * from '~/components/date-picker/index';
+export * from '~/components/date-pickers/index';
 export * from '~/components/input/input';
 export * from '~/components/label/label';
 export * from '~/components/popover/popover';

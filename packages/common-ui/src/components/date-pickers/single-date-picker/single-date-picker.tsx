@@ -1,25 +1,13 @@
 import { CalendarIcon } from 'lucide-react';
-import type { Locale } from 'date-fns';
-
+import React from 'react';
 import { cn } from '~/utils/className';
-import { formatDate, type DateFormatKey } from '~/utils/dates';
+import { formatDate } from '~/utils/dates';
 import { Button } from '~/components/button/button';
 import { Calendar } from '~/components/calendar/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/popover/popover';
+import type { SingleDatePickerProps } from '~/components/date-pickers/single-date-picker/single-date-picker-types';
 
-export interface DatePickerProps {
-	date?: Date;
-	onDateChange?: (date: Date | undefined) => void;
-	placeholder?: string;
-	disabled?: boolean;
-	className?: string;
-	fromYear?: number;
-	toYear?: number;
-	locale?: Locale;
-	dateFormat?: DateFormatKey;
-}
-
-export const DatePicker = ({
+export const SingleDatePicker = ({
 	date,
 	onDateChange,
 	placeholder = 'Pick a date',
@@ -29,9 +17,14 @@ export const DatePicker = ({
 	toYear = 2100,
 	locale,
 	dateFormat = 'fullShort'
-}: DatePickerProps) => {
+}: SingleDatePickerProps) => {
 	const startMonth = new Date(fromYear, 0);
 	const endMonth = new Date(toYear, 11);
+
+	const formattedDate = React.useMemo(() => {
+		return formatDate({ date, formatKey: dateFormat, locale });
+	}, [date, dateFormat, locale]);
+
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
@@ -45,7 +38,7 @@ export const DatePicker = ({
 					)}
 				>
 					<CalendarIcon className='mr-2 h-4 w-4' />
-					{date ? formatDate({ date, formatKey: dateFormat, locale }) : <span>{placeholder}</span>}
+					{date ? <span>{formattedDate}</span> : <span>{placeholder}</span>}
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className='w-auto p-0'>

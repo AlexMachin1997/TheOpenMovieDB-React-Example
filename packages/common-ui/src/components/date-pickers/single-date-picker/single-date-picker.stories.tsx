@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { fr, es, de, ja } from 'date-fns/locale';
 
-import { DatePicker } from './date-picker';
+import { SingleDatePicker } from './single-date-picker';
 import { getDateFormatExamples, type DateFormatKey } from '~/utils/dates';
 
-const meta: Meta<typeof DatePicker> = {
-	title: 'Components/DatePicker',
-	component: DatePicker,
+const meta: Meta<typeof SingleDatePicker> = {
+	title: 'Components/Date pickers/Single date picker',
+	component: SingleDatePicker,
 	tags: ['autodocs']
 };
 
@@ -15,12 +15,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	render: () => <DatePicker placeholder='Pick a date' />
+	render: () => <SingleDatePicker placeholder='Pick a date' />
 };
 
 const WithSelectedDateComponent = () => {
 	const [date, setDate] = useState<Date | undefined>(new Date('2024-01-15'));
-	return <DatePicker date={date} onDateChange={setDate} placeholder='Pick a date' />;
+	return <SingleDatePicker date={date} onDateChange={setDate} placeholder='Pick a date' />;
 };
 
 export const WithSelectedDate: Story = {
@@ -29,7 +29,7 @@ export const WithSelectedDate: Story = {
 
 const DisabledComponent = () => {
 	const [date, setDate] = useState<Date>();
-	return <DatePicker date={date} onDateChange={setDate} disabled placeholder='Pick a date' />;
+	return <SingleDatePicker date={date} onDateChange={setDate} disabled placeholder='Pick a date' />;
 };
 
 export const Disabled: Story = {
@@ -38,7 +38,7 @@ export const Disabled: Story = {
 
 const CustomPlaceholderComponent = () => {
 	const [date, setDate] = useState<Date>();
-	return <DatePicker date={date} onDateChange={setDate} placeholder='Select your birthday' />;
+	return <SingleDatePicker date={date} onDateChange={setDate} placeholder='Select your birthday' />;
 };
 
 export const CustomPlaceholder: Story = {
@@ -51,7 +51,7 @@ const InteractiveComponent = () => {
 
 	return (
 		<div className='space-y-4'>
-			<DatePicker date={date} onDateChange={setDate} placeholder='Select a date' />
+			<SingleDatePicker date={date} onDateChange={setDate} placeholder='Select a date' />
 			{date && (
 				<p className='text-sm text-muted-foreground'>Selected date: {date.toLocaleDateString()}</p>
 			)}
@@ -71,8 +71,8 @@ const MultipleComponent = () => {
 	return (
 		<div className='space-y-4'>
 			<div className='flex gap-4'>
-				<DatePicker date={startDate} onDateChange={setStartDate} placeholder='Start date' />
-				<DatePicker date={endDate} onDateChange={setEndDate} placeholder='End date' />
+				<SingleDatePicker date={startDate} onDateChange={setStartDate} placeholder='Start date' />
+				<SingleDatePicker date={endDate} onDateChange={setEndDate} placeholder='End date' />
 			</div>
 			{(startDate || endDate) && (
 				<p className='text-sm text-muted-foreground'>
@@ -99,7 +99,7 @@ const WithDropdownNavigationComponent = () => {
 					Click the month or year in the calendar header to jump to a specific month/year. By
 					default, supports years 1900-2100.
 				</p>
-				<DatePicker
+				<SingleDatePicker
 					date={date}
 					onDateChange={setDate}
 					placeholder='Pick a date with dropdown navigation'
@@ -128,7 +128,7 @@ const WithCustomRangeComponent = () => {
 				<div className='space-y-3'>
 					<div>
 						<p className='text-sm font-medium mb-1'>Current year only:</p>
-						<DatePicker
+						<SingleDatePicker
 							date={currentYearDate}
 							onDateChange={setCurrentYearDate}
 							placeholder='Select date this year'
@@ -138,7 +138,7 @@ const WithCustomRangeComponent = () => {
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>Next 5 years only:</p>
-						<DatePicker
+						<SingleDatePicker
 							date={futureDate}
 							onDateChange={setFutureDate}
 							placeholder='Select future date'
@@ -148,7 +148,7 @@ const WithCustomRangeComponent = () => {
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>Birth year picker (1940-2010):</p>
-						<DatePicker
+						<SingleDatePicker
 							date={birthDate}
 							onDateChange={setBirthDate}
 							placeholder='Select birth year'
@@ -183,7 +183,7 @@ const WithLocalesComponent = () => {
 				<div className='space-y-3'>
 					<div>
 						<p className='text-sm font-medium mb-1'>English (default):</p>
-						<DatePicker
+						<SingleDatePicker
 							date={englishDate}
 							onDateChange={setEnglishDate}
 							placeholder='Select a date'
@@ -191,7 +191,7 @@ const WithLocalesComponent = () => {
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>French:</p>
-						<DatePicker
+						<SingleDatePicker
 							date={frenchDate}
 							onDateChange={setFrenchDate}
 							placeholder='Sélectionner une date'
@@ -200,7 +200,7 @@ const WithLocalesComponent = () => {
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>Spanish:</p>
-						<DatePicker
+						<SingleDatePicker
 							date={spanishDate}
 							onDateChange={setSpanishDate}
 							placeholder='Seleccionar una fecha'
@@ -209,7 +209,7 @@ const WithLocalesComponent = () => {
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>German:</p>
-						<DatePicker
+						<SingleDatePicker
 							date={germanDate}
 							onDateChange={setGermanDate}
 							placeholder='Datum auswählen'
@@ -218,7 +218,7 @@ const WithLocalesComponent = () => {
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>Japanese:</p>
-						<DatePicker
+						<SingleDatePicker
 							date={japaneseDate}
 							onDateChange={setJapaneseDate}
 							placeholder='日付を選択'
@@ -279,7 +279,7 @@ const WithDateFormatsComponent = () => {
 
 				{/* Date picker with selected format */}
 				<div className='mb-4'>
-					<DatePicker
+					<SingleDatePicker
 						date={selectedDate}
 						onDateChange={(date) => date && setSelectedDate(date)}
 						dateFormat={selectedFormat}
@@ -298,7 +298,7 @@ const WithDateFormatsComponent = () => {
 									key={formatKey}
 									className='flex items-center gap-3 p-2 bg-secondary/50 rounded'
 								>
-									<DatePicker
+									<SingleDatePicker
 										date={selectedDate}
 										onDateChange={(date) => date && setSelectedDate(date)}
 										dateFormat={formatKey}

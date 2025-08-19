@@ -2,12 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { fr, es, de } from 'date-fns/locale';
-
-import { DateRangePicker } from './date-range-picker';
+import { DateRangePicker } from '~/components/date-pickers/range-date-picker/range-date-picker';
 import { type DateFormatKey } from '~/utils/dates';
 
 const meta = {
-	title: 'Components/DateRangePicker',
+	title: 'Components/Date pickers/Range date picker',
 	component: DateRangePicker,
 	parameters: {
 		layout: 'fullscreen',
@@ -58,7 +57,6 @@ export const CustomPlaceholder: Story = {
 	)
 };
 
-// Interactive example with state management
 const InteractiveComponent = () => {
 	const [dateRange, setDateRange] = useState<DateRange>();
 
@@ -89,7 +87,6 @@ export const Interactive: Story = {
 	render: () => <InteractiveComponent />
 };
 
-// Travel booking example with future dates enabled
 const TravelBookingComponent = () => {
 	const [travelDates, setTravelDates] = useState<DateRange>();
 
@@ -138,8 +135,11 @@ export const TravelBooking: Story = {
 	render: () => <TravelBookingComponent />
 };
 
-export const WithCustomRange: Story = {
-	render: () => (
+const WithCustomRangeComponent = () => {
+	const [currentYearRange, setCurrentYearRange] = useState<DateRange>();
+	const [projectTimelineRange, setProjectTimelineRange] = useState<DateRange>();
+
+	return (
 		<div className='p-8 space-y-4'>
 			<div>
 				<h3 className='font-medium mb-2'>Custom Date Range</h3>
@@ -150,6 +150,8 @@ export const WithCustomRange: Story = {
 					<div>
 						<p className='text-sm font-medium mb-1'>Current year only:</p>
 						<DateRangePicker
+							dateRange={currentYearRange}
+							onDateRangeChange={setCurrentYearRange}
 							placeholder='Select dates this year'
 							fromYear={new Date().getFullYear()}
 							toYear={new Date().getFullYear()}
@@ -157,12 +159,22 @@ export const WithCustomRange: Story = {
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>Project timeline (2024-2026):</p>
-						<DateRangePicker placeholder='Select project dates' fromYear={2024} toYear={2026} />
+						<DateRangePicker
+							dateRange={projectTimelineRange}
+							onDateRangeChange={setProjectTimelineRange}
+							placeholder='Select project dates'
+							fromYear={2024}
+							toYear={2026}
+						/>
 					</div>
 				</div>
 			</div>
 		</div>
-	)
+	);
+};
+
+export const WithCustomRange: Story = {
+	render: () => <WithCustomRangeComponent />
 };
 
 const WithLocalesComponent = () => {
@@ -263,7 +275,6 @@ const WithDateFormatsComponent = () => {
 					))}
 				</div>
 
-				{/* Smart formatting demo */}
 				<div className='mt-6 p-4 bg-blue-50 rounded-md'>
 					<h4 className='font-medium mb-2'>Smart Range Formatting</h4>
 					<p className='text-sm text-muted-foreground mb-3'>
