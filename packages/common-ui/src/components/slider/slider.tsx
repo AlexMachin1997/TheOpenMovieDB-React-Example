@@ -3,7 +3,7 @@ import * as SliderPrimitive from '@radix-ui/react-slider';
 import { cn } from '~/utils/className';
 
 const SliderRoot = React.forwardRef<
-	React.ElementRef<typeof SliderPrimitive.Root>,
+	React.ComponentRef<typeof SliderPrimitive.Root>,
 	React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
 >(({ className, ...props }, ref) => (
 	<SliderPrimitive.Root
@@ -16,7 +16,7 @@ const SliderRoot = React.forwardRef<
 SliderRoot.displayName = 'SliderRoot';
 
 const SliderTrack = React.forwardRef<
-	React.ElementRef<typeof SliderPrimitive.Track>,
+	React.ComponentRef<typeof SliderPrimitive.Track>,
 	React.ComponentPropsWithoutRef<typeof SliderPrimitive.Track>
 >(({ className, ...props }, ref) => (
 	<SliderPrimitive.Track
@@ -29,7 +29,7 @@ const SliderTrack = React.forwardRef<
 SliderTrack.displayName = 'SliderTrack';
 
 const SliderRange = React.forwardRef<
-	React.ElementRef<typeof SliderPrimitive.Range>,
+	React.ComponentRef<typeof SliderPrimitive.Range>,
 	React.ComponentPropsWithoutRef<typeof SliderPrimitive.Range>
 >(({ className, ...props }, ref) => (
 	<SliderPrimitive.Range
@@ -42,7 +42,7 @@ const SliderRange = React.forwardRef<
 SliderRange.displayName = 'SliderRange';
 
 const SliderThumb = React.forwardRef<
-	React.ElementRef<typeof SliderPrimitive.Thumb>,
+	React.ComponentRef<typeof SliderPrimitive.Thumb>,
 	React.ComponentPropsWithoutRef<typeof SliderPrimitive.Thumb>
 >(({ className, ...props }, ref) => (
 	<SliderPrimitive.Thumb
