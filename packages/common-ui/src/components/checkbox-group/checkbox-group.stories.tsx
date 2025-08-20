@@ -1,10 +1,11 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { CheckboxGroup, Checkbox } from '~/components/checkbox-group/checkbox-group';
-import type { Option } from '~/components/checkbox-group/checkbox-group';
+import { CheckboxGroup } from '~/components/checkbox-group/checkbox-group';
+import { Checkbox } from '~/components/checkbox/checkbox';
+import type { Option } from '~/types/Option';
 
 const meta: Meta<typeof CheckboxGroup> = {
-	title: 'Components/CheckboxGroup',
+	title: 'Components/Checkbox group',
 	component: CheckboxGroup,
 	parameters: {
 		layout: 'centered'
@@ -50,16 +51,6 @@ const sampleOptions: Option[] = [
 	{ id: 'option-1', value: 'option-one', label: 'Option One' },
 	{ id: 'option-2', value: 'option-two', label: 'Option Two' },
 	{ id: 'option-3', value: 'option-three', label: 'Option Three' }
-];
-
-const sampleOptionsWithLongLabels: Option[] = [
-	{
-		id: 'option-1',
-		value: 'option-one',
-		label: 'This is a very long option label that should demonstrate the alignment'
-	},
-	{ id: 'option-2', value: 'option-two', label: 'Short option' },
-	{ id: 'option-3', value: 'option-three', label: 'Another option with medium length text' }
 ];
 
 const sampleOptionsWithDisabled: Option[] = [
@@ -111,46 +102,7 @@ export const LabelPositionRight: Story = {
 			options={sampleOptions}
 			name='right-label-group'
 			defaultValue={['option-one']}
-			labelPosition='right'
 		/>
-	)
-};
-
-export const LabelPositionRightWithLongLabels: Story = {
-	render: () => (
-		<CheckboxGroupTemplate
-			options={sampleOptionsWithLongLabels}
-			name='right-label-long-group'
-			defaultValue={['option-one']}
-			labelPosition='right'
-		/>
-	)
-};
-
-export const LabelPositionRightConstrainedWidth: Story = {
-	render: () => (
-		<div className='max-w-xs'>
-			<CheckboxGroupTemplate
-				options={sampleOptionsWithLongLabels}
-				name='right-label-constrained-group'
-				defaultValue={['option-one']}
-				labelPosition='right'
-			/>
-		</div>
-	)
-};
-
-export const LabelPositionRightWithFlexContainer: Story = {
-	render: () => (
-		<div className='max-w-md'>
-			<CheckboxGroupTemplate
-				options={sampleOptionsWithLongLabels}
-				name='right-label-flex-group'
-				defaultValue={['option-one']}
-				labelPosition='right'
-				className='space-y-2'
-			/>
-		</div>
 	)
 };
 
@@ -172,32 +124,6 @@ export const CustomNoOptionsMessage: Story = {
 			noOptionsAvailableMessage='Please check back later for available options.'
 		/>
 	)
-};
-
-const ControlledComponent = () => {
-	const [value, setValue] = React.useState<string[]>(['option-one']);
-
-	return (
-		<div className='space-y-4'>
-			<CheckboxGroup
-				options={sampleOptions}
-				name='controlled-group'
-				value={value}
-				onChange={(data) => {
-					console.log(`Selected ${data.value.join(', ')} from group ${data.name}`);
-					setValue(data.value);
-				}}
-			/>
-			<div className='p-3 bg-blue-50 rounded border border-blue-200'>
-				<p className='text-sm font-medium text-blue-700'>Controlled State:</p>
-				<p className='text-sm text-blue-600'>Selected values: {value.join(', ')}</p>
-			</div>
-		</div>
-	);
-};
-
-export const Controlled: Story = {
-	render: () => <ControlledComponent />
 };
 
 const FormExampleComponent = () => {

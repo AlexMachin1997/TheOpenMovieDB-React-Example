@@ -1,9 +1,7 @@
 import * as React from 'react';
-import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { CheckIcon } from 'lucide-react';
 import { cn } from '~/utils/className';
-import { Label } from '~/components/label/label';
 import { Option } from '~/types/Option';
+import { Checkbox, CheckboxLabel } from '~/components/checkbox/checkbox';
 
 type CheckboxGroupProps = {
 	options?: Option[];
@@ -12,10 +10,9 @@ type CheckboxGroupProps = {
 	onChange?: ((data: { value: string[]; name: string }) => void) | null;
 	noOptionsAvailableMessage?: string;
 	disabled?: boolean;
-	labelPosition?: 'left' | 'right';
 	name: string;
 	className?: string;
-} & Omit<React.ComponentProps<'div'>, 'onChange' | 'value' | 'defaultValue'>;
+};
 
 const CheckboxGroup = ({
 	options = [],
@@ -23,27 +20,32 @@ const CheckboxGroup = ({
 	onChange = null,
 	noOptionsAvailableMessage = 'No options currently available.',
 	disabled = false,
-	labelPosition = 'left',
 	name,
 	className,
 	defaultValue = [],
 	...props
 }: CheckboxGroupProps) => {
-	// Determine if this is controlled or uncontrolled
-	const isControlled = value !== undefined;
+	const isControlled = React.useMemo(() => value !== undefined, [value]);
 
 	const handleValueChange = React.useCallback(
-		(optionValue: string, checked: boolean) => {
-			if (onChange) {
-				const currentValues = value || defaultValue;
-				const newValue = checked
-					? [...currentValues, optionValue]
-					: currentValues.filter((v) => v !== optionValue);
+		(optionValue: string) => {
+			if (onChange && isControlled) {
+				const wasPreviouslyChecked = value?.includes(optionValue);
 
-				onChange({ value: newValue, name });
+				const existingCheckboxes = [...(value || [])];
+
+				const index = existingCheckboxes.findIndex((checkbox) => checkbox === optionValue);
+
+				if (wasPreviouslyChecked === false) {
+					existingCheckboxes.push(optionValue);
+				} else if (wasPreviouslyChecked === true && index !== -1) {
+					existingCheckboxes.splice(index, 1);
+				}
+
+				onChange({ value: existingCheckboxes, name });
 			}
 		},
-		[onChange, name, value, defaultValue]
+		[onChange, value, isControlled, name]
 	);
 
 	return (
@@ -63,21 +65,15 @@ const CheckboxGroup = ({
 							const isOptionDisabled = option.disabled || disabled;
 
 							return (
-								<CheckboxGroupOption
+								<CheckboxGroupItem
 									key={option.id}
 									value={option.value}
-									// For controlled mode: use checked and onCheckedChange
-									// For uncontrolled mode: use defaultChecked and no onCheckedChange
 									checked={isControlled ? isChecked : undefined}
 									defaultChecked={!isControlled ? isChecked : undefined}
-									onCheckedChange={
-										isControlled ? (checked) => handleValueChange(option.value, checked) : undefined
-									}
+									onCheckedChange={() => handleValueChange(option.value)}
 									disabled={isOptionDisabled}
-									labelPosition={labelPosition}
 									label={option.label}
 									id={option.id}
-									// Each checkbox needs a unique name for form submission
 									name={`${name}-${option.value}`}
 								/>
 							);
@@ -89,31 +85,20 @@ const CheckboxGroup = ({
 	);
 };
 
-type CheckboxGroupOptionProps = {
-	label?: string;
-	labelPosition?: 'left' | 'right';
-	className?: string;
-	disabled?: boolean;
-	checked?: boolean;
-	defaultChecked?: boolean;
-	onCheckedChange?: (checked: boolean) => void;
-	name?: string;
-} & Omit<
-	React.ComponentProps<typeof CheckboxPrimitive.Root>,
-	'checked' | 'defaultChecked' | 'onCheckedChange'
->;
+type CheckboxGroupItemProps = React.ComponentProps<typeof Checkbox> & {
+	label: string;
+};
 
-const CheckboxGroupOption = ({
+const CheckboxGroupItem = ({
 	className,
 	label,
-	labelPosition = 'left',
 	disabled = false,
 	checked,
 	defaultChecked,
 	onCheckedChange,
 	name,
 	...props
-}: CheckboxGroupOptionProps) => {
+}: CheckboxGroupItemProps) => {
 	return (
 		<div
 			className={cn('flex items-center space-x-2', {
@@ -121,114 +106,25 @@ const CheckboxGroupOption = ({
 				'cursor-pointer': !disabled
 			})}
 		>
-			{labelPosition === 'left' && (
-				<Checkbox
-					className={className}
-					disabled={disabled}
-					checked={checked}
-					defaultChecked={defaultChecked}
-					onCheckedChange={onCheckedChange}
-					name={name}
-					{...props}
-				/>
-			)}
-			{label && (
-				<CheckboxLabel
-					htmlFor={props.id}
-					disabled={disabled}
-					className={cn({
-						'flex-1': labelPosition === 'right'
-					})}
-				>
-					{label}
-				</CheckboxLabel>
-			)}
-			{labelPosition === 'right' && (
-				<Checkbox
-					className={className}
-					disabled={disabled}
-					checked={checked}
-					defaultChecked={defaultChecked}
-					onCheckedChange={onCheckedChange}
-					name={name}
-					{...props}
-				/>
-			)}
+			<CheckboxLabel htmlFor={props.id} disabled={disabled}>
+				{label}
+			</CheckboxLabel>
+
+			<Checkbox
+				className={className}
+				disabled={disabled}
+				checked={checked}
+				defaultChecked={defaultChecked}
+				onCheckedChange={onCheckedChange}
+				name={name}
+				{...props}
+			/>
 		</div>
 	);
 };
 
-type CheckboxProps = {
-	className?: string;
-	disabled?: boolean;
-	checked?: boolean;
-	defaultChecked?: boolean;
-	onCheckedChange?: (checked: boolean) => void;
-} & Omit<
-	React.ComponentProps<typeof CheckboxPrimitive.Root>,
-	'checked' | 'defaultChecked' | 'onCheckedChange'
->;
-
-const Checkbox = ({
-	className,
-	disabled = false,
-	checked,
-	defaultChecked,
-	onCheckedChange,
-	...props
-}: CheckboxProps) => {
-	return (
-		<CheckboxPrimitive.Root
-			data-slot='checkbox'
-			className={cn(
-				'peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
-				className
-			)}
-			checked={checked}
-			defaultChecked={defaultChecked}
-			onCheckedChange={onCheckedChange}
-			disabled={disabled}
-			{...props}
-		>
-			<CheckboxPrimitive.Indicator
-				data-slot='checkbox-indicator'
-				className='flex items-center justify-center text-current transition-none'
-			>
-				<CheckIcon className='size-3.5' />
-			</CheckboxPrimitive.Indicator>
-		</CheckboxPrimitive.Root>
-	);
-};
-
-type CheckboxLabelProps = {
-	htmlFor?: string;
-	disabled?: boolean;
-	children: React.ReactNode;
-	className?: string;
-};
-
-const CheckboxLabel = ({ htmlFor, disabled = false, children, className }: CheckboxLabelProps) => {
-	return (
-		<Label
-			htmlFor={htmlFor}
-			className={cn(
-				'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-				{
-					'cursor-not-allowed': disabled,
-					'cursor-pointer': !disabled
-				},
-				className
-			)}
-		>
-			{children}
-		</Label>
-	);
-};
-
 CheckboxGroup.displayName = 'CheckboxGroup';
-CheckboxGroupOption.displayName = 'CheckboxGroupOption';
-Checkbox.displayName = 'Checkbox';
-CheckboxLabel.displayName = 'CheckboxLabel';
+CheckboxGroupItem.displayName = 'CheckboxGroupItem';
 
-export { CheckboxGroup, Checkbox };
+export { CheckboxGroup };
 export type { CheckboxGroupProps };
