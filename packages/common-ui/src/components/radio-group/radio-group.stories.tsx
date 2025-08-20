@@ -1,10 +1,10 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { RadioGroup } from './radio-group';
-import type { Option } from './radio-group';
+import type { Option } from '~/types/Option';
 
 const meta: Meta<typeof RadioGroup> = {
-	title: 'Components/RadioGroup',
+	title: 'Components/Radio group',
 	component: RadioGroup,
 	parameters: {
 		layout: 'centered'
@@ -19,16 +19,6 @@ const sampleOptions: Option[] = [
 	{ id: 'option-1', value: 'option-one', label: 'Option One' },
 	{ id: 'option-2', value: 'option-two', label: 'Option Two' },
 	{ id: 'option-3', value: 'option-three', label: 'Option Three' }
-];
-
-const sampleOptionsWithLongLabels: Option[] = [
-	{
-		id: 'option-1',
-		value: 'option-one',
-		label: 'This is a very long option label that should demonstrate the alignment'
-	},
-	{ id: 'option-2', value: 'option-two', label: 'Short option' },
-	{ id: 'option-3', value: 'option-three', label: 'Another option with medium length text' }
 ];
 
 const sampleOptionsWithDisabled: Option[] = [
@@ -67,55 +57,6 @@ export const WithDisabledGroup: Story = {
 			defaultValue='option-one'
 			disabled={true}
 		/>
-	)
-};
-
-export const LabelPositionRight: Story = {
-	render: () => (
-		<RadioGroup
-			options={sampleOptions}
-			name='right-label-group'
-			defaultValue='option-one'
-			labelPosition='right'
-		/>
-	)
-};
-
-export const LabelPositionRightWithLongLabels: Story = {
-	render: () => (
-		<RadioGroup
-			options={sampleOptionsWithLongLabels}
-			name='right-label-long-group'
-			defaultValue='option-one'
-			labelPosition='right'
-		/>
-	)
-};
-
-export const LabelPositionRightConstrainedWidth: Story = {
-	render: () => (
-		<div className='max-w-xs'>
-			<RadioGroup
-				options={sampleOptionsWithLongLabels}
-				name='right-label-constrained-group'
-				defaultValue='option-one'
-				labelPosition='right'
-			/>
-		</div>
-	)
-};
-
-export const LabelPositionRightWithFlexContainer: Story = {
-	render: () => (
-		<div className='max-w-md'>
-			<RadioGroup
-				options={sampleOptionsWithLongLabels}
-				name='right-label-flex-group'
-				defaultValue='option-one'
-				labelPosition='right'
-				className='space-y-2'
-			/>
-		</div>
 	)
 };
 
@@ -205,5 +146,16 @@ export const HorizontalLayout: Story = {
 export const WithOrderedOptions: Story = {
 	render: () => (
 		<RadioGroup options={sampleOptionsWithOrder} name='ordered-group' defaultValue='option-one' />
+	)
+};
+
+export const WithCustomIconColor: Story = {
+	render: () => (
+		<RadioGroup
+			options={sampleOptions}
+			name='custom-icon-group'
+			defaultValue='option-one'
+			iconClassName='fill-blue-500'
+		/>
 	)
 };

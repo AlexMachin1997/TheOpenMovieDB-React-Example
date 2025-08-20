@@ -32,6 +32,7 @@ type CheckboxProps = Omit<
 	'onCheckedChange'
 > & {
 	onCheckedChange?: (checked: boolean) => void;
+	iconClassName?: string;
 };
 
 const Checkbox = ({
@@ -40,6 +41,7 @@ const Checkbox = ({
 	checked,
 	defaultChecked,
 	onCheckedChange,
+	iconClassName,
 	...props
 }: CheckboxProps) => {
 	const handleCheckbox = (checked: CheckedState) => {
@@ -65,7 +67,7 @@ const Checkbox = ({
 				data-slot='checkbox-indicator'
 				className='flex items-center justify-center text-current transition-none'
 			>
-				<CheckIcon className='size-3.5' />
+				<CheckIcon className={cn('size-3.5', iconClassName)} />
 			</CheckboxPrimitive.Indicator>
 		</CheckboxPrimitive.Root>
 	);

@@ -84,6 +84,25 @@ export const CustomStyling: Story = {
 	)
 };
 
+export const CustomIconColor: Story = {
+	render: () => (
+		<div className='space-y-3'>
+			<div className='flex items-center space-x-2'>
+				<Checkbox id='custom-icon-1' defaultChecked iconClassName='text-red-500' />
+				<CheckboxLabel htmlFor='custom-icon-1'>Red checkmark</CheckboxLabel>
+			</div>
+			<div className='flex items-center space-x-2'>
+				<Checkbox id='custom-icon-2' defaultChecked iconClassName='text-green-500' />
+				<CheckboxLabel htmlFor='custom-icon-2'>Green checkmark</CheckboxLabel>
+			</div>
+			<div className='flex items-center space-x-2'>
+				<Checkbox id='custom-icon-3' defaultChecked iconClassName='text-purple-500' />
+				<CheckboxLabel htmlFor='custom-icon-3'>Purple checkmark</CheckboxLabel>
+			</div>
+		</div>
+	)
+};
+
 const ControlledCheckbox = () => {
 	const [isChecked, setIsChecked] = React.useState(false);
 
