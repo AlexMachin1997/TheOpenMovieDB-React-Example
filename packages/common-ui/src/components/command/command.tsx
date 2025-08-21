@@ -23,6 +23,9 @@ const Command = ({ className, ...props }: React.ComponentProps<typeof CommandPri
 	);
 };
 
+// TODO: Upgrade to React 19
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const CommandDialog = ({
 	title = 'Command Palette',
 	description = 'Search for a command to run...',
@@ -54,18 +57,22 @@ const CommandDialog = ({
 	);
 };
 
-const CommandList = ({
-	className,
-	...props
-}: React.ComponentProps<typeof CommandPrimitive.List>) => {
+// TODO: Upgrade to React 19
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const CommandList = React.forwardRef<
+	HTMLDivElement,
+	React.ComponentProps<typeof CommandPrimitive.List>
+>(({ className, ...props }, ref) => {
 	return (
 		<CommandPrimitive.List
+			ref={ref}
 			data-slot='command-list'
 			className={cn('max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto', className)}
 			{...props}
 		/>
 	);
-};
+});
 
 const CommandEmpty = ({ ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) => {
 	return (

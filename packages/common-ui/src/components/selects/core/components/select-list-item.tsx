@@ -27,7 +27,7 @@ export const SelectListItem = ({
 			<CheckIcon
 				className={cn('mr-2 size-4', selectedValues.has(value) ? 'opacity-100' : 'opacity-0')}
 			/>
-			{optionsMap.get(value)}
+			<span className='min-w-0 flex-1 truncate'>{optionsMap.get(value)}</span>
 		</CommandItem>
 	);
 };

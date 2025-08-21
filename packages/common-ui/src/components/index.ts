@@ -17,4 +17,5 @@ export * from '~/components/tabs/tabs';
 export * from '~/components/textarea/textarea';
 export * from '~/components/tooltip/tooltip';
 export * from '~/components/dropdown-menu/dropdown-menu';
+export * from '~/components/selects/index';
 export * from '~/components/skeleton/skeleton';

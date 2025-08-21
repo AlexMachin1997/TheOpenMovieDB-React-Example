@@ -5,11 +5,8 @@ import { Option } from '~/types/Option';
 import { useSelectContext } from '~/components/selects/core/hooks/useSelectContext';
 import { SelectGroup } from '~/components/selects/core/components/select-group';
 import { SelectSeparator } from '~/components/selects/core/components/select-seperator';
-import {
-	virtualizeGroupedOptions,
-	estimateVirtualizedItemSize,
-	VirtualizedItem
-} from '~/components/selects/core/utils/index';
+import { getVirtualizedItems, getEstimatedItemHeight } from '~/components/selects/core/utils/index';
+import { VirtualizedItem } from '~/components/selects/core/types/virtualized-item';
 
 export interface SelectVirtualizedGroupedListProps<T extends Option = Option> {
 	children: (props: { item: T }) => React.ReactNode;
@@ -34,7 +31,7 @@ export const SelectVirtualizedGroupedList = React.memo(
 
 		const virtualizedItems = React.useMemo(
 			() =>
-				virtualizeGroupedOptions<T>({
+				getVirtualizedItems<T>({
 					options: filteredOptions,
 					groupOrder,
 					ungroupedPosition
@@ -46,7 +43,7 @@ export const SelectVirtualizedGroupedList = React.memo(
 			count: virtualizedItems.length,
 			getScrollElement: () => parentRef.current,
 			estimateSize: React.useCallback(
-				(index: number) => estimateVirtualizedItemSize(virtualizedItems[index], estimateSize),
+				(index: number) => getEstimatedItemHeight(virtualizedItems[index], estimateSize),
 				[virtualizedItems, estimateSize]
 			),
 			overscan
@@ -74,38 +71,37 @@ export const SelectVirtualizedGroupedList = React.memo(
 		);
 
 		return (
-			<CommandList className={className}>
-				<div ref={parentRef} className='max-h-[300px] overflow-y-auto'>
-					<div
-						style={{
-							height: `${virtualizer.getTotalSize()}px`,
-							width: '100%',
-							position: 'relative'
-						}}
-					>
-						{virtualizer.getVirtualItems().map((virtualRow) => {
-							const item = virtualizedItems.at(virtualRow.index);
+			<CommandList className={className} ref={parentRef}>
+				<div
+					style={{
+						height: `${virtualizer.getTotalSize()}px`,
+						width: '100%',
+						position: 'relative'
+					}}
+				>
+					{virtualizer.getVirtualItems().map((virtualRow) => {
+						const item = virtualizedItems.at(virtualRow.index);
 
-							if (!item) return null;
+						if (!item) return null;
 
-							return (
-								<div
-									key={virtualRow.key}
-									ref={virtualizer.measureElement}
-									data-index={virtualRow.index}
-									style={{
-										position: 'absolute',
-										top: 0,
-										left: 0,
-										width: '100%',
-										transform: `translateY(${virtualRow.start}px)`
-									}}
-								>
-									{renderGroupedListItem(item)}
-								</div>
-							);
-						})}
-					</div>
+						return (
+							<div
+								key={virtualRow.key}
+								ref={virtualizer.measureElement}
+								data-index={virtualRow.index}
+								style={{
+									position: 'absolute',
+									top: 0,
+									left: 0,
+									width: '100%',
+									minWidth: 0,
+									transform: `translateY(${virtualRow.start}px)`
+								}}
+							>
+								{renderGroupedListItem(item, virtualRow)}
+							</div>
+						);
+					})}
 				</div>
 			</CommandList>
 		);

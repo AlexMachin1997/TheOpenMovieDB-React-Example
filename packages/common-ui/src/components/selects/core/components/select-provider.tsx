@@ -3,17 +3,28 @@ import { Popover } from '~/components/popover/popover';
 import { SelectContext } from '~/components/selects/core/contexts/select-context';
 import { Option } from '~/types/Option';
 
+/**
+ * Props for the SelectProvider component
+ *
+ * @interface SelectProviderProps
+ */
+interface SelectProviderProps {
+	/** Child components that will have access to the select context */
+	children: React.ReactNode;
+	/** Array of currently selected values */
+	values?: string[];
+	/** Array of available options to select from */
+	options?: Option[];
+	/** Callback fired when selected values change */
+	onValuesChange?: (values: string[]) => void;
+}
+
 export const SelectProvider = ({
 	children,
 	values = [],
 	options = [],
 	onValuesChange
-}: {
-	children: React.ReactNode;
-	values?: string[];
-	options?: Option[];
-	onValuesChange?: (values: string[]) => void;
-}) => {
+}: SelectProviderProps) => {
 	const [open, setOpen] = React.useState(false);
 	const [searchValue, setSearchValue] = React.useState('');
 

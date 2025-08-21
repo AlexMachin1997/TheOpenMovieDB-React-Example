@@ -7,8 +7,8 @@ import {
 	SelectList,
 	SelectListItem,
 	SelectListItems,
-	SelectGroupedListItems,
-	SelectVirtualizedList
+	SelectVirtualizedList,
+	SelectVirtualizedGroupedList
 } from '~/components/selects/core/components';
 import { MultiSelectValue } from '~/components/selects/multi-select/multi-select';
 import { Label } from '~/components/label/label';
@@ -360,9 +360,9 @@ const WithGroupsTemplate = () => {
 				<MultiSelectValue placeholder='Select from 100+ technologies...' />
 			</SelectTrigger>
 			<SelectList search={{ placeholder: 'Search items...', emptyMessage: 'No items found' }}>
-				<SelectGroupedListItems groupOrder={groups} ungroupedPosition='bottom'>
+				<SelectVirtualizedGroupedList groupOrder={groups} ungroupedPosition='bottom'>
 					{({ item }) => <SelectListItem value={item.value} />}
-				</SelectGroupedListItems>
+				</SelectVirtualizedGroupedList>
 			</SelectList>
 		</SelectProvider>
 	);
@@ -424,7 +424,7 @@ const LargeListVirtualizedTemplate = () => {
 
 	return (
 		<SelectProvider values={selectedValues} options={options} onValuesChange={setSelectedValues}>
-			<SelectTrigger>
+			<SelectTrigger className='w-full max-w-[400px]'>
 				<MultiSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
 			</SelectTrigger>
 			<SelectList search={{ placeholder: 'Search items...', emptyMessage: 'No items found' }}>

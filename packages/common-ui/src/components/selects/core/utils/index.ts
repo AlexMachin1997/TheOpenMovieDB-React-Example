@@ -1,4 +1,5 @@
 import { Option } from '~/types/Option';
+import { VirtualizedItem } from '~/components/selects/core/types/virtualized-item';
 
 export interface GroupedOptions<T extends Option = Option> {
 	groups: Map<string | undefined, T[]>;
@@ -10,11 +11,6 @@ export interface GroupOptionsParams {
 	groupOrder?: string[];
 	ungroupedPosition?: 'top' | 'bottom';
 }
-
-export type VirtualizedItem =
-	| { type: 'separator'; id: string }
-	| { type: 'group-header'; id: string; groupName: string }
-	| { type: 'option'; id: string; option: Option };
 
 /**
  * Groups options by their group property and returns sorted group names
@@ -42,7 +38,7 @@ const groupOptions = <T extends Option = Option>({
 
 	// Get sorted group names
 	const groupNames = Array.from(groups.keys());
-	const definedGroups = groupNames.filter((name) => name !== undefined) as string[];
+	const definedGroups = groupNames.filter(Boolean);
 	const hasUngrouped = groupNames.includes(undefined);
 
 	// Sort defined groups
@@ -67,7 +63,7 @@ const groupOptions = <T extends Option = Option>({
  * Creates a flat array of virtualized items from grouped options
  * Includes separators, group headers, and options in the correct order
  */
-export const virtualizeGroupedOptions = <T extends Option = Option>(
+export const getVirtualizedItems = <T extends Option = Option>(
 	params: GroupOptionsParams
 ): VirtualizedItem[] => {
 	const items: VirtualizedItem[] = [];
@@ -111,7 +107,7 @@ export const virtualizeGroupedOptions = <T extends Option = Option>(
 /**
  * Estimates the size of a virtualized item based on its type
  */
-export const estimateVirtualizedItemSize = (
+export const getEstimatedItemHeight = (
 	item: VirtualizedItem | undefined,
 	defaultOptionSize: number
 ): number => {
