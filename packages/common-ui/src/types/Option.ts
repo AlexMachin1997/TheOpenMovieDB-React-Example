@@ -6,6 +6,13 @@
  *   { label: 'Option 2', id: '2', value: 'option2' },
  *   { label: 'Option 3', id: '3', value: 'option3' },
  * ];
+ *
+ * // With groups:
+ * const groupedOptions: Option[] = [
+ *   { label: 'React', id: 'react', value: 'react', group: 'Frontend' },
+ *   { label: 'Vue', id: 'vue', value: 'vue', group: 'Frontend' },
+ *   { label: 'Express', id: 'express', value: 'express', group: 'Backend' },
+ * ];
  */
 type Option = {
 	label: string;
@@ -13,6 +20,7 @@ type Option = {
 	value: string;
 	order?: number;
 	disabled?: boolean;
+	group?: string;
 };
 
 export type { Option };
