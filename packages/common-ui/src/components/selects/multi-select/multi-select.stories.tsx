@@ -65,7 +65,12 @@ const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
 	const [selectedValues, setSelectedValues] = React.useState<string[]>(args?.values || []);
 
 	return (
-		<SelectProvider {...args} values={selectedValues} onValuesChange={setSelectedValues}>
+		<SelectProvider
+			{...args}
+			mode='multiple'
+			values={selectedValues}
+			onValuesChange={setSelectedValues}
+		>
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<MultiSelectValue
 					placeholder='Select options...'
@@ -355,6 +360,7 @@ const WithGroupsTemplate = () => {
 			values={selectedValues}
 			onValuesChange={setSelectedValues}
 			options={groupOptions}
+			mode='multiple'
 		>
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<MultiSelectValue placeholder='Select from 100+ technologies...' />
@@ -423,7 +429,12 @@ const LargeListVirtualizedTemplate = () => {
 	}, []);
 
 	return (
-		<SelectProvider values={selectedValues} options={options} onValuesChange={setSelectedValues}>
+		<SelectProvider
+			mode='multiple'
+			values={selectedValues}
+			options={options}
+			onValuesChange={setSelectedValues}
+		>
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<MultiSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
 			</SelectTrigger>
@@ -460,6 +471,7 @@ const WithFormTemplate = () => {
 					values={selectedFrameworks}
 					onValuesChange={setSelectedFrameworks}
 					options={frameworks}
+					mode='multiple'
 				>
 					<SelectTrigger className='w-full'>
 						<MultiSelectValue placeholder='Choose frameworks...' />
@@ -478,6 +490,7 @@ const WithFormTemplate = () => {
 					values={selectedLanguages}
 					onValuesChange={setSelectedLanguages}
 					options={programmingLanguages}
+					mode='multiple'
 				>
 					<SelectTrigger className='w-full'>
 						<MultiSelectValue placeholder='Choose languages...' />
@@ -524,7 +537,12 @@ const CustomStylingTemplate = (args: MultiSelectStorybookTypes) => {
 	const [selectedValues, setSelectedValues] = React.useState<string[]>(args.values || []);
 
 	return (
-		<SelectProvider {...args} values={selectedValues} onValuesChange={setSelectedValues}>
+		<SelectProvider
+			{...args}
+			mode='multiple'
+			values={selectedValues}
+			onValuesChange={setSelectedValues}
+		>
 			<SelectTrigger className='w-full max-w-[400px] bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:from-blue-100 hover:to-indigo-100'>
 				<MultiSelectValue placeholder='Custom styled multi-select...' />
 			</SelectTrigger>

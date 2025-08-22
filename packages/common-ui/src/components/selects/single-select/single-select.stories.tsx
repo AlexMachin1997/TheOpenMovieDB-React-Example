@@ -67,6 +67,7 @@ const BasicSingleSelectTemplate = (args: SingleSelectStorybookTypes) => {
 	const [selectedValue, setSelectedValue] = React.useState<string>(args?.value || '');
 
 	const handleValueChange = (values: string[]) => {
+		console.log('values', values);
 		const newValue = values[0] || '';
 		setSelectedValue(newValue);
 		args?.onValueChange?.(newValue);
@@ -77,6 +78,7 @@ const BasicSingleSelectTemplate = (args: SingleSelectStorybookTypes) => {
 			{...args}
 			values={selectedValue ? [selectedValue] : []}
 			onValuesChange={handleValueChange}
+			mode='single'
 		>
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<SingleSelectValue
@@ -193,6 +195,7 @@ const WithGroupsTemplate = () => {
 			values={selectedValue ? [selectedValue] : []}
 			onValuesChange={handleValueChange}
 			options={groupOptions}
+			mode='single'
 		>
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<SingleSelectValue placeholder='Select a technology...' />
@@ -230,6 +233,7 @@ const LargeListVirtualizedTemplate = () => {
 			values={selectedValue ? [selectedValue] : []}
 			options={options}
 			onValuesChange={handleValueChange}
+			mode='single'
 		>
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<SingleSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
@@ -275,6 +279,7 @@ const WithFormTemplate = () => {
 					values={selectedFramework ? [selectedFramework] : []}
 					onValuesChange={handleFrameworkChange}
 					options={frameworks}
+					mode='single'
 				>
 					<SelectTrigger className='w-full'>
 						<SingleSelectValue placeholder='Choose a framework...' />
@@ -295,6 +300,7 @@ const WithFormTemplate = () => {
 					values={selectedLanguage ? [selectedLanguage] : []}
 					onValuesChange={handleLanguageChange}
 					options={programmingLanguages}
+					mode='single'
 				>
 					<SelectTrigger className='w-full'>
 						<SingleSelectValue placeholder='Choose a language...' />
@@ -351,6 +357,7 @@ const CustomStylingTemplate = (args: SingleSelectStorybookTypes) => {
 			{...args}
 			values={selectedValue ? [selectedValue] : []}
 			onValuesChange={handleValueChange}
+			mode='single'
 		>
 			<SelectTrigger className='w-full max-w-[400px] bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:from-blue-100 hover:to-indigo-100'>
 				<SingleSelectValue placeholder='Custom styled single-select...' />
@@ -369,61 +376,6 @@ export const CustomStyling: Story = {
 	args: {
 		options: frameworks
 	}
-};
-
-const ComparisonTemplate = () => {
-	const [singleValue, setSingleValue] = React.useState<string>('');
-	const [multiValues, setMultiValues] = React.useState<string[]>([]);
-
-	const handleSingleChange = (values: string[]) => {
-		setSingleValue(values[0] || '');
-	};
-
-	return (
-		<div className='space-y-8'>
-			<div className='space-y-2'>
-				<Label>Single Select (closes on selection):</Label>
-				<SelectProvider
-					values={singleValue ? [singleValue] : []}
-					onValuesChange={handleSingleChange}
-					options={frameworks.slice(0, 6)}
-				>
-					<SelectTrigger className='w-full max-w-[400px]'>
-						<SingleSelectValue placeholder='Select one framework...' />
-					</SelectTrigger>
-					<SelectList>
-						<SelectListItems>
-							{({ item }) => <SingleSelectListItem value={item.value} />}
-						</SelectListItems>
-					</SelectList>
-				</SelectProvider>
-				<div className='text-sm text-muted-foreground'>Selected: {singleValue || 'None'}</div>
-			</div>
-
-			<div className='space-y-2'>
-				<Label>Multi Select (stays open for multiple selections):</Label>
-				<SelectProvider
-					values={multiValues}
-					onValuesChange={setMultiValues}
-					options={frameworks.slice(0, 6)}
-				>
-					<SelectTrigger className='w-full max-w-[400px]'>
-						<MultiSelectValue placeholder='Select multiple frameworks...' />
-					</SelectTrigger>
-					<SelectList>
-						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
-					</SelectList>
-				</SelectProvider>
-				<div className='text-sm text-muted-foreground'>
-					Selected: {multiValues.join(', ') || 'None'}
-				</div>
-			</div>
-		</div>
-	);
-};
-
-export const Comparison: Story = {
-	render: () => <ComparisonTemplate />
 };
 
 export const WithClearButton: StoryObj<SingleSelectStorybookTypes> = {
@@ -485,6 +437,7 @@ const ClearButtonDemoTemplate = () => {
 					values={withoutClearValue ? [withoutClearValue] : []}
 					onValuesChange={handleWithoutClearChange}
 					options={frameworks.slice(0, 6)}
+					mode='single'
 				>
 					<SelectTrigger className='w-full max-w-[400px]'>
 						<SingleSelectValue placeholder='Select a framework...' showClearButton={false} />

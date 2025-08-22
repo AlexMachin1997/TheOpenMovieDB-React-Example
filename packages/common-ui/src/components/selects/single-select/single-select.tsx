@@ -59,7 +59,7 @@ export const SingleSelectValue = ({
 
 	const handleClear = (value?: string) => {
 		if (value) {
-			toggleValue(value); // This will remove the selected value
+			toggleValue(value, 'single');
 		}
 	};
 
@@ -135,16 +135,15 @@ interface SingleSelectListItemProps
  */
 export const SingleSelectListItem = ({
 	value,
-	onSelect,
 	disabled = false,
 	...props
 }: SingleSelectListItemProps) => {
 	const { toggleValue, selectedValues, optionsMap, setOpen } = useSelectContext();
 
 	const handleSelect = () => {
-		toggleValue(value);
+		console.log('handleSelect', value);
+		toggleValue(value, 'single');
 		setOpen(false);
-		onSelect?.(value);
 	};
 
 	return (

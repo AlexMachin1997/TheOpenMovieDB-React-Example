@@ -19,7 +19,7 @@ export const SelectListItem = ({
 			{...props}
 			value={optionsMap.get(value)}
 			onSelect={() => {
-				toggleValue(value);
+				toggleValue(value, 'single');
 				onSelect?.(value);
 			}}
 			disabled={disabled}
