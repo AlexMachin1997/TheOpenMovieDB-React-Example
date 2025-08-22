@@ -54,6 +54,7 @@ export const RangeSlider = ({
 								onPointerLeave={handleDragLeave}
 								min={min}
 								max={max}
+								aria-label={label}
 								step={step}
 								disabled={disabled}
 								minStepsBetweenThumbs={0}
@@ -69,7 +70,11 @@ export const RangeSlider = ({
 								{value?.map((thumbValue, i) => (
 									<Tooltip key={i}>
 										<TooltipTrigger asChild>
-											<SliderThumb className={thumbClassName} />
+											<SliderThumb
+												className={thumbClassName}
+												aria-label={`${label} slider thumb ${i === 0 ? 'minimum' : 'maximum'}`}
+												aria-valuetext={formatThumbTooltip(thumbValue)}
+											/>
 										</TooltipTrigger>
 										<TooltipContent
 											side='top'

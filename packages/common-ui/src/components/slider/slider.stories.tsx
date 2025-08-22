@@ -341,11 +341,16 @@ const DisabledStateExample = () => {
 					step={1}
 					disabled
 					className='h-6'
+					aria-label='Disabled slider'
 				>
 					<SliderTrack className='bg-gray-200 h-2 rounded-full'>
 						<SliderRange className='bg-gray-400 h-full rounded-full' />
 					</SliderTrack>
-					<SliderThumb className='w-5 h-5 bg-gray-400 border-2 border-white shadow-md cursor-not-allowed' />
+					<SliderThumb
+						className='w-5 h-5 bg-gray-400 border-2 border-white shadow-md cursor-not-allowed'
+						aria-label='Disabled slider thumb'
+						aria-valuetext={`${value[0]}%`}
+					/>
 				</SliderRoot>
 			</div>
 		</div>
@@ -375,11 +380,12 @@ const StepVariationsExample = () => {
 					max={100}
 					step={1}
 					className='h-6'
+					aria-label='Step 1 slider'
 				>
 					<SliderTrack>
 						<SliderRange />
 					</SliderTrack>
-					<SliderThumb />
+					<SliderThumb aria-label='Step 1 slider thumb' aria-valuetext={`${value1[0]}%`} />
 				</SliderRoot>
 				<p className='text-sm text-gray-600'>Value: {value1[0]}</p>
 			</div>
@@ -393,11 +399,12 @@ const StepVariationsExample = () => {
 					max={100}
 					step={5}
 					className='h-6'
+					aria-label='Step 5 slider'
 				>
 					<SliderTrack>
 						<SliderRange />
 					</SliderTrack>
-					<SliderThumb />
+					<SliderThumb aria-label='Step 5 slider thumb' aria-valuetext={`${value2[0]}%`} />
 				</SliderRoot>
 				<p className='text-sm text-gray-600'>Value: {value2[0]}</p>
 			</div>
@@ -411,11 +418,12 @@ const StepVariationsExample = () => {
 					max={100}
 					step={10}
 					className='h-6'
+					aria-label='Step 10 slider'
 				>
 					<SliderTrack>
 						<SliderRange />
 					</SliderTrack>
-					<SliderThumb />
+					<SliderThumb aria-label='Step 10 slider thumb' aria-valuetext={`${value3[0]}%`} />
 				</SliderRoot>
 				<p className='text-sm text-gray-600'>Value: {value3[0]}</p>
 			</div>
@@ -456,6 +464,7 @@ const IndividualComponentsExample = () => {
 										max={100}
 										step={1}
 										onValueChange={setValue}
+										aria-label='Custom slider'
 									>
 										<SliderTrack className='bg-gray-100 h-3 rounded-full border border-gray-200'>
 											<SliderRange className='bg-gradient-to-r from-emerald-500 to-teal-500 h-full rounded-full' />
@@ -464,7 +473,11 @@ const IndividualComponentsExample = () => {
 										{value?.map((thumbValue, i) => (
 											<Tooltip key={i}>
 												<TooltipTrigger asChild>
-													<SliderThumb className='w-6 h-6 bg-white border-3 border-emerald-500 shadow-lg hover:shadow-xl transition-shadow focus:ring-4 focus:ring-emerald-200' />
+													<SliderThumb
+														className='w-6 h-6 bg-white border-3 border-emerald-500 shadow-lg hover:shadow-xl transition-shadow focus:ring-4 focus:ring-emerald-200'
+														aria-label='Custom slider thumb'
+														aria-valuetext={`${thumbValue}%`}
+													/>
 												</TooltipTrigger>
 												<TooltipContent
 													side='top'
@@ -497,13 +510,19 @@ const IndividualComponentsExample = () => {
 						max={100}
 						step={1}
 						onValueChange={setValue}
+						aria-label='Minimal slider'
 					>
 						<SliderTrack className='bg-gray-200 h-1 rounded-full'>
 							<SliderRange className='bg-gray-800 h-full rounded-full' />
 						</SliderTrack>
 
 						{value?.map((thumbValue, i) => (
-							<SliderThumb key={i} className='w-3 h-3 bg-gray-800 border-0 shadow-sm' />
+							<SliderThumb
+								key={i}
+								className='w-3 h-3 bg-gray-800 border-0 shadow-sm'
+								aria-label='Minimal slider thumb'
+								aria-valuetext={`${thumbValue}%`}
+							/>
 						)) ?? null}
 					</SliderRoot>
 				</div>
@@ -526,6 +545,7 @@ const IndividualComponentsExample = () => {
 										max={100}
 										step={1}
 										onValueChange={setValue}
+										aria-label='Premium slider'
 									>
 										<SliderTrack className='bg-slate-100 h-4 rounded-full border border-slate-200 shadow-inner'>
 											<SliderRange className='bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 h-full rounded-full shadow-lg' />
@@ -534,7 +554,11 @@ const IndividualComponentsExample = () => {
 										{value?.map((thumbValue, i) => (
 											<Tooltip key={i}>
 												<TooltipTrigger asChild>
-													<SliderThumb className='w-8 h-8 bg-white border-4 border-purple-500 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-110 focus:ring-4 focus:ring-purple-200' />
+													<SliderThumb
+														className='w-8 h-8 bg-white border-4 border-purple-500 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-110 focus:ring-4 focus:ring-purple-200'
+														aria-label='Premium slider thumb'
+														aria-valuetext={`${thumbValue}%`}
+													/>
 												</TooltipTrigger>
 												<TooltipContent
 													side='top'

@@ -53,6 +53,7 @@ export const SliderInput = ({
 								onPointerLeave={handleDragLeave}
 								min={min}
 								max={max}
+								aria-label={label}
 								step={step}
 								disabled={disabled}
 								minStepsBetweenThumbs={0}
@@ -68,7 +69,11 @@ export const SliderInput = ({
 								{value.map((thumbValue, i) => (
 									<Tooltip key={i}>
 										<TooltipTrigger asChild>
-											<SliderThumb className={thumbClassName} />
+											<SliderThumb
+												className={thumbClassName}
+												aria-label={`${label} slider thumb`}
+												aria-valuetext={formatThumbTooltip(thumbValue)}
+											/>
 										</TooltipTrigger>
 										<TooltipContent
 											side='top'
