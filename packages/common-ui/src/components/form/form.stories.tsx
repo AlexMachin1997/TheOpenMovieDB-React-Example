@@ -16,19 +16,22 @@ import { Input } from '~/components/input/input';
 import { Textarea } from '~/components/textarea/textarea';
 import { Switch } from '~/components/switch/switch';
 import { Button } from '~/components/button/button';
-import { Checkbox, CheckboxLabel } from '~/components/checkbox/checkbox';
+import { Checkbox } from '~/components/checkbox/checkbox';
 import { Radio, RadioLabel } from '~/components/radio/radio';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { CheckboxGroup } from '~/components/checkbox-group/checkbox-group';
 import { RadioGroup } from '~/components/radio-group/radio-group';
 import {
+	SingleSelectListItem,
 	SingleSelectValue,
-	SingleSelectListItem
-} from '~/components/selects/single-select/single-select';
-import { MultiSelectValue } from '~/components/selects/multi-select/multi-select';
-import { SelectProvider } from '~/components/selects/core/components/select-provider';
-import { SelectTrigger } from '~/components/selects/core/components/select-trigger';
-import { SelectList } from '~/components/selects/core/components/select-list';
-import { SelectItemsRenderer } from '~/components/selects/core/components/select-items-renderer';
+	SelectProvider,
+	SelectTrigger,
+	SelectList,
+	MultiSelectValue,
+	SelectListItems,
+	SelectListItem
+} from '~/components/selects';
+
 import { SliderInput as SingleSlider } from '~/components/sliders/single-slider/single-slider';
 import { RangeSlider } from '~/components/sliders/range-slider/range-slider';
 import { SingleDatePicker } from '~/components/date-pickers/single-date-picker/single-date-picker';
@@ -51,7 +54,7 @@ type Story = StoryObj<typeof meta>;
 const formSchema = z.object({
 	// Basic inputs
 	name: z.string().min(2, 'Name must be at least 2 characters'),
-	email: z.string().email('Please enter a valid email'),
+	email: z.email('Please enter a valid email'),
 	description: z.string().min(10, 'Description must be at least 10 characters'),
 	notifications: z.boolean(),
 
@@ -131,9 +134,9 @@ const ComprehensiveForm = () => {
 			email: '',
 			description: '',
 			notifications: false,
-			framework: '',
-			gender: '',
-			experience: '',
+			framework: undefined,
+			gender: undefined,
+			experience: undefined,
 			skills: [],
 			interests: [],
 			rating: [5],
@@ -248,23 +251,17 @@ const ComprehensiveForm = () => {
 											options={frameworks}
 											values={field.value ? [field.value] : []}
 											onValuesChange={(values) => {
-												const selected = values[0];
-												field.onChange(selected || '');
+												field.onChange(values);
 											}}
+											mode='single'
 										>
 											<SelectTrigger>
 												<SingleSelectValue placeholder='Select your preferred framework' />
 											</SelectTrigger>
 											<SelectList>
-												<SelectItemsRenderer items={frameworks}>
-													{({ item }) => (
-														<SingleSelectListItem
-															key={item.id}
-															value={item.value}
-															disabled={item.disabled}
-														/>
-													)}
-												</SelectItemsRenderer>
+												<SelectListItems>
+													{({ item }) => <SingleSelectListItem value={item.value} />}
+												</SelectListItems>
 											</SelectList>
 										</SelectProvider>
 									</FormControl>
@@ -338,20 +335,15 @@ const ComprehensiveForm = () => {
 											onValuesChange={(values) => {
 												field.onChange(values);
 											}}
+											mode='multiple'
 										>
 											<SelectTrigger>
 												<MultiSelectValue placeholder='Select your programming skills' />
 											</SelectTrigger>
 											<SelectList>
-												<SelectItemsRenderer items={skills}>
-													{({ item }) => (
-														<SingleSelectListItem
-															key={item.id}
-															value={item.value}
-															disabled={item.disabled}
-														/>
-													)}
-												</SelectItemsRenderer>
+												<SelectListItems>
+													{({ item }) => <SingleSelectListItem value={item.value} />}
+												</SelectListItems>
 											</SelectList>
 										</SelectProvider>
 									</FormControl>
@@ -589,7 +581,7 @@ const BasicInputsExample = () => {
 const SelectsExample = () => {
 	const form = useForm({
 		defaultValues: {
-			framework: '',
+			framework: undefined,
 			skills: []
 		}
 	});
@@ -608,23 +600,17 @@ const SelectsExample = () => {
 									options={frameworks}
 									values={field.value ? [field.value] : []}
 									onValuesChange={(values) => {
-										const selected = values[0];
-										field.onChange(selected || '');
+										field.onChange(values);
 									}}
+									mode='single'
 								>
 									<SelectTrigger>
 										<SingleSelectValue placeholder='Select a framework' />
 									</SelectTrigger>
 									<SelectList>
-										<SelectItemsRenderer items={frameworks}>
-											{({ item }) => (
-												<SingleSelectListItem
-													key={item.id}
-													value={item.value}
-													disabled={item.disabled}
-												/>
-											)}
-										</SelectItemsRenderer>
+										<SelectListItems>
+											{({ item }) => <SingleSelectListItem value={item.value} />}
+										</SelectListItems>
 									</SelectList>
 								</SelectProvider>
 							</FormControl>
@@ -646,20 +632,15 @@ const SelectsExample = () => {
 									onValuesChange={(values) => {
 										field.onChange(values);
 									}}
+									mode='multiple'
 								>
 									<SelectTrigger>
 										<MultiSelectValue placeholder='Select skills' />
 									</SelectTrigger>
 									<SelectList>
-										<SelectItemsRenderer items={skills}>
-											{({ item }) => (
-												<SingleSelectListItem
-													key={item.id}
-													value={item.value}
-													disabled={item.disabled}
-												/>
-											)}
-										</SelectItemsRenderer>
+										<SelectListItems>
+											{({ item }) => <SelectListItem value={item.value} />}
+										</SelectListItems>
 									</SelectList>
 								</SelectProvider>
 							</FormControl>
@@ -672,11 +653,20 @@ const SelectsExample = () => {
 	);
 };
 
+// Form validation schema
+const slidersForm = z.object({
+	// Sliders
+	rating: z.tuple([z.number()]),
+	priceRange: z.tuple([z.number(), z.number()])
+});
+
+type SlidersFormData = z.infer<typeof slidersForm>;
+
 const SlidersExample = () => {
-	const form = useForm({
+	const form = useForm<SlidersFormData>({
 		defaultValues: {
-			singleValue: [50],
-			rangeValue: [20, 80]
+			rating: [50],
+			priceRange: [20, 80]
 		}
 	});
 
@@ -685,7 +675,7 @@ const SlidersExample = () => {
 			<form className='space-y-6 w-full max-w-md'>
 				<FormField
 					control={form.control}
-					name='singleValue'
+					name='rating'
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Single Slider</FormLabel>
@@ -710,7 +700,7 @@ const SlidersExample = () => {
 
 				<FormField
 					control={form.control}
-					name='rangeValue'
+					name='priceRange'
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Range Slider</FormLabel>
@@ -788,6 +778,155 @@ const DatePickersExample = () => {
 	);
 };
 
+const IndividualCheckboxExample = () => {
+	const form = useForm({
+		defaultValues: {
+			terms: false,
+			newsletter: false,
+			marketing: false
+		}
+	});
+
+	return (
+		<Form {...form}>
+			<form className='space-y-6 w-full max-w-md'>
+				<FormField
+					control={form.control}
+					name='terms'
+					render={({ field }) => (
+						<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+							<FormControl>
+								<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+							</FormControl>
+							<div className='space-y-1 leading-none'>
+								<FormLabel>I agree to the terms and conditions</FormLabel>
+								<FormDescription>
+									You must agree to our terms and conditions to continue.
+								</FormDescription>
+							</div>
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name='newsletter'
+					render={({ field }) => (
+						<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+							<FormControl>
+								<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+							</FormControl>
+							<div className='space-y-1 leading-none'>
+								<FormLabel>Subscribe to newsletter</FormLabel>
+								<FormDescription>
+									Receive updates about new features and announcements.
+								</FormDescription>
+							</div>
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name='marketing'
+					render={({ field }) => (
+						<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+							<FormControl>
+								<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+							</FormControl>
+							<div className='space-y-1 leading-none'>
+								<FormLabel>Allow marketing communications</FormLabel>
+								<FormDescription>
+									Receive promotional emails and offers from our partners.
+								</FormDescription>
+							</div>
+						</FormItem>
+					)}
+				/>
+			</form>
+		</Form>
+	);
+};
+
+const IndividualRadioExample = () => {
+	const form = useForm({
+		defaultValues: {
+			preference: undefined,
+			priority: undefined
+		}
+	});
+
+	return (
+		<Form {...form}>
+			<form className='space-y-6 w-full max-w-md'>
+				<FormField
+					control={form.control}
+					name='preference'
+					render={({ field }) => (
+						<FormItem className='space-y-3'>
+							<FormLabel>Communication Preference</FormLabel>
+							<FormControl>
+								<RadioGroupPrimitive.Root
+									value={field.value}
+									onValueChange={field.onChange}
+									className='space-y-2'
+								>
+									<div className='flex items-center space-x-2'>
+										<Radio value='email' id='email' />
+										<RadioLabel htmlFor='email'>Email</RadioLabel>
+									</div>
+									<div className='flex items-center space-x-2'>
+										<Radio value='phone' id='phone' />
+										<RadioLabel htmlFor='phone'>Phone</RadioLabel>
+									</div>
+									<div className='flex items-center space-x-2'>
+										<Radio value='sms' id='sms' />
+										<RadioLabel htmlFor='sms'>SMS</RadioLabel>
+									</div>
+								</RadioGroupPrimitive.Root>
+							</FormControl>
+							<FormDescription>Choose your preferred method of communication.</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name='priority'
+					render={({ field }) => (
+						<FormItem className='space-y-3'>
+							<FormLabel>Support Priority</FormLabel>
+							<FormControl>
+								<RadioGroupPrimitive.Root
+									value={field.value}
+									onValueChange={field.onChange}
+									className='space-y-2'
+								>
+									<div className='flex items-center space-x-2'>
+										<Radio value='low' id='low' />
+										<RadioLabel htmlFor='low'>Low Priority</RadioLabel>
+									</div>
+									<div className='flex items-center space-x-2'>
+										<Radio value='medium' id='medium' />
+										<RadioLabel htmlFor='medium'>Medium Priority</RadioLabel>
+									</div>
+									<div className='flex items-center space-x-2'>
+										<Radio value='high' id='high' />
+										<RadioLabel htmlFor='high'>High Priority</RadioLabel>
+									</div>
+								</RadioGroupPrimitive.Root>
+							</FormControl>
+							<FormDescription>Select the priority level for your support request.</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+			</form>
+		</Form>
+	);
+};
+
 // Stories
 export const ComprehensiveFormExample: Story = {
 	render: () => <ComprehensiveForm />
@@ -807,4 +946,12 @@ export const Sliders: Story = {
 
 export const DatePickers: Story = {
 	render: () => <DatePickersExample />
+};
+
+export const IndividualCheckboxes: Story = {
+	render: () => <IndividualCheckboxExample />
+};
+
+export const IndividualRadios: Story = {
+	render: () => <IndividualRadioExample />
 };

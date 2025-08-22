@@ -17,13 +17,15 @@ interface SelectProviderProps {
 	options?: Option[];
 	/** Callback fired when selected values change */
 	onValuesChange?: (values: string[]) => void;
+	mode?: 'single' | 'multiple';
 }
 
 export const SelectProvider = ({
 	children,
 	values = [],
 	options = [],
-	onValuesChange
+	onValuesChange,
+	mode = 'single'
 }: SelectProviderProps) => {
 	const [open, setOpen] = React.useState(false);
 	const [searchValue, setSearchValue] = React.useState('');
@@ -32,7 +34,6 @@ export const SelectProvider = ({
 		return new Map(options.map((option) => [option.value, option.label]));
 	}, [options]);
 
-	// Filter options based on search value
 	const filteredOptions = React.useMemo(() => {
 		if (!searchValue.trim()) return options;
 
@@ -40,17 +41,27 @@ export const SelectProvider = ({
 		return options.filter((option) => option.label.toLowerCase().includes(searchLower));
 	}, [options, searchValue]);
 
-	function toggleValue(value: string) {
-		const newValues = new Set(values);
+	const toggleValue = (value: string) => {
+		const currentValues = new Set(values);
 
-		if (newValues.has(value)) {
-			newValues.delete(value);
-		} else {
-			newValues.add(value);
+		// If the mode is single, clear the current values and add the new value
+		if (mode === 'single') {
+			currentValues.clear();
+			currentValues.add(value);
 		}
 
-		onValuesChange?.([...newValues]);
-	}
+		// If the mode is multiple and the value is already in the current values, delete it
+		if (mode === 'multiple' && currentValues.has(value)) {
+			currentValues.delete(value);
+		}
+
+		// If the mode is multiple and the value is not in the current values, add it
+		if (mode === 'multiple' && !currentValues.has(value)) {
+			currentValues.add(value);
+		}
+
+		onValuesChange?.(Array.from(currentValues));
+	};
 
 	return (
 		<SelectContext.Provider

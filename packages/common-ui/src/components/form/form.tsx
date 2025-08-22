@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { forwardRef } from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import {
@@ -94,52 +95,57 @@ const FormLabel = ({ className, ...props }: React.ComponentProps<typeof LabelPri
 	);
 };
 
-const FormControl = ({ ...props }: React.ComponentProps<typeof Slot>) => {
-	const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
+const FormControl = forwardRef<HTMLDivElement, React.ComponentProps<typeof Slot>>(
+	({ ...props }, ref) => {
+		const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
-	return (
-		<Slot
-			data-slot='form-control'
-			id={formItemId}
-			aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
-			aria-invalid={!!error}
-			{...props}
-		/>
-	);
-};
-
-const FormDescription = ({ className, ...props }: React.ComponentProps<'p'>) => {
-	const { formDescriptionId } = useFormField();
-
-	return (
-		<p
-			data-slot='form-description'
-			id={formDescriptionId}
-			className={cn('text-muted-foreground text-sm', className)}
-			{...props}
-		/>
-	);
-};
-
-const FormMessage = ({ className, ...props }: React.ComponentProps<'p'>) => {
-	const { error, formMessageId } = useFormField();
-	const body = error ? String(error?.message ?? '') : props.children;
-
-	if (!body) {
-		return null;
+		return (
+			<Slot
+				data-slot='form-control'
+				id={formItemId}
+				aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
+				aria-invalid={!!error}
+				ref={ref}
+				{...props}
+			/>
+		);
 	}
+);
 
-	return (
-		<p
-			data-slot='form-message'
-			id={formMessageId}
-			className={cn('text-destructive text-sm', className)}
-			{...props}
-		>
-			{body}
-		</p>
-	);
-};
+const FormDescription = React.forwardRef<HTMLParagraphElement, React.ComponentProps<'p'>>(
+	({ className, ...props }, ref) => {
+		const { formDescriptionId } = useFormField();
+
+		return (
+			<p
+				data-slot='form-description'
+				id={formDescriptionId}
+				ref={ref}
+				className={cn('text-muted-foreground text-sm', className)}
+				{...props}
+			/>
+		);
+	}
+);
+
+const FormMessage = forwardRef<HTMLParagraphElement, React.ComponentProps<'p'>>(
+	({ className, ...props }, ref) => {
+		const { error, formMessageId } = useFormField();
+		const body = error ? String(error?.message ?? '') : props.children;
+
+		return (
+			<p
+				data-slot='form-message'
+				id={formMessageId}
+				className={cn('text-destructive text-sm', className)}
+				ref={ref}
+				{...props}
+			>
+				{body}
+			</p>
+		);
+	}
+);
 
 export {
 	useFormField,
