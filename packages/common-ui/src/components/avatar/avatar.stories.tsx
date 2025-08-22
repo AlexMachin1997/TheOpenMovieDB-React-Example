@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UserIcon, BotIcon, HeartIcon, SettingsIcon } from 'lucide-react';
 
 import { Avatar, AvatarImage, AvatarFallback } from './avatar';
@@ -9,7 +9,6 @@ const meta: Meta<typeof Avatar> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		className: {
 			control: 'text'

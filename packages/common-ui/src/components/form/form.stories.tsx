@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -43,8 +43,7 @@ const meta: Meta<typeof FormProvider> = {
 	component: FormProvider,
 	parameters: {
 		layout: 'centered'
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

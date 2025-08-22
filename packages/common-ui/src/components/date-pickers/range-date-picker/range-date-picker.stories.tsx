@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { fr, es, de } from 'date-fns/locale';
@@ -13,8 +13,7 @@ const meta = {
 		viewport: {
 			defaultViewport: 'desktop'
 		}
-	},
-	tags: ['autodocs']
+	}
 } satisfies Meta<typeof DateRangePicker>;
 
 export default meta;

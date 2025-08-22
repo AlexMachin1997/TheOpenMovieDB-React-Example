@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
 	Accordion,
 	AccordionContent,
@@ -16,8 +16,7 @@ const meta: Meta<typeof Accordion> = {
 				component: 'A vertically collapsible accordion component built with Radix UI primitives.'
 			}
 		}
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

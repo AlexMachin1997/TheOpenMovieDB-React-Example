@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { CalendarIcon, InfoIcon, SettingsIcon, UserIcon } from 'lucide-react';
 import { Button } from '~/components/button/button';
@@ -19,7 +19,6 @@ const meta: Meta<typeof Popover> = {
 			}
 		}
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		defaultOpen: {
 			control: 'boolean',

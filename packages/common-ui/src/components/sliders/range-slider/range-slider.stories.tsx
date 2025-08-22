@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
 import { RangeSlider } from '~/components/sliders/range-slider/range-slider';
 import { RangeValue } from '~/components/sliders/range-slider/range-slider-types';
@@ -14,8 +14,7 @@ const meta: Meta = {
 					'A flexible slider component that supports both single and dual handle modes, built with Radix UI. Features tooltips for both individual thumbs and drag operations with customizable label formatting.'
 			}
 		}
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

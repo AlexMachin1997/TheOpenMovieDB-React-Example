@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '~/components/button/button';
 import { Input } from '~/components/input/input';
 import { Label } from '~/components/label/label';
@@ -22,7 +22,6 @@ const meta: Meta<typeof Dialog> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		open: {
 			control: 'boolean',

@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-vite';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { Calendar } from '~/components/calendar/calendar';
@@ -9,7 +9,6 @@ const meta: Meta<typeof Calendar> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		mode: {
 			control: 'select',

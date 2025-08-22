@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RadioGroup } from './radio-group';
 import type { Option } from '~/types/Option';
 
@@ -8,8 +8,7 @@ const meta: Meta<typeof RadioGroup> = {
 	component: RadioGroup,
 	parameters: {
 		layout: 'centered'
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

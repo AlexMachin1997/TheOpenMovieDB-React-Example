@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Checkbox, CheckboxLabel } from './checkbox';
 
 const meta: Meta<typeof Checkbox> = {
@@ -7,8 +7,7 @@ const meta: Meta<typeof Checkbox> = {
 	component: Checkbox,
 	parameters: {
 		layout: 'centered'
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

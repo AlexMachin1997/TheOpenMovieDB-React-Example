@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
 import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/slider/slider';
 import { Label } from '~/components/label/label';
@@ -19,8 +19,7 @@ const meta: Meta = {
 					'Individual slider components that can be composed together for maximum customization. Use these when you need full control over styling and behavior.'
 			}
 		}
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

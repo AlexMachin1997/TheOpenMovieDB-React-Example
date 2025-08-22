@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { fr, es, de, ja } from 'date-fns/locale';
 
@@ -7,8 +7,7 @@ import { getDateFormatExamples, type DateFormatKey } from '~/utils/dates';
 
 const meta: Meta<typeof SingleDatePicker> = {
 	title: 'Components/Date pickers/Single date picker',
-	component: SingleDatePicker,
-	tags: ['autodocs']
+	component: SingleDatePicker
 };
 
 export default meta;

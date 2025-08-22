@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Alert, AlertDescription, AlertTitle } from './alert';
 import { InfoIcon, AlertTriangleIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
 
@@ -8,7 +8,6 @@ const meta: Meta<typeof Alert> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		variant: {
 			control: { type: 'select' },

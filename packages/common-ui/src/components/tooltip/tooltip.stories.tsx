@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
 	Tooltip,
 	TooltipContent,
@@ -13,7 +13,6 @@ const meta: Meta<typeof Tooltip> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		delayDuration: {
 			control: { type: 'number', min: 0, max: 5000, step: 100 }

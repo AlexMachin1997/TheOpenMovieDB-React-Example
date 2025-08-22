@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CalendarIcon, GitForkIcon, InfoIcon, StarIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/avatar/avatar';
 import { Badge } from '~/components/badge/badge';
@@ -17,8 +17,7 @@ const meta: Meta = {
 					'A hover card component that displays rich content when hovering over a trigger element. Built on Radix UI primitives with automatic positioning and collision detection.'
 			}
 		}
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

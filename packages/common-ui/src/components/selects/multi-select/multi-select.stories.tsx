@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import {
 	SelectProvider,
@@ -27,9 +27,7 @@ type MultiSelectStorybookTypes = {
 
 const meta: Meta<typeof SelectProvider> = {
 	title: 'Components/Selects/MultiSelect',
-	component: SelectProvider,
-
-	tags: ['autodocs']
+	component: SelectProvider
 };
 
 export default meta;

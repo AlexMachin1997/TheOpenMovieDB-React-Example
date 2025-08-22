@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Input } from '~/components/input/input';
 import { Label } from '~/components/label/label';
@@ -9,7 +9,6 @@ const meta: Meta<typeof Input> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		type: {
 			control: 'select',

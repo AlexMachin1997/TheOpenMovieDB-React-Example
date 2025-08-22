@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Switch } from '~/components/switch/switch';
 
@@ -8,7 +8,6 @@ const meta: Meta<typeof Switch> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		checked: {
 			control: 'boolean'

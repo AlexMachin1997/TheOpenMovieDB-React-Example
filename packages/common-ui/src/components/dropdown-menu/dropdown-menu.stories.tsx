@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -35,8 +35,7 @@ const meta: Meta<typeof DropdownMenu> = {
 	component: DropdownMenu,
 	parameters: {
 		layout: 'centered'
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Radio, RadioLabel } from './radio';
 
 const meta: Meta<typeof Radio> = {
@@ -8,8 +8,7 @@ const meta: Meta<typeof Radio> = {
 	component: Radio,
 	parameters: {
 		layout: 'centered'
-	},
-	tags: ['autodocs']
+	}
 };
 
 export default meta;

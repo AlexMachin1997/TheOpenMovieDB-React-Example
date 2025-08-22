@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Progress } from './progress';
 
 const meta: Meta<typeof Progress> = {
@@ -7,7 +7,6 @@ const meta: Meta<typeof Progress> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		value: {
 			control: { type: 'range', min: 0, max: 100, step: 1 },

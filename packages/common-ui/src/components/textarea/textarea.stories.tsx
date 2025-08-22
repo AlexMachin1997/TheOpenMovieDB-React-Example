@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Textarea } from '~/components/textarea/textarea';
 import { Label } from '~/components/label/label';
@@ -9,7 +9,6 @@ const meta: Meta<typeof Textarea> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		placeholder: {
 			control: 'text'

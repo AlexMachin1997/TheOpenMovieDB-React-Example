@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Skeleton } from '~/components/skeleton/skeleton';
 import { Avatar, AvatarFallback } from '~/components/avatar/avatar';
 
@@ -8,7 +8,6 @@ const meta: Meta<typeof Skeleton> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		className: {
 			control: 'text'

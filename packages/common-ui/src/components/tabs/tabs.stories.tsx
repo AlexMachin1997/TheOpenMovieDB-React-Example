@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '~/components/tabs/tabs';
 
@@ -8,7 +8,6 @@ const meta: Meta<typeof Tabs> = {
 	parameters: {
 		layout: 'centered'
 	},
-	tags: ['autodocs'],
 	argTypes: {
 		defaultValue: {
 			control: 'text'
