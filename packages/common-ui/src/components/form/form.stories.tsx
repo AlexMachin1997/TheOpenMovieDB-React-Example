@@ -4,14 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import {
-	Form,
+	FormProvider,
 	FormControl,
 	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage
-} from '~/components/form/form';
+} from '~/components/form';
 import { Input } from '~/components/input/input';
 import { Textarea } from '~/components/textarea/textarea';
 import { Switch } from '~/components/switch/switch';
@@ -38,9 +38,9 @@ import { SingleDatePicker } from '~/components/date-pickers/single-date-picker/s
 import { DateRangePicker } from '~/components/date-pickers/range-date-picker/range-date-picker';
 import { Option } from '~/types/Option';
 
-const meta: Meta<typeof Form> = {
+const meta: Meta<typeof FormProvider> = {
 	title: 'Components/Form',
-	component: Form,
+	component: FormProvider,
 	parameters: {
 		layout: 'centered'
 	},
@@ -155,7 +155,7 @@ const ComprehensiveForm = () => {
 	};
 
 	return (
-		<Form {...form}>
+		<FormProvider {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full max-w-2xl'>
 				<div className='space-y-6'>
 					{/* Basic Inputs Section */}
@@ -498,7 +498,7 @@ const ComprehensiveForm = () => {
 					Submit Application
 				</Button>
 			</form>
-		</Form>
+		</FormProvider>
 	);
 };
 
@@ -514,7 +514,7 @@ const BasicInputsExample = () => {
 	});
 
 	return (
-		<Form {...form}>
+		<FormProvider {...form}>
 			<form className='space-y-6 w-full max-w-md'>
 				<FormField
 					control={form.control}
@@ -574,7 +574,7 @@ const BasicInputsExample = () => {
 					)}
 				/>
 			</form>
-		</Form>
+		</FormProvider>
 	);
 };
 
@@ -587,7 +587,7 @@ const SelectsExample = () => {
 	});
 
 	return (
-		<Form {...form}>
+		<FormProvider {...form}>
 			<form className='space-y-6 w-full max-w-md'>
 				<FormField
 					control={form.control}
@@ -649,7 +649,7 @@ const SelectsExample = () => {
 					)}
 				/>
 			</form>
-		</Form>
+		</FormProvider>
 	);
 };
 
@@ -671,7 +671,7 @@ const SlidersExample = () => {
 	});
 
 	return (
-		<Form {...form}>
+		<FormProvider {...form}>
 			<form className='space-y-6 w-full max-w-md'>
 				<FormField
 					control={form.control}
@@ -723,7 +723,7 @@ const SlidersExample = () => {
 					)}
 				/>
 			</form>
-		</Form>
+		</FormProvider>
 	);
 };
 
@@ -736,7 +736,7 @@ const DatePickersExample = () => {
 	});
 
 	return (
-		<Form {...form}>
+		<FormProvider {...form}>
 			<form className='space-y-6 w-full max-w-md'>
 				<FormField
 					control={form.control}
@@ -774,7 +774,7 @@ const DatePickersExample = () => {
 					)}
 				/>
 			</form>
-		</Form>
+		</FormProvider>
 	);
 };
 
@@ -788,7 +788,7 @@ const IndividualCheckboxExample = () => {
 	});
 
 	return (
-		<Form {...form}>
+		<FormProvider {...form}>
 			<form className='space-y-6 w-full max-w-md'>
 				<FormField
 					control={form.control}
@@ -844,7 +844,7 @@ const IndividualCheckboxExample = () => {
 					)}
 				/>
 			</form>
-		</Form>
+		</FormProvider>
 	);
 };
 
@@ -857,7 +857,7 @@ const IndividualRadioExample = () => {
 	});
 
 	return (
-		<Form {...form}>
+		<FormProvider {...form}>
 			<form className='space-y-6 w-full max-w-md'>
 				<FormField
 					control={form.control}
@@ -923,7 +923,7 @@ const IndividualRadioExample = () => {
 					)}
 				/>
 			</form>
-		</Form>
+		</FormProvider>
 	);
 };
 
