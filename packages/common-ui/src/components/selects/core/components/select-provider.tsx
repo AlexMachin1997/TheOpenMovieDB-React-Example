@@ -3,64 +3,67 @@ import { Popover } from '~/components/popover/popover';
 import { SelectContext } from '~/components/selects/core/contexts/select-context';
 import { Option } from '~/types/Option';
 
+interface SingleSelectProviderProps {
+	mode: 'single';
+	children: React.ReactNode;
+	values?: string[];
+	options?: Option[];
+	onValuesChange?: (values: string) => void;
+}
+
+interface MultiSelectProviderProps {
+	mode: 'multiple';
+	children: React.ReactNode;
+	values?: string[];
+	options?: Option[];
+	onValuesChange?: (values: string[]) => void;
+}
+
 /**
  * Props for the SelectProvider component
  *
  * @interface SelectProviderProps
  */
-interface SelectProviderProps {
-	/** Child components that will have access to the select context */
-	children: React.ReactNode;
-	/** Array of currently selected values */
-	values?: string[];
-	/** Array of available options to select from */
-	options?: Option[];
-	/** Callback fired when selected values change */
-	onValuesChange?: (values: string[]) => void;
-	mode?: 'single' | 'multiple';
-}
+type SelectProviderProps = SingleSelectProviderProps | MultiSelectProviderProps;
 
-export const SelectProvider = ({
-	children,
-	values = [],
-	options = [],
-	onValuesChange,
-	mode = 'single'
-}: SelectProviderProps) => {
+export const SelectProvider = (props: SelectProviderProps) => {
 	const [open, setOpen] = React.useState(false);
 	const [searchValue, setSearchValue] = React.useState('');
 
 	const optionsMap = React.useMemo(() => {
-		return new Map(options.map((option) => [option.value, option.label]));
-	}, [options]);
+		return new Map(props.options?.map((option) => [option.value, option.label]));
+	}, [props.options]);
 
 	const filteredOptions = React.useMemo(() => {
-		if (!searchValue.trim()) return options;
+		if (!searchValue.trim()) return props.options;
 
 		const searchLower = searchValue.toLowerCase();
-		return options.filter((option) => option.label.toLowerCase().includes(searchLower));
-	}, [options, searchValue]);
+		return props.options?.filter((option) => option.label.toLowerCase().includes(searchLower));
+	}, [props.options, searchValue]);
 
 	const toggleValue = (value: string) => {
-		const currentValues = new Set(values);
+		const currentValues = new Set(props.values);
 
 		// If the mode is single, clear the current values and add the new value
-		if (mode === 'single') {
+		if (props.mode === 'single') {
 			currentValues.clear();
 			currentValues.add(value);
+			props.onValuesChange?.(value);
 		}
 
-		// If the mode is multiple and the value is already in the current values, delete it
-		if (mode === 'multiple' && currentValues.has(value)) {
-			currentValues.delete(value);
-		}
+		if (props.mode === 'multiple') {
+			// If the mode is multiple and the value is already in the current values, delete it
+			if (currentValues.has(value)) {
+				currentValues.delete(value);
+			}
 
-		// If the mode is multiple and the value is not in the current values, add it
-		if (mode === 'multiple' && !currentValues.has(value)) {
-			currentValues.add(value);
-		}
+			// If the mode is multiple and the value is not in the current values, add it
+			if (!currentValues.has(value)) {
+				currentValues.add(value);
+			}
 
-		onValuesChange?.(Array.from(currentValues));
+			props.onValuesChange?.(Array.from(currentValues));
+		}
 	};
 
 	return (
@@ -68,16 +71,16 @@ export const SelectProvider = ({
 			value={{
 				open,
 				setOpen,
-				selectedValues: new Set(values),
+				selectedValues: new Set(props.values),
 				toggleValue,
 				optionsMap,
 				searchValue,
 				setSearchValue,
-				filteredOptions
+				filteredOptions: filteredOptions ?? []
 			}}
 		>
 			<Popover open={open} onOpenChange={setOpen}>
-				{children}
+				{props.children}
 			</Popover>
 		</SelectContext.Provider>
 	);

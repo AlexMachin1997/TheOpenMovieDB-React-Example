@@ -7,14 +7,12 @@ import {
 	SelectList,
 	SelectListItems,
 	SelectGroupedListItems,
-	SelectVirtualizedList,
-	SelectListItem
+	SelectVirtualizedList
 } from '~/components/selects/core/components';
 import {
 	SingleSelectValue,
 	SingleSelectListItem
 } from '~/components/selects/single-select/single-select';
-import { MultiSelectValue } from '~/components/selects/multi-select/multi-select';
 import { Label } from '~/components/label/label';
 import { Option } from '~/types/Option';
 
@@ -66,11 +64,10 @@ const programmingLanguages: Option[] = [
 const BasicSingleSelectTemplate = (args: SingleSelectStorybookTypes) => {
 	const [selectedValue, setSelectedValue] = React.useState<string>(args?.value || '');
 
-	const handleValueChange = (values: string[]) => {
-		console.log('values', values);
-		const newValue = values[0] || '';
-		setSelectedValue(newValue);
-		args?.onValueChange?.(newValue);
+	const handleValueChange = (value: string) => {
+		setSelectedValue(value);
+
+		args?.onValueChange?.(value);
 	};
 
 	return (
@@ -146,11 +143,11 @@ export const WithoutSearch: StoryObj<SingleSelectStorybookTypes> = {
 	render: (args) => <BasicSingleSelectTemplate {...args} />
 };
 
-const WithGroupsTemplate = () => {
+const WithGroupsTemplate = (args: SingleSelectStorybookTypes) => {
 	const [selectedValue, setSelectedValue] = React.useState<string>('');
 
-	const handleValueChange = (values: string[]) => {
-		setSelectedValue(values[0] || '');
+	const handleValueChange = (value: string) => {
+		setSelectedValue(value);
 	};
 
 	// Grouped options for single select
@@ -209,15 +206,15 @@ const WithGroupsTemplate = () => {
 	);
 };
 
-export const WithGroups: Story = {
-	render: () => <WithGroupsTemplate />
+export const WithGroups: StoryObj<SingleSelectStorybookTypes> = {
+	render: (args) => <WithGroupsTemplate {...args} />
 };
 
 const LargeListVirtualizedTemplate = () => {
 	const [selectedValue, setSelectedValue] = React.useState<string>('');
 
-	const handleValueChange = (values: string[]) => {
-		setSelectedValue(values[0] || '');
+	const handleValueChange = (value: string) => {
+		setSelectedValue(value);
 	};
 
 	const options: Option[] = React.useMemo(() => {
@@ -255,12 +252,12 @@ const WithFormTemplate = () => {
 	const [selectedFramework, setSelectedFramework] = React.useState<string>('');
 	const [selectedLanguage, setSelectedLanguage] = React.useState<string>('');
 
-	const handleFrameworkChange = (values: string[]) => {
-		setSelectedFramework(values[0] || '');
+	const handleFrameworkChange = (value: string) => {
+		setSelectedFramework(value);
 	};
 
-	const handleLanguageChange = (values: string[]) => {
-		setSelectedLanguage(values[0] || '');
+	const handleLanguageChange = (value: string) => {
+		setSelectedLanguage(value);
 	};
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -348,8 +345,8 @@ export const WithForm: Story = {
 const CustomStylingTemplate = (args: SingleSelectStorybookTypes) => {
 	const [selectedValue, setSelectedValue] = React.useState<string>('');
 
-	const handleValueChange = (values: string[]) => {
-		setSelectedValue(values[0] || '');
+	const handleValueChange = (value: string) => {
+		setSelectedValue(value);
 	};
 
 	return (
@@ -371,7 +368,7 @@ const CustomStylingTemplate = (args: SingleSelectStorybookTypes) => {
 	);
 };
 
-export const CustomStyling: Story = {
+export const CustomStyling: StoryObj<SingleSelectStorybookTypes> = {
 	render: (args) => <CustomStylingTemplate {...args} />,
 	args: {
 		options: frameworks
@@ -400,12 +397,12 @@ const ClearButtonDemoTemplate = () => {
 	const [withClearValue, setWithClearValue] = React.useState<string>('react');
 	const [withoutClearValue, setWithoutClearValue] = React.useState<string>('vue');
 
-	const handleWithClearChange = (values: string[]) => {
-		setWithClearValue(values[0] || '');
+	const handleWithClearChange = (value: string) => {
+		setWithClearValue(value);
 	};
 
-	const handleWithoutClearChange = (values: string[]) => {
-		setWithoutClearValue(values[0] || '');
+	const handleWithoutClearChange = (value: string) => {
+		setWithoutClearValue(value);
 	};
 
 	return (
@@ -416,6 +413,7 @@ const ClearButtonDemoTemplate = () => {
 					values={withClearValue ? [withClearValue] : []}
 					onValuesChange={handleWithClearChange}
 					options={frameworks.slice(0, 6)}
+					mode='single'
 				>
 					<SelectTrigger className='w-full max-w-[400px]'>
 						<SingleSelectValue placeholder='Select a framework...' showClearButton={true} />
