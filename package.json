@@ -1,22 +1,28 @@
 {
-  "name": "the-open-movie-database",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "prettier": "turbo run prettier",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types",
-    "test": "turbo run test",
-    "validate": "turbo run validate",
-    "type-check": "turbo run ts-validate"
-  },
-  "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
-    "turbo": "^2.5.6"
-  },
-  "packageManager": "pnpm@9.0.0",
-  "engines": {
-    "node": ">=22"
-  }
+	"name": "the-open-movie-database",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"lint": "turbo run lint",
+		"prettier": "turbo run prettier",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"check-types": "turbo run check-types",
+		"test": "turbo run test",
+		"validate": "turbo run validate",
+		"type-check": "turbo run ts-validate"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"turbo": "^2.5.6"
+	},
+	"packageManager": "pnpm@9.0.0",
+	"engines": {
+		"node": ">=22"
+	},
+	"pnpm": {
+		"overrides": {
+			"react": "^19.1.1",
+			"react-dom": "^19.1.1"
+		}
+	}
 }
