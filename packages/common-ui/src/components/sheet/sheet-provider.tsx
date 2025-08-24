@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 
 type SheetProps = React.ComponentProps<typeof SheetPrimitive.Root> & {
-	ref?: React.RefObject<SheetRef>;
+	ref?: React.RefObject<SheetRef | undefined>;
 };
 
 export interface SheetRef {

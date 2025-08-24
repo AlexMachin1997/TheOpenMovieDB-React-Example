@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
-import { SliderInput } from '~/components/sliders/single-slider/single-slider';
+import { SingleSlider } from '~/components/sliders/single-slider/single-slider';
 import { SingleValue } from '~/components/sliders/single-slider/single-slider-types';
 import { cn } from '~/utils/className';
 
@@ -31,7 +31,7 @@ const SingleHandleExample = () => {
 	const formatSliderTooltip = React.useCallback((value: SingleValue) => `Volume: ${value[0]}%`, []);
 
 	return (
-		<SliderInput
+		<SingleSlider
 			label='Single Handle'
 			name='single-handle'
 			id='single-handle'
@@ -61,7 +61,7 @@ const VolumeControlExample = () => {
 	const formatSliderTooltip = React.useCallback((value: SingleValue) => `Volume: ${value[0]}%`, []);
 
 	return (
-		<SliderInput
+		<SingleSlider
 			label='Volume Control'
 			name='volume-control'
 			id='volume-control'
@@ -92,7 +92,7 @@ const DisabledExample = () => {
 	const formatSliderTooltip = React.useCallback((value: SingleValue) => `Volume: ${value[0]}%`, []);
 
 	return (
-		<SliderInput
+		<SingleSlider
 			label='Disabled Slider'
 			name='disabled-slider'
 			id='disabled-slider'
@@ -127,7 +127,7 @@ const DecimalFormattingExample = () => {
 	);
 
 	return (
-		<SliderInput
+		<SingleSlider
 			label='Rating Range'
 			name='rating-range'
 			id='rating-range'
@@ -185,7 +185,7 @@ const FormDataAPIExample = () => {
 			</p>
 
 			<form onSubmit={handleSubmit} className='space-y-4'>
-				<SliderInput
+				<SingleSlider
 					label='Volume Control'
 					name='volume'
 					id='volume-slider'
@@ -255,7 +255,7 @@ const CustomFormattingExample = () => {
 	const formatThumbTooltip = React.useCallback((value: number) => formatSize(value), [formatSize]);
 
 	return (
-		<SliderInput
+		<SingleSlider
 			label='Size'
 			name='size'
 			id='size'

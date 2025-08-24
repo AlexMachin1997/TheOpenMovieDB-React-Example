@@ -32,7 +32,7 @@ import {
 	SelectListItem
 } from '~/components/selects';
 
-import { SliderInput as SingleSlider } from '~/components/sliders/single-slider/single-slider';
+import { SingleSlider } from '~/components/sliders/single-slider/single-slider';
 import { RangeSlider } from '~/components/sliders/range-slider/range-slider';
 import { SingleDatePicker } from '~/components/date-pickers/single-date-picker/single-date-picker';
 import { DateRangePicker } from '~/components/date-pickers/range-date-picker/range-date-picker';

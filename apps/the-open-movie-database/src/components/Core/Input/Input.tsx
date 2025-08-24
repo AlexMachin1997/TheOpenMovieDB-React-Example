@@ -1,5 +1,5 @@
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	label?: string | React.ReactNode | JSX.Element;
+	label?: string | React.ReactNode;
 	labelClassName?: string;
 	containerClassName?: string;
 }

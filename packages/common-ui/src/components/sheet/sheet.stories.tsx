@@ -131,7 +131,7 @@ export const Controlled: Story = {
 };
 
 const RefBasedSheet = () => {
-	const sheetRef = React.useRef<SheetRef>(null);
+	const sheetRef = React.useRef<SheetRef>(undefined);
 
 	return (
 		<div className='flex flex-col gap-4'>

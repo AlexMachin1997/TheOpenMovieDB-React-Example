@@ -3,7 +3,12 @@ import { MEDIA_TYPE } from '~/types/RoutingTypes';
 export type BaseCardProps = {
 	title: string;
 	subtitle?: string;
-	renderLink?: null | ((renderLinkArgs: { content: React.ReactNode }) => JSX.Element);
+	renderLink?:
+		| null
+		| ((renderLinkArgs: {
+				content: React.ReactNode;
+				className?: string;
+		  }) => React.ReactElement<{ className?: string }>);
 	image: string;
 	children: React.ReactNode;
 	imageHeight?: string;
