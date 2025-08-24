@@ -11,7 +11,7 @@ export * from '~/components/progress/progress';
 export * from '~/components/radio/radio';
 export * from '~/components/radio-group/radio-group';
 export * from '~/components/sliders/single-slider/single-slider';
-export * from '~/components/slider/slider';
+export * from '~/components/slider';
 export * from '~/components/switch/switch';
 export * from '~/components/tabs/tabs';
 export * from '~/components/textarea/textarea';

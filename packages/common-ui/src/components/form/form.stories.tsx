@@ -11,7 +11,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage
-} from '~/components/form';
+} from '~/components/form/form';
 import { Input } from '~/components/input/input';
 import { Textarea } from '~/components/textarea/textarea';
 import { Switch } from '~/components/switch/switch';

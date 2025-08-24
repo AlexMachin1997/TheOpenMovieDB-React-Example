@@ -7,7 +7,7 @@ import {
 	TooltipTrigger
 } from '~/components/tooltip/tooltip';
 import { useIsDragging } from '~/components/sliders/hooks/useIsDragging';
-import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/slider/slider';
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/slider';
 import { cn } from '~/utils/className';
 
 export const RangeSlider = ({

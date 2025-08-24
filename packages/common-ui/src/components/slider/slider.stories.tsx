@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
-import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/slider/slider';
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/slider';
 import { Label } from '~/components/label/label';
 import {
 	Tooltip,

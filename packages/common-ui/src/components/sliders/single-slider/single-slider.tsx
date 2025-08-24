@@ -6,12 +6,12 @@ import {
 	TooltipProvider,
 	TooltipTrigger
 } from '~/components/tooltip/tooltip';
-import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/slider/slider';
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/slider';
 import { cn } from '~/utils/className';
 import { SingleValue } from '~/components/sliders/single-slider/single-slider-types';
 import { useIsDragging } from '../hooks/useIsDragging';
 
-export const SliderInput = ({
+export const SingleSlider = ({
 	className,
 	rootClassName,
 	trackClassName,
