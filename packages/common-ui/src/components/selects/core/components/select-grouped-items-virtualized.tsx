@@ -98,7 +98,7 @@ export const SelectVirtualizedGroupedList = React.memo(
 									transform: `translateY(${virtualRow.start}px)`
 								}}
 							>
-								{renderGroupedListItem(item, virtualRow)}
+								{renderGroupedListItem(item)}
 							</div>
 						);
 					})}

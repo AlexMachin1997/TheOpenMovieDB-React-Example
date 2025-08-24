@@ -4,18 +4,15 @@ import { cn } from '~/utils/className';
 
 type FormDescriptionProps = React.ComponentProps<'p'>;
 
-export const FormDescription = React.forwardRef<HTMLParagraphElement, FormDescriptionProps>(
-	({ className, ...props }, ref) => {
-		const { formDescriptionId } = useFormField();
+export const FormDescription = ({ className, ...props }: FormDescriptionProps) => {
+	const { formDescriptionId } = useFormField();
 
-		return (
-			<p
-				data-slot='form-description'
-				id={formDescriptionId}
-				ref={ref}
-				className={cn('text-muted-foreground text-sm', className)}
-				{...props}
-			/>
-		);
-	}
-);
+	return (
+		<p
+			data-slot='form-description'
+			id={formDescriptionId}
+			className={cn('text-muted-foreground text-sm', className)}
+			{...props}
+		/>
+	);
+};

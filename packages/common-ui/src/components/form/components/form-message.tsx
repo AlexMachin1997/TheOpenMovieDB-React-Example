@@ -4,21 +4,18 @@ import { cn } from '~/utils/className';
 
 type FormMessageProps = React.ComponentProps<'p'>;
 
-export const FormMessage = React.forwardRef<HTMLParagraphElement, FormMessageProps>(
-	({ className, ...props }, ref) => {
-		const { error, formMessageId } = useFormField();
-		const body = error ? String(error?.message ?? '') : props.children;
+export const FormMessage = ({ className, ...props }: FormMessageProps) => {
+	const { error, formMessageId } = useFormField();
+	const body = error ? String(error?.message ?? '') : props.children;
 
-		return (
-			<p
-				data-slot='form-message'
-				id={formMessageId}
-				className={cn('text-destructive text-sm', className)}
-				ref={ref}
-				{...props}
-			>
-				{body}
-			</p>
-		);
-	}
-);
+	return (
+		<p
+			data-slot='form-message'
+			id={formMessageId}
+			className={cn('text-destructive text-sm', className)}
+			{...props}
+		>
+			{body}
+		</p>
+	);
+};

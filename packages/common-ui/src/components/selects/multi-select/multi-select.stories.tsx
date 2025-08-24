@@ -31,7 +31,6 @@ const meta: Meta<typeof SelectProvider> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
 const frameworks: Option[] = [
 	{ id: 'next.js', value: 'next.js', label: 'Next.js' },
@@ -372,7 +371,7 @@ const WithGroupsTemplate = () => {
 	);
 };
 
-export const WithGroups: Story = {
+export const WithGroups: StoryObj<MultiSelectStorybookTypes> = {
 	args: {
 		values: []
 	},
@@ -527,7 +526,7 @@ const WithFormTemplate = () => {
 	);
 };
 
-export const WithForm: Story = {
+export const WithForm: StoryObj<MultiSelectStorybookTypes> = {
 	render: () => <WithFormTemplate />
 };
 
@@ -551,7 +550,7 @@ const CustomStylingTemplate = (args: MultiSelectStorybookTypes) => {
 	);
 };
 
-export const CustomStyling: Story = {
+export const CustomStyling: StoryObj<MultiSelectStorybookTypes> = {
 	render: (args) => <CustomStylingTemplate {...args} />,
 	args: {
 		values: [],

@@ -6,19 +6,16 @@ import { cn } from '~/utils/className';
 
 type FormLabelProps = React.ComponentProps<typeof LabelPrimitive.Root>;
 
-export const FormLabel = React.forwardRef<HTMLLabelElement, FormLabelProps>(
-	({ className, ...props }, ref) => {
-		const { error, formItemId } = useFormField();
+export const FormLabel = ({ className, ...props }: FormLabelProps) => {
+	const { error, formItemId } = useFormField();
 
-		return (
-			<Label
-				data-slot='form-label'
-				data-error={!!error}
-				className={cn('data-[error=true]:text-destructive', className)}
-				htmlFor={formItemId}
-				ref={ref}
-				{...props}
-			/>
-		);
-	}
-);
+	return (
+		<Label
+			data-slot='form-label'
+			data-error={!!error}
+			className={cn('data-[error=true]:text-destructive', className)}
+			htmlFor={formItemId}
+			{...props}
+		/>
+	);
+};

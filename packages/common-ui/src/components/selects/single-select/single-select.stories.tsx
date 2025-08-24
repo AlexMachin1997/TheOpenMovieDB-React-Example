@@ -32,7 +32,6 @@ const meta: Meta<typeof SelectProvider> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
 const frameworks: Option[] = [
 	{ id: 'next.js', value: 'next.js', label: 'Next.js' },
@@ -142,7 +141,7 @@ export const WithoutSearch: StoryObj<SingleSelectStorybookTypes> = {
 	render: (args) => <BasicSingleSelectTemplate {...args} />
 };
 
-const WithGroupsTemplate = (args: SingleSelectStorybookTypes) => {
+const WithGroupsTemplate = () => {
 	const [selectedValue, setSelectedValue] = React.useState<string>('');
 
 	const handleValueChange = (value: string) => {
@@ -206,7 +205,7 @@ const WithGroupsTemplate = (args: SingleSelectStorybookTypes) => {
 };
 
 export const WithGroups: StoryObj<SingleSelectStorybookTypes> = {
-	render: (args) => <WithGroupsTemplate {...args} />
+	render: () => <WithGroupsTemplate />
 };
 
 const LargeListVirtualizedTemplate = () => {
@@ -337,7 +336,7 @@ const WithFormTemplate = () => {
 	);
 };
 
-export const WithForm: Story = {
+export const WithForm: StoryObj<SingleSelectStorybookTypes> = {
 	render: () => <WithFormTemplate />
 };
 
@@ -453,6 +452,6 @@ const ClearButtonDemoTemplate = () => {
 	);
 };
 
-export const ClearButtonDemo: Story = {
+export const ClearButtonDemo: StoryObj<SingleSelectStorybookTypes> = {
 	render: () => <ClearButtonDemoTemplate />
 };

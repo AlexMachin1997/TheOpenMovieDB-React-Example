@@ -5,21 +5,16 @@ import { type VariantProps } from 'class-variance-authority';
 import { cn } from '~/utils/className';
 import { badgeVariants } from '~/components/badge/variants';
 
-const Badge = React.forwardRef<
-	HTMLSpanElement,
-	React.ComponentProps<'span'> & VariantProps<typeof badgeVariants> & { asChild?: boolean }
->(({ className, variant, asChild = false, ...props }, ref) => {
+type BadgeProps = React.ComponentProps<'span'> &
+	VariantProps<typeof badgeVariants> & { asChild?: boolean };
+
+const Badge = ({ className, variant, asChild = false, ...props }: BadgeProps) => {
 	const Comp = asChild ? Slot : 'span';
 
 	return (
-		<Comp
-			data-slot='badge'
-			className={cn(badgeVariants({ variant }), className)}
-			ref={ref}
-			{...props}
-		/>
+		<Comp data-slot='badge' className={cn(badgeVariants({ variant }), className)} {...props} />
 	);
-});
+};
 
 Badge.displayName = 'Badge';
 

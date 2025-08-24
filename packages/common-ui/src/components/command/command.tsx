@@ -23,9 +23,13 @@ const Command = ({ className, ...props }: React.ComponentProps<typeof CommandPri
 	);
 };
 
-// TODO: Upgrade to React 19
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+type CommandDialogProps = React.ComponentProps<typeof Dialog> & {
+	title?: string;
+	description?: string;
+	className?: string;
+	showCloseButton?: boolean;
+};
+
 const CommandDialog = ({
 	title = 'Command Palette',
 	description = 'Search for a command to run...',
@@ -33,12 +37,7 @@ const CommandDialog = ({
 	className,
 	showCloseButton = true,
 	...props
-}: React.ComponentProps<typeof Dialog> & {
-	title?: string;
-	description?: string;
-	className?: string;
-	showCloseButton?: boolean;
-}) => {
+}: CommandDialogProps) => {
 	return (
 		<Dialog {...props}>
 			<DialogHeader className='sr-only'>
@@ -57,24 +56,25 @@ const CommandDialog = ({
 	);
 };
 
-// TODO: Upgrade to React 19
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const CommandList = React.forwardRef<
-	HTMLDivElement,
-	React.ComponentProps<typeof CommandPrimitive.List>
->(({ className, ...props }, ref) => {
+type CommandListProps = React.ComponentProps<typeof CommandPrimitive.List> & {
+	className?: string;
+};
+
+const CommandList = ({ className, ...props }: CommandListProps) => {
 	return (
 		<CommandPrimitive.List
-			ref={ref}
 			data-slot='command-list'
 			className={cn('max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto', className)}
 			{...props}
 		/>
 	);
-});
+};
 
-const CommandEmpty = ({ ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) => {
+type CommandEmptyProps = React.ComponentProps<typeof CommandPrimitive.Empty> & {
+	className?: string;
+};
+
+const CommandEmpty = ({ className, ...props }: CommandEmptyProps) => {
 	return (
 		<CommandPrimitive.Empty
 			data-slot='command-empty'
@@ -84,10 +84,11 @@ const CommandEmpty = ({ ...props }: React.ComponentProps<typeof CommandPrimitive
 	);
 };
 
-const CommandGroup = ({
-	className,
-	...props
-}: React.ComponentProps<typeof CommandPrimitive.Group>) => {
+type CommandGroupProps = React.ComponentProps<typeof CommandPrimitive.Group> & {
+	className?: string;
+};
+
+const CommandGroup = ({ className, ...props }: CommandGroupProps) => {
 	return (
 		<CommandPrimitive.Group
 			data-slot='command-group'
@@ -100,10 +101,11 @@ const CommandGroup = ({
 	);
 };
 
-const CommandSeparator = ({
-	className,
-	...props
-}: React.ComponentProps<typeof CommandPrimitive.Separator>) => {
+type CommandSeparatorProps = React.ComponentProps<typeof CommandPrimitive.Separator> & {
+	className?: string;
+};
+
+const CommandSeparator = ({ className, ...props }: CommandSeparatorProps) => {
 	return (
 		<CommandPrimitive.Separator
 			data-slot='command-separator'
@@ -113,10 +115,11 @@ const CommandSeparator = ({
 	);
 };
 
-const CommandItem = ({
-	className,
-	...props
-}: React.ComponentProps<typeof CommandPrimitive.Item>) => {
+type CommandItemProps = React.ComponentProps<typeof CommandPrimitive.Item> & {
+	className?: string;
+};
+
+const CommandItem = ({ className, ...props }: CommandItemProps) => {
 	return (
 		<CommandPrimitive.Item
 			data-slot='command-item'
@@ -129,7 +132,11 @@ const CommandItem = ({
 	);
 };
 
-const CommandShortcut = ({ className, ...props }: React.ComponentProps<'span'>) => {
+type CommandShortcutProps = React.ComponentProps<'span'> & {
+	className?: string;
+};
+
+const CommandShortcut = ({ className, ...props }: CommandShortcutProps) => {
 	return (
 		<span
 			data-slot='command-shortcut'

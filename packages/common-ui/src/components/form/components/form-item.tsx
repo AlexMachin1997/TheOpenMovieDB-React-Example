@@ -4,14 +4,12 @@ import { cn } from '~/utils/className';
 
 type FormItemProps = React.ComponentProps<'div'>;
 
-export const FormItem = React.forwardRef<HTMLDivElement, FormItemProps>(
-	({ className, ...props }, ref) => {
-		const id = React.useId();
+export const FormItem = ({ className, ...props }: FormItemProps) => {
+	const id = React.useId();
 
-		return (
-			<FormItemContext.Provider value={{ id }}>
-				<div data-slot='form-item' className={cn('grid gap-2', className)} ref={ref} {...props} />
-			</FormItemContext.Provider>
-		);
-	}
-);
+	return (
+		<FormItemContext.Provider value={{ id }}>
+			<div data-slot='form-item' className={cn('grid gap-2', className)} {...props} />
+		</FormItemContext.Provider>
+	);
+};

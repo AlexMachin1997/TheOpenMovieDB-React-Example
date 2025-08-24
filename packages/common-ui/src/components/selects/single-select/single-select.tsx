@@ -59,7 +59,7 @@ export const SingleSelectValue = ({
 
 	const handleClear = (value?: string) => {
 		if (value) {
-			toggleValue(value, 'single');
+			toggleValue(value);
 		}
 	};
 
@@ -142,7 +142,7 @@ export const SingleSelectListItem = ({
 
 	const handleSelect = () => {
 		console.log('handleSelect', value);
-		toggleValue(value, 'single');
+		toggleValue(value);
 		setOpen(false);
 	};
 

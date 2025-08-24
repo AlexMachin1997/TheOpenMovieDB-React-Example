@@ -76,69 +76,64 @@ export type SelectItemClearProps = {
  * @param ref - React ref for the button element
  * @returns The rendered clear button component
  */
-export const SelectItemClear = React.forwardRef<HTMLButtonElement, SelectItemClearProps>(
-	(
-		{
-			value,
-			valueLabel,
-			onClear,
-			variant = 'input',
-			className,
-			iconSize = 'md',
-			ariaLabel,
-			onRefChange,
-			...props
-		},
-		ref
-	) => {
-		const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
-			e.stopPropagation();
-			onClear(value);
-		};
+export const SelectItemClear = ({
+	value,
+	valueLabel,
+	onClear,
+	variant = 'input',
+	className,
+	iconSize = 'md',
+	ariaLabel,
+	onRefChange,
+	...props
+}: SelectItemClearProps) => {
+	const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation();
+		onClear(value);
+	};
 
-		const handleRef = React.useCallback(
-			(el: HTMLButtonElement | null) => {
-				if (typeof ref === 'function') {
-					ref(el);
-				} else if (ref) {
-					ref.current = el;
-				}
-				onRefChange?.(el);
-			},
-			[ref, onRefChange]
-		);
-
-		const defaultAriaLabel = React.useMemo(() => {
-			if (ariaLabel) return ariaLabel;
-			if (value && valueLabel) return `Remove ${valueLabel}`;
-			if (value) return `Remove ${value}`;
-			return 'Clear selection';
-		}, [ariaLabel, value, valueLabel]);
-
-		const variantStyles = React.useMemo(() => {
-			switch (variant) {
-				case 'badge':
-					return 'text-muted-foreground group-hover:text-destructive h-auto w-auto min-w-0 p-1 hover:bg-transparent';
-				case 'input':
-				default:
-					return 'ml-2 h-auto w-auto min-w-0 p-1 opacity-50 hover:opacity-100 focus:opacity-100 hover:bg-transparent';
+	const handleRef = React.useCallback(
+		(el: HTMLButtonElement | null) => {
+			if (typeof props.ref === 'function') {
+				props.ref(el);
+			} else if (props.ref) {
+				props.ref.current = el;
 			}
-		}, [variant]);
+			onRefChange?.(el);
+		},
+		[onRefChange, props]
+	);
 
-		return (
-			<Button
-				{...props}
-				ref={handleRef}
-				variant='ghost'
-				size='sm'
-				onClick={handleClear}
-				className={cn(variantStyles, className)}
-				aria-label={defaultAriaLabel}
-			>
-				<XIcon className={'size-3'} />
-			</Button>
-		);
-	}
-);
+	const defaultAriaLabel = React.useMemo(() => {
+		if (ariaLabel) return ariaLabel;
+		if (value && valueLabel) return `Remove ${valueLabel}`;
+		if (value) return `Remove ${value}`;
+		return 'Clear selection';
+	}, [ariaLabel, value, valueLabel]);
+
+	const variantStyles = React.useMemo(() => {
+		switch (variant) {
+			case 'badge':
+				return 'text-muted-foreground group-hover:text-destructive h-auto w-auto min-w-0 p-1 hover:bg-transparent';
+			case 'input':
+			default:
+				return 'ml-2 h-auto w-auto min-w-0 p-1 opacity-50 hover:opacity-100 focus:opacity-100 hover:bg-transparent';
+		}
+	}, [variant]);
+
+	return (
+		<Button
+			{...props}
+			ref={handleRef}
+			variant='ghost'
+			size='sm'
+			onClick={handleClear}
+			className={cn(variantStyles, className)}
+			aria-label={defaultAriaLabel}
+		>
+			<XIcon className={'size-3'} />
+		</Button>
+	);
+};
 
 SelectItemClear.displayName = 'SelectItemClear';
