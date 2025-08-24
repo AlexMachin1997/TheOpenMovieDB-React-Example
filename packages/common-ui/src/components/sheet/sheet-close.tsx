@@ -9,6 +9,7 @@ export const SheetClose = ({ ...props }: SheetCloseProps) => {
 		<SheetPrimitive.Close
 			data-slot='sheet-close'
 			className={cn('cursor-pointer', props.className)}
+			tabIndex={0}
 			{...props}
 		/>
 	);

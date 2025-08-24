@@ -1,9 +1,10 @@
-export { Sheet } from '~/components/sheet/sheet-provider';
+export { Sheet, type SheetRef } from '~/components/sheet/sheet-provider';
 export { SheetTrigger } from '~/components/sheet/sheet-trigger';
 export { SheetClose } from '~/components/sheet/sheet-close';
 export { SheetPortal } from '~/components/sheet/sheet-portal';
 export { SheetOverlay } from '~/components/sheet/sheet-overlay';
 export { SheetContent } from '~/components/sheet/sheet-content';
+export { SheetInnerContent } from '~/components/sheet/sheet-inner-content';
 export { SheetHeader } from '~/components/sheet/sheet-header';
 export { SheetFooter } from '~/components/sheet/sheet-footer';
 export { SheetTitle } from '~/components/sheet/sheet-title';

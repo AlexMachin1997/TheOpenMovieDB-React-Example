@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import * as React from 'react';
 import { Button } from '~/components/button/button';
 
 import {
@@ -7,8 +8,10 @@ import {
 	SheetDescription,
 	SheetFooter,
 	SheetHeader,
+	SheetInnerContent,
 	SheetTitle,
-	SheetTrigger
+	SheetTrigger,
+	type SheetRef
 } from '~/components/sheet/sheet';
 
 const meta: Meta<typeof Sheet> = {
@@ -37,7 +40,7 @@ export const Basic: Story = {
 						Make changes to your profile here. Click save when you&apos;re done.
 					</SheetDescription>
 				</SheetHeader>
-				<div className='grid gap-4'>
+				<SheetInnerContent className='grid gap-4 p-6'>
 					<div className='grid grid-cols-4 items-center gap-4'>
 						<label htmlFor='name' className='text-right'>
 							Name
@@ -45,7 +48,7 @@ export const Basic: Story = {
 						<input
 							id='name'
 							defaultValue='Pedro Duarte'
-							className='col-span-3 rounded-md border px-3 py-2'
+							className='col-span-3 rounCded-md border px-3 py-2'
 						/>
 					</div>
 					<div className='grid grid-cols-4 items-center gap-4'>
@@ -58,13 +61,129 @@ export const Basic: Story = {
 							className='col-span-3 rounded-md border px-3 py-2'
 						/>
 					</div>
-				</div>
+				</SheetInnerContent>
 				<SheetFooter>
 					<Button type='submit'>Save changes</Button>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>
 	)
+};
+
+const ControlledSheet = () => {
+	const [open, setOpen] = React.useState(false);
+
+	return (
+		<div className='flex flex-col gap-4'>
+			<div className='flex gap-2'>
+				<Button onClick={() => setOpen(true)} variant='outline'>
+					Open Sheet
+				</Button>
+				<Button onClick={() => setOpen(false)} variant='outline'>
+					Close Sheet
+				</Button>
+				<Button onClick={() => setOpen(!open)} variant='outline'>
+					Toggle Sheet
+				</Button>
+			</div>
+			<div className='text-sm text-muted-foreground'>
+				Sheet is currently: <span className='font-medium'>{open ? 'Open' : 'Closed'}</span>
+			</div>
+			<Sheet open={open} onOpenChange={setOpen}>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Controlled Sheet</SheetTitle>
+						<SheetDescription>
+							This sheet is controlled externally. You can open, close, or toggle it using the
+							buttons above.
+						</SheetDescription>
+					</SheetHeader>
+					<SheetInnerContent className='grid gap-4 p-6'>
+						<div className='space-y-2'>
+							<h4 className='font-medium'>Current State</h4>
+							<p className='text-sm text-muted-foreground'>
+								The sheet is currently {open ? 'open' : 'closed'}. You can control this state from
+								outside the component.
+							</p>
+						</div>
+						<div className='space-y-2'>
+							<h4 className='font-medium'>Usage</h4>
+							<p className='text-sm text-muted-foreground'>
+								This pattern is useful when you need to control the sheet state from a parent
+								component or based on external events.
+							</p>
+						</div>
+					</SheetInnerContent>
+					<SheetFooter>
+						<Button variant='outline' onClick={() => setOpen(false)}>
+							Close
+						</Button>
+						<Button onClick={() => setOpen(false)}>Save & Close</Button>
+					</SheetFooter>
+				</SheetContent>
+			</Sheet>
+		</div>
+	);
+};
+
+export const Controlled: Story = {
+	render: () => <ControlledSheet />
+};
+
+const RefBasedSheet = () => {
+	const sheetRef = React.useRef<SheetRef>(null);
+
+	return (
+		<div className='flex flex-col gap-4'>
+			<div className='flex gap-2'>
+				<Button onClick={() => sheetRef.current?.open()} variant='outline'>
+					Open via Ref
+				</Button>
+				<Button onClick={() => sheetRef.current?.close()} variant='outline'>
+					Close via Ref
+				</Button>
+				<Button onClick={() => sheetRef.current?.toggle()} variant='outline'>
+					Toggle via Ref
+				</Button>
+			</div>
+
+			<Sheet ref={sheetRef}>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Ref-Based Sheet</SheetTitle>
+						<SheetDescription>
+							This sheet is controlled via ref. The SheetClose component still works perfectly!
+						</SheetDescription>
+					</SheetHeader>
+					<SheetInnerContent className='grid gap-4 p-6'>
+						<div className='space-y-2'>
+							<h4 className='font-medium'>Imperative API</h4>
+							<p className='text-sm text-muted-foreground'>
+								Use the ref to programmatically control the sheet:{' '}
+								<code>sheetRef.current?.open()</code>
+							</p>
+						</div>
+						<div className='space-y-2'>
+							<h4 className='font-medium'>SheetClose Compatibility</h4>
+							<p className='text-sm text-muted-foreground'>
+								The existing SheetClose component works seamlessly with the new ref-based approach.
+							</p>
+						</div>
+					</SheetInnerContent>
+					<SheetFooter>
+						<Button variant='outline' onClick={() => sheetRef.current?.close()}>
+							Close via Ref
+						</Button>
+						<Button onClick={() => sheetRef.current?.close()}>Save & Close</Button>
+					</SheetFooter>
+				</SheetContent>
+			</Sheet>
+		</div>
+	);
+};
+
+export const RefBased: Story = {
+	render: () => <RefBasedSheet />
 };
 
 export const LeftSide: Story = {
@@ -160,7 +279,7 @@ export const CustomWidth: Story = {
 					<SheetTitle>Advanced Settings</SheetTitle>
 					<SheetDescription>Configure advanced options for your application.</SheetDescription>
 				</SheetHeader>
-				<div className='grid gap-6'>
+				<div className='grid gap-6 p-6'>
 					<div className='space-y-2'>
 						<h4 className='font-medium'>Performance</h4>
 						<div className='space-y-2'>
@@ -208,7 +327,7 @@ export const WithForm: Story = {
 					<SheetTitle>Create New Project</SheetTitle>
 					<SheetDescription>Fill in the details below to create a new project.</SheetDescription>
 				</SheetHeader>
-				<form className='grid gap-4'>
+				<SheetInnerContent className='grid gap-4 p-6'>
 					<div className='grid gap-2'>
 						<label htmlFor='project-name' className='text-sm font-medium'>
 							Project Name
@@ -242,7 +361,7 @@ export const WithForm: Story = {
 							<option value='other'>Other</option>
 						</select>
 					</div>
-				</form>
+				</SheetInnerContent>
 				<SheetFooter>
 					<Button variant='outline'>Cancel</Button>
 					<Button>Create Project</Button>
@@ -266,7 +385,7 @@ export const Confirmation: Story = {
 						data from our servers.
 					</SheetDescription>
 				</SheetHeader>
-				<div>
+				<SheetInnerContent>
 					<p className='text-sm text-muted-foreground'>
 						Please type &quot;delete&quot; to confirm this action.
 					</p>
@@ -274,7 +393,7 @@ export const Confirmation: Story = {
 						placeholder="Type 'delete' to confirm"
 						className='mt-2 w-full rounded-md border px-3 py-2'
 					/>
-				</div>
+				</SheetInnerContent>
 				<SheetFooter>
 					<Button variant='outline'>Cancel</Button>
 					<Button variant='destructive'>Delete Account</Button>
@@ -295,7 +414,7 @@ export const LongContent: Story = {
 					<SheetTitle>Terms of Service</SheetTitle>
 					<SheetDescription>Please read our complete terms of service agreement.</SheetDescription>
 				</SheetHeader>
-				<div className='space-y-4 overflow-y-auto p-6'>
+				<SheetInnerContent className='space-y-4'>
 					<section>
 						<h3 className='font-semibold text-lg mb-2'>1. Acceptance of Terms</h3>
 						<p className='text-sm text-muted-foreground leading-relaxed'>
@@ -399,7 +518,7 @@ export const LongContent: Story = {
 							unclear.
 						</p>
 					</section>
-				</div>
+				</SheetInnerContent>
 				<SheetFooter>
 					<Button variant='outline'>Decline</Button>
 					<Button>Accept Terms</Button>
@@ -407,4 +526,130 @@ export const LongContent: Story = {
 			</SheetContent>
 		</Sheet>
 	)
+};
+
+const ScrollableContentSheet = () => {
+	return (
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button variant='outline'>Open Scrollable Sheet</Button>
+			</SheetTrigger>
+			<SheetContent>
+				<SheetHeader>
+					<SheetTitle>Scrollable Content</SheetTitle>
+					<SheetDescription>
+						This sheet uses SheetInnerContent for scrollable content with default padding.
+					</SheetDescription>
+				</SheetHeader>
+				<SheetInnerContent>
+					<div className='space-y-6'>
+						<section>
+							<h3 className='text-lg font-semibold mb-4'>Section 1</h3>
+							<p className='text-muted-foreground mb-4'>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+								incididunt ut labore et dolore magna aliqua.
+							</p>
+							<div className='grid gap-4'>
+								{Array.from({ length: 5 }).map((_, i) => (
+									<div key={i} className='p-4 border rounded-lg'>
+										<h4 className='font-medium'>Item {i + 1}</h4>
+										<p className='text-sm text-muted-foreground'>
+											This is item {i + 1} with some content to demonstrate scrolling.
+										</p>
+									</div>
+								))}
+							</div>
+						</section>
+
+						<section>
+							<h3 className='text-lg font-semibold mb-4'>Section 2</h3>
+							<p className='text-muted-foreground mb-4'>
+								Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+								ex ea commodo consequat.
+							</p>
+							<div className='grid gap-4'>
+								{Array.from({ length: 8 }).map((_, i) => (
+									<div key={i} className='p-4 border rounded-lg'>
+										<h4 className='font-medium'>Another Item {i + 1}</h4>
+										<p className='text-sm text-muted-foreground'>
+											More content to ensure the sheet becomes scrollable.
+										</p>
+									</div>
+								))}
+							</div>
+						</section>
+
+						<section>
+							<h3 className='text-lg font-semibold mb-4'>Section 3</h3>
+							<p className='text-muted-foreground mb-4'>
+								Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+								fugiat nulla pariatur.
+							</p>
+							<div className='grid gap-4'>
+								{Array.from({ length: 6 }).map((_, i) => (
+									<div key={i} className='p-4 border rounded-lg'>
+										<h4 className='font-medium'>Final Item {i + 1}</h4>
+										<p className='text-sm text-muted-foreground'>
+											Final section to demonstrate the full scrolling capability.
+										</p>
+									</div>
+								))}
+							</div>
+						</section>
+					</div>
+				</SheetInnerContent>
+				<SheetFooter>
+					<Button variant='outline'>Cancel</Button>
+					<Button>Save Changes</Button>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
+	);
+};
+
+export const ScrollableContent: Story = {
+	render: () => <ScrollableContentSheet />
+};
+
+const CustomStyledSheet = () => {
+	return (
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button variant='outline'>Open Custom Styled Sheet</Button>
+			</SheetTrigger>
+			<SheetContent>
+				<SheetHeader>
+					<SheetTitle>Custom Styled Content</SheetTitle>
+					<SheetDescription>This sheet uses custom styling on SheetInnerContent.</SheetDescription>
+				</SheetHeader>
+				<SheetInnerContent className='p-8 bg-gradient-to-br from-blue-50 to-indigo-100'>
+					<div className='space-y-4'>
+						<h3 className='text-xl font-bold text-blue-900'>Custom Styling</h3>
+						<p className='text-blue-700'>
+							This SheetInnerContent has custom padding (p-8) and a gradient background. The default
+							p-6 padding has been overridden.
+						</p>
+						<div className='grid gap-3'>
+							{Array.from({ length: 4 }).map((_, i) => (
+								<div key={i} className='p-4 bg-white rounded-lg shadow-sm'>
+									<h4 className='font-medium text-blue-900'>Custom Item {i + 1}</h4>
+									<p className='text-sm text-blue-600'>
+										This demonstrates how you can override the default styling.
+									</p>
+								</div>
+							))}
+						</div>
+					</div>
+				</SheetInnerContent>
+				<SheetFooter>
+					<Button variant='outline'>Cancel</Button>
+					<Button>Save Changes</Button>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
+	);
+};
+
+export const CustomStyled: Story = {
+	render: () => <CustomStyledSheet />
 };
