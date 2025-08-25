@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
 import { SingleSlider } from '~/components/Sliders/SingleSlider/SingleSlider';
-import { SingleValue } from '~/components/Sliders/SingleSlider/SingleSlider-Types';
+import { SingleValue } from '~/components/Sliders/types/single-slider';
 import { cn } from '~/utils/className';
 
 const meta: Meta = {

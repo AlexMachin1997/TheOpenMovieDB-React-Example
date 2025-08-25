@@ -7,10 +7,7 @@ import {
 } from '~/components/Tooltip/Tooltip';
 import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/Slider/Slider';
 import { cn } from '~/utils/className';
-import {
-	SingleValue,
-	SingleSliderInputProps
-} from '~/components/Sliders/SingleSlider/SingleSlider-Types';
+import { SingleValue, ISingleSliderInput } from '~/components/Sliders/types/single-slider';
 import { useIsDragging } from '~/components/Sliders/hooks/useIsDragging';
 
 export const SingleSlider = ({
@@ -34,7 +31,7 @@ export const SingleSlider = ({
 	step = 1,
 	disabled = false,
 	onChange
-}: SingleSliderInputProps) => {
+}: ISingleSliderInput) => {
 	const { isDragging, handleDragStart, handleDragLeave, handleDragEnd } = useIsDragging();
 
 	return (

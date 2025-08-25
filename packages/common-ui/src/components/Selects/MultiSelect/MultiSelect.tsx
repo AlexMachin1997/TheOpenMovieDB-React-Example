@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { cn } from '~/utils/className';
 import { Badge } from '~/components/Badge/Badge';
-import { useSelectContext } from '~/components/Selects/core/hooks/useSelectContext';
-import { SelectItemClear } from '~/components/Selects/core/components/SelectItemClear';
+import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
 
 /**
  * Props for the MultiSelectValue component

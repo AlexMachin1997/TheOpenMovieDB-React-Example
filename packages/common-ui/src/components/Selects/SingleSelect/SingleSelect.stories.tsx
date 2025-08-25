@@ -8,7 +8,7 @@ import {
 	SelectListItems,
 	SelectGroupedListItems,
 	SelectVirtualizedList
-} from '~/components/Selects/core/components';
+} from '~/components/Selects/components';
 import {
 	SingleSelectValue,
 	SingleSelectListItem

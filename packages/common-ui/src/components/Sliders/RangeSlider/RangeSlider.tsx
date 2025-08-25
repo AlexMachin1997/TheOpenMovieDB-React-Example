@@ -1,5 +1,5 @@
 import { Label } from '~/components/Label/Label';
-import { RangeValue, SliderInputProps } from '~/components/Sliders/RangeSlider/RangeSlider-Types';
+import { RangeValue, IRangeSliderInput } from '~/components/Sliders/types/range-slider';
 import {
 	Tooltip,
 	TooltipContent,
@@ -31,7 +31,7 @@ export const RangeSlider = ({
 	step = 1,
 	disabled = false,
 	onChange
-}: SliderInputProps) => {
+}: IRangeSliderInput) => {
 	const { isDragging, handleDragStart, handleDragLeave, handleDragEnd } = useIsDragging();
 
 	return (

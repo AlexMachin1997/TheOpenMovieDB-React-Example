@@ -2,8 +2,8 @@ import * as React from 'react';
 import { CheckIcon } from 'lucide-react';
 import { cn } from '~/utils/className';
 import { CommandItem } from '~/components/Command/Command';
-import { useSelectContext } from '~/components/Selects/core/hooks/useSelectContext';
-import { SelectItemClear } from '~/components/Selects/core/components/SelectItemClear';
+import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
 
 /**
  * Props for the SingleSelectValue component

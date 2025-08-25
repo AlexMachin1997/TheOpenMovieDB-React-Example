@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
 import { RangeSlider } from '~/components/Sliders/RangeSlider/RangeSlider';
-import { RangeValue } from '~/components/Sliders/RangeSlider/RangeSlider-Types';
+import { RangeValue } from '~/components/Sliders/types/range-slider';
 import { cn } from '~/utils/className';
 
 const meta: Meta = {

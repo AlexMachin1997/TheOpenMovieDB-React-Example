@@ -1,11 +1,14 @@
-export { Sheet, type SheetRef } from '~/components/Sheet/SheetProvider';
-export { SheetTrigger } from '~/components/Sheet/SheetTrigger';
-export { SheetClose } from '~/components/Sheet/SheetClose';
-export { SheetPortal } from '~/components/Sheet/SheetPortal';
-export { SheetOverlay } from '~/components/Sheet/SheetOverlay';
-export { SheetContent } from '~/components/Sheet/SheetContent';
-export { SheetInnerContent } from '~/components/Sheet/SheetInnerContent';
-export { SheetHeader } from '~/components/Sheet/SheetHeader';
-export { SheetFooter } from '~/components/Sheet/SheetFooter';
-export { SheetTitle } from '~/components/Sheet/SheetTitle';
-export { SheetDescription } from '~/components/Sheet/SheetDescription';
+export {
+	Sheet,
+	SheetTrigger,
+	SheetClose,
+	SheetPortal,
+	SheetOverlay,
+	SheetContent,
+	SheetInnerContent,
+	SheetHeader,
+	SheetFooter,
+	SheetTitle,
+	SheetDescription
+} from '~/components/Sheet/components';
+export type { SheetRef } from '~/components/Sheet/types/sheet-ref';

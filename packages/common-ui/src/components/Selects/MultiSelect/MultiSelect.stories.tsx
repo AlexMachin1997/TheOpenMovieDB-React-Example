@@ -9,7 +9,7 @@ import {
 	SelectListItems,
 	SelectVirtualizedList,
 	SelectVirtualizedGroupedList
-} from '~/components/Selects/core/components';
+} from '~/components/Selects/components';
 import { MultiSelectValue } from '~/components/Selects/MultiSelect/MultiSelect';
 import { Label } from '~/components/Label/Label';
 import { Option } from '~/types/Option';

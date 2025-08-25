@@ -3,7 +3,7 @@ import { Command as CommandPrimitive } from 'cmdk';
 import { SearchIcon } from 'lucide-react';
 import { useDebounce } from 'react-use';
 import { cn } from '~/utils/className';
-import { useSelectContext } from '~/components/Selects/core/hooks/useSelectContext';
+import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 
 export interface CommandSearchProps extends React.ComponentProps<typeof CommandPrimitive.Input> {
 	debounceMs?: number;

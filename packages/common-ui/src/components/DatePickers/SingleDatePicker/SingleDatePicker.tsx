@@ -5,9 +5,9 @@ import { formatDate } from '~/utils/dates';
 import { Button } from '~/components/Button/Button';
 import { Calendar } from '~/components/Calendar/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/Popover/Popover';
-import { DatePickerProps } from '~/components/DatePickers/types';
+import { IDatePicker } from '~/components/DatePickers/types';
 
-interface SingleDatePickerProps extends DatePickerProps {
+interface ISingleDatePicker extends IDatePicker {
 	date?: Date;
 	onDateChange?: (date: Date | undefined) => void;
 }
@@ -22,7 +22,7 @@ export const SingleDatePicker = ({
 	toYear = 2100,
 	locale,
 	dateFormat = 'fullShort'
-}: SingleDatePickerProps) => {
+}: ISingleDatePicker) => {
 	const startMonth = new Date(fromYear, 0);
 	const endMonth = new Date(toYear, 11);
 

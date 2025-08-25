@@ -6,9 +6,9 @@ import { formatDateRange } from '~/utils/dates';
 import { Button } from '~/components/Button/Button';
 import { Calendar } from '~/components/Calendar/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/Popover/Popover';
-import { DatePickerProps } from '~/components/DatePickers/types';
+import { IDatePicker } from '~/components/DatePickers/types';
 
-interface DateRangePickerProps extends DatePickerProps {
+interface IRangeDatePicker extends IDatePicker {
 	dateRange?: DateRange;
 	onDateRangeChange: (dateRange: DateRange | undefined) => void;
 }
@@ -23,7 +23,7 @@ export const DateRangePicker = ({
 	toYear = 2100,
 	locale,
 	dateFormat = 'medium'
-}: DateRangePickerProps) => {
+}: IRangeDatePicker) => {
 	const startMonth = new Date(fromYear, 0);
 	const endMonth = new Date(toYear, 11);
 
