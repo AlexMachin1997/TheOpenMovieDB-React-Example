@@ -11,8 +11,18 @@ import {
 	SheetInnerContent,
 	SheetTitle,
 	SheetTrigger,
-	type SheetRef
+	type SheetRef,
+	SheetClose
 } from '~/components/Sheet/Sheet';
+
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle
+} from '~/components/Dialog/Dialog';
 
 const meta: Meta<typeof Sheet> = {
 	title: 'Components/Sheet',
@@ -650,4 +660,264 @@ const CustomStyledSheet = () => {
 
 export const CustomStyled: Story = {
 	render: () => <CustomStyledSheet />
+};
+
+export const WithSheetClose: Story = {
+	render: () => (
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button variant='outline'>Open Sheet with Close API</Button>
+			</SheetTrigger>
+			<SheetContent>
+				<SheetHeader>
+					<SheetTitle>Sheet with Close API</SheetTitle>
+					<SheetDescription>
+						This sheet demonstrates various ways to use the SheetClose component.
+					</SheetDescription>
+				</SheetHeader>
+				<SheetInnerContent className='grid gap-4 p-6'>
+					<div className='space-y-4'>
+						<h4 className='font-medium'>Close Button Examples</h4>
+
+						{/* Basic SheetClose as a button */}
+						<div className='space-y-2'>
+							<p className='text-sm text-muted-foreground'>Basic SheetClose button:</p>
+							<SheetClose asChild>
+								<Button variant='outline' size='sm'>
+									Close Sheet
+								</Button>
+							</SheetClose>
+						</div>
+
+						{/* SheetClose with custom styling */}
+						<div className='space-y-2'>
+							<p className='text-sm text-muted-foreground'>SheetClose with custom styling:</p>
+							<SheetClose className='w-full p-3 text-left bg-red-50 hover:bg-red-100 border border-red-200 rounded-md transition-colors'>
+								❌ Close and Discard Changes
+							</SheetClose>
+						</div>
+
+						{/* SheetClose with icon */}
+						<div className='space-y-2'>
+							<p className='text-sm text-muted-foreground'>SheetClose with icon:</p>
+							<SheetClose className='flex items-center gap-2 p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors'>
+								<svg
+									width='16'
+									height='16'
+									viewBox='0 0 24 24'
+									fill='none'
+									stroke='currentColor'
+									strokeWidth='2'
+								>
+									<path d='M18 6L6 18M6 6l12 12' />
+								</svg>
+								Close
+							</SheetClose>
+						</div>
+
+						{/* SheetClose in footer */}
+						<div className='space-y-2'>
+							<p className='text-sm text-muted-foreground'>SheetClose in action buttons:</p>
+							<div className='flex gap-2'>
+								<SheetClose asChild>
+									<Button variant='outline' size='sm'>
+										Cancel
+									</Button>
+								</SheetClose>
+								<Button size='sm'>Save Changes</Button>
+							</div>
+						</div>
+
+						{/* SheetClose with confirmation */}
+						<div className='space-y-2'>
+							<p className='text-sm text-muted-foreground'>SheetClose with confirmation dialog:</p>
+							<SheetClose asChild>
+								<Button
+									variant='destructive'
+									size='sm'
+									onClick={(e) => {
+										if (!confirm('Are you sure you want to close without saving?')) {
+											e.preventDefault();
+										}
+									}}
+								>
+									Close Without Saving
+								</Button>
+							</SheetClose>
+						</div>
+					</div>
+				</SheetInnerContent>
+				<SheetFooter>
+					<SheetClose asChild>
+						<Button variant='outline'>Cancel</Button>
+					</SheetClose>
+					<Button>Save Changes</Button>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
+	)
+};
+
+const WithConfirmationDialogSheet = () => {
+	const [showConfirmation, setShowConfirmation] = React.useState(false);
+	const sheetRef = React.useRef<SheetRef>(undefined);
+
+	const handleCloseAttempt = () => {
+		setShowConfirmation(true);
+	};
+
+	const handleConfirmClose = () => {
+		setShowConfirmation(false);
+		sheetRef.current?.close();
+	};
+
+	const handleCancelClose = () => {
+		setShowConfirmation(false);
+		// Sheet stays open
+	};
+
+	return (
+		<>
+			<Sheet ref={sheetRef}>
+				<SheetTrigger asChild>
+					<Button variant='outline'>Open Sheet with Confirmation</Button>
+				</SheetTrigger>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Unsaved Changes</SheetTitle>
+						<SheetDescription>
+							You have unsaved changes. Use the close button to test the confirmation dialog.
+						</SheetDescription>
+					</SheetHeader>
+					<SheetInnerContent className='grid gap-4 p-6'>
+						<div className='space-y-4'>
+							<p className='text-sm text-muted-foreground'>
+								This sheet has unsaved changes. When you try to close it, a confirmation dialog will
+								appear.
+							</p>
+							<div className='p-4 bg-yellow-50 border border-yellow-200 rounded-md'>
+								<p className='text-sm text-yellow-800'>
+									⚠️ You have unsaved changes that will be lost if you close without saving.
+								</p>
+							</div>
+						</div>
+					</SheetInnerContent>
+					<SheetFooter>
+						<Button variant='outline' onClick={handleCloseAttempt}>
+							Close Sheet
+						</Button>
+						<SheetClose asChild>
+							<Button>Save Changes</Button>
+						</SheetClose>
+					</SheetFooter>
+				</SheetContent>
+			</Sheet>
+
+			{/* Confirmation Dialog */}
+			<Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Unsaved Changes</DialogTitle>
+						<DialogDescription>
+							You have unsaved changes. Are you sure you want to close? All changes will be lost.
+						</DialogDescription>
+					</DialogHeader>
+					<DialogFooter>
+						<Button variant='outline' onClick={handleCancelClose}>
+							Cancel
+						</Button>
+						<Button variant='destructive' onClick={handleConfirmClose}>
+							Close Without Saving
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</>
+	);
+};
+
+export const WithConfirmationDialog: Story = {
+	render: () => <WithConfirmationDialogSheet />
+};
+
+const WithConfirmationDialogRefSheet = () => {
+	const [showConfirmation, setShowConfirmation] = React.useState(false);
+	const sheetRef = React.useRef<SheetRef>(undefined);
+
+	const handleCloseAttempt = () => {
+		setShowConfirmation(true);
+	};
+
+	const handleConfirmClose = () => {
+		setShowConfirmation(false);
+		sheetRef.current?.close();
+	};
+
+	const handleCancelClose = () => {
+		setShowConfirmation(false);
+		// Sheet stays open
+	};
+
+	return (
+		<>
+			<Sheet ref={sheetRef}>
+				<SheetTrigger asChild>
+					<Button variant='outline'>Open Sheet with Ref Confirmation</Button>
+				</SheetTrigger>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Unsaved Changes (Ref Approach)</SheetTitle>
+						<SheetDescription>
+							This version uses the sheet ref approach for confirmation before closing.
+						</SheetDescription>
+					</SheetHeader>
+					<SheetInnerContent className='grid gap-4 p-6'>
+						<div className='space-y-4'>
+							<p className='text-sm text-muted-foreground'>
+								This sheet uses the SheetRef API. When you try to close it, a confirmation dialog
+								will appear.
+							</p>
+							<div className='p-4 bg-blue-50 border border-blue-200 rounded-md'>
+								<p className='text-sm text-blue-800'>
+									ℹ️ Using sheetRef.current?.close() to programmatically close the sheet.
+								</p>
+							</div>
+						</div>
+					</SheetInnerContent>
+					<SheetFooter>
+						<Button variant='outline' onClick={handleCloseAttempt}>
+							Close Sheet
+						</Button>
+						<SheetClose asChild>
+							<Button>Save Changes</Button>
+						</SheetClose>
+					</SheetFooter>
+				</SheetContent>
+			</Sheet>
+
+			{/* Confirmation Dialog */}
+			<Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Unsaved Changes</DialogTitle>
+						<DialogDescription>
+							You have unsaved changes. Are you sure you want to close? All changes will be lost.
+						</DialogDescription>
+					</DialogHeader>
+					<DialogFooter>
+						<Button variant='outline' onClick={handleCancelClose}>
+							Cancel
+						</Button>
+						<Button variant='destructive' onClick={handleConfirmClose}>
+							Close Without Saving
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</>
+	);
+};
+
+export const WithConfirmationDialogRef: Story = {
+	render: () => <WithConfirmationDialogRefSheet />
 };
