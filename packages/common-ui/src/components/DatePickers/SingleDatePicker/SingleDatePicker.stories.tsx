@@ -1,9 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import type { Locale } from 'date-fns';
 import { fr, es, de, ja } from 'date-fns/locale';
 
 import { SingleDatePicker } from '~/components/DatePickers/SingleDatePicker/SingleDatePicker';
 import { getDateFormatExamples, type DateFormatKey } from '~/utils/dates';
+
+type SingleDatePickerStorybookTypes = {
+	date?: Date;
+	onDateChange?: (date: Date | undefined) => void;
+	placeholder?: string;
+	disabled?: boolean;
+	className?: string;
+	fromYear?: number;
+	toYear?: number;
+	locale?: Locale;
+	dateFormat?: DateFormatKey;
+};
 
 const meta: Meta<typeof SingleDatePicker> = {
 	title: 'Components/Date pickers/Single date picker',
@@ -11,59 +24,77 @@ const meta: Meta<typeof SingleDatePicker> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-	render: () => <SingleDatePicker placeholder='Pick a date' />
+type Story = StoryObj<typeof SingleDatePicker>;
+
+const BasicSingleDatePickerTemplate = (args: SingleDatePickerStorybookTypes) => {
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>(args?.date);
+
+	const handleDateChange = (date: Date | undefined) => {
+		setSelectedDate(date);
+	};
+
+	return <SingleDatePicker {...args} date={selectedDate} onDateChange={handleDateChange} />;
 };
 
-const WithSelectedDateComponent = () => {
-	const [date, setDate] = useState<Date | undefined>(new Date('2024-01-15'));
-	return <SingleDatePicker date={date} onDateChange={setDate} placeholder='Pick a date' />;
+export const Default: Story = {
+	render: (args) => <BasicSingleDatePickerTemplate {...args} />,
+	args: {
+		placeholder: 'Pick a date'
+	}
 };
 
 export const WithSelectedDate: Story = {
-	render: () => <WithSelectedDateComponent />
-};
-
-const DisabledComponent = () => {
-	const [date, setDate] = useState<Date>();
-	return <SingleDatePicker date={date} onDateChange={setDate} disabled placeholder='Pick a date' />;
+	render: (args) => <BasicSingleDatePickerTemplate {...args} />,
+	args: {
+		date: new Date('2024-01-15'),
+		placeholder: 'Pick a date'
+	}
 };
 
 export const Disabled: Story = {
-	render: () => <DisabledComponent />
-};
-
-const CustomPlaceholderComponent = () => {
-	const [date, setDate] = useState<Date>();
-	return <SingleDatePicker date={date} onDateChange={setDate} placeholder='Select your birthday' />;
+	render: (args) => <BasicSingleDatePickerTemplate {...args} />,
+	args: {
+		disabled: true,
+		placeholder: 'Pick a date'
+	}
 };
 
 export const CustomPlaceholder: Story = {
-	render: () => <CustomPlaceholderComponent />
+	render: (args) => <BasicSingleDatePickerTemplate {...args} />,
+	args: {
+		placeholder: 'Select your birthday'
+	}
 };
 
-// Interactive example with state management
-const InteractiveComponent = () => {
-	const [date, setDate] = useState<Date>();
+const InteractiveTemplate = (args: SingleDatePickerStorybookTypes) => {
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>(args?.date);
+
+	const handleDateChange = (date: Date | undefined) => {
+		setSelectedDate(date);
+		args?.onDateChange?.(date);
+	};
 
 	return (
 		<div className='space-y-4'>
-			<SingleDatePicker date={date} onDateChange={setDate} placeholder='Select a date' />
-			{date && (
-				<p className='text-sm text-muted-foreground'>Selected date: {date.toLocaleDateString()}</p>
+			<SingleDatePicker {...args} date={selectedDate} onDateChange={handleDateChange} />
+			{selectedDate && (
+				<p className='text-sm text-muted-foreground'>
+					Selected date: {selectedDate.toLocaleDateString()}
+				</p>
 			)}
 		</div>
 	);
 };
 
 export const Interactive: Story = {
-	render: () => <InteractiveComponent />
+	render: (args) => <InteractiveTemplate {...args} />,
+	args: {
+		placeholder: 'Select a date'
+	}
 };
 
-// Multiple date pickers example
-const MultipleComponent = () => {
+const MultipleTemplate = () => {
 	const [startDate, setStartDate] = useState<Date>();
 	const [endDate, setEndDate] = useState<Date>();
 
@@ -85,11 +116,17 @@ const MultipleComponent = () => {
 };
 
 export const Multiple: Story = {
-	render: () => <MultipleComponent />
+	render: () => <MultipleTemplate />
 };
 
-const WithDropdownNavigationComponent = () => {
-	const [date, setDate] = useState<Date>();
+const WithDropdownNavigationTemplate = (args: SingleDatePickerStorybookTypes) => {
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>(args?.date);
+
+	const handleDateChange = (date: Date | undefined) => {
+		setSelectedDate(date);
+		args?.onDateChange?.(date);
+	};
+
 	return (
 		<div className='space-y-4'>
 			<div>
@@ -98,21 +135,20 @@ const WithDropdownNavigationComponent = () => {
 					Click the month or year in the calendar header to jump to a specific month/year. By
 					default, supports years 1900-2100.
 				</p>
-				<SingleDatePicker
-					date={date}
-					onDateChange={setDate}
-					placeholder='Pick a date with dropdown navigation'
-				/>
+				<SingleDatePicker {...args} date={selectedDate} onDateChange={handleDateChange} />
 			</div>
 		</div>
 	);
 };
 
 export const WithDropdownNavigation: Story = {
-	render: () => <WithDropdownNavigationComponent />
+	render: (args) => <WithDropdownNavigationTemplate {...args} />,
+	args: {
+		placeholder: 'Pick a date with dropdown navigation'
+	}
 };
 
-const WithCustomRangeComponent = () => {
+const WithCustomRangeTemplate = () => {
 	const [currentYearDate, setCurrentYearDate] = useState<Date>();
 	const [futureDate, setFutureDate] = useState<Date>();
 	const [birthDate, setBirthDate] = useState<Date>();
@@ -162,10 +198,10 @@ const WithCustomRangeComponent = () => {
 };
 
 export const WithCustomRange: Story = {
-	render: () => <WithCustomRangeComponent />
+	render: () => <WithCustomRangeTemplate />
 };
 
-const WithLocalesComponent = () => {
+const WithLocalesTemplate = () => {
 	const [englishDate, setEnglishDate] = useState<Date>();
 	const [frenchDate, setFrenchDate] = useState<Date>();
 	const [spanishDate, setSpanishDate] = useState<Date>();
@@ -231,10 +267,10 @@ const WithLocalesComponent = () => {
 };
 
 export const WithLocales: Story = {
-	render: () => <WithLocalesComponent />
+	render: () => <WithLocalesTemplate />
 };
 
-const WithDateFormatsComponent = () => {
+const WithDateFormatsTemplate = () => {
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date('2024-04-15'));
 	const [selectedFormat, setSelectedFormat] = useState<DateFormatKey>('fullShort');
 
@@ -276,7 +312,6 @@ const WithDateFormatsComponent = () => {
 					</select>
 				</div>
 
-				{/* Date picker with selected format */}
 				<div className='mb-4'>
 					<SingleDatePicker
 						date={selectedDate}
@@ -286,7 +321,6 @@ const WithDateFormatsComponent = () => {
 					/>
 				</div>
 
-				{/* Popular formats showcase */}
 				<div>
 					<h4 className='font-medium mb-2'>Popular Formats:</h4>
 					<div className='grid grid-cols-1 gap-2'>
@@ -317,5 +351,5 @@ const WithDateFormatsComponent = () => {
 };
 
 export const WithDateFormats: Story = {
-	render: () => <WithDateFormatsComponent />
+	render: () => <WithDateFormatsTemplate />
 };

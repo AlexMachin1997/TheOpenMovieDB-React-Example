@@ -11,13 +11,7 @@ const meta: Meta<typeof Popover> = {
 	component: Popover,
 	subcomponents: { PopoverTrigger, PopoverContent },
 	parameters: {
-		layout: 'centered',
-		docs: {
-			description: {
-				component:
-					'A popover component that displays content in a floating panel triggered by a button or other element.'
-			}
-		}
+		layout: 'centered'
 	},
 	argTypes: {
 		defaultOpen: {

@@ -5,7 +5,12 @@ import { formatDate } from '~/utils/dates';
 import { Button } from '~/components/Button/Button';
 import { Calendar } from '~/components/Calendar/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/Popover/Popover';
-import type { SingleDatePickerProps } from '~/components/DatePickers/SingleDatePicker/SingleDatePicker-Types';
+import { DatePickerProps } from '~/components/DatePickers/types';
+
+interface SingleDatePickerProps extends DatePickerProps {
+	date?: Date;
+	onDateChange?: (date: Date | undefined) => void;
+}
 
 export const SingleDatePicker = ({
 	date,

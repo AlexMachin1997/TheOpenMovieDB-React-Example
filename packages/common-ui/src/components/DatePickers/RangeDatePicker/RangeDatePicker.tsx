@@ -1,11 +1,17 @@
 import { CalendarIcon } from 'lucide-react';
 import React from 'react';
+import type { DateRange } from 'react-day-picker';
 import { cn } from '~/utils/className';
 import { formatDateRange } from '~/utils/dates';
 import { Button } from '~/components/Button/Button';
 import { Calendar } from '~/components/Calendar/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/Popover/Popover';
-import type { DateRangePickerProps } from '~/components/DatePickers/RangeDatePicker/RangeDatePicker-Types';
+import { DatePickerProps } from '~/components/DatePickers/types';
+
+interface DateRangePickerProps extends DatePickerProps {
+	dateRange?: DateRange;
+	onDateRangeChange: (dateRange: DateRange | undefined) => void;
+}
 
 export const DateRangePicker = ({
 	dateRange,

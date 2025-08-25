@@ -7,13 +7,7 @@ import { cn } from '~/utils/className';
 const meta: Meta = {
 	title: 'Components/Sliders/Single Slider',
 	parameters: {
-		layout: 'centered',
-		docs: {
-			description: {
-				component:
-					'A flexible slider component that supports both single and dual handle modes, built with Radix UI. Features tooltips for both individual thumbs and drag operations with customizable label formatting.'
-			}
-		}
+		layout: 'centered'
 	}
 };
 

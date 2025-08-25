@@ -127,23 +127,14 @@ export const Disabled: Story = {
 	)
 };
 
-// Interactive example
 export const Interactive: Story = {
 	args: {
 		children: 'Click me!',
 		variant: 'default',
 		size: 'default'
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: 'This is an interactive button that you can control using the controls panel.'
-			}
-		}
 	}
 };
 
-// As child example
 export const AsChild: Story = {
 	render: () => (
 		<div className='flex gap-4'>
@@ -154,13 +145,5 @@ export const AsChild: Story = {
 				<span>Span Button</span>
 			</Button>
 		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'Using the `asChild` prop allows the button to render as a different element while maintaining button styling and behavior.'
-			}
-		}
-	}
+	)
 };

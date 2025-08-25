@@ -295,15 +295,7 @@ const SignUpFormComponent = () => {
 };
 
 export const SignUpForm: Story = {
-	render: () => <SignUpFormComponent />,
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'A complete sign-up form example demonstrating how to use Input components with proper labeling and form handling.'
-			}
-		}
-	}
+	render: () => <SignUpFormComponent />
 };
 
 const ContactFormComponent = () => {
@@ -408,13 +400,5 @@ const ContactFormComponent = () => {
 };
 
 export const ContactForm: Story = {
-	render: () => <ContactFormComponent />,
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'A contact form example showing various input types including text, email, telephone, and textarea integration.'
-			}
-		}
-	}
+	render: () => <ContactFormComponent />
 };

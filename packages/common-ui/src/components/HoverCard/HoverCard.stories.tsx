@@ -6,17 +6,11 @@ import { Button } from '~/components/Button/Button';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '~/components/HoverCard/HoverCard';
 
 const meta: Meta = {
-	title: 'Components/HoverCard',
+	title: 'Components/Hover card',
 	component: HoverCard,
 	subcomponents: { HoverCardTrigger, HoverCardContent },
 	parameters: {
-		layout: 'centered',
-		docs: {
-			description: {
-				component:
-					'A hover card component that displays rich content when hovering over a trigger element. Built on Radix UI primitives with automatic positioning and collision detection.'
-			}
-		}
+		layout: 'centered'
 	}
 };
 

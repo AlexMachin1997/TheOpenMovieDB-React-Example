@@ -1,11 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { DateRange } from 'react-day-picker';
+import type { DateRange } from 'react-day-picker';
+import type { Locale } from 'date-fns';
 import { fr, es, de } from 'date-fns/locale';
 import { DateRangePicker } from '~/components/DatePickers/RangeDatePicker/RangeDatePicker';
 import { type DateFormatKey } from '~/utils/dates';
 
-const meta = {
+type DateRangePickerStorybookTypes = {
+	dateRange?: DateRange;
+	onDateRangeChange: (dateRange: DateRange | undefined) => void;
+	placeholder?: string;
+	disabled?: boolean;
+	className?: string;
+	fromYear?: number;
+	toYear?: number;
+	locale?: Locale;
+	dateFormat?: DateFormatKey;
+};
+
+const meta: Meta<typeof DateRangePicker> = {
 	title: 'Components/Date pickers/Range date picker',
 	component: DateRangePicker,
 	parameters: {
@@ -14,54 +27,59 @@ const meta = {
 			defaultViewport: 'desktop'
 		}
 	}
-} satisfies Meta<typeof DateRangePicker>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<DateRangePickerStorybookTypes>;
 
-export const Default: Story = {
-	render: () => (
+const BasicDateRangePickerTemplate = (args: DateRangePickerStorybookTypes) => {
+	const [selectedRange, setSelectedRange] = useState<DateRange | undefined>(args?.dateRange);
+
+	const handleRangeChange = (range: DateRange | undefined) => {
+		setSelectedRange(range);
+	};
+
+	return (
 		<div className='p-8'>
-			<DateRangePicker />
+			<DateRangePicker {...args} dateRange={selectedRange} onDateRangeChange={handleRangeChange} />
 		</div>
-	)
+	);
 };
 
 export const WithSelectedRange: Story = {
-	render: () => (
-		<div className='p-8'>
-			<DateRangePicker
-				dateRange={{
-					from: new Date('2024-01-15'),
-					to: new Date('2024-01-20')
-				}}
-			/>
-		</div>
-	)
+	render: (args) => <BasicDateRangePickerTemplate {...args} />,
+	args: {
+		dateRange: {
+			from: new Date('2024-01-15'),
+			to: new Date('2024-01-20')
+		}
+	}
 };
 
 export const Disabled: Story = {
-	render: () => (
-		<div className='p-8'>
-			<DateRangePicker disabled />
-		</div>
-	)
+	render: (args) => <BasicDateRangePickerTemplate {...args} />,
+	args: {
+		disabled: true
+	}
 };
 
 export const CustomPlaceholder: Story = {
-	render: () => (
-		<div className='p-8'>
-			<DateRangePicker placeholder='Select check-in and check-out dates' />
-		</div>
-	)
+	render: (args) => <BasicDateRangePickerTemplate {...args} />,
+	args: {
+		placeholder: 'Select check-in and check-out dates'
+	}
 };
 
-const InteractiveComponent = () => {
-	const [dateRange, setDateRange] = useState<DateRange>();
+const InteractiveTemplate = (args: DateRangePickerStorybookTypes) => {
+	const [dateRange, setDateRange] = useState<DateRange | undefined>(args?.dateRange);
+
+	const handleRangeChange = (range: DateRange | undefined) => {
+		setDateRange(range);
+	};
 
 	return (
 		<div className='p-8 space-y-4'>
-			<DateRangePicker dateRange={dateRange} onDateRangeChange={setDateRange} />
+			<DateRangePicker {...args} dateRange={dateRange} onDateRangeChange={handleRangeChange} />
 			{(dateRange?.from || dateRange?.to) && (
 				<div className='text-sm text-muted-foreground'>
 					{dateRange?.from && !dateRange?.to && (
@@ -83,10 +101,11 @@ const InteractiveComponent = () => {
 };
 
 export const Interactive: Story = {
-	render: () => <InteractiveComponent />
+	render: (args) => <InteractiveTemplate {...args} />,
+	args: {}
 };
 
-const TravelBookingComponent = () => {
+const TravelBookingTemplate = () => {
 	const [travelDates, setTravelDates] = useState<DateRange>();
 
 	const calculateNights = () => {
@@ -131,10 +150,11 @@ const TravelBookingComponent = () => {
 };
 
 export const TravelBooking: Story = {
-	render: () => <TravelBookingComponent />
+	render: () => <TravelBookingTemplate />,
+	args: {}
 };
 
-const WithCustomRangeComponent = () => {
+const WithCustomRangeTemplate = () => {
 	const [currentYearRange, setCurrentYearRange] = useState<DateRange>();
 	const [projectTimelineRange, setProjectTimelineRange] = useState<DateRange>();
 
@@ -173,10 +193,11 @@ const WithCustomRangeComponent = () => {
 };
 
 export const WithCustomRange: Story = {
-	render: () => <WithCustomRangeComponent />
+	render: () => <WithCustomRangeTemplate />,
+	args: {}
 };
 
-const WithLocalesComponent = () => {
+const WithLocalesTemplate = () => {
 	const [englishRange, setEnglishRange] = useState<DateRange>();
 	const [frenchRange, setFrenchRange] = useState<DateRange>();
 	const [spanishRange, setSpanishRange] = useState<DateRange>();
@@ -232,10 +253,11 @@ const WithLocalesComponent = () => {
 };
 
 export const WithLocales: Story = {
-	render: () => <WithLocalesComponent />
+	render: () => <WithLocalesTemplate />,
+	args: {}
 };
 
-const WithDateFormatsComponent = () => {
+const WithDateFormatsTemplate = () => {
 	const [selectedRange, setSelectedRange] = useState<DateRange>({
 		from: new Date('2024-04-15'),
 		to: new Date('2024-04-20')
@@ -299,5 +321,6 @@ const WithDateFormatsComponent = () => {
 };
 
 export const WithDateFormats: Story = {
-	render: () => <WithDateFormatsComponent />
+	render: () => <WithDateFormatsTemplate />,
+	args: {}
 };

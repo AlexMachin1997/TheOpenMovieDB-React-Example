@@ -12,13 +12,7 @@ import {
 const meta: Meta = {
 	title: 'Components/Slider',
 	parameters: {
-		layout: 'centered',
-		docs: {
-			description: {
-				component:
-					'Individual slider components that can be composed together for maximum customization. Use these when you need full control over styling and behavior.'
-			}
-		}
+		layout: 'centered'
 	}
 };
 

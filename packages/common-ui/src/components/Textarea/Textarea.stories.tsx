@@ -247,15 +247,7 @@ const ContactFormComponent = () => {
 };
 
 export const ContactForm: Story = {
-	render: () => <ContactFormComponent />,
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'A contact form example showing how to integrate Textarea with other form elements like inputs and buttons.'
-			}
-		}
-	}
+	render: () => <ContactFormComponent />
 };
 
 const FeedbackFormComponent = () => {
@@ -354,15 +346,7 @@ const FeedbackFormComponent = () => {
 };
 
 export const FeedbackForm: Story = {
-	render: () => <FeedbackFormComponent />,
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'A comprehensive feedback form example demonstrating multiple textarea fields with different purposes and helper text.'
-			}
-		}
-	}
+	render: () => <FeedbackFormComponent />
 };
 
 const BioFormComponent = () => {
@@ -393,15 +377,7 @@ const BioFormComponent = () => {
 };
 
 export const BioForm: Story = {
-	render: () => <BioFormComponent />,
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'A bio form example with character count and helper text, demonstrating textarea with maxLength and validation feedback.'
-			}
-		}
-	}
+	render: () => <BioFormComponent />
 };
 
 const ResizableTextareaComponent = () => {
@@ -425,13 +401,5 @@ const ResizableTextareaComponent = () => {
 };
 
 export const Resizable: Story = {
-	render: () => <ResizableTextareaComponent />,
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'A resizable textarea example demonstrating the resize functionality with custom styling.'
-			}
-		}
-	}
+	render: () => <ResizableTextareaComponent />
 };

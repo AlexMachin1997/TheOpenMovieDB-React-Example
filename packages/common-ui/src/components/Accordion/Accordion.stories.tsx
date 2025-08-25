@@ -10,12 +10,7 @@ const meta: Meta<typeof Accordion> = {
 	title: 'Components/Accordion',
 	component: Accordion,
 	parameters: {
-		layout: 'centered',
-		docs: {
-			description: {
-				component: 'A vertically collapsible accordion component built with Radix UI primitives.'
-			}
-		}
+		layout: 'centered'
 	}
 };
 

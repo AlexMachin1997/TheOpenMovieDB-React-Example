@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Progress } from './Progress';
+import { Progress } from '~/components/Progress/Progress';
 
 const meta: Meta<typeof Progress> = {
 	title: 'Components/Progress',
@@ -74,13 +74,6 @@ export const Complete: Story = {
 export const Indeterminate: Story = {
 	args: {
 		indeterminate: true
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: 'Shows a continuous loading animation when the exact progress is unknown.'
-			}
-		}
 	}
 };
 
@@ -88,13 +81,6 @@ export const CustomColors: Story = {
 	args: {
 		value: 60,
 		indicatorClassName: 'bg-green-500'
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: 'Custom progress bar color using indicatorClassName prop.'
-			}
-		}
 	}
 };
 
@@ -103,14 +89,6 @@ export const CustomStyling: Story = {
 		value: 60,
 		className: 'h-4 bg-slate-200',
 		indicatorClassName: 'bg-purple-500'
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'Custom styling with increased height, different background color, and custom indicator color.'
-			}
-		}
 	}
 };
 
@@ -141,14 +119,7 @@ export const ProgressExamples: Story = {
 				<p className='text-xs text-muted-foreground mt-1'>Installing packages... 90%</p>
 			</div>
 		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: 'Real-world examples showing different use cases for the Progress component.'
-			}
-		}
-	}
+	)
 };
 
 export const ColorExamples: Story = {
@@ -184,15 +155,7 @@ export const ColorExamples: Story = {
 				<Progress value={55} indicatorClassName='bg-gray-500' />
 			</div>
 		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'Different color variants of the Progress component to indicate different states or categories.'
-			}
-		}
-	}
+	)
 };
 
 export const VariantUseCase: Story = {
@@ -252,15 +215,7 @@ export const VariantUseCase: Story = {
 				</div>
 			</div>
 		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'Real-world examples showing how different variants can be used to represent different types of progress or status levels.'
-			}
-		}
-	}
+	)
 };
 
 export const WithTextOverlay: Story = {
@@ -286,14 +241,7 @@ export const WithTextOverlay: Story = {
 				<Progress value={60} className='h-6' indicatorClassName='bg-blue-500' showValue />
 			</div>
 		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: 'Progress bars with text overlays showing values, ratios, or custom content.'
-			}
-		}
-	}
+	)
 };
 
 export const Sizes: Story = {
@@ -324,13 +272,5 @@ export const Sizes: Story = {
 				<Progress value={60} className='h-6' showValue />
 			</div>
 		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'Different height variations of the Progress component. Use h-6 or larger for text overlays.'
-			}
-		}
-	}
+	)
 };
