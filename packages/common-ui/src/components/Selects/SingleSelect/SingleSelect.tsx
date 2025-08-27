@@ -141,7 +141,6 @@ export const SingleSelectListItem = ({
 	const { toggleValue, selectedValues, optionsMap, setOpen } = useSelectContext();
 
 	const handleSelect = () => {
-		console.log('handleSelect', value);
 		toggleValue(value);
 		setOpen(false);
 	};

@@ -1,14 +1,12 @@
 import { Command, CommandList, CommandInput, CommandEmpty } from '~/components/Command/Command';
 import { PopoverContent } from '~/components/Popover/Popover';
 
-export const SelectList = ({
-	search,
-	children,
-	...props
-}: {
+interface ISelectList extends React.ComponentPropsWithoutRef<typeof Command> {
 	search?: { placeholder?: string; emptyMessage?: string };
 	children: React.ReactNode;
-} & Omit<React.ComponentPropsWithoutRef<typeof Command>, 'children'>) => {
+}
+
+export const SelectList = ({ search, children, ...props }: ISelectList) => {
 	return (
 		<PopoverContent className='min-w-[var(--radix-popover-trigger-width)] p-0'>
 			<Command {...props} shouldFilter={false}>

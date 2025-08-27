@@ -307,14 +307,14 @@ export const RichContent: Story = {
 export const CustomStyling: Story = {
 	render: () => (
 		<Accordion type='single' collapsible className='w-full max-w-md'>
-			<AccordionItem value='item-1' className='border-2 border-blue-200 rounded-lg mb-2'>
+			<AccordionItem value='item-1' className='border-2 border-blue-200 rounded-lg'>
 				<AccordionTrigger className='px-4 py-3 text-blue-900 hover:text-blue-700'>
 					<span className='flex items-center gap-2'>
 						<span className='w-2 h-2 bg-blue-500 rounded-full'></span>
 						Premium Features
 					</span>
 				</AccordionTrigger>
-				<AccordionContent className='px-4 pb-4'>
+				<AccordionContent className='px-4'>
 					<div className='bg-blue-50 p-3 rounded'>
 						<p className='text-blue-800'>
 							Access to premium features including advanced analytics, priority support, and
@@ -330,7 +330,7 @@ export const CustomStyling: Story = {
 						Free Tier
 					</span>
 				</AccordionTrigger>
-				<AccordionContent className='px-4 pb-4'>
+				<AccordionContent className='px-4'>
 					<div className='bg-green-50 p-3 rounded'>
 						<p className='text-green-800'>
 							Basic features available for free users with limited access to core functionality.

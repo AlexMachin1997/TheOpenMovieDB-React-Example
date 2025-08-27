@@ -5,10 +5,10 @@ import { type VariantProps } from 'class-variance-authority';
 import { cn } from '~/utils/className';
 import { badgeVariants } from '~/components/Badge/variants';
 
-type BadgeProps = React.ComponentProps<'span'> &
+type IBadge = React.ComponentProps<'span'> &
 	VariantProps<typeof badgeVariants> & { asChild?: boolean };
 
-const Badge = ({ className, variant, asChild = false, ...props }: BadgeProps) => {
+const Badge = ({ className, variant, asChild = false, ...props }: IBadge) => {
 	const Comp = asChild ? Slot : 'span';
 
 	return (

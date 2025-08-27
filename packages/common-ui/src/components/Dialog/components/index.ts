@@ -1,0 +1,11 @@
+export { DialogClose } from '~/components/Dialog/components/DialogClose';
+export { DialogContent } from '~/components/Dialog/components/DialogContent';
+export { DialogContentArea } from '~/components/Dialog/components/DialogContentArea';
+export { DialogDescription } from '~/components/Dialog/components/DialogDescription';
+export { DialogFooter } from '~/components/Dialog/components/DialogFooter';
+export { DialogHeader } from '~/components/Dialog/components/DialogHeader';
+export { DialogOverlay } from '~/components/Dialog/components/DialogOverlay';
+export { DialogPortal } from '~/components/Dialog/components/DialogPortal';
+export { DialogTitle } from '~/components/Dialog/components/DialogTitle';
+export { DialogTrigger } from '~/components/Dialog/components/DialogTrigger';
+export { Dialog } from '~/components/Dialog/components/Dialog';
