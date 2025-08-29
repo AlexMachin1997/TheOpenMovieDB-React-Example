@@ -8,6 +8,7 @@ import {
 	DialogHeader,
 	DialogTitle
 } from '~/components/Dialog/Dialog';
+import { useCommandContext } from '~/components/Command/hooks';
 
 interface ICommandDialog extends React.ComponentProps<typeof Dialog> {
 	title?: string;
@@ -24,8 +25,10 @@ export const CommandDialog = ({
 	showCloseButton = true,
 	...props
 }: ICommandDialog) => {
+	const { open, setOpen } = useCommandContext();
+
 	return (
-		<Dialog {...props}>
+		<Dialog open={open} onOpenChange={setOpen} {...props}>
 			<DialogHeader className='sr-only'>
 				<DialogTitle>{title}</DialogTitle>
 				<DialogDescription>{description}</DialogDescription>

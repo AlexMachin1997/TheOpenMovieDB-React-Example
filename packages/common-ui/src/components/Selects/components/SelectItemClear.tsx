@@ -12,7 +12,7 @@ export type SelectItemClearProps = {
 	/**
 	 * The value to clear
 	 */
-	value?: string;
+	value: string;
 	/**
 	 * Label for the value (used in aria-label)
 	 */
@@ -20,7 +20,7 @@ export type SelectItemClearProps = {
 	/**
 	 * Callback function called when the clear button is clicked
 	 */
-	onClear: (value?: string) => void;
+	onClear: (value: string) => void;
 	/**
 	 * Variant styling for different use cases
 	 */

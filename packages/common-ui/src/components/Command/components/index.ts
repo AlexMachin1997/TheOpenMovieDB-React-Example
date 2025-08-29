@@ -7,3 +7,5 @@ export { CommandItem } from '~/components/Command/components/CommandItem';
 export { CommandShortcut } from '~/components/Command/components/CommandShortcut';
 export { CommandSeparator } from '~/components/Command/components/CommandSeparator';
 export { Command } from '~/components/Command/components/Command';
+export { CommandProvider } from '~/components/Command/components/CommandProvider';
+export { VirtualizedList } from '~/components/Command/components/VirtualizedList';

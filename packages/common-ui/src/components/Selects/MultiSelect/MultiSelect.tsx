@@ -2,6 +2,7 @@ import * as React from 'react';
 import { cn } from '~/utils/className';
 import { Badge } from '~/components/Badge/Badge';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
 
 /**
@@ -56,7 +57,8 @@ export const MultiSelectValue = ({
 	overflowBehavior = 'wrap-when-open',
 	...props
 }: MultiSelectValueProps) => {
-	const { selectedValues, toggleValue, optionsMap, open } = useSelectContext();
+	const { selectedValues, toggleValue, optionsMap } = useSelectContext();
+	const { open } = useCommandContext();
 	const [overflowAmount, setOverflowAmount] = React.useState(0);
 	const valueRef = React.useRef<HTMLUListElement>(null);
 	const overflowRef = React.useRef<HTMLUListElement>(null);

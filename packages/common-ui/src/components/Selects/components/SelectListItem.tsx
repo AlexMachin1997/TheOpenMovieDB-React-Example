@@ -14,14 +14,16 @@ export const SelectListItem = ({
 } & Omit<React.ComponentPropsWithoutRef<typeof CommandItem>, 'value'>) => {
 	const { toggleValue, selectedValues, optionsMap } = useSelectContext();
 
+	const handleSelectItem = React.useCallback(() => {
+		toggleValue(value);
+		onSelect?.(value);
+	}, [toggleValue, value, onSelect]);
+
 	return (
 		<CommandItem
 			{...props}
 			value={optionsMap.get(value)}
-			onSelect={() => {
-				toggleValue(value);
-				onSelect?.(value);
-			}}
+			onSelect={handleSelectItem}
 			disabled={disabled}
 		>
 			<CheckIcon

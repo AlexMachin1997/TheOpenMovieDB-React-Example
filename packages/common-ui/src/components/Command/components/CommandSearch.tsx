@@ -3,19 +3,19 @@ import { Command as CommandPrimitive } from 'cmdk';
 import { SearchIcon } from 'lucide-react';
 import { useDebounce } from 'react-use';
 import { cn } from '~/utils/className';
-import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
 export interface CommandSearchProps extends React.ComponentProps<typeof CommandPrimitive.Input> {
 	debounceMs?: number;
 }
 
 export const CommandSearch = ({ debounceMs = 300, className, ...props }: CommandSearchProps) => {
-	const { setSearchValue } = useSelectContext();
+	const { onSearchChange } = useCommandContext();
 	const [inputValue, setInputValue] = React.useState('');
 
 	const handleDebouncedValueChange = React.useCallback(() => {
-		setSearchValue(inputValue);
-	}, [inputValue, setSearchValue]);
+		onSearchChange(inputValue);
+	}, [inputValue, onSearchChange]);
 
 	const debounceDependencies = React.useMemo(() => {
 		return [inputValue];

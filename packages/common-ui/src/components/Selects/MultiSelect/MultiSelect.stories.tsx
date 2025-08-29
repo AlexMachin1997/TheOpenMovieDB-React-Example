@@ -15,14 +15,14 @@ import { Label } from '~/components/Label/Label';
 import { Option } from '~/types/Option';
 
 type MultiSelectStorybookTypes = {
-	values?: string[];
-	options?: Option[];
+	values: string[];
+	options: Option[];
 	onValuesChange?: (values: string[]) => void;
 	children?: React.ReactNode;
 	placeholder?: string;
 	overflowBehavior?: 'wrap' | 'wrap-when-open' | 'cutoff';
-	canSearch?: boolean;
-	clickToRemove?: boolean;
+	canSearch: boolean;
+	clickToRemove: boolean;
 };
 
 const meta: Meta<typeof SelectProvider> = {

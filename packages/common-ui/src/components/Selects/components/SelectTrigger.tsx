@@ -1,7 +1,7 @@
 import { Button } from '~/components/Button/Button';
 import { PopoverTrigger } from '~/components/Popover/Popover';
 import { cn } from '~/utils/className';
-import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { ChevronsUpDownIcon } from 'lucide-react';
 
 export const SelectTrigger = ({
@@ -15,7 +15,7 @@ export const SelectTrigger = ({
 	className?: string;
 	children?: React.ReactNode;
 } & React.ComponentPropsWithoutRef<typeof Button>) => {
-	const { open } = useSelectContext();
+	const { open } = useCommandContext();
 
 	return (
 		<PopoverTrigger asChild>

@@ -7,5 +7,6 @@ export {
 	CommandItem,
 	CommandShortcut,
 	CommandSeparator,
-	Command
+	Command,
+	CommandProvider
 } from '~/components/Command/components';

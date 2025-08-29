@@ -3,6 +3,7 @@ import { CheckIcon } from 'lucide-react';
 import { cn } from '~/utils/className';
 import { CommandItem } from '~/components/Command/Command';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
 
 /**
@@ -57,13 +58,11 @@ export const SingleSelectValue = ({
 	// For single select, we only care about the first selected value
 	const selectedValue = Array.from(selectedValues)[0];
 
-	const handleClear = (value?: string) => {
-		if (value) {
-			toggleValue(value);
-		}
+	const handleClear = (value: string) => {
+		toggleValue(value);
 	};
 
-	if (selectedValues.size === 0) {
+	if (selectedValues.size === 0 || !selectedValue) {
 		return (
 			<ul
 				{...props}
@@ -81,7 +80,7 @@ export const SingleSelectValue = ({
 				{showClearButton && (
 					<SelectItemClear
 						value={selectedValue}
-						valueLabel={optionsMap.get(selectedValue ?? '')}
+						valueLabel={optionsMap.get(selectedValue)}
 						onClear={handleClear}
 						variant='badge'
 						iconSize='sm'
@@ -138,7 +137,8 @@ export const SingleSelectListItem = ({
 	disabled = false,
 	...props
 }: SingleSelectListItemProps) => {
-	const { toggleValue, selectedValues, optionsMap, setOpen } = useSelectContext();
+	const { toggleValue, selectedValues, optionsMap } = useSelectContext();
+	const { setOpen } = useCommandContext();
 
 	const handleSelect = () => {
 		toggleValue(value);
