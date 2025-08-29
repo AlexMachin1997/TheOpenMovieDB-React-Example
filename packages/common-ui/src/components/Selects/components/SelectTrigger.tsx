@@ -4,6 +4,52 @@ import { cn } from '~/utils/className';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { ChevronsUpDownIcon } from 'lucide-react';
 
+/**
+ * Props for the SelectTrigger component
+ *
+ * @interface SelectTriggerProps
+ * @extends React.ComponentPropsWithoutRef<typeof Button>
+ */
+interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeof Button> {
+	/** Additional CSS classes to apply to the trigger button */
+	className?: string;
+	/** Content to display inside the trigger button */
+	children?: React.ReactNode;
+}
+
+/**
+ * Trigger button component for select dropdowns
+ *
+ * This component provides a button that opens the select dropdown when clicked.
+ * It integrates with the CommandContext to manage the open/close state and
+ * provides proper accessibility attributes for screen readers.
+ *
+ * Features:
+ * - Automatic open/close state management through CommandContext
+ * - Proper ARIA attributes for accessibility (aria-expanded, role="combobox")
+ * - Consistent styling with other form components
+ * - Chevron icon to indicate dropdown functionality
+ * - Focus and hover states with proper visual feedback
+ * - Support for disabled state
+ * - Integration with PopoverTrigger for positioning
+ *
+ * The component automatically:
+ * - Sets aria-expanded based on the current open state
+ * - Provides proper role="combobox" for accessibility
+ * - Shows a chevron icon to indicate dropdown functionality
+ * - Handles focus states and keyboard navigation
+ *
+ * Styling includes:
+ * - Consistent border and background colors
+ * - Proper spacing and typography
+ * - Focus ring and hover states
+ * - Disabled and invalid states
+ * - Dark mode support
+ *
+ * @component
+ * @param props - The trigger button configuration props
+ * @returns The rendered select trigger button component
+ */
 export const SelectTrigger = ({
 	className,
 	children,
@@ -11,10 +57,7 @@ export const SelectTrigger = ({
 	role = 'combobox',
 	'aria-expanded': ariaExpanded,
 	...props
-}: {
-	className?: string;
-	children?: React.ReactNode;
-} & React.ComponentPropsWithoutRef<typeof Button>) => {
+}: SelectTriggerProps) => {
 	const { open } = useCommandContext();
 
 	return (

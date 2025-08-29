@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cn } from '~/utils/className';
-import { Command } from '~/components/Command/components/Command';
+import { Command } from '~/components/Command/components';
 import {
 	Dialog,
 	DialogContent,
@@ -10,13 +10,49 @@ import {
 } from '~/components/Dialog/Dialog';
 import { useCommandContext } from '~/components/Command/hooks';
 
+/**
+ * Props for the CommandDialog component
+ *
+ * @interface ICommandDialog
+ * @extends React.ComponentProps<typeof Dialog>
+ */
 interface ICommandDialog extends React.ComponentProps<typeof Dialog> {
+	/** The title displayed in the dialog header (screen reader only) */
 	title?: string;
+	/** The description displayed in the dialog header (screen reader only) */
 	description?: string;
+	/** Additional CSS classes to apply to the dialog content */
 	className?: string;
+	/** Whether to show the close button in the dialog */
 	showCloseButton?: boolean;
 }
 
+/**
+ * Dialog component that wraps command palette functionality in a modal interface
+ *
+ * This component provides a full-screen modal dialog for command palette operations,
+ * combining the Dialog component with Command functionality. It automatically
+ * manages the open/close state through the CommandContext and provides
+ * accessibility features through screen reader-only headers.
+ *
+ * Features:
+ * - Full-screen modal dialog with backdrop
+ * - Screen reader accessible with hidden header
+ * - Integrated with Command component for consistent styling
+ * - Automatic state management through CommandContext
+ * - Customizable close button visibility
+ * - Responsive design with proper overflow handling
+ *
+ * The dialog includes comprehensive styling for command components:
+ * - Proper spacing and padding for command items
+ * - Consistent typography and colors
+ * - Icon sizing and positioning
+ * - Group heading and separator styling
+ *
+ * @component
+ * @param props - The dialog configuration props
+ * @returns The rendered command dialog component
+ */
 export const CommandDialog = ({
 	title = 'Command Palette',
 	description = 'Search for a command to run...',
