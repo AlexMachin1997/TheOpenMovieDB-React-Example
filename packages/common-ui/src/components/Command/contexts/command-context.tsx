@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { Option } from '~/types/Option';
 
 /**
  * Context value interface for command palette functionality
@@ -29,6 +30,12 @@ export interface CommandContextValue {
 	setOpen: (open: boolean) => void;
 	/** Function to handle search value changes */
 	onSearchChange: (value: string) => void;
+	/** Generic options for filtering (used by both Command and Select) */
+	options?: Option[];
+	/** Map of option values to their display labels for efficient lookups */
+	optionsMap: Map<string, string>;
+	/** Array of options filtered by the current search value */
+	filteredOptions: Option[];
 }
 
 /**

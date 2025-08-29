@@ -54,7 +54,7 @@ interface ISelectList extends React.ComponentPropsWithoutRef<typeof Command> {
 export const SelectList = ({ search, children, ...props }: ISelectList) => {
 	return (
 		<PopoverContent className='min-w-[var(--radix-popover-trigger-width)] p-0'>
-			<Command {...props} shouldFilter={false}>
+			<Command {...props}>
 				{typeof search !== 'undefined' && <CommandInput placeholder={search.placeholder} />}
 				<CommandList>
 					<CommandEmpty>{search?.emptyMessage ?? 'No items found'}</CommandEmpty>

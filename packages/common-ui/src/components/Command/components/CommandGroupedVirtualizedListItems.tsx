@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { CommandGroupedVirtualizedList } from '~/components/Command/components/CommandGroupedVirtualizedList';
 import { Option } from '~/types/Option';
-import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
-export interface SelectVirtualizedGroupedListProps<T extends Option = Option> {
+export interface CommandGroupedVirtualizedListItemsProps<T extends Option = Option> {
 	children: (props: { item: T }) => React.ReactNode;
 	estimateSize?: number;
 	overscan?: number;
@@ -12,7 +12,7 @@ export interface SelectVirtualizedGroupedListProps<T extends Option = Option> {
 	ungroupedPosition?: 'top' | 'bottom';
 }
 
-export const SelectVirtualizedGroupedList = React.memo(
+export const CommandGroupedVirtualizedListItems = React.memo(
 	<T extends Option>({
 		children,
 		estimateSize = 36,
@@ -20,8 +20,8 @@ export const SelectVirtualizedGroupedList = React.memo(
 		className,
 		groupOrder,
 		ungroupedPosition = 'top'
-	}: SelectVirtualizedGroupedListProps<T>) => {
-		const { filteredOptions } = useSelectContext();
+	}: CommandGroupedVirtualizedListItemsProps<T>) => {
+		const { filteredOptions } = useCommandContext();
 
 		return (
 			<CommandGroupedVirtualizedList
@@ -38,4 +38,4 @@ export const SelectVirtualizedGroupedList = React.memo(
 	}
 );
 
-SelectVirtualizedGroupedList.displayName = 'SelectVirtualizedGroupedList';
+CommandGroupedVirtualizedListItems.displayName = 'CommandGroupedVirtualizedListItems';

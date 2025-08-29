@@ -26,6 +26,12 @@ interface ICommand extends React.ComponentProps<typeof CommandPrimitive> {
  * - Rounded corners and overflow handling
  * - Accessibility support through cmdk primitives
  * - Customizable styling through className prop
+ * - Disabled built-in filtering (shouldFilter={false}) to allow custom filtering logic
+ *
+ * ⚠️ IMPORTANT: This component sets shouldFilter={false} to disable cmdk's built-in
+ * filtering. This is required for proper integration with CommandProvider's custom
+ * filtering logic and virtualization components. Without this, virtualization and
+ * grouped lists may fail to render correctly.
  *
  * @component
  * @example
@@ -61,6 +67,7 @@ export const Command = ({ className, ...props }: ICommand) => {
 				className
 			)}
 			{...props}
+			shouldFilter={false}
 		/>
 	);
 };

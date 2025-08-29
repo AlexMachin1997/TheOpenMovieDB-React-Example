@@ -5,7 +5,10 @@ export * from '~/components/Command/components';
 export * from '~/components/Command/contexts/command-context';
 
 // Hooks
-export * from '~/components/Command/hooks/useCommandContext';
+export * from '~/components/Command/hooks';
 
 // Types
-export * from '~/components/Command/types/command-provider';
+export * from '~/components/Command/types';
+
+// Utils
+export * from '~/components/Command/utils';

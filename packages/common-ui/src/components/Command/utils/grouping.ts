@@ -1,16 +1,6 @@
 import { Option } from '~/types/Option';
-import { VirtualizedItem } from '~/components/Selects/types/virtualized-item';
-
-export interface GroupedOptions<T extends Option = Option> {
-	groups: Map<string | undefined, T[]>;
-	sortedGroupNames: (string | undefined)[];
-}
-
-export interface GroupOptionsParams {
-	options: Option[];
-	groupOrder?: string[];
-	ungroupedPosition?: 'top' | 'bottom';
-}
+import { VirtualizedItem } from '~/components/Command/types/virtualized-item';
+import { GroupedOptions, GroupOptionsParams } from '~/components/Command/types/grouped-options';
 
 /**
  * Groups options by their group property and returns sorted group names
@@ -19,7 +9,7 @@ const groupOptions = <T extends Option = Option>({
 	options,
 	groupOrder,
 	ungroupedPosition = 'top'
-}: GroupOptionsParams): GroupedOptions<T> => {
+}: GroupOptionsParams<T>): GroupedOptions<T> => {
 	// Group options by their group property
 	const groups = new Map<string | undefined, T[]>();
 
@@ -29,11 +19,11 @@ const groupOptions = <T extends Option = Option>({
 	}
 
 	options.forEach((option) => {
-		const group = (option as T).group;
+		const group = option.group;
 		if (!groups.has(group)) {
 			groups.set(group, []);
 		}
-		groups.get(group)!.push(option as T);
+		groups.get(group)!.push(option);
 	});
 
 	// Get sorted group names
@@ -64,9 +54,9 @@ const groupOptions = <T extends Option = Option>({
  * Includes separators, group headers, and options in the correct order
  */
 export const getVirtualizedItems = <T extends Option = Option>(
-	params: GroupOptionsParams
-): VirtualizedItem[] => {
-	const items: VirtualizedItem[] = [];
+	params: GroupOptionsParams<T>
+): VirtualizedItem<T>[] => {
+	const items: VirtualizedItem<T>[] = [];
 	const { groups, sortedGroupNames } = groupOptions<T>(params);
 
 	// Build flat item list for virtualization
@@ -107,8 +97,8 @@ export const getVirtualizedItems = <T extends Option = Option>(
 /**
  * Estimates the size of a virtualized item based on its type
  */
-export const getEstimatedItemHeight = (
-	item: VirtualizedItem | undefined,
+export const getEstimatedItemHeight = <T extends Option = Option>(
+	item: VirtualizedItem<T> | undefined,
 	defaultOptionSize: number
 ): number => {
 	switch (item?.type) {

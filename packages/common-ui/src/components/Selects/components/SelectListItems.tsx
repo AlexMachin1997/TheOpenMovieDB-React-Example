@@ -2,7 +2,6 @@ import * as React from 'react';
 import { CommandList } from '~/components/Command/Command';
 import { Option } from '~/types/Option';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
-import { SelectItemsRenderer } from './SelectItemsRenderer';
 
 export interface SelectListItemsProps {
 	children: (props: { item: Option }) => React.ReactNode;
@@ -14,9 +13,9 @@ export const SelectListItems = React.memo(({ children, className }: SelectListIt
 
 	return (
 		<CommandList className={className}>
-			<SelectItemsRenderer items={filteredOptions}>
-				{({ item }) => children({ item })}
-			</SelectItemsRenderer>
+			{filteredOptions.map((item) => (
+				<React.Fragment key={item.id}>{children({ item })}</React.Fragment>
+			))}
 		</CommandList>
 	);
 });

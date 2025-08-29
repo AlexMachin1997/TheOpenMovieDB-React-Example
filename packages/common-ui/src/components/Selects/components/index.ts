@@ -10,11 +10,10 @@ export * from '~/components/Selects/components/SelectGroupedListItems';
  * Select list components
  * Core components for rendering select lists, items, and managing interactions
  */
-export * from '~/components/Selects/components/SelectItemsRenderer';
 export * from '~/components/Selects/components/SelectListItem';
-export * from '~/components/Selects/components/SelectListItemsVirtualized';
 export * from '~/components/Selects/components/SelectList';
 export * from '~/components/Selects/components/SelectListItems';
+export * from '~/components/Selects/components/SelectListItemsVirtualized';
 
 /**
  * Select infrastructure components

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Popover } from '~/components/Popover/Popover';
 import { CommandContext, CommandContextValue } from '~/components/Command/contexts/command-context';
 import { CommandProviderProps } from '~/components/Command/types/command-provider';
+import { Option } from '~/types/Option';
 
 /**
  * Provider component that manages the state and behavior of command palette functionality
@@ -34,13 +35,27 @@ export const CommandProvider = ({
 	closeOnSelect = true,
 	open,
 	setOpen,
-	defaultSearchValue = ''
+	defaultSearchValue = '',
+	options
 }: CommandProviderProps) => {
 	const [searchValue, setSearchValue] = React.useState(defaultSearchValue);
 
 	const handleSearchChange = React.useCallback((value: string) => {
 		setSearchValue(value);
 	}, []);
+
+	// Generic filtering logic (shared between Command and Select)
+	const optionsMap = React.useMemo(() => {
+		return new Map(options.map((option: Option) => [option.value, option.label]));
+	}, [options]);
+
+	const filteredOptions = React.useMemo(() => {
+		if (!options) return [];
+		if (!searchValue.trim()) return options;
+
+		const searchLower = searchValue.toLowerCase();
+		return options.filter((option: Option) => option.label.toLowerCase().includes(searchLower));
+	}, [options, searchValue]);
 
 	const contextValue: CommandContextValue = React.useMemo(
 		() => ({
@@ -53,9 +68,23 @@ export const CommandProvider = ({
 			openMenu: () => setOpen(true),
 			toggle: () => setOpen(!open),
 			setOpen: setOpen,
-			onSearchChange: handleSearchChange
+			onSearchChange: handleSearchChange,
+			options,
+			optionsMap,
+			filteredOptions
 		}),
-		[open, searchValue, items, setItems, closeOnSelect, setOpen, handleSearchChange]
+		[
+			open,
+			searchValue,
+			items,
+			setItems,
+			closeOnSelect,
+			setOpen,
+			handleSearchChange,
+			options,
+			optionsMap,
+			filteredOptions
+		]
 	);
 
 	return (

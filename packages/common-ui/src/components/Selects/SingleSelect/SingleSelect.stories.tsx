@@ -17,8 +17,8 @@ import { Label } from '~/components/Label/Label';
 import { Option } from '~/types/Option';
 
 type SingleSelectStorybookTypes = {
-	value?: string;
-	options?: Option[];
+	value: string;
+	options: Option[];
 	onValueChange?: (value: string) => void;
 	children?: React.ReactNode;
 	placeholder?: string;

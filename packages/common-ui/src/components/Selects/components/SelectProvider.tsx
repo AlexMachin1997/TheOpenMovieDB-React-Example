@@ -4,24 +4,27 @@ import { CommandProvider } from '~/components/Command/components/CommandProvider
 import { SelectContext } from '~/components/Selects/contexts/select-context';
 import { Option } from '~/types/Option';
 
+interface ISelectProviderCommonOptions {
+	/** Available options for selection */
+	options: Option[];
+	/** Whether to close the dropdown when an option is selected */
+	closeOnSelect?: boolean;
+	/** Child components to render */
+	children: React.ReactNode;
+	/** Currently selected value(s) */
+	values?: string[];
+}
+
 /**
  * Props for single-select mode
  *
  * @interface SingleSelectProviderProps
  */
-interface SingleSelectProviderProps {
+interface SingleSelectProviderProps extends ISelectProviderCommonOptions {
 	/** Selection mode - must be 'single' */
 	mode: 'single';
-	/** Child components to render */
-	children: React.ReactNode;
-	/** Currently selected value(s) - for single select, only the first value is used */
-	values?: string[];
-	/** Available options for selection */
-	options?: Option[];
 	/** Callback when selection changes - receives single string value */
 	onValuesChange: (values: string) => void;
-	/** Whether to close the dropdown when an option is selected */
-	closeOnSelect?: boolean;
 }
 
 /**
@@ -29,19 +32,11 @@ interface SingleSelectProviderProps {
  *
  * @interface MultiSelectProviderProps
  */
-interface MultiSelectProviderProps {
+interface MultiSelectProviderProps extends ISelectProviderCommonOptions {
 	/** Selection mode - must be 'multiple' */
 	mode: 'multiple';
-	/** Child components to render */
-	children: React.ReactNode;
-	/** Currently selected values */
-	values: string[];
-	/** Available options for selection */
-	options: Option[];
 	/** Callback when selection changes - receives array of string values */
 	onValuesChange: (values: string[]) => void;
-	/** Whether to close the dropdown when an option is selected */
-	closeOnSelect?: boolean;
 }
 
 /**
@@ -64,18 +59,7 @@ type SelectProviderProps = SingleSelectProviderProps | MultiSelectProviderProps;
  * @returns The select context provider with computed values
  */
 const SelectProviderInner = (props: SelectProviderProps) => {
-	const { searchValue, onSearchChange } = useCommandContext();
-
-	const optionsMap = React.useMemo(() => {
-		return new Map(props.options?.map((option) => [option.value, option.label]));
-	}, [props.options]);
-
-	const filteredOptions = React.useMemo(() => {
-		if (!searchValue.trim()) return props.options;
-
-		const searchLower = searchValue.toLowerCase();
-		return props.options?.filter((option) => option.label.toLowerCase().includes(searchLower));
-	}, [props.options, searchValue]);
+	const { searchValue, onSearchChange, optionsMap, filteredOptions } = useCommandContext();
 
 	const toggleValue = (value: string) => {
 		const currentValues = new Set(props.values);
@@ -107,7 +91,7 @@ const SelectProviderInner = (props: SelectProviderProps) => {
 				optionsMap,
 				searchValue,
 				onSearchChange,
-				filteredOptions: filteredOptions ?? [],
+				filteredOptions,
 				mode: props.mode
 			}}
 		>
@@ -159,6 +143,7 @@ export const SelectProvider = (props: SelectProviderProps) => {
 			closeOnSelect={props.closeOnSelect}
 			open={open}
 			setOpen={setOpen}
+			options={props.options}
 		>
 			<SelectProviderInner {...props} />
 		</CommandProvider>

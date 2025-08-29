@@ -1,3 +1,5 @@
+import { Option } from '~/types/Option';
+
 export interface CommandProviderProps {
 	children: React.ReactNode;
 	items: unknown[];
@@ -6,4 +8,5 @@ export interface CommandProviderProps {
 	setOpen: (open: boolean) => void;
 	closeOnSelect?: boolean;
 	defaultSearchValue?: string;
+	options: Option[];
 }
