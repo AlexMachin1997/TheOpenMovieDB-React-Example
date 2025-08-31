@@ -3,9 +3,8 @@ import { CommandList } from '~/components/Command/components/CommandList';
 import { CommandSeparator } from '~/components/Command/components/CommandSeparator';
 import { CommandGroup } from '~/components/Command/components/CommandGroup';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
-import { Option } from '~/types/Option';
 import { ICommandGroupedListProps } from '~/components/Command/types';
-import { CommandEmpty } from './CommandEmpty';
+import { Option } from '~/types/Option';
 
 export const CommandGroupedList = React.memo(function CommandGroupedList({
 	children,
@@ -32,7 +31,7 @@ export const CommandGroupedList = React.memo(function CommandGroupedList({
 
 	const sortedGroups = React.useMemo(() => {
 		const groupNames = Array.from(groups.keys());
-		const definedGroups = groupNames.filter((name) => name !== undefined) as string[];
+		const definedGroups = groupNames.filter(Boolean);
 		const hasUngrouped = groupNames.includes(undefined);
 
 		const sortedGroups = groupOrder
@@ -50,13 +49,6 @@ export const CommandGroupedList = React.memo(function CommandGroupedList({
 
 		return sortedGroups;
 	}, [groups, groupOrder, ungroupedPosition]);
-
-	if (groups.size === 0)
-		return (
-			<CommandList className={className}>
-				<CommandEmpty />
-			</CommandList>
-		);
 
 	return (
 		<CommandList className={className}>

@@ -11,14 +11,15 @@ import {
 import {
 	Command,
 	CommandDialog,
-	CommandInput,
 	CommandProvider,
 	CommandListItems,
 	CommandVirtualizedList,
 	CommandGroupedList,
 	CommandGroupedVirtualizedListItems,
 	CommandItem,
-	CommandShortcut
+	CommandShortcut,
+	CommandContainer,
+	CommandWrapper
 } from '~/components/Command/components';
 // Internal components for stories
 import type { Option } from '~/types/Option';
@@ -73,8 +74,10 @@ const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
 	return (
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<Command {...args}>
-					<CommandInput placeholder='Type a command or search...' />
+				<CommandWrapper
+					{...args}
+					searchConfig={{ searchPlaceholder: 'Type a command or search...' }}
+				>
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -88,7 +91,7 @@ const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</Command>
+				</CommandWrapper>
 			</CommandProvider>
 		</div>
 	);
@@ -96,6 +99,94 @@ const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
 
 export const Basic: Story = {
 	render: (args) => <BasicCommandTemplate {...args} />
+};
+
+// CommandWrapper Template
+const CommandWrapperTemplate = (args: React.ComponentProps<typeof CommandWrapper>) => {
+	const [open, setOpen] = React.useState(false);
+
+	// Basic options for the command
+	const options: Option[] = React.useMemo(
+		() => [
+			{ id: 'calendar', value: 'calendar', label: 'Calendar' },
+			{ id: 'search-emoji', value: 'search-emoji', label: 'Search Emoji' },
+			{ id: 'calculator', value: 'calculator', label: 'Calculator' },
+			{ id: 'profile', value: 'profile', label: 'Profile' },
+			{ id: 'settings', value: 'settings', label: 'Settings' },
+			{ id: 'dashboard', value: 'dashboard', label: 'Dashboard' }
+		],
+		[]
+	);
+
+	return (
+		<div className='w-[350px]'>
+			<CommandProvider open={open} setOpen={setOpen} options={options}>
+				<CommandWrapper {...args}>
+					<CommandListItems>
+						{({ item }) => (
+							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
+								{item.value === 'calendar' && <CalendarIcon className='size-4' />}
+								{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
+								{item.value === 'calculator' && <FileTextIcon className='size-4' />}
+								{item.value === 'profile' && <UserIcon className='size-4' />}
+								{item.value === 'settings' && <SettingsIcon className='size-4' />}
+								{item.value === 'dashboard' && <HomeIcon className='size-4' />}
+								<span>{item.label}</span>
+							</CommandItem>
+						)}
+					</CommandListItems>
+				</CommandWrapper>
+			</CommandProvider>
+		</div>
+	);
+};
+
+export const WithWrapper: Story = {
+	render: (args) => <CommandWrapperTemplate {...args} />
+};
+
+// CommandContainer Template
+const CommandContainerTemplate = (args: React.ComponentProps<typeof CommandContainer>) => {
+	const [open, setOpen] = React.useState(false);
+
+	// Basic options for the command
+	const options: Option[] = React.useMemo(
+		() => [
+			{ id: 'calendar', value: 'calendar', label: 'Calendar' },
+			{ id: 'search-emoji', value: 'search-emoji', label: 'Search Emoji' },
+			{ id: 'calculator', value: 'calculator', label: 'Calculator' },
+			{ id: 'profile', value: 'profile', label: 'Profile' },
+			{ id: 'settings', value: 'settings', label: 'Settings' },
+			{ id: 'dashboard', value: 'dashboard', label: 'Dashboard' }
+		],
+		[]
+	);
+
+	return (
+		<div className='w-[350px]'>
+			<CommandProvider open={open} setOpen={setOpen} options={options}>
+				<CommandContainer {...args}>
+					<CommandListItems>
+						{({ item }) => (
+							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
+								{item.value === 'calendar' && <CalendarIcon className='size-4' />}
+								{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
+								{item.value === 'calculator' && <FileTextIcon className='size-4' />}
+								{item.value === 'profile' && <UserIcon className='size-4' />}
+								{item.value === 'settings' && <SettingsIcon className='size-4' />}
+								{item.value === 'dashboard' && <HomeIcon className='size-4' />}
+								<span>{item.label}</span>
+							</CommandItem>
+						)}
+					</CommandListItems>
+				</CommandContainer>
+			</CommandProvider>
+		</div>
+	);
+};
+
+export const WithContainer: Story = {
+	render: (args) => <CommandContainerTemplate {...args} />
 };
 
 // Command with Shortcuts Template
@@ -117,8 +208,10 @@ const CommandWithShortcutsTemplate = (args: React.ComponentProps<typeof Command>
 	return (
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<Command {...args}>
-					<CommandInput placeholder='Type a command or search...' />
+				<CommandWrapper
+					{...args}
+					searchConfig={{ searchPlaceholder: 'Type a command or search...' }}
+				>
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -136,7 +229,7 @@ const CommandWithShortcutsTemplate = (args: React.ComponentProps<typeof Command>
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</Command>
+				</CommandWrapper>
 			</CommandProvider>
 		</div>
 	);
@@ -186,19 +279,20 @@ const CommandDialogTemplate = (args: React.ComponentProps<typeof CommandDialog>)
 			</div>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
 				<CommandDialog {...args}>
-					<CommandInput placeholder='Type a command or search...' />
-					<CommandListItems>
-						{({ item }) => (
-							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
-								{item.value === 'calendar' && <CalendarIcon className='size-4' />}
-								{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
-								{item.value === 'calculator' && <FileTextIcon className='size-4' />}
-								{item.value === 'profile' && <UserIcon className='size-4' />}
-								{item.value === 'settings' && <SettingsIcon className='size-4' />}
-								<span>{item.label}</span>
-							</CommandItem>
-						)}
-					</CommandListItems>
+					<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
+						<CommandListItems>
+							{({ item }) => (
+								<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
+									{item.value === 'calendar' && <CalendarIcon className='size-4' />}
+									{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
+									{item.value === 'calculator' && <FileTextIcon className='size-4' />}
+									{item.value === 'profile' && <UserIcon className='size-4' />}
+									{item.value === 'settings' && <SettingsIcon className='size-4' />}
+									<span>{item.label}</span>
+								</CommandItem>
+							)}
+						</CommandListItems>
+					</CommandWrapper>
 				</CommandDialog>
 			</CommandProvider>
 		</>
@@ -232,8 +326,10 @@ const DisabledItemsTemplate = (args: React.ComponentProps<typeof Command>) => {
 	return (
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<Command {...args}>
-					<CommandInput placeholder='Type a command or search...' />
+				<CommandWrapper
+					{...args}
+					searchConfig={{ searchPlaceholder: 'Type a command or search...' }}
+				>
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem
@@ -251,7 +347,7 @@ const DisabledItemsTemplate = (args: React.ComponentProps<typeof Command>) => {
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</Command>
+				</CommandWrapper>
 			</CommandProvider>
 		</div>
 	);
@@ -279,8 +375,11 @@ const CustomStylingTemplate = (args: React.ComponentProps<typeof Command>) => {
 	return (
 		<div className='w-[400px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<Command className='border border-border rounded-lg shadow-lg' {...args}>
-					<CommandInput placeholder='Search for anything...' />
+				<CommandWrapper
+					{...args}
+					className='border border-border rounded-lg shadow-lg'
+					searchConfig={{ searchPlaceholder: 'Search for anything...' }}
+				>
 					<CommandListItems className='max-h-[300px]'>
 						{({ item }) => (
 							<CommandItem
@@ -306,7 +405,7 @@ const CustomStylingTemplate = (args: React.ComponentProps<typeof Command>) => {
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</Command>
+				</CommandWrapper>
 			</CommandProvider>
 		</div>
 	);
@@ -335,8 +434,7 @@ const VirtualizedListTemplate = (args: CommandVirtualizedStorybookTypes) => {
 	return (
 		<div className='w-[400px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={largeOptions}>
-				<Command>
-					<CommandInput placeholder='Search through 1000 options...' />
+				<CommandWrapper searchConfig={{ searchPlaceholder: 'Search through 1000 options...' }}>
 					<CommandVirtualizedList {...args}>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -344,7 +442,7 @@ const VirtualizedListTemplate = (args: CommandVirtualizedStorybookTypes) => {
 							</CommandItem>
 						)}
 					</CommandVirtualizedList>
-				</Command>
+				</CommandWrapper>
 			</CommandProvider>
 		</div>
 	);
@@ -398,8 +496,7 @@ const GroupedListTemplate = (args: CommandGroupedStorybookTypes) => {
 	return (
 		<div className='w-[400px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={groupOptions}>
-				<Command>
-					<CommandInput placeholder='Search grouped options...' />
+				<CommandWrapper searchConfig={{ searchPlaceholder: 'Search grouped options...' }}>
 					<CommandGroupedList {...args}>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -407,7 +504,7 @@ const GroupedListTemplate = (args: CommandGroupedStorybookTypes) => {
 							</CommandItem>
 						)}
 					</CommandGroupedList>
-				</Command>
+				</CommandWrapper>
 			</CommandProvider>
 		</div>
 	);
@@ -478,8 +575,9 @@ const GroupedVirtualizedListTemplate = (args: CommandGroupedVirtualizedStorybook
 	return (
 		<div className='w-[450px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={largeGroupedOptions}>
-				<Command>
-					<CommandInput placeholder='Search through 90 grouped options...' />
+				<CommandWrapper
+					searchConfig={{ searchPlaceholder: 'Search through 90 grouped options...' }}
+				>
 					<CommandGroupedVirtualizedListItems {...args} groupOrder={groups}>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -487,7 +585,7 @@ const GroupedVirtualizedListTemplate = (args: CommandGroupedVirtualizedStorybook
 							</CommandItem>
 						)}
 					</CommandGroupedVirtualizedListItems>
-				</Command>
+				</CommandWrapper>
 			</CommandProvider>
 		</div>
 	);
@@ -500,4 +598,91 @@ export const GroupedVirtualizedList: StoryObj<CommandGroupedVirtualizedStorybook
 		overscan: 5,
 		ungroupedPosition: 'bottom'
 	}
+};
+
+// Empty State Demo Template
+const EmptyStateDemoTemplate = () => {
+	const [open, setOpen] = React.useState(false);
+
+	// Empty options array to demonstrate empty state
+	const emptyOptions: Option[] = [];
+
+	return (
+		<div className='space-y-8'>
+			<div className='w-[350px]'>
+				<h3 className='text-sm font-medium mb-2'>Default Empty State (No Options):</h3>
+				<CommandProvider open={open} setOpen={setOpen} options={emptyOptions}>
+					<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
+						<CommandListItems>
+							{({ item }) => (
+								<CommandItem key={item.id} value={item.value}>
+									<span>{item.label}</span>
+								</CommandItem>
+							)}
+						</CommandListItems>
+					</CommandWrapper>
+				</CommandProvider>
+				<p className='text-sm text-muted-foreground mt-2'>
+					Shows &quot;No options currently available&quot; when no search is provided
+				</p>
+			</div>
+
+			<div className='w-[350px]'>
+				<h3 className='text-sm font-medium mb-2'>Custom Empty State Messages:</h3>
+				<CommandProvider
+					open={open}
+					setOpen={setOpen}
+					options={emptyOptions}
+					emptyState={{
+						noOptionsMessage: 'No commands available at the moment',
+						noSearchResultsMessage: 'No commands found matching "{searchTerm}"',
+						formatSearchTerm: (term) => `"${term}"`
+					}}
+				>
+					<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
+						<CommandListItems>
+							{({ item }) => (
+								<CommandItem key={item.id} value={item.value}>
+									<span>{item.label}</span>
+								</CommandItem>
+							)}
+						</CommandListItems>
+					</CommandWrapper>
+				</CommandProvider>
+				<p className='text-sm text-muted-foreground mt-2'>
+					Custom messages for both no options and no search results scenarios
+				</p>
+			</div>
+
+			<div className='w-[350px]'>
+				<h3 className='text-sm font-medium mb-2'>Bold Search Term Formatting:</h3>
+				<CommandProvider
+					open={open}
+					setOpen={setOpen}
+					options={emptyOptions}
+					emptyState={{
+						noSearchResultsMessage: 'No commands found for **{searchTerm}**',
+						formatSearchTerm: (term) => `**${term}**`
+					}}
+				>
+					<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
+						<CommandListItems>
+							{({ item }) => (
+								<CommandItem key={item.id} value={item.value}>
+									<span>{item.label}</span>
+								</CommandItem>
+							)}
+						</CommandListItems>
+					</CommandWrapper>
+				</CommandProvider>
+				<p className='text-sm text-muted-foreground mt-2'>
+					Search terms are formatted with bold markers
+				</p>
+			</div>
+		</div>
+	);
+};
+
+export const EmptyStateDemo: Story = {
+	render: () => <EmptyStateDemoTemplate />
 };

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { cn } from '~/utils/className';
 import { IVirtualizedListProps } from '~/components/Command/types';
-import { CommandEmpty } from '~/components/Command/components/CommandEmpty';
 
 export const VirtualizedList = React.memo(
 	({
@@ -21,13 +20,6 @@ export const VirtualizedList = React.memo(
 			estimateSize: React.useCallback(() => estimateSize, [estimateSize]),
 			overscan
 		});
-
-		if (virtualizer.getTotalSize() === 0)
-			return (
-				<div className={cn('overflow-y-auto', className)} style={{ maxHeight }}>
-					<CommandEmpty />
-				</div>
-			);
 
 		return (
 			<div ref={parentRef} className={cn('overflow-y-auto', className)} style={{ maxHeight }}>

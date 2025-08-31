@@ -2,7 +2,6 @@ import * as React from 'react';
 import { CommandList } from '~/components/Command/Command';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { ICommonCommandProps, IRenderProps } from '~/components/Command/types';
-import { CommandEmpty } from '~/components/Command/components/CommandEmpty';
 
 export interface ISelectListItemsProps extends ICommonCommandProps, IRenderProps {
 	className?: string;
@@ -10,13 +9,6 @@ export interface ISelectListItemsProps extends ICommonCommandProps, IRenderProps
 
 export const SelectListItems = ({ className, children, ...props }: ISelectListItemsProps) => {
 	const { filteredOptions } = useCommandContext();
-
-	if (filteredOptions.length === 0)
-		return (
-			<CommandList className={className}>
-				<CommandEmpty />
-			</CommandList>
-		);
 
 	return (
 		<CommandList className={className} {...props}>

@@ -33,7 +33,8 @@ export const CommandProvider = ({
 	open,
 	setOpen,
 	defaultSearchValue = '',
-	options
+	options,
+	emptyState
 }: IBaseCommandProvider) => {
 	const [searchValue, setSearchValue] = React.useState(defaultSearchValue);
 
@@ -66,7 +67,8 @@ export const CommandProvider = ({
 			onSearchChange: handleSearchChange,
 			options,
 			optionsMap,
-			filteredOptions
+			filteredOptions,
+			emptyState
 		}),
 		[
 			open,
@@ -76,7 +78,8 @@ export const CommandProvider = ({
 			handleSearchChange,
 			options,
 			optionsMap,
-			filteredOptions
+			filteredOptions,
+			emptyState
 		]
 	);
 

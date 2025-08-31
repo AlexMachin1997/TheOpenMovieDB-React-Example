@@ -27,6 +27,90 @@ If you're experiencing rendering issues with virtualized or grouped components, 
 - `CommandEmpty` - Empty state component
 - `CommandShortcut` - Keyboard shortcut display
 
+### CommandWrapper (Centralized)
+
+A centralized wrapper component that provides unified functionality for wrapping Command components with search and empty state functionality. This component is used internally by both `CommandContainer` and `SelectList` to avoid code duplication.
+
+```tsx
+import { CommandWrapper, CommandListItems, CommandItem } from '~/components/Command';
+
+// Basic usage
+<CommandWrapper enabledSearch={true} searchPlaceholder="Search...">
+	<CommandListItems>
+		{({ item }) => (
+			<CommandItem key={item.id} value={item.value}>
+				{item.label}
+			</CommandItem>
+		)}
+	</CommandListItems>
+</CommandWrapper>
+
+// With manual wrapper (e.g., for selects)
+<PopoverContent className="min-w-[var(--radix-popover-trigger-width)] p-0">
+	<CommandWrapper enabledSearch={true} searchPlaceholder="Search...">
+		<CommandListItems>
+			{({ item }) => (
+				<CommandItem key={item.id} value={item.value}>
+					{item.label}
+				</CommandItem>
+			)}
+		</CommandListItems>
+	</CommandWrapper>
+</PopoverContent>
+```
+
+**Props:**
+
+- `enabledSearch?: boolean` - Whether search functionality is enabled (default: true)
+- `searchPlaceholder?: string` - Placeholder text for the search input (default: "Type a command or search...")
+- `emptyState?: IEmptyStateConfig` - Configuration for empty state messages
+- `children?: React.ReactNode` - Child components to render within the command list
+- All props from `Command` component
+
+**Features:**
+
+- Configurable search functionality (enabled/disabled)
+- Automatic empty state handling
+- Consistent styling and behavior
+- Proper accessibility and keyboard navigation
+- Integration with CommandProvider context
+- Simple and focused API
+
+### CommandContainer
+
+A convenience component that combines `Command`, `CommandInput`, `CommandList`, and `CommandEmpty` into a single container. This component is designed for command usage where search is always enabled. **Uses `CommandWrapper` internally.**
+
+```tsx
+import { CommandContainer, CommandListItems, CommandItem } from '~/components/Command';
+
+<CommandProvider open={open} setOpen={setOpen} options={options}>
+	<CommandContainer searchPlaceholder='Type a command or search...'>
+		<CommandListItems>
+			{({ item }) => (
+				<CommandItem key={item.id} value={item.value}>
+					{item.label}
+				</CommandItem>
+			)}
+		</CommandListItems>
+	</CommandContainer>
+</CommandProvider>;
+```
+
+**Props:**
+
+- `searchPlaceholder?: string` - Placeholder text for the search input (default: "Type a command or search...")
+- `emptyState?: IEmptyStateConfig` - Configuration for empty state messages
+- `children?: React.ReactNode` - Child components to render within the command list
+- All props from `Command` component
+
+**Features:**
+
+- Always enabled search functionality (no option to disable)
+- Automatic empty state handling
+- Consistent styling and behavior
+- Proper accessibility and keyboard navigation
+- Integration with CommandProvider context
+
 ### Virtualized Components
 
 #### `CommandVirtualizedList`
@@ -305,3 +389,135 @@ const MyCustomGroupedCommand = () => {
 	);
 };
 ```
+
+### Empty State Customization
+
+The Command components provide intelligent empty state handling that automatically detects whether there's an active search term and displays appropriate messages. Empty state configuration is centralized through the `CommandProvider`.
+
+#### Basic Empty State
+
+```tsx
+<CommandProvider options={options}>
+	<Command>
+		<CommandListItems>
+			{({ item }) => (
+				<CommandItem key={item.id} value={item.value}>
+					{item.label}
+				</CommandItem>
+			)}
+		</CommandListItems>
+	</Command>
+</CommandProvider>
+```
+
+**Default behavior:**
+
+- When no search term: Shows "No options currently available"
+- When search term exists: Shows "No options for '{search term}'"
+
+#### Custom Empty State Messages
+
+```tsx
+<CommandProvider
+	options={options}
+	emptyState={{
+		noOptionsMessage: 'No commands available at the moment',
+		noSearchResultsMessage: 'No commands found matching "{searchTerm}"',
+		formatSearchTerm: (term) => `"${term}"`
+	}}
+>
+	<Command>
+		<CommandListItems>
+			{({ item }) => (
+				<CommandItem key={item.id} value={item.value}>
+					{item.label}
+				</CommandItem>
+			)}
+		</CommandListItems>
+	</Command>
+</CommandProvider>
+```
+
+**Empty state configuration options:**
+
+- `noOptionsMessage?: string` - Message when no options are available (no search)
+- `noSearchResultsMessage?: string` - Message when search returns no results
+- `formatSearchTerm?: (searchTerm: string) => string` - Function to customize search term display
+
+#### Advanced Search Term Formatting
+
+```tsx
+<CommandProvider
+	options={options}
+	emptyState={{
+		noSearchResultsMessage: 'No results found for **{searchTerm}**',
+		formatSearchTerm: (term) => `**${term}**`
+	}}
+>
+	<Command>
+		<CommandListItems>
+			{({ item }) => (
+				<CommandItem key={item.id} value={item.value}>
+					{item.label}
+				</CommandItem>
+			)}
+		</CommandListItems>
+	</Command>
+</CommandProvider>
+```
+
+#### Empty State with Virtualized Lists
+
+```tsx
+<CommandProvider
+	options={options}
+	emptyState={{
+		noOptionsMessage: 'No items available',
+		noSearchResultsMessage: 'No items match "{searchTerm}"',
+		formatSearchTerm: (term) => `"${term}"`
+	}}
+>
+	<Command>
+		<CommandVirtualizedList options={options}>
+			{({ item, style }) => (
+				<CommandItem key={item.id} value={item.value} style={style}>
+					{item.label}
+				</CommandItem>
+			)}
+		</CommandVirtualizedList>
+	</Command>
+</CommandProvider>
+```
+
+#### Empty State with Grouped Lists
+
+```tsx
+<CommandProvider
+	options={groupedOptions}
+	emptyState={{
+		noOptionsMessage: 'No grouped items available',
+		noSearchResultsMessage: 'No grouped items match "{searchTerm}"',
+		formatSearchTerm: (term) => `"${term}"`
+	}}
+>
+	<Command>
+		<CommandGroupedList options={groupedOptions}>
+			{({ item }) => (
+				<CommandItem key={item.id} value={item.value}>
+					{item.label}
+				</CommandItem>
+			)}
+		</CommandGroupedList>
+	</Command>
+</CommandProvider>
+```
+
+**Key Features:**
+
+- **Centralized configuration** through CommandProvider
+- **Automatic detection** of search state
+- **Contextual messages** based on whether user is searching
+- **Customizable formatting** of search terms in messages
+- **Consistent behavior** across all Command components
+- **No manual implementation** required at each layer
+- **Automatic rendering** when no options are available

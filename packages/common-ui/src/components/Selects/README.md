@@ -2,23 +2,33 @@
 
 The Selects package provides a comprehensive set of components for building single and multi-select interfaces with advanced features like virtualization, grouping, and search capabilities.
 
+## ⚠️ Accessibility & HTML Compliance
+
+**IMPORTANT**: The Select components are designed with full accessibility compliance and HTML validity in mind:
+
+- **No Nested Buttons**: The `SelectTrigger` uses a `button` with `role="combobox"`, while `SelectItemClear` uses `asChild` with a `div` to avoid nested button issues
+- **ARIA Compliance**: All components follow ARIA Authoring Practices Guide for select components
+- **Keyboard Navigation**: Full keyboard support with proper focus management
+- **Screen Reader Support**: Proper ARIA attributes and semantic HTML structure
+
 ## Core Components
 
 ### Single Select Components
 
 - `SingleSelect` - The main single select container
-- `SingleSelectTrigger` - Trigger button for opening the select
+- `SingleSelectTrigger` - Trigger button for opening the select (uses `button` with `role="combobox"`)
 - `SingleSelectContent` - Dropdown content container
 - `SingleSelectItem` - Individual select items
 - `SingleSelectGroup` - Group container for related items
 - `SingleSelectSeparator` - Visual separator between groups
 - `SingleSelectSearch` - Search input component
 - `SingleSelectEmpty` - Empty state component
+- `SingleSelectValue` - Displays selected value with optional clear button
 
 ### Multi Select Components
 
 - `MultiSelect` - The main multi select container
-- `MultiSelectTrigger` - Trigger button for opening the select
+- `MultiSelectTrigger` - Trigger button for opening the select (uses `button` with `role="combobox"`)
 - `MultiSelectContent` - Dropdown content container
 - `MultiSelectItem` - Individual select items
 - `MultiSelectGroup` - Group container for related items
@@ -26,6 +36,54 @@ The Selects package provides a comprehensive set of components for building sing
 - `MultiSelectSearch` - Search input component
 - `MultiSelectEmpty` - Empty state component
 - `MultiSelectBadge` - Badge component for selected items
+- `MultiSelectValue` - Displays selected values with optional clear buttons
+
+### Shared Components
+
+#### `SelectItemClear`
+
+A reusable clear button component that provides consistent clear/remove functionality across both single-select and multi-select contexts. This component automatically handles the nested button issue by using `asChild` with a `div` when used inside other buttons.
+
+```tsx
+import { SelectItemClear } from '~/components/Selects';
+
+// In a single-select context (inside SelectTrigger)
+<SelectItemClear
+  value="react"
+  valueLabel="React"
+  onClear={handleClear}
+  variant="badge"
+  iconSize="sm"
+/>
+
+// In a multi-select context (inside badges)
+<SelectItemClear
+  value="vue"
+  valueLabel="Vue.js"
+  onClear={handleRemove}
+  variant="badge"
+  iconSize="sm"
+/>
+```
+
+**Props:**
+
+- `value: string` - The value to clear
+- `valueLabel?: string` - Label for the value (used in aria-label)
+- `onClear: (value: string) => void` - Callback function called when the clear button is clicked
+- `variant?: 'badge' | 'input'` - Variant styling for different use cases
+- `className?: string` - Additional CSS classes
+- `iconSize?: 'sm' | 'md'` - Icon size override
+- `ariaLabel?: string` - Custom aria label
+- `onRefChange?: (el: HTMLButtonElement | null) => void` - Ref callback for focus management
+
+**Features:**
+
+- **Automatic Nested Button Prevention**: Uses `asChild` with `div` to avoid HTML validation errors
+- **Accessibility**: Proper ARIA labels and keyboard navigation
+- **Event Prevention**: Stops event propagation to prevent conflicts with parent elements
+- **Flexible Styling**: Different variants for badge and input contexts
+- **Focus Management**: Ref callback support for multi-select focus handling
 
 ### Virtualized Components
 
@@ -247,10 +305,12 @@ The package includes utilities for advanced grouping operations:
 1. **Proper labels** - Ensure all items have meaningful labels
 2. **Keyboard navigation** - The Select components handle keyboard navigation automatically
 3. **Screen readers** - Use proper ARIA labels and descriptions
+4. **HTML compliance** - Components automatically handle nested button issues
+5. **Focus management** - Proper focus handling for clear buttons in multi-select contexts
 
 ## Examples
 
-### Basic Single Select
+### Basic Single Select with Clear Button
 
 ```tsx
 const MySingleSelect = () => {
@@ -263,7 +323,7 @@ const MySingleSelect = () => {
 	return (
 		<SingleSelect>
 			<SingleSelectTrigger>
-				<SingleSelectValue placeholder='Select an option' />
+				<SingleSelectValue placeholder='Select an option' showClearButton={true} />
 			</SingleSelectTrigger>
 			<SingleSelectContent>
 				<SingleSelectSearch placeholder='Search options...' />
@@ -279,7 +339,7 @@ const MySingleSelect = () => {
 };
 ```
 
-### Multi Select with Badges
+### Multi Select with Badges and Clear Buttons
 
 ```tsx
 const MyMultiSelect = () => {
@@ -405,6 +465,161 @@ const MyGroupedVirtualizedSelect = () => {
 };
 ```
 
+### Empty State Customization
+
+The Selects components provide intelligent empty state handling that automatically detects whether there's an active search term and displays appropriate messages. Empty state configuration is centralized through the `SelectProvider`.
+
+#### Basic Empty State
+
+```tsx
+<SelectProvider options={options}>
+	<SelectTrigger>
+		<SingleSelectValue placeholder='Select an option...' />
+	</SelectTrigger>
+	<SelectList>
+		<SelectListItems>{({ item }) => <SingleSelectListItem value={item.value} />}</SelectListItems>
+	</SelectList>
+</SelectProvider>
+```
+
+**Default behavior:**
+
+- When no search term: Shows "No options currently available"
+- When search term exists: Shows "No options for '{search term}'"
+
+#### Custom Empty State Messages
+
+```tsx
+<SelectProvider
+	options={options}
+	emptyState={{
+		noOptionsMessage: 'No items available at the moment',
+		noSearchResultsMessage: 'No items found matching "{searchTerm}"',
+		formatSearchTerm: (term) => `"${term}"`
+	}}
+>
+	<SelectTrigger>
+		<SingleSelectValue placeholder='Select an option...' />
+	</SelectTrigger>
+	<SelectList
+		search={{
+			placeholder: 'Search items...'
+		}}
+	>
+		<SelectListItems>{({ item }) => <SingleSelectListItem value={item.value} />}</SelectListItems>
+	</SelectList>
+</SelectProvider>
+```
+
+**Empty state configuration options:**
+
+- `noOptionsMessage?: string` - Message when no options are available (no search)
+- `noSearchResultsMessage?: string` - Message when search returns no results
+- `formatSearchTerm?: (searchTerm: string) => string` - Function to customize search term display
+
+#### Advanced Search Term Formatting
+
+```tsx
+<SelectProvider
+	options={options}
+	emptyState={{
+		noSearchResultsMessage: 'No results found for **{searchTerm}**',
+		formatSearchTerm: (term) => `**${term}**`
+	}}
+>
+	<SelectTrigger>
+		<SingleSelectValue placeholder='Select an option...' />
+	</SelectTrigger>
+	<SelectList
+		search={{
+			placeholder: 'Search items...'
+		}}
+	>
+		<SelectListItems>{({ item }) => <SingleSelectListItem value={item.value} />}</SelectListItems>
+	</SelectList>
+</SelectProvider>
+```
+
+#### Empty State with Virtualized Lists
+
+```tsx
+<SelectProvider
+	options={options}
+	emptyState={{
+		noOptionsMessage: 'No items available',
+		noSearchResultsMessage: 'No items match "{searchTerm}"',
+		formatSearchTerm: (term) => `"${term}"`
+	}}
+>
+	<SelectTrigger>
+		<SingleSelectValue placeholder='Select an option...' />
+	</SelectTrigger>
+	<SelectList>
+		<SelectListItemsVirtualized estimateSize={36} overscan={5}>
+			{({ item, style }) => <SingleSelectListItem key={item.id} value={item.value} style={style} />}
+		</SelectListItemsVirtualized>
+	</SelectList>
+</SelectProvider>
+```
+
+#### Empty State with Grouped Lists
+
+```tsx
+<SelectProvider
+	options={groupedOptions}
+	emptyState={{
+		noOptionsMessage: 'No grouped items available',
+		noSearchResultsMessage: 'No grouped items match "{searchTerm}"',
+		formatSearchTerm: (term) => `"${term}"`
+	}}
+>
+	<SelectTrigger>
+		<SingleSelectValue placeholder='Select an option...' />
+	</SelectTrigger>
+	<SelectList>
+		<SelectGroupedListItems groupOrder={['Frontend', 'Backend']} ungroupedPosition='bottom'>
+			{({ item }) => <SingleSelectListItem value={item.value} />}
+		</SelectGroupedListItems>
+	</SelectList>
+</SelectProvider>
+```
+
+#### Empty State with Multi-Select
+
+```tsx
+<SelectProvider
+	options={options}
+	mode='multi'
+	emptyState={{
+		noOptionsMessage: 'No options available for selection',
+		noSearchResultsMessage: 'No options match "{searchTerm}"',
+		formatSearchTerm: (term) => `"${term}"`
+	}}
+>
+	<SelectTrigger>
+		<MultiSelectValue placeholder='Select options...' />
+	</SelectTrigger>
+	<SelectList
+		search={{
+			placeholder: 'Search options...'
+		}}
+	>
+		<SelectListItems>{({ item }) => <MultiSelectListItem value={item.value} />}</SelectListItems>
+	</SelectList>
+</SelectProvider>
+```
+
+**Key Features:**
+
+- **Centralized configuration** through SelectProvider
+- **Automatic detection** of search state
+- **Contextual messages** based on whether user is searching
+- **Customizable formatting** of search terms in messages
+- **Consistent behavior** across all Select components
+- **No manual implementation** required at each layer
+- **Works with all select variants** (single, multi, virtualized, grouped)
+- **Automatic rendering** when no options are available
+
 ## Integration with Command Package
 
 The Selects package leverages the Command package for advanced features like virtualization and grouping. This provides:
@@ -422,3 +637,4 @@ If you're migrating from older select components, the new API provides:
 - **Enhanced Grouping** - Flexible group ordering and positioning
 - **Improved Accessibility** - Better keyboard navigation and screen reader support
 - **Type Safety** - Full TypeScript support with generic types
+- **HTML Compliance** - No nested button issues, proper ARIA attributes

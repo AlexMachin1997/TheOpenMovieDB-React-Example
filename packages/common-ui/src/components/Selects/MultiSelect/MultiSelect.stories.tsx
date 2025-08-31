@@ -78,11 +78,11 @@ const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
 				/>
 			</SelectTrigger>
 			<SelectList
-				search={
-					args?.canSearch
-						? { placeholder: 'Search items...', emptyMessage: 'No items found' }
-						: undefined
-				}
+				searchConfig={{ enabledSearch: args?.canSearch, searchPlaceholder: 'Search items...' }}
+				emptyState={{
+					noSearchResultsMessage: 'No items found',
+					noOptionsMessage: 'No items found'
+				}}
 			>
 				<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 			</SelectList>
@@ -364,7 +364,7 @@ const WithGroupsTemplate = () => {
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<MultiSelectValue placeholder='Select from 100+ technologies...' />
 			</SelectTrigger>
-			<SelectList search={{ placeholder: 'Search items...', emptyMessage: 'No items found' }}>
+			<SelectList searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
 				<SelectVirtualizedGroupedList groupOrder={groups} ungroupedPosition='bottom'>
 					{({ item }) => <SelectListItem value={item.value} />}
 				</SelectVirtualizedGroupedList>
@@ -437,7 +437,7 @@ const LargeListVirtualizedTemplate = () => {
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<MultiSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
 			</SelectTrigger>
-			<SelectList search={{ placeholder: 'Search items...', emptyMessage: 'No items found' }}>
+			<SelectList searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
 				<SelectVirtualizedGroupedList>
 					{({ item }) => <SelectListItem value={item.value} />}
 				</SelectVirtualizedGroupedList>
@@ -476,7 +476,11 @@ const WithFormTemplate = () => {
 						<MultiSelectValue placeholder='Choose frameworks...' />
 					</SelectTrigger>
 					<SelectList
-						search={{ placeholder: 'Search frameworks...', emptyMessage: 'No frameworks found' }}
+						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search frameworks...' }}
+						emptyState={{
+							noSearchResultsMessage: 'No frameworks found',
+							noOptionsMessage: 'No frameworks found'
+						}}
 					>
 						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectList>
@@ -494,7 +498,13 @@ const WithFormTemplate = () => {
 					<SelectTrigger className='w-full'>
 						<MultiSelectValue placeholder='Choose languages...' />
 					</SelectTrigger>
-					<SelectList>
+					<SelectList
+						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search languages...' }}
+						emptyState={{
+							noSearchResultsMessage: 'No languages found',
+							noOptionsMessage: 'No languages found'
+						}}
+					>
 						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectList>
 				</SelectProvider>
@@ -551,7 +561,9 @@ const CustomStylingTemplate = (args: MultiSelectStorybookTypes) => {
 					clickToRemove={args?.clickToRemove ?? true}
 				/>
 			</SelectTrigger>
-			<SelectList>
+			<SelectList
+				searchConfig={{ enabledSearch: true, searchPlaceholder: 'Custom styled multi-select...' }}
+			>
 				<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 			</SelectList>
 		</SelectProvider>

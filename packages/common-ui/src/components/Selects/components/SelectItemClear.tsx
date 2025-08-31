@@ -50,6 +50,8 @@ export type SelectItemClearProps = {
  * single-select and multi-select contexts. It handles the visual styling differences
  * between badge contexts (multi-select) and input contexts (single-select).
  *
+ * Uses asChild with a div to avoid nested button issues when used inside other buttons.
+ *
  * @component
  * @example
  * ```tsx
@@ -87,19 +89,27 @@ export const SelectItemClear = ({
 	onRefChange,
 	...props
 }: SelectItemClearProps) => {
-	const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleClear = (e: React.MouseEvent<HTMLElement>) => {
 		e.stopPropagation();
 		onClear(value);
 	};
 
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			e.stopPropagation();
+			onClear(value);
+		}
+	};
+
 	const handleRef = React.useCallback(
-		(el: HTMLButtonElement | null) => {
+		(el: HTMLElement | null) => {
 			if (typeof props.ref === 'function') {
-				props.ref(el);
+				(props.ref as React.RefCallback<HTMLElement>)(el);
 			} else if (props.ref) {
-				props.ref.current = el;
+				(props.ref as React.MutableRefObject<HTMLElement | null>).current = el;
 			}
-			onRefChange?.(el);
+			onRefChange?.(el as HTMLButtonElement | null);
 		},
 		[onRefChange, props]
 	);
@@ -124,6 +134,7 @@ export const SelectItemClear = ({
 	return (
 		<Button
 			{...props}
+			asChild
 			ref={handleRef}
 			variant='ghost'
 			size='sm'
@@ -131,7 +142,9 @@ export const SelectItemClear = ({
 			className={cn(variantStyles, className)}
 			aria-label={defaultAriaLabel}
 		>
-			<XIcon className={'size-3'} />
+			<div onKeyDown={handleKeyDown} role='button' tabIndex={0}>
+				<XIcon className={'size-3'} />
+			</div>
 		</Button>
 	);
 };

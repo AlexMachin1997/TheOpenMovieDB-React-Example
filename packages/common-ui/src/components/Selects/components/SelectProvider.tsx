@@ -2,6 +2,7 @@ import * as React from 'react';
 import { CommandProvider } from '~/components/Command/components/CommandProvider';
 import { SelectContext } from '~/components/Selects/contexts/select-context';
 import { Option } from '~/types/Option';
+import { IEmptyStateConfig } from '~/components/Command/types';
 
 interface ISelectProviderCommonOptions {
 	/** Available options for selection */
@@ -12,6 +13,10 @@ interface ISelectProviderCommonOptions {
 	children: React.ReactNode;
 	/** Currently selected value(s) */
 	values?: string[];
+	/** Configuration for empty state messages */
+	emptyState?: IEmptyStateConfig;
+	/** Default search value to start with */
+	defaultSearchValue?: string;
 }
 
 /**
@@ -62,7 +67,7 @@ type SelectProviderProps = SingleSelectProviderProps | MultiSelectProviderProps;
  */
 const SelectProviderInner = (props: SelectProviderProps) => {
 	const toggleValue = (value: string) => {
-		const currentValues = new Set(props.values || []);
+		const currentValues = new Set(props?.values ?? []);
 
 		if (props.mode === 'single') {
 			if (currentValues.has(value)) {
@@ -79,6 +84,7 @@ const SelectProviderInner = (props: SelectProviderProps) => {
 			} else {
 				currentValues.add(value);
 			}
+
 			props.onValuesChange(Array.from(currentValues));
 		}
 	};
@@ -140,7 +146,9 @@ export const SelectProvider = (props: SelectProviderProps) => {
 			open={open}
 			setOpen={setOpen}
 			closeOnSelect={props.mode === 'single'}
-			{...props}
+			options={props.options}
+			emptyState={props.emptyState}
+			defaultSearchValue={props.defaultSearchValue}
 		>
 			<SelectProviderInner {...props} />
 		</CommandProvider>

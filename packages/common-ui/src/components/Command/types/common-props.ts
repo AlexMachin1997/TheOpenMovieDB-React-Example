@@ -1,15 +1,15 @@
 import { Option } from '~/types/Option';
 
 /**
- * Common properties shared across command components
+ * Common properties for command-like components
  *
- * This interface defines properties that are commonly used across
- * multiple command-related interfaces to reduce duplication.
+ * This interface defines the basic properties that are shared
+ * across all command-related components.
  *
  * @interface ICommonCommandProps
  */
 export interface ICommonCommandProps {
-	/** Additional CSS classes to apply */
+	/** Additional CSS classes to apply to the component */
 	className?: string;
 }
 

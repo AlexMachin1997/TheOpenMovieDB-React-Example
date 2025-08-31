@@ -14,6 +14,8 @@ import { useCommandContext } from '~/components/Command/hooks/useCommandContext'
 export interface CommandSearchProps extends React.ComponentProps<typeof CommandPrimitive.Input> {
 	/** Debounce delay in milliseconds for search input changes */
 	debounceMs?: number;
+	/** Whether search functionality is enabled */
+	enabledSearch?: boolean;
 }
 
 /**
@@ -42,7 +44,12 @@ export interface CommandSearchProps extends React.ComponentProps<typeof CommandP
  * @param props - The search input configuration props
  * @returns The rendered search input component
  */
-export const CommandSearch = ({ debounceMs = 300, className, ...props }: CommandSearchProps) => {
+export const CommandSearch = ({
+	debounceMs = 300,
+	className,
+	enabledSearch = true,
+	...props
+}: CommandSearchProps) => {
 	const { onSearchChange } = useCommandContext();
 	const [inputValue, setInputValue] = React.useState('');
 
@@ -55,6 +62,8 @@ export const CommandSearch = ({ debounceMs = 300, className, ...props }: Command
 	}, [inputValue]);
 
 	useDebounce(handleDebouncedValueChange, debounceMs, debounceDependencies);
+
+	if (!enabledSearch) return null;
 
 	return (
 		<div data-slot='command-input-wrapper' className='flex h-9 items-center gap-2 border-b px-3'>

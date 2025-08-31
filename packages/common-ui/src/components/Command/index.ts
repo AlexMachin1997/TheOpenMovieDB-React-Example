@@ -1,5 +1,18 @@
 // Components
-export * from '~/components/Command/components';
+export {
+	CommandDialog,
+	CommandInput,
+	CommandList,
+	CommandEmpty,
+	CommandGroup,
+	CommandItem,
+	CommandShortcut,
+	CommandSeparator,
+	Command,
+	CommandProvider,
+	CommandContainer,
+	CommandWrapper
+} from '~/components/Command/components';
 
 // Contexts
 export * from '~/components/Command/contexts/command-context';

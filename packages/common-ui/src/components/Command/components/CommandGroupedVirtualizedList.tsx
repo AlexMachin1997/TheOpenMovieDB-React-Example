@@ -7,7 +7,6 @@ import { VirtualizedItem } from '~/components/Command/types/virtualized-item';
 import { getVirtualizedItems, getEstimatedItemHeight } from '~/components/Command/utils/grouping';
 import { IBaseCommandGroupedVirtualizedList } from '~/components/Command/types';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
-import { CommandEmpty } from '~/components/Command/components/CommandEmpty';
 
 export const CommandGroupedVirtualizedList = React.memo(
 	({
@@ -61,13 +60,6 @@ export const CommandGroupedVirtualizedList = React.memo(
 			},
 			[children]
 		);
-
-		if (virtualizer.getTotalSize() === 0)
-			return (
-				<CommandList className={className}>
-					<CommandEmpty />
-				</CommandList>
-			);
 
 		return (
 			<CommandList className={className} ref={parentRef}>

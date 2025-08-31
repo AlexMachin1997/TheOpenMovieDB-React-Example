@@ -82,11 +82,7 @@ const BasicSingleSelectTemplate = (args: SingleSelectStorybookTypes) => {
 				/>
 			</SelectTrigger>
 			<SelectList
-				search={
-					args?.canSearch
-						? { placeholder: 'Search items...', emptyMessage: 'No items found' }
-						: undefined
-				}
+				searchConfig={{ enabledSearch: args?.canSearch, searchPlaceholder: 'Search items...' }}
 			>
 				<SelectListItems>
 					{({ item }) => <SingleSelectListItem value={item.value} />}
@@ -195,7 +191,7 @@ const WithGroupsTemplate = () => {
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<SingleSelectValue placeholder='Select a technology...' />
 			</SelectTrigger>
-			<SelectList search={{ placeholder: 'Search items...', emptyMessage: 'No items found' }}>
+			<SelectList searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
 				<SelectGroupedListItems groupOrder={groups} ungroupedPosition='bottom'>
 					{({ item }) => <SingleSelectListItem value={item.value} />}
 				</SelectGroupedListItems>
@@ -233,7 +229,7 @@ const LargeListVirtualizedTemplate = () => {
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<SingleSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
 			</SelectTrigger>
-			<SelectList search={{ placeholder: 'Search items...', emptyMessage: 'No items found' }}>
+			<SelectList searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
 				<SelectListItemsVirtualized>
 					{({ item }) => <SingleSelectListItem value={item.value} />}
 				</SelectListItemsVirtualized>
@@ -280,7 +276,7 @@ const WithFormTemplate = () => {
 						<SingleSelectValue placeholder='Choose a framework...' />
 					</SelectTrigger>
 					<SelectList
-						search={{ placeholder: 'Search frameworks...', emptyMessage: 'No frameworks found' }}
+						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search frameworks...' }}
 					>
 						<SelectListItems>
 							{({ item }) => <SingleSelectListItem value={item.value} />}
@@ -300,7 +296,9 @@ const WithFormTemplate = () => {
 					<SelectTrigger className='w-full'>
 						<SingleSelectValue placeholder='Choose a language...' />
 					</SelectTrigger>
-					<SelectList>
+					<SelectList
+						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search languages...' }}
+					>
 						<SelectListItems>
 							{({ item }) => <SingleSelectListItem value={item.value} />}
 						</SelectListItems>
@@ -357,7 +355,9 @@ const CustomStylingTemplate = (args: SingleSelectStorybookTypes) => {
 			<SelectTrigger className='w-full max-w-[400px] bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:from-blue-100 hover:to-indigo-100'>
 				<SingleSelectValue placeholder='Custom styled single-select...' />
 			</SelectTrigger>
-			<SelectList>
+			<SelectList
+				searchConfig={{ enabledSearch: true, searchPlaceholder: 'Custom styled single-select...' }}
+			>
 				<SelectListItems>
 					{({ item }) => <SingleSelectListItem value={item.value} />}
 				</SelectListItems>
@@ -416,7 +416,9 @@ const ClearButtonDemoTemplate = () => {
 					<SelectTrigger className='w-full max-w-[400px]'>
 						<SingleSelectValue placeholder='Select a framework...' showClearButton={true} />
 					</SelectTrigger>
-					<SelectList>
+					<SelectList
+						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Select a framework...' }}
+					>
 						<SelectListItems>
 							{({ item }) => <SingleSelectListItem value={item.value} />}
 						</SelectListItems>
@@ -438,7 +440,9 @@ const ClearButtonDemoTemplate = () => {
 					<SelectTrigger className='w-full max-w-[400px]'>
 						<SingleSelectValue placeholder='Select a framework...' showClearButton={false} />
 					</SelectTrigger>
-					<SelectList>
+					<SelectList
+						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Select a framework...' }}
+					>
 						<SelectListItems>
 							{({ item }) => <SingleSelectListItem value={item.value} />}
 						</SelectListItems>
@@ -454,4 +458,104 @@ const ClearButtonDemoTemplate = () => {
 
 export const ClearButtonDemo: StoryObj<SingleSelectStorybookTypes> = {
 	render: () => <ClearButtonDemoTemplate />
+};
+
+const EmptyStateDemoTemplate = () => {
+	const [selectedValue, setSelectedValue] = React.useState<string>('');
+
+	const handleValueChange = (value: string) => {
+		setSelectedValue(value);
+	};
+
+	// Empty options array to demonstrate empty state
+	const emptyOptions: Option[] = [];
+
+	return (
+		<div className='space-y-8'>
+			<div className='space-y-2'>
+				<Label>Default Empty State (No Options):</Label>
+				<SelectProvider
+					values={selectedValue ? [selectedValue] : []}
+					onValuesChange={handleValueChange}
+					options={emptyOptions}
+					mode='single'
+				>
+					<SelectTrigger className='w-full max-w-[400px]'>
+						<SingleSelectValue placeholder='Select an option...' />
+					</SelectTrigger>
+					<SelectList searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
+						<SelectListItems>
+							{({ item }) => <SingleSelectListItem value={item.value} />}
+						</SelectListItems>
+					</SelectList>
+				</SelectProvider>
+				<div className='text-sm text-muted-foreground'>
+					Shows No options currently available when no search is provided
+				</div>
+			</div>
+
+			<div className='space-y-2'>
+				<Label>Custom Empty State Messages:</Label>
+				<SelectProvider
+					values={selectedValue ? [selectedValue] : []}
+					onValuesChange={handleValueChange}
+					options={emptyOptions}
+					mode='single'
+					emptyState={{
+						noOptionsMessage: 'No items available at the moment',
+						noSearchResultsMessage: 'No items found matching "{searchTerm}"',
+						formatSearchTerm: (term) => `"${term}"`
+					}}
+				>
+					<SelectTrigger className='w-full max-w-[400px]'>
+						<SingleSelectValue placeholder='Select an option...' />
+					</SelectTrigger>
+					<SelectList searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
+						<SelectListItems>
+							{({ item }) => <SingleSelectListItem value={item.value} />}
+						</SelectListItems>
+					</SelectList>
+				</SelectProvider>
+				<div className='text-sm text-muted-foreground'>
+					Custom messages for both no options and no search results scenarios
+				</div>
+			</div>
+
+			<div className='space-y-2'>
+				<Label>Bold Search Term Formatting:</Label>
+				<SelectProvider
+					values={selectedValue ? [selectedValue] : []}
+					onValuesChange={handleValueChange}
+					options={emptyOptions}
+					mode='single'
+					emptyState={{
+						noSearchResultsMessage: 'No results found for **{searchTerm}**',
+						formatSearchTerm: (term) => `**${term}**`
+					}}
+				>
+					<SelectTrigger className='w-full max-w-[400px]'>
+						<SingleSelectValue placeholder='Select an option...' />
+					</SelectTrigger>
+					<SelectList
+						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}
+						emptyState={{
+							noSearchResultsMessage: 'No results found for **{searchTerm}**',
+							formatSearchTerm: (term) => `**${term}**`
+						}}
+					>
+						<SelectListItems>
+							{({ item }) => <SingleSelectListItem value={item.value} />}
+						</SelectListItems>
+					</SelectList>
+				</SelectProvider>
+				<div className='text-sm text-muted-foreground'>
+					Search terms are formatted with bold markers
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export const EmptyStateDemo: StoryObj<SingleSelectStorybookTypes> = {
+	render: () => <EmptyStateDemoTemplate />
 };
