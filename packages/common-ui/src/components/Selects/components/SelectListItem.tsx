@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CheckIcon } from 'lucide-react';
 import { CommandItem } from '~/components/Command/Command';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
-import { cn } from '~/utils/className';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
 /**
  * Props for the SelectListItem component
@@ -47,30 +47,21 @@ interface SelectListItemProps
  * @param props - The select list item configuration props
  * @returns The rendered select list item component
  */
-export const SelectListItem = ({
-	value,
-	onSelect,
-	disabled = false,
-	...props
-}: SelectListItemProps) => {
-	const { toggleValue, selectedValues, optionsMap } = useSelectContext();
+export const SelectListItem = ({ value, children, ...props }: SelectListItemProps) => {
+	const { toggleValue, selectedValues } = useSelectContext();
+	const { optionsMap } = useCommandContext();
+
+	const isSelected = selectedValues.has(value);
 
 	const handleSelectItem = React.useCallback(() => {
 		toggleValue(value);
-		onSelect?.(value);
-	}, [toggleValue, value, onSelect]);
+	}, [toggleValue, value]);
 
 	return (
-		<CommandItem
-			{...props}
-			value={optionsMap.get(value)}
-			onSelect={handleSelectItem}
-			disabled={disabled}
-		>
-			<CheckIcon
-				className={cn('mr-2 size-4', selectedValues.has(value) ? 'opacity-100' : 'opacity-0')}
-			/>
+		<CommandItem {...props} value={optionsMap.get(value)} onSelect={handleSelectItem}>
+			{children}
 			<span className='min-w-0 flex-1 truncate'>{optionsMap.get(value)}</span>
+			{isSelected && <CheckIcon className='ml-auto h-4 w-4' />}
 		</CommandItem>
 	);
 };

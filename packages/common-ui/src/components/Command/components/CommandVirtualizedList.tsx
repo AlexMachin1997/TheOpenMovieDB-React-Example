@@ -1,28 +1,17 @@
 import * as React from 'react';
 import { CommandList } from '~/components/Command/components/CommandList';
 import { VirtualizedList } from '~/components/Command/components/VirtualizedList';
-import { Option } from '~/types/Option';
-
-export interface CommandVirtualizedListProps<T extends Option = Option> {
-	options: T[];
-	estimateSize?: number;
-	overscan?: number;
-	children: (props: { item: T; style: React.CSSProperties }) => React.ReactNode;
-	className?: string;
-}
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { ICommandVirtualizedListProps } from '~/components/Command/types';
 
 export const CommandVirtualizedList = React.memo(
-	<T extends Option>({
-		options,
-		estimateSize = 36,
-		overscan = 5,
-		children,
-		className
-	}: CommandVirtualizedListProps<T>) => {
+	({ estimateSize = 36, overscan = 5, children, className }: ICommandVirtualizedListProps) => {
+		const { filteredOptions } = useCommandContext();
+
 		return (
 			<CommandList className={className}>
-				<VirtualizedList items={options} estimateSize={estimateSize} overscan={overscan}>
-					{({ item, style }) => children({ item, style })}
+				<VirtualizedList items={filteredOptions} estimateSize={estimateSize} overscan={overscan}>
+					{({ item, index }) => children({ item, index })}
 				</VirtualizedList>
 			</CommandList>
 		);

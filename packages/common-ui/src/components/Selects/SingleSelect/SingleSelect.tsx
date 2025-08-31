@@ -5,18 +5,10 @@ import { CommandItem } from '~/components/Command/Command';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
-
-/**
- * Props for the SingleSelectValue component
- *
- * @interface SingleSelectValueProps
- */
-interface SingleSelectValueProps extends Omit<React.ComponentPropsWithoutRef<'ul'>, 'children'> {
-	/** Placeholder text shown when no option is selected */
-	placeholder?: string;
-	/** Whether to show a clear button for removing the selected value */
-	showClearButton?: boolean;
-}
+import {
+	SingleSelectValueProps,
+	BaseSelectItemProps
+} from '~/components/Selects/types/base-select-types';
 
 /**
  * Displays the selected value in a single-select interface
@@ -53,7 +45,8 @@ export const SingleSelectValue = ({
 	showClearButton = true,
 	...props
 }: SingleSelectValueProps) => {
-	const { selectedValues, optionsMap, toggleValue } = useSelectContext();
+	const { selectedValues, toggleValue } = useSelectContext();
+	const { optionsMap } = useCommandContext();
 
 	// For single select, we only care about the first selected value
 	const selectedValue = Array.from(selectedValues)[0];
@@ -92,70 +85,52 @@ export const SingleSelectValue = ({
 };
 
 /**
- * Props for the SingleSelectListItem component
- *
- * @interface SingleSelectListItemProps
- */
-interface SingleSelectListItemProps
-	extends Omit<React.ComponentPropsWithoutRef<typeof CommandItem>, 'value'> {
-	/** The value of this option */
-	value: string;
-}
-
-/**
  * A selectable item in a single-select dropdown list
  *
  * This component renders an individual option in the dropdown list. When selected,
  * it automatically closes the dropdown and updates the selection state. Only one
- * item can be selected at a time in single-select mode.
+ * option can be selected at a time in single-select mode.
  *
  * Features:
- * - Shows checkmark for selected state
- * - Closes dropdown on selection
- * - Integrates with command/search functionality
- * - Supports disabled state
- * - Accessibility compliant
+ * - Visual feedback for selected state with check icon
+ * - Automatic dropdown closing on selection
+ * - Proper accessibility and keyboard navigation
+ * - Integration with SelectProvider context
+ * - Consistent styling with other command items
+ *
+ * The component automatically handles the selection logic and provides visual
+ * feedback through the check icon when an option is selected.
  *
  * @component
  * @example
  * ```tsx
- * <SelectListItems>
- *   {({ item }) => (
- *     <SingleSelectListItem
- *       value={item.value}
- *       disabled={item.disabled}
- *     />
- *   )}
- * </SelectListItems>
+ * // Basic usage
+ * <SingleSelectListItem value="react" />
+ *
+ * // With custom content
+ * <SingleSelectListItem value="vue">
+ *   <Icon name="vue" />
+ *   Vue.js
+ * </SingleSelectListItem>
  * ```
  *
  * @param props - The component props
- * @returns The rendered select list item component
+ * @returns The rendered single-select list item component
  */
-export const SingleSelectListItem = ({
-	value,
-	disabled = false,
-	...props
-}: SingleSelectListItemProps) => {
-	const { toggleValue, selectedValues, optionsMap } = useSelectContext();
-	const { setOpen } = useCommandContext();
+export const SingleSelectListItem = ({ value, children, ...props }: BaseSelectItemProps) => {
+	const { selectedValues, toggleValue } = useSelectContext();
+	const { optionsMap } = useCommandContext();
 
-	const handleSelect = () => {
+	const handleSelect = React.useCallback(() => {
 		toggleValue(value);
-		setOpen(false);
-	};
+	}, [toggleValue, value]);
 
 	return (
-		<CommandItem
-			{...props}
-			value={optionsMap.get(value)}
-			onSelect={handleSelect}
-			disabled={disabled}
-		>
+		<CommandItem {...props} value={optionsMap.get(value)} onSelect={handleSelect}>
 			<CheckIcon
 				className={cn('mr-2 size-4', selectedValues.has(value) ? 'opacity-100' : 'opacity-0')}
 			/>
-			{optionsMap.get(value)}
+			<p>{optionsMap.get(value)}</p>
 		</CommandItem>
 	);
 };

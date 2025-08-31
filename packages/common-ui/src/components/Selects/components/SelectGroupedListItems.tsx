@@ -1,37 +1,8 @@
-import * as React from 'react';
 import { CommandGroupedList } from '~/components/Command/components/CommandGroupedList';
-import { Option } from '~/types/Option';
-import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { ICommandGroupedListProps } from '~/components/Command/types';
 
-export interface SelectGroupedListItemsProps<T extends Option = Option> {
-	children: (props: { item: T }) => React.ReactNode;
-	className?: string;
-	/** Order of groups to display. If not provided, groups will be sorted alphabetically */
-	groupOrder?: string[];
-	/** Whether to show ungrouped items at the top or bottom. Default: 'top' */
-	ungroupedPosition?: 'top' | 'bottom';
-}
-
-export const SelectGroupedListItems = React.memo(
-	<T extends Option>({
-		children,
-		className,
-		groupOrder,
-		ungroupedPosition = 'top'
-	}: SelectGroupedListItemsProps<T>) => {
-		const { filteredOptions } = useSelectContext();
-
-		return (
-			<CommandGroupedList
-				options={filteredOptions}
-				className={className}
-				groupOrder={groupOrder}
-				ungroupedPosition={ungroupedPosition}
-			>
-				{({ item }) => children({ item: item as T })}
-			</CommandGroupedList>
-		);
-	}
-);
+export const SelectGroupedListItems = (props: ICommandGroupedListProps) => {
+	return <CommandGroupedList {...props} />;
+};
 
 SelectGroupedListItems.displayName = 'SelectGroupedListItems';

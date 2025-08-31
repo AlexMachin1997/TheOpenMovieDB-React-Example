@@ -1,35 +1,11 @@
 import * as React from 'react';
 import { CommandVirtualizedList } from '~/components/Command/components/CommandVirtualizedList';
-import { Option } from '~/types/Option';
-import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { ICommandVirtualizedListProps } from '~/components/Command/types';
 
-export interface SelectVirtualizedListProps<T extends Option = Option> {
-	estimateSize?: number;
-	overscan?: number;
-	children: (props: { item: T; style: React.CSSProperties }) => React.ReactNode;
-	className?: string;
-}
-
-export const SelectVirtualizedList = React.memo(
-	<T extends Option>({
-		estimateSize = 36,
-		overscan = 5,
-		children,
-		className
-	}: SelectVirtualizedListProps<T>) => {
-		const { filteredOptions } = useSelectContext();
-
-		return (
-			<CommandVirtualizedList
-				options={filteredOptions}
-				estimateSize={estimateSize}
-				overscan={overscan}
-				className={className}
-			>
-				{({ item, style }) => children({ item: item as T, style })}
-			</CommandVirtualizedList>
-		);
+export const SelectListItemsVirtualized = React.memo(
+	({ ...props }: ICommandVirtualizedListProps) => {
+		return <CommandVirtualizedList {...props} />;
 	}
 );
 
-SelectVirtualizedList.displayName = 'SelectVirtualizedList';
+SelectListItemsVirtualized.displayName = 'SelectListItemsVirtualized';

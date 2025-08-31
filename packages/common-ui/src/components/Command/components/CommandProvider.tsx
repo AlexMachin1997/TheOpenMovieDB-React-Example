@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Popover } from '~/components/Popover/Popover';
 import { CommandContext, CommandContextValue } from '~/components/Command/contexts/command-context';
-import { CommandProviderProps } from '~/components/Command/types/command-provider';
+import { IBaseCommandProvider } from '~/components/Command/types/command-provider';
 import { Option } from '~/types/Option';
 
 /**
@@ -21,7 +21,6 @@ import { Option } from '~/types/Option';
  * The provider creates a context that includes:
  * - Current search value and change handler
  * - Open/close state and control functions
- * - Items array and setter for dynamic content
  * - Configuration for close-on-select behavior
  *
  * @component
@@ -30,21 +29,18 @@ import { Option } from '~/types/Option';
  */
 export const CommandProvider = ({
 	children,
-	items,
-	setItems,
 	closeOnSelect = true,
 	open,
 	setOpen,
 	defaultSearchValue = '',
 	options
-}: CommandProviderProps) => {
+}: IBaseCommandProvider) => {
 	const [searchValue, setSearchValue] = React.useState(defaultSearchValue);
 
 	const handleSearchChange = React.useCallback((value: string) => {
 		setSearchValue(value);
 	}, []);
 
-	// Generic filtering logic (shared between Command and Select)
 	const optionsMap = React.useMemo(() => {
 		return new Map(options.map((option: Option) => [option.value, option.label]));
 	}, [options]);
@@ -54,15 +50,14 @@ export const CommandProvider = ({
 		if (!searchValue.trim()) return options;
 
 		const searchLower = searchValue.toLowerCase();
-		return options.filter((option: Option) => option.label.toLowerCase().includes(searchLower));
+
+		return options.filter((option) => option.label.toLowerCase().includes(searchLower));
 	}, [options, searchValue]);
 
 	const contextValue: CommandContextValue = React.useMemo(
 		() => ({
 			open,
 			searchValue,
-			items,
-			setItems,
 			closeOnSelect,
 			close: () => setOpen(false),
 			openMenu: () => setOpen(true),
@@ -76,8 +71,6 @@ export const CommandProvider = ({
 		[
 			open,
 			searchValue,
-			items,
-			setItems,
 			closeOnSelect,
 			setOpen,
 			handleSearchChange,

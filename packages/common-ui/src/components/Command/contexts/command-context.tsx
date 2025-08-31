@@ -1,42 +1,18 @@
 import { createContext } from 'react';
-import { Option } from '~/types/Option';
+import { IBaseCommandContext } from '../types';
 
 /**
  * Context value interface for command palette functionality
  *
- * This interface defines the shape of the context value provided by CommandProvider.
- * It includes all the state and functions needed for command palette operations.
+ * This interface extends the base command context value with any
+ * Command-specific functionality. Currently, it's identical to the
+ * base interface but can be extended with Command-specific properties
+ * in the future.
  *
  * @interface CommandContextValue
+ * @extends IBaseCommandContext
  */
-export interface CommandContextValue {
-	/** Whether the command palette is currently open */
-	open: boolean;
-	/** Current search value for filtering command items */
-	searchValue: string;
-	/** Array of command items to display */
-	items: unknown[];
-	/** Function to update the command items array */
-	setItems: (items: unknown[]) => void;
-	/** Whether to automatically close the palette when an item is selected */
-	closeOnSelect?: boolean;
-	/** Function to close the command palette */
-	close: () => void;
-	/** Function to open the command palette */
-	openMenu: () => void;
-	/** Function to toggle the command palette open/close state */
-	toggle: () => void;
-	/** Function to set the command palette open state */
-	setOpen: (open: boolean) => void;
-	/** Function to handle search value changes */
-	onSearchChange: (value: string) => void;
-	/** Generic options for filtering (used by both Command and Select) */
-	options?: Option[];
-	/** Map of option values to their display labels for efficient lookups */
-	optionsMap: Map<string, string>;
-	/** Array of options filtered by the current search value */
-	filteredOptions: Option[];
-}
+export type CommandContextValue = IBaseCommandContext;
 
 /**
  * React context for command palette functionality

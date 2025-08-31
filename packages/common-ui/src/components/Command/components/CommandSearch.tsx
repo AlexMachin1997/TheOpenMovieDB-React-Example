@@ -47,7 +47,7 @@ export const CommandSearch = ({ debounceMs = 300, className, ...props }: Command
 	const [inputValue, setInputValue] = React.useState('');
 
 	const handleDebouncedValueChange = React.useCallback(() => {
-		onSearchChange(inputValue);
+		onSearchChange?.(inputValue);
 	}, [inputValue, onSearchChange]);
 
 	const debounceDependencies = React.useMemo(() => {

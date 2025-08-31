@@ -1,23 +1,30 @@
 import * as React from 'react';
 import { CommandList } from '~/components/Command/Command';
-import { Option } from '~/types/Option';
-import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { ICommonCommandProps, IRenderProps } from '~/components/Command/types';
+import { CommandEmpty } from '~/components/Command/components/CommandEmpty';
 
-export interface SelectListItemsProps {
-	children: (props: { item: Option }) => React.ReactNode;
+export interface ISelectListItemsProps extends ICommonCommandProps, IRenderProps {
 	className?: string;
 }
 
-export const SelectListItems = React.memo(({ children, className }: SelectListItemsProps) => {
-	const { filteredOptions } = useSelectContext();
+export const SelectListItems = ({ className, children, ...props }: ISelectListItemsProps) => {
+	const { filteredOptions } = useCommandContext();
+
+	if (filteredOptions.length === 0)
+		return (
+			<CommandList className={className}>
+				<CommandEmpty />
+			</CommandList>
+		);
 
 	return (
-		<CommandList className={className}>
+		<CommandList className={className} {...props}>
 			{filteredOptions.map((item) => (
 				<React.Fragment key={item.id}>{children({ item })}</React.Fragment>
 			))}
 		</CommandList>
 	);
-});
+};
 
 SelectListItems.displayName = 'SelectListItems';

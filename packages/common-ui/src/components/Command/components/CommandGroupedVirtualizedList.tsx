@@ -3,40 +3,32 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { CommandList } from '~/components/Command/components/CommandList';
 import { CommandGroup } from '~/components/Command/components/CommandGroup';
 import { CommandSeparator } from '~/components/Command/components/CommandSeparator';
-import { Option } from '~/types/Option';
 import { VirtualizedItem } from '~/components/Command/types/virtualized-item';
 import { getVirtualizedItems, getEstimatedItemHeight } from '~/components/Command/utils/grouping';
-
-export interface CommandGroupedVirtualizedListProps<T extends Option = Option> {
-	options: T[];
-	children: (props: { item: T }) => React.ReactNode;
-	estimateSize?: number;
-	overscan?: number;
-	className?: string;
-	groupOrder?: string[];
-	ungroupedPosition?: 'top' | 'bottom';
-}
+import { IBaseCommandGroupedVirtualizedList } from '~/components/Command/types';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { CommandEmpty } from '~/components/Command/components/CommandEmpty';
 
 export const CommandGroupedVirtualizedList = React.memo(
-	<T extends Option>({
-		options,
+	({
 		children,
 		estimateSize = 36,
 		overscan = 5,
 		className,
 		groupOrder,
 		ungroupedPosition = 'top'
-	}: CommandGroupedVirtualizedListProps<T>) => {
+	}: IBaseCommandGroupedVirtualizedList) => {
+		const { filteredOptions } = useCommandContext();
 		const parentRef = React.useRef<HTMLDivElement>(null);
 
 		const virtualizedItems = React.useMemo(
 			() =>
-				getVirtualizedItems<T>({
-					options,
+				getVirtualizedItems({
+					options: filteredOptions,
 					groupOrder,
 					ungroupedPosition
 				}),
-			[options, groupOrder, ungroupedPosition]
+			[filteredOptions, groupOrder, ungroupedPosition]
 		);
 
 		const virtualizer = useVirtualizer({
@@ -50,7 +42,7 @@ export const CommandGroupedVirtualizedList = React.memo(
 		});
 
 		const renderGroupedListItem = React.useCallback(
-			(virtualItem: VirtualizedItem<T>) => {
+			(virtualItem: VirtualizedItem) => {
 				switch (virtualItem.type) {
 					case 'separator':
 						return <CommandSeparator />;
@@ -69,6 +61,13 @@ export const CommandGroupedVirtualizedList = React.memo(
 			},
 			[children]
 		);
+
+		if (virtualizer.getTotalSize() === 0)
+			return (
+				<CommandList className={className}>
+					<CommandEmpty />
+				</CommandList>
+			);
 
 		return (
 			<CommandList className={className} ref={parentRef}>

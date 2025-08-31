@@ -7,7 +7,6 @@ import {
 	SelectList,
 	SelectListItem,
 	SelectListItems,
-	SelectVirtualizedList,
 	SelectVirtualizedGroupedList
 } from '~/components/Selects/components';
 import { MultiSelectValue } from '~/components/Selects/MultiSelect/MultiSelect';
@@ -21,8 +20,8 @@ type MultiSelectStorybookTypes = {
 	children?: React.ReactNode;
 	placeholder?: string;
 	overflowBehavior?: 'wrap' | 'wrap-when-open' | 'cutoff';
-	canSearch: boolean;
-	clickToRemove: boolean;
+	canSearch?: boolean;
+	clickToRemove?: boolean;
 };
 
 const meta: Meta<typeof SelectProvider> = {
@@ -61,9 +60,12 @@ const programmingLanguages: Option[] = [
 const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
 	const [selectedValues, setSelectedValues] = React.useState<string[]>(args?.values || []);
 
+	// Destructure args to avoid prop conflicts with SelectProvider
+	const { values: _, onValuesChange: __, children: ___, ...selectProviderArgs } = args;
+
 	return (
 		<SelectProvider
-			{...args}
+			{...selectProviderArgs}
 			mode='multiple'
 			values={selectedValues}
 			onValuesChange={setSelectedValues}
@@ -72,7 +74,7 @@ const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
 				<MultiSelectValue
 					placeholder='Select options...'
 					overflowBehavior={args?.overflowBehavior}
-					clickToRemove={args?.clickToRemove}
+					clickToRemove={args?.clickToRemove ?? true}
 				/>
 			</SelectTrigger>
 			<SelectList
@@ -436,9 +438,9 @@ const LargeListVirtualizedTemplate = () => {
 				<MultiSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
 			</SelectTrigger>
 			<SelectList search={{ placeholder: 'Search items...', emptyMessage: 'No items found' }}>
-				<SelectVirtualizedList>
+				<SelectVirtualizedGroupedList>
 					{({ item }) => <SelectListItem value={item.value} />}
-				</SelectVirtualizedList>
+				</SelectVirtualizedGroupedList>
 			</SelectList>
 		</SelectProvider>
 	);
@@ -533,15 +535,21 @@ export const WithForm: StoryObj<MultiSelectStorybookTypes> = {
 const CustomStylingTemplate = (args: MultiSelectStorybookTypes) => {
 	const [selectedValues, setSelectedValues] = React.useState<string[]>(args.values || []);
 
+	// Destructure args to avoid prop conflicts with SelectProvider
+	const { values: _, onValuesChange: __, children: ___, ...selectProviderArgs } = args;
+
 	return (
 		<SelectProvider
-			{...args}
+			{...selectProviderArgs}
 			mode='multiple'
 			values={selectedValues}
 			onValuesChange={setSelectedValues}
 		>
 			<SelectTrigger className='w-full max-w-[400px] bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:from-blue-100 hover:to-indigo-100'>
-				<MultiSelectValue placeholder='Custom styled multi-select...' />
+				<MultiSelectValue
+					placeholder='Custom styled multi-select...'
+					clickToRemove={args?.clickToRemove ?? true}
+				/>
 			</SelectTrigger>
 			<SelectList>
 				<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>

@@ -16,11 +16,11 @@ import {
 	CommandListItems,
 	CommandVirtualizedList,
 	CommandGroupedList,
-	CommandGroupedVirtualizedListItems
+	CommandGroupedVirtualizedListItems,
+	CommandItem,
+	CommandShortcut
 } from '~/components/Command/components';
 // Internal components for stories
-import { CommandItem } from '~/components/Command/components/CommandItem';
-import { CommandShortcut } from '~/components/Command/components/CommandShortcut';
 import type { Option } from '~/types/Option';
 
 type CommandVirtualizedStorybookTypes = {
@@ -55,7 +55,6 @@ type Story = StoryObj<typeof meta>;
 
 // Basic Command Component Template
 const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
-	const [items, setItems] = React.useState<unknown[]>([]);
 	const [open, setOpen] = React.useState(false);
 
 	// Basic options for the command
@@ -73,13 +72,7 @@ const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
 
 	return (
 		<div className='w-[350px]'>
-			<CommandProvider
-				items={items}
-				setItems={setItems}
-				open={open}
-				setOpen={setOpen}
-				options={options}
-			>
+			<CommandProvider open={open} setOpen={setOpen} options={options}>
 				<Command {...args}>
 					<CommandInput placeholder='Type a command or search...' />
 					<CommandListItems>
@@ -107,7 +100,6 @@ export const Basic: Story = {
 
 // Command with Shortcuts Template
 const CommandWithShortcutsTemplate = (args: React.ComponentProps<typeof Command>) => {
-	const [items, setItems] = React.useState<unknown[]>([]);
 	const [open, setOpen] = React.useState(false);
 
 	// Options with shortcuts for the command
@@ -124,13 +116,7 @@ const CommandWithShortcutsTemplate = (args: React.ComponentProps<typeof Command>
 
 	return (
 		<div className='w-[350px]'>
-			<CommandProvider
-				items={items}
-				setItems={setItems}
-				open={open}
-				setOpen={setOpen}
-				options={options}
-			>
+			<CommandProvider open={open} setOpen={setOpen} options={options}>
 				<Command {...args}>
 					<CommandInput placeholder='Type a command or search...' />
 					<CommandListItems>
@@ -162,7 +148,6 @@ export const WithShortcuts: Story = {
 
 // Command Dialog Template
 const CommandDialogTemplate = (args: React.ComponentProps<typeof CommandDialog>) => {
-	const [items, setItems] = React.useState<unknown[]>([]);
 	const [open, setOpen] = React.useState(false);
 
 	// Options for the dialog command
@@ -199,13 +184,7 @@ const CommandDialogTemplate = (args: React.ComponentProps<typeof CommandDialog>)
 					Open Command Palette
 				</button>
 			</div>
-			<CommandProvider
-				items={items}
-				setItems={setItems}
-				open={open}
-				setOpen={setOpen}
-				options={options}
-			>
+			<CommandProvider open={open} setOpen={setOpen} options={options}>
 				<CommandDialog {...args}>
 					<CommandInput placeholder='Type a command or search...' />
 					<CommandListItems>
@@ -232,7 +211,6 @@ export const Dialog: Story = {
 
 const DisabledItemsTemplate = (args: React.ComponentProps<typeof Command>) => {
 	const [open, setOpen] = React.useState(false);
-	const [items, setItems] = React.useState<unknown[]>([]);
 
 	// Options with some disabled items
 	const options: Option[] = React.useMemo(
@@ -253,13 +231,7 @@ const DisabledItemsTemplate = (args: React.ComponentProps<typeof Command>) => {
 
 	return (
 		<div className='w-[350px]'>
-			<CommandProvider
-				open={open}
-				setOpen={setOpen}
-				items={items}
-				setItems={setItems}
-				options={options}
-			>
+			<CommandProvider open={open} setOpen={setOpen} options={options}>
 				<Command {...args}>
 					<CommandInput placeholder='Type a command or search...' />
 					<CommandListItems>
@@ -292,7 +264,6 @@ export const WithDisabledItems: Story = {
 // Custom Styling Template
 const CustomStylingTemplate = (args: React.ComponentProps<typeof Command>) => {
 	const [open, setOpen] = React.useState(false);
-	const [items, setItems] = React.useState<unknown[]>([]);
 
 	// Options for custom styling
 	const options: Option[] = React.useMemo(
@@ -307,13 +278,7 @@ const CustomStylingTemplate = (args: React.ComponentProps<typeof Command>) => {
 
 	return (
 		<div className='w-[400px]'>
-			<CommandProvider
-				open={open}
-				setOpen={setOpen}
-				items={items}
-				setItems={setItems}
-				options={options}
-			>
+			<CommandProvider open={open} setOpen={setOpen} options={options}>
 				<Command className='border border-border rounded-lg shadow-lg' {...args}>
 					<CommandInput placeholder='Search for anything...' />
 					<CommandListItems className='max-h-[300px]'>
@@ -353,7 +318,6 @@ export const CustomStyling: Story = {
 
 // Virtualized List Template
 const VirtualizedListTemplate = (args: CommandVirtualizedStorybookTypes) => {
-	const [items, setItems] = React.useState<unknown[]>([]);
 	const [open, setOpen] = React.useState(false);
 
 	// Generate large dataset for virtualization demo
@@ -370,23 +334,12 @@ const VirtualizedListTemplate = (args: CommandVirtualizedStorybookTypes) => {
 
 	return (
 		<div className='w-[400px]'>
-			<CommandProvider
-				items={items}
-				setItems={setItems}
-				open={open}
-				setOpen={setOpen}
-				options={largeOptions}
-			>
+			<CommandProvider open={open} setOpen={setOpen} options={largeOptions}>
 				<Command>
 					<CommandInput placeholder='Search through 1000 options...' />
-					<CommandVirtualizedList {...args} options={largeOptions}>
-						{({ item, style }) => (
-							<CommandItem
-								key={item.id}
-								value={item.value}
-								style={style}
-								className='flex items-center gap-2'
-							>
+					<CommandVirtualizedList {...args}>
+						{({ item }) => (
+							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
 								<span>{item.label}</span>
 							</CommandItem>
 						)}
@@ -407,7 +360,6 @@ export const VirtualizedList: StoryObj<CommandVirtualizedStorybookTypes> = {
 
 // Grouped List Template
 const GroupedListTemplate = (args: CommandGroupedStorybookTypes) => {
-	const [items, setItems] = React.useState<unknown[]>([]);
 	const [open, setOpen] = React.useState(false);
 
 	// Grouped options for command
@@ -445,16 +397,10 @@ const GroupedListTemplate = (args: CommandGroupedStorybookTypes) => {
 
 	return (
 		<div className='w-[400px]'>
-			<CommandProvider
-				items={items}
-				setItems={setItems}
-				open={open}
-				setOpen={setOpen}
-				options={groupOptions}
-			>
+			<CommandProvider open={open} setOpen={setOpen} options={groupOptions}>
 				<Command>
 					<CommandInput placeholder='Search grouped options...' />
-					<CommandGroupedList {...args} options={groupOptions}>
+					<CommandGroupedList {...args}>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
 								<span>{item.label}</span>
@@ -493,7 +439,6 @@ export const GroupedListUngroupedBottom: StoryObj<CommandGroupedStorybookTypes> 
 
 // Grouped Virtualized List Template
 const GroupedVirtualizedListTemplate = (args: CommandGroupedVirtualizedStorybookTypes) => {
-	const [items, setItems] = React.useState<unknown[]>([]);
 	const [open, setOpen] = React.useState(false);
 
 	const groups = React.useMemo(() => {
@@ -532,13 +477,7 @@ const GroupedVirtualizedListTemplate = (args: CommandGroupedVirtualizedStorybook
 
 	return (
 		<div className='w-[450px]'>
-			<CommandProvider
-				items={items}
-				setItems={setItems}
-				open={open}
-				setOpen={setOpen}
-				options={largeGroupedOptions}
-			>
+			<CommandProvider open={open} setOpen={setOpen} options={largeGroupedOptions}>
 				<Command>
 					<CommandInput placeholder='Search through 90 grouped options...' />
 					<CommandGroupedVirtualizedListItems {...args} groupOrder={groups}>

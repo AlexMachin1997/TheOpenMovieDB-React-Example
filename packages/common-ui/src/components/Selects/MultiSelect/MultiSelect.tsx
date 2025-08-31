@@ -4,20 +4,7 @@ import { Badge } from '~/components/Badge/Badge';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
-
-/**
- * Props for the MultiSelectValue component
- *
- * @interface MultiSelectValueProps
- */
-interface MultiSelectValueProps extends Omit<React.ComponentPropsWithoutRef<'ul'>, 'children'> {
-	/** Placeholder text shown when no items are selected */
-	placeholder?: string;
-	/** Whether selected items can be removed by clicking */
-	clickToRemove?: boolean;
-	/** How to handle overflow when there are many selected items */
-	overflowBehavior?: 'wrap' | 'wrap-when-open' | 'cutoff';
-}
+import { MultiSelectValueProps } from '~/components/Selects/types';
 
 /**
  * Displays selected values in a multi-select interface
@@ -57,7 +44,8 @@ export const MultiSelectValue = ({
 	overflowBehavior = 'wrap-when-open',
 	...props
 }: MultiSelectValueProps) => {
-	const { selectedValues, toggleValue, optionsMap } = useSelectContext();
+	const { selectedValues, toggleValue } = useSelectContext();
+	const { optionsMap } = useCommandContext();
 	const { open } = useCommandContext();
 	const [overflowAmount, setOverflowAmount] = React.useState(0);
 	const valueRef = React.useRef<HTMLUListElement>(null);

@@ -7,8 +7,8 @@ import {
 	SelectList,
 	SelectListItems,
 	SelectGroupedListItems,
-	SelectVirtualizedList
-} from '~/components/Selects/components';
+	SelectListItemsVirtualized
+} from '~/components/Selects';
 import {
 	SingleSelectValue,
 	SingleSelectListItem
@@ -234,9 +234,9 @@ const LargeListVirtualizedTemplate = () => {
 				<SingleSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
 			</SelectTrigger>
 			<SelectList search={{ placeholder: 'Search items...', emptyMessage: 'No items found' }}>
-				<SelectVirtualizedList>
+				<SelectListItemsVirtualized>
 					{({ item }) => <SingleSelectListItem value={item.value} />}
-				</SelectVirtualizedList>
+				</SelectListItemsVirtualized>
 			</SelectList>
 		</SelectProvider>
 	);

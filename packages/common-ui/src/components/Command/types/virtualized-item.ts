@@ -7,7 +7,7 @@ import { Option } from '~/types/Option';
  * represent separators, group headers, and actual options in a flat array
  * for efficient rendering.
  */
-export type VirtualizedItem<T extends Option = Option> =
+export type VirtualizedItem =
 	| {
 			type: 'separator';
 			id: string;
@@ -20,5 +20,5 @@ export type VirtualizedItem<T extends Option = Option> =
 	| {
 			type: 'option';
 			id: string;
-			option: T;
+			option: Option;
 	  };

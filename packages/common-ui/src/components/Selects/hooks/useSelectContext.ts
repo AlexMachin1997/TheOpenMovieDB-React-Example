@@ -4,23 +4,24 @@ import { SelectContext } from '~/components/Selects/contexts/select-context';
 /**
  * Hook to access select context throughout the component tree
  *
- * This hook provides access to the SelectContext, which contains all the state
- * and functions needed for select functionality. It includes error handling
- * to ensure the hook is used within a SelectProvider.
+ * This hook provides access to the SelectContext, which contains select-specific
+ * state and functions. It includes error handling to ensure the hook is used
+ * within a SelectProvider.
  *
- * The hook returns the complete select context value including:
+ * The hook returns select-specific context values:
  * - Selected values and toggle function
- * - Options mapping for efficient lookups
- * - Search functionality
  * - Selection mode (single/multiple)
- * - Filtered options based on search
+ *
+ * Note: Command functionality (search, filtering, options mapping) should be
+ * accessed via useCommandContext when needed.
  *
  * @throws {Error} When used outside of a SelectProvider
- * @returns The select context value with all state and functions
+ * @returns The select context value with select-specific state and functions
  *
  * @example
  * ```tsx
- * const { selectedValues, toggleValue, optionsMap, mode } = useSelectContext();
+ * const { selectedValues, toggleValue, mode } = useSelectContext();
+ * const { optionsMap, filteredOptions } = useCommandContext();
  *
  * // Check if a value is selected
  * const isSelected = selectedValues.has('some-value');

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useCommandContext } from '~/components/Command';
 import { CommandProvider } from '~/components/Command/components/CommandProvider';
 import { SelectContext } from '~/components/Selects/contexts/select-context';
 import { Option } from '~/types/Option';
@@ -50,19 +49,20 @@ type SelectProviderProps = SingleSelectProviderProps | MultiSelectProviderProps;
  * Inner provider component that manages select-specific state and logic
  *
  * This component handles the core select functionality including:
- * - Option filtering based on search value
  * - Value toggling logic for single/multi select modes
- * - Options mapping for efficient lookups
+ * - Selection state management
  * - Integration with CommandContext for search functionality
+ *
+ * Note: Command functionality (search, filtering, options mapping) is provided
+ * by the CommandProvider and should be accessed directly through useCommandContext
+ * when needed in select components.
  *
  * @param props - The select provider configuration props
  * @returns The select context provider with computed values
  */
 const SelectProviderInner = (props: SelectProviderProps) => {
-	const { searchValue, onSearchChange, optionsMap, filteredOptions } = useCommandContext();
-
 	const toggleValue = (value: string) => {
-		const currentValues = new Set(props.values);
+		const currentValues = new Set(props.values || []);
 
 		if (props.mode === 'single') {
 			if (currentValues.has(value)) {
@@ -86,12 +86,8 @@ const SelectProviderInner = (props: SelectProviderProps) => {
 	return (
 		<SelectContext.Provider
 			value={{
-				selectedValues: new Set(props.values),
+				selectedValues: new Set(props.values || []),
 				toggleValue,
-				optionsMap,
-				searchValue,
-				onSearchChange,
-				filteredOptions,
 				mode: props.mode
 			}}
 		>
@@ -109,41 +105,42 @@ const SelectProviderInner = (props: SelectProviderProps) => {
  *
  * Key features:
  * - Single and multi-select mode support
- * - Search functionality with option filtering
- * - Automatic option mapping for efficient lookups
+ * - Search functionality with option filtering (via CommandProvider)
+ * - Automatic option mapping for efficient lookups (via CommandProvider)
  * - Configurable close-on-select behavior
  * - Integration with Command palette functionality
  *
  * The provider creates a layered context structure:
- * 1. CommandProvider - handles search, open/close state, and command functionality
+ * 1. CommandProvider - handles search, open/close state, filtering, and command functionality
  * 2. SelectProviderInner - handles select-specific logic and state
+ *
+ * Components should access:
+ * - Select functionality (selectedValues, toggleValue, mode) via useSelectContext
+ * - Command functionality (searchValue, filteredOptions, optionsMap) via useCommandContext
  *
  * Single-select mode:
  * - Only one value can be selected at a time
  * - Selecting a value deselects the previous selection
- * - onValuesChange receives a single string value
+ * - onValuesChange receives a single value
  *
  * Multi-select mode:
  * - Multiple values can be selected simultaneously
  * - Values are toggled on/off when clicked
- * - onValuesChange receives an array of string values
+ * - onValuesChange receives an array of values
  *
  * @component
  * @param props - The provider configuration props
  * @returns The combined command and select provider
  */
 export const SelectProvider = (props: SelectProviderProps) => {
-	const [items, setItems] = React.useState<unknown[]>([]);
 	const [open, setOpen] = React.useState(false);
 
 	return (
 		<CommandProvider
-			items={items}
-			setItems={setItems}
-			closeOnSelect={props.closeOnSelect}
 			open={open}
 			setOpen={setOpen}
-			options={props.options}
+			closeOnSelect={props.mode === 'single'}
+			{...props}
 		>
 			<SelectProviderInner {...props} />
 		</CommandProvider>

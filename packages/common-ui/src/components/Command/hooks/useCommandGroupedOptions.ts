@@ -1,17 +1,6 @@
 import * as React from 'react';
 import { Option } from '~/types/Option';
-
-/**
- * Configuration options for grouping behavior
- *
- * @interface GroupedOptionsConfig
- */
-interface GroupedOptionsConfig {
-	/** Array of group names defining the order in which groups should appear */
-	groupOrder?: string[];
-	/** Position for ungrouped items relative to grouped items */
-	ungroupedPosition?: 'top' | 'bottom' | undefined;
-}
+import { IBaseGroupedCommand, GroupedOptions } from '~/components/Command/types';
 
 /**
  * Hook to organize command options into groups with configurable ordering
@@ -62,20 +51,21 @@ interface GroupedOptionsConfig {
  * });
  * ```
  */
-export const useCommandGroupedOptions = <T extends Option = Option>(
-	options: T[],
-	{ groupOrder = [], ungroupedPosition = 'top' }: GroupedOptionsConfig = {}
-) => {
+export const useCommandGroupedOptions = (
+	options: Option[],
+	{ groupOrder = [], ungroupedPosition = 'top' }: IBaseGroupedCommand = {}
+): GroupedOptions => {
 	const groups = React.useMemo(() => {
-		const groups = new Map<string | undefined, T[]>();
+		const groups = new Map<string | undefined, Option[]>();
 
 		options.forEach((option) => {
-			const group = option.group;
-			if (!groups.has(group)) {
-				groups.set(group, []);
+			if (!option.group) return;
+
+			if (!groups.has(option.group)) {
+				groups.set(option.group, []);
 			}
 
-			groups.get(group)!.push(option);
+			groups.get(option.group)!.push(option);
 		});
 
 		return groups;
@@ -102,8 +92,5 @@ export const useCommandGroupedOptions = <T extends Option = Option>(
 		return sortedGroups;
 	}, [groups, groupOrder, ungroupedPosition]);
 
-	return {
-		sortedGroups,
-		groups
-	};
+	return { sortedGroupNames: sortedGroups, groups };
 };
