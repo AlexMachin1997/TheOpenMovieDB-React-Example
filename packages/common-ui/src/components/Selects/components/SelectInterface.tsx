@@ -1,15 +1,15 @@
-import { CommandWrapper } from '~/components/Command/components/CommandWrapper';
+import { CommandInterface } from '~/components/Command/components/CommandInterface';
 import { PopoverContent } from '~/components/Popover/Popover';
 import { ICommandSearchProps, IEmptyStateConfig } from '~/components/Command/types';
 
 /**
- * Props for the SelectList component
+ * Props for the SelectInterface component
  *
- * @interface ISelectList
- * @extends React.ComponentPropsWithoutRef<typeof CommandWrapper>
+ * @interface ISelectInterface
+ * @extends React.ComponentPropsWithoutRef<typeof CommandInterface>
  */
-interface ISelectList extends React.ComponentPropsWithoutRef<typeof CommandWrapper> {
-	/** Child components to render within the select list */
+interface ISelectInterface extends React.ComponentPropsWithoutRef<typeof CommandInterface> {
+	/** Child components to render within the select interface */
 	children: React.ReactNode;
 	/** Empty state configuration */
 	emptyState?: IEmptyStateConfig;
@@ -18,7 +18,7 @@ interface ISelectList extends React.ComponentPropsWithoutRef<typeof CommandWrapp
 }
 
 /**
- * Container component for select dropdown content
+ * Complete select interface component for select dropdown functionality
  *
  * This component provides the main container for select dropdown functionality,
  * combining PopoverContent with Command components to create a searchable
@@ -53,15 +53,20 @@ interface ISelectList extends React.ComponentPropsWithoutRef<typeof CommandWrapp
  * - Provides intelligent message selection based on search state
  *
  * @component
- * @param props - The select list configuration props
- * @returns The rendered select list container component
+ * @param props - The select interface configuration props
+ * @returns The rendered select interface container component
  */
-export const SelectList = ({ searchConfig, children, emptyState, ...props }: ISelectList) => {
+export const SelectInterface = ({
+	searchConfig,
+	children,
+	emptyState,
+	...props
+}: ISelectInterface) => {
 	return (
 		<PopoverContent className='min-w-[var(--radix-popover-trigger-width)] p-0'>
-			<CommandWrapper searchConfig={searchConfig} emptyState={emptyState} {...props}>
+			<CommandInterface searchConfig={searchConfig} emptyState={emptyState} {...props}>
 				{children}
-			</CommandWrapper>
+			</CommandInterface>
 		</PopoverContent>
 	);
 };

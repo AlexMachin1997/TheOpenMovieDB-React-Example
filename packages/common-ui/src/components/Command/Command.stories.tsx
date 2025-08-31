@@ -18,8 +18,7 @@ import {
 	CommandGroupedVirtualizedListItems,
 	CommandItem,
 	CommandShortcut,
-	CommandContainer,
-	CommandWrapper
+	CommandInterface
 } from '~/components/Command/components';
 // Internal components for stories
 import type { Option } from '~/types/Option';
@@ -74,7 +73,7 @@ const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
 	return (
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<CommandWrapper
+				<CommandInterface
 					{...args}
 					searchConfig={{ searchPlaceholder: 'Type a command or search...' }}
 				>
@@ -91,7 +90,7 @@ const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</CommandWrapper>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
@@ -101,8 +100,8 @@ export const Basic: Story = {
 	render: (args) => <BasicCommandTemplate {...args} />
 };
 
-// CommandWrapper Template
-const CommandWrapperTemplate = (args: React.ComponentProps<typeof CommandWrapper>) => {
+// CommandInterface Template
+const CommandInterfaceTemplate = (args: React.ComponentProps<typeof CommandInterface>) => {
 	const [open, setOpen] = React.useState(false);
 
 	// Basic options for the command
@@ -121,7 +120,7 @@ const CommandWrapperTemplate = (args: React.ComponentProps<typeof CommandWrapper
 	return (
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<CommandWrapper {...args}>
+				<CommandInterface {...args}>
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -135,18 +134,18 @@ const CommandWrapperTemplate = (args: React.ComponentProps<typeof CommandWrapper
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</CommandWrapper>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
 };
 
-export const WithWrapper: Story = {
-	render: (args) => <CommandWrapperTemplate {...args} />
+export const WithInterface: Story = {
+	render: (args) => <CommandInterfaceTemplate {...args} />
 };
 
 // CommandContainer Template
-const CommandContainerTemplate = (args: React.ComponentProps<typeof CommandContainer>) => {
+const CommandContainerTemplate = (args: React.ComponentProps<typeof CommandInterface>) => {
 	const [open, setOpen] = React.useState(false);
 
 	// Basic options for the command
@@ -165,7 +164,7 @@ const CommandContainerTemplate = (args: React.ComponentProps<typeof CommandConta
 	return (
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<CommandContainer {...args}>
+				<CommandInterface {...args}>
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -179,7 +178,7 @@ const CommandContainerTemplate = (args: React.ComponentProps<typeof CommandConta
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</CommandContainer>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
@@ -208,7 +207,7 @@ const CommandWithShortcutsTemplate = (args: React.ComponentProps<typeof Command>
 	return (
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<CommandWrapper
+				<CommandInterface
 					{...args}
 					searchConfig={{ searchPlaceholder: 'Type a command or search...' }}
 				>
@@ -229,7 +228,7 @@ const CommandWithShortcutsTemplate = (args: React.ComponentProps<typeof Command>
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</CommandWrapper>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
@@ -279,7 +278,7 @@ const CommandDialogTemplate = (args: React.ComponentProps<typeof CommandDialog>)
 			</div>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
 				<CommandDialog {...args}>
-					<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
+					<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 						<CommandListItems>
 							{({ item }) => (
 								<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -292,7 +291,7 @@ const CommandDialogTemplate = (args: React.ComponentProps<typeof CommandDialog>)
 								</CommandItem>
 							)}
 						</CommandListItems>
-					</CommandWrapper>
+					</CommandInterface>
 				</CommandDialog>
 			</CommandProvider>
 		</>
@@ -326,7 +325,7 @@ const DisabledItemsTemplate = (args: React.ComponentProps<typeof Command>) => {
 	return (
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<CommandWrapper
+				<CommandInterface
 					{...args}
 					searchConfig={{ searchPlaceholder: 'Type a command or search...' }}
 				>
@@ -347,7 +346,7 @@ const DisabledItemsTemplate = (args: React.ComponentProps<typeof Command>) => {
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</CommandWrapper>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
@@ -375,7 +374,7 @@ const CustomStylingTemplate = (args: React.ComponentProps<typeof Command>) => {
 	return (
 		<div className='w-[400px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
-				<CommandWrapper
+				<CommandInterface
 					{...args}
 					className='border border-border rounded-lg shadow-lg'
 					searchConfig={{ searchPlaceholder: 'Search for anything...' }}
@@ -405,7 +404,7 @@ const CustomStylingTemplate = (args: React.ComponentProps<typeof Command>) => {
 							</CommandItem>
 						)}
 					</CommandListItems>
-				</CommandWrapper>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
@@ -434,7 +433,7 @@ const VirtualizedListTemplate = (args: CommandVirtualizedStorybookTypes) => {
 	return (
 		<div className='w-[400px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={largeOptions}>
-				<CommandWrapper searchConfig={{ searchPlaceholder: 'Search through 1000 options...' }}>
+				<CommandInterface searchConfig={{ searchPlaceholder: 'Search through 1000 options...' }}>
 					<CommandVirtualizedList {...args}>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -442,7 +441,7 @@ const VirtualizedListTemplate = (args: CommandVirtualizedStorybookTypes) => {
 							</CommandItem>
 						)}
 					</CommandVirtualizedList>
-				</CommandWrapper>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
@@ -496,7 +495,7 @@ const GroupedListTemplate = (args: CommandGroupedStorybookTypes) => {
 	return (
 		<div className='w-[400px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={groupOptions}>
-				<CommandWrapper searchConfig={{ searchPlaceholder: 'Search grouped options...' }}>
+				<CommandInterface searchConfig={{ searchPlaceholder: 'Search grouped options...' }}>
 					<CommandGroupedList {...args}>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
@@ -504,7 +503,7 @@ const GroupedListTemplate = (args: CommandGroupedStorybookTypes) => {
 							</CommandItem>
 						)}
 					</CommandGroupedList>
-				</CommandWrapper>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
@@ -575,7 +574,7 @@ const GroupedVirtualizedListTemplate = (args: CommandGroupedVirtualizedStorybook
 	return (
 		<div className='w-[450px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={largeGroupedOptions}>
-				<CommandWrapper
+				<CommandInterface
 					searchConfig={{ searchPlaceholder: 'Search through 90 grouped options...' }}
 				>
 					<CommandGroupedVirtualizedListItems {...args} groupOrder={groups}>
@@ -585,7 +584,7 @@ const GroupedVirtualizedListTemplate = (args: CommandGroupedVirtualizedStorybook
 							</CommandItem>
 						)}
 					</CommandGroupedVirtualizedListItems>
-				</CommandWrapper>
+				</CommandInterface>
 			</CommandProvider>
 		</div>
 	);
@@ -612,7 +611,7 @@ const EmptyStateDemoTemplate = () => {
 			<div className='w-[350px]'>
 				<h3 className='text-sm font-medium mb-2'>Default Empty State (No Options):</h3>
 				<CommandProvider open={open} setOpen={setOpen} options={emptyOptions}>
-					<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
+					<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 						<CommandListItems>
 							{({ item }) => (
 								<CommandItem key={item.id} value={item.value}>
@@ -620,7 +619,7 @@ const EmptyStateDemoTemplate = () => {
 								</CommandItem>
 							)}
 						</CommandListItems>
-					</CommandWrapper>
+					</CommandInterface>
 				</CommandProvider>
 				<p className='text-sm text-muted-foreground mt-2'>
 					Shows &quot;No options currently available&quot; when no search is provided
@@ -639,7 +638,7 @@ const EmptyStateDemoTemplate = () => {
 						formatSearchTerm: (term) => `"${term}"`
 					}}
 				>
-					<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
+					<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 						<CommandListItems>
 							{({ item }) => (
 								<CommandItem key={item.id} value={item.value}>
@@ -647,7 +646,7 @@ const EmptyStateDemoTemplate = () => {
 								</CommandItem>
 							)}
 						</CommandListItems>
-					</CommandWrapper>
+					</CommandInterface>
 				</CommandProvider>
 				<p className='text-sm text-muted-foreground mt-2'>
 					Custom messages for both no options and no search results scenarios
@@ -665,7 +664,7 @@ const EmptyStateDemoTemplate = () => {
 						formatSearchTerm: (term) => `**${term}**`
 					}}
 				>
-					<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
+					<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 						<CommandListItems>
 							{({ item }) => (
 								<CommandItem key={item.id} value={item.value}>
@@ -673,7 +672,7 @@ const EmptyStateDemoTemplate = () => {
 								</CommandItem>
 							)}
 						</CommandListItems>
-					</CommandWrapper>
+					</CommandInterface>
 				</CommandProvider>
 				<p className='text-sm text-muted-foreground mt-2'>
 					Search terms are formatted with bold markers

@@ -55,7 +55,7 @@ export const useCommandGroupedOptions = (
 	options: Option[],
 	{ groupOrder = [], ungroupedPosition = 'top' }: IBaseGroupedCommand = {}
 ): GroupedOptions => {
-	const groups = React.useMemo(() => {
+	const { sortedGroupNames, groups } = React.useMemo(() => {
 		const groups = new Map<string | undefined, Option[]>();
 
 		options.forEach((option) => {
@@ -68,10 +68,6 @@ export const useCommandGroupedOptions = (
 			groups.get(option.group)!.push(option);
 		});
 
-		return groups;
-	}, [options]);
-
-	const sortedGroups = React.useMemo(() => {
 		const groupNames = Array.from(groups.keys());
 		const definedGroups = groupNames.filter(Boolean);
 		const hasUngrouped = groupNames.includes(undefined);
@@ -83,14 +79,14 @@ export const useCommandGroupedOptions = (
 				]
 			: definedGroups.sort();
 
-		if (hasUngrouped) {
-			return ungroupedPosition === 'top'
+		const finalSortedGroups = hasUngrouped
+			? ungroupedPosition === 'top'
 				? [undefined, ...sortedGroups]
-				: [...sortedGroups, undefined];
-		}
+				: [...sortedGroups, undefined]
+			: sortedGroups;
 
-		return sortedGroups;
-	}, [groups, groupOrder, ungroupedPosition]);
+		return { sortedGroupNames: finalSortedGroups, groups };
+	}, [options, groupOrder, ungroupedPosition]);
 
-	return { sortedGroupNames: sortedGroups, groups };
+	return { sortedGroupNames, groups };
 };

@@ -476,9 +476,9 @@ The Selects components provide intelligent empty state handling that automatical
 	<SelectTrigger>
 		<SingleSelectValue placeholder='Select an option...' />
 	</SelectTrigger>
-	<SelectList>
+	<SelectInterface>
 		<SelectListItems>{({ item }) => <SingleSelectListItem value={item.value} />}</SelectListItems>
-	</SelectList>
+	</SelectInterface>
 </SelectProvider>
 ```
 

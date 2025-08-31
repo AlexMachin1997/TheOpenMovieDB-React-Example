@@ -10,8 +10,7 @@ export {
 	CommandSeparator,
 	Command,
 	CommandProvider,
-	CommandContainer,
-	CommandWrapper
+	CommandInterface
 } from '~/components/Command/components';
 
 // Contexts

@@ -70,31 +70,25 @@ interface ICommandEmpty extends React.ComponentProps<typeof CommandPrimitive.Emp
  */
 export const CommandEmpty = ({
 	className,
-	noOptionsMessage,
-	noSearchResultsMessage,
+	noOptionsMessage = 'No options currently available',
+	noSearchResultsMessage = 'No options for {searchTerm}',
 	formatSearchTerm,
 	children,
 	...props
 }: ICommandEmpty) => {
 	const { searchValue, filteredOptions } = useCommandContext();
 
-	// Use prop overrides or fall back to context configuration, then defaults
-	const finalNoOptionsMessage = noOptionsMessage || 'No options currently available';
-	const finalNoSearchResultsMessage = noSearchResultsMessage || 'No options for {searchTerm}';
-	const finalFormatSearchTerm = formatSearchTerm || ((term) => `"${term}"`);
-
 	// Determine the appropriate message based on search state
-	const getEmptyMessage = () => {
-		const hasSearchTerm = searchValue.trim().length > 0;
+	const hasSearchTerm = searchValue.trim().length > 0;
+	const emptyMessage = hasSearchTerm
+		? (() => {
+				const finalFormatSearchTerm = formatSearchTerm || ((term) => `"${term}"`);
+				const formattedSearchTerm = finalFormatSearchTerm(searchValue.trim());
+				return noSearchResultsMessage.replace('{searchTerm}', formattedSearchTerm);
+			})()
+		: noOptionsMessage;
 
-		if (hasSearchTerm) {
-			const formattedSearchTerm = finalFormatSearchTerm(searchValue.trim());
-			return finalNoSearchResultsMessage.replace('{searchTerm}', formattedSearchTerm);
-		}
-
-		return finalNoOptionsMessage;
-	};
-
+	// If there are options, don't show the empty state
 	if (filteredOptions.length > 0) return null;
 
 	return (
@@ -103,7 +97,7 @@ export const CommandEmpty = ({
 			className={cn('py-6 text-center text-sm', className)}
 			{...props}
 		>
-			{children || getEmptyMessage()}
+			{emptyMessage}
 		</CommandPrimitive.Empty>
 	);
 };

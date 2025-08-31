@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
 	SelectProvider,
 	SelectTrigger,
-	SelectList,
+	SelectInterface,
 	SelectListItem,
 	SelectListItems,
 	SelectVirtualizedGroupedList
@@ -77,7 +77,7 @@ const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
 					clickToRemove={args?.clickToRemove ?? true}
 				/>
 			</SelectTrigger>
-			<SelectList
+			<SelectInterface
 				searchConfig={{ enabledSearch: args?.canSearch, searchPlaceholder: 'Search items...' }}
 				emptyState={{
 					noSearchResultsMessage: 'No items found',
@@ -85,7 +85,7 @@ const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
 				}}
 			>
 				<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
-			</SelectList>
+			</SelectInterface>
 		</SelectProvider>
 	);
 };
@@ -364,11 +364,11 @@ const WithGroupsTemplate = () => {
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<MultiSelectValue placeholder='Select from 100+ technologies...' />
 			</SelectTrigger>
-			<SelectList searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
+			<SelectInterface searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
 				<SelectVirtualizedGroupedList groupOrder={groups} ungroupedPosition='bottom'>
 					{({ item }) => <SelectListItem value={item.value} />}
 				</SelectVirtualizedGroupedList>
-			</SelectList>
+			</SelectInterface>
 		</SelectProvider>
 	);
 };
@@ -437,11 +437,11 @@ const LargeListVirtualizedTemplate = () => {
 			<SelectTrigger className='w-full max-w-[400px]'>
 				<MultiSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
 			</SelectTrigger>
-			<SelectList searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
+			<SelectInterface searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
 				<SelectVirtualizedGroupedList>
 					{({ item }) => <SelectListItem value={item.value} />}
 				</SelectVirtualizedGroupedList>
-			</SelectList>
+			</SelectInterface>
 		</SelectProvider>
 	);
 };
@@ -475,7 +475,7 @@ const WithFormTemplate = () => {
 					<SelectTrigger className='w-full'>
 						<MultiSelectValue placeholder='Choose frameworks...' />
 					</SelectTrigger>
-					<SelectList
+					<SelectInterface
 						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search frameworks...' }}
 						emptyState={{
 							noSearchResultsMessage: 'No frameworks found',
@@ -483,7 +483,7 @@ const WithFormTemplate = () => {
 						}}
 					>
 						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
-					</SelectList>
+					</SelectInterface>
 				</SelectProvider>
 			</div>
 
@@ -498,7 +498,7 @@ const WithFormTemplate = () => {
 					<SelectTrigger className='w-full'>
 						<MultiSelectValue placeholder='Choose languages...' />
 					</SelectTrigger>
-					<SelectList
+					<SelectInterface
 						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search languages...' }}
 						emptyState={{
 							noSearchResultsMessage: 'No languages found',
@@ -506,7 +506,7 @@ const WithFormTemplate = () => {
 						}}
 					>
 						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
-					</SelectList>
+					</SelectInterface>
 				</SelectProvider>
 			</div>
 
@@ -561,11 +561,11 @@ const CustomStylingTemplate = (args: MultiSelectStorybookTypes) => {
 					clickToRemove={args?.clickToRemove ?? true}
 				/>
 			</SelectTrigger>
-			<SelectList
+			<SelectInterface
 				searchConfig={{ enabledSearch: true, searchPlaceholder: 'Custom styled multi-select...' }}
 			>
 				<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
-			</SelectList>
+			</SelectInterface>
 		</SelectProvider>
 	);
 };

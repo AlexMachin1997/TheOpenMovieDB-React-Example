@@ -26,7 +26,7 @@ import {
 	SingleSelectValue,
 	SelectProvider,
 	SelectTrigger,
-	SelectList,
+	SelectInterface,
 	MultiSelectValue,
 	SelectListItems,
 	SelectListItem
@@ -257,11 +257,11 @@ const ComprehensiveForm = () => {
 											<SelectTrigger>
 												<SingleSelectValue placeholder='Select your preferred framework' />
 											</SelectTrigger>
-											<SelectList>
+											<SelectInterface>
 												<SelectListItems>
 													{({ item }) => <SingleSelectListItem value={item.value} />}
 												</SelectListItems>
-											</SelectList>
+											</SelectInterface>
 										</SelectProvider>
 									</FormControl>
 									<FormDescription>
@@ -339,11 +339,11 @@ const ComprehensiveForm = () => {
 											<SelectTrigger>
 												<MultiSelectValue placeholder='Select your programming skills' />
 											</SelectTrigger>
-											<SelectList>
+											<SelectInterface>
 												<SelectListItems>
 													{({ item }) => <SingleSelectListItem value={item.value} />}
 												</SelectListItems>
-											</SelectList>
+											</SelectInterface>
 										</SelectProvider>
 									</FormControl>
 									<FormDescription>
@@ -606,11 +606,11 @@ const SelectsExample = () => {
 									<SelectTrigger>
 										<SingleSelectValue placeholder='Select a framework' />
 									</SelectTrigger>
-									<SelectList>
+									<SelectInterface>
 										<SelectListItems>
 											{({ item }) => <SingleSelectListItem value={item.value} />}
 										</SelectListItems>
-									</SelectList>
+									</SelectInterface>
 								</SelectProvider>
 							</FormControl>
 							<FormMessage />
@@ -636,11 +636,11 @@ const SelectsExample = () => {
 									<SelectTrigger>
 										<MultiSelectValue placeholder='Select skills' />
 									</SelectTrigger>
-									<SelectList>
+									<SelectInterface>
 										<SelectListItems>
 											{({ item }) => <SelectListItem value={item.value} />}
 										</SelectListItems>
-									</SelectList>
+									</SelectInterface>
 								</SelectProvider>
 							</FormControl>
 							<FormMessage />

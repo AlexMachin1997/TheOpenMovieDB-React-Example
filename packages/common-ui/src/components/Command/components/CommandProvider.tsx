@@ -42,10 +42,6 @@ export const CommandProvider = ({
 		setSearchValue(value);
 	}, []);
 
-	const optionsMap = React.useMemo(() => {
-		return new Map(options.map((option: Option) => [option.value, option.label]));
-	}, [options]);
-
 	const filteredOptions = React.useMemo(() => {
 		if (!options) return [];
 		if (!searchValue.trim()) return options;
@@ -66,7 +62,7 @@ export const CommandProvider = ({
 			setOpen: setOpen,
 			onSearchChange: handleSearchChange,
 			options,
-			optionsMap,
+			optionsMap: new Map(options.map((option: Option) => [option.value, option.label])),
 			filteredOptions,
 			emptyState
 		}),
@@ -77,7 +73,6 @@ export const CommandProvider = ({
 			setOpen,
 			handleSearchChange,
 			options,
-			optionsMap,
 			filteredOptions,
 			emptyState
 		]

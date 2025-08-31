@@ -15,5 +15,4 @@ export { CommandGroupedVirtualizedList } from '~/components/Command/components/C
 export { CommandListItems } from '~/components/Command/components/CommandListItems';
 export { CommandGroupedListItems } from '~/components/Command/components/CommandGroupedListItems';
 export { CommandGroupedVirtualizedListItems } from '~/components/Command/components/CommandGroupedVirtualizedListItems';
-export { CommandContainer } from '~/components/Command/components/CommandContainer';
-export { CommandWrapper } from '~/components/Command/components/CommandWrapper';
+export { CommandInterface } from '~/components/Command/components/CommandInterface';

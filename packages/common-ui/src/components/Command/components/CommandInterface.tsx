@@ -6,13 +6,13 @@ import { CommandEmpty } from '~/components/Command/components/CommandEmpty';
 import { ICommandSearchProps, IEmptyStateConfig } from '~/components/Command/types';
 
 /**
- * Props for the CommandWrapper component
+ * Props for the CommandInterface component
  *
- * @interface ICommandWrapper
+ * @interface ICommandInterface
  * @extends React.ComponentPropsWithoutRef<typeof Command>
  */
-interface ICommandWrapper extends React.ComponentPropsWithoutRef<typeof Command> {
-	/** Child components to render within the command wrapper */
+interface ICommandInterface extends React.ComponentPropsWithoutRef<typeof Command> {
+	/** Child components to render within the command interface */
 	children?: React.ReactNode;
 	/** Empty state configuration */
 	emptyState?: IEmptyStateConfig;
@@ -21,9 +21,9 @@ interface ICommandWrapper extends React.ComponentPropsWithoutRef<typeof Command>
 }
 
 /**
- * Centralized wrapper component for command functionality
+ * Complete command interface component for command functionality
  *
- * This component provides a unified interface for wrapping Command components
+ * This component provides a unified interface for command components
  * with search and empty state functionality. It can be used by both Selects
  * and Command packages to avoid code duplication.
  *
@@ -60,15 +60,15 @@ interface ICommandWrapper extends React.ComponentPropsWithoutRef<typeof Command>
  * - Maintains proper component hierarchy
  *
  * @component
- * @param props - The command wrapper configuration props
- * @returns The rendered command wrapper component
+ * @param props - The command interface configuration props
+ * @returns The rendered command interface component
  */
-export const CommandWrapper = ({
+export const CommandInterface = ({
 	searchConfig,
 	children,
 	emptyState,
 	...props
-}: ICommandWrapper) => {
+}: ICommandInterface) => {
 	return (
 		<Command {...props}>
 			<CommandSearch {...searchConfig} />

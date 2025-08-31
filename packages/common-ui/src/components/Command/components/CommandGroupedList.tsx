@@ -14,7 +14,8 @@ export const CommandGroupedList = React.memo(function CommandGroupedList({
 }: ICommandGroupedListProps) {
 	const { filteredOptions } = useCommandContext();
 
-	const groups = React.useMemo(() => {
+	// Group and sort options in a single pass
+	const { groups, sortedGroups } = React.useMemo(() => {
 		const groups = new Map<string | undefined, Option[]>();
 
 		filteredOptions.forEach((option) => {
@@ -22,14 +23,9 @@ export const CommandGroupedList = React.memo(function CommandGroupedList({
 			if (!groups.has(group)) {
 				groups.set(group, []);
 			}
-
 			groups.get(group)!.push(option);
 		});
 
-		return groups;
-	}, [filteredOptions]);
-
-	const sortedGroups = React.useMemo(() => {
 		const groupNames = Array.from(groups.keys());
 		const definedGroups = groupNames.filter(Boolean);
 		const hasUngrouped = groupNames.includes(undefined);
@@ -41,14 +37,14 @@ export const CommandGroupedList = React.memo(function CommandGroupedList({
 				]
 			: definedGroups.sort();
 
-		if (hasUngrouped) {
-			return ungroupedPosition === 'top'
+		const finalSortedGroups = hasUngrouped
+			? ungroupedPosition === 'top'
 				? [undefined, ...sortedGroups]
-				: [...sortedGroups, undefined];
-		}
+				: [...sortedGroups, undefined]
+			: sortedGroups;
 
-		return sortedGroups;
-	}, [groups, groupOrder, ungroupedPosition]);
+		return { groups, sortedGroups: finalSortedGroups };
+	}, [filteredOptions, groupOrder, ungroupedPosition]);
 
 	return (
 		<CommandList className={className}>

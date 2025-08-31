@@ -2,6 +2,10 @@
 
 The Command package provides a comprehensive set of components for building command palettes, search interfaces, and virtualized lists with grouping capabilities.
 
+## Recent Updates
+
+**Latest Changes**: All Command stories have been updated to use `CommandInterface` consistently, providing a unified API for search and empty state functionality. The `searchConfig` prop is now used instead of direct `searchPlaceholder` props for better type safety and consistency. `CommandContainer` has been removed in favor of using `CommandInterface` directly. `CommandWrapper` has been renamed to `CommandInterface` for better clarity.
+
 ## ⚠️ Critical Configuration
 
 **IMPORTANT**: The `Command` component automatically sets `shouldFilter={false}` to disable cmdk's built-in filtering. This is **required** for proper integration with:
@@ -27,15 +31,15 @@ If you're experiencing rendering issues with virtualized or grouped components, 
 - `CommandEmpty` - Empty state component
 - `CommandShortcut` - Keyboard shortcut display
 
-### CommandWrapper (Centralized)
+### CommandInterface (Centralized)
 
-A centralized wrapper component that provides unified functionality for wrapping Command components with search and empty state functionality. This component is used internally by both `CommandContainer` and `SelectList` to avoid code duplication.
+A centralized wrapper component that provides unified functionality for wrapping Command components with search and empty state functionality. This component is used internally by `SelectInterface` to avoid code duplication.
 
 ```tsx
-import { CommandWrapper, CommandListItems, CommandItem } from '~/components/Command';
+import { CommandInterface, CommandListItems, CommandItem } from '~/components/Command';
 
 // Basic usage
-<CommandWrapper enabledSearch={true} searchPlaceholder="Search...">
+<CommandInterface searchConfig={{ searchPlaceholder: "Search..." }}>
 	<CommandListItems>
 		{({ item }) => (
 			<CommandItem key={item.id} value={item.value}>
@@ -43,11 +47,11 @@ import { CommandWrapper, CommandListItems, CommandItem } from '~/components/Comm
 			</CommandItem>
 		)}
 	</CommandListItems>
-</CommandWrapper>
+</CommandInterface>
 
 // With manual wrapper (e.g., for selects)
 <PopoverContent className="min-w-[var(--radix-popover-trigger-width)] p-0">
-	<CommandWrapper enabledSearch={true} searchPlaceholder="Search...">
+	<CommandInterface searchConfig={{ searchPlaceholder: "Search..." }}>
 		<CommandListItems>
 			{({ item }) => (
 				<CommandItem key={item.id} value={item.value}>
@@ -55,14 +59,29 @@ import { CommandWrapper, CommandListItems, CommandItem } from '~/components/Comm
 				</CommandItem>
 			)}
 		</CommandListItems>
-	</CommandWrapper>
+	</CommandInterface>
 </PopoverContent>
+
+// With custom styling
+<CommandInterface
+	className="border border-border rounded-lg shadow-lg"
+	searchConfig={{ searchPlaceholder: "Search for anything..." }}
+>
+	<CommandListItems className="max-h-[300px]">
+		{({ item }) => (
+			<CommandItem key={item.id} value={item.value}>
+				{item.label}
+			</CommandItem>
+		)}
+	</CommandListItems>
+</CommandInterface>
 ```
 
 **Props:**
 
-- `enabledSearch?: boolean` - Whether search functionality is enabled (default: true)
-- `searchPlaceholder?: string` - Placeholder text for the search input (default: "Type a command or search...")
+- `searchConfig?: ICommandSearchProps` - Search configuration object
+  - `enabledSearch?: boolean` - Whether search functionality is enabled (default: true)
+  - `searchPlaceholder?: string` - Placeholder text for the search input (default: "Type a command or search...")
 - `emptyState?: IEmptyStateConfig` - Configuration for empty state messages
 - `children?: React.ReactNode` - Child components to render within the command list
 - All props from `Command` component
@@ -75,41 +94,7 @@ import { CommandWrapper, CommandListItems, CommandItem } from '~/components/Comm
 - Proper accessibility and keyboard navigation
 - Integration with CommandProvider context
 - Simple and focused API
-
-### CommandContainer
-
-A convenience component that combines `Command`, `CommandInput`, `CommandList`, and `CommandEmpty` into a single container. This component is designed for command usage where search is always enabled. **Uses `CommandWrapper` internally.**
-
-```tsx
-import { CommandContainer, CommandListItems, CommandItem } from '~/components/Command';
-
-<CommandProvider open={open} setOpen={setOpen} options={options}>
-	<CommandContainer searchPlaceholder='Type a command or search...'>
-		<CommandListItems>
-			{({ item }) => (
-				<CommandItem key={item.id} value={item.value}>
-					{item.label}
-				</CommandItem>
-			)}
-		</CommandListItems>
-	</CommandContainer>
-</CommandProvider>;
-```
-
-**Props:**
-
-- `searchPlaceholder?: string` - Placeholder text for the search input (default: "Type a command or search...")
-- `emptyState?: IEmptyStateConfig` - Configuration for empty state messages
-- `children?: React.ReactNode` - Child components to render within the command list
-- All props from `Command` component
-
-**Features:**
-
-- Always enabled search functionality (no option to disable)
-- Automatic empty state handling
-- Consistent styling and behavior
-- Proper accessibility and keyboard navigation
-- Integration with CommandProvider context
+- Centralized wrapper for consistent usage across Command and Select components
 
 ### Virtualized Components
 
@@ -310,16 +295,20 @@ const MyVirtualizedCommand = () => {
 	const options = generateLargeOptions(); // 1000+ items
 
 	return (
-		<Command>
-			<CommandVirtualizedList options={options}>
-				{({ item, style }) => (
-					<CommandItem key={item.id} value={item.value} style={style}>
-						<span>{item.label}</span>
-						{item.description && <span className='text-muted-foreground'>{item.description}</span>}
-					</CommandItem>
-				)}
-			</CommandVirtualizedList>
-		</Command>
+		<CommandProvider open={open} setOpen={setOpen} options={options}>
+			<CommandInterface searchConfig={{ searchPlaceholder: 'Search through 1000 options...' }}>
+				<CommandVirtualizedList options={options}>
+					{({ item, style }) => (
+						<CommandItem key={item.id} value={item.value} style={style}>
+							<span>{item.label}</span>
+							{item.description && (
+								<span className='text-muted-foreground'>{item.description}</span>
+							)}
+						</CommandItem>
+					)}
+				</CommandVirtualizedList>
+			</CommandInterface>
+		</CommandProvider>
 	);
 };
 ```
@@ -331,24 +320,26 @@ const MyGroupedVirtualizedCommand = () => {
 	const options = generateGroupedOptions(); // Many grouped items
 
 	return (
-		<Command>
-			<CommandGroupedVirtualizedList
-				options={options}
-				groupOrder={['Favorites', 'Recent', 'All']}
-				ungroupedPosition='bottom'
-				estimateSize={40}
-				overscan={8}
-			>
-				{({ item }) => (
-					<CommandItem key={item.id} value={item.value}>
-						<div className='flex items-center gap-2'>
-							{item.icon && <Icon name={item.icon} />}
-							<span>{item.label}</span>
-						</div>
-					</CommandItem>
-				)}
-			</CommandGroupedVirtualizedList>
-		</Command>
+		<CommandProvider open={open} setOpen={setOpen} options={options}>
+			<CommandInterface searchConfig={{ searchPlaceholder: 'Search grouped options...' }}>
+				<CommandGroupedVirtualizedList
+					options={options}
+					groupOrder={['Favorites', 'Recent', 'All']}
+					ungroupedPosition='bottom'
+					estimateSize={40}
+					overscan={8}
+				>
+					{({ item }) => (
+						<CommandItem key={item.id} value={item.value}>
+							<div className='flex items-center gap-2'>
+								{item.icon && <Icon name={item.icon} />}
+								<span>{item.label}</span>
+							</div>
+						</CommandItem>
+					)}
+				</CommandGroupedVirtualizedList>
+			</CommandInterface>
+		</CommandProvider>
 	);
 };
 ```
@@ -365,27 +356,29 @@ const MyCustomGroupedCommand = () => {
 	});
 
 	return (
-		<Command>
-			<CommandList>
-				{sortedGroups.map((groupName, index) => {
-					const groupOptions = groups.get(groupName) || [];
+		<CommandProvider open={open} setOpen={setOpen} options={options}>
+			<CommandInterface searchConfig={{ searchPlaceholder: 'Search options...' }}>
+				<CommandList>
+					{sortedGroups.map((groupName, index) => {
+						const groupOptions = groups.get(groupName) || [];
 
-					if (groupOptions.length === 0) return null;
+						if (groupOptions.length === 0) return null;
 
-					return (
-						<React.Fragment key={groupName || 'ungrouped'}>
-							{index > 0 && <CommandSeparator />}
-							{groupName && <CommandGroup heading={groupName} />}
-							{groupOptions.map((option) => (
-								<CommandItem key={option.id} value={option.value}>
-									{option.label}
-								</CommandItem>
-							))}
-						</React.Fragment>
-					);
-				})}
-			</CommandList>
-		</Command>
+						return (
+							<React.Fragment key={groupName || 'ungrouped'}>
+								{index > 0 && <CommandSeparator />}
+								{groupName && <CommandGroup heading={groupName} />}
+								{groupOptions.map((option) => (
+									<CommandItem key={option.id} value={option.value}>
+										{option.label}
+									</CommandItem>
+								))}
+							</React.Fragment>
+						);
+					})}
+				</CommandList>
+			</CommandInterface>
+		</CommandProvider>
 	);
 };
 ```
@@ -398,7 +391,7 @@ The Command components provide intelligent empty state handling that automatical
 
 ```tsx
 <CommandProvider options={options}>
-	<Command>
+	<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 		<CommandListItems>
 			{({ item }) => (
 				<CommandItem key={item.id} value={item.value}>
@@ -406,7 +399,7 @@ The Command components provide intelligent empty state handling that automatical
 				</CommandItem>
 			)}
 		</CommandListItems>
-	</Command>
+	</CommandWrapper>
 </CommandProvider>
 ```
 
@@ -426,7 +419,7 @@ The Command components provide intelligent empty state handling that automatical
 		formatSearchTerm: (term) => `"${term}"`
 	}}
 >
-	<Command>
+	<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 		<CommandListItems>
 			{({ item }) => (
 				<CommandItem key={item.id} value={item.value}>
@@ -434,7 +427,7 @@ The Command components provide intelligent empty state handling that automatical
 				</CommandItem>
 			)}
 		</CommandListItems>
-	</Command>
+	</CommandWrapper>
 </CommandProvider>
 ```
 
@@ -454,7 +447,7 @@ The Command components provide intelligent empty state handling that automatical
 		formatSearchTerm: (term) => `**${term}**`
 	}}
 >
-	<Command>
+	<CommandWrapper searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 		<CommandListItems>
 			{({ item }) => (
 				<CommandItem key={item.id} value={item.value}>
@@ -462,7 +455,7 @@ The Command components provide intelligent empty state handling that automatical
 				</CommandItem>
 			)}
 		</CommandListItems>
-	</Command>
+	</CommandWrapper>
 </CommandProvider>
 ```
 
@@ -477,7 +470,7 @@ The Command components provide intelligent empty state handling that automatical
 		formatSearchTerm: (term) => `"${term}"`
 	}}
 >
-	<Command>
+	<CommandInterface searchConfig={{ searchPlaceholder: 'Search items...' }}>
 		<CommandVirtualizedList options={options}>
 			{({ item, style }) => (
 				<CommandItem key={item.id} value={item.value} style={style}>
@@ -485,7 +478,7 @@ The Command components provide intelligent empty state handling that automatical
 				</CommandItem>
 			)}
 		</CommandVirtualizedList>
-	</Command>
+	</CommandInterface>
 </CommandProvider>
 ```
 
@@ -500,7 +493,7 @@ The Command components provide intelligent empty state handling that automatical
 		formatSearchTerm: (term) => `"${term}"`
 	}}
 >
-	<Command>
+	<CommandInterface searchConfig={{ searchPlaceholder: 'Search grouped items...' }}>
 		<CommandGroupedList options={groupedOptions}>
 			{({ item }) => (
 				<CommandItem key={item.id} value={item.value}>
@@ -508,7 +501,7 @@ The Command components provide intelligent empty state handling that automatical
 				</CommandItem>
 			)}
 		</CommandGroupedList>
-	</Command>
+	</CommandInterface>
 </CommandProvider>
 ```
 

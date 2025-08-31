@@ -11,7 +11,7 @@ export * from '~/components/Selects/components/SelectGroupedListItems';
  * Core components for rendering select lists, items, and managing interactions
  */
 export * from '~/components/Selects/components/SelectListItem';
-export * from '~/components/Selects/components/SelectList';
+export * from '~/components/Selects/components/SelectInterface';
 export * from '~/components/Selects/components/SelectListItems';
 export * from '~/components/Selects/components/SelectListItemsVirtualized';
 

@@ -57,11 +57,7 @@ export const CommandSearch = ({
 		onSearchChange?.(inputValue);
 	}, [inputValue, onSearchChange]);
 
-	const debounceDependencies = React.useMemo(() => {
-		return [inputValue];
-	}, [inputValue]);
-
-	useDebounce(handleDebouncedValueChange, debounceMs, debounceDependencies);
+	useDebounce(handleDebouncedValueChange, debounceMs, [inputValue]);
 
 	if (!enabledSearch) return null;
 

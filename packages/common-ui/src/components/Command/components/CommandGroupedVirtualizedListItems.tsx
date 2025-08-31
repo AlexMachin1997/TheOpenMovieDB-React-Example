@@ -1,15 +1,9 @@
-import * as React from 'react';
 import { CommandGroupedVirtualizedList } from '~/components/Command/components/CommandGroupedVirtualizedList';
-import { IGroupedVirtualizedListProps } from '~/components/Command/types';
+import { IBaseCommandGroupedVirtualizedList } from '~/components/Command/types';
 
-export const CommandGroupedVirtualizedListItems = React.memo(
-	({ children, ...props }: IGroupedVirtualizedListProps) => {
-		return (
-			<CommandGroupedVirtualizedList {...props}>
-				{({ item }) => children({ item })}
-			</CommandGroupedVirtualizedList>
-		);
-	}
-);
-
-CommandGroupedVirtualizedListItems.displayName = 'CommandGroupedVirtualizedListItems';
+export const CommandGroupedVirtualizedListItems = ({
+	children,
+	...props
+}: IBaseCommandGroupedVirtualizedList) => {
+	return <CommandGroupedVirtualizedList {...props}>{children}</CommandGroupedVirtualizedList>;
+};

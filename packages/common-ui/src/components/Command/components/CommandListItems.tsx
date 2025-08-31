@@ -8,7 +8,7 @@ interface ICommandListItems {
 	className?: string;
 }
 
-export const CommandListItems = React.memo(({ children, className }: ICommandListItems) => {
+export const CommandListItems = ({ children, className }: ICommandListItems) => {
 	const { filteredOptions } = useCommandContext();
 
 	return (
@@ -18,6 +18,4 @@ export const CommandListItems = React.memo(({ children, className }: ICommandLis
 			))}
 		</CommandList>
 	);
-});
-
-CommandListItems.displayName = 'CommandListItems';
+};
