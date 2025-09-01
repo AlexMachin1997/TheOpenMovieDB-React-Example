@@ -11,11 +11,11 @@ import {
 } from '~/components/Selects/components';
 import { MultiSelectValue } from '~/components/Selects/MultiSelect/MultiSelect';
 import { Option } from '~/types/Option';
-import { MultiSelectValueProps } from '~/components/Selects/types';
+import { IMultiSelectValue } from '~/components/Selects/types/select-value';
 import { ICommandSearchProps } from '~/components/Command/types';
 import { Label } from '~/components/Label/Label';
 
-interface IMultiSelectStorybookArguments extends MultiSelectValueProps, ICommandSearchProps {
+interface IMultiSelectStorybookArguments extends IMultiSelectValue, ICommandSearchProps {
 	values: string[];
 	options: Option[];
 	onValuesChange?: (values: string[]) => void;

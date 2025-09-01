@@ -4,7 +4,7 @@ import { Badge } from '~/components/Badge/Badge';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
-import { MultiSelectValueProps } from '~/components/Selects/types';
+import { IMultiSelectValue } from '~/components/Selects/types/select-value';
 
 /**
  * Displays selected values in a multi-select interface
@@ -43,7 +43,7 @@ export const MultiSelectValue = ({
 	className,
 	overflowBehavior = 'wrap-when-open',
 	...props
-}: MultiSelectValueProps) => {
+}: IMultiSelectValue) => {
 	const { selectedValues, toggleValue } = useSelectContext();
 	const { optionsMap } = useCommandContext();
 	const { open } = useCommandContext();
@@ -51,7 +51,7 @@ export const MultiSelectValue = ({
 	const valueRef = React.useRef<HTMLUListElement>(null);
 	const overflowRef = React.useRef<HTMLUListElement>(null);
 	const observerRef = React.useRef<ResizeObserver | null>(null);
-	const buttonRefs = React.useRef<Map<string, HTMLButtonElement>>(new Map());
+	const buttonRefs = React.useRef<Map<string, HTMLElement>>(new Map());
 	const [prevCount, setPrevCount] = React.useState(selectedValues.size);
 
 	const shouldWrap = overflowBehavior === 'wrap' || (overflowBehavior === 'wrap-when-open' && open);

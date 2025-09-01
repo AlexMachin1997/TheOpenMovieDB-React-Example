@@ -6,9 +6,9 @@ import { Button } from '~/components/Button/Button';
 /**
  * Props for the SelectItemClear component
  *
- * @interface SelectItemClearProps
+ * @interface ISelectItemClear
  */
-export type SelectItemClearProps = {
+export type ISelectItemClear = {
 	/**
 	 * The value to clear
 	 */
@@ -40,8 +40,16 @@ export type SelectItemClearProps = {
 	/**
 	 * Ref callback for focus management (used in multi-select)
 	 */
-	onRefChange?: (el: HTMLButtonElement | null) => void;
-} & Omit<React.ComponentProps<typeof Button>, 'onClick' | 'children' | 'type' | 'variant' | 'size'>;
+	onRefChange?: (el: HTMLElement | null) => void;
+
+	/**
+	 * Ref callback for focus management (used in multi-select)
+	 */
+	ref?: React.Ref<HTMLElement>;
+} & Omit<
+	React.ComponentProps<typeof Button>,
+	'onClick' | 'children' | 'type' | 'variant' | 'size' | 'ref'
+>;
 
 /**
  * A reusable clear button component for select interfaces
@@ -88,7 +96,7 @@ export const SelectItemClear = ({
 	ariaLabel,
 	onRefChange,
 	...props
-}: SelectItemClearProps) => {
+}: ISelectItemClear) => {
 	const handleClear = (e: React.MouseEvent<HTMLElement>) => {
 		e.stopPropagation();
 		onClear(value);
@@ -105,11 +113,11 @@ export const SelectItemClear = ({
 	const handleRef = React.useCallback(
 		(el: HTMLElement | null) => {
 			if (typeof props.ref === 'function') {
-				(props.ref as React.RefCallback<HTMLElement>)(el);
+				props.ref(el);
 			} else if (props.ref) {
-				(props.ref as React.MutableRefObject<HTMLElement | null>).current = el;
+				props.ref.current = el;
 			}
-			onRefChange?.(el as HTMLButtonElement | null);
+			onRefChange?.(el);
 		},
 		[onRefChange, props]
 	);

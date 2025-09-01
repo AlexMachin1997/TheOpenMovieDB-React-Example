@@ -1,79 +1,99 @@
 # Selects Component Types
 
-This directory contains the type definitions for the Selects component, which extends the shared base command types with select-specific functionality.
+This directory contains the type definitions for the Selects component, which provides select-specific functionality.
 
 ## File Structure
 
-- `base-select-types.ts` - Select-specific types that extend base command types
-- `select-context.ts` - Select-specific context types that extend base context
+- `select-value-types.ts` - Types for select value display components
+- `select-context.ts` - Select-specific context types
 - `index.ts` - Exports all types from this directory
 
-## Base Select Types
+## Select Value Types
 
-The `base-select-types.ts` file contains types that extend the shared base command types with select-specific functionality:
+The `select-value-types.ts` file contains types for select value display components:
 
 ### Core Interfaces
 
-- `BaseSelectContextValue` - Extends `BaseCommandContextValue` with selection state
-- `BaseSelectProviderProps` - Extends `BaseCommandProviderProps` with selection configuration
-- `BaseSelectValueProps` - Base props for select value display components
-- `SingleSelectValueProps` - Props for single-select value display components
-- `MultiSelectValueProps` - Props for multi-select value display components
+- `ISingleSelectValue` - Props for single-select value display components
+- `IMultiSelectValue` - Props for multi-select value display components
 
 ### Key Features
 
-- **Extends Base Types**: All select types extend the shared base command types
-- **Selection-Specific**: Adds selection state management and mode handling
+- **Value Display**: Types for components that display selected values
 - **Mode Support**: Supports both single and multiple selection modes
 - **Well Documented**: Each interface includes comprehensive JSDoc comments
-- **Type Safe**: Full TypeScript support with proper inheritance
+- **Type Safe**: Full TypeScript support
+
+## Select Context Types
+
+The `select-context.ts` file contains types for select context functionality:
+
+### Core Interfaces
+
+- `ISelectContext` - Select-specific context value interface
+- `IBaseSelectProviderProps` - Provider props interface for select components
+
+### Key Features
+
+- **Selection State**: Manages selected values and toggle functionality
+- **Mode Configuration**: Supports single and multiple selection modes
+- **Provider Props**: Configuration for select providers
 
 ## Usage in Selects Component
 
 The Selects component uses these types as follows:
 
 ```typescript
-// Select context extends base select context
-export type SelectContext = BaseSelectContextValue & {
-	// Select-specific properties can be added here
+// Select context provides selection functionality
+export type ISelectContext = {
+	selectedValues: Set<string>;
+	toggleValue: (value: string) => void;
+	mode: 'single' | 'multiple';
 };
 
-// Components use the shared types
-export const SingleSelectValue = (props: SingleSelectValueProps) => {
+// Components use the value display types
+export const SingleSelectValue = (props: ISingleSelectValue) => {
 	// Component implementation
 };
 
-export const MultiSelectValue = (props: MultiSelectValueProps) => {
+export const MultiSelectValue = (props: IMultiSelectValue) => {
 	// Component implementation
 };
 ```
 
-## Type Hierarchy
+## Type Structure
 
 ```
-BaseCommandContextValue (shared)
-├── BaseSelectContextValue (selects)
-│   └── SelectContext (selects)
-└── CommandContextValue (command)
+ISelectContext (select context)
+├── selectedValues: Set<string>
+├── toggleValue: (value: string) => void
+└── mode: 'single' | 'multiple'
 
-BaseCommandProviderProps (shared)
-├── BaseSelectProviderProps (selects)
-└── ICommandProviderProps (command)
+ISingleSelectValue (single select display)
+├── showClearButton?: boolean
+├── placeholder?: string
+└── ...React.ComponentPropsWithoutRef<'ul'>
+
+IMultiSelectValue (multi select display)
+├── showClearButton?: boolean
+├── placeholder?: string
+├── overflowBehavior?: 'wrap' | 'wrap-when-open' | 'cutoff'
+└── ...React.ComponentPropsWithoutRef<'ul'>
 ```
 
 ## Benefits
 
-1. **Inheritance**: Leverages shared base types for consistency
-2. **Specialization**: Adds select-specific functionality on top of base types
-3. **Maintainability**: Changes to base types automatically benefit selects
-4. **Type Safety**: Full TypeScript support with proper inheritance
-5. **Documentation**: Clear separation between shared and select-specific concerns
+1. **Specialization**: Focused on select-specific functionality
+2. **Type Safety**: Full TypeScript support with proper typing
+3. **Maintainability**: Clear separation of concerns
+4. **Documentation**: Comprehensive JSDoc comments
+5. **Flexibility**: Supports both single and multiple selection modes
 
 ## Component Integration
 
-The Selects components now use these shared types:
+The Selects components use these types:
 
-- `SingleSelectValue` uses `SingleSelectValueProps`
-- `MultiSelectValue` uses `MultiSelectValueProps`
+- `SingleSelectValue` uses `ISingleSelectValue`
+- `MultiSelectValue` uses `IMultiSelectValue`
 
-This ensures consistent prop interfaces and eliminates duplicate type definitions.
+This ensures consistent prop interfaces and proper type safety across the select components.

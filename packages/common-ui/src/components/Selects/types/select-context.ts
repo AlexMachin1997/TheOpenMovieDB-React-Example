@@ -1,4 +1,22 @@
-import { IBaseSelectContextValue } from '~/components/Selects/types/base-select-types';
+import { IBaseCommandProvider } from '~/components/Command/types';
+
+/**
+ * Base provider props interface for select components
+ *
+ * This interface extends the base command provider props with select-specific
+ * configuration like selection mode and initial values.
+ *
+ * @interface IBaseSelectProviderProps
+ * @extends IBaseCommandProvider
+ */
+export interface IBaseSelectProviderProps extends IBaseCommandProvider {
+	/** Selection mode - either 'single' or 'multiple' */
+	mode: 'single' | 'multiple';
+	/** Initial selected values */
+	initialSelectedValues?: string[];
+	/** Callback when selection changes */
+	onSelectionChange?: (selectedValues: string[]) => void;
+}
 
 /**
  * Context value interface for select functionality
@@ -17,6 +35,11 @@ import { IBaseSelectContextValue } from '~/components/Selects/types/base-select-
  *
  * @interface SelectContext
  */
-export type SelectContext = IBaseSelectContextValue & {
-	// Select-specific properties can be added here in the future
-};
+export interface ISelectContext {
+	/** Set of currently selected values */
+	selectedValues: Set<string>;
+	/** Function to toggle a value's selection state */
+	toggleValue: (value: string) => void;
+	/** Selection mode - either 'single' or 'multiple' */
+	mode: 'single' | 'multiple';
+}

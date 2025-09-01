@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { SelectContext as SelectContextInterface } from '~/components/Selects/types/select-context';
+import { ISelectContext } from '~/components/Selects/types/select-context';
 
 /**
  * React context for select functionality
@@ -18,12 +18,4 @@ import { SelectContext as SelectContextInterface } from '~/components/Selects/ty
  * const { selectedValues, toggleValue, mode } = useSelectContext();
  * ```
  */
-export const SelectContext = createContext<SelectContextInterface | null>(null);
-
-/**
- * Select context type (no longer generic since values are always strings)
- */
-export type SelectContextType = SelectContextInterface;
-
-// Re-export the interface for use in other files
-export type { SelectContextInterface };
+export const SelectContext = createContext<ISelectContext | null>(null);

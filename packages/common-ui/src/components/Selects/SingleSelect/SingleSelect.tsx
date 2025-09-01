@@ -2,7 +2,7 @@ import { cn } from '~/utils/className';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
-import { SingleSelectValueProps } from '~/components/Selects/types/base-select-types';
+import { ISingleSelectValue } from '~/components/Selects/types/select-value';
 
 /**
  * Displays the selected value in a single-select interface
@@ -38,7 +38,7 @@ export const SingleSelectValue = ({
 	className,
 	showClearButton = true,
 	...props
-}: SingleSelectValueProps) => {
+}: ISingleSelectValue) => {
 	const { selectedValues, toggleValue } = useSelectContext();
 	const { optionsMap } = useCommandContext();
 
