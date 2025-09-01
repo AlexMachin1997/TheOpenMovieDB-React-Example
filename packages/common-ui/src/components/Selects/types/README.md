@@ -19,7 +19,6 @@ The `base-select-types.ts` file contains types that extend the shared base comma
 - `BaseSelectValueProps` - Base props for select value display components
 - `SingleSelectValueProps` - Props for single-select value display components
 - `MultiSelectValueProps` - Props for multi-select value display components
-- `BaseSelectItemProps` - Base props for select item components
 
 ### Key Features
 
@@ -76,7 +75,5 @@ The Selects components now use these shared types:
 
 - `SingleSelectValue` uses `SingleSelectValueProps`
 - `MultiSelectValue` uses `MultiSelectValueProps`
-- `SingleSelectListItem` uses `BaseSelectItemProps`
-- `MultiSelectListItem` uses `BaseSelectItemProps`
 
 This ensures consistent prop interfaces and eliminates duplicate type definitions.

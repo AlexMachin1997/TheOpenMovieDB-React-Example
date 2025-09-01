@@ -78,23 +78,3 @@ export interface MultiSelectValueProps extends BaseSelectValueProps {
 	/** How to handle overflow when there are many selected items */
 	overflowBehavior?: 'wrap' | 'wrap-when-open' | 'cutoff';
 }
-
-/**
- * Props for select item components
- *
- * This interface defines common props for individual selectable items
- * within select interfaces.
- *
- * @interface BaseSelectItemProps
- */
-export interface BaseSelectItemProps
-	extends Omit<React.ComponentPropsWithoutRef<'div'>, 'onSelect'> {
-	/** Value associated with this item */
-	value: string;
-	/** Whether the item is disabled */
-	disabled?: boolean;
-	/** Whether the item is currently selected */
-	selected?: boolean;
-	/** Callback when the item is selected */
-	onSelect?: (value: string) => void;
-}
