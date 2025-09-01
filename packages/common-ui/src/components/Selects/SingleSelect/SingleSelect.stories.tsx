@@ -9,10 +9,8 @@ import {
 	SelectGroupedListItems,
 	SelectListItemsVirtualized
 } from '~/components/Selects';
-import {
-	SingleSelectValue,
-	SingleSelectListItem
-} from '~/components/Selects/SingleSelect/SingleSelect';
+import { SingleSelectValue } from '~/components/Selects/SingleSelect/SingleSelect';
+import { SelectListItem } from '~/components/Selects/components/SelectListItem';
 import { Label } from '~/components/Label/Label';
 import { Option } from '~/types/Option';
 
@@ -84,9 +82,7 @@ const BasicSingleSelectTemplate = (args: SingleSelectStorybookTypes) => {
 			<SelectInterface
 				searchConfig={{ enabledSearch: args?.canSearch, searchPlaceholder: 'Search items...' }}
 			>
-				<SelectListItems>
-					{({ item }) => <SingleSelectListItem value={item.value} />}
-				</SelectListItems>
+				<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 			</SelectInterface>
 		</SelectProvider>
 	);
@@ -193,7 +189,7 @@ const WithGroupsTemplate = () => {
 			</SelectTrigger>
 			<SelectInterface searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
 				<SelectGroupedListItems groupOrder={groups} ungroupedPosition='bottom'>
-					{({ item }) => <SingleSelectListItem value={item.value} />}
+					{({ item }) => <SelectListItem value={item.value} />}
 				</SelectGroupedListItems>
 			</SelectInterface>
 		</SelectProvider>
@@ -231,7 +227,7 @@ const LargeListVirtualizedTemplate = () => {
 			</SelectTrigger>
 			<SelectInterface searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
 				<SelectListItemsVirtualized>
-					{({ item }) => <SingleSelectListItem value={item.value} />}
+					{({ item }) => <SelectListItem value={item.value} />}
 				</SelectListItemsVirtualized>
 			</SelectInterface>
 		</SelectProvider>
@@ -278,9 +274,7 @@ const WithFormTemplate = () => {
 					<SelectInterface
 						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search frameworks...' }}
 					>
-						<SelectListItems>
-							{({ item }) => <SingleSelectListItem value={item.value} />}
-						</SelectListItems>
+						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectInterface>
 				</SelectProvider>
 			</div>
@@ -299,9 +293,7 @@ const WithFormTemplate = () => {
 					<SelectInterface
 						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search languages...' }}
 					>
-						<SelectListItems>
-							{({ item }) => <SingleSelectListItem value={item.value} />}
-						</SelectListItems>
+						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectInterface>
 				</SelectProvider>
 			</div>
@@ -358,9 +350,7 @@ const CustomStylingTemplate = (args: SingleSelectStorybookTypes) => {
 			<SelectInterface
 				searchConfig={{ enabledSearch: true, searchPlaceholder: 'Custom styled single-select...' }}
 			>
-				<SelectListItems>
-					{({ item }) => <SingleSelectListItem value={item.value} />}
-				</SelectListItems>
+				<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 			</SelectInterface>
 		</SelectProvider>
 	);
@@ -419,9 +409,7 @@ const ClearButtonDemoTemplate = () => {
 					<SelectInterface
 						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Select a framework...' }}
 					>
-						<SelectListItems>
-							{({ item }) => <SingleSelectListItem value={item.value} />}
-						</SelectListItems>
+						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectInterface>
 				</SelectProvider>
 				<div className='text-sm text-muted-foreground'>
@@ -443,9 +431,7 @@ const ClearButtonDemoTemplate = () => {
 					<SelectInterface
 						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Select a framework...' }}
 					>
-						<SelectListItems>
-							{({ item }) => <SingleSelectListItem value={item.value} />}
-						</SelectListItems>
+						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectInterface>
 				</SelectProvider>
 				<div className='text-sm text-muted-foreground'>
@@ -486,9 +472,7 @@ const EmptyStateDemoTemplate = () => {
 					<SelectInterface
 						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}
 					>
-						<SelectListItems>
-							{({ item }) => <SingleSelectListItem value={item.value} />}
-						</SelectListItems>
+						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectInterface>
 				</SelectProvider>
 				<div className='text-sm text-muted-foreground'>
@@ -515,9 +499,7 @@ const EmptyStateDemoTemplate = () => {
 					<SelectInterface
 						searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}
 					>
-						<SelectListItems>
-							{({ item }) => <SingleSelectListItem value={item.value} />}
-						</SelectListItems>
+						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectInterface>
 				</SelectProvider>
 				<div className='text-sm text-muted-foreground'>
@@ -547,9 +529,7 @@ const EmptyStateDemoTemplate = () => {
 							formatSearchTerm: (term) => `**${term}**`
 						}}
 					>
-						<SelectListItems>
-							{({ item }) => <SingleSelectListItem value={item.value} />}
-						</SelectListItems>
+						<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 					</SelectInterface>
 				</SelectProvider>
 				<div className='text-sm text-muted-foreground'>

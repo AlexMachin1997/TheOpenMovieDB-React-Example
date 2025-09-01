@@ -22,6 +22,8 @@ export interface ICommandSearchProps {
 	enabledSearch?: boolean;
 	/** Search placeholder text */
 	searchPlaceholder?: string;
+	/** Debounce delay in milliseconds for search input changes */
+	debounceMs?: number;
 }
 
 /**

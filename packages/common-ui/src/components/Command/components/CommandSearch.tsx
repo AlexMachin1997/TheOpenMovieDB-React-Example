@@ -4,6 +4,7 @@ import { SearchIcon } from 'lucide-react';
 import { useDebounce } from 'react-use';
 import { cn } from '~/utils/className';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { ICommandSearchProps } from '~/components/Command/types';
 
 /**
  * Props for the CommandSearch component
@@ -11,12 +12,9 @@ import { useCommandContext } from '~/components/Command/hooks/useCommandContext'
  * @interface CommandSearchProps
  * @extends React.ComponentProps<typeof CommandPrimitive.Input>
  */
-export interface CommandSearchProps extends React.ComponentProps<typeof CommandPrimitive.Input> {
-	/** Debounce delay in milliseconds for search input changes */
-	debounceMs?: number;
-	/** Whether search functionality is enabled */
-	enabledSearch?: boolean;
-}
+export interface CommandSearchProps
+	extends React.ComponentProps<typeof CommandPrimitive.Input>,
+		ICommandSearchProps {}
 
 /**
  * Search input component for command palette functionality
@@ -48,6 +46,7 @@ export const CommandSearch = ({
 	debounceMs = 300,
 	className,
 	enabledSearch = true,
+	searchPlaceholder = 'Search',
 	...props
 }: CommandSearchProps) => {
 	const { onSearchChange } = useCommandContext();
@@ -71,6 +70,7 @@ export const CommandSearch = ({
 					className
 				)}
 				value={inputValue}
+				placeholder={searchPlaceholder}
 				onValueChange={setInputValue}
 				{...props}
 			/>

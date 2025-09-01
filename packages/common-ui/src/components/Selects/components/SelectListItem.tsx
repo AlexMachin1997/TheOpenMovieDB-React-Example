@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { CheckIcon } from 'lucide-react';
+import { cn } from '~/utils/className';
 import { CommandItem } from '~/components/Command/Command';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
@@ -30,6 +31,7 @@ interface SelectListItemProps
  * - Support for disabled state
  * - Proper accessibility and keyboard navigation
  * - Consistent styling with command palette design
+ * - Checkmark always positioned on the left with opacity toggle
  *
  * The component automatically:
  * - Shows a checkmark icon when the item is selected
@@ -38,12 +40,23 @@ interface SelectListItemProps
  * - Supports both single and multi-select modes
  *
  * Visual behavior:
- * - Checkmark is visible (opacity-100) when selected
- * - Checkmark is hidden (opacity-0) when not selected
+ * - Checkmark on left, always visible with opacity toggle
  * - Text is truncated with ellipsis if too long
  * - Proper spacing and alignment with other items
  *
  * @component
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <SelectListItem value="react" />
+ *
+ * // With custom content
+ * <SelectListItem value="angular">
+ *   <Icon name="angular" />
+ *   Angular
+ * </SelectListItem>
+ * ```
+ *
  * @param props - The select list item configuration props
  * @returns The rendered select list item component
  */
@@ -59,9 +72,9 @@ export const SelectListItem = ({ value, children, ...props }: SelectListItemProp
 
 	return (
 		<CommandItem {...props} value={optionsMap.get(value)} onSelect={handleSelectItem}>
+			<CheckIcon className={cn('mr-2 size-4', isSelected ? 'opacity-100' : 'opacity-0')} />
 			{children}
-			<span className='min-w-0 flex-1 truncate'>{optionsMap.get(value)}</span>
-			{isSelected && <CheckIcon className='ml-auto h-4 w-4' />}
+			<p>{optionsMap.get(value)}</p>
 		</CommandItem>
 	);
 };

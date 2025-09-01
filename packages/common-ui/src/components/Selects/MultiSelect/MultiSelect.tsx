@@ -30,7 +30,7 @@ import { MultiSelectValueProps } from '~/components/Selects/types';
  * <MultiSelectValue
  *   placeholder="Choose options..."
  *   overflowBehavior="wrap"
- *   clickToRemove={true}
+ *   showClearButton={true}
  * />
  * ```
  *
@@ -39,7 +39,7 @@ import { MultiSelectValueProps } from '~/components/Selects/types';
  */
 export const MultiSelectValue = ({
 	placeholder = 'No items selected',
-	clickToRemove = true,
+	showClearButton = true,
 	className,
 	overflowBehavior = 'wrap-when-open',
 	...props
@@ -148,7 +148,7 @@ export const MultiSelectValue = ({
 				<li key={value}>
 					<Badge variant='outline' data-selected-item className='group flex items-center gap-1'>
 						{optionsMap.get(value) || value}
-						{clickToRemove && (
+						{showClearButton && (
 							<SelectItemClear
 								value={value}
 								valueLabel={optionsMap.get(value)}

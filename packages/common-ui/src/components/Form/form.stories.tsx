@@ -22,7 +22,6 @@ import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { CheckboxGroup } from '~/components/CheckboxGroup/CheckboxGroup';
 import { RadioGroup } from '~/components/RadioGroup/RadioGroup';
 import {
-	SingleSelectListItem,
 	SingleSelectValue,
 	SelectProvider,
 	SelectTrigger,
@@ -259,7 +258,7 @@ const ComprehensiveForm = () => {
 											</SelectTrigger>
 											<SelectInterface>
 												<SelectListItems>
-													{({ item }) => <SingleSelectListItem value={item.value} />}
+													{({ item }) => <SelectListItem  value={item.value} />}
 												</SelectListItems>
 											</SelectInterface>
 										</SelectProvider>
@@ -341,7 +340,7 @@ const ComprehensiveForm = () => {
 											</SelectTrigger>
 											<SelectInterface>
 												<SelectListItems>
-													{({ item }) => <SingleSelectListItem value={item.value} />}
+													{({ item }) => <SelectListItem  value={item.value} />}
 												</SelectListItems>
 											</SelectInterface>
 										</SelectProvider>
@@ -608,7 +607,7 @@ const SelectsExample = () => {
 									</SelectTrigger>
 									<SelectInterface>
 										<SelectListItems>
-											{({ item }) => <SingleSelectListItem value={item.value} />}
+											{({ item }) => <SelectListItem  value={item.value} />}
 										</SelectListItems>
 									</SelectInterface>
 								</SelectProvider>

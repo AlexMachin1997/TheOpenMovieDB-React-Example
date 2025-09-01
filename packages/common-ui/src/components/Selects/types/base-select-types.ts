@@ -73,8 +73,8 @@ export interface SingleSelectValueProps extends BaseSelectValueProps {
  * @extends BaseSelectValueProps
  */
 export interface MultiSelectValueProps extends BaseSelectValueProps {
-	/** Whether selected items can be removed by clicking */
-	clickToRemove?: boolean;
+	/** Whether to show a clear button for removing the selected value */
+	showClearButton?: boolean;
 	/** How to handle overflow when there are many selected items */
 	overflowBehavior?: 'wrap' | 'wrap-when-open' | 'cutoff';
 }

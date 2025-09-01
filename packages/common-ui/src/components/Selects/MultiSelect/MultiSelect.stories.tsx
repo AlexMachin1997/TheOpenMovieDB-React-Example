@@ -10,19 +10,17 @@ import {
 	SelectVirtualizedGroupedList
 } from '~/components/Selects/components';
 import { MultiSelectValue } from '~/components/Selects/MultiSelect/MultiSelect';
-import { Label } from '~/components/Label/Label';
 import { Option } from '~/types/Option';
+import { MultiSelectValueProps } from '~/components/Selects/types';
+import { ICommandSearchProps } from '~/components/Command/types';
+import { Label } from '~/components/Label/Label';
 
-type MultiSelectStorybookTypes = {
+interface IMultiSelectStorybookArguments extends MultiSelectValueProps, ICommandSearchProps {
 	values: string[];
 	options: Option[];
 	onValuesChange?: (values: string[]) => void;
 	children?: React.ReactNode;
-	placeholder?: string;
-	overflowBehavior?: 'wrap' | 'wrap-when-open' | 'cutoff';
-	canSearch?: boolean;
-	clickToRemove?: boolean;
-};
+}
 
 const meta: Meta<typeof SelectProvider> = {
 	title: 'Components/Selects/MultiSelect',
@@ -57,15 +55,12 @@ const programmingLanguages: Option[] = [
 	{ id: 'php', value: 'php', label: 'PHP' }
 ];
 
-const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
+const BasicMultiSelectTemplate = (args: IMultiSelectStorybookArguments) => {
 	const [selectedValues, setSelectedValues] = React.useState<string[]>(args?.values || []);
-
-	// Destructure args to avoid prop conflicts with SelectProvider
-	const { values: _, onValuesChange: __, children: ___, ...selectProviderArgs } = args;
 
 	return (
 		<SelectProvider
-			{...selectProviderArgs}
+			{...args}
 			mode='multiple'
 			values={selectedValues}
 			onValuesChange={setSelectedValues}
@@ -74,11 +69,11 @@ const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
 				<MultiSelectValue
 					placeholder='Select options...'
 					overflowBehavior={args?.overflowBehavior}
-					clickToRemove={args?.clickToRemove ?? true}
+					showClearButton={args?.showClearButton ?? true}
 				/>
 			</SelectTrigger>
 			<SelectInterface
-				searchConfig={{ enabledSearch: args?.canSearch, searchPlaceholder: 'Search items...' }}
+				searchConfig={{ enabledSearch: args?.enabledSearch, searchPlaceholder: 'Search items...' }}
 				emptyState={{
 					noSearchResultsMessage: 'No items found',
 					noOptionsMessage: 'No items found'
@@ -90,7 +85,7 @@ const BasicMultiSelectTemplate = (args: MultiSelectStorybookTypes) => {
 	);
 };
 
-export const Default: StoryObj<MultiSelectStorybookTypes> = {
+export const Default: StoryObj<IMultiSelectStorybookArguments> = {
 	render: (args) => <BasicMultiSelectTemplate {...args} />,
 	args: {
 		values: [],
@@ -98,7 +93,7 @@ export const Default: StoryObj<MultiSelectStorybookTypes> = {
 	}
 };
 
-export const WithPreselectedValues: StoryObj<MultiSelectStorybookTypes> = {
+export const WithPreselectedValues: StoryObj<IMultiSelectStorybookArguments> = {
 	render: (args) => <BasicMultiSelectTemplate {...args} />,
 	args: {
 		values: ['next.js', 'react'],
@@ -106,7 +101,7 @@ export const WithPreselectedValues: StoryObj<MultiSelectStorybookTypes> = {
 	}
 };
 
-export const WithSearch: StoryObj<MultiSelectStorybookTypes> = {
+export const WithSearch: StoryObj<IMultiSelectStorybookArguments> = {
 	args: {
 		values: [],
 		options: [
@@ -121,16 +116,16 @@ export const WithSearch: StoryObj<MultiSelectStorybookTypes> = {
 			{ id: 'in', value: 'in', label: 'India' },
 			{ id: 'cn', value: 'cn', label: 'China' }
 		],
-		canSearch: true
+		enabledSearch: true
 	},
 	render: (args) => <BasicMultiSelectTemplate {...args} />
 };
 
-export const WithoutSearch: StoryObj<MultiSelectStorybookTypes> = {
+export const WithoutSearch: StoryObj<IMultiSelectStorybookArguments> = {
 	args: {
 		values: [],
 		options: frameworks.slice(0, 5),
-		canSearch: false
+		enabledSearch: false
 	},
 	render: (args) => <BasicMultiSelectTemplate {...args} />
 };
@@ -373,14 +368,14 @@ const WithGroupsTemplate = () => {
 	);
 };
 
-export const WithGroups: StoryObj<MultiSelectStorybookTypes> = {
+export const WithGroups: StoryObj<IMultiSelectStorybookArguments> = {
 	args: {
 		values: []
 	},
 	render: () => <WithGroupsTemplate />
 };
 
-export const WrapWhenOpen: StoryObj<MultiSelectStorybookTypes> = {
+export const WrapWhenOpen: StoryObj<IMultiSelectStorybookArguments> = {
 	render: (args) => <BasicMultiSelectTemplate {...args} />,
 	args: {
 		values: [],
@@ -389,7 +384,7 @@ export const WrapWhenOpen: StoryObj<MultiSelectStorybookTypes> = {
 	}
 };
 
-export const Wrap: StoryObj<MultiSelectStorybookTypes> = {
+export const Wrap: StoryObj<IMultiSelectStorybookArguments> = {
 	render: (args) => <BasicMultiSelectTemplate {...args} />,
 	args: {
 		values: [],
@@ -398,7 +393,7 @@ export const Wrap: StoryObj<MultiSelectStorybookTypes> = {
 	}
 };
 
-export const Cutoff: StoryObj<MultiSelectStorybookTypes> = {
+export const Cutoff: StoryObj<IMultiSelectStorybookArguments> = {
 	render: (args) => <BasicMultiSelectTemplate {...args} />,
 	args: {
 		values: [],
@@ -407,12 +402,12 @@ export const Cutoff: StoryObj<MultiSelectStorybookTypes> = {
 	}
 };
 
-export const DisabledClickToRemove: StoryObj<MultiSelectStorybookTypes> = {
+export const DisabledShowClearButton: StoryObj<IMultiSelectStorybookArguments> = {
 	render: (args) => <BasicMultiSelectTemplate {...args} />,
 	args: {
 		values: [],
 		options: frameworks,
-		clickToRemove: false
+		showClearButton: false
 	}
 };
 
@@ -446,7 +441,7 @@ const LargeListVirtualizedTemplate = () => {
 	);
 };
 
-export const LargeListVirtualized: StoryObj<MultiSelectStorybookTypes> = {
+export const LargeListVirtualized: StoryObj<IMultiSelectStorybookArguments> = {
 	render: () => <LargeListVirtualizedTemplate />
 };
 
@@ -538,11 +533,11 @@ const WithFormTemplate = () => {
 	);
 };
 
-export const WithForm: StoryObj<MultiSelectStorybookTypes> = {
+export const WithForm: StoryObj<IMultiSelectStorybookArguments> = {
 	render: () => <WithFormTemplate />
 };
 
-const CustomStylingTemplate = (args: MultiSelectStorybookTypes) => {
+const CustomStylingTemplate = (args: IMultiSelectStorybookArguments) => {
 	const [selectedValues, setSelectedValues] = React.useState<string[]>(args.values || []);
 
 	// Destructure args to avoid prop conflicts with SelectProvider
@@ -558,7 +553,7 @@ const CustomStylingTemplate = (args: MultiSelectStorybookTypes) => {
 			<SelectTrigger className='w-full max-w-[400px] bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 hover:from-blue-100 hover:to-indigo-100'>
 				<MultiSelectValue
 					placeholder='Custom styled multi-select...'
-					clickToRemove={args?.clickToRemove ?? true}
+					showClearButton={args?.showClearButton ?? true}
 				/>
 			</SelectTrigger>
 			<SelectInterface
@@ -570,7 +565,7 @@ const CustomStylingTemplate = (args: MultiSelectStorybookTypes) => {
 	);
 };
 
-export const CustomStyling: StoryObj<MultiSelectStorybookTypes> = {
+export const CustomStyling: StoryObj<IMultiSelectStorybookArguments> = {
 	render: (args) => <CustomStylingTemplate {...args} />,
 	args: {
 		values: [],

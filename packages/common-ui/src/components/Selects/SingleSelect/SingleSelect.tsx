@@ -1,14 +1,8 @@
-import * as React from 'react';
-import { CheckIcon } from 'lucide-react';
 import { cn } from '~/utils/className';
-import { CommandItem } from '~/components/Command/Command';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';
-import {
-	SingleSelectValueProps,
-	BaseSelectItemProps
-} from '~/components/Selects/types/base-select-types';
+import { SingleSelectValueProps } from '~/components/Selects/types/base-select-types';
 
 /**
  * Displays the selected value in a single-select interface
@@ -48,14 +42,13 @@ export const SingleSelectValue = ({
 	const { selectedValues, toggleValue } = useSelectContext();
 	const { optionsMap } = useCommandContext();
 
-	// For single select, we only care about the first selected value
 	const selectedValue = Array.from(selectedValues)[0];
 
 	const handleClear = (value: string) => {
 		toggleValue(value);
 	};
 
-	if (selectedValues.size === 0 || !selectedValue) {
+	if (!selectedValue) {
 		return (
 			<ul
 				{...props}
@@ -81,56 +74,5 @@ export const SingleSelectValue = ({
 				)}
 			</li>
 		</ul>
-	);
-};
-
-/**
- * A selectable item in a single-select dropdown list
- *
- * This component renders an individual option in the dropdown list. When selected,
- * it automatically closes the dropdown and updates the selection state. Only one
- * option can be selected at a time in single-select mode.
- *
- * Features:
- * - Visual feedback for selected state with check icon
- * - Automatic dropdown closing on selection
- * - Proper accessibility and keyboard navigation
- * - Integration with SelectProvider context
- * - Consistent styling with other command items
- *
- * The component automatically handles the selection logic and provides visual
- * feedback through the check icon when an option is selected.
- *
- * @component
- * @example
- * ```tsx
- * // Basic usage
- * <SingleSelectListItem value="react" />
- *
- * // With custom content
- * <SingleSelectListItem value="vue">
- *   <Icon name="vue" />
- *   Vue.js
- * </SingleSelectListItem>
- * ```
- *
- * @param props - The component props
- * @returns The rendered single-select list item component
- */
-export const SingleSelectListItem = ({ value, children, ...props }: BaseSelectItemProps) => {
-	const { selectedValues, toggleValue } = useSelectContext();
-	const { optionsMap } = useCommandContext();
-
-	const handleSelect = React.useCallback(() => {
-		toggleValue(value);
-	}, [toggleValue, value]);
-
-	return (
-		<CommandItem {...props} value={optionsMap.get(value)} onSelect={handleSelect}>
-			<CheckIcon
-				className={cn('mr-2 size-4', selectedValues.has(value) ? 'opacity-100' : 'opacity-0')}
-			/>
-			<p>{optionsMap.get(value)}</p>
-		</CommandItem>
 	);
 };
