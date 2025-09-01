@@ -80,24 +80,6 @@ export interface IRenderWithIndexProps {
 export interface IGroupedListProps extends ICommonCommandProps, IGroupingProps, IRenderProps {}
 
 /**
- * Combined properties for virtualized list components
- *
- * This interface combines common props, virtualization props, and render props with index
- * for components that display virtualized lists.
- *
- * @interface IVirtualizedListProps
- */
-export interface IVirtualizedListProps
-	extends ICommonCommandProps,
-		IVirtualizationProps,
-		IRenderWithIndexProps {
-	/** Array of items to render */
-	items: Option[];
-	/** Maximum height of the virtualized list container */
-	maxHeight?: string;
-}
-
-/**
  * Combined properties for grouped virtualized list components
  *
  * This interface combines common props, grouping props, virtualization props, and render props
