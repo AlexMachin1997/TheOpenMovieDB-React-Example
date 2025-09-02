@@ -15,7 +15,7 @@ import {
 	CommandListItems,
 	CommandVirtualizedList,
 	CommandGroupedList,
-	CommandGroupedVirtualizedListItems,
+	CommandGroupedVirtualizedList,
 	CommandItem,
 	CommandShortcut,
 	CommandInterface
@@ -577,13 +577,13 @@ const GroupedVirtualizedListTemplate = (args: CommandGroupedVirtualizedStorybook
 				<CommandInterface
 					searchConfig={{ searchPlaceholder: 'Search through 90 grouped options...' }}
 				>
-					<CommandGroupedVirtualizedListItems {...args} groupOrder={groups}>
+					<CommandGroupedVirtualizedList {...args} groupOrder={groups}>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
 								<span>{item.label}</span>
 							</CommandItem>
 						)}
-					</CommandGroupedVirtualizedListItems>
+					</CommandGroupedVirtualizedList>
 				</CommandInterface>
 			</CommandProvider>
 		</div>

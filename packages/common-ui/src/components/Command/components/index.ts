@@ -12,6 +12,4 @@ export { CommandVirtualizedList } from '~/components/Command/components/CommandV
 export { CommandGroupedList } from '~/components/Command/components/CommandGroupedList';
 export { CommandGroupedVirtualizedList } from '~/components/Command/components/CommandGroupedVirtualizedList';
 export { CommandListItems } from '~/components/Command/components/CommandListItems';
-export { CommandGroupedListItems } from '~/components/Command/components/CommandGroupedListItems';
-export { CommandGroupedVirtualizedListItems } from '~/components/Command/components/CommandGroupedVirtualizedListItems';
 export { CommandInterface } from '~/components/Command/components/CommandInterface';

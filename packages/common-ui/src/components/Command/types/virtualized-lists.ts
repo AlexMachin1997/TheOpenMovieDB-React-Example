@@ -4,7 +4,7 @@ import {
 	IVirtualizationProps,
 	IRenderProps,
 	IRenderWithIndexProps
-} from './common-props';
+} from '~/components/Command/types/common-props';
 
 /**
  * Props for grouped virtualized list components

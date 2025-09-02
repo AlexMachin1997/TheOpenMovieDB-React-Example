@@ -101,26 +101,6 @@ export const WithPreselectedValues: StoryObj<IMultiSelectStorybookArguments> = {
 	}
 };
 
-export const WithSearch: StoryObj<IMultiSelectStorybookArguments> = {
-	args: {
-		values: [],
-		options: [
-			{ id: 'us', value: 'us', label: 'United States' },
-			{ id: 'ca', value: 'ca', label: 'Canada' },
-			{ id: 'uk', value: 'uk', label: 'United Kingdom' },
-			{ id: 'de', value: 'de', label: 'Germany' },
-			{ id: 'fr', value: 'fr', label: 'France' },
-			{ id: 'jp', value: 'jp', label: 'Japan' },
-			{ id: 'au', value: 'au', label: 'Australia' },
-			{ id: 'br', value: 'br', label: 'Brazil' },
-			{ id: 'in', value: 'in', label: 'India' },
-			{ id: 'cn', value: 'cn', label: 'China' }
-		],
-		enabledSearch: true
-	},
-	render: (args) => <BasicMultiSelectTemplate {...args} />
-};
-
 export const WithoutSearch: StoryObj<IMultiSelectStorybookArguments> = {
 	args: {
 		values: [],

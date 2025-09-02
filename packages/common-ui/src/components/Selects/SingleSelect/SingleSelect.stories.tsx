@@ -104,26 +104,6 @@ export const WithPreselectedValue: StoryObj<SingleSelectStorybookTypes> = {
 	}
 };
 
-export const WithSearch: StoryObj<SingleSelectStorybookTypes> = {
-	args: {
-		value: '',
-		options: [
-			{ id: 'us', value: 'us', label: 'United States' },
-			{ id: 'ca', value: 'ca', label: 'Canada' },
-			{ id: 'uk', value: 'uk', label: 'United Kingdom' },
-			{ id: 'de', value: 'de', label: 'Germany' },
-			{ id: 'fr', value: 'fr', label: 'France' },
-			{ id: 'jp', value: 'jp', label: 'Japan' },
-			{ id: 'au', value: 'au', label: 'Australia' },
-			{ id: 'br', value: 'br', label: 'Brazil' },
-			{ id: 'in', value: 'in', label: 'India' },
-			{ id: 'cn', value: 'cn', label: 'China' }
-		],
-		canSearch: true
-	},
-	render: (args) => <BasicSingleSelectTemplate {...args} />
-};
-
 export const WithoutSearch: StoryObj<SingleSelectStorybookTypes> = {
 	args: {
 		value: '',
