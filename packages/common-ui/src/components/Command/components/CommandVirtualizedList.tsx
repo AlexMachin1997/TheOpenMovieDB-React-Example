@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { CommandList } from '~/components/Command/components/CommandList';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
-import { ICommandVirtualizedListProps } from '~/components/Command/types';
+import { ICommandVirtualizedList } from '~/components/Command/types';
 import { cn } from '~/utils/className';
 
 export const CommandVirtualizedList = React.memo(
@@ -12,7 +12,7 @@ export const CommandVirtualizedList = React.memo(
 		estimateSize = 36,
 		overscan = 5,
 		maxHeight = '300px'
-	}: ICommandVirtualizedListProps) => {
+	}: ICommandVirtualizedList) => {
 		const { filteredOptions } = useCommandContext();
 		const parentRef = React.useRef<HTMLDivElement>(null);
 

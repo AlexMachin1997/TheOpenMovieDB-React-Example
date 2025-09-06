@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { CommandList } from '~/components/Command/components/CommandList';
-import { Option } from '~/types/Option';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { ICommonCommandProps, IRenderProps } from '~/components/Command/types';
 
-interface ICommandListItems {
-	children: (props: { item: Option }) => React.ReactNode;
-	className?: string;
-}
+/**
+ * Props for the CommandListItems component
+ *
+ * @interface ICommandListItems
+ * @extends ICommonCommandProps
+ * @extends IRenderProps
+ */
+export interface ICommandListItems extends ICommonCommandProps, IRenderProps {}
 
 export const CommandListItems = ({ children, className }: ICommandListItems) => {
 	const { filteredOptions } = useCommandContext();

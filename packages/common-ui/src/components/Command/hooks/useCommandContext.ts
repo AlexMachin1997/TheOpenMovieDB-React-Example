@@ -1,41 +1,17 @@
-import * as React from 'react';
+import { useContext } from 'react';
 import { CommandContext } from '~/components/Command/contexts/command-context';
 
 /**
- * Hook to access command palette context
+ * Hook to access command context throughout the component tree
  *
- * This hook provides access to the CommandContext throughout the component tree.
- * It includes error handling to ensure the hook is used within a CommandProvider.
- *
- * The hook returns the complete command context value including:
- * - Open/close state and control functions
- * - Search value and change handler
- * - Items array and setter
- * - Configuration options like closeOnSelect
- *
- * @throws {Error} When used outside of a CommandProvider
- * @returns The command context value with all state and functions
- *
- * @example
- * ```tsx
- * const { open, close, searchValue, onSearchChange } = useCommandContext();
- *
- * // Use the context values
- * if (open) {
- *   // Command palette is open
- * }
- *
- * // Close the palette
- * close();
- *
- * // Update search
- * onSearchChange('new search term');
- * ```
+ * This hook provides access to the CommandContext, which contains command-specific
+ * state and functions. It includes error handling to ensure the hook is used
+ * within a CommandProvider.
  */
 export const useCommandContext = () => {
-	const context = React.useContext(CommandContext);
+	const context = useContext(CommandContext);
 
-	if (context == null) {
+	if (!context) {
 		throw new Error('useCommandContext must be used within a CommandProvider');
 	}
 

@@ -1,34 +1,17 @@
+import { ICommandContext } from '~/components/Command/types/core';
 import { createContext } from 'react';
-import { IBaseCommandContext } from '../types';
 
 /**
- * Context value interface for command palette functionality
+ * React context for command functionality
  *
- * This interface extends the base command context value with any
- * Command-specific functionality. Currently, it's identical to the
- * base interface but can be extended with Command-specific properties
- * in the future.
+ * This context provides access to command state and functions
+ * throughout the component tree.
  *
- * @interface CommandContextValue
- * @extends IBaseCommandContext
+ * @extends ICommandContext
  */
-export type CommandContextValue = IBaseCommandContext;
+export const CommandContext = createContext<ICommandContext | undefined>(undefined);
 
 /**
- * React context for command palette functionality
- *
- * This context provides access to command palette state and functions
- * throughout the component tree. It must be used within a CommandProvider.
- *
- * The context includes:
- * - Open/close state management
- * - Search functionality
- * - Item management
- * - Selection behavior configuration
- *
- * @example
- * ```tsx
- * const { open, close, searchValue } = useCommandContext();
- * ```
+ * Type alias for the command context value
  */
-export const CommandContext = createContext<CommandContextValue | null>(null);
+export type CommandContextValue = ICommandContext;

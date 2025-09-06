@@ -8,7 +8,7 @@ import { cn } from '~/utils/className';
  * @interface ICommand
  * @extends React.ComponentProps<typeof CommandPrimitive>
  */
-interface ICommand extends React.ComponentProps<typeof CommandPrimitive> {
+export interface ICommand extends React.ComponentProps<typeof CommandPrimitive> {
 	/** Additional CSS classes to apply to the command container */
 	className?: string;
 }

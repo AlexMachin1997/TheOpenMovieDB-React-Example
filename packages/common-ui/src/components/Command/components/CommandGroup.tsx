@@ -8,9 +8,11 @@ import { cn } from '~/utils/className';
  * @interface ICommandGroup
  * @extends React.ComponentProps<typeof CommandPrimitive.Group>
  */
-interface ICommandGroup extends React.ComponentProps<typeof CommandPrimitive.Group> {
+export interface ICommandGroup extends React.ComponentProps<typeof CommandPrimitive.Group> {
 	/** Additional CSS classes to apply to the command group */
 	className?: string;
+	/** Heading text for the group */
+	heading?: string;
 }
 
 /**

@@ -7,15 +7,16 @@ import {
 	SelectInterface,
 	SelectListItem,
 	SelectListItems,
-	SelectVirtualizedGroupedList
+	SelectGroupedItemsVirtualized,
+	SelectListItemsVirtualized
 } from '~/components/Selects/components';
 import { MultiSelectValue } from '~/components/Selects/MultiSelect/MultiSelect';
 import { Option } from '~/types/Option';
 import { IMultiSelectValue } from '~/components/Selects/types/select-value';
-import { ICommandSearchProps } from '~/components/Command/types';
+import { ICommandSearchConfig } from '~/components/Command/types/core';
 import { Label } from '~/components/Label/Label';
 
-interface IMultiSelectStorybookArguments extends IMultiSelectValue, ICommandSearchProps {
+interface IMultiSelectStorybookArguments extends IMultiSelectValue, ICommandSearchConfig {
 	values: string[];
 	options: Option[];
 	onValuesChange?: (values: string[]) => void;
@@ -340,9 +341,9 @@ const WithGroupsTemplate = () => {
 				<MultiSelectValue placeholder='Select from 100+ technologies...' />
 			</SelectTrigger>
 			<SelectInterface searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
-				<SelectVirtualizedGroupedList groupOrder={groups} ungroupedPosition='bottom'>
+				<SelectGroupedItemsVirtualized groupOrder={groups} ungroupedPosition='bottom'>
 					{({ item }) => <SelectListItem value={item.value} />}
-				</SelectVirtualizedGroupedList>
+				</SelectGroupedItemsVirtualized>
 			</SelectInterface>
 		</SelectProvider>
 	);
@@ -413,9 +414,9 @@ const LargeListVirtualizedTemplate = () => {
 				<MultiSelectValue placeholder={`Select from ${options.length} items (virtualized)`} />
 			</SelectTrigger>
 			<SelectInterface searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search items...' }}>
-				<SelectVirtualizedGroupedList>
+				<SelectListItemsVirtualized>
 					{({ item }) => <SelectListItem value={item.value} />}
-				</SelectVirtualizedGroupedList>
+				</SelectListItemsVirtualized>
 			</SelectInterface>
 		</SelectProvider>
 	);

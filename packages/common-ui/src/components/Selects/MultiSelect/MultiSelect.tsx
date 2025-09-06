@@ -45,8 +45,7 @@ export const MultiSelectValue = ({
 	...props
 }: IMultiSelectValue) => {
 	const { selectedValues, toggleValue } = useSelectContext();
-	const { optionsMap } = useCommandContext();
-	const { open } = useCommandContext();
+	const { open, optionsMap } = useCommandContext();
 	const [overflowAmount, setOverflowAmount] = React.useState(0);
 	const valueRef = React.useRef<HTMLUListElement>(null);
 	const overflowRef = React.useRef<HTMLUListElement>(null);

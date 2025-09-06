@@ -3,15 +3,15 @@ import { Command as CommandPrimitive } from 'cmdk';
 import { cn } from '~/utils/className';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
-/**
- * Props for the CommandItem component
- *
- * @interface ICommandItem
- * @extends React.ComponentProps<typeof CommandPrimitive.Item>
- */
-interface ICommandItem extends React.ComponentProps<typeof CommandPrimitive.Item> {
+export interface ICommandItem extends React.ComponentProps<typeof CommandPrimitive.Item> {
 	/** Additional CSS classes to apply to the command item */
 	className?: string;
+	/** Whether the item is disabled */
+	disabled?: boolean;
+	/** Whether the item is selected */
+	selected?: boolean;
+	/** Function called when the item is selected */
+	onSelect?: (value: string) => void;
 }
 
 /**

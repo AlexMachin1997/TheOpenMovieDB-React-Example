@@ -1,21 +1,24 @@
 import { Option } from '~/types/Option';
-import { VirtualizedItem } from '~/components/Command/types/virtualized-item';
-import { GroupedOptions, GroupOptionsParams } from '~/components/Command/types/grouped-options';
+import { IGroupedOptions, IGroupOptionsParams } from '~/components/Command/types';
+import { VirtualizedItem } from '~/components/Command/types';
 
 /**
- * Groups options by their group property and returns sorted group names
+ * Groups options by their group property and sorts them according to the specified order
+ *
+ * @param params - Parameters for grouping options
+ * @returns Object containing grouped options and sorted group names
  */
-const groupOptions = ({
+export const groupOptions = ({
 	options,
-	groupOrder,
+	groupOrder = [],
 	ungroupedPosition = 'top'
-}: GroupOptionsParams): GroupedOptions => {
+}: IGroupOptionsParams): IGroupedOptions => {
 	// Group options by their group property
 	const groups = new Map<string | undefined, Option[]>();
 
 	// Safety check
 	if (!options || !Array.isArray(options)) {
-		return { groups, sortedGroupNames: [] };
+		return { groups, sortedGroups: [] };
 	}
 
 	options.forEach((option) => {
@@ -46,19 +49,19 @@ const groupOptions = ({
 			: [...sortedGroups, undefined]
 		: sortedGroups;
 
-	return { groups, sortedGroupNames };
+	return { groups, sortedGroups: sortedGroupNames };
 };
 
 /**
  * Creates a flat array of virtualized items from grouped options
  * Includes separators, group headers, and options in the correct order
  */
-export const getVirtualizedItems = (params: GroupOptionsParams): VirtualizedItem[] => {
+export const getVirtualizedItems = (params: IGroupOptionsParams): VirtualizedItem[] => {
 	const items: VirtualizedItem[] = [];
-	const { groups, sortedGroupNames } = groupOptions(params);
+	const { groups, sortedGroups } = groupOptions(params);
 
 	// Build flat item list for virtualization
-	sortedGroupNames.forEach((groupName, groupIndex) => {
+	sortedGroups.forEach((groupName: string | undefined, groupIndex: number) => {
 		const groupItems = groups.get(groupName) || [];
 		if (groupItems.length === 0) return;
 

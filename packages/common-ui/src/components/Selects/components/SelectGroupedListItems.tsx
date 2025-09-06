@@ -1,7 +1,7 @@
 import { CommandGroupedList } from '~/components/Command/components/CommandGroupedList';
-import { ICommandGroupedListProps } from '~/components/Command/types';
+import { ICommandGroupedList } from '~/components/Command/types';
 
-export const SelectGroupedListItems = (props: ICommandGroupedListProps) => {
+export const SelectGroupedListItems = (props: ICommandGroupedList) => {
 	return <CommandGroupedList {...props} />;
 };
 

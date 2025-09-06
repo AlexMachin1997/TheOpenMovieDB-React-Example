@@ -8,8 +8,8 @@ import { cn } from '~/utils/className';
  * @interface ICommandSeparator
  * @extends React.ComponentProps<typeof CommandPrimitive.Separator>
  */
-interface ICommandSeparator extends React.ComponentProps<typeof CommandPrimitive.Separator> {
-	/** Additional CSS classes to apply to the separator */
+export interface ICommandSeparator extends React.ComponentProps<typeof CommandPrimitive.Separator> {
+	/** Additional CSS classes to apply to the command separator */
 	className?: string;
 }
 

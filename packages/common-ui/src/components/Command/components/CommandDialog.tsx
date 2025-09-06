@@ -8,7 +8,7 @@ import {
 	DialogHeader,
 	DialogTitle
 } from '~/components/Dialog/Dialog';
-import { useCommandContext } from '~/components/Command/hooks';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
 /**
  * Props for the CommandDialog component
@@ -16,13 +16,17 @@ import { useCommandContext } from '~/components/Command/hooks';
  * @interface ICommandDialog
  * @extends React.ComponentProps<typeof Dialog>
  */
-interface ICommandDialog extends React.ComponentProps<typeof Dialog> {
+export interface ICommandDialog extends React.ComponentProps<typeof Dialog> {
+	/** Additional CSS classes to apply to the command dialog */
+	className?: string;
+	/** Whether the dialog is open */
+	open?: boolean;
+	/** Function called when the dialog open state changes */
+	onOpenChange?: (open: boolean) => void;
 	/** The title displayed in the dialog header (screen reader only) */
 	title?: string;
 	/** The description displayed in the dialog header (screen reader only) */
 	description?: string;
-	/** Additional CSS classes to apply to the dialog content */
-	className?: string;
 	/** Whether to show the close button in the dialog */
 	showCloseButton?: boolean;
 }

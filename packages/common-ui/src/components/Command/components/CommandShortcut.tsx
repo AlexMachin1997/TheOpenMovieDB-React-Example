@@ -7,8 +7,8 @@ import { cn } from '~/utils/className';
  * @interface ICommandShortcut
  * @extends React.ComponentProps<'span'>
  */
-interface ICommandShortcut extends React.ComponentProps<'span'> {
-	/** Additional CSS classes to apply to the shortcut display */
+export interface ICommandShortcut extends React.ComponentProps<'span'> {
+	/** Additional CSS classes to apply to the command shortcut */
 	className?: string;
 }
 

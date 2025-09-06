@@ -8,7 +8,7 @@ import { cn } from '~/utils/className';
  * @interface ICommandList
  * @extends React.ComponentProps<typeof CommandPrimitive.List>
  */
-interface ICommandList extends React.ComponentProps<typeof CommandPrimitive.List> {
+export interface ICommandList extends React.ComponentProps<typeof CommandPrimitive.List> {
 	/** Additional CSS classes to apply to the command list */
 	className?: string;
 }

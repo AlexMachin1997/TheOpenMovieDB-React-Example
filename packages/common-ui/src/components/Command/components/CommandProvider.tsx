@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Popover } from '~/components/Popover/Popover';
 import { CommandContext, CommandContextValue } from '~/components/Command/contexts/command-context';
-import { IBaseCommandProvider } from '~/components/Command/types/command-provider';
+import { ICommandProvider } from '~/components/Command/types/core';
 import { Option } from '~/types/Option';
 
 /**
@@ -35,7 +35,7 @@ export const CommandProvider = ({
 	defaultSearchValue = '',
 	options,
 	emptyState
-}: IBaseCommandProvider) => {
+}: ICommandProvider) => {
 	const [searchValue, setSearchValue] = React.useState(defaultSearchValue);
 
 	const handleSearchChange = React.useCallback((value: string) => {

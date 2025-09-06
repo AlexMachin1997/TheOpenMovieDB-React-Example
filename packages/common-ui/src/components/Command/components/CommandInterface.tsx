@@ -3,7 +3,7 @@ import { Command } from '~/components/Command/components/Command';
 import { CommandSearch } from '~/components/Command/components/CommandSearch';
 import { CommandList } from '~/components/Command/components/CommandList';
 import { CommandEmpty } from '~/components/Command/components/CommandEmpty';
-import { ICommandSearchProps, IEmptyStateConfig } from '~/components/Command/types';
+import { ICommandSearchConfig, IEmptyStateConfig } from '~/components/Command/types';
 
 /**
  * Props for the CommandInterface component
@@ -11,13 +11,13 @@ import { ICommandSearchProps, IEmptyStateConfig } from '~/components/Command/typ
  * @interface ICommandInterface
  * @extends React.ComponentPropsWithoutRef<typeof Command>
  */
-interface ICommandInterface extends React.ComponentPropsWithoutRef<typeof Command> {
+export interface ICommandInterface extends React.ComponentPropsWithoutRef<typeof Command> {
 	/** Child components to render within the command interface */
 	children?: React.ReactNode;
 	/** Empty state configuration */
 	emptyState?: IEmptyStateConfig;
 	/** Search configuration */
-	searchConfig?: ICommandSearchProps;
+	searchConfig?: ICommandSearchConfig;
 }
 
 /**

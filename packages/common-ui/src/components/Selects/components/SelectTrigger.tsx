@@ -9,7 +9,7 @@ import { ChevronsUpDownIcon } from 'lucide-react';
  *
  * @interface SelectTriggerProps
  */
-interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeof Button> {
+export interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeof Button> {
 	/** Additional CSS classes to apply to the trigger button */
 	className?: string;
 	/** Content to display inside the trigger button */

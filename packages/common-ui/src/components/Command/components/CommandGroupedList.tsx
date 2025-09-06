@@ -3,7 +3,7 @@ import { CommandList } from '~/components/Command/components/CommandList';
 import { CommandSeparator } from '~/components/Command/components/CommandSeparator';
 import { CommandGroup } from '~/components/Command/components/CommandGroup';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
-import { ICommandGroupedListProps } from '~/components/Command/types';
+import { ICommandGroupedList } from '~/components/Command/types';
 import { Option } from '~/types/Option';
 
 export const CommandGroupedList = React.memo(function CommandGroupedList({
@@ -11,7 +11,7 @@ export const CommandGroupedList = React.memo(function CommandGroupedList({
 	className,
 	groupOrder,
 	ungroupedPosition = 'top'
-}: ICommandGroupedListProps) {
+}: ICommandGroupedList) {
 	const { filteredOptions } = useCommandContext();
 
 	// Group and sort options in a single pass

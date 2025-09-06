@@ -9,7 +9,7 @@ import { useCommandContext } from '~/components/Command/hooks/useCommandContext'
  * @interface ICommandEmpty
  * @extends React.ComponentProps<typeof CommandPrimitive.Empty>
  */
-interface ICommandEmpty extends React.ComponentProps<typeof CommandPrimitive.Empty> {
+export interface ICommandEmpty extends React.ComponentProps<typeof CommandPrimitive.Empty> {
 	/** Additional CSS classes to apply to the empty state */
 	className?: string;
 	/** Custom message to show when no search is provided and no options are available (overrides context) */

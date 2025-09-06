@@ -11,7 +11,7 @@ import { useCommandContext } from '~/components/Command/hooks/useCommandContext'
  * @interface SelectListItemProps
  * @extends Omit<React.ComponentPropsWithoutRef<typeof CommandItem>, 'value'>
  */
-interface SelectListItemProps
+export interface SelectListItemProps
 	extends Omit<React.ComponentPropsWithoutRef<typeof CommandItem>, 'value'> {
 	/** The value of this select option */
 	value: string;

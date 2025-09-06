@@ -1,15 +1,15 @@
-import { IBaseCommandProvider } from '~/components/Command/types';
+import { ICommandProvider } from '~/components/Command/types/core';
 
 /**
  * Base provider props interface for select components
  *
- * This interface extends the base command provider props with select-specific
+ * This interface extends the command provider props with select-specific
  * configuration like selection mode and initial values.
  *
  * @interface IBaseSelectProviderProps
- * @extends IBaseCommandProvider
+ * @extends ICommandProvider
  */
-export interface IBaseSelectProviderProps extends IBaseCommandProvider {
+export interface IBaseSelectProviderProps extends ICommandProvider {
 	/** Selection mode - either 'single' or 'multiple' */
 	mode: 'single' | 'multiple';
 	/** Initial selected values */
@@ -42,4 +42,21 @@ export interface ISelectContext {
 	toggleValue: (value: string) => void;
 	/** Selection mode - either 'single' or 'multiple' */
 	mode: 'single' | 'multiple';
+}
+/**
+ * Base provider props interface for select components
+ *
+ * This interface extends the command provider props with select-specific
+ * configuration like selection mode and initial values.
+ *
+ * @interface IBaseSelectProviderProps
+ * @extends ICommandProvider
+ */
+export interface IBaseSelectProviderProps extends ICommandProvider {
+	/** Selection mode - either 'single' or 'multiple' */
+	mode: 'single' | 'multiple';
+	/** Initial selected values */
+	initialSelectedValues?: string[];
+	/** Callback when selection changes */
+	onSelectionChange?: (selectedValues: string[]) => void;
 }

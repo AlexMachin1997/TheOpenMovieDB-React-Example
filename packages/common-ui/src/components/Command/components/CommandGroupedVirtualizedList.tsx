@@ -3,9 +3,9 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { CommandList } from '~/components/Command/components/CommandList';
 import { CommandGroup } from '~/components/Command/components/CommandGroup';
 import { CommandSeparator } from '~/components/Command/components/CommandSeparator';
-import { VirtualizedItem } from '~/components/Command/types/virtualized-item';
+import { VirtualizedItem } from '~/components/Command/types/virtualization';
 import { getVirtualizedItems, getEstimatedItemHeight } from '~/components/Command/utils/grouping';
-import { IBaseCommandGroupedVirtualizedList } from '~/components/Command/types';
+import { ICommandGroupedVirtualizedList } from '~/components/Command/types';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
 export const CommandGroupedVirtualizedList = React.memo(
@@ -16,7 +16,7 @@ export const CommandGroupedVirtualizedList = React.memo(
 		className,
 		groupOrder,
 		ungroupedPosition = 'top'
-	}: IBaseCommandGroupedVirtualizedList) => {
+	}: ICommandGroupedVirtualizedList) => {
 		const { filteredOptions } = useCommandContext();
 		const parentRef = React.useRef<HTMLDivElement>(null);
 

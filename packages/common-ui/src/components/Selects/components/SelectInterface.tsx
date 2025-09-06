@@ -1,6 +1,6 @@
 import { CommandInterface } from '~/components/Command/components/CommandInterface';
 import { PopoverContent } from '~/components/Popover/Popover';
-import { ICommandSearchProps, IEmptyStateConfig } from '~/components/Command/types';
+import { ICommandSearchConfig, IEmptyStateConfig } from '~/components/Command/types/core';
 
 /**
  * Props for the SelectInterface component
@@ -14,7 +14,7 @@ interface ISelectInterface extends React.ComponentPropsWithoutRef<typeof Command
 	/** Empty state configuration */
 	emptyState?: IEmptyStateConfig;
 	/** Search configuration */
-	searchConfig?: ICommandSearchProps;
+	searchConfig?: ICommandSearchConfig;
 }
 
 /**

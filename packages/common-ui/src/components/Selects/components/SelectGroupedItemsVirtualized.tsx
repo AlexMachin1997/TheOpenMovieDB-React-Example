@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { CommandGroupedVirtualizedList } from '~/components/Command/components/CommandGroupedVirtualizedList';
-import { IGroupedVirtualizedListProps } from '~/components/Command/types';
+import { ICommandGroupedVirtualizedList } from '~/components/Command/types';
 
-export const SelectVirtualizedGroupedList = React.memo(
-	({ children, ...props }: IGroupedVirtualizedListProps) => {
+export const SelectGroupedItemsVirtualized = React.memo(
+	({ children, ...props }: ICommandGroupedVirtualizedList) => {
 		return (
 			<CommandGroupedVirtualizedList {...props}>
 				{({ item }) => children({ item: item })}
@@ -12,4 +12,4 @@ export const SelectVirtualizedGroupedList = React.memo(
 	}
 );
 
-SelectVirtualizedGroupedList.displayName = 'SelectVirtualizedGroupedList';
+SelectGroupedItemsVirtualized.displayName = 'SelectGroupedItemsVirtualized';
