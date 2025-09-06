@@ -57,7 +57,6 @@ export const CommandProvider = ({
 			searchValue,
 			closeOnSelect,
 			close: () => setOpen(false),
-			openMenu: () => setOpen(true),
 			toggle: () => setOpen(!open),
 			setOpen: setOpen,
 			onSearchChange: handleSearchChange,

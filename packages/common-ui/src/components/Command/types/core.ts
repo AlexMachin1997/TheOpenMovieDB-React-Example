@@ -75,8 +75,6 @@ export interface ICommandContext {
 	closeOnSelect?: boolean;
 	/** Function to close the command interface */
 	close: () => void;
-	/** Function to open the command interface */
-	openMenu: () => void;
 	/** Function to toggle the open/close state */
 	toggle: () => void;
 	/** Function to set the open state */

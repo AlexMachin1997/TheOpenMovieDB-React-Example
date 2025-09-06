@@ -667,32 +667,6 @@ const EmptyStateDemoTemplate = () => {
 					Custom messages for both no options and no search results scenarios
 				</p>
 			</div>
-
-			<div className='w-[350px]'>
-				<h3 className='text-sm font-medium mb-2'>Bold Search Term Formatting:</h3>
-				<CommandProvider
-					open={open}
-					setOpen={setOpen}
-					options={emptyOptions}
-					emptyState={{
-						noSearchResultsMessage: 'No commands found for **{searchTerm}**',
-						formatSearchTerm: (term) => `**${term}**`
-					}}
-				>
-					<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
-						<CommandListItems>
-							{({ item }) => (
-								<CommandItem {...item}>
-									<span>{item.label}</span>
-								</CommandItem>
-							)}
-						</CommandListItems>
-					</CommandInterface>
-				</CommandProvider>
-				<p className='text-sm text-muted-foreground mt-2'>
-					Search terms are formatted with bold markers
-				</p>
-			</div>
 		</div>
 	);
 };

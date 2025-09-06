@@ -79,16 +79,16 @@ export const CommandEmpty = ({
 	const { searchValue, filteredOptions } = useCommandContext();
 
 	// Determine the appropriate message based on search state
-	const hasSearchTerm = searchValue.trim().length > 0;
-	const emptyMessage = hasSearchTerm
-		? (() => {
-				const finalFormatSearchTerm = formatSearchTerm || ((term) => `"${term}"`);
-				const formattedSearchTerm = finalFormatSearchTerm(searchValue.trim());
-				return noSearchResultsMessage.replace('{searchTerm}', formattedSearchTerm);
-			})()
-		: noOptionsMessage;
+	const emptyMessage = React.useMemo(() => {
+		if (searchValue.trim().length > 0) {
+			const finalFormatSearchTerm = formatSearchTerm || ((term) => `"${term}"`);
+			const formattedSearchTerm = finalFormatSearchTerm(searchValue.trim());
+			return noSearchResultsMessage.replace('{searchTerm}', formattedSearchTerm);
+		}
 
-	// If there are options, don't show the empty state
+		return noOptionsMessage;
+	}, [searchValue, noOptionsMessage, noSearchResultsMessage, formatSearchTerm]);
+
 	if (filteredOptions.length > 0) return null;
 
 	return (

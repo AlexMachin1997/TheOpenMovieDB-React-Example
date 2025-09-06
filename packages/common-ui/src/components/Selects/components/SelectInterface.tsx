@@ -56,17 +56,10 @@ interface ISelectInterface extends React.ComponentPropsWithoutRef<typeof Command
  * @param props - The select interface configuration props
  * @returns The rendered select interface container component
  */
-export const SelectInterface = ({
-	searchConfig,
-	children,
-	emptyState,
-	...props
-}: ISelectInterface) => {
+export const SelectInterface = ({ children, ...props }: ISelectInterface) => {
 	return (
 		<PopoverContent className='min-w-[var(--radix-popover-trigger-width)] p-0'>
-			<CommandInterface searchConfig={searchConfig} emptyState={emptyState} {...props}>
-				{children}
-			</CommandInterface>
+			<CommandInterface {...props}>{children}</CommandInterface>
 		</PopoverContent>
 	);
 };
