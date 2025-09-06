@@ -42,6 +42,11 @@ type CommandGroupedVirtualizedStorybookTypes = {
 	className?: string;
 };
 
+type CommandBasicStorybookTypes = {
+	showClearButton?: boolean;
+	searchPlaceholder?: string;
+};
+
 const meta: Meta<typeof Command> = {
 	title: 'Components/Command',
 	component: Command,
@@ -54,7 +59,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Basic Command Component Template
-const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
+const BasicCommandTemplate = (args: CommandBasicStorybookTypes) => {
 	const [open, setOpen] = React.useState(false);
 
 	// Basic options for the command
@@ -74,8 +79,10 @@ const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
 		<div className='w-[350px]'>
 			<CommandProvider open={open} setOpen={setOpen} options={options}>
 				<CommandInterface
-					{...args}
-					searchConfig={{ searchPlaceholder: 'Type a command or search...' }}
+					searchConfig={{
+						searchPlaceholder: args.searchPlaceholder || 'Type a command or search...',
+						showClearButton: args.showClearButton || false
+					}}
 				>
 					<CommandListItems>
 						{({ item }) => (
@@ -98,6 +105,14 @@ const BasicCommandTemplate = (args: React.ComponentProps<typeof Command>) => {
 
 export const Basic: Story = {
 	render: (args) => <BasicCommandTemplate {...args} />
+};
+
+export const WithClearButton: StoryObj<CommandBasicStorybookTypes> = {
+	render: (args) => <BasicCommandTemplate {...args} />,
+	args: {
+		showClearButton: true,
+		searchPlaceholder: 'Type a command or search...'
+	}
 };
 
 // CommandInterface Template
@@ -614,7 +629,7 @@ const EmptyStateDemoTemplate = () => {
 					<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 						<CommandListItems>
 							{({ item }) => (
-								<CommandItem key={item.id} value={item.value}>
+								<CommandItem {...item}>
 									<span>{item.label}</span>
 								</CommandItem>
 							)}
@@ -641,7 +656,7 @@ const EmptyStateDemoTemplate = () => {
 					<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 						<CommandListItems>
 							{({ item }) => (
-								<CommandItem key={item.id} value={item.value}>
+								<CommandItem {...item}>
 									<span>{item.label}</span>
 								</CommandItem>
 							)}
@@ -667,7 +682,7 @@ const EmptyStateDemoTemplate = () => {
 					<CommandInterface searchConfig={{ searchPlaceholder: 'Type a command or search...' }}>
 						<CommandListItems>
 							{({ item }) => (
-								<CommandItem key={item.id} value={item.value}>
+								<CommandItem {...item}>
 									<span>{item.label}</span>
 								</CommandItem>
 							)}

@@ -1,20 +1,22 @@
 import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
-import { SearchIcon } from 'lucide-react';
+import { SearchIcon, XIcon } from 'lucide-react';
 import { useDebounce } from 'react-use';
 import { cn } from '~/utils/className';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
-import { ICommandSearchProps } from '~/components/Command/types';
+import { ICommandSearchConfig } from '~/components/Command/types/core';
+import { Button } from '~/components/Button/Button';
 
 /**
  * Props for the CommandSearch component
  *
- * @interface CommandSearchProps
+ * @interface ICommandSearch
  * @extends React.ComponentProps<typeof CommandPrimitive.Input>
+ * @extends ICommandSearchConfig
  */
-export interface CommandSearchProps
+interface ICommandSearch
 	extends React.ComponentProps<typeof CommandPrimitive.Input>,
-		ICommandSearchProps {}
+		ICommandSearchConfig {}
 
 /**
  * Search input component for command palette functionality
@@ -47,8 +49,9 @@ export const CommandSearch = ({
 	className,
 	enabledSearch = true,
 	searchPlaceholder = 'Search',
+	showClearButton = false,
 	...props
-}: CommandSearchProps) => {
+}: ICommandSearch) => {
 	const { onSearchChange } = useCommandContext();
 	const [inputValue, setInputValue] = React.useState('');
 
@@ -61,7 +64,7 @@ export const CommandSearch = ({
 	if (!enabledSearch) return null;
 
 	return (
-		<div data-slot='command-input-wrapper' className='flex h-9 items-center gap-2 border-b px-3'>
+		<div data-slot='command-input-wrapper' className='flex items-center gap-2 border-b px-3'>
 			<SearchIcon className='size-4 shrink-0 opacity-50' />
 			<CommandPrimitive.Input
 				data-slot='command-input'
@@ -74,6 +77,11 @@ export const CommandSearch = ({
 				onValueChange={setInputValue}
 				{...props}
 			/>
+			{showClearButton && (
+				<Button variant='outline' size='icon' onClick={() => setInputValue('')} className='p-0'>
+					<XIcon className='size-3 shrink-0' />
+				</Button>
+			)}
 		</div>
 	);
 };
