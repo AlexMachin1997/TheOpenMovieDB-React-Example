@@ -362,7 +362,7 @@ export const WithoutClearButton: StoryObj<SingleSelectStorybookTypes> = {
 };
 
 const ClearButtonDemoTemplate = () => {
-	const [withClearValue, setWithClearValue] = React.useState<string>('react');
+	const [withClearValue, setWithClearValue] = React.useState<string>('vue');
 	const [withoutClearValue, setWithoutClearValue] = React.useState<string>('vue');
 
 	const handleWithClearChange = (value: string) => {
@@ -378,7 +378,7 @@ const ClearButtonDemoTemplate = () => {
 			<div className='space-y-2'>
 				<Label>With Clear Button (default):</Label>
 				<SelectProvider
-					values={withClearValue ? [withClearValue] : []}
+					values={[withClearValue]}
 					onValuesChange={handleWithClearChange}
 					options={frameworks.slice(0, 6)}
 					mode='single'
@@ -400,7 +400,7 @@ const ClearButtonDemoTemplate = () => {
 			<div className='space-y-2'>
 				<Label>Without Clear Button:</Label>
 				<SelectProvider
-					values={withoutClearValue ? [withoutClearValue] : []}
+					values={[withoutClearValue]}
 					onValuesChange={handleWithoutClearChange}
 					options={frameworks.slice(0, 6)}
 					mode='single'
