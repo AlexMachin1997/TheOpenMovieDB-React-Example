@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import {
 	Accordion,
 	AccordionContent,
@@ -25,7 +26,22 @@ export const DefaultIsOpen: Story = {
 				<AccordionContent>Will only show when the Accordion is open</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const trigger = canvas.getByRole('button', { name: /what is refund your refund policy/i });
+		await expect(trigger).toBeVisible();
+		await userEvent.click(trigger);
+
+		const content = canvas.getByText('Will only show when the Accordion is open');
+		await expect(content).toBeVisible();
+		await userEvent.click(trigger);
+
+		await waitFor(() => {
+			expect(content).not.toBeVisible();
+		});
+	}
 };
 
 export const IsDisabled: Story = {
@@ -36,7 +52,19 @@ export const IsDisabled: Story = {
 				<AccordionContent>Will only show when the Accordion is open</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const content = canvas.queryByText('Will only show when the Accordion is open');
+
+		const trigger = canvas.queryByRole('button', {
+			name: /what is refund your refund policy/i
+		});
+
+		await expect(trigger).toBeDisabled();
+		await expect(content).not.toBeInTheDocument();
+	}
 };
 
 export const FullExample: Story = {
@@ -47,7 +75,22 @@ export const FullExample: Story = {
 				<AccordionContent>Will only show when the Accordion is open</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const trigger = canvas.getByRole('button', { name: /what is refund your refund policy/i });
+		await expect(trigger).toBeVisible();
+		await userEvent.click(trigger);
+
+		const content = canvas.getByText('Will only show when the Accordion is open');
+		await expect(content).toBeVisible();
+		await userEvent.click(trigger);
+
+		await waitFor(() => {
+			expect(content).not.toBeVisible();
+		});
+	}
 };
 
 export const SingleCollapsible: Story = {
@@ -93,7 +136,41 @@ export const SingleCollapsible: Story = {
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const productTrigger = canvas.getByRole('button', { name: /product information/i });
+		const shippingTrigger = canvas.getByRole('button', { name: /shipping details/i });
+		const returnTrigger = canvas.getByRole('button', { name: /return policy/i });
+
+		await userEvent.click(productTrigger);
+
+		await waitFor(async () => {
+			const productContent = canvas.getByText(/our flagship product combines/i);
+			await expect(productContent).toBeVisible();
+			await expect(canvas.queryByText(/we offer worldwide shipping/i)).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/we stand behind our products/i)).not.toBeInTheDocument();
+		});
+
+		await userEvent.click(shippingTrigger);
+
+		await waitFor(async () => {
+			const shippingContent = canvas.getByText(/we offer worldwide shipping/i);
+			await expect(shippingContent).toBeVisible();
+			await expect(canvas.queryByText(/our flagship product combines/i)).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/we stand behind our products/i)).not.toBeInTheDocument();
+		});
+
+		await userEvent.click(returnTrigger);
+
+		await waitFor(async () => {
+			const returnContent = canvas.getByText(/we stand behind our products/i);
+			await expect(returnContent).toBeVisible();
+			await expect(canvas.queryByText(/our flagship product combines/i)).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/we offer worldwide shipping/i)).not.toBeInTheDocument();
+		});
+	}
 };
 
 export const MultipleNonCollapsible: Story = {
@@ -138,7 +215,61 @@ export const MultipleNonCollapsible: Story = {
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const gettingStartedTrigger = canvas.getByRole('button', { name: /getting started/i });
+		const configurationTrigger = canvas.getByRole('button', { name: /configuration/i });
+		const advancedUsageTrigger = canvas.getByRole('button', { name: /advanced usage/i });
+
+		// Open first item
+		await userEvent.click(gettingStartedTrigger);
+
+		await waitFor(async () => {
+			const gettingStartedContent = canvas.getByText(/follow the installation guide/i);
+			await expect(gettingStartedContent).toBeVisible();
+			await expect(canvas.queryByText(/configure your project/i)).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/learn how to customize/i)).not.toBeInTheDocument();
+		});
+
+		// Open second item - should keep first open (multiple mode)
+		await userEvent.click(configurationTrigger);
+
+		await waitFor(async () => {
+			const configurationContent = canvas.getByText(/configure your project/i);
+			await expect(configurationContent).toBeVisible();
+			// First item should still be open
+			const gettingStartedContent = canvas.getByText(/follow the installation guide/i);
+			await expect(gettingStartedContent).toBeVisible();
+			await expect(canvas.queryByText(/learn how to customize/i)).not.toBeInTheDocument();
+		});
+
+		// Open third item - should keep both previous open
+		await userEvent.click(advancedUsageTrigger);
+
+		await waitFor(async () => {
+			const advancedUsageContent = canvas.getByText(/learn how to customize/i);
+			await expect(advancedUsageContent).toBeVisible();
+			// Both previous items should still be open
+			const gettingStartedContent = canvas.getByText(/follow the installation guide/i);
+			await expect(gettingStartedContent).toBeVisible();
+			const configurationContent = canvas.getByText(/configure your project/i);
+			await expect(configurationContent).toBeVisible();
+		});
+
+		// Close first item - others should remain open
+		await userEvent.click(gettingStartedTrigger);
+
+		await waitFor(async () => {
+			await expect(canvas.queryByText(/follow the installation guide/i)).not.toBeInTheDocument();
+			// Other items should still be open
+			const configurationContent = canvas.getByText(/configure your project/i);
+			await expect(configurationContent).toBeVisible();
+			const advancedUsageContent = canvas.getByText(/learn how to customize/i);
+			await expect(advancedUsageContent).toBeVisible();
+		});
+	}
 };
 
 export const MultipleOpen: Story = {
@@ -195,7 +326,63 @@ export const MultipleOpen: Story = {
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const documentationTrigger = canvas.getByRole('button', { name: /📚 documentation/i });
+		const settingsTrigger = canvas.getByRole('button', { name: /⚙️ settings/i });
+		const configurationTrigger = canvas.getByRole('button', { name: /🔧 configuration/i });
+
+		// Open first item
+		await userEvent.click(documentationTrigger);
+
+		await waitFor(async () => {
+			const documentationContent = canvas.getByText(/this accordion allows multiple items/i);
+			await expect(documentationContent).toBeVisible();
+			await expect(canvas.queryByText(/this is another section/i)).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/this behavior is achieved/i)).not.toBeInTheDocument();
+		});
+
+		// Open second item - should keep first open (multiple mode)
+		await userEvent.click(settingsTrigger);
+
+		await waitFor(async () => {
+			const settingsContent = canvas.getByText(/this is another section/i);
+			await expect(settingsContent).toBeVisible();
+			// First item should still be open
+			const documentationContent = canvas.getByText(/this accordion allows multiple items/i);
+			await expect(documentationContent).toBeVisible();
+			await expect(canvas.queryByText(/this behavior is achieved/i)).not.toBeInTheDocument();
+		});
+
+		// Open third item - should keep both previous open
+		await userEvent.click(configurationTrigger);
+
+		await waitFor(async () => {
+			const configurationContent = canvas.getByText(/this behavior is achieved/i);
+			await expect(configurationContent).toBeVisible();
+			// Both previous items should still be open
+			const documentationContent = canvas.getByText(/this accordion allows multiple items/i);
+			await expect(documentationContent).toBeVisible();
+			const settingsContent = canvas.getByText(/this is another section/i);
+			await expect(settingsContent).toBeVisible();
+		});
+
+		// Close first item - others should remain open
+		await userEvent.click(documentationTrigger);
+
+		await waitFor(async () => {
+			await expect(
+				canvas.queryByText(/this accordion allows multiple items/i)
+			).not.toBeInTheDocument();
+			// Other items should still be open
+			const settingsContent = canvas.getByText(/this is another section/i);
+			await expect(settingsContent).toBeVisible();
+			const configurationContent = canvas.getByText(/this behavior is achieved/i);
+			await expect(configurationContent).toBeVisible();
+		});
+	}
 };
 
 export const SingleNonCollapsible: Story = {
@@ -231,7 +418,57 @@ export const SingleNonCollapsible: Story = {
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const refundTrigger = canvas.getByRole('button', { name: /what is your refund policy/i });
+		const trackingTrigger = canvas.getByRole('button', { name: /how do i track my order/i });
+
+		// Open first item
+		await userEvent.click(refundTrigger);
+
+		await waitFor(async () => {
+			const refundContent = canvas.getByText(/we offer a 30-day money-back guarantee/i);
+			await expect(refundContent).toBeVisible();
+			await expect(canvas.queryByText(/once your order ships/i)).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/yes, we ship to most countries/i)).not.toBeInTheDocument();
+		});
+
+		// Click same item again - should NOT close it (non-collapsible)
+		await userEvent.click(refundTrigger);
+
+		await waitFor(async () => {
+			const refundContent = canvas.getByText(/we offer a 30-day money-back guarantee/i);
+			await expect(refundContent).toBeVisible();
+			await expect(canvas.queryByText(/once your order ships/i)).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/yes, we ship to most countries/i)).not.toBeInTheDocument();
+		});
+
+		// Click second item - should close first and open second (single mode)
+		await userEvent.click(trackingTrigger);
+
+		await waitFor(async () => {
+			const trackingContent = canvas.getByText(/once your order ships/i);
+			await expect(trackingContent).toBeVisible();
+			await expect(
+				canvas.queryByText(/we offer a 30-day money-back guarantee/i)
+			).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/yes, we ship to most countries/i)).not.toBeInTheDocument();
+		});
+
+		// Click same item again - should NOT close it (non-collapsible)
+		await userEvent.click(trackingTrigger);
+
+		await waitFor(async () => {
+			const trackingContent = canvas.getByText(/once your order ships/i);
+			await expect(trackingContent).toBeVisible();
+			await expect(
+				canvas.queryByText(/we offer a 30-day money-back guarantee/i)
+			).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/yes, we ship to most countries/i)).not.toBeInTheDocument();
+		});
+	}
 };
 
 export const RichContent: Story = {
@@ -301,7 +538,40 @@ export const RichContent: Story = {
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const technicalSpecsTrigger = canvas.getByRole('button', { name: /technical specifications/i });
+		const customerReviewsTrigger = canvas.getByRole('button', { name: /customer reviews/i });
+
+		// Open technical specifications
+		await userEvent.click(technicalSpecsTrigger);
+
+		await waitFor(async () => {
+			const dimensions = canvas.getByText(/height: 12.5 inches/i);
+			await expect(dimensions).toBeVisible();
+			await expect(canvas.queryByText(/excellent product/i)).not.toBeInTheDocument();
+		});
+
+		// Switch to customer reviews
+		await userEvent.click(customerReviewsTrigger);
+
+		await waitFor(async () => {
+			const sarahReview = canvas.getByText(/excellent product/i);
+			await expect(sarahReview).toBeVisible();
+			await expect(canvas.queryByText(/height: 12.5 inches/i)).not.toBeInTheDocument();
+		});
+
+		// Switch back to technical specs
+		await userEvent.click(technicalSpecsTrigger);
+
+		await waitFor(async () => {
+			const dimensions = canvas.getByText(/height: 12.5 inches/i);
+			await expect(dimensions).toBeVisible();
+			await expect(canvas.queryByText(/excellent product/i)).not.toBeInTheDocument();
+		});
+	}
 };
 
 export const CustomStyling: Story = {
@@ -339,7 +609,40 @@ export const CustomStyling: Story = {
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const premiumFeaturesTrigger = canvas.getByRole('button', { name: /premium features/i });
+		const freeTierTrigger = canvas.getByRole('button', { name: /free tier/i });
+
+		// Open premium features
+		await userEvent.click(premiumFeaturesTrigger);
+
+		await waitFor(async () => {
+			const premiumContent = canvas.getByText(/access to premium features/i);
+			await expect(premiumContent).toBeVisible();
+			await expect(canvas.queryByText(/basic features available/i)).not.toBeInTheDocument();
+		});
+
+		// Switch to free tier
+		await userEvent.click(freeTierTrigger);
+
+		await waitFor(async () => {
+			const freeTierContent = canvas.getByText(/basic features available/i);
+			await expect(freeTierContent).toBeVisible();
+			await expect(canvas.queryByText(/access to premium features/i)).not.toBeInTheDocument();
+		});
+
+		// Switch back to premium features
+		await userEvent.click(premiumFeaturesTrigger);
+
+		await waitFor(async () => {
+			const premiumContent = canvas.getByText(/access to premium features/i);
+			await expect(premiumContent).toBeVisible();
+			await expect(canvas.queryByText(/basic features available/i)).not.toBeInTheDocument();
+		});
+	}
 };
 
 export const WithFormElements: Story = {
@@ -413,7 +716,63 @@ export const WithFormElements: Story = {
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const personalInfoTrigger = canvas.getByRole('button', { name: /personal information/i });
+		const preferencesTrigger = canvas.getByRole('button', { name: /preferences/i });
+
+		// Open personal information section
+		await userEvent.click(personalInfoTrigger);
+
+		await waitFor(async () => {
+			// Test form interactions within accordion
+			const nameInput = canvas.getByPlaceholderText(/enter your full name/i);
+			const emailInput = canvas.getByPlaceholderText(/enter your email/i);
+
+			// Type in form fields
+			await userEvent.type(nameInput, 'John Doe');
+			await userEvent.type(emailInput, 'john@example.com');
+
+			// Verify form values
+			await expect(nameInput).toHaveValue('John Doe');
+			await expect(emailInput).toHaveValue('john@example.com');
+		});
+
+		// Switch to preferences section
+		await userEvent.click(preferencesTrigger);
+
+		await waitFor(async () => {
+			// Test checkbox interactions
+			const newsletterCheckbox = canvas.getByRole('checkbox', { name: /subscribe to newsletter/i });
+			const notificationsCheckbox = canvas.getByRole('checkbox', {
+				name: /enable push notifications/i
+			});
+			const themeSelect = canvas.getByRole('combobox', { name: /theme preference/i });
+
+			// Check checkboxes
+			await userEvent.click(newsletterCheckbox);
+			await userEvent.click(notificationsCheckbox);
+
+			await expect(newsletterCheckbox).toBeChecked();
+			await expect(notificationsCheckbox).toBeChecked();
+
+			// Test select dropdown
+			await userEvent.selectOptions(themeSelect, 'dark');
+			await expect(themeSelect).toHaveValue('dark');
+		});
+
+		// Switch back to personal info - form should retain values
+		await userEvent.click(personalInfoTrigger);
+
+		await waitFor(async () => {
+			const nameInput = canvas.getByPlaceholderText(/enter your full name/i);
+			const emailInput = canvas.getByPlaceholderText(/enter your email/i);
+			await expect(nameInput).toHaveValue('John Doe');
+			await expect(emailInput).toHaveValue('john@example.com');
+		});
+	}
 };
 
 export const WithIconsAndBadges: Story = {
@@ -480,5 +839,59 @@ export const WithIconsAndBadges: Story = {
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const activeProjectsTrigger = canvas.getByRole('button', { name: /active projects/i });
+		const pendingReviewsTrigger = canvas.getByRole('button', { name: /pending reviews/i });
+		const completedTasksTrigger = canvas.getByRole('button', { name: /completed tasks/i });
+
+		// Open first item
+		await userEvent.click(activeProjectsTrigger);
+
+		await waitFor(async () => {
+			const projectAlpha = canvas.getByText(/project alpha/i);
+			await expect(projectAlpha).toBeVisible();
+			await expect(canvas.queryByText(/code review #123/i)).not.toBeInTheDocument();
+			await expect(canvas.queryByText(/all tasks have been completed/i)).not.toBeInTheDocument();
+		});
+
+		// Open second item - should keep first open (multiple mode)
+		await userEvent.click(pendingReviewsTrigger);
+
+		await waitFor(async () => {
+			const codeReview = canvas.getByText(/code review #123/i);
+			await expect(codeReview).toBeVisible();
+			// First item should still be open
+			const projectAlpha = canvas.getByText(/project alpha/i);
+			await expect(projectAlpha).toBeVisible();
+			await expect(canvas.queryByText(/all tasks have been completed/i)).not.toBeInTheDocument();
+		});
+
+		// Open third item - should keep both previous open
+		await userEvent.click(completedTasksTrigger);
+
+		await waitFor(async () => {
+			const completedTasks = canvas.getByText(/all tasks have been completed/i);
+			await expect(completedTasks).toBeVisible();
+			// Both previous items should still be open
+			const projectAlpha = canvas.getByText(/project alpha/i);
+			await expect(projectAlpha).toBeVisible();
+			const codeReview = canvas.getByText(/code review #123/i);
+			await expect(codeReview).toBeVisible();
+		});
+
+		// Close first item - others should remain open
+		await userEvent.click(activeProjectsTrigger);
+
+		await waitFor(async () => {
+			await expect(canvas.queryByText(/project alpha/i)).not.toBeInTheDocument();
+			// Other items should still be open
+			const codeReview = canvas.getByText(/code review #123/i);
+			await expect(codeReview).toBeVisible();
+			const completedTasks = canvas.getByText(/all tasks have been completed/i);
+			await expect(completedTasks).toBeVisible();
+		});
+	}
 };
