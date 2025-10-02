@@ -77,8 +77,14 @@ export const CommandSearch = ({
 				onValueChange={setInputValue}
 				{...props}
 			/>
-			{showClearButton && (
-				<Button variant='outline' size='icon' onClick={() => setInputValue('')} className='p-0'>
+			{showClearButton && inputValue && (
+				<Button
+					variant='outline'
+					size='icon'
+					onClick={() => setInputValue('')}
+					className='p-0'
+					aria-label='Clear search'
+				>
 					<XIcon className='size-3 shrink-0' />
 				</Button>
 			)}
