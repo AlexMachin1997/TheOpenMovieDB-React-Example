@@ -169,7 +169,9 @@ export const MultiSelectValue = ({
 
 			<Badge
 				style={{
-					display: overflowAmount > 0 && !shouldWrap ? 'block' : 'none'
+					display: overflowAmount > 0 && !shouldWrap ? 'flex' : 'none',
+					alignItems: 'center',
+					justifyContent: 'center'
 				}}
 				variant='outline'
 				ref={overflowRef}

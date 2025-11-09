@@ -1,88 +1,62 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from '@tanstack/react-form';
+import type { DateRange } from 'react-day-picker';
 import * as z from 'zod';
 
-import {
-	FormProvider,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage
-} from '~/components/Form/components';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+
 import { Input } from '~/components/Input/Input';
 import { Textarea } from '~/components/Textarea/Textarea';
 import { Switch } from '~/components/Switch/Switch';
 import { Button } from '~/components/Button/Button';
 import { Checkbox } from '~/components/Checkbox/Checkbox';
 import { Radio, RadioLabel } from '~/components/Radio/Radio';
-import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { CheckboxGroup } from '~/components/CheckboxGroup/CheckboxGroup';
 import { RadioGroup } from '~/components/RadioGroup/RadioGroup';
 import {
-	SingleSelectValue,
 	SelectProvider,
 	SelectTrigger,
+	SingleSelectValue,
 	SelectInterface,
-	MultiSelectValue,
 	SelectListItems,
-	SelectListItem
+	SelectListItem,
+	MultiSelectValue
 } from '~/components/Selects/index';
-
 import { SingleSlider } from '~/components/Sliders/SingleSlider/SingleSlider';
 import { RangeSlider } from '~/components/Sliders/RangeSlider/RangeSlider';
 import { SingleDatePicker } from '~/components/DatePickers/SingleDatePicker/SingleDatePicker';
 import { DateRangePicker } from '~/components/DatePickers/RangeDatePicker/RangeDatePicker';
 import { Option } from '~/types/Option';
 
-const meta: Meta<typeof FormProvider> = {
-	title: 'Components/Form',
-	component: FormProvider,
-	parameters: {
-		layout: 'centered'
-	}
-};
+const dateRangeSchema = z
+	.object({
+		from: z.date().optional(),
+		to: z.date().optional()
+	})
+	.transform(
+		(range): DateRange => ({
+			from: range.from ?? undefined,
+			to: range.to ?? undefined
+		})
+	);
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-// Form validation schema
 const formSchema = z.object({
-	// Basic inputs
-	name: z.string().min(2, 'Name must be at least 2 characters'),
-	email: z.email('Please enter a valid email'),
-	description: z.string().min(10, 'Description must be at least 10 characters'),
+	name: z.string().min(2, 'Name must be at least 2 characters.'),
+	email: z.string().email('Please enter a valid email.'),
+	description: z.string().min(10, 'Description must be at least 10 characters.'),
 	notifications: z.boolean(),
-
-	// Single choice inputs
-	framework: z.string().min(1, 'Please select a framework'),
-	gender: z.string().min(1, 'Please select your gender'),
-	experience: z.string().min(1, 'Please select your experience level'),
-
-	// Multiple choice inputs
-	skills: z.array(z.string()).min(1, 'Please select at least one skill'),
-	interests: z.array(z.string()).min(1, 'Please select at least one interest'),
-
-	// Sliders
+	framework: z.string().min(1, 'Please select a framework.'),
+	gender: z.string().min(1, 'Please select your gender.'),
+	experience: z.string().min(1, 'Please select your experience level.'),
+	skills: z.array(z.string()).min(1, 'Select at least one skill.'),
+	interests: z.array(z.string()).min(1, 'Select at least one interest.'),
 	rating: z.tuple([z.number()]),
 	priceRange: z.tuple([z.number(), z.number()]),
-
-	// Dates
 	birthDate: z.date().optional(),
-	availability: z
-		.object({
-			from: z.date(),
-			to: z.date()
-		})
-		.optional()
+	availability: dateRangeSchema.optional()
 });
 
-type FormData = z.infer<typeof formSchema>;
-
-// Sample data for selects
-const frameworks: Option[] = [
+const frameworks: Array<Option> = [
 	{ id: 'react', value: 'react', label: 'React' },
 	{ id: 'vue', value: 'vue', label: 'Vue.js' },
 	{ id: 'angular', value: 'angular', label: 'Angular' },
@@ -90,7 +64,7 @@ const frameworks: Option[] = [
 	{ id: 'next', value: 'next', label: 'Next.js' }
 ];
 
-const skills: Option[] = [
+const skills: Array<Option> = [
 	{ id: 'javascript', value: 'javascript', label: 'JavaScript' },
 	{ id: 'typescript', value: 'typescript', label: 'TypeScript' },
 	{ id: 'python', value: 'python', label: 'Python' },
@@ -100,7 +74,7 @@ const skills: Option[] = [
 	{ id: 'rust', value: 'rust', label: 'Rust' }
 ];
 
-const interests: Option[] = [
+const interests: Array<Option> = [
 	{ id: 'frontend', value: 'frontend', label: 'Frontend Development' },
 	{ id: 'backend', value: 'backend', label: 'Backend Development' },
 	{ id: 'mobile', value: 'mobile', label: 'Mobile Development' },
@@ -109,847 +83,845 @@ const interests: Option[] = [
 	{ id: 'blockchain', value: 'blockchain', label: 'Blockchain' }
 ];
 
-const experienceLevels: Option[] = [
+const experienceLevels: Array<Option> = [
 	{ id: 'beginner', value: 'beginner', label: 'Beginner (0-2 years)' },
 	{ id: 'intermediate', value: 'intermediate', label: 'Intermediate (3-5 years)' },
 	{ id: 'advanced', value: 'advanced', label: 'Advanced (6-10 years)' },
 	{ id: 'expert', value: 'expert', label: 'Expert (10+ years)' }
 ];
 
-const genderOptions: Option[] = [
+const genderOptions: Array<Option> = [
 	{ id: 'male', value: 'male', label: 'Male' },
 	{ id: 'female', value: 'female', label: 'Female' },
 	{ id: 'other', value: 'other', label: 'Other' },
 	{ id: 'prefer-not', value: 'prefer-not', label: 'Prefer not to say' }
 ];
 
-// Form component with all inputs
-const ComprehensiveForm = () => {
-	const form = useForm<FormData>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			name: '',
-			email: '',
-			description: '',
-			notifications: false,
-			framework: undefined,
-			gender: undefined,
-			experience: undefined,
-			skills: [],
-			interests: [],
-			rating: [5],
-			priceRange: [20, 80],
-			birthDate: undefined,
-			availability: {
-				from: undefined,
-				to: undefined
-			}
+const getErrorMessage = (field: any) => {
+	const issue = field.state.meta?.errors?.[0];
+	if (!issue) {
+		return undefined;
+	}
+
+	return typeof issue === 'string' ? issue : issue?.message;
+};
+
+type IFormSchema = z.infer<typeof formSchema>;
+
+const comprehensiveDefaultValues: IFormSchema = {
+	name: '',
+	email: '',
+	description: '',
+	notifications: false,
+	framework: '',
+	gender: '',
+	experience: '',
+	skills: [],
+	interests: [],
+	rating: [5],
+	priceRange: [20, 80],
+	birthDate: undefined,
+	availability: undefined
+};
+
+const ComprehensiveFormStory = () => {
+	const form = useForm({
+		defaultValues: comprehensiveDefaultValues,
+		validators: {
+			onSubmit: (formData) => formSchema.safeParse(formData)
+		},
+		onSubmit: async ({ value }) => {
+			console.log('Form submitted:', value);
+			alert('Form submitted successfully! Check console for data.');
 		}
 	});
 
-	const onSubmit = (data: FormData) => {
-		console.log('Form submitted:', data);
-		alert('Form submitted successfully! Check console for data.');
-	};
-
 	return (
-		<FormProvider {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full max-w-2xl'>
-				<div className='space-y-6'>
-					{/* Basic Inputs Section */}
-					<div className='space-y-4'>
-						<h3 className='text-lg font-semibold'>Basic Information</h3>
+		<form
+			onSubmit={(event) => {
+				event.preventDefault();
+				void form.handleSubmit();
+			}}
+			className='space-y-8 w-full max-w-2xl'
+		>
+			<section className='space-y-6'>
+				<div className='space-y-4'>
+					<h3 className='text-lg font-semibold'>Basic Information</h3>
 
-						<FormField
-							control={form.control}
-							name='name'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Full Name</FormLabel>
-									<FormControl>
-										<Input placeholder='Enter your full name' {...field} />
-									</FormControl>
-									<FormDescription>
+					<form.Field name='name'>
+						{(field) => {
+							const error = getErrorMessage(field);
+
+							return (
+								<div className='space-y-2'>
+									<label htmlFor={field.name} className='text-sm font-medium'>
+										Full Name
+									</label>
+									<Input
+										id={field.name}
+										value={field.state.value ?? ''}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+										placeholder='Enter your full name'
+										autoComplete='name'
+									/>
+									<p className='text-muted-foreground text-sm'>
 										Please enter your full name as it appears on official documents.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+									</p>
+									{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+								</div>
+							);
+						}}
+					</form.Field>
 
-						<FormField
-							control={form.control}
-							name='email'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email Address</FormLabel>
-									<FormControl>
-										<Input type='email' placeholder='Enter your email' {...field} />
-									</FormControl>
-									<FormDescription>
+					<form.Field name='email'>
+						{(field) => {
+							const error = getErrorMessage(field);
+
+							return (
+								<div className='space-y-2'>
+									<label htmlFor={field.name} className='text-sm font-medium'>
+										Email Address
+									</label>
+									<Input
+										id={field.name}
+										type='email'
+										value={field.state.value ?? ''}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+										placeholder='Enter your email'
+										autoComplete='email'
+									/>
+									<p className='text-muted-foreground text-sm'>
 										We&apos;ll use this to send you important updates.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+									</p>
+									{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+								</div>
+							);
+						}}
+					</form.Field>
 
-						<FormField
-							control={form.control}
-							name='description'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Bio/Description</FormLabel>
-									<FormControl>
-										<Textarea
-											placeholder="Tell us about yourself, your experience, and what you're looking for..."
-											className='min-h-[100px]'
-											{...field}
-										/>
-									</FormControl>
-									<FormDescription>
+					<form.Field name='description'>
+						{(field) => {
+							const error = getErrorMessage(field);
+
+							return (
+								<div className='space-y-2'>
+									<label htmlFor={field.name} className='text-sm font-medium'>
+										Bio/Description
+									</label>
+									<Textarea
+										id={field.name}
+										value={field.state.value ?? ''}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+										placeholder="Tell us about yourself, your experience, and what you're looking for..."
+										className='min-h-[100px]'
+									/>
+									<p className='text-muted-foreground text-sm'>
 										Provide a brief description of your background and goals.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+									</p>
+									{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+								</div>
+							);
+						}}
+					</form.Field>
 
-						<FormField
-							control={form.control}
-							name='notifications'
-							render={({ field }) => (
-								<FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-									<div className='space-y-0.5'>
-										<FormLabel className='text-base'>Email Notifications</FormLabel>
-										<FormDescription>
-											Receive email notifications about new opportunities and updates.
-										</FormDescription>
-									</div>
-									<FormControl>
-										<Switch checked={field.value} onCheckedChange={field.onChange} />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-					</div>
-
-					{/* Single Choice Inputs Section */}
-					<div className='space-y-4'>
-						<h3 className='text-lg font-semibold'>Single Choice Inputs</h3>
-
-						<FormField
-							control={form.control}
-							name='framework'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Preferred Framework</FormLabel>
-									<FormControl>
-										<SelectProvider
-											options={frameworks}
-											values={field.value ? [field.value] : []}
-											onValuesChange={(values) => {
-												field.onChange(values);
-											}}
-											mode='single'
-										>
-											<SelectTrigger>
-												<SingleSelectValue placeholder='Select your preferred framework' />
-											</SelectTrigger>
-											<SelectInterface>
-												<SelectListItems>
-													{({ item }) => <SelectListItem  value={item.value} />}
-												</SelectListItems>
-											</SelectInterface>
-										</SelectProvider>
-									</FormControl>
-									<FormDescription>
-										Choose the framework you&apos;re most comfortable with.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name='gender'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Gender</FormLabel>
-									<FormControl>
-										<RadioGroup
-											name='gender'
-											options={genderOptions}
-											value={field.value}
-											onChange={({ value }) => field.onChange(value)}
-										/>
-									</FormControl>
-									<FormDescription>
-										This information helps us provide personalized content.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name='experience'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Experience Level</FormLabel>
-									<FormControl>
-										<RadioGroup
-											name='experience'
-											options={experienceLevels}
-											value={field.value}
-											onChange={({ value }) => field.onChange(value)}
-										/>
-									</FormControl>
-									<FormDescription>
-										Select the option that best describes your experience level.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-
-					{/* Multiple Choice Inputs Section */}
-					<div className='space-y-4'>
-						<h3 className='text-lg font-semibold'>Multiple Choice Inputs</h3>
-
-						<FormField
-							control={form.control}
-							name='skills'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Programming Skills</FormLabel>
-									<FormControl>
-										<SelectProvider
-											options={skills}
-											values={field.value}
-											onValuesChange={(values) => {
-												field.onChange(values);
-											}}
-											mode='multiple'
-										>
-											<SelectTrigger>
-												<MultiSelectValue placeholder='Select your programming skills' />
-											</SelectTrigger>
-											<SelectInterface>
-												<SelectListItems>
-													{({ item }) => <SelectListItem  value={item.value} />}
-												</SelectListItems>
-											</SelectInterface>
-										</SelectProvider>
-									</FormControl>
-									<FormDescription>
-										Select all programming languages you&apos;re proficient in.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name='interests'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Areas of Interest</FormLabel>
-									<FormControl>
-										<CheckboxGroup
-											name='interests'
-											options={interests.map((option) => ({
-												id: option.id,
-												value: option.value,
-												label: option.label,
-												disabled: option.disabled
-											}))}
-											value={field.value}
-											onChange={({ value }) => field.onChange(value)}
-										/>
-									</FormControl>
-									<FormDescription>
-										Select all areas that interest you professionally.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-
-					{/* Sliders Section */}
-					<div className='space-y-4'>
-						<h3 className='text-lg font-semibold'>Sliders</h3>
-
-						<FormField
-							control={form.control}
-							name='rating'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Overall Rating</FormLabel>
-									<FormControl>
-										<SingleSlider
-											id='rating'
-											name='rating'
-											label=''
-											value={field.value}
-											min={1}
-											max={10}
-											step={1}
-											onChange={field.onChange}
-											formatThumbTooltip={(value) => `${value}/10`}
-											formatSliderTooltip={(value) => `Rating: ${value[0]}/10`}
-										/>
-									</FormControl>
-									<FormDescription>
-										Rate your overall satisfaction with our platform.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name='priceRange'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Expected Salary Range (K USD)</FormLabel>
-									<FormControl>
-										<RangeSlider
-											id='priceRange'
-											name='priceRange'
-											label=''
-											value={field.value}
-											min={0}
-											max={200}
-											step={5}
-											onChange={field.onChange}
-											formatThumbTooltip={(value) => `$${value}K`}
-											formatSliderTooltip={(value) => `Range: $${value[0]}K - $${value[1]}K`}
-										/>
-									</FormControl>
-									<FormDescription>
-										Select your expected salary range in thousands of USD.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-
-					{/* Date Pickers Section */}
-					<div className='space-y-4'>
-						<h3 className='text-lg font-semibold'>Date Selection</h3>
-
-						<FormField
-							control={form.control}
-							name='birthDate'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Date of Birth</FormLabel>
-									<FormControl>
-										<SingleDatePicker
-											date={field.value}
-											onDateChange={field.onChange}
-											placeholder='Select your date of birth'
-											fromYear={1950}
-											toYear={2010}
-										/>
-									</FormControl>
-									<FormDescription>Your date of birth for account verification.</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name='availability'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Availability Period</FormLabel>
-									<FormControl>
-										<DateRangePicker
-											dateRange={field.value}
-											onDateRangeChange={field.onChange}
-											placeholder='Select your availability period'
-											fromYear={2024}
-											toYear={2025}
-										/>
-									</FormControl>
-									<FormDescription>
-										Select the period when you&apos;ll be available for new opportunities.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
+					<form.Field name='notifications'>
+						{(field) => (
+							<div className='flex flex-row items-center justify-between rounded-lg border p-4'>
+								<div className='space-y-0.5'>
+									<p className='text-base font-medium'>Email Notifications</p>
+									<p className='text-muted-foreground text-sm'>
+										Receive email notifications about new opportunities and updates.
+									</p>
+								</div>
+								<Switch
+									id={field.name}
+									checked={field.state.value}
+									onCheckedChange={(checked) => field.handleChange(checked)}
+									onBlur={field.handleBlur}
+								/>
+							</div>
+						)}
+					</form.Field>
 				</div>
 
-				<Button type='submit' className='w-full'>
-					Submit Application
-				</Button>
-			</form>
-		</FormProvider>
-	);
-};
+				<div className='space-y-4'>
+					<h3 className='text-lg font-semibold'>Single Choice Inputs</h3>
 
-// Individual component examples
-const BasicInputsExample = () => {
-	const form = useForm({
-		defaultValues: {
-			name: '',
-			email: '',
-			description: '',
-			notifications: false
-		}
-	});
+					<form.Field name='framework'>
+						{(field) => {
+							const error = getErrorMessage(field);
+							const values = field.state.value ? [field.state.value] : [];
 
-	return (
-		<FormProvider {...form}>
-			<form className='space-y-6 w-full max-w-md'>
-				<FormField
-					control={form.control}
-					name='name'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Name</FormLabel>
-							<FormControl>
-								<Input placeholder='Enter your name' {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+							return (
+								<div className='space-y-2'>
+									<label className='text-sm font-medium'>Preferred Framework</label>
+									<SelectProvider
+										options={frameworks}
+										values={values}
+										onValuesChange={(nextValues) => field.handleChange(nextValues[0] ?? '')}
+										mode='single'
+									>
+										<SelectTrigger>
+											<SingleSelectValue placeholder='Select your preferred framework' />
+										</SelectTrigger>
+										<SelectInterface>
+											<SelectListItems>
+												{({ item }) => <SelectListItem value={item.value} />}
+											</SelectListItems>
+										</SelectInterface>
+									</SelectProvider>
+									<p className='text-muted-foreground text-sm'>
+										Choose the framework you&apos;re most comfortable with.
+									</p>
+									{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+								</div>
+							);
+						}}
+					</form.Field>
 
-				<FormField
-					control={form.control}
-					name='email'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Email</FormLabel>
-							<FormControl>
-								<Input type='email' placeholder='Enter your email' {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+					<form.Field name='gender'>
+						{(field) => {
+							const error = getErrorMessage(field);
 
-				<FormField
-					control={form.control}
-					name='description'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Description</FormLabel>
-							<FormControl>
-								<Textarea placeholder='Enter description' {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+							return (
+								<div className='space-y-2'>
+									<label className='text-sm font-medium'>Gender</label>
+									<RadioGroup
+										name='gender'
+										options={genderOptions}
+										value={field.state.value ?? ''}
+										onChange={({ value }) => field.handleChange(value)}
+									/>
+									<p className='text-muted-foreground text-sm'>
+										This information helps us provide personalized content.
+									</p>
+									{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+								</div>
+							);
+						}}
+					</form.Field>
 
-				<FormField
-					control={form.control}
-					name='notifications'
-					render={({ field }) => (
-						<FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-							<div className='space-y-0.5'>
-								<FormLabel className='text-base'>Notifications</FormLabel>
-								<FormDescription>Receive email notifications</FormDescription>
+					<form.Field name='experience'>
+						{(field) => {
+							const error = getErrorMessage(field);
+
+							return (
+								<div className='space-y-2'>
+									<label className='text-sm font-medium'>Experience Level</label>
+									<RadioGroup
+										name='experience'
+										options={experienceLevels}
+										value={field.state.value ?? ''}
+										onChange={({ value }) => field.handleChange(value)}
+									/>
+									<p className='text-muted-foreground text-sm'>
+										Select the option that best describes your experience level.
+									</p>
+									{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+								</div>
+							);
+						}}
+					</form.Field>
+				</div>
+
+				<div className='space-y-4'>
+					<h3 className='text-lg font-semibold'>Multiple Choice Inputs</h3>
+
+					<form.Field name='skills'>
+						{(field) => {
+							const error = getErrorMessage(field);
+
+							return (
+								<div className='space-y-2'>
+									<label className='text-sm font-medium'>Programming Skills</label>
+									<SelectProvider
+										options={skills}
+										values={field.state.value ?? []}
+										onValuesChange={(nextValues) => field.handleChange(nextValues)}
+										mode='multiple'
+									>
+										<SelectTrigger>
+											<MultiSelectValue placeholder='Select your programming skills' />
+										</SelectTrigger>
+										<SelectInterface>
+											<SelectListItems>
+												{({ item }) => <SelectListItem value={item.value} />}
+											</SelectListItems>
+										</SelectInterface>
+									</SelectProvider>
+									<p className='text-muted-foreground text-sm'>
+										Select all programming languages you&apos;re proficient in.
+									</p>
+									{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+								</div>
+							);
+						}}
+					</form.Field>
+
+					<form.Field name='interests'>
+						{(field) => {
+							const error = getErrorMessage(field);
+
+							return (
+								<div className='space-y-2'>
+									<p className='text-sm font-medium'>Areas of Interest</p>
+
+									<CheckboxGroup
+										name='interests'
+										options={interests.map((option) => ({
+											id: option.id,
+											value: option.value,
+											label: option.label
+										}))}
+										value={field.state.value ?? []}
+										onChange={({ value }) => field.handleChange(value)}
+									/>
+
+									<p className='text-muted-foreground text-sm'>
+										Select all areas that interest you professionally.
+									</p>
+									{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+								</div>
+							);
+						}}
+					</form.Field>
+				</div>
+
+				<div className='space-y-4'>
+					<h3 className='text-lg font-semibold'>Sliders</h3>
+
+					<form.Field name='rating'>
+						{(field) => (
+							<SingleSlider
+								label='Overall Rating'
+								id='rating'
+								name='rating'
+								value={field.state.value ?? [0]}
+								min={1}
+								max={10}
+								step={1}
+								onChange={field.handleChange}
+								formatThumbTooltip={(value) => `${value}/10`}
+								formatSliderTooltip={(value) => `Rating: ${value[0]}/10`}
+							/>
+						)}
+					</form.Field>
+
+					<form.Field name='priceRange'>
+						{(field) => (
+							<RangeSlider
+								label='Expected Salary Range (K USD)'
+								id='priceRange'
+								name='priceRange'
+								value={field.state.value ?? [0, 0]}
+								min={0}
+								max={200}
+								step={5}
+								onChange={field.handleChange}
+								formatThumbTooltip={(value) => `$${value}K`}
+								formatSliderTooltip={(value) => `Range: $${value[0]}K - $${value[1]}K`}
+							/>
+						)}
+					</form.Field>
+				</div>
+
+				<div className='space-y-4'>
+					<h3 className='text-lg font-semibold'>Date Selection</h3>
+
+					<form.Field name='birthDate'>
+						{(field) => (
+							<div className='space-y-2'>
+								<label className='text-sm font-medium'>Date of Birth</label>
+								<SingleDatePicker
+									date={field.state.value}
+									onDateChange={field.handleChange}
+									placeholder='Select your date of birth'
+									fromYear={1950}
+									toYear={2010}
+								/>
+								<p className='text-muted-foreground text-sm'>
+									Your date of birth for account verification.
+								</p>
 							</div>
-							<FormControl>
-								<Switch checked={field.value} onCheckedChange={field.onChange} />
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-			</form>
-		</FormProvider>
+						)}
+					</form.Field>
+
+					<form.Field name='availability'>
+						{(field) => (
+							<div className='space-y-2'>
+								<label className='text-sm font-medium'>Availability Period</label>
+								<DateRangePicker
+									dateRange={field.state.value}
+									onDateRangeChange={field.handleChange}
+									placeholder='Select your availability period'
+									fromYear={2024}
+									toYear={2025}
+								/>
+								<p className='text-muted-foreground text-sm'>
+									Select the period when you&apos;ll be available for new opportunities.
+								</p>
+							</div>
+						)}
+					</form.Field>
+				</div>
+			</section>
+
+			<Button type='submit' className='w-full'>
+				Submit Application
+			</Button>
+		</form>
 	);
 };
 
-const SelectsExample = () => {
+const BasicInputsStory = () => {
+	interface IBasicInputsForm {
+		name: string;
+		email: string;
+		description: string;
+		notifications: boolean;
+	}
+
+	const basicInputsDefaultValues: IBasicInputsForm = {
+		name: '',
+		email: '',
+		description: '',
+		notifications: false
+	};
+
 	const form = useForm({
-		defaultValues: {
-			framework: undefined,
-			skills: []
-		}
+		defaultValues: basicInputsDefaultValues
 	});
 
 	return (
-		<FormProvider {...form}>
-			<form className='space-y-6 w-full max-w-md'>
-				<FormField
-					control={form.control}
-					name='framework'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Framework</FormLabel>
-							<FormControl>
-								<SelectProvider
-									options={frameworks}
-									values={field.value ? [field.value] : []}
-									onValuesChange={(values) => {
-										field.onChange(values);
-									}}
-									mode='single'
-								>
-									<SelectTrigger>
-										<SingleSelectValue placeholder='Select a framework' />
-									</SelectTrigger>
-									<SelectInterface>
-										<SelectListItems>
-											{({ item }) => <SelectListItem  value={item.value} />}
-										</SelectListItems>
-									</SelectInterface>
-								</SelectProvider>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+		<form className='space-y-6 w-full max-w-md'>
+			<form.Field name='name'>
+				{(field) => (
+					<div className='space-y-2'>
+						<label htmlFor={field.name} className='text-sm font-medium'>
+							Name
+						</label>
+						<Input
+							id={field.name}
+							value={field.state.value ?? ''}
+							onBlur={field.handleBlur}
+							onChange={(event) => field.handleChange(event.target.value)}
+							placeholder='Enter your name'
+						/>
+					</div>
+				)}
+			</form.Field>
 
-				<FormField
-					control={form.control}
-					name='skills'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Skills</FormLabel>
-							<FormControl>
-								<SelectProvider
-									options={skills}
-									values={field.value}
-									onValuesChange={(values) => {
-										field.onChange(values);
-									}}
-									mode='multiple'
-								>
-									<SelectTrigger>
-										<MultiSelectValue placeholder='Select skills' />
-									</SelectTrigger>
-									<SelectInterface>
-										<SelectListItems>
-											{({ item }) => <SelectListItem value={item.value} />}
-										</SelectListItems>
-									</SelectInterface>
-								</SelectProvider>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-			</form>
-		</FormProvider>
+			<form.Field name='email'>
+				{(field) => (
+					<div className='space-y-2'>
+						<label htmlFor={field.name} className='text-sm font-medium'>
+							Email
+						</label>
+						<Input
+							id={field.name}
+							type='email'
+							value={field.state.value ?? ''}
+							onBlur={field.handleBlur}
+							onChange={(event) => field.handleChange(event.target.value)}
+							placeholder='Enter your email'
+						/>
+					</div>
+				)}
+			</form.Field>
+
+			<form.Field name='description'>
+				{(field) => (
+					<div className='space-y-2'>
+						<label htmlFor={field.name} className='text-sm font-medium'>
+							Description
+						</label>
+						<Textarea
+							id={field.name}
+							value={field.state.value ?? ''}
+							onBlur={field.handleBlur}
+							onChange={(event) => field.handleChange(event.target.value)}
+							placeholder='Enter description'
+						/>
+					</div>
+				)}
+			</form.Field>
+
+			<form.Field name='notifications'>
+				{(field) => (
+					<div className='flex flex-row items-center justify-between rounded-lg border p-4'>
+						<div className='space-y-0.5'>
+							<p className='text-base font-medium'>Notifications</p>
+							<p className='text-muted-foreground text-sm'>Receive email notifications</p>
+						</div>
+						<Switch
+							id={field.name}
+							checked={Boolean(field.state.value)}
+							onCheckedChange={(checked) => field.handleChange(checked)}
+							onBlur={field.handleBlur}
+						/>
+					</div>
+				)}
+			</form.Field>
+		</form>
 	);
 };
 
-// Form validation schema
-const slidersForm = z.object({
-	// Sliders
+const SelectsStory = () => {
+	interface ISelectsForm {
+		framework: string;
+		skills: string[];
+	}
+
+	const selectsDefaultValues: ISelectsForm = {
+		framework: '',
+		skills: []
+	};
+
+	const form = useForm({
+		defaultValues: selectsDefaultValues
+	});
+
+	return (
+		<form className='space-y-6 w-full max-w-md'>
+			<form.Field name='framework'>
+				{(field) => {
+					const error = getErrorMessage(field);
+
+					return (
+						<div className='space-y-2'>
+							<label className='text-sm font-medium'>Framework</label>
+							<SelectProvider
+								options={frameworks}
+								values={field.state.value ? [field.state.value] : []}
+								onValuesChange={(nextValues) => field.handleChange(nextValues)}
+								mode='single'
+							>
+								<SelectTrigger>
+									<SingleSelectValue placeholder='Select a framework' />
+								</SelectTrigger>
+								<SelectInterface>
+									<SelectListItems>
+										{({ item }) => <SelectListItem value={item.value} />}
+									</SelectListItems>
+								</SelectInterface>
+							</SelectProvider>
+							{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+						</div>
+					);
+				}}
+			</form.Field>
+
+			<form.Field name='skills'>
+				{(field) => {
+					const error = getErrorMessage(field);
+
+					return (
+						<div className='space-y-2'>
+							<label className='text-sm font-medium'>Skills</label>
+							<SelectProvider
+								options={skills}
+								values={field.state.value ?? []}
+								onValuesChange={(nextValues) => field.handleChange(nextValues)}
+								mode='multiple'
+							>
+								<SelectTrigger>
+									<MultiSelectValue placeholder='Select skills' />
+								</SelectTrigger>
+								<SelectInterface>
+									<SelectListItems>
+										{({ item }) => <SelectListItem value={item.value} />}
+									</SelectListItems>
+								</SelectInterface>
+							</SelectProvider>
+							{error ? <p className='text-destructive text-sm'>{error}</p> : null}
+						</div>
+					);
+				}}
+			</form.Field>
+		</form>
+	);
+};
+
+const slidersSchema = z.object({
 	rating: z.tuple([z.number()]),
 	priceRange: z.tuple([z.number(), z.number()])
 });
 
-type SlidersFormData = z.infer<typeof slidersForm>;
+type ISlidersFormData = z.infer<typeof slidersSchema>;
 
-const SlidersExample = () => {
-	const form = useForm<SlidersFormData>({
-		defaultValues: {
-			rating: [50],
-			priceRange: [20, 80]
-		}
-	});
-
-	return (
-		<FormProvider {...form}>
-			<form className='space-y-6 w-full max-w-md'>
-				<FormField
-					control={form.control}
-					name='rating'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Single Slider</FormLabel>
-							<FormControl>
-								<SingleSlider
-									id='single'
-									name='single'
-									label=''
-									value={field.value}
-									min={0}
-									max={100}
-									step={1}
-									onChange={field.onChange}
-									formatThumbTooltip={(value) => `${value}%`}
-									formatSliderTooltip={(value) => `Value: ${value[0]}%`}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name='priceRange'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Range Slider</FormLabel>
-							<FormControl>
-								<RangeSlider
-									id='range'
-									name='range'
-									label=''
-									value={field.value}
-									min={0}
-									max={100}
-									step={5}
-									onChange={field.onChange}
-									formatThumbTooltip={(value) => `${value}`}
-									formatSliderTooltip={(value) => `Range: ${value[0]} - ${value[1]}`}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-			</form>
-		</FormProvider>
-	);
+const slidersDefaultValues: ISlidersFormData = {
+	rating: [50],
+	priceRange: [20, 80]
 };
 
-const DatePickersExample = () => {
+const SlidersStory = () => {
 	const form = useForm({
-		defaultValues: {
-			singleDate: undefined,
-			dateRange: undefined
+		defaultValues: slidersDefaultValues,
+		validators: {
+			onSubmit: slidersSchema
+		},
+		onSubmit: async ({ value }) => {
+			console.log('Slider values:', value);
 		}
 	});
 
 	return (
-		<FormProvider {...form}>
-			<form className='space-y-6 w-full max-w-md'>
-				<FormField
-					control={form.control}
-					name='singleDate'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Single Date Picker</FormLabel>
-							<FormControl>
-								<SingleDatePicker
-									date={field.value}
-									onDateChange={field.onChange}
-									placeholder='Pick a date'
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+		<form
+			className='space-y-6 w-full max-w-md'
+			onSubmit={(event) => {
+				event.preventDefault();
+				form.handleSubmit();
+			}}
+		>
+			<form.Field name='rating'>
+				{(field) => (
+					<div className='space-y-2'>
+						<SingleSlider
+							id='single'
+							name='single'
+							label='Single Slider'
+							value={field.state.value ?? [0]}
+							min={0}
+							max={100}
+							step={1}
+							onChange={field.handleChange}
+							formatThumbTooltip={(value) => `${value}%`}
+							formatSliderTooltip={(value) => `Value: ${value[0]}%`}
+						/>
+					</div>
+				)}
+			</form.Field>
 
-				<FormField
-					control={form.control}
-					name='dateRange'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Date Range Picker</FormLabel>
-							<FormControl>
-								<DateRangePicker
-									dateRange={field.value}
-									onDateRangeChange={field.onChange}
-									placeholder='Pick a date range'
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-			</form>
-		</FormProvider>
+			<form.Field name='priceRange'>
+				{(field) => (
+					<div className='space-y-2'>
+						<RangeSlider
+							id='range'
+							name='range'
+							label='Range Slider'
+							value={field.state.value ?? [0, 0]}
+							min={0}
+							max={100}
+							step={5}
+							onChange={field.handleChange}
+							formatThumbTooltip={(value) => `${value}`}
+							formatSliderTooltip={(value) => `Range: ${value[0]} - ${value[1]}`}
+						/>
+					</div>
+				)}
+			</form.Field>
+
+			<Button type='submit' variant='outline'>
+				Log slider values
+			</Button>
+		</form>
 	);
 };
 
-const IndividualCheckboxExample = () => {
+const DatePickersStory = () => {
+	interface IDatePickersForm {
+		singleDate?: Date;
+		dateRange?: DateRange;
+	}
+
+	const datePickersDefaultValues: IDatePickersForm = {
+		singleDate: undefined,
+		dateRange: undefined
+	};
+
 	const form = useForm({
-		defaultValues: {
-			terms: false,
-			newsletter: false,
-			marketing: false
-		}
+		defaultValues: datePickersDefaultValues
 	});
 
 	return (
-		<FormProvider {...form}>
-			<form className='space-y-6 w-full max-w-md'>
-				<FormField
-					control={form.control}
-					name='terms'
-					render={({ field }) => (
-						<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
-							<FormControl>
-								<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-							</FormControl>
-							<div className='space-y-1 leading-none'>
-								<FormLabel>I agree to the terms and conditions</FormLabel>
-								<FormDescription>
-									You must agree to our terms and conditions to continue.
-								</FormDescription>
-							</div>
-						</FormItem>
-					)}
-				/>
+		<form className='space-y-6 w-full max-w-md'>
+			<form.Field name='singleDate'>
+				{(field) => (
+					<div className='space-y-2'>
+						<label className='text-sm font-medium'>Single Date Picker</label>
+						<SingleDatePicker
+							date={field.state.value}
+							onDateChange={field.handleChange}
+							placeholder='Pick a date'
+						/>
+					</div>
+				)}
+			</form.Field>
 
-				<FormField
-					control={form.control}
-					name='newsletter'
-					render={({ field }) => (
-						<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
-							<FormControl>
-								<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-							</FormControl>
-							<div className='space-y-1 leading-none'>
-								<FormLabel>Subscribe to newsletter</FormLabel>
-								<FormDescription>
-									Receive updates about new features and announcements.
-								</FormDescription>
-							</div>
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name='marketing'
-					render={({ field }) => (
-						<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
-							<FormControl>
-								<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-							</FormControl>
-							<div className='space-y-1 leading-none'>
-								<FormLabel>Allow marketing communications</FormLabel>
-								<FormDescription>
-									Receive promotional emails and offers from our partners.
-								</FormDescription>
-							</div>
-						</FormItem>
-					)}
-				/>
-			</form>
-		</FormProvider>
+			<form.Field name='dateRange'>
+				{(field) => (
+					<div className='space-y-2'>
+						<label className='text-sm font-medium'>Date Range Picker</label>
+						<DateRangePicker
+							dateRange={field.state.value}
+							onDateRangeChange={field.handleChange}
+							placeholder='Pick a date range'
+						/>
+					</div>
+				)}
+			</form.Field>
+		</form>
 	);
 };
 
-const IndividualRadioExample = () => {
+const IndividualCheckboxStory = () => {
+	interface ICheckboxForm {
+		terms: boolean;
+		newsletter: boolean;
+		marketing: boolean;
+	}
+
+	const checkboxDefaultValues: ICheckboxForm = {
+		terms: false,
+		newsletter: false,
+		marketing: false
+	};
+
 	const form = useForm({
-		defaultValues: {
-			preference: undefined,
-			priority: undefined
-		}
+		defaultValues: checkboxDefaultValues
 	});
 
 	return (
-		<FormProvider {...form}>
-			<form className='space-y-6 w-full max-w-md'>
-				<FormField
-					control={form.control}
-					name='preference'
-					render={({ field }) => (
-						<FormItem className='space-y-3'>
-							<FormLabel>Communication Preference</FormLabel>
-							<FormControl>
-								<RadioGroupPrimitive.Root
-									value={field.value}
-									onValueChange={field.onChange}
-									className='space-y-2'
-								>
-									<div className='flex items-center space-x-2'>
-										<Radio value='email' id='email' />
-										<RadioLabel htmlFor='email'>Email</RadioLabel>
-									</div>
-									<div className='flex items-center space-x-2'>
-										<Radio value='phone' id='phone' />
-										<RadioLabel htmlFor='phone'>Phone</RadioLabel>
-									</div>
-									<div className='flex items-center space-x-2'>
-										<Radio value='sms' id='sms' />
-										<RadioLabel htmlFor='sms'>SMS</RadioLabel>
-									</div>
-								</RadioGroupPrimitive.Root>
-							</FormControl>
-							<FormDescription>Choose your preferred method of communication.</FormDescription>
-							<FormMessage />
-						</FormItem>
+		<form className='space-y-6 w-full max-w-md'>
+			{(['terms', 'newsletter', 'marketing'] as const).map((name) => (
+				<form.Field key={name} name={name}>
+					{(field) => (
+						<div className='flex flex-row items-start space-x-3 space-y-0 rounded-lg border p-4'>
+							<Checkbox
+								id={field.name}
+								checked={Boolean(field.state.value)}
+								onCheckedChange={(checked) => field.handleChange(Boolean(checked))}
+								onBlur={field.handleBlur}
+							/>
+							<div className='space-y-1 leading-none'>
+								<p className='font-medium'>
+									{name === 'terms'
+										? 'I agree to the terms and conditions'
+										: name === 'newsletter'
+											? 'Subscribe to newsletter'
+											: 'Allow marketing communications'}
+								</p>
+								<p className='text-muted-foreground text-sm'>
+									{name === 'terms'
+										? 'You must agree to our terms and conditions to continue.'
+										: name === 'newsletter'
+											? 'Receive updates about new features and announcements.'
+											: 'Receive promotional emails and offers from our partners.'}
+								</p>
+							</div>
+						</div>
 					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name='priority'
-					render={({ field }) => (
-						<FormItem className='space-y-3'>
-							<FormLabel>Support Priority</FormLabel>
-							<FormControl>
-								<RadioGroupPrimitive.Root
-									value={field.value}
-									onValueChange={field.onChange}
-									className='space-y-2'
-								>
-									<div className='flex items-center space-x-2'>
-										<Radio value='low' id='low' />
-										<RadioLabel htmlFor='low'>Low Priority</RadioLabel>
-									</div>
-									<div className='flex items-center space-x-2'>
-										<Radio value='medium' id='medium' />
-										<RadioLabel htmlFor='medium'>Medium Priority</RadioLabel>
-									</div>
-									<div className='flex items-center space-x-2'>
-										<Radio value='high' id='high' />
-										<RadioLabel htmlFor='high'>High Priority</RadioLabel>
-									</div>
-								</RadioGroupPrimitive.Root>
-							</FormControl>
-							<FormDescription>Select the priority level for your support request.</FormDescription>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-			</form>
-		</FormProvider>
+				</form.Field>
+			))}
+		</form>
 	);
 };
 
-// Stories
+const IndividualRadioStory = () => {
+	interface IRadioForm {
+		preference: string;
+		priority: string;
+	}
+
+	const radioDefaultValues: IRadioForm = {
+		preference: '',
+		priority: ''
+	};
+
+	const form = useForm({
+		defaultValues: radioDefaultValues
+	});
+
+	return (
+		<form className='space-y-6 w-full max-w-md'>
+			<form.Field name='preference'>
+				{(field) => (
+					<div className='space-y-3'>
+						<p className='font-medium'>Communication Preference</p>
+						<RadioGroupPrimitive.Root
+							value={field.state.value ?? ''}
+							onValueChange={(value) => field.handleChange(value)}
+							className='space-y-2'
+						>
+							{['email', 'phone', 'sms'].map((value) => (
+								<div key={value} className='flex items-center space-x-2'>
+									<Radio value={value} id={value} />
+									<RadioLabel htmlFor={value}>{value.toUpperCase()}</RadioLabel>
+								</div>
+							))}
+						</RadioGroupPrimitive.Root>
+					</div>
+				)}
+			</form.Field>
+
+			<form.Field name='priority'>
+				{(field) => (
+					<div className='space-y-3'>
+						<p className='font-medium'>Support Priority</p>
+						<RadioGroupPrimitive.Root
+							value={field.state.value ?? ''}
+							onValueChange={(value) => field.handleChange(value)}
+							className='space-y-2'
+						>
+							{(
+								[
+									['low', 'Low Priority'],
+									['medium', 'Medium Priority'],
+									['high', 'High Priority']
+								] as const
+							).map(([value, label]) => (
+								<div key={value} className='flex items-center space-x-2'>
+									<Radio value={value} id={value} />
+									<RadioLabel htmlFor={value}>{label}</RadioLabel>
+								</div>
+							))}
+						</RadioGroupPrimitive.Root>
+					</div>
+				)}
+			</form.Field>
+		</form>
+	);
+};
+
+const meta: Meta<typeof ComprehensiveFormStory> = {
+	title: 'Components/Form',
+	component: ComprehensiveFormStory,
+	parameters: {
+		layout: 'centered'
+	}
+};
+
+export default meta;
+
+type Story = StoryObj<typeof ComprehensiveFormStory>;
+
 export const ComprehensiveFormExample: Story = {
-	render: () => <ComprehensiveForm />
+	render: () => <ComprehensiveFormStory />
 };
 
 export const BasicInputs: Story = {
-	render: () => <BasicInputsExample />
+	render: () => <BasicInputsStory />
 };
 
 export const Selects: Story = {
-	render: () => <SelectsExample />
+	render: () => <SelectsStory />
 };
 
 export const Sliders: Story = {
-	render: () => <SlidersExample />
+	render: () => <SlidersStory />
 };
 
 export const DatePickers: Story = {
-	render: () => <DatePickersExample />
+	render: () => <DatePickersStory />
 };
 
 export const IndividualCheckboxes: Story = {
-	render: () => <IndividualCheckboxExample />
+	render: () => <IndividualCheckboxStory />
 };
 
 export const IndividualRadios: Story = {
-	render: () => <IndividualRadioExample />
+	render: () => <IndividualRadioStory />
 };
