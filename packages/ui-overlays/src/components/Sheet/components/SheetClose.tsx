@@ -1,0 +1,16 @@
+import * as React from 'react';
+import * as SheetPrimitive from '@radix-ui/react-dialog';
+import { cn } from '@repo/ui-core';
+
+type SheetCloseProps = React.ComponentProps<typeof SheetPrimitive.Close>;
+
+export const SheetClose = ({ ...props }: SheetCloseProps) => {
+	return (
+		<SheetPrimitive.Close
+			data-slot='sheet-close'
+			className={cn('cursor-pointer', props.className)}
+			tabIndex={0}
+			{...props}
+		/>
+	);
+};

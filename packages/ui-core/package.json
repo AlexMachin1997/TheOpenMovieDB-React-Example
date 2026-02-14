@@ -1,0 +1,63 @@
+{
+	"name": "@repo/ui-core",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./styles": "./dist/styles.css"
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"dev": "vite build --watch",
+		"build": "pnpm run check-types && vite build",
+		"build-lib": "vite build",
+		"check-types": "tsc --noEmit",
+		"lint": "eslint",
+		"prettier": "prettier --write ./src",
+		"test": "vitest",
+		"validate": "pnpm run lint && pnpm run check-types && pnpm run test"
+	},
+	"dependencies": {
+		"@radix-ui/react-accordion": "^1.2.12",
+		"@radix-ui/react-avatar": "^1.1.10",
+		"@radix-ui/react-label": "^2.1.7",
+		"@radix-ui/react-progress": "^1.1.7",
+		"@radix-ui/react-slot": "^1.2.3",
+		"@radix-ui/react-switch": "^1.2.6",
+		"@radix-ui/react-tabs": "^1.1.13",
+		"@radix-ui/react-tooltip": "^1.2.8",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"lucide-react": "^0.541.0",
+		"motion": "^12.15.0",
+		"tailwind-merge": "^3.3.1"
+	},
+	"devDependencies": {
+		"@repo/eslint-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@repo/vite-config": "workspace:*",
+		"@tailwindcss/vite": "^4.1.12",
+		"@vitejs/plugin-react-swc": "^4.0.1",
+		"@types/react": "^19.1.11",
+		"@types/react-dom": "^19.1.7",
+		"eslint": "^9.34.0",
+		"prettier": "^3.6.2",
+		"tailwindcss": "^4.1.12",
+		"tw-animate-css": "^1.3.7",
+		"vite": "^7.1.3",
+		"vite-plugin-dts": "^4.3.0",
+		"vitest": "^3.2.4"
+	},
+	"peerDependencies": {
+		"react": ">=18.0.0",
+		"react-dom": ">=18.0.0"
+	}
+}

@@ -1,0 +1,31 @@
+{
+	"name": "@repo/vite-config",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		"./react-library": {
+			"types": "./dist/react-library.d.ts",
+			"import": "./dist/react-library.js"
+		},
+		"./typescript-library": {
+			"types": "./dist/typescript-library.d.ts",
+			"import": "./dist/typescript-library.js"
+		}
+	},
+	"scripts": {
+		"lint": "echo 'No linting needed for config package'",
+		"prettier": "echo 'No formatting needed for config package'",
+		"check-types": "echo 'No type checking needed for config package'",
+		"validate": "echo 'No validation needed for config package'",
+		"test": "echo 'No tests for config package'",
+		"build": "tsc"
+	},
+	"devDependencies": {
+		"@tailwindcss/vite": "^4.1.12",
+		"@vitejs/plugin-react-swc": "^4.0.1",
+		"tsup": "^8.0.2",
+		"vite": "^7.1.3",
+		"vite-plugin-dts": "^4.3.0"
+	}
+}

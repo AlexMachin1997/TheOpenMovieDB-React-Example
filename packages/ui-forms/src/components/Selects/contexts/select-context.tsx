@@ -1,0 +1,15 @@
+import { createContext } from 'react';
+import { ISelectContext } from '~/components/Selects/types/select-context';
+
+/**
+ * React context for select functionality
+ *
+ * This context provides access to select state and functions throughout
+ * the component tree. It must be used within a SelectProvider.
+ *
+ * @example
+ * ```tsx
+ * const { selectedValues, toggleValue, mode } = useSelectContext();
+ * ```
+ */
+export const SelectContext = createContext<ISelectContext | null>(null);

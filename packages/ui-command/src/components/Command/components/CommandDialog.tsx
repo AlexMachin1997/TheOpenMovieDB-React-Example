@@ -1,0 +1,56 @@
+import * as React from 'react';
+import { cn } from '@repo/ui-core';
+import { Command } from '~/components/Command/components';
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle
+} from '@repo/ui-overlays';
+import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+
+/**
+ * Props for the CommandDialog component
+ */
+export interface ICommandDialog extends React.ComponentProps<typeof Dialog> {
+	className?: string;
+	open?: boolean;
+	onOpenChange?: (open: boolean) => void;
+	title?: string;
+	description?: string;
+	showCloseButton?: boolean;
+}
+
+/**
+ * Dialog component that wraps command palette functionality in a modal interface
+ *
+ * @component
+ */
+export const CommandDialog = ({
+	title = 'Command Palette',
+	description = 'Search for a command to run...',
+	children,
+	className,
+	showCloseButton = true,
+	...props
+}: ICommandDialog) => {
+	const { open, setOpen } = useCommandContext();
+
+	return (
+		<Dialog open={open} onOpenChange={setOpen} {...props}>
+			<DialogHeader className='sr-only'>
+				<DialogTitle>{title}</DialogTitle>
+				<DialogDescription>{description}</DialogDescription>
+			</DialogHeader>
+			<DialogContent
+				className={cn('overflow-hidden p-0', className)}
+				showCloseButton={showCloseButton}
+			>
+				<Command className='[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5'>
+					{children}
+				</Command>
+			</DialogContent>
+		</Dialog>
+	);
+};

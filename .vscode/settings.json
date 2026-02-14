@@ -21,7 +21,7 @@
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 
-	"workbench.sideBar.location": "right",
+	"workbench.sideBar.location": "left",
 
 	"javascript.updateImportsOnFileMove.enabled": "always",
 
