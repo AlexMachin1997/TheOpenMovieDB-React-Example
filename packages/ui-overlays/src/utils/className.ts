@@ -1,2 +1,1 @@
-import { cn } from '@repo/ui-core';
-export { cn };
+export { cn } from '@repo/tailwind-config';
