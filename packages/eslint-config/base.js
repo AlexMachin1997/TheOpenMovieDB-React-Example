@@ -37,7 +37,8 @@ export const config = [
 			...eslintConfigPrettier.rules,
 			'no-console': 'off',
 			'@typescript-eslint/no-empty-function': 'off',
-			'@typescript-eslint/no-var-requires': 'off'
+			'@typescript-eslint/no-var-requires': 'off',
+			'import/extensions': 'off'
 		}
 	},
 	{

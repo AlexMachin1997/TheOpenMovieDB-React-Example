@@ -45,7 +45,7 @@ export const config = [
 			'import/resolver': {
 				typescript: {
 					alwaysTryTypes: true,
-					project: ['packages/*/tsconfig.json', 'apps/*/tsconfig.json']
+					project: true
 				},
 				node: {
 					extensions: ['.ts', '.tsx', '.js', '.jsx']
