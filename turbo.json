@@ -1,5 +1,5 @@
 {
-	"$schema": "https://turborepo.com/schema.json",
+	"$schema": "https://v2-8-8.turborepo.dev/schema.json",
 	"ui": "tui",
 	"globalDependencies": [".env*"],
 	"globalEnv": ["NODE_ENV"],
@@ -21,6 +21,9 @@
 		"test": {
 			"dependsOn": ["^test"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"]
+		},
+		"validate": {
+			"dependsOn": ["lint", "check-types"]
 		}
 	}
 }

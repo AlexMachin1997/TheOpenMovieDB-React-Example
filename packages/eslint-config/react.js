@@ -43,6 +43,10 @@ export const config = [
 				'@typescript-eslint/parser': ['.ts', '.tsx']
 			},
 			'import/resolver': {
+				typescript: {
+					alwaysTryTypes: true,
+					project: ['packages/*/tsconfig.json', 'apps/*/tsconfig.json']
+				},
 				node: {
 					extensions: ['.ts', '.tsx', '.js', '.jsx']
 				}
