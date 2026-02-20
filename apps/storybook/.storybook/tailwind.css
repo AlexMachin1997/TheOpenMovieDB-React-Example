@@ -1,0 +1,6 @@
+@import '@repo/tailwind-config/globals.css';
+
+@source "../../../packages/ui-core/src";
+@source "../../../packages/ui-command/src";
+@source "../../../packages/ui-overlays/src";
+@source "../../../packages/ui-forms/src";
