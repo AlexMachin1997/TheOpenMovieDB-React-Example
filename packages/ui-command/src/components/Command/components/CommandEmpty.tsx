@@ -15,7 +15,6 @@ export const CommandEmpty = ({
 	noOptionsMessage = 'No options currently available',
 	noSearchResultsMessage = 'No options for {searchTerm}',
 	formatSearchTerm,
-	children,
 	...props
 }: ICommandEmpty) => {
 	const { searchValue, filteredOptions } = useCommandContext();

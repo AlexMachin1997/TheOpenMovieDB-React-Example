@@ -6,7 +6,7 @@ import { buttonVariants } from '~/components/Button/variants';
 
 type ButtonVariants = VariantProps<typeof buttonVariants>;
 
-interface ButtonProps extends React.ComponentProps<'button'> {
+interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
 	variant?: ButtonVariants['variant'];
 	size?: ButtonVariants['size'];
 	asChild?: boolean;

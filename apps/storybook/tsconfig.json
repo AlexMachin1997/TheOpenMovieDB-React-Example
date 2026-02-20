@@ -1,7 +1,12 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+	"extends": "@repo/typescript-config/react.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {},
+		"declaration": true,
+		"outDir": "dist",
+		"rootDir": "."
+	},
+	"include": ["vite.config.ts", "vitest.shims.d.ts", ".storybook", "**/*.ts", "**/*.tsx"],
+	"exclude": ["dist", "node_modules"]
 }

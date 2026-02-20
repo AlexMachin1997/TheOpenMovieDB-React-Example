@@ -3,8 +3,8 @@ import pluginReact from 'eslint-plugin-react';
 import pluginReactRefresh from 'eslint-plugin-react-refresh';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import importPlugin from 'eslint-plugin-import';
-import storybook from 'eslint-plugin-storybook';
 import { config as baseConfig } from './base.js';
+import pluginStorybook from 'eslint-plugin-storybook';
 
 /**
  * A comprehensive ESLint configuration for React applications.
@@ -32,7 +32,7 @@ export const config = [
 			react: pluginReact,
 			'jsx-a11y': jsxA11y,
 			import: importPlugin,
-			storybook: storybook
+			storybook: pluginStorybook
 		},
 		settings: {
 			react: {
@@ -53,7 +53,6 @@ export const config = [
 			}
 		},
 		rules: {
-			...pluginReactHooks.configs.recommended.rules,
 			'react-hooks/rules-of-hooks': 'error',
 			'react-hooks/exhaustive-deps': 'error',
 			'react-refresh/only-export-components': ['error', { allowConstantExport: true }],

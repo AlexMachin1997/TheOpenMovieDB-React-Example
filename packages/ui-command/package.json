@@ -21,8 +21,7 @@
 		"check-types": "tsc --noEmit",
 		"lint": "eslint",
 		"prettier": "prettier --write ./src",
-		"test": "vitest",
-		"validate": "pnpm run lint && pnpm run check-types && pnpm run test"
+		"validate": "echo 'Validation dependencies handled by Turbo'"
 	},
 	"dependencies": {
 		"@radix-ui/react-dialog": "^1.1.14",

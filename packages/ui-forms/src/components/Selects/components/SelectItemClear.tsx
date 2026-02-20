@@ -83,7 +83,7 @@ export const SelectItemClear = ({
 			aria-label={defaultAriaLabel}
 		>
 			<div onKeyDown={handleKeyDown} role='button' tabIndex={0}>
-				<XIcon className={'size-3'} />
+				<XIcon className={'size-3'} size={iconSize} />
 			</div>
 		</Button>
 	);
