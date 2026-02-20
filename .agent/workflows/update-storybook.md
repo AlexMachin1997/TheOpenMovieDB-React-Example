@@ -23,3 +23,6 @@ pnpm install
 
 > [!NOTE]
 > For **major** Storybook version jumps (e.g., v8 -> v9 or v9 -> v10), you might also need to run configuration codemods. In those rare scenarios, you would temporarily use `pushd apps\storybook & pnpm dlx storybook@latest upgrade & popd` for each specific package. For day-to-day updates, this workflow is all you need.
+
+> [!WARNING]
+> Because Storybook is migrating to native Vitest via `@storybook/experimental-addon-test`, the older `@storybook/test` package is frozen at `8.6.x`. When running this update, you may see an expected warning `unmet peer storybook@^8.6.15: found 10.x.x`. This is safe to ignore until you migrate to the new testing addon.
