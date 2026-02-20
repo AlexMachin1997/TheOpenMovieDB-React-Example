@@ -1,10 +1,7 @@
-import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-export interface ICommandList extends React.ComponentProps<typeof CommandPrimitive.List> {
-	className?: string;
-}
+import type { ICommandList } from '~/components/Command/Command.types';
 
 export const CommandList = ({ className, ...props }: ICommandList) => {
 	return (

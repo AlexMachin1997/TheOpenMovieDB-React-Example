@@ -1,8 +1,6 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Button } from '~/components/Button/Button';
-import { Input } from '~/components/Input/Input';
-import { Label } from '~/components/Label/Label';
+import { Button, Alert, AlertDescription, AlertTitle } from '@repo/ui-core';
 import {
 	Dialog,
 	DialogContent,
@@ -14,7 +12,6 @@ import {
 	DialogTrigger,
 	DialogClose
 } from '~/components/Dialog/Dialog';
-import { Alert, AlertDescription, AlertTitle } from '~/components/Alert/Alert';
 
 const meta: Meta<typeof Dialog> = {
 	title: 'Components/Dialog',
@@ -97,46 +94,6 @@ export const ConfirmationDialog: Story = {
 						<Button variant='outline'>Cancel</Button>
 					</DialogClose>
 					<Button variant='destructive'>Delete Account</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
-	)
-};
-
-export const FormDialog: Story = {
-	render: () => (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant='outline'>Edit Profile</Button>
-			</DialogTrigger>
-			<DialogContent className='sm:max-w-[425px]'>
-				<DialogHeader>
-					<DialogTitle>Edit Profile</DialogTitle>
-					<DialogDescription>
-						Make changes to your profile here. Click save when you&apos;re done.
-					</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					<div className='grid gap-4'>
-						<div className='grid gap-2'>
-							<Label htmlFor='name'>Name</Label>
-							<Input id='name' defaultValue='John Doe' />
-						</div>
-						<div className='grid gap-2'>
-							<Label htmlFor='email'>Email</Label>
-							<Input id='email' type='email' defaultValue='john@example.com' />
-						</div>
-						<div className='grid gap-2'>
-							<Label htmlFor='username'>Username</Label>
-							<Input id='username' defaultValue='@johndoe' />
-						</div>
-					</div>
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant='outline'>Cancel</Button>
-					</DialogClose>
-					<Button type='submit'>Save changes</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
@@ -486,67 +443,4 @@ const ControlledDialogComponent = () => {
 
 export const ControlledDialog: Story = {
 	render: () => <ControlledDialogComponent />
-};
-
-const ControlledDialogWithFormComponent = () => {
-	const [open, setOpen] = React.useState(false);
-	const [formData, setFormData] = React.useState({ name: '', email: '' });
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		console.log('Form submitted:', formData);
-		setOpen(false);
-		// Reset form
-		setFormData({ name: '', email: '' });
-	};
-
-	return (
-		<div className='space-y-4'>
-			<Button onClick={() => setOpen(true)}>Open Form Dialog</Button>
-
-			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogContent className='sm:max-w-[425px]'>
-					<DialogHeader>
-						<DialogTitle>Controlled Form Dialog</DialogTitle>
-						<DialogDescription>
-							This form dialog is controlled by React state and handles form submission.
-						</DialogDescription>
-					</DialogHeader>
-					<DialogContentArea>
-						<form onSubmit={handleSubmit} className='space-y-4'>
-							<div className='grid gap-2'>
-								<Label htmlFor='controlled-name'>Name</Label>
-								<Input
-									id='controlled-name'
-									value={formData.name}
-									onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-									required
-								/>
-							</div>
-							<div className='grid gap-2'>
-								<Label htmlFor='controlled-email'>Email</Label>
-								<Input
-									id='controlled-email'
-									type='email'
-									value={formData.email}
-									onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-									required
-								/>
-							</div>
-						</form>
-					</DialogContentArea>
-					<DialogFooter>
-						<Button variant='outline' onClick={() => setOpen(false)}>
-							Cancel
-						</Button>
-						<Button onClick={handleSubmit}>Submit</Button>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
-		</div>
-	);
-};
-
-export const ControlledDialogWithForm: Story = {
-	render: () => <ControlledDialogWithFormComponent />
 };

@@ -5,6 +5,8 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import importPlugin from 'eslint-plugin-import';
 import { config as baseConfig } from './base.js';
 import pluginStorybook from 'eslint-plugin-storybook';
+import { projectStructureParser, projectStructurePlugin } from 'eslint-plugin-project-structure';
+import { folderStructureConfig } from './folderStructure.mjs';
 
 /**
  * A comprehensive ESLint configuration for React applications.
@@ -94,6 +96,21 @@ export const config = [
 			'react/jsx-filename-extension': 'off',
 			'react/require-default-props': 'off',
 			'react/prop-types': 'off'
+		}
+	},
+
+	// Project structure enforcement — uses its own parser to check all file extensions
+	{
+		files: ['**'],
+		ignores: ['projectStructure.cache.json'],
+		languageOptions: {
+			parser: projectStructureParser
+		},
+		plugins: {
+			'project-structure': projectStructurePlugin
+		},
+		rules: {
+			'project-structure/folder-structure': ['error', folderStructureConfig]
 		}
 	}
 ];

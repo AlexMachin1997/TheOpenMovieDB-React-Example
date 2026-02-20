@@ -2,14 +2,11 @@ import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
 import { SearchIcon, XIcon } from 'lucide-react';
 import { useDebounce } from 'react-use';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
-import { ICommandSearchConfig } from '~/components/Command/types/core';
-import { Button } from '@repo/ui-core';
 
-interface ICommandSearch
-	extends React.ComponentProps<typeof CommandPrimitive.Input>,
-		ICommandSearchConfig {}
+import { Button } from '@repo/ui-core';
+import type { ICommandSearch } from '~/components/Command/Command.types';
 
 /**
  * Search input component for command palette functionality

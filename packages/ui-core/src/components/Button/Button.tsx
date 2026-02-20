@@ -1,18 +1,9 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { type VariantProps } from 'class-variance-authority';
-import { cn } from '~/utils/className';
+import { cn } from '@repo/tailwind-config';
 import { buttonVariants } from '~/components/Button/variants';
+import type { IButton } from '~/components/Button/Button.types';
 
-type ButtonVariants = VariantProps<typeof buttonVariants>;
-
-interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
-	variant?: ButtonVariants['variant'];
-	size?: ButtonVariants['size'];
-	asChild?: boolean;
-}
-
-const Button = ({ className, variant, size, asChild = false, ...props }: ButtonProps) => {
+const Button = ({ className, variant, size, asChild = false, ...props }: IButton) => {
 	const Comp = asChild ? Slot : 'button';
 
 	return (

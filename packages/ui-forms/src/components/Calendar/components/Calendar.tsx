@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { DayPicker, DayPickerProps, getDefaultClassNames } from 'react-day-picker';
 import { buttonVariants, Button } from '@repo/ui-core';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { CalendarDayButton } from '~/components/Calendar/components/CalendarDayButton';
 
 type ICalendar = {

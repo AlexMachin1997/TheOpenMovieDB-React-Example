@@ -1,11 +1,7 @@
-import type * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from 'lucide-react';
-import { cn } from '~/utils/className';
-
-type IAccordionTrigger = React.ComponentProps<typeof AccordionPrimitive.Trigger> & {
-	icon?: React.ReactNode;
-};
+import { cn } from '@repo/tailwind-config';
+import type { IAccordionTrigger } from '~/components/Accordion/Accordion.types';
 
 export const AccordionTrigger = ({ className, children, icon, ...props }: IAccordionTrigger) => {
 	return (

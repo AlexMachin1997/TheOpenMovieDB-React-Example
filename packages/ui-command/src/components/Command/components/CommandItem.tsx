@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
-export interface ICommandItem extends React.ComponentProps<typeof CommandPrimitive.Item> {
-	className?: string;
-	disabled?: boolean;
-	selected?: boolean;
-	onSelect?: (value: string) => void;
-}
+import type { ICommandItem } from '~/components/Command/Command.types';
 
 export const CommandItem = ({ className, onSelect, disabled = false, ...props }: ICommandItem) => {
 	const { closeOnSelect, close } = useCommandContext();

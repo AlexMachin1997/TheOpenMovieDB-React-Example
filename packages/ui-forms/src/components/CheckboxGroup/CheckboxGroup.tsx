@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '~/utils/className';
+import { cn } from '@repo/tailwind-config';
 import { type Option } from '@repo/core';
 import { Checkbox, CheckboxLabel } from '~/components/Checkbox/Checkbox';
 

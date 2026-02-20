@@ -1,11 +1,8 @@
 import * as SliderPrimitive from '@radix-ui/react-slider';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
+import type { ISliderRoot } from '~/components/Slider/Slider.types';
 
-type SliderRootProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
-	className?: string;
-};
-
-export const SliderRoot = ({ className, ...props }: SliderRootProps) => (
+export const SliderRoot = ({ className, ...props }: ISliderRoot) => (
 	<SliderPrimitive.Root
 		data-slot='slider-root'
 		className={cn('relative flex items-center w-full h-5', className)}

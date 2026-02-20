@@ -1,0 +1,37 @@
+import { Meta, ArgTypes, Stories } from '@storybook/blocks';
+import * as InputStories from './Input.stories';
+
+<Meta of={InputStories} />
+
+# Input
+
+A styled text input built on the native `<input>` element. Supports all standard HTML input types with focus-visible ring, file input styling, and `aria-invalid` error states.
+
+## Import
+
+```tsx
+import { Input } from '@repo/ui-forms';
+```
+
+## Guidelines
+
+- **Always pair with a `<Label>`** for accessibility — never use a placeholder as a label substitute.
+- Use `aria-invalid="true"` for error states; never rely on colour alone to communicate errors.
+- For multi-line input, use `<Textarea>` instead.
+- The `file` type gets custom button styling automatically.
+
+## Features
+
+- Focus-visible ring with `3px` offset
+- File input button styling (`file:` variants)
+- Dark mode support (`dark:bg-input/30`)
+- Error state via `aria-invalid` with destructive ring
+- Selection highlight with primary colour
+
+## Props
+
+<ArgTypes />
+
+## Examples
+
+<Stories />

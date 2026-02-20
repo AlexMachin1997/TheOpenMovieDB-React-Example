@@ -1,10 +1,9 @@
-import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-type SheetOverlayProps = React.ComponentProps<typeof SheetPrimitive.Overlay>;
+import type { ISheetOverlay } from '~/components/Sheet/Sheet.types';
 
-export const SheetOverlay = ({ className, ...props }: SheetOverlayProps) => {
+export const SheetOverlay = ({ className, ...props }: ISheetOverlay) => {
 	return (
 		<SheetPrimitive.Overlay
 			data-slot='sheet-overlay'

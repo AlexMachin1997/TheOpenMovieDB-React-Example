@@ -1,13 +1,8 @@
-import * as React from 'react';
-import { type VariantProps } from 'class-variance-authority';
-import { cn } from '~/utils/className';
-import { alertVariants } from '~/components/Alert/variants';
+import { cn } from '@repo/tailwind-config';
+import { alertVariants } from '~/components/Alert/Alert.variants';
+import { IAlert, IAlertDescription, IAlertTitle } from '~/components/Alert/Alert.types';
 
-const Alert = ({
-	className,
-	variant,
-	...props
-}: React.ComponentProps<'div'> & VariantProps<typeof alertVariants>) => {
+const Alert = ({ className, variant, ...props }: IAlert) => {
 	return (
 		<div
 			data-slot='alert'
@@ -18,7 +13,7 @@ const Alert = ({
 	);
 };
 
-const AlertTitle = ({ className, ...props }: React.ComponentProps<'div'>) => {
+const AlertTitle = ({ className, ...props }: IAlertTitle) => {
 	return (
 		<div
 			data-slot='alert-title'
@@ -28,7 +23,7 @@ const AlertTitle = ({ className, ...props }: React.ComponentProps<'div'>) => {
 	);
 };
 
-const AlertDescription = ({ className, ...props }: React.ComponentProps<'div'>) => {
+const AlertDescription = ({ className, ...props }: IAlertDescription) => {
 	return (
 		<div
 			data-slot='alert-description'

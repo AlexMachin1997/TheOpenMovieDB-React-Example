@@ -1,7 +1,7 @@
 import { CalendarIcon } from 'lucide-react';
 import React from 'react';
 import type { DateRange } from 'react-day-picker';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { formatDateRange } from '@repo/core';
 import { Button } from '@repo/ui-core';
 import { Calendar } from '~/components/Calendar/components/Calendar';

@@ -1,8 +1,8 @@
-import * as React from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
-import { cn } from '~/utils/className';
+import { cn } from '@repo/tailwind-config';
+import type { ILabel } from '~/components/Label/Label.types';
 
-const Label = ({ className, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) => {
+const Label = ({ className, ...props }: ILabel) => {
 	return (
 		<LabelPrimitive.Root
 			data-slot='label'

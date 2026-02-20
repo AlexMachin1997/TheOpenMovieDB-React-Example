@@ -1,12 +1,8 @@
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { CheckIcon } from 'lucide-react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { CheckedState } from '@radix-ui/react-checkbox';
-
-type ICheckbox = Omit<React.ComponentProps<typeof CheckboxPrimitive.Root>, 'onCheckedChange'> & {
-	onCheckedChange?: (checked: boolean) => void;
-	iconClassName?: string;
-};
+import type { ICheckbox } from '~/components/Checkbox/Checkbox.types';
 
 export const Checkbox = ({
 	className,

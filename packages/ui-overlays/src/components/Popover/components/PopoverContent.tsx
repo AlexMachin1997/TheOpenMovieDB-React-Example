@@ -1,10 +1,7 @@
-import * as React from 'react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-interface IPopoverContent extends React.ComponentProps<typeof PopoverPrimitive.Content> {
-	className?: string;
-}
+import type { IPopoverContent } from '~/components/Popover/Popover.types';
 
 export const PopoverContent = ({
 	className,

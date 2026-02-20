@@ -1,11 +1,8 @@
 import * as SliderPrimitive from '@radix-ui/react-slider';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
+import type { ISliderRange } from '~/components/Slider/Slider.types';
 
-type SliderRangeProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Range> & {
-	className?: string;
-};
-
-export const SliderRange = ({ className, ...props }: SliderRangeProps) => (
+export const SliderRange = ({ className, ...props }: ISliderRange) => (
 	<SliderPrimitive.Range
 		data-slot='slider-range'
 		className={cn('absolute bg-blue-500 rounded-full h-full', className)}

@@ -1,20 +1,12 @@
-import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { SheetOverlay } from '~/components/Sheet/components/SheetOverlay';
 import { SheetPortal } from '~/components/Sheet/components/SheetPortal';
 
-type SheetContentProps = React.ComponentProps<typeof SheetPrimitive.Content> & {
-	side?: 'top' | 'right' | 'bottom' | 'left';
-};
+import type { ISheetContent } from '~/components/Sheet/Sheet.types';
 
-export const SheetContent = ({
-	className,
-	children,
-	side = 'right',
-	...props
-}: SheetContentProps) => {
+export const SheetContent = ({ className, children, side = 'right', ...props }: ISheetContent) => {
 	return (
 		<SheetPortal>
 			<SheetOverlay />

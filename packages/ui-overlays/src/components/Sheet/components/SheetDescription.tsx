@@ -1,10 +1,9 @@
-import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-type SheetDescriptionProps = React.ComponentProps<typeof SheetPrimitive.Description>;
+import type { ISheetDescription } from '~/components/Sheet/Sheet.types';
 
-export const SheetDescription = ({ className, ...props }: SheetDescriptionProps) => {
+export const SheetDescription = ({ className, ...props }: ISheetDescription) => {
 	return (
 		<SheetPrimitive.Description
 			data-slot='sheet-description'

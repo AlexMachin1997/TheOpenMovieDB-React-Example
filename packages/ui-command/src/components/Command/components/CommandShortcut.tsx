@@ -1,9 +1,6 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-export interface ICommandShortcut extends React.ComponentProps<'span'> {
-	className?: string;
-}
+import type { ICommandShortcut } from '~/components/Command/Command.types';
 
 export const CommandShortcut = ({ className, ...props }: ICommandShortcut) => {
 	return (

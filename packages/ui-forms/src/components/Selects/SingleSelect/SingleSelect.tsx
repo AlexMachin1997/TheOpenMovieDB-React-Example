@@ -1,4 +1,4 @@
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 import { useCommandContext } from '@repo/ui-command';
 import { SelectItemClear } from '~/components/Selects/components/SelectItemClear';

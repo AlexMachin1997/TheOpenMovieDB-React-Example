@@ -1,11 +1,8 @@
 import * as SliderPrimitive from '@radix-ui/react-slider';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
+import type { ISliderThumb } from '~/components/Slider/Slider.types';
 
-type SliderThumbProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Thumb> & {
-	className?: string;
-};
-
-export const SliderThumb = ({ className, ...props }: SliderThumbProps) => (
+export const SliderThumb = ({ className, ...props }: ISliderThumb) => (
 	<SliderPrimitive.Thumb
 		data-slot='slider-thumb'
 		className={cn(

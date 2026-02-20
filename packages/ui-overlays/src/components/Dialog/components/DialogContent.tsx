@@ -1,14 +1,9 @@
-import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { DialogOverlay } from '~/components/Dialog/components/DialogOverlay';
 import { DialogPortal } from '~/components/Dialog/components/DialogPortal';
 import { XIcon } from 'lucide-react';
-
-interface IDialogContent extends React.ComponentProps<typeof DialogPrimitive.Content> {
-	showCloseButton?: boolean;
-	icon?: React.ReactNode;
-}
+import type { IDialogContent } from '~/components/Dialog/Dialog.types';
 
 export const DialogContent = ({
 	className,

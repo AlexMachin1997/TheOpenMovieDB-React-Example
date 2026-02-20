@@ -3,7 +3,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { CommandList } from '~/components/Command/components/CommandList';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { ICommandVirtualizedList } from '~/components/Command/types';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
 export const CommandVirtualizedList = React.memo(
 	({

@@ -1,6 +1,6 @@
 import { Button } from '@repo/ui-core';
 import { PopoverTrigger } from '@repo/ui-overlays';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { useCommandContext } from '@repo/ui-command';
 import { ChevronsUpDownIcon } from 'lucide-react';
 

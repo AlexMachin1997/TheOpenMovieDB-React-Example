@@ -1,9 +1,5 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
-
-interface IDialogFooter extends React.ComponentProps<'div'> {
-	className?: string;
-}
+import { cn } from '@repo/tailwind-config';
+import type { IDialogFooter } from '~/components/Dialog/Dialog.types';
 
 export const DialogFooter = ({ className, ...props }: IDialogFooter) => {
 	return (

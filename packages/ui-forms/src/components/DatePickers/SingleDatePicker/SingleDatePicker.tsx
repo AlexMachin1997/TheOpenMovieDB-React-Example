@@ -1,6 +1,6 @@
 import { CalendarIcon } from 'lucide-react';
 import React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { formatDate } from '@repo/core';
 import { Button } from '@repo/ui-core';
 import { Calendar } from '~/components/Calendar/components/Calendar';

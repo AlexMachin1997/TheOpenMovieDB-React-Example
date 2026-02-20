@@ -1,9 +1,9 @@
-import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { motion, AnimatePresence } from 'motion/react';
-import { cn } from '~/utils/className';
+import { cn } from '@repo/tailwind-config';
+import type { ITabs, ITabsList, ITabsTrigger, ITabsContent } from '~/components/Tabs/Tabs.types';
 
-const Tabs = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) => {
+const Tabs = ({ className, ...props }: ITabs) => {
 	return (
 		<TabsPrimitive.Root
 			data-slot='tabs'
@@ -13,7 +13,7 @@ const Tabs = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive
 	);
 };
 
-const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) => {
+const TabsList = ({ className, ...props }: ITabsList) => {
 	return (
 		<TabsPrimitive.List
 			data-slot='tabs-list'
@@ -26,10 +26,7 @@ const TabsList = ({ className, ...props }: React.ComponentProps<typeof TabsPrimi
 	);
 };
 
-const TabsTrigger = ({
-	className,
-	...props
-}: React.ComponentProps<typeof TabsPrimitive.Trigger>) => {
+const TabsTrigger = ({ className, ...props }: ITabsTrigger) => {
 	return (
 		<TabsPrimitive.Trigger
 			data-slot='tabs-trigger'
@@ -42,11 +39,7 @@ const TabsTrigger = ({
 	);
 };
 
-const TabsContent = ({
-	className,
-	children,
-	...props
-}: React.ComponentProps<typeof TabsPrimitive.Content>) => {
+const TabsContent = ({ className, children, ...props }: ITabsContent) => {
 	return (
 		<TabsPrimitive.Content data-slot='tabs-content' {...props}>
 			<div className={cn('flex-1 outline-none relative', className)}>

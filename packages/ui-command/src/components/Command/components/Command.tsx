@@ -1,17 +1,7 @@
-import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-/**
- * Props for the Command component
- *
- * @interface ICommand
- * @extends React.ComponentProps<typeof CommandPrimitive>
- */
-export interface ICommand extends React.ComponentProps<typeof CommandPrimitive> {
-	/** Additional CSS classes to apply to the command container */
-	className?: string;
-}
+import type { ICommand } from '~/components/Command/Command.types';
 
 /**
  * Root command component that provides the foundation for command palette functionality

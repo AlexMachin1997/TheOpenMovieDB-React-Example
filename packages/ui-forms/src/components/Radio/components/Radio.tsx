@@ -1,10 +1,7 @@
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { CircleIcon } from 'lucide-react';
-import { cn } from '@repo/ui-core';
-
-type IRadio = React.ComponentProps<typeof RadioGroupPrimitive.Item> & {
-	iconClassName?: string;
-};
+import { cn } from '@repo/tailwind-config';
+import type { IRadio } from '~/components/Radio/Radio.types';
 
 export const Radio = ({ className, disabled = false, iconClassName, ...props }: IRadio) => {
 	return (

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
 type TextareaProps = React.ComponentProps<'textarea'>;
 

@@ -1,10 +1,6 @@
-import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@repo/ui-core';
-
-interface IDialogOverlay extends React.ComponentProps<typeof DialogPrimitive.Overlay> {
-	className?: string;
-}
+import { cn } from '@repo/tailwind-config';
+import type { IDialogOverlay } from '~/components/Dialog/Dialog.types';
 
 export const DialogOverlay = ({ className, ...props }: IDialogOverlay) => {
 	return (

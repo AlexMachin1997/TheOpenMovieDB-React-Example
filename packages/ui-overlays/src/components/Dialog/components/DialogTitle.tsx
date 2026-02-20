@@ -1,10 +1,6 @@
-import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@repo/ui-core';
-
-interface IDialogTitle extends React.ComponentProps<typeof DialogPrimitive.Title> {
-	className?: string;
-}
+import { cn } from '@repo/tailwind-config';
+import type { IDialogTitle } from '~/components/Dialog/Dialog.types';
 
 export const DialogTitle = ({ className, ...props }: IDialogTitle) => {
 	return (

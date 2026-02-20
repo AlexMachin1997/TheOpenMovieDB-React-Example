@@ -1,34 +1,27 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+import { mergeConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import tailwindcss from '@tailwindcss/vite';
 
-import { dirname } from 'path';
-
-import { fileURLToPath } from 'url';
-
-/**
- * This function is used to resolve the absolute path of a package.
- * It is needed in projects that use Yarn PnP or are set up within a monorepo.
- */
-function getAbsolutePath(value: string) {
-	return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
-}
 const config: StorybookConfig = {
 	stories: [
 		'../../../packages/**/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
 		'../../../packages/**/src/**/*.mdx'
 	],
-	addons: [
-		getAbsolutePath('@chromatic-com/storybook'),
-		getAbsolutePath('@storybook/addon-vitest'),
-		getAbsolutePath('@storybook/addon-a11y'),
-		getAbsolutePath('@storybook/addon-docs'),
-		getAbsolutePath('@storybook/addon-interactions')
-	],
-	framework: getAbsolutePath('@storybook/react-vite'),
-	viteFinal: async (config) => {
-		const { mergeConfig } = await import('vite');
-		const tsconfigPaths = (await import('vite-tsconfig-paths')).default;
-		const tailwindcss = (await import('@tailwindcss/vite')).default;
 
+	addons: [
+		'@chromatic-com/storybook',
+		'@storybook/addon-vitest',
+		'@storybook/addon-a11y',
+		'@storybook/addon-docs'
+	],
+
+	framework: {
+		name: '@storybook/react-vite',
+		options: {}
+	},
+
+	viteFinal: async (config) => {
 		return mergeConfig(config, {
 			plugins: [
 				tsconfigPaths({
@@ -44,4 +37,5 @@ const config: StorybookConfig = {
 		});
 	}
 };
+
 export default config;

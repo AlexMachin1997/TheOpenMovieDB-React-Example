@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-type SheetHeaderProps = React.ComponentProps<'div'>;
+import type { ISheetHeader } from '~/components/Sheet/Sheet.types';
 
-export const SheetHeader = ({ className, ...props }: SheetHeaderProps) => {
+export const SheetHeader = ({ className, ...props }: ISheetHeader) => {
 	return (
 		<div
 			data-slot='sheet-header'

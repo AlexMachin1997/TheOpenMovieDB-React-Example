@@ -1,9 +1,6 @@
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { Label } from '@repo/ui-core';
-
-interface ICheckboxLabel extends React.ComponentProps<typeof Label> {
-	disabled?: boolean;
-}
+import type { ICheckboxLabel } from '~/components/Checkbox/Checkbox.types';
 
 export const CheckboxLabel = ({ htmlFor, disabled, children, className }: ICheckboxLabel) => {
 	return (

@@ -1,12 +1,8 @@
-import * as React from 'react';
 import * as SwitchPrimitive from '@radix-ui/react-switch';
-import { cn } from '~/utils/className';
+import { cn } from '@repo/tailwind-config';
+import type { ISwitch } from '~/components/Switch/Switch.types';
 
-interface ISwitchProps extends React.ComponentProps<typeof SwitchPrimitive.Root> {
-	className?: string;
-}
-
-const Switch = ({ className, ...props }: ISwitchProps) => {
+const Switch = ({ className, ...props }: ISwitch) => {
 	return (
 		<SwitchPrimitive.Root
 			data-slot='switch'

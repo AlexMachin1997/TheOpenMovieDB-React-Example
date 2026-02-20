@@ -1,11 +1,13 @@
-import * as React from 'react';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import { cn } from '~/utils/className';
+import { cn } from '@repo/tailwind-config';
+import type {
+	ITooltip,
+	ITooltipProvider,
+	ITooltipTrigger,
+	ITooltipContent
+} from '~/components/Tooltip/Tooltip.types';
 
-const TooltipProvider = ({
-	delayDuration = 0,
-	...props
-}: React.ComponentProps<typeof TooltipPrimitive.Provider>) => {
+const TooltipProvider = ({ delayDuration = 0, ...props }: ITooltipProvider) => {
 	return (
 		<TooltipPrimitive.Provider
 			data-slot='tooltip-provider'
@@ -16,7 +18,7 @@ const TooltipProvider = ({
 	);
 };
 
-const Tooltip = ({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root>) => {
+const Tooltip = ({ ...props }: ITooltip) => {
 	return (
 		<TooltipProvider>
 			<TooltipPrimitive.Root data-slot='tooltip' {...props} />
@@ -24,11 +26,11 @@ const Tooltip = ({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root
 	);
 };
 
-const TooltipTrigger = ({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) => {
+const TooltipTrigger = ({ ...props }: ITooltipTrigger) => {
 	return <TooltipPrimitive.Trigger data-slot='tooltip-trigger' {...props} />;
 };
 
-type TooltipContentProps = React.ComponentProps<typeof TooltipPrimitive.Content> & {
+type TooltipContentProps = ITooltipContent & {
 	arrowClassName?: string;
 };
 

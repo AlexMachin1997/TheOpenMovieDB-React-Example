@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-type SheetInnerContentProps = React.HTMLAttributes<HTMLDivElement>;
+import type { ISheetInnerContent } from '~/components/Sheet/Sheet.types';
 
-export const SheetInnerContent = ({ className, children, ...props }: SheetInnerContentProps) => {
+export const SheetInnerContent = ({ className, children, ...props }: ISheetInnerContent) => {
 	return (
 		<div className={cn('flex-1 overflow-y-auto p-6', className)} {...props}>
 			{children}

@@ -1,12 +1,9 @@
 import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
-import { SheetRef } from '~/components/Sheet/types/sheet-ref';
 
-type SheetProps = React.ComponentProps<typeof SheetPrimitive.Root> & {
-	ref?: React.RefObject<SheetRef | undefined>;
-};
+import type { ISheet } from '~/components/Sheet/Sheet.types';
 
-export const Sheet = ({ ref, ...props }: SheetProps) => {
+export const Sheet = ({ ref, ...props }: ISheet) => {
 	const [isOpen, setIsOpen] = React.useState(false);
 
 	React.useImperativeHandle(

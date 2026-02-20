@@ -1,10 +1,6 @@
-import type * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { cn } from '~/utils/className';
-
-interface IAccordionItem extends React.ComponentProps<typeof AccordionPrimitive.Item> {
-	className?: string;
-}
+import { cn } from '@repo/tailwind-config';
+import type { IAccordionItem } from '~/components/Accordion/Accordion.types';
 
 export const AccordionItem = ({ className, ...props }: IAccordionItem) => {
 	return (

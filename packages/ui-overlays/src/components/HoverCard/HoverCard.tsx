@@ -1,15 +1,17 @@
-import * as React from 'react';
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
+import { cn } from '@repo/tailwind-config';
 
-import { cn } from '@repo/ui-core';
+import type {
+	IHoverCard,
+	IHoverCardTrigger,
+	IHoverCardContent
+} from '~/components/HoverCard/HoverCard.types';
 
-const HoverCard = ({ ...props }: React.ComponentProps<typeof HoverCardPrimitive.Root>) => {
+const HoverCard = ({ ...props }: IHoverCard) => {
 	return <HoverCardPrimitive.Root data-slot='hover-card' {...props} />;
 };
 
-const HoverCardTrigger = ({
-	...props
-}: React.ComponentProps<typeof HoverCardPrimitive.Trigger>) => {
+const HoverCardTrigger = ({ ...props }: IHoverCardTrigger) => {
 	return <HoverCardPrimitive.Trigger data-slot='hover-card-trigger' {...props} />;
 };
 
@@ -18,7 +20,7 @@ const HoverCardContent = ({
 	align = 'center',
 	sideOffset = 4,
 	...props
-}: React.ComponentProps<typeof HoverCardPrimitive.Content>) => {
+}: IHoverCardContent) => {
 	return (
 		<HoverCardPrimitive.Portal data-slot='hover-card-portal'>
 			<HoverCardPrimitive.Content

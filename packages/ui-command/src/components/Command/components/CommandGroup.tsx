@@ -1,11 +1,7 @@
-import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-export interface ICommandGroup extends React.ComponentProps<typeof CommandPrimitive.Group> {
-	className?: string;
-	heading?: string;
-}
+import type { ICommandGroup } from '~/components/Command/Command.types';
 
 export const CommandGroup = ({ className, ...props }: ICommandGroup) => {
 	return (

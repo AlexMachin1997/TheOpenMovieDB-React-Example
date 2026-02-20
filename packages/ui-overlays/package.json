@@ -39,7 +39,6 @@
 		"@repo/tailwind-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@repo/ui-core": "workspace:*",
-		"@repo/ui-forms": "workspace:*",
 		"@repo/vite-config": "workspace:*",
 		"@tailwindcss/vite": "^4.1.12",
 		"@vitejs/plugin-react-swc": "^4.0.1",

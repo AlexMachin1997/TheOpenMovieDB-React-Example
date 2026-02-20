@@ -1,10 +1,7 @@
-import * as React from 'react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-interface IPopoverAnchor extends React.ComponentProps<typeof PopoverPrimitive.Anchor> {
-	className?: string;
-}
+import type { IPopoverAnchor } from '~/components/Popover/Popover.types';
 
 export const PopoverAnchor = ({ className, ...props }: IPopoverAnchor) => {
 	return <PopoverPrimitive.Anchor className={cn(className)} {...props} />;

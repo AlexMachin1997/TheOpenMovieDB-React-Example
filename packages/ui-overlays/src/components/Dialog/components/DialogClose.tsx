@@ -1,10 +1,6 @@
-import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@repo/ui-core';
-
-interface IDialogClose extends React.ComponentProps<typeof DialogPrimitive.Close> {
-	className?: string;
-}
+import { cn } from '@repo/tailwind-config';
+import type { IDialogClose } from '~/components/Dialog/Dialog.types';
 
 export const DialogClose = ({ className, ...props }: IDialogClose) => {
 	return (

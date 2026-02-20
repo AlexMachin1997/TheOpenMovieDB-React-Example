@@ -93,6 +93,9 @@ temp/
 # Vite
 .vite
 
+# ESLint Project Structure
+projectStructure.cache.json
+
 # Testing
 coverage/
 *.lcov

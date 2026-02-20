@@ -1,9 +1,6 @@
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { Label } from '@repo/ui-core';
-
-interface IRadioLabel extends React.ComponentProps<typeof Label> {
-	disabled?: boolean;
-}
+import type { IRadioLabel } from '~/components/Radio/Radio.types';
 
 export const RadioLabel = ({ htmlFor, disabled, children, className }: IRadioLabel) => {
 	return (

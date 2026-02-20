@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { XIcon } from 'lucide-react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { Button } from '@repo/ui-core';
 
 export type ISelectItemClear = {

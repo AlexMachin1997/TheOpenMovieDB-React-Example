@@ -1,12 +1,8 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { type VariantProps } from 'class-variance-authority';
 
-import { cn } from '~/utils/className';
-import { badgeVariants } from '~/components/Badge/variants';
-
-type IBadge = React.ComponentProps<'span'> &
-	VariantProps<typeof badgeVariants> & { asChild?: boolean };
+import { cn } from '@repo/tailwind-config';
+import { badgeVariants } from '~/components/Badge/Badge.variants';
+import type { IBadge } from '~/components/Badge/Badge.types';
 
 const Badge = ({ className, variant, asChild = false, ...props }: IBadge) => {
 	const Comp = asChild ? Slot : 'span';

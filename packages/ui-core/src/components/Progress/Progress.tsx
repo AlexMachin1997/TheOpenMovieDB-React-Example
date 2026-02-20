@@ -1,13 +1,6 @@
-import * as React from 'react';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
-import { cn } from '~/utils/className';
-
-interface IProgressProps extends React.ComponentProps<typeof ProgressPrimitive.Root> {
-	indeterminate?: boolean;
-	value?: number;
-	indicatorClassName?: string;
-	showValue?: boolean;
-}
+import { cn } from '@repo/tailwind-config';
+import type { IProgress } from '~/components/Progress/Progress.types';
 
 const Progress = ({
 	className = 'bg-primary/20',
@@ -16,7 +9,7 @@ const Progress = ({
 	indicatorClassName = 'bg-primary',
 	showValue = false,
 	...props
-}: IProgressProps) => {
+}: IProgress) => {
 	return (
 		<div className='relative'>
 			<ProgressPrimitive.Root

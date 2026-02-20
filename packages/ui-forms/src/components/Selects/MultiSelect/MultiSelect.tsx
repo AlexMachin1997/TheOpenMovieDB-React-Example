@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { Badge } from '@repo/ui-core';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 import { useCommandContext } from '@repo/ui-command';

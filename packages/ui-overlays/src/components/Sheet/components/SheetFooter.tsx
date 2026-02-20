@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-type SheetFooterProps = React.ComponentProps<'div'>;
+import type { ISheetFooter } from '~/components/Sheet/Sheet.types';
 
-export const SheetFooter = ({ className, ...props }: SheetFooterProps) => {
+export const SheetFooter = ({ className, ...props }: ISheetFooter) => {
 	return (
 		<div
 			data-slot='sheet-footer'

@@ -1,8 +1,8 @@
-import * as React from 'react';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import { cn } from '~/utils/className';
+import { cn } from '@repo/tailwind-config';
+import { IAvatar, IAvatarImage, IAvatarFallback } from '~/components/Avatar/Avatar.types';
 
-const Avatar = ({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Root>) => {
+const Avatar = ({ className, ...props }: IAvatar) => {
 	return (
 		<AvatarPrimitive.Root
 			data-slot='avatar'
@@ -12,10 +12,7 @@ const Avatar = ({ className, ...props }: React.ComponentProps<typeof AvatarPrimi
 	);
 };
 
-const AvatarImage = ({
-	className,
-	...props
-}: React.ComponentProps<typeof AvatarPrimitive.Image>) => {
+const AvatarImage = ({ className, ...props }: IAvatarImage) => {
 	return (
 		<AvatarPrimitive.Image
 			data-slot='avatar-image'
@@ -25,10 +22,7 @@ const AvatarImage = ({
 	);
 };
 
-const AvatarFallback = ({
-	className,
-	...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) => {
+const AvatarFallback = ({ className, ...props }: IAvatarFallback) => {
 	return (
 		<AvatarPrimitive.Fallback
 			data-slot='avatar-fallback'

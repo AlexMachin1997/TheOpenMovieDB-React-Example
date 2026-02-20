@@ -1,9 +1,13 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
+import type { IInput } from '~/components/Input/Input.types';
 
-type InputProps = React.ComponentProps<'input'>;
-
-const Input = ({ className, type, ...props }: InputProps) => {
+/**
+ * A styled text input component built on the native `<input>` element.
+ *
+ * Supports all standard HTML input types and includes focus-visible ring,
+ * file input styling, and aria-invalid error states out of the box.
+ */
+const Input = ({ className, type, ...props }: IInput) => {
 	return (
 		<input
 			type={type}

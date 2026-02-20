@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { Command } from '~/components/Command/components';
 import {
 	Dialog,
@@ -10,17 +9,7 @@ import {
 } from '@repo/ui-overlays';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
-/**
- * Props for the CommandDialog component
- */
-export interface ICommandDialog extends React.ComponentProps<typeof Dialog> {
-	className?: string;
-	open?: boolean;
-	onOpenChange?: (open: boolean) => void;
-	title?: string;
-	description?: string;
-	showCloseButton?: boolean;
-}
+import type { ICommandDialog } from '~/components/Command/Command.types';
 
 /**
  * Dialog component that wraps command palette functionality in a modal interface

@@ -1,6 +1,7 @@
-import { cn } from '~/utils/className';
+import { cn } from '@repo/tailwind-config';
+import type { ISkeleton } from '~/components/Skeleton/Skeleton.types';
 
-const Skeleton = ({ className, ...props }: React.ComponentProps<'div'>) => {
+const Skeleton = ({ className, ...props }: ISkeleton) => {
 	return (
 		<div
 			data-slot='skeleton'

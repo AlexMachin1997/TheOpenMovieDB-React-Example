@@ -1,9 +1,5 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
-
-interface IDialogHeader extends React.ComponentProps<'div'> {
-	className?: string;
-}
+import { cn } from '@repo/tailwind-config';
+import type { IDialogHeader } from '~/components/Dialog/Dialog.types';
 
 export const DialogHeader = ({ className, ...props }: IDialogHeader) => {
 	return (

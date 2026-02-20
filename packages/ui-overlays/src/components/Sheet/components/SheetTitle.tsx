@@ -1,10 +1,9 @@
-import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 
-type SheetTitleProps = React.ComponentProps<typeof SheetPrimitive.Title>;
+import type { ISheetTitle } from '~/components/Sheet/Sheet.types';
 
-export const SheetTitle = ({ className, ...props }: SheetTitleProps) => {
+export const SheetTitle = ({ className, ...props }: ISheetTitle) => {
 	return (
 		<SheetPrimitive.Title
 			data-slot='sheet-title'

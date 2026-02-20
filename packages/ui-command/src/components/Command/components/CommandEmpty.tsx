@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 
-export interface ICommandEmpty extends React.ComponentProps<typeof CommandPrimitive.Empty> {
-	className?: string;
-	noOptionsMessage?: string;
-	noSearchResultsMessage?: string;
-	formatSearchTerm?: (searchTerm: string) => string;
-}
+import type { ICommandEmpty } from '~/components/Command/Command.types';
 
 export const CommandEmpty = ({
 	className,

@@ -39,6 +39,17 @@ export const Default: Story = {
 	args: {
 		type: 'text',
 		placeholder: 'Enter your username'
+	},
+	parameters: {
+		docs: {
+			source: {
+				code: `import { Input } from '@repo/ui-forms';
+import { Label } from '@repo/ui-core';
+
+<Label htmlFor="default-input">Username</Label>
+<Input id="default-input" placeholder="Enter your username" />`
+			}
+		}
 	}
 };
 
@@ -52,6 +63,17 @@ export const Email: Story = {
 	args: {
 		type: 'email',
 		placeholder: 'Enter your email'
+	},
+	parameters: {
+		docs: {
+			source: {
+				code: `import { Input } from '@repo/ui-forms';
+import { Label } from '@repo/ui-core';
+
+<Label htmlFor="email-input">Email Address</Label>
+<Input id="email-input" type="email" placeholder="Enter your email" />`
+			}
+		}
 	}
 };
 
@@ -179,6 +201,16 @@ export const WithError: Story = {
 		type: 'email',
 		placeholder: 'Enter your email',
 		'aria-invalid': true
+	},
+	parameters: {
+		docs: {
+			source: {
+				code: `import { Input } from '@repo/ui-forms';
+
+<Input type="email" placeholder="Enter your email" aria-invalid="true" />
+<p className="text-sm text-red-500">Please enter a valid email address</p>`
+			}
+		}
 	}
 };
 
@@ -204,6 +236,22 @@ export const Controlled: Story = {
 	render: (args) => <ControlledComponent {...args} />,
 	args: {
 		placeholder: 'Type something...'
+	},
+	parameters: {
+		docs: {
+			source: {
+				code: `import { useState } from 'react';
+import { Input } from '@repo/ui-forms';
+
+const [value, setValue] = useState('');
+
+<Input
+  value={value}
+  onChange={(e) => setValue(e.target.value)}
+  placeholder="Type something..."
+/>`
+			}
+		}
 	}
 };
 

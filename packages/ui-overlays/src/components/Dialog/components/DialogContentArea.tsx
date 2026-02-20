@@ -1,9 +1,5 @@
-import * as React from 'react';
-import { cn } from '@repo/ui-core';
-
-interface IDialogContentArea extends React.ComponentProps<'div'> {
-	className?: string;
-}
+import { cn } from '@repo/tailwind-config';
+import type { IDialogContentArea } from '~/components/Dialog/Dialog.types';
 
 export const DialogContentArea = ({ className, ...props }: IDialogContentArea) => {
 	return (

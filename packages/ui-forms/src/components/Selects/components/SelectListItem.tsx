@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CheckIcon } from 'lucide-react';
-import { cn } from '@repo/ui-core';
+import { cn } from '@repo/tailwind-config';
 import { CommandItem, useCommandContext } from '@repo/ui-command';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 

@@ -21,10 +21,7 @@ export {
 	TooltipProvider
 } from '~/components/Tooltip/Tooltip';
 
-// Utilities
-export { cn } from '~/utils/className';
-
 // Variants (for consumers who need to extend)
 export { buttonVariants } from '~/components/Button/variants';
-export { badgeVariants } from '~/components/Badge/variants';
-export { alertVariants } from '~/components/Alert/variants';
+export { badgeVariants } from '~/components/Badge/Badge.variants';
+export { alertVariants } from '~/components/Alert/Alert.variants';
