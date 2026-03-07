@@ -1,0 +1,360 @@
+{/* Select.mdx */}
+import { Meta, Canvas, Controls, Story, Source } from '@storybook/addon-docs/blocks';
+
+import * as SelectStories from './Select.stories';
+
+<Meta of={SelectStories} />
+
+# Select
+
+A unified, type-safe select component that supports both **single** and **multiple** selection modes.
+
+The `type` prop acts as a discriminator — TypeScript enforces the correct `value` and `onValueChange` signatures automatically.
+
+## Installation
+
+The `Select` component is exported from `@repo/ui-forms`:
+
+```tsx
+import { Select } from '@repo/ui-forms';
+```
+
+---
+
+## Quick Start
+
+### Single Select
+
+```tsx
+import { useState } from 'react';
+import { Select } from '@repo/ui-forms';
+
+const options = [
+  { id: 'react', value: 'react', label: 'React' },
+  { id: 'vue', value: 'vue', label: 'Vue.js' },
+  { id: 'angular', value: 'angular', label: 'Angular' },
+];
+
+function MyComponent() {
+  const [value, setValue] = useState('');
+
+  return (
+    <Select
+      type="single"
+      value={value}
+      onValueChange={setValue}
+      options={options}
+      placeholder="Select a framework..."
+      searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search...' }}
+    />
+  );
+}
+```
+
+<Canvas sourceState="none" of={SelectStories.SingleDefault} />
+
+### Multi Select
+
+```tsx
+import { useState } from 'react';
+import { Select } from '@repo/ui-forms';
+
+const options = [
+  { id: 'react', value: 'react', label: 'React' },
+  { id: 'vue', value: 'vue', label: 'Vue.js' },
+  { id: 'angular', value: 'angular', label: 'Angular' },
+];
+
+function MyComponent() {
+  const [values, setValues] = useState<string[]>([]);
+
+  return (
+    <Select
+      type="multiple"
+      value={values}
+      onValueChange={setValues}
+      options={options}
+      placeholder="Select frameworks..."
+      searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search...' }}
+    />
+  );
+}
+```
+
+<Canvas sourceState="none" of={SelectStories.MultiDefault} />
+
+---
+
+## Guidelines & Use Cases
+
+### When to use `Select`
+- **Selecting from a small to medium list**: If you have between 5 and 50 options, a `Select` dropdown is ideal.
+- **Form Integration**: When a user needs to pick one or more distinct values from a categorized list (e.g., countries, tags, assigned users).
+- **Space constraints**: When you want to offer multiple choices without cluttering the UI with dozens of radio buttons or checkboxes.
+
+### When to consider alternatives
+- **Very few options (1-4)**: Use Radio Buttons (for single selection) or Checkboxes (for multiple selection) to expose all choices immediately so the user saves a click.
+- **Massive datasets with complex fetching**: While the `Select` component supports virtualization for up to 10,000 items, if you are searching against millions of server-side records, consider a dedicated asynchronous combo-box pattern.
+
+### Best Practices
+1. **Always provide a clear placeholder**: Use action-oriented placeholders like "Select a framework..." rather than leaving it blank.
+2. **Use Search for > 15 items**: If your list requires a user to scroll significantly, enable `searchConfig` to help them filter items quickly.
+3. **Group related items**: If options fall into logical categories, use `SelectGroupedListItems` to make scanning easier.
+4. **Handle empty states gracefully**: If an option list depends on another field (e.g., selecting a City requires selecting a Country first), use the `emptyState` prop to explain why the list is empty ("Please select a country first").
+
+---
+
+## API Reference
+
+### SelectProps (Discriminated Union)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `type` | `'single' \| 'multiple'` | **required** | Selection mode. Determines the shape of `value` and `onValueChange`. |
+| `options` | `Option[]` | **required** | Available options for the dropdown. |
+| `value` | `string` (single) / `string[]` (multiple) | **required** | Currently selected value(s). |
+| `onValueChange` | `(v: string) => void` (single) / `(v: string[]) => void` (multiple) | **required** | Called when the selection changes. |
+| `placeholder` | `string` | `'Select an option...'` | Placeholder text when nothing is selected. |
+| `showClearButton` | `boolean` | `true` | Show the clear/deselect button(s). |
+| `searchConfig` | `ICommandSearchConfig` | `undefined` | Enable and configure the search input. |
+| `emptyState` | `IEmptyStateConfig` | `undefined` | Customise empty state messages. |
+| `defaultSearchValue` | `string` | `undefined` | Prefill the search input. |
+| `triggerClassName` | `string` | `'w-full'` | Additional CSS class for the trigger button. |
+| `overflowBehavior` | `'wrap' \| 'wrap-when-open' \| 'cutoff'` | `'wrap-when-open'` | _(Multi only)_ How selected badges behave when they overflow. |
+| `children` | `ReactNode` | Default flat list | Custom dropdown body — pass your own list component for grouping or virtualisation. |
+
+### Option Shape
+
+```ts
+interface Option {
+  id: string;
+  value: string;
+  label: string;
+  group?: string; // Optional — used for grouped lists
+}
+```
+
+---
+
+## Recipes
+
+### Preselected Value (Single)
+
+```tsx
+<Select
+  type="single"
+  value="react"
+  onValueChange={setValue}
+  options={options}
+/>
+```
+
+<Canvas sourceState="none" of={SelectStories.SinglePreselected} />
+
+### Preselected Values (Multi)
+
+```tsx
+<Select
+  type="multiple"
+  value={['next.js', 'react']}
+  onValueChange={setValues}
+  options={options}
+/>
+```
+
+<Canvas sourceState="none" of={SelectStories.MultiPreselected} />
+
+### Disable Search
+
+```tsx
+<Select
+  type="single"
+  value={value}
+  onValueChange={setValue}
+  options={options}
+  searchConfig={{ enabledSearch: false }}
+/>
+```
+
+<Canvas sourceState="none" of={SelectStories.SingleWithoutSearch} />
+
+### Hide Clear Button
+
+```tsx
+<Select
+  type="single"
+  value="vue"
+  onValueChange={setValue}
+  options={options}
+  showClearButton={false}
+/>
+```
+
+<Canvas sourceState="none" of={SelectStories.SingleWithoutClearButton} />
+
+### Grouped Options (Single)
+
+Pass `children` with a grouped list component to render items under headings:
+
+```tsx
+import { Select, SelectGroupedListItems, SelectListItem } from '@repo/ui-forms';
+
+const options = [
+  { id: 'react', value: 'react', label: 'React', group: 'Frontend' },
+  { id: 'express', value: 'express', label: 'Express', group: 'Backend' },
+];
+const groups = ['Frontend', 'Backend'];
+
+<Select
+  type="single"
+  value={value}
+  onValueChange={setValue}
+  options={options}
+  placeholder="Select a technology..."
+  searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search...' }}
+>
+  <SelectGroupedListItems groupOrder={groups} ungroupedPosition="bottom">
+    {({ item }) => <SelectListItem value={item.value} />}
+  </SelectGroupedListItems>
+</Select>
+```
+
+<Canvas sourceState="none" of={SelectStories.SingleWithGroups} />
+
+### Grouped Options (Multi, Virtualized)
+
+```tsx
+import { Select, SelectGroupedItemsVirtualized, SelectListItem } from '@repo/ui-forms';
+
+<Select
+  type="multiple"
+  value={values}
+  onValueChange={setValues}
+  options={groupedOptions}
+  placeholder="Select technologies..."
+  searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search...' }}
+>
+  <SelectGroupedItemsVirtualized groupOrder={groups} ungroupedPosition="bottom">
+    {({ item }) => <SelectListItem value={item.value} />}
+  </SelectGroupedItemsVirtualized>
+</Select>
+```
+
+<Canvas sourceState="none" of={SelectStories.MultiWithGroups} />
+
+### Virtualized List (5 000+ items)
+
+For very large option lists, use the virtualized list component:
+
+```tsx
+import { Select, SelectListItemsVirtualized, SelectListItem } from '@repo/ui-forms';
+
+<Select
+  type="single"
+  value={value}
+  onValueChange={setValue}
+  options={largeOptions}
+  placeholder="Select from 5000 items..."
+  searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search...' }}
+>
+  <SelectListItemsVirtualized>
+    {({ item }) => <SelectListItem value={item.value} />}
+  </SelectListItemsVirtualized>
+</Select>
+```
+
+<Canvas sourceState="none" of={SelectStories.SingleVirtualized} />
+
+### Multi Select Overflow Behaviour
+
+Control how selected badges behave when they exceed the trigger width:
+
+| Value | Behaviour |
+|-------|-----------|
+| `'wrap-when-open'` | Badges wrap onto new lines only while the dropdown is open (default). |
+| `'wrap'` | Badges always wrap. |
+| `'cutoff'` | Overflow badges are hidden with a `+N` counter. |
+
+```tsx
+<Select
+  type="multiple"
+  value={values}
+  onValueChange={setValues}
+  options={options}
+  overflowBehavior="wrap"
+/>
+```
+
+<Canvas sourceState="none" of={SelectStories.MultiWrap} />
+
+### Custom Trigger Styling
+
+```tsx
+<Select
+  type="single"
+  value={value}
+  onValueChange={setValue}
+  options={options}
+  triggerClassName="w-full max-w-[400px] bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200"
+/>
+```
+
+<Canvas sourceState="none" of={SelectStories.CustomStyling} />
+
+### Empty State Messages
+
+```tsx
+<Select
+  type="single"
+  value={value}
+  onValueChange={setValue}
+  options={[]}
+  emptyState={{
+    noOptionsMessage: 'No items available',
+    noSearchResultsMessage: 'Nothing matches "{searchTerm}"',
+    formatSearchTerm: (term) => `"${term}"`
+  }}
+  searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search...' }}
+/>
+```
+
+<Canvas sourceState="none" of={SelectStories.EmptyState} />
+
+### Form Integration
+
+Use single and multi selects side-by-side inside a form:
+
+<Canvas sourceState="none" of={SelectStories.FormIntegration} />
+
+---
+
+## Type Safety
+
+The discriminated union ensures TypeScript catches mismatches at compile time:
+
+```tsx
+// ✅ Correct — type="single" + string value
+<Select type="single" value="" onValueChange={(v: string) => {}} options={[]} />
+
+// ✅ Correct — type="multiple" + string[] value
+<Select type="multiple" value={[]} onValueChange={(v: string[]) => {}} options={[]} />
+
+// ❌ Type error — string[] value with type="single"
+<Select type="single" value={[]} onValueChange={(v: string[]) => {}} options={[]} />
+```
+
+---
+
+## Migration from SingleSelect / MultiSelect
+
+If you previously used `SingleSelectValue` or `MultiSelectValue` directly:
+
+| Before | After |
+|--------|-------|
+| `<SelectProvider mode="single" ...>` | `<Select type="single" ...>` |
+| `<SelectProvider mode="multiple" ...>` | `<Select type="multiple" ...>` |
+| `<SingleSelectValue />` inside trigger | Handled automatically |
+| `<MultiSelectValue />` inside trigger | Handled automatically |
+| Manual `SelectTrigger` + `SelectInterface` wiring | Handled automatically |
+
+The lower-level primitives (`SelectProvider`, `SelectTrigger`, `SelectInterface`, etc.) are still exported for advanced use cases where you need full control.

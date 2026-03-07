@@ -1,3 +1,3 @@
 export * from '~/components/Selects/components';
-export * from '~/components/Selects/MultiSelect/MultiSelect';
-export * from '~/components/Selects/SingleSelect/SingleSelect';
+export { Select } from '~/components/Selects/Select';
+export type { SelectProps, ISingleSelectProps, IMultiSelectProps } from '~/components/Selects/Select.types';
