@@ -34,6 +34,7 @@ These apply at all times:
 
 - **Do not apologise.** Acknowledge mistakes plainly and correct them.
 - **Be concise.** Prefer short, direct answers over long explanations. Use code over prose wherever possible.
+- **Wait for confirmation.** Whenever the user asks a question or proposes an action, do not blindly proceed to execute it. Always wait for the user to explicitly say "proceed" or an equivalent confirmation before starting the execution.
 - **No placeholders.** Never leave `// TODO`, `...`, or `/* implement me */` in generated code. Generate full, working implementations.
 - **Assume context.** The user is an experienced developer. Do not over-explain basics or add unnecessary preamble.
 - **Ask, don't assume.** When scope or intent is unclear, ask — but batch questions into one message.
@@ -81,13 +82,9 @@ These apply at all times:
 
 Read the relevant `SKILL.md` before starting any work in these areas:
 
-| Skill                                                            | Read when...                                                                   |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| [ESLint Standards](./skills/eslint-standards/SKILL.md)           | Adding/changing ESLint config, debugging lint errors, adding a new package     |
-| [Monorepo Standards](./skills/monorepo-standards/SKILL.md)       | Adding a package, setting up Tailwind, debugging dependency cycles or imports  |
-| [React Engineering Standards](./skills/react-standards/SKILL.md) | Creating or modifying UI components, setting up stories, compound components   |
-| [TypeScript Standards](./skills/typescript-standards/SKILL.md)   | Configuring `tsconfig.json`, defining interfaces, debugging TS errors          |
-| [Assistant Management](./skills/assistant-management/SKILL.md)   | Creating or modifying workflows/skills, or planning agent tooling improvements |
+| Skill                                                      | Read when...                                                                  |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [Monorepo Standards](./skills/monorepo-standards/SKILL.md) | Adding a package, setting up Tailwind, debugging dependency cycles or imports |
 
 ---
 
@@ -95,12 +92,9 @@ Read the relevant `SKILL.md` before starting any work in these areas:
 
 Run these as slash commands in any conversation:
 
-| Command                       | Description                                                                |
-| ----------------------------- | -------------------------------------------------------------------------- |
-| `/update-skills`              | Scan all skills in `.agent/skills/` and regenerate this file's Skill Index |
-| `/new-ui-component`           | Scaffold a new UI component with the correct file-based architecture       |
-| `/new-ui-package`             | Scaffold a new standard React UI package in the monorepo                   |
-| `/diagnose-dependency-cycles` | Identify and fix infinite hanging scripts caused by cyclic dependencies    |
-| `/diagnose-ts-errors`         | Diagnose common TypeScript and TSConfig errors in the monorepo             |
-| `/fix-tailwind-styles`        | Fix styles not appearing due to Tailwind v4 `@source` directives           |
-| `/update-storybook`           | Update all Storybook dependencies across the monorepo                      |
+| Command                       | Description                                                             |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `/new-ui-package`             | Scaffold a new standard React UI package in the monorepo                |
+| `/diagnose-dependency-cycles` | Identify and fix infinite hanging scripts caused by cyclic dependencies |
+| `/fix-tailwind-styles`        | Fix styles not appearing due to Tailwind v4 `@source` directives        |
+| `/update-storybook`           | Update all Storybook dependencies across the monorepo                   |
