@@ -2,7 +2,8 @@ import { defineConfig, type UserConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import dts from 'vite-plugin-dts';
-import path from 'path';
+import path from 'node:path';
+import fs from 'node:fs';
 
 interface ReactLibraryOptions {
 	/** Path to the library entry file (default: 'src/index.ts') */
@@ -26,6 +27,22 @@ interface ReactLibraryOptions {
  */
 export const reactLibrary = (options: ReactLibraryOptions = {}): UserConfig => {
 	const { entry = 'src/index.ts', externals = [] } = options;
+
+	let pkg: any = {};
+	try {
+		pkg = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf-8'));
+	} catch (e) {
+		console.warn(`Could not read package.json in ${process.cwd()}`);
+	}
+
+	const pkgDependencies = [
+		...Object.keys(pkg.dependencies || {}),
+		...Object.keys(pkg.peerDependencies || {})
+	];
+
+	console.log(
+		`[VITE CONFIG] Auto-externalizing ${pkgDependencies.length} dependencies in ${pkg.name}...`
+	);
 
 	return defineConfig({
 		plugins: [
@@ -52,14 +69,11 @@ export const reactLibrary = (options: ReactLibraryOptions = {}): UserConfig => {
 			outDir: 'dist',
 			target: 'ES2022',
 			rollupOptions: {
-				external: [
-					'react',
-					'react-dom',
-					'react/jsx-runtime',
-					// Treat all @repo/* packages as external
-					/^@repo\/.*/,
-					...externals
-				],
+				external: (id) => {
+					if (id.startsWith('@repo/')) return true;
+					if (externals.some((ext) => id === ext || id.startsWith(`${ext}/`))) return true;
+					return false;
+				},
 				output: {
 					preserveModules: true,
 					preserveModulesRoot: 'src',

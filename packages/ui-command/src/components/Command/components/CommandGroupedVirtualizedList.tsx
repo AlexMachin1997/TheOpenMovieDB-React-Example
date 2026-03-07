@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { CommandList } from '~/components/Command/components/CommandList';
-import { CommandGroup } from '~/components/Command/components/CommandGroup';
-import { CommandSeparator } from '~/components/Command/components/CommandSeparator';
-import { VirtualizedItem } from '~/components/Command/types/virtualization';
 import { getVirtualizedItems, getEstimatedItemHeight } from '~/components/Command/utils/grouping';
 import { ICommandGroupedVirtualizedList } from '~/components/Command/types';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { CommandGroupedListItem } from './CommandGroupedListItem';
 
 export const CommandGroupedVirtualizedList = React.memo(
 	({
@@ -40,27 +38,6 @@ export const CommandGroupedVirtualizedList = React.memo(
 			overscan
 		});
 
-		const renderGroupedListItem = React.useCallback(
-			(virtualItem: VirtualizedItem) => {
-				switch (virtualItem.type) {
-					case 'separator':
-						return <CommandSeparator />;
-
-					case 'group-header':
-						return <CommandGroup heading={virtualItem.groupName} />;
-
-					case 'option':
-						return children({
-							item: virtualItem.option
-						});
-
-					default:
-						return null;
-				}
-			},
-			[children]
-		);
-
 		return (
 			<CommandList className={className} ref={parentRef}>
 				<div
@@ -80,16 +57,12 @@ export const CommandGroupedVirtualizedList = React.memo(
 								key={virtualRow.key}
 								ref={virtualizer.measureElement}
 								data-index={virtualRow.index}
+								className='absolute top-0 left-0 w-full min-w-0'
 								style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									width: '100%',
-									minWidth: 0,
 									transform: `translateY(${virtualRow.start}px)`
 								}}
 							>
-								{renderGroupedListItem(item)}
+								<CommandGroupedListItem item={item}>{children}</CommandGroupedListItem>
 							</div>
 						);
 					})}

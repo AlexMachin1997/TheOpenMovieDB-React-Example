@@ -3,7 +3,7 @@ import { Skeleton } from '~/components/Skeleton/Skeleton';
 import { Avatar, AvatarFallback } from '~/components/Avatar/Avatar';
 
 const meta: Meta<typeof Skeleton> = {
-	title: 'Components/Skeleton',
+	title: 'UI Core/Skeleton',
 	component: Skeleton,
 	parameters: {
 		layout: 'centered'
@@ -104,8 +104,8 @@ export const TableSkeleton: Story = {
 export const ListSkeleton: Story = {
 	render: () => (
 		<div className='w-full max-w-sm space-y-4'>
-			{Array.from({ length: 4 }).map((_, i) => (
-				<div key={i} className='flex items-center space-x-4'>
+			{[1, 2, 3, 4].map((num) => (
+				<div key={num} className='flex items-center space-x-4'>
 					<Skeleton className='h-12 w-12 rounded-full' />
 					<div className='space-y-2'>
 						<Skeleton className='h-4 w-[200px]' />

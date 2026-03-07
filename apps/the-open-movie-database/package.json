@@ -6,8 +6,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "pnpm run check-types && vite build",
-		"check-types": "tsc --noEmit",
-		"lint": "eslint",
+		"check-types": "tsc --noEmit --incremental",
+		"lint": "eslint --cache",
 		"prettier": "prettier --write ./src",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",

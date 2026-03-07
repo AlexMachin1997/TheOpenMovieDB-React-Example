@@ -25,7 +25,7 @@ type SingleSelectStorybookTypes = {
 };
 
 const meta: Meta<typeof SelectProvider> = {
-	title: 'Components/Selects/SingleSelect',
+	title: 'UI Forms/Selects/SingleSelect',
 	component: SelectProvider
 };
 
@@ -230,8 +230,7 @@ const WithFormTemplate = () => {
 		setSelectedLanguage(value);
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		console.log('Form submitted:', {
 			framework: selectedFramework,
 			language: selectedLanguage
@@ -239,7 +238,7 @@ const WithFormTemplate = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className='space-y-6 w-full max-w-md'>
+		<form action={handleSubmit} className='space-y-6 w-full max-w-md'>
 			<div className='space-y-2'>
 				<Label htmlFor='framework'>Select Framework:</Label>
 				<SelectProvider

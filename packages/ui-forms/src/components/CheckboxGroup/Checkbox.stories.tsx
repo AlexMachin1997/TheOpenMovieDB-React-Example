@@ -5,7 +5,7 @@ import type { Option } from '@repo/core';
 import { Checkbox } from '../Checkbox/Checkbox';
 
 const meta: Meta<typeof CheckboxGroup> = {
-	title: 'Components/Checkbox group',
+	title: 'UI Forms/Checkbox group',
 	parameters: {
 		layout: 'centered'
 	}
@@ -317,9 +317,7 @@ const ControlledVsUncontrolledComponent = () => {
 					Using individual Radix UI Checkbox components for native form behavior.
 				</p>
 				<form
-					onSubmit={(event) => {
-						event.preventDefault();
-						const formData = new FormData(event.target as HTMLFormElement);
+					action={(formData: FormData) => {
 						const selectedValues: string[] = [];
 
 						// This works because we're using individual Radix UI Checkbox components

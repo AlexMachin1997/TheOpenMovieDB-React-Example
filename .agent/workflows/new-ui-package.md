@@ -60,18 +60,15 @@ Follow these steps to create a new UI package (e.g., `@repo/ui-charts`) that cor
    ```
 
 4. **Wire up Tailwind CSS**
-   To ensure Tailwind scans your new package, open `packages/tailwind-config/src/globals.css` and add your package to the top-level sources:
+   To ensure Tailwind scans your new package, you must register it as a `@source` target in the consuming applications (e.g. `apps/storybook` or `apps/web`).
+
+   For example, in `apps/storybook/.storybook/tailwind.css`:
 
    ```css
-   @source "../../ui-charts/src"; // <-- Add this
+   @source "../../../packages/ui-charts/src"; /* <-- Add your package here */
    ```
 
-   Then trigger a build inside the config to re-export the `dist`:
-   // turbo
-
-   ```bash
-   cd packages/tailwind-config && pnpm run build
-   ```
+   _Note: Do not add these `@source` tags to the shared `@repo/tailwind-config` package anymore._
 
 5. **Restart Tooling**
    Restart your IDE's ESLint/TypeScript servers, and restart the Storybook development server so the new path map `@repo/ui-charts` is registered across the workspace.

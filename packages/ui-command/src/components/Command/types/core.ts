@@ -31,6 +31,15 @@ export interface IVirtualizationProps {
 }
 
 /**
+ * Render function type for virtualized list items
+ *
+ * This type defines the signature of a render function that
+ * receives an item and returns a React node.
+ *
+ * @type RenderFunction
+ */
+export type RenderFunction = (props: { item: Option }) => React.ReactNode;
+/**
  * Common properties for components that render children functions
  *
  * This interface defines the common pattern for components that
@@ -40,7 +49,7 @@ export interface IVirtualizationProps {
  */
 export interface IRenderProps {
 	/** Render function that receives item data and returns React nodes */
-	children: (props: { item: Option }) => React.ReactNode;
+	children: RenderFunction;
 }
 
 /**

@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 
 const meta: Meta<typeof DropdownMenu> = {
-	title: 'Components/Dropdown menu',
+	title: 'UI Overlays/Dropdown menu',
 	component: DropdownMenu,
 	parameters: {
 		layout: 'centered'
@@ -480,7 +480,7 @@ export const VeryLongContent: Story = {
 					<DropdownMenuLabel>Many Menu Items</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					{Array.from({ length: 20 }, (_, i) => (
-						<DropdownMenuItem key={i}>Menu Item {i + 1}</DropdownMenuItem>
+						<DropdownMenuItem key={`menu-item-${i}`}>Menu Item {i + 1}</DropdownMenuItem>
 					))}
 				</DropdownMenuContent>
 			</DropdownMenu>

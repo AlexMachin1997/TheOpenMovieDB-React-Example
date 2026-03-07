@@ -19,8 +19,8 @@
 	"scripts": {
 		"build": "tsup src/index.ts --format esm,cjs --dts",
 		"dev": "tsup src/index.ts --format esm,cjs --dts --watch",
-		"check-types": "tsc --noEmit",
-		"lint": "eslint",
+		"check-types": "tsc --noEmit --incremental",
+		"lint": "eslint --cache",
 		"prettier": "prettier --write ./src"
 	},
 	"dependencies": {

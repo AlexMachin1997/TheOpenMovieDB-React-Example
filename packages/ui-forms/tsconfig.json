@@ -8,7 +8,8 @@
 			"react-dom": ["./node_modules/@types/react-dom"]
 		},
 		"declaration": true,
-		"outDir": "dist"
+		"outDir": "dist",
+		"rootDir": "./src"
 	},
 	"include": ["src/**/*"],
 	"exclude": ["dist", "node_modules"]

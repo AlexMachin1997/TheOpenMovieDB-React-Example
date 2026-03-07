@@ -48,7 +48,7 @@ type CommandBasicStorybookTypes = {
 };
 
 const meta: Meta<typeof Command> = {
-	title: 'Components/Command',
+	title: 'UI Command/Command',
 	component: Command,
 	parameters: {
 		layout: 'centered'

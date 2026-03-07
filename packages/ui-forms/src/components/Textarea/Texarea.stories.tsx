@@ -4,7 +4,7 @@ import { Textarea } from '~/components/Textarea/Textarea';
 import { Label } from '@repo/ui-core';
 
 const meta: Meta<typeof Textarea> = {
-	title: 'Components/Textarea',
+	title: 'UI Forms/Textarea',
 	component: Textarea,
 	parameters: {
 		layout: 'centered'
@@ -169,8 +169,7 @@ const ContactFormComponent = () => {
 			}));
 		};
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		console.log('Contact form submitted:', formData);
 	};
 
@@ -266,8 +265,7 @@ const FeedbackFormComponent = () => {
 			}));
 		};
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		console.log('Feedback form submitted:', formData);
 	};
 
@@ -278,7 +276,7 @@ const FeedbackFormComponent = () => {
 				<p className='text-muted-foreground'>Help us improve our product</p>
 			</div>
 
-			<form onSubmit={handleSubmit} className='space-y-6'>
+			<form action={handleSubmit} className='space-y-6'>
 				<div className='space-y-2'>
 					<Label htmlFor='rating'>Overall Rating</Label>
 					<select

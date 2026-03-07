@@ -1,12 +1,12 @@
 import { config as reactConfig } from '@repo/eslint-config/react';
+import { createConfig } from '@repo/eslint-config/utils';
 
 /**
  * A shared ESLint configuration for the repository.
  *
  * @type {import("eslint").Linter.Config[]}
  * */
-export default [
-	...reactConfig,
+export default createConfig(import.meta.dirname, reactConfig, [
 	{
 		// Exclude large static files that slow down linting (replaces .eslintignore for ESLint 9+)
 		ignores: [
@@ -58,4 +58,4 @@ export default [
 			'import/no-deprecated': 'off'
 		}
 	}
-];
+]);

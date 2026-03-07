@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useState, useReducer } from 'react';
 import type { DateRange } from 'react-day-picker';
 import type { Locale } from 'date-fns';
 import { fr, es, de } from 'date-fns/locale';
@@ -19,7 +19,7 @@ type DateRangePickerStorybookTypes = {
 };
 
 const meta: Meta<typeof DateRangePicker> = {
-	title: 'Components/Date pickers/Range date picker',
+	title: 'UI Forms/Date pickers/Range date picker',
 	component: DateRangePicker,
 	parameters: {
 		layout: 'fullscreen',
@@ -198,10 +198,16 @@ export const WithCustomRange: Story = {
 };
 
 const WithLocalesTemplate = () => {
-	const [englishRange, setEnglishRange] = useState<DateRange>();
-	const [frenchRange, setFrenchRange] = useState<DateRange>();
-	const [spanishRange, setSpanishRange] = useState<DateRange>();
-	const [germanRange, setGermanRange] = useState<DateRange>();
+	const [ranges, dispatch] = useReducer(
+		(
+			state: Record<string, DateRange | undefined>,
+			action: { locale: string; range: DateRange | undefined }
+		) => ({
+			...state,
+			[action.locale]: action.range
+		}),
+		{}
+	);
 
 	return (
 		<div className='p-8 space-y-4'>
@@ -214,16 +220,16 @@ const WithLocalesTemplate = () => {
 					<div>
 						<p className='text-sm font-medium mb-1'>English (default):</p>
 						<DateRangePicker
-							dateRange={englishRange}
-							onDateRangeChange={setEnglishRange}
+							dateRange={ranges.english}
+							onDateRangeChange={(range) => dispatch({ locale: 'english', range })}
 							placeholder='Select date range'
 						/>
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>French:</p>
 						<DateRangePicker
-							dateRange={frenchRange}
-							onDateRangeChange={setFrenchRange}
+							dateRange={ranges.french}
+							onDateRangeChange={(range) => dispatch({ locale: 'french', range })}
 							placeholder='Sélectionner une plage de dates'
 							locale={fr}
 						/>
@@ -231,8 +237,8 @@ const WithLocalesTemplate = () => {
 					<div>
 						<p className='text-sm font-medium mb-1'>Spanish:</p>
 						<DateRangePicker
-							dateRange={spanishRange}
-							onDateRangeChange={setSpanishRange}
+							dateRange={ranges.spanish}
+							onDateRangeChange={(range) => dispatch({ locale: 'spanish', range })}
 							placeholder='Seleccionar rango de fechas'
 							locale={es}
 						/>
@@ -240,8 +246,8 @@ const WithLocalesTemplate = () => {
 					<div>
 						<p className='text-sm font-medium mb-1'>German:</p>
 						<DateRangePicker
-							dateRange={germanRange}
-							onDateRangeChange={setGermanRange}
+							dateRange={ranges.german}
+							onDateRangeChange={(range) => dispatch({ locale: 'german', range })}
 							placeholder='Datumsbereich auswählen'
 							locale={de}
 						/>

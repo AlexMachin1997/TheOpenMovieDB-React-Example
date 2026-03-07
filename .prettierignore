@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Storybook
+storybook-static/
+
+# Fonts
+**/*.ttf
+**/*.woff
+**/*.woff2
+**/*.eot
+**/*.otf

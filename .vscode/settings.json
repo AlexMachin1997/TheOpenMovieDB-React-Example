@@ -1,4 +1,5 @@
 {
+	"css.lint.unknownAtRules": "ignore",
 	"scss.lint.unknownAtRules": "ignore",
 	"files.eol": "\n",
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -68,5 +69,16 @@
 	"screencastMode.fontSize": 59,
 	"scm.inputFontSize": 20,
 	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"tailwindCSS.classFunctions": ["cva"]
+	"tailwindCSS.classFunctions": ["cva"],
+	"tailwindCSS.experimental.configFile": {
+		"apps/storybook/.storybook/tailwind.css": ["packages/**"],
+		"apps/the-open-movie-database/src/index.scss": ["apps/the-open-movie-database/**"]
+	},
+	"tailwindCSS.includeLanguages": {
+		"typescript": "javascript",
+		"typescriptreact": "javascript"
+	},
+	"editor.quickSuggestions": {
+		"strings": true
+	}
 }

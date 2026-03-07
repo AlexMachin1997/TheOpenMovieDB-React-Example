@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Switch } from '~/components/Switch/Switch';
 
 const meta: Meta<typeof Switch> = {
-	title: 'Components/Switch',
+	title: 'UI Core/Switch',
 	component: Switch,
 	parameters: {
 		layout: 'centered'

@@ -10,13 +10,15 @@
 			"outputs": ["dist/**", ".next/**", "!.next/cache/**"]
 		},
 		"lint": {
-			"dependsOn": ["^lint"]
+			"dependsOn": ["^lint"],
+			"outputs": [".eslintcache"]
 		},
 		"prettier": {
 			"dependsOn": ["^prettier"]
 		},
 		"check-types": {
-			"dependsOn": ["^check-types"]
+			"dependsOn": ["^check-types"],
+			"outputs": ["*.tsbuildinfo", "tsconfig.tsbuildinfo"]
 		},
 		"test": {
 			"dependsOn": ["^test"],

@@ -76,7 +76,6 @@ export const DateRangePicker = ({
 						startMonth={startMonth}
 						endMonth={endMonth}
 						locale={locale}
-						autoFocus
 						className='max-w-none'
 					/>
 				</PopoverContent>

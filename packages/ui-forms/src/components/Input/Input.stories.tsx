@@ -4,7 +4,7 @@ import { Input } from '~/components/Input/Input';
 import { Label } from '@repo/ui-core';
 
 const meta: Meta<typeof Input> = {
-	title: 'Components/Input',
+	title: 'UI Forms/Input',
 	component: Input,
 	parameters: {
 		layout: 'centered'
@@ -270,8 +270,7 @@ const SignUpFormComponent = () => {
 		}));
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		console.log('Form submitted:', formData);
 	};
 
@@ -282,7 +281,7 @@ const SignUpFormComponent = () => {
 				<p className='text-muted-foreground'>Join us today!</p>
 			</div>
 
-			<form onSubmit={handleSubmit} className='space-y-4'>
+			<form action={handleSubmit} className='space-y-4'>
 				<div className='space-y-2'>
 					<Label htmlFor='username'>Username</Label>
 					<Input
@@ -362,8 +361,7 @@ const ContactFormComponent = () => {
 		}));
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		console.log('Contact form submitted:', formData);
 	};
 
@@ -374,7 +372,7 @@ const ContactFormComponent = () => {
 				<p className='text-muted-foreground'>We&apos;d love to hear from you</p>
 			</div>
 
-			<form onSubmit={handleSubmit} className='space-y-4'>
+			<form action={handleSubmit} className='space-y-4'>
 				<div className='grid grid-cols-2 gap-4'>
 					<div className='space-y-2'>
 						<Label htmlFor='name'>Full Name</Label>

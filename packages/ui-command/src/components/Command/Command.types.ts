@@ -12,6 +12,7 @@ export interface ICommandDialog extends React.ComponentProps<typeof Dialog> {
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;
 	title?: string;
+	children?: React.ReactNode;
 	description?: string;
 	showCloseButton?: boolean;
 }

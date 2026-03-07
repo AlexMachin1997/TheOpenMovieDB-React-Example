@@ -43,6 +43,7 @@ jspm_packages/
 
 # Optional eslint cache
 .eslintcache
+**/.eslintcache
 
 # Microbundle cache
 .rpt2_cache/
@@ -102,3 +103,13 @@ coverage/
 
 # Husky
 .husky/_
+
+# Fonts
+*.ttf
+*.woff
+*.woff2
+*.eot
+*.otf
+
+# TypeScript incremental build info
+*.tsbuildinfo

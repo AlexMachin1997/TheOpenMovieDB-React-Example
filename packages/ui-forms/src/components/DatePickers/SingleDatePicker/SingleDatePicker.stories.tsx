@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useState, useReducer } from 'react';
 import type { Locale } from 'date-fns';
 import { fr, es, de, ja } from 'date-fns/locale';
 
@@ -19,7 +19,7 @@ type SingleDatePickerStorybookTypes = {
 };
 
 const meta: Meta<typeof SingleDatePicker> = {
-	title: 'Components/Date pickers/Single date picker',
+	title: 'UI Forms/Date pickers/Single date picker',
 	component: SingleDatePicker
 };
 
@@ -202,11 +202,16 @@ export const WithCustomRange: Story = {
 };
 
 const WithLocalesTemplate = () => {
-	const [englishDate, setEnglishDate] = useState<Date>();
-	const [frenchDate, setFrenchDate] = useState<Date>();
-	const [spanishDate, setSpanishDate] = useState<Date>();
-	const [germanDate, setGermanDate] = useState<Date>();
-	const [japaneseDate, setJapaneseDate] = useState<Date>();
+	const [dates, dispatch] = useReducer(
+		(
+			state: Record<string, Date | undefined>,
+			action: { locale: string; date: Date | undefined }
+		) => ({
+			...state,
+			[action.locale]: action.date
+		}),
+		{}
+	);
 
 	return (
 		<div className='space-y-4'>
@@ -219,16 +224,16 @@ const WithLocalesTemplate = () => {
 					<div>
 						<p className='text-sm font-medium mb-1'>English (default):</p>
 						<SingleDatePicker
-							date={englishDate}
-							onDateChange={setEnglishDate}
+							date={dates.english}
+							onDateChange={(date) => dispatch({ locale: 'english', date })}
 							placeholder='Select a date'
 						/>
 					</div>
 					<div>
 						<p className='text-sm font-medium mb-1'>French:</p>
 						<SingleDatePicker
-							date={frenchDate}
-							onDateChange={setFrenchDate}
+							date={dates.french}
+							onDateChange={(date) => dispatch({ locale: 'french', date })}
 							placeholder='Sélectionner une date'
 							locale={fr}
 						/>
@@ -236,8 +241,8 @@ const WithLocalesTemplate = () => {
 					<div>
 						<p className='text-sm font-medium mb-1'>Spanish:</p>
 						<SingleDatePicker
-							date={spanishDate}
-							onDateChange={setSpanishDate}
+							date={dates.spanish}
+							onDateChange={(date) => dispatch({ locale: 'spanish', date })}
 							placeholder='Seleccionar una fecha'
 							locale={es}
 						/>
@@ -245,8 +250,8 @@ const WithLocalesTemplate = () => {
 					<div>
 						<p className='text-sm font-medium mb-1'>German:</p>
 						<SingleDatePicker
-							date={germanDate}
-							onDateChange={setGermanDate}
+							date={dates.german}
+							onDateChange={(date) => dispatch({ locale: 'german', date })}
 							placeholder='Datum auswählen'
 							locale={de}
 						/>
@@ -254,8 +259,8 @@ const WithLocalesTemplate = () => {
 					<div>
 						<p className='text-sm font-medium mb-1'>Japanese:</p>
 						<SingleDatePicker
-							date={japaneseDate}
-							onDateChange={setJapaneseDate}
+							date={dates.japanese}
+							onDateChange={(date) => dispatch({ locale: 'japanese', date })}
 							placeholder='日付を選択'
 							locale={ja}
 						/>

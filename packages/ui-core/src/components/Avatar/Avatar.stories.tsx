@@ -4,7 +4,7 @@ import { UserIcon, BotIcon, HeartIcon, SettingsIcon } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from './Avatar';
 
 const meta: Meta<typeof Avatar> = {
-	title: 'Components/Avatar',
+	title: 'UI Core/Avatar',
 	component: Avatar,
 	parameters: {
 		layout: 'centered'

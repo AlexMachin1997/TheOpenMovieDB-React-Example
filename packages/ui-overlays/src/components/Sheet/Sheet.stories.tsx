@@ -25,7 +25,7 @@ import {
 } from '~/components/Dialog/Dialog';
 
 const meta: Meta<typeof Sheet> = {
-	title: 'Components/Sheet',
+	title: 'UI Overlays/Sheet',
 	component: Sheet,
 	parameters: {
 		layout: 'centered'
@@ -558,11 +558,11 @@ const ScrollableContentSheet = () => {
 								incididunt ut labore et dolore magna aliqua.
 							</p>
 							<div className='grid gap-4'>
-								{Array.from({ length: 5 }).map((_, i) => (
-									<div key={i} className='p-4 border rounded-lg'>
-										<h4 className='font-medium'>Item {i + 1}</h4>
+								{[1, 2, 3, 4, 5].map((num) => (
+									<div key={num} className='p-4 border rounded-lg'>
+										<h4 className='font-medium'>Item {num}</h4>
 										<p className='text-sm text-muted-foreground'>
-											This is item {i + 1} with some content to demonstrate scrolling.
+											This is item {num} with some content to demonstrate scrolling.
 										</p>
 									</div>
 								))}
@@ -576,9 +576,9 @@ const ScrollableContentSheet = () => {
 								ex ea commodo consequat.
 							</p>
 							<div className='grid gap-4'>
-								{Array.from({ length: 8 }).map((_, i) => (
-									<div key={i} className='p-4 border rounded-lg'>
-										<h4 className='font-medium'>Another Item {i + 1}</h4>
+								{[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+									<div key={num} className='p-4 border rounded-lg'>
+										<h4 className='font-medium'>Another Item {num}</h4>
 										<p className='text-sm text-muted-foreground'>
 											More content to ensure the sheet becomes scrollable.
 										</p>
@@ -594,9 +594,9 @@ const ScrollableContentSheet = () => {
 								fugiat nulla pariatur.
 							</p>
 							<div className='grid gap-4'>
-								{Array.from({ length: 6 }).map((_, i) => (
-									<div key={i} className='p-4 border rounded-lg'>
-										<h4 className='font-medium'>Final Item {i + 1}</h4>
+								{[1, 2, 3, 4, 5, 6].map((num) => (
+									<div key={num} className='p-4 border rounded-lg'>
+										<h4 className='font-medium'>Final Item {num}</h4>
 										<p className='text-sm text-muted-foreground'>
 											Final section to demonstrate the full scrolling capability.
 										</p>
@@ -638,9 +638,9 @@ const CustomStyledSheet = () => {
 							p-6 padding has been overridden.
 						</p>
 						<div className='grid gap-3'>
-							{Array.from({ length: 4 }).map((_, i) => (
-								<div key={i} className='p-4 bg-white rounded-lg shadow-sm'>
-									<h4 className='font-medium text-blue-900'>Custom Item {i + 1}</h4>
+							{[1, 2, 3, 4].map((num) => (
+								<div key={num} className='p-4 bg-white rounded-lg shadow-sm'>
+									<h4 className='font-medium text-blue-900'>Custom Item {num}</h4>
 									<p className='text-sm text-blue-600'>
 										This demonstrates how you can override the default styling.
 									</p>

@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from './Alert';
 import { InfoIcon, AlertTriangleIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
 
 const meta: Meta<typeof Alert> = {
-	title: 'Components/Alert',
+	title: 'UI Core/Alert',
 	component: Alert,
 	parameters: {
 		layout: 'centered'

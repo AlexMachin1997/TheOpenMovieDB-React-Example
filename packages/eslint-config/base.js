@@ -43,13 +43,21 @@ export const config = [
 	},
 	{
 		ignores: [
-			'dist/**',
-			'build/**',
-			'coverage/**',
-			'node_modules/**',
+			'**/dist/**',
+			'**/build/**',
+			'**/coverage/**',
+			'**/node_modules/**',
 			'**/*.scss',
-			'*.png',
-			'.github/workflows/**/*.yml'
+			'**/*.png',
+			'**/.github/workflows/**/*.yml',
+			'**/.next/**',
+			'**/out/**',
+			'**/storybook-static/**',
+			'**/*.ttf',
+			'**/*.woff',
+			'**/*.woff2',
+			'**/*.eot',
+			'**/*.otf'
 		]
 	}
 ];

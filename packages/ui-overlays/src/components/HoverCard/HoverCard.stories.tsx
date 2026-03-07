@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage, Badge, Button } from '@repo/ui-cor
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '~/components/HoverCard/HoverCard';
 
 const meta: Meta = {
-	title: 'Components/Hover card',
+	title: 'UI Overlays/Hover card',
 	component: HoverCard,
 	subcomponents: { HoverCardTrigger, HoverCardContent },
 	parameters: {
@@ -225,8 +225,8 @@ export const TeamMember: Story = {
 				{ name: 'Alice Johnson', role: 'Designer', avatar: 'AJ', color: 'bg-red-500' },
 				{ name: 'Bob Smith', role: 'Developer', avatar: 'BS', color: 'bg-blue-500' },
 				{ name: 'Carol Davis', role: 'Manager', avatar: 'CD', color: 'bg-green-500' }
-			].map((member, index) => (
-				<HoverCard key={index}>
+			].map((member) => (
+				<HoverCard key={member.name}>
 					<HoverCardTrigger asChild>
 						<Button
 							variant='ghost'

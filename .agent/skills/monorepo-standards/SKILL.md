@@ -101,3 +101,18 @@ const config: StorybookConfig = {
 };
 export default config;
 ```
+
+### VS Code IntelliSense Configuration
+
+Because individual packages no longer contain `tailwind.config.ts` files, the Tailwind CSS extension will fail to provide IntelliSense. Map the extension to the consumer CSS files in `.vscode/settings.json` and silence native CSS errors:
+
+```json
+{
+	"css.lint.unknownAtRules": "ignore",
+	"scss.lint.unknownAtRules": "ignore",
+	"tailwindCSS.experimental.configFile": {
+		"apps/storybook/.storybook/tailwind.css": ["packages/**"],
+		"apps/the-open-movie-database/src/index.scss": ["apps/the-open-movie-database/**"]
+	}
+}
+```

@@ -24,7 +24,7 @@ interface IMultiSelectStorybookArguments extends IMultiSelectValue, ICommandSear
 }
 
 const meta: Meta<typeof SelectProvider> = {
-	title: 'Components/Selects/MultiSelect',
+	title: 'UI Forms/Selects/MultiSelect',
 	component: SelectProvider
 };
 
@@ -430,8 +430,7 @@ const WithFormTemplate = () => {
 	const [selectedFrameworks, setSelectedFrameworks] = React.useState<string[]>([]);
 	const [selectedLanguages, setSelectedLanguages] = React.useState<string[]>([]);
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		console.log('Form submitted:', {
 			frameworks: selectedFrameworks,
 			languages: selectedLanguages
@@ -439,7 +438,7 @@ const WithFormTemplate = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className='space-y-6 w-full max-w-md'>
+		<form action={handleSubmit} className='space-y-6 w-full max-w-md'>
 			<div className='space-y-2'>
 				<Label htmlFor='frameworks'>Select Frameworks:</Label>
 				<SelectProvider

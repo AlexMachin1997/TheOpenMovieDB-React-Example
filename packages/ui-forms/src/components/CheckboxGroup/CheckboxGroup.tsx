@@ -14,15 +14,18 @@ type CheckboxGroupProps = {
 	className?: string;
 };
 
+const EMPTY_OPTIONS: Option[] = [];
+const EMPTY_VALUES: string[] = [];
+
 const CheckboxGroup = ({
-	options = [],
+	options = EMPTY_OPTIONS,
 	value = undefined,
 	onChange = null,
 	noOptionsAvailableMessage = 'No options currently available.',
 	disabled = false,
 	name,
 	className,
-	defaultValue = [],
+	defaultValue = EMPTY_VALUES,
 	...props
 }: CheckboxGroupProps) => {
 	const isControlled = React.useMemo(() => value !== undefined, [value]);

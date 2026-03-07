@@ -37,7 +37,7 @@ export const SingleDatePicker = ({
 					variant='outline'
 					disabled={disabled}
 					className={cn(
-						'w-[280px] justify-start text-left font-normal',
+						'max-w-md w-full justify-start text-left font-normal',
 						!date && 'text-muted-foreground',
 						className
 					)}
@@ -55,7 +55,6 @@ export const SingleDatePicker = ({
 					startMonth={startMonth}
 					endMonth={endMonth}
 					locale={locale}
-					autoFocus
 				/>
 			</PopoverContent>
 		</Popover>

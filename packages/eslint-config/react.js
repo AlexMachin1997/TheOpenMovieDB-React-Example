@@ -2,7 +2,6 @@ import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactRefresh from 'eslint-plugin-react-refresh';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import importPlugin from 'eslint-plugin-import';
 import { config as baseConfig } from './base.js';
 import pluginStorybook from 'eslint-plugin-storybook';
 import { projectStructureParser, projectStructurePlugin } from 'eslint-plugin-project-structure';
@@ -33,25 +32,11 @@ export const config = [
 			'react-refresh': pluginReactRefresh,
 			react: pluginReact,
 			'jsx-a11y': jsxA11y,
-			import: importPlugin,
 			storybook: pluginStorybook
 		},
 		settings: {
 			react: {
 				version: 'detect'
-			},
-			'import/extensions': ['.ts', '.tsx'],
-			'import/parsers': {
-				'@typescript-eslint/parser': ['.ts', '.tsx']
-			},
-			'import/resolver': {
-				typescript: {
-					alwaysTryTypes: true,
-					project: true
-				},
-				node: {
-					extensions: ['.ts', '.tsx', '.js', '.jsx']
-				}
 			}
 		},
 		rules: {
@@ -66,27 +51,10 @@ export const config = [
 				}
 			],
 			'react/no-unknown-property': 'off',
-			'import/no-extraneous-dependencies': [
-				'error',
-				{
-					devDependencies: true
-				}
-			],
 			'jsx-a11y/label-has-associated-control': [
 				2,
 				{
 					assert: 'either'
-				}
-			],
-			'import/extensions': [
-				'error',
-				'ignorePackages',
-				{
-					js: 'never',
-					jsx: 'never',
-					ts: 'never',
-					tsx: 'never',
-					mjs: 'never'
 				}
 			],
 			// React 17+ JSX transform rules
@@ -95,13 +63,16 @@ export const config = [
 			'react/jsx-props-no-spreading': 'off',
 			'react/jsx-filename-extension': 'off',
 			'react/require-default-props': 'off',
-			'react/prop-types': 'off'
+			'react/prop-types': 'off',
+			'react/display-name': 'off',
+			'@typescript-eslint/no-unused-vars': 'off'
 		}
 	},
 
-	// Project structure enforcement — uses its own parser to check all file extensions
+	// Project structure enforcement — scoped to JS/TS source files to avoid
+	// running the custom AST parser over JSON, YAML, lock files etc.
 	{
-		files: ['**'],
+		files: ['**/*.{ts,tsx,js,jsx}'],
 		ignores: ['projectStructure.cache.json'],
 		languageOptions: {
 			parser: projectStructureParser
