@@ -20,8 +20,15 @@ export {
 	TooltipContent,
 	TooltipProvider
 } from '~/components/Tooltip/Tooltip';
+export { Search } from '~/components/Search/Search';
+export { DebouncableInput } from '~/components/DebouncableInput/DebouncableInput';
 
 // Variants (for consumers who need to extend)
 export { buttonVariants } from '~/components/Button/variants';
 export { badgeVariants } from '~/components/Badge/Badge.variants';
 export { alertVariants } from '~/components/Alert/Alert.variants';
+export {
+	searchWrapperVariants,
+	searchClearButtonVariants
+} from '~/components/Search/Search.variants';
+export { debouncableInputVariants } from '~/components/DebouncableInput/DebouncableInput.variants';

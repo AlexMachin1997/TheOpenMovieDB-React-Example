@@ -1,0 +1,100 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as DebouncableInputStories from './DebouncableInput.stories';
+
+<Meta of={DebouncableInputStories} />
+
+# DebouncableInput
+
+A controlled or uncontrolled text input component that natively debounces changes, avoiding the need to manually implement `useDebounce` hooks in parent components.
+
+## Installation
+
+```tsx
+import { DebouncableInput } from '@repo/ui-core';
+```
+
+## Features
+- Natively intercepts `onChange` to delay firing state updates to `onValueChange`.
+- Supports standard React 19 `ref` attributes without needing `forwardRef`.
+- Perfect for search inputs, data table filtering, or any field where delayed filtering API calls are required.
+
+<Canvas sourceState="none" of={DebouncableInputStories.Default} />
+
+## Properties
+
+<Controls />
+
+---
+
+## Guidelines & Use Cases
+
+### When to use `DebouncableInput`
+- **Search fields**: When typing into an input triggers an API call or expensive DOM filtering.
+- **Auto-saving forms**: If you need to trigger a save mutation X milliseconds after the user finishes typing.
+
+### Best Practices
+- **Do not wrap `DebouncableInput` in another debounce hook**: The component manages its own internal deferral. Hooking it to an external `useDebounce` is redundant.
+- **Rely on `onValueChange`**: The standard `onChange` DOM event is still accessible as a pass-through primitive, but you must strictly use `onValueChange={(val: string) => void}` to capture the deferred output correctly.
+
+---
+
+## Recipes
+
+### Quick Start
+
+```tsx
+import { useState } from 'react';
+import { DebouncableInput } from '@repo/ui-core';
+
+export function SearchExample() {
+  const handleSearch = (searchTerm: string) => {
+    // This will only fire 300ms after the user stops typing
+    console.log("Searching for:", searchTerm);
+  };
+
+  return (
+    <DebouncableInput 
+      placeholder="Search for something..." 
+      onValueChange={handleSearch} 
+      debounceMs={300} 
+    />
+  );
+}
+```
+
+### Custom Debounce Timing
+
+By default, the debounce delay is `300ms`. You can increase or decrease this via `debounceMs`.
+
+```tsx
+<DebouncableInput
+  debounceMs={1000}
+  placeholder="1 second debounce..."
+  onValueChange={handleSearch}
+/>
+```
+
+<Canvas sourceState="none" of={DebouncableInputStories.WithCustomDebounce} />
+
+### With Default Value
+
+```tsx
+<DebouncableInput
+  defaultValue="Initial starting value"
+  onValueChange={handleSearch}
+/>
+```
+
+<Canvas sourceState="none" of={DebouncableInputStories.WithDefaultValue} />
+
+### Disabled State
+
+```tsx
+<DebouncableInput
+  disabled
+  placeholder="Disabled input"
+  onValueChange={handleSearch}
+/>
+```
+
+<Canvas sourceState="none" of={DebouncableInputStories.Disabled} />

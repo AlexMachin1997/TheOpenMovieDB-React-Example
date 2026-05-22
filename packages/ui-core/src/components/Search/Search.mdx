@@ -1,0 +1,79 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SearchStories from './Search.stories';
+
+<Meta of={SearchStories} />
+
+# Search
+
+An enhanced search input component combining `DebouncableInput`, a static `SearchIcon`, and an optional clear (`X`) button. Ideal for command palettes, data tables, and generic site searches.
+
+## Installation
+
+```tsx
+import { Search } from '@repo/ui-core';
+```
+
+## Features
+- Visually incorporates search icon and clear actions structurally.
+- Inherits all debouncing features automatically from `DebouncableInput`.
+- Fully accessible out-of-the-box (with `aria-` support for internal icons).
+- Manages state internally to immediately render the clear button, avoiding visual latency while the parent waits for the deferred `onValueChange`.
+
+<Canvas sourceState="none" of={SearchStories.Default} />
+
+## Properties
+
+<Controls />
+
+---
+
+## Guidelines & Use Cases
+
+### When to use `Search`
+- **Global Search Bars**: Like top-nav search experiences.
+- **Command Palettes**: `cmdk` or standard dropdown modal searches.
+- **Table filtering**: Top-right corner inputs that filter large datasets.
+
+### Best Practices
+- **Enable `showClearButton` for long entries**: If users are expected to type long queries, always give them a quick escape hatch. 
+- **Manage the empty state downstream**: When the clear button is clicked, `onValueChange` fires with an empty string `""`. Ensure your parent component responds to this by resetting its filtered list to the default state.
+
+---
+
+## Recipes
+
+### Basic Navigation Search
+
+```tsx
+import { Search } from '@repo/ui-core';
+
+export const GlobalSearch = () => {
+    const fetchResults = (query: string) => {
+        // Triggers query after 400ms debounce
+        console.log("Searching backend:", query);
+    };
+
+    return (
+        <Search
+            showClearButton={true}
+            debounceMs={400}
+            onValueChange={fetchResults}
+            placeholder="Search users..."
+        />
+    );
+};
+```
+
+### With Clear Button
+
+When `showClearButton` is `true`, an `X` icon appears dynamically when there is text typed.
+
+```tsx
+<Search
+  showClearButton={true}
+  placeholder="Type to see clear button..."
+  onValueChange={fetchResults}
+/>
+```
+
+<Canvas sourceState="none" of={SearchStories.WithClearButton} />

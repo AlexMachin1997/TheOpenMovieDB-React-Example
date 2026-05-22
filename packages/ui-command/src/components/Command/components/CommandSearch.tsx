@@ -1,11 +1,8 @@
 import * as React from 'react';
-import { Command as CommandPrimitive } from 'cmdk';
-import { SearchIcon, XIcon } from 'lucide-react';
-import { useDebounce } from 'react-use';
 import { cn } from '@repo/tailwind-config';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { Search } from '@repo/ui-core';
 
-import { Button } from '@repo/ui-core';
 import type { ICommandSearch } from '~/components/Command/Command.types';
 
 /**
@@ -21,42 +18,40 @@ export const CommandSearch = ({
 	showClearButton = false,
 	...props
 }: ICommandSearch) => {
-	const { onSearchChange } = useCommandContext();
-	const [inputValue, setInputValue] = React.useState('');
+	const { onSearchChange, searchValue } = useCommandContext();
 
-	const handleDebouncedValueChange = React.useCallback(() => {
-		onSearchChange?.(inputValue);
-	}, [inputValue, onSearchChange]);
+	// Value state strictly controls what is synced upstream vs what is typed.
+	// We rely purely on the underlying `<Search>` to handle debouncing and emit changes through `onValueChange`
+	const [value, setValue] = React.useState(searchValue || '');
 
-	useDebounce(handleDebouncedValueChange, debounceMs, [inputValue]);
+	// Sync with external context updates (e.g., cleared programmatically by other components)
+	React.useEffect(() => {
+		if (searchValue !== value) {
+			setValue(searchValue || '');
+		}
+	}, [searchValue]);
 
 	if (!enabledSearch) return null;
 
+	const handleSearchChange = React.useCallback(
+		(val: string) => {
+			setValue(val);
+			onSearchChange?.(val);
+		},
+		[onSearchChange]
+	);
+
 	return (
-		<div data-slot='command-input-wrapper' className='flex items-center gap-2 border-b px-3'>
-			<SearchIcon className='size-4 shrink-0 opacity-50' />
-			<CommandPrimitive.Input
-				data-slot='command-input'
-				className={cn(
-					'placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
-					className
-				)}
-				value={inputValue}
-				placeholder={searchPlaceholder}
-				onValueChange={setInputValue}
+		<div data-slot='command-input-wrapper' className={cn('bg-background', className)}>
+			<Search
 				{...props}
+				value={value}
+				onValueChange={handleSearchChange}
+				debounceMs={debounceMs}
+				placeholder={searchPlaceholder}
+				showClearButton={showClearButton}
+				className='border-b-0 px-3' // Strip outer borders so it fits seamlessly inside the command palette
 			/>
-			{showClearButton && inputValue && (
-				<Button
-					variant='outline'
-					size='icon'
-					onClick={() => setInputValue('')}
-					className='p-0'
-					aria-label='Clear search'
-				>
-					<XIcon className='size-3 shrink-0' />
-				</Button>
-			)}
 		</div>
 	);
 };
