@@ -1,5 +1,6 @@
 import { defineConfig, type UserConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import { DTS_EXCLUDE } from './shared.js';
 
 interface TypescriptLibraryOptions {
 	/** Path to the library entry file (default: 'src/index.ts') */
@@ -25,7 +26,7 @@ export const typescriptLibrary = (options: TypescriptLibraryOptions = {}): UserC
 		plugins: [
 			dts({
 				include: ['src/**/*'],
-				exclude: ['src/**/*.test.ts']
+				exclude: DTS_EXCLUDE
 			})
 		],
 

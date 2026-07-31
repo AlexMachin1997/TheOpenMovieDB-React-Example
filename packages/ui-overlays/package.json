@@ -21,7 +21,9 @@
 		"check-types": "tsc --noEmit --incremental",
 		"lint": "eslint --cache",
 		"prettier": "prettier --write ./src",
-		"validate": "echo 'Validation dependencies handled by Turbo'"
+		"validate": "echo 'Validation dependencies handled by Turbo'",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"dependencies": {
 		"@radix-ui/react-dialog": "^1.1.14",
@@ -52,7 +54,8 @@
 		"tailwindcss": "^4.1.12",
 		"typescript": "catalog:",
 		"vite": "catalog:",
-		"vite-plugin-dts": "^4.3.0"
+		"vite-plugin-dts": "^4.3.0",
+		"vitest": "^4.0.18"
 	},
 	"peerDependencies": {
 		"react": ">=18.0.0",

@@ -1,6 +1,17 @@
 # D0 — Vitest test harness
 
-**Phase:** 1 · **Size:** S · **Depends on:** none · **Status:** todo
+**Phase:** 1 · **Size:** S · **Depends on:** none · **Status:** ✅ done
+
+> **Implementation note.** Landed as a **node-environment** harness: Vitest covers pure
+> logic only, while component behaviour is tested via Storybook `play()` tests. Consequences:
+> jsdom + React Testing Library are **deferred to D3** (first real need is `renderHook` for
+> `useDebouncedValue`); the existing Storybook interaction tests are tracked under **F6**
+> (blocked by the D5 React-externalization bug). This deliverable ships **plumbing only** —
+> every library package is wired (config + `test`/`test:watch` scripts) but carries **no test
+> files yet**, staying green via `passWithNoTests: true`. Real coverage lands on top of this
+> harness in **D1** (grouping), **D2** (dates), and **D3** (debounce). The shared preset lives
+> in `@repo/vite-config/vitest-base`; the DTS `exclude` and Vitest `include` are single-sourced
+> in `packages/vite-config/shared.ts`.
 
 ## Goal
 

@@ -25,7 +25,9 @@
 		"check-types": "tsc --noEmit --incremental",
 		"lint": "eslint --cache",
 		"prettier": "prettier --write ./src",
-		"validate": "echo 'Validation dependencies handled by Turbo'"
+		"validate": "echo 'Validation dependencies handled by Turbo'",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"dependencies": {
 		"date-fns": "^4.1.0"
@@ -39,7 +41,7 @@
 		"typescript": "catalog:",
 		"vite": "catalog:",
 		"vite-plugin-dts": "^4.3.0",
-		"vitest": "^3.2.4",
+		"vitest": "^4.0.18",
 		"tsx": "^4.0.1"
 	}
 }

@@ -21,8 +21,13 @@
 			"outputs": ["*.tsbuildinfo", "tsconfig.tsbuildinfo"]
 		},
 		"test": {
-			"dependsOn": ["^test"],
-			"inputs": ["$TURBO_DEFAULT$", ".env*"]
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": []
+		},
+		"test:watch": {
+			"cache": false,
+			"persistent": true
 		},
 		"validate": {
 			"dependsOn": ["lint", "check-types"]

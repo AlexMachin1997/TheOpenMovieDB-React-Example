@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import dts from 'vite-plugin-dts';
 import path from 'node:path';
 import fs from 'node:fs';
+import { DTS_EXCLUDE } from './shared.js';
 
 interface ReactLibraryOptions {
 	/** Path to the library entry file (default: 'src/index.ts') */
@@ -50,7 +51,7 @@ export const reactLibrary = (options: ReactLibraryOptions = {}): UserConfig => {
 			tailwindcss(),
 			dts({
 				include: ['src/**/*'],
-				exclude: ['src/**/*.stories.tsx', 'src/**/*.test.tsx', 'src/**/*.mdx']
+				exclude: DTS_EXCLUDE
 			})
 		],
 
