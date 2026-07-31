@@ -38,7 +38,12 @@ export const config = [
 			'no-console': 'off',
 			'@typescript-eslint/no-empty-function': 'off',
 			'@typescript-eslint/no-var-requires': 'off',
-			'import/extensions': 'off'
+			'import/extensions': 'off',
+			// TEMPORARY: downgraded to 'warn' so the newly-enforced linter (previously dead — see
+			// docs/refactor P0) doesn't block commits on ~39 pre-existing violations. Fix these and
+			// restore to 'error' in the "type-hygiene cleanup" deliverable.
+			'@typescript-eslint/no-empty-object-type': 'warn',
+			'@typescript-eslint/no-explicit-any': 'warn'
 		}
 	},
 	{
@@ -47,6 +52,8 @@ export const config = [
 			'**/build/**',
 			'**/coverage/**',
 			'**/node_modules/**',
+			// Standalone dev utility (ESLint timing profiler), not library source.
+			'**/profile.js',
 			'**/*.scss',
 			'**/*.png',
 			'**/.github/workflows/**/*.yml',

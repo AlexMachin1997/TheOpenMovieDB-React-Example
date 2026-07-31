@@ -24,14 +24,15 @@ export const CommandSearch = ({
 	// We rely purely on the underlying `<Search>` to handle debouncing and emit changes through `onValueChange`
 	const [value, setValue] = React.useState(searchValue || '');
 
-	// Sync with external context updates (e.g., cleared programmatically by other components)
+	// Sync with external context updates (e.g., cleared programmatically by other components).
+	// Intentionally keyed only on `searchValue`: adding `value` would clobber what the user is
+	// mid-typing. The proper fix (extract a `useDebouncedValue` hook) is tracked as D3.
 	React.useEffect(() => {
 		if (searchValue !== value) {
 			setValue(searchValue || '');
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchValue]);
-
-	if (!enabledSearch) return null;
 
 	const handleSearchChange = React.useCallback(
 		(val: string) => {
@@ -40,6 +41,10 @@ export const CommandSearch = ({
 		},
 		[onSearchChange]
 	);
+
+	// Early return must come AFTER all hooks (react-hooks/rules-of-hooks): returning above the
+	// hooks made the hook count vary between renders and would crash when `enabledSearch` toggled.
+	if (!enabledSearch) return null;
 
 	return (
 		<div data-slot='command-input-wrapper' className={cn('bg-background', className)}>

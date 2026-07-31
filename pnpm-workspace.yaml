@@ -1,3 +1,9 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# Single source of truth for shared dev-tool versions (referenced as "catalog:").
+# Expand this in D5 to cover eslint / prettier / vite / vitest etc.
+catalog:
+  typescript: ^5.8.2
+  vite: ^7.3.6

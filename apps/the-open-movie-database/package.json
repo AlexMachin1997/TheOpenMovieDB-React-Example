@@ -60,7 +60,7 @@
 		"prettier-plugin-tailwindcss": "^0.3.0",
 		"storybook": "^10.2.16",
 		"typescript": "^5.0.2",
-		"vite": "^7.0.4",
+		"vite": "catalog:",
 		"vitest": "^3.2.4"
 	}
 }
