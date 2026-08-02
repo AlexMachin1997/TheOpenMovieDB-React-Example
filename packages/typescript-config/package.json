@@ -12,6 +12,7 @@
 		"./base.json": "./base.json",
 		"./react.json": "./react.json",
 		"./node.json": "./node.json",
+		"./vitest.json": "./vitest.json",
 		"./types": "./types/index.d.ts",
 		"./types/*": "./types/*"
 	},
@@ -34,6 +35,7 @@
 		"base.json",
 		"react.json",
 		"node.json",
+		"vitest.json",
 		"types/"
 	],
 	"publishConfig": {
