@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from '@storybook/test';
+import { expect, fn, userEvent, waitFor, within } from '@storybook/test';
 
 import { Search } from '~/components/Search/Search';
 
@@ -48,8 +48,9 @@ export const InteractiveClearTest: Story = {
 		});
 
 		await step('Wait for debounce and verify clear button appears', async () => {
-			await new Promise((r) => setTimeout(r, 100));
-			expect(args.onValueChange).toHaveBeenLastCalledWith('Matrix');
+			await waitFor(() => {
+				expect(args.onValueChange).toHaveBeenLastCalledWith('Matrix');
+			});
 
 			const clearBtn = await canvas.findByRole('button', { name: /clear search/i });
 			expect(clearBtn).toBeVisible();

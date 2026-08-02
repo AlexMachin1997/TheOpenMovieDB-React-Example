@@ -45,9 +45,9 @@ with a regression test, which is the whole point of splitting the work this way.
 |----|-------------|-------|------|-----------|--------|------|
 | P0 | Repo health & guardrails | 0 | M | — | ✅ done | [00-repo-health.md](00-repo-health.md) |
 | D0 | Vitest test harness | 1 | S | P0 | ✅ done | [01-test-harness.md](01-test-harness.md) |
-| D1 | Consolidate & test grouping logic | 1 | S | D0 | todo | [02-grouping-logic.md](02-grouping-logic.md) |
-| D2 | Test & fix date formatting | 1 | S | D0 | todo | [03-date-logic.md](03-date-logic.md) |
-| D3 | Extract `useDebouncedValue` hook | 1 | M | D0 | todo | [04-debounce-hook.md](04-debounce-hook.md) |
+| D1 | Consolidate & test grouping logic | 1 | S | D0 | ✅ done | [02-grouping-logic.md](02-grouping-logic.md) |
+| D2 | Test & fix date formatting | 1 | S | D0 | ✅ done | [03-date-logic.md](03-date-logic.md) |
+| D3 | Extract `useDebouncedValue` hook | 1 | M | D0 | ✅ done | [04-debounce-hook.md](04-debounce-hook.md) |
 | D4 | Correctness bug fixes | 1 | M | D0 | todo | [05-correctness-bugs.md](05-correctness-bugs.md) |
 | D5 | Build & tooling config fixes | 2 | S | — | todo | _scoped below_ |
 | D6 | Exports & barrel conventions | 3 | M | — | todo | _scoped below_ |
@@ -145,7 +145,7 @@ Small, tracked deliverables that came out of getting the pipeline green. None bl
 | F3 | Align Storybook versions | S | `@storybook/test`/`@storybook/instrumenter` are `8.6.15` vs `storybook@10.2.16` (peer warning). Unify on 10.x (also unblocks F2). |
 | F4 | Restore folder-structure lint | S | The `eslint-plugin-project-structure` rule was disabled (its parser clobbered the TS parser for all files). Re-add in an ISOLATED config/run so it can't disable code linting. Pairs with D7. |
 | F5 | `check-types` build ordering | XS | Add `dependsOn: ["^build"]` to the `check-types` task in `turbo.json` so standalone `pnpm check-types` resolves internal `@repo/*` `.d.ts` without a prior build. |
-| F6 | Unblock Storybook interaction tests | S | `apps/storybook` already runs `play()` tests via `@storybook/addon-vitest` + Playwright, but `pnpm test` there is **red**: the library `dist` bundles its own React (the **D5** externalization bug), so browser stories hit duplicate-React "hooks are null" errors. Fixing **D5** (externalize `react`/`react-dom`/Radix) should turn these green. Also **depends on F3** (align `@storybook/test` `8.6.15` → `10.x`) and pairs with F2. This is where component-behaviour coverage lives — the D0 node harness deliberately doesn't duplicate it. |
+| F6 | Unblock Storybook interaction tests | S | `apps/storybook` already runs `play()` tests via `@storybook/addon-vitest` + Playwright, but `pnpm test` there is **red**: the library `dist` bundles its own React (the **D5** externalization bug), so browser stories hit duplicate-React "hooks are null" errors. Fixing **D5** (externalize `react`/`react-dom`/Radix) should turn these green. Also **depends on F3** (align `@storybook/test` `8.6.15` → `10.x`) and pairs with F2. This is where component-behaviour coverage lives — the D0 node harness deliberately doesn't duplicate it. **Found during D3:** the identical "Invalid hook call" / duplicate-React crash also happens live in the Storybook **dev server** for every `UI Command/Command` story (crashes inside `<Popover>` on mount) — confirmed pre-existing via `git stash` (reproduces on unmodified `main`, unrelated to D3). Notable because dev-server stories load package `src` directly, not `dist` — so the dist-bundling theory alone may not fully explain it; worth re-checking root cause when picking this up. |
 
 Also note: **D3 now also owns the `CommandSearch` stale-effect fix** — it's currently suppressed with a scoped `eslint-disable` + a pointer to D3, since the real fix is the `useDebouncedValue` extraction.
 

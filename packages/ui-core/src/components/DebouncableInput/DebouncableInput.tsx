@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useDebounce } from 'react-use';
 import { cn } from '@repo/tailwind-config';
+import { useDebouncedValue } from '~/hooks';
 import { debouncableInputVariants } from '~/components/DebouncableInput/DebouncableInput.variants';
 import type { IDebouncableInput } from '~/components/DebouncableInput/DebouncableInput.types';
 
@@ -18,33 +18,15 @@ export const DebouncableInput = ({
 	ref,
 	...props
 }: IDebouncableInput) => {
-	const initialValue =
-		controlledValue !== undefined ? String(controlledValue) : defaultValue !== undefined ? String(defaultValue) : '';
-
-	const [internalValue, setInternalValue] = React.useState<string>(initialValue);
-	const lastEmittedValue = React.useRef<string>(initialValue);
-
-	// Sync controlled value if the prop changes externally
-	React.useEffect(() => {
-		if (controlledValue !== undefined) {
-			setInternalValue(String(controlledValue));
-			lastEmittedValue.current = String(controlledValue);
-		}
-	}, [controlledValue]);
-
-	// Handle internal debouncing
-	const handleDebouncedValueChange = React.useCallback(() => {
-		if (internalValue !== lastEmittedValue.current) {
-			lastEmittedValue.current = internalValue;
-			onValueChange(internalValue);
-		}
-	}, [internalValue, onValueChange]);
-
-	useDebounce(handleDebouncedValueChange, debounceMs, [internalValue]);
+	const { value, setValue } = useDebouncedValue({
+		value: controlledValue !== undefined ? String(controlledValue) : undefined,
+		defaultValue: defaultValue !== undefined ? String(defaultValue) : undefined,
+		debounceMs,
+		onValueChange
+	});
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const newValue = e.target.value;
-		setInternalValue(newValue);
+		setValue(e.target.value);
 	};
 
 	return (
@@ -53,7 +35,7 @@ export const DebouncableInput = ({
 			ref={ref}
 			data-slot='debouncable-input'
 			className={cn(debouncableInputVariants(), className)}
-			value={internalValue}
+			value={value}
 			onChange={handleChange}
 		/>
 	);

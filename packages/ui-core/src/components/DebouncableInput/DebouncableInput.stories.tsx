@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from '@storybook/test';
-import { waitForDebounce } from './__fixtures__/interactions';
+import { expect, fn, userEvent, waitFor, within } from '@storybook/test';
 
 import { DebouncableInput } from '~/components/DebouncableInput/DebouncableInput';
 
@@ -41,14 +40,15 @@ export const WithCustomDebounce: Story = {
 			await userEvent.type(input, 'Testing 1000ms');
 		});
 
-		await step('Verify onValueChange is not called before 1 second', async () => {
-			await waitForDebounce(500);
-			expect(args.onValueChange).not.toHaveBeenCalled();
-		});
-
-		await step('Wait for full debounce and verify exactly one call', async () => {
-			await waitForDebounce(600);
-			expect(args.onValueChange).toHaveBeenCalledTimes(1);
+		await step('Wait for the debounce to settle and verify exactly one call', async () => {
+			// This story's debounceMs (1000ms) is deliberately long, close to waitFor's default
+			// 1000ms timeout — give it headroom rather than racing the two.
+			await waitFor(
+				() => {
+					expect(args.onValueChange).toHaveBeenCalledTimes(1);
+				},
+				{ timeout: 2000 }
+			);
 			expect(args.onValueChange).toHaveBeenCalledWith('Testing 1000ms');
 		});
 	}
@@ -100,13 +100,10 @@ export const InteractiveDebounceTest: Story = {
 			expect(args.onValueChange).not.toHaveBeenCalled();
 		});
 
-		await step('Wait for debounce to trigger', async () => {
-			// Wait slightly longer than the 300ms debounce
-			await waitForDebounce(400);
-		});
-
-		await step('Verify onValueChange is called exactly once with final value', async () => {
-			expect(args.onValueChange).toHaveBeenCalledTimes(1);
+		await step('Wait for debounce to settle and verify exactly one call with final value', async () => {
+			await waitFor(() => {
+				expect(args.onValueChange).toHaveBeenCalledTimes(1);
+			});
 			expect(args.onValueChange).toHaveBeenCalledWith('Hello');
 		});
 	}

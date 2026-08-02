@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { SearchIcon, XIcon } from 'lucide-react';
 import { cn } from '@repo/tailwind-config';
 
+import { useDebouncedValue } from '~/hooks';
 import { DebouncableInput } from '~/components/DebouncableInput';
 import { Button } from '~/components/Button';
 import { searchWrapperVariants, searchClearButtonVariants, searchDebouncableInputVariants } from '~/components/Search/Search.variants';
@@ -22,26 +22,19 @@ export const Search = ({
 	ref,
 	...props
 }: ISearch) => {
-	// We track the internal state explicitly to conditionally render the clear button immediately
-	// without waiting for the debounce loop to fire external state updates back to us.
-	const [localValue, setLocalValue] = React.useState<string>(
-		externalValue !== undefined ? String(externalValue) : defaultValue !== undefined ? String(defaultValue) : ''
-	);
-
-	React.useEffect(() => {
-		if (externalValue !== undefined) {
-			setLocalValue(String(externalValue));
-		}
-	}, [externalValue]);
-
-	const handleValueChange = (val: string) => {
-		setLocalValue(val);
-		onValueChange(val);
-	};
+	// debounceMs is intentionally NOT passed here — that's forwarded to the child
+	// DebouncableInput below, which owns the one real debounce delay. This hook call only
+	// mirrors DebouncableInput's already-settled value (synchronous pass-through) so the
+	// clear button can read it without duplicating a second state/sync-effect implementation.
+	const { value: localValue, setValue: setLocalValue } = useDebouncedValue({
+		value: externalValue !== undefined ? String(externalValue) : undefined,
+		defaultValue: defaultValue !== undefined ? String(defaultValue) : undefined,
+		debounceMs: 0,
+		onValueChange
+	});
 
 	const handleClear = () => {
 		setLocalValue('');
-		onValueChange('');
 	};
 
 	const isClearVisible = showClearButton && localValue.length > 0;
@@ -52,7 +45,7 @@ export const Search = ({
 			<DebouncableInput
 				ref={ref}
 				value={localValue}
-				onValueChange={handleValueChange}
+				onValueChange={setLocalValue}
 				className={cn(
 					searchDebouncableInputVariants(),
 					className

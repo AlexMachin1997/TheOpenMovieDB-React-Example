@@ -1,6 +1,6 @@
 # D3 — Extract `useDebouncedValue` hook
 
-**Phase:** 1 · **Size:** M · **Depends on:** D0 · **Status:** todo
+**Phase:** 1 · **Size:** M · **Depends on:** D0 · **Status:** ✅ done
 
 ## Goal
 
