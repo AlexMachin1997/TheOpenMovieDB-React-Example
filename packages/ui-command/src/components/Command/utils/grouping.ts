@@ -22,7 +22,9 @@ export const groupOptions = ({
 	}
 
 	options.forEach((option) => {
-		const group = option.group;
+		// Treat a missing or empty group as ungrouped (bucketed under `undefined`), so empty-string
+		// groups aren't silently dropped by the `filter(Boolean)` on the group names below.
+		const group = option.group || undefined;
 		if (!groups.has(group)) {
 			groups.set(group, []);
 		}

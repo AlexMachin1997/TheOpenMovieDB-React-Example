@@ -86,8 +86,8 @@ export interface ICommandContext {
 	close: () => void;
 	/** Function to toggle the open/close state */
 	toggle: () => void;
-	/** Function to set the open state */
-	setOpen: (open: boolean) => void;
+	/** Function to set the open state — accepts a boolean or an updater, like a `useState` setter */
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	/** Function to handle search value changes */
 	onSearchChange?: (value: string) => void;
 	/** Generic options for filtering */
@@ -114,8 +114,8 @@ export interface ICommandProvider {
 	children: React.ReactNode;
 	/** Whether the interface is currently open */
 	open: boolean;
-	/** Function to set the open state */
-	setOpen: (open: boolean) => void;
+	/** Function to set the open state — accepts a boolean or an updater, like a `useState` setter */
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	/** Whether to close automatically when an item is selected */
 	closeOnSelect?: boolean;
 	/** Default search value to start with */

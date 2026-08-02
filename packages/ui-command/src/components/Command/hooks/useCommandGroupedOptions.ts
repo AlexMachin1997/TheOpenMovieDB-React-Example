@@ -25,8 +25,10 @@ import type { Option } from '@repo/core';
  */
 export const useCommandGroupedOptions = (
 	options: Option[],
-	{ groupOrder = [], ungroupedPosition = 'top' }: IGrouping = {}
+	{ groupOrder, ungroupedPosition }: IGrouping = {}
 ): IGroupedOptions =>
+	// Defaults are left to `groupOptions` so the memo dependencies stay referentially stable:
+	// defaulting `groupOrder` to `[]` here would create a new array every render and defeat the memo.
 	useMemo(
 		() => groupOptions({ options, groupOrder, ungroupedPosition }),
 		[options, groupOrder, ungroupedPosition]

@@ -3,7 +3,7 @@
 	"extends": "./base.json",
 	"compilerOptions": {
 		"jsx": "react-jsx",
-		"types": ["@repo/typescript-config/types", "react", "react-dom"]
+		"types": ["@repo/typescript-config/types", "react", "react-dom", "vitest/globals"]
 	},
 	"include": [
 		"src",

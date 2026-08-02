@@ -24,6 +24,21 @@ describe('groupOptions', () => {
 		expect(sortedGroups).toEqual([undefined, 'Frontend']);
 	});
 
+	it('treats a missing or empty-string group as ungrouped', () => {
+		const missing = createOption({ id: 'm1', value: 'm1' });
+		const empty = createOption({ id: 'e1', value: 'e1', group: '' });
+		const grouped = createOption({ id: 'g1', value: 'g1', group: 'Frontend' });
+
+		const { groups, sortedGroups } = groupOptions({
+			options: [missing, empty, grouped],
+			ungroupedPosition: 'top'
+		});
+
+		expect(groups.get(undefined)).toEqual([missing, empty]);
+		expect(groups.has('')).toBe(false);
+		expect(sortedGroups).toEqual([undefined, 'Frontend']);
+	});
+
 	it('places the ungrouped block last with ungroupedPosition bottom', () => {
 		const ungrouped = createOption({ id: 'u1', value: 'u1' });
 		const grouped = createOption({ id: 'g1', value: 'g1', group: 'Frontend' });

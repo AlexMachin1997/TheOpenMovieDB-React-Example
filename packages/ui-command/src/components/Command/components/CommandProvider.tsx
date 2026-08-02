@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Popover } from '@repo/ui-overlays';
 import { CommandContext, CommandContextValue } from '~/components/Command/contexts/command-context';
 import { filterOptions } from '~/components/Command/utils/filtering';
+import { buildOptionsMap } from '~/components/Command/utils/optionsMap';
 import { ICommandProvider } from '~/components/Command/types/core';
-import type { Option } from '@repo/core';
 
 /**
  * Provider component that manages the state and behavior of command palette functionality
@@ -30,17 +30,29 @@ export const CommandProvider = ({
 		[options, searchValue]
 	);
 
+	const optionsMap = React.useMemo(() => {
+		return buildOptionsMap(options);
+	}, [options]);
+
+	const close = React.useCallback(() => {
+		setOpen(false);
+	}, [setOpen]);
+
+	const toggle = React.useCallback(() => {
+		setOpen((prev) => !prev);
+	}, [setOpen]);
+
 	const contextValue: CommandContextValue = React.useMemo(
 		() => ({
 			open,
 			searchValue,
 			closeOnSelect,
-			close: () => setOpen(false),
-			toggle: () => setOpen(!open),
+			close: close,
+			toggle: toggle,
 			setOpen: setOpen,
 			onSearchChange: handleSearchChange,
 			options,
-			optionsMap: new Map(options.map((option: Option) => [option.value, option.label])),
+			optionsMap,
 			filteredOptions,
 			emptyState
 		}),
@@ -48,9 +60,12 @@ export const CommandProvider = ({
 			open,
 			searchValue,
 			closeOnSelect,
+			close,
+			toggle,
 			setOpen,
 			handleSearchChange,
 			options,
+			optionsMap,
 			filteredOptions,
 			emptyState
 		]

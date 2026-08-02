@@ -7,8 +7,7 @@
 		},
 		"declaration": true,
 		"outDir": "dist",
-		"rootDir": "./src",
-		"types": ["@repo/typescript-config/types", "react", "react-dom", "vitest/globals"]
+		"rootDir": "./src"
 	},
 	"include": ["src/**/*"],
 	"exclude": ["dist", "node_modules"]
