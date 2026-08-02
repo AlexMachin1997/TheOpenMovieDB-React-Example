@@ -39,9 +39,17 @@ export const formatDateRange = (options: FormatDateRangeOptions = {}): string =>
 
 			if (startYear === endYear && startMonth === endMonth) {
 				// Same month: "Apr 4 - 8, 2022"
-				const startDay = startDate.getDate();
-				const monthShort = formatDate({ date: startDate, formatKey: 'monthShort', locale });
-				return `${monthShort} ${startDay}${separator}${end}`;
+				const startWithoutYear = formatDateCustom({
+					date: startDate,
+					formatString: 'MMM d',
+					locale
+				});
+				const endDayYear = formatDateCustom({
+					date: endDate,
+					formatString: 'd, yyyy',
+					locale
+				});
+				return `${startWithoutYear}${separator}${endDayYear}`;
 			} else if (startYear === endYear) {
 				// Same year: "Apr 4 - May 8, 2022"
 				const startWithoutYear = formatDateCustom({
