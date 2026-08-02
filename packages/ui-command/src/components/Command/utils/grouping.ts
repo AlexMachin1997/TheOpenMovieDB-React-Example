@@ -34,13 +34,12 @@ export const groupOptions = ({
 	const definedGroups = groupNames.filter(Boolean);
 	const hasUngrouped = groupNames.includes(undefined);
 
-	// Sort defined groups
-	const sortedGroups = groupOrder
-		? [
-				...groupOrder.filter((name) => definedGroups.includes(name)),
-				...definedGroups.filter((name) => !groupOrder.includes(name)).sort()
-			]
-		: definedGroups.sort();
+	// Sort defined groups: honour groupOrder first, then remaining named groups alphabetically.
+	// groupOrder defaults to [] so it is always defined here — no need to guard the array access.
+	const sortedGroups = [
+		...groupOrder.filter((name) => definedGroups.includes(name)),
+		...definedGroups.filter((name) => !groupOrder.includes(name)).sort()
+	];
 
 	// Add ungrouped items based on position preference
 	const sortedGroupNames = hasUngrouped

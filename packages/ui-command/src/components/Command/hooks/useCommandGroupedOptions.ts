@@ -1,13 +1,15 @@
 import { useMemo } from 'react';
 import { IGrouping, IGroupedOptions } from '~/components/Command/types';
+import { groupOptions } from '~/components/Command/utils/grouping';
 import type { Option } from '@repo/core';
 
 /**
  * Hook for grouping command options with memoization
  *
- * This hook provides a memoized way to group options by their group property,
- * ensuring that the grouping operation only runs when the options or grouping
- * configuration changes.
+ * Thin memoized wrapper around the canonical {@link groupOptions} utility, so grouping has a
+ * single source of truth. The hook only adds memoization — all bucketing/ordering behaviour
+ * (keeping ungrouped options under the `undefined` key, `groupOrder` precedence, ungrouped
+ * top/bottom placement) comes from `groupOptions`.
  *
  * @param options - Array of options to group
  * @param groupingConfig - Configuration for grouping behavior
@@ -24,39 +26,8 @@ import type { Option } from '@repo/core';
 export const useCommandGroupedOptions = (
 	options: Option[],
 	{ groupOrder = [], ungroupedPosition = 'top' }: IGrouping = {}
-): IGroupedOptions => {
-	const { sortedGroups, groups } = useMemo(() => {
-		const groups = new Map<string | undefined, Option[]>();
-
-		options.forEach((option) => {
-			if (!option.group) return;
-
-			if (!groups.has(option.group)) {
-				groups.set(option.group, []);
-			}
-
-			groups.get(option.group)!.push(option);
-		});
-
-		const groupNames = Array.from(groups.keys());
-		const definedGroups = groupNames.filter(Boolean);
-		const hasUngrouped = groupNames.includes(undefined);
-
-		const sortedGroups = groupOrder
-			? [
-					...groupOrder.filter((name) => definedGroups.includes(name)),
-					...definedGroups.filter((name) => !groupOrder.includes(name)).sort()
-				]
-			: definedGroups.sort();
-
-		const finalSortedGroups = hasUngrouped
-			? ungroupedPosition === 'top'
-				? [undefined, ...sortedGroups]
-				: [...sortedGroups, undefined]
-			: sortedGroups;
-
-		return { sortedGroups: finalSortedGroups, groups };
-	}, [options, groupOrder, ungroupedPosition]);
-
-	return { sortedGroups, groups };
-};
+): IGroupedOptions =>
+	useMemo(
+		() => groupOptions({ options, groupOrder, ungroupedPosition }),
+		[options, groupOrder, ungroupedPosition]
+	);

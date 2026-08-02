@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
 import { cn } from '@repo/tailwind-config';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { getEmptyMessage } from '~/components/Command/utils/emptyMessage';
 
 import type { ICommandEmpty } from '~/components/Command/Command.types';
 
@@ -14,15 +15,16 @@ export const CommandEmpty = ({
 }: ICommandEmpty) => {
 	const { searchValue, filteredOptions } = useCommandContext();
 
-	const emptyMessage = React.useMemo(() => {
-		if (searchValue.trim().length > 0) {
-			const finalFormatSearchTerm = formatSearchTerm || ((term) => `"${term}"`);
-			const formattedSearchTerm = finalFormatSearchTerm(searchValue.trim());
-			return noSearchResultsMessage.replace('{searchTerm}', formattedSearchTerm);
-		}
-
-		return noOptionsMessage;
-	}, [searchValue, noOptionsMessage, noSearchResultsMessage, formatSearchTerm]);
+	const emptyMessage = React.useMemo(
+		() =>
+			getEmptyMessage({
+				searchValue,
+				noOptionsMessage,
+				noSearchResultsMessage,
+				formatSearchTerm
+			}),
+		[searchValue, noOptionsMessage, noSearchResultsMessage, formatSearchTerm]
+	);
 
 	if (filteredOptions.length > 0) return null;
 

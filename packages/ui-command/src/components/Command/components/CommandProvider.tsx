@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Popover } from '@repo/ui-overlays';
 import { CommandContext, CommandContextValue } from '~/components/Command/contexts/command-context';
+import { filterOptions } from '~/components/Command/utils/filtering';
 import { ICommandProvider } from '~/components/Command/types/core';
 import type { Option } from '@repo/core';
 
@@ -24,14 +25,10 @@ export const CommandProvider = ({
 		setSearchValue(value);
 	}, []);
 
-	const filteredOptions = React.useMemo(() => {
-		if (!options) return [];
-		if (!searchValue.trim()) return options;
-
-		const searchLower = searchValue.toLowerCase();
-
-		return options.filter((option) => option.label.toLowerCase().includes(searchLower));
-	}, [options, searchValue]);
+	const filteredOptions = React.useMemo(
+		() => filterOptions(options, searchValue),
+		[options, searchValue]
+	);
 
 	const contextValue: CommandContextValue = React.useMemo(
 		() => ({

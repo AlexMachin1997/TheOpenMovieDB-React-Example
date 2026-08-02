@@ -1,6 +1,6 @@
 # D1 — Consolidate & test grouping logic
 
-**Phase:** 1 · **Size:** S · **Depends on:** D0 · **Status:** todo
+**Phase:** 1 · **Size:** S · **Depends on:** D0 · **Status:** done
 
 ## Goal
 
@@ -44,13 +44,35 @@ have no tests.
 
 ## Acceptance criteria
 
-- [ ] Only one grouping implementation remains; `grep` for the group+sort algorithm finds
-      it in exactly one place.
-- [ ] Tests assert ungrouped options are **kept** (top and bottom placement), `groupOrder`
+- [x] Only one grouping implementation remains; `grep` for the group+sort algorithm finds
+      it in exactly one place (`utils/grouping.ts`).
+- [x] Tests assert ungrouped options are **kept** (top and bottom placement), `groupOrder`
       precedence, alphabetical fallback, separator-before-every-group-except-first, and
       headers only for named groups.
-- [ ] A test reproduces the old ungrouped-dropping bug and now passes.
-- [ ] `ui-command` and `Selects` Storybook grouped stories still render identically.
+- [x] A test reproduces the old ungrouped-dropping bug and now passes (the `groupOptions`
+      "ungrouped kept" spec — the exact contract the old hook violated).
+- [~] `ui-command` and `Selects` Storybook grouped stories still render identically —
+      behaviourally guaranteed (all consumers now route through the unit-tested `groupOptions`);
+      the Storybook `play()` run was not executed in this session.
+
+## Outcome
+
+Resolved the open decision **in favour of keeping** `useCommandGroupedOptions`: it was rewritten
+as a thin memoized wrapper around `groupOptions` and **adopted inside `CommandGroupedList`** (which
+dropped its inline copy). This collapses all three implementations onto `groupOptions` and fixes
+the hook's two bugs (dropped ungrouped options, dead `ungroupedPosition`) by construction.
+
+Also, beyond the original scope:
+
+- Extracted two more inline pure computations for testability: `filterOptions` (`utils/filtering.ts`,
+  from `CommandProvider`) and `getEmptyMessage` (`utils/emptyMessage.ts`, from `CommandEmpty`).
+- Proof-first at the pure-util layer only — **no jsdom/Testing Library** added (the hook is covered
+  transitively once it delegates). Tests are one `.spec.ts` per module (`grouping`, `filtering`,
+  `emptyMessage`), 20 tests total, all green.
+- `grouping.ts`'s `filter(Boolean)` narrowing was preserved (intentional, ts-reset-powered); only the
+  unreachable `groupOrder` ternary branch was collapsed.
+- Wired `vitest/globals` into `ui-command`'s `tsconfig` (first test in a library package).
+- Updated the `vitest-testing` skill to the one-spec-per-module / describe-per-function convention.
 
 ## Open decision
 
