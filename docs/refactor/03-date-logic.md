@@ -1,6 +1,6 @@
 # D2 — Test & fix date formatting
 
-**Phase:** 1 · **Size:** S · **Depends on:** D0 · **Status:** todo
+**Phase:** 1 · **Size:** S · **Depends on:** D0 · **Status:** ✅ done
 
 ## Goal
 

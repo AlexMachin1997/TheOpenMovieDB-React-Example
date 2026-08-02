@@ -1,6 +1,6 @@
 # D1 — Consolidate & test grouping logic
 
-**Phase:** 1 · **Size:** S · **Depends on:** D0 · **Status:** done
+**Phase:** 1 · **Size:** S · **Depends on:** D0 · **Status:** ✅ done
 
 ## Goal
 
