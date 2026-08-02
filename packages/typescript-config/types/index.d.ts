@@ -1,6 +1,9 @@
 // Re-export all global type definitions
 /// <reference path="./global.d.ts" />
 
+// Makes vitest's describe/it/expect/vi globals available to all consumers
+/// <reference types="vitest/globals" />
+
 // Import ts-reset directly here - this makes it available to all consumers
 import '@total-typescript/ts-reset';
 

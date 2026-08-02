@@ -12,7 +12,6 @@
 		"./base.json": "./base.json",
 		"./react.json": "./react.json",
 		"./node.json": "./node.json",
-		"./vitest.json": "./vitest.json",
 		"./types": "./types/index.d.ts",
 		"./types/*": "./types/*"
 	},
@@ -25,7 +24,8 @@
 		"build": "echo 'No build needed for config package'"
 	},
 	"dependencies": {
-		"@total-typescript/ts-reset": "^0.6.1"
+		"@total-typescript/ts-reset": "^0.6.1",
+		"vitest": "catalog:"
 	},
 	"devDependencies": {
 		"eslint": "^9.34.0",
@@ -35,7 +35,6 @@
 		"base.json",
 		"react.json",
 		"node.json",
-		"vitest.json",
 		"types/"
 	],
 	"publishConfig": {
