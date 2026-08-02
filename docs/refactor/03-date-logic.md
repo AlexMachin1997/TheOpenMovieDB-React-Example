@@ -35,15 +35,18 @@ and has zero tests. It also has a live bug:
 
 ## Approach
 
-- [ ] Write `dates/ranges.test.ts` covering all four branches: same-month, same-year,
-      cross-year, single-date (with and without the prefix), plus null/invalid inputs.
-- [ ] Watch the same-month case fail, then fix [`ranges.ts:43`](../../packages/core/src/dates/ranges.ts).
-- [ ] Add `dates/formatters.test.ts` for each `DateFormatKey` and null handling.
-- [ ] (Optional) refactor the format-key record; (optional) remove `console.warn`.
+- [x] Write `dates/ranges.test.ts` covering all four branches: same-month, same-year,
+      cross-year, single-date (with and without the prefix), plus null/invalid inputs. — landed
+      as `ranges.spec.ts` (28 tests; also covers reversed ranges, custom separators, invalid dates).
+- [x] Watch the same-month case fail, then fix [`ranges.ts:43`](../../packages/core/src/dates/ranges.ts).
+- [x] Add `dates/formatters.test.ts` for each `DateFormatKey` and null handling. — landed as
+      `formatters.spec.ts` (28 tests, `it.each` over every `DateFormatKey`).
+- [ ] (Optional) refactor the format-key record; (optional) remove `console.warn`. — neither
+      done: `DateFormatKey` is still declared in three places and both `console.warn` calls remain.
 
 ## Acceptance criteria
 
-- [ ] A same-month range formats as `"Apr 4 - 8, 2022"`.
-- [ ] Tests cover every branch of `formatDateRange` and each `DateFormatKey`.
-- [ ] `pnpm --filter @repo/core test` is green and included in `turbo run test`.
-- [ ] DatePicker stories still render sensible strings.
+- [x] A same-month range formats as `"Apr 4 - 8, 2022"`.
+- [x] Tests cover every branch of `formatDateRange` and each `DateFormatKey`.
+- [x] `pnpm --filter @repo/core test` is green and included in `turbo run test`. — 56 tests passing.
+- [ ] DatePicker stories still render sensible strings. — not re-verified this session.

@@ -36,10 +36,10 @@ have no tests.
 
 ## Approach
 
-- [ ] Refactor [`CommandGroupedList.tsx:18-47`](../../packages/ui-command/src/components/Command/components/CommandGroupedList.tsx) to call `groupOptions(...)`.
-- [ ] Delete `useCommandGroupedOptions.ts` and its export in `hooks/index.ts` (or fix + adopt).
-- [ ] Add `utils/grouping.test.ts` covering `groupOptions`, `getVirtualizedItems`, `getEstimatedItemHeight`.
-- [ ] Tidy the dead ternary: `groupOrder = []` default makes `groupOrder ? … : …`
+- [x] Refactor [`CommandGroupedList.tsx:18-47`](../../packages/ui-command/src/components/Command/components/CommandGroupedList.tsx) to call `groupOptions(...)`.
+- [x] Delete `useCommandGroupedOptions.ts` and its export in `hooks/index.ts` (or fix + adopt). — took the "fix + adopt" path (see Outcome below), not deletion.
+- [x] Add `utils/grouping.test.ts` covering `groupOptions`, `getVirtualizedItems`, `getEstimatedItemHeight`. — landed as `grouping.spec.ts` (+ `filtering.spec.ts`, `emptyMessage.spec.ts`), 20 tests total.
+- [x] Tidy the dead ternary: `groupOrder = []` default makes `groupOrder ? … : …`
       always take the truthy branch ([`grouping.ts:38-43`](../../packages/ui-command/src/components/Command/utils/grouping.ts)).
 
 ## Acceptance criteria

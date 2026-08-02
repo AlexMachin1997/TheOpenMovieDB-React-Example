@@ -80,18 +80,18 @@ gates) is blocked until this is done.
 
 ## Approach
 
-- [ ] Add `typescript` (catalog-pinned) to the five packages that invoke `tsc`.
-- [ ] `pnpm install`, then confirm `turbo run build` and `turbo run check-types` pass.
-- [ ] Change pre-commit `&` → `&&`; test that a deliberate lint error blocks a commit.
-- [ ] Confirm `turbo run lint` runs to completion (fix the storybook ESM crash if it persists).
-- [ ] Verify CI checks are required for merge.
+- [x] Add `typescript` (catalog-pinned) to the five packages that invoke `tsc`.
+- [~] `pnpm install`, then confirm `turbo run build` and `turbo run check-types` pass. — `check-types` passes; `build` needs the developer's local system-Node update (see Status above).
+- [x] Change pre-commit `&` → `&&`; test that a deliberate lint error blocks a commit.
+- [x] Confirm `turbo run lint` runs to completion (fix the storybook ESM crash if it persists).
+- [ ] Verify CI checks are required for merge. — not verified; GitHub branch-protection setting, not code, never checked in a session.
 
 ## Acceptance criteria
 
-- [ ] `pnpm build`, `pnpm check-types`, and `pnpm lint` all run to completion from the repo root.
-- [ ] A staged file containing a `rules-of-hooks` violation **fails** the pre-commit hook.
-- [ ] CI's ESLint/TypeCheck jobs are green on a clean branch and required to merge.
-- [ ] No product code changed (dependency, hook-script, and config only).
+- [~] `pnpm build`, `pnpm check-types`, and `pnpm lint` all run to completion from the repo root. — true for `check-types`/`lint`; `build` is green under Node 24 but pending the local system-Node update.
+- [x] A staged file containing a `rules-of-hooks` violation **fails** the pre-commit hook. — proven live: the pre-existing `CommandSearch` rules-of-hooks bug was caught by lint once this landed.
+- [ ] CI's ESLint/TypeCheck jobs are green on a clean branch and required to merge. — not verified; GitHub repo setting, outside session scope so far.
+- [x] No product code changed (dependency, hook-script, and config only).
 
 ## Notes
 

@@ -35,20 +35,27 @@ Storybook covers this with **real timers** — stories wait 400-600ms of wall-cl
 
 ## Approach
 
-- [ ] Write the hook: resolve initial value, sync on external `value` change, debounce
-      emits via `onValueChange`, guard against emitting the initial/unchanged value.
-- [ ] Add `useDebouncedValue.test.ts` using `vi.useFakeTimers()` + `renderHook`.
-- [ ] Refactor `DebouncableInput` to use it.
-- [ ] Refactor `Search` to use it; delete `localValue`; single-source clear-button visibility.
-- [ ] Replace/trim the real-timer story fixture now that logic is unit-tested.
+- [x] Write the hook: resolve initial value, sync on external `value` change, debounce
+      emits via `onValueChange`, guard against emitting the initial/unchanged value. — hand-rolled;
+      dropped `react-use` entirely (it was `DebouncableInput`'s only consumer repo-wide).
+- [x] Add `useDebouncedValue.test.ts` using `vi.useFakeTimers()` + `renderHook`. — landed as
+      `useDebouncedValue.spec.ts` (repo's `.spec.ts` convention), 7 tests.
+- [x] Refactor `DebouncableInput` to use it.
+- [x] Refactor `Search` to use it; delete `localValue`; single-source clear-button visibility.
+- [x] Replace/trim the real-timer story fixture now that logic is unit-tested. — `__fixtures__/interactions.ts` deleted; stories now use `waitFor`.
 
 ## Acceptance criteria
 
-- [ ] One hook owns debounce + sync; neither component re-implements it.
-- [ ] `Search` no longer holds a second copy of the value state.
-- [ ] Hook tests cover: debounce delay, rapid changes coalescing to one emit, external
+- [x] One hook owns debounce + sync; neither component re-implements it. — also deleted
+      `CommandSearch`'s third copy, one level up (not in this file's original Scope, but the
+      roadmap README explicitly assigned it to D3).
+- [x] `Search` no longer holds a second copy of the value state.
+- [x] Hook tests cover: debounce delay, rapid changes coalescing to one emit, external
       `value` update syncing in, no emit on initial mount.
-- [ ] Existing `DebouncableInput`/`Search` stories still behave the same for the user.
+- [x] Existing `DebouncableInput`/`Search` stories still behave the same for the user. — verified
+      manually in a real browser (typing, clear button, clear action). The automated `play()` run
+      hit an unrelated Storybook browser-pane timer-throttling flake (Storybook's own "passed in
+      CLI, failed in browser" banner); confirmed not a real regression.
 
 ## Open decision
 

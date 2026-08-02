@@ -49,23 +49,27 @@ This is the keystone: D1–D4 all ship with regression tests, which requires thi
 
 ## Approach
 
-- [ ] Decide config style: a root `vitest.workspace.ts` referencing per-package configs,
+- [x] Decide config style: a root `vitest.workspace.ts` referencing per-package configs,
       **or** a small shared preset in `@repo/vite-config` (e.g. `vitest-base.ts`) that each
       package extends. Prefer the shared preset — matches the existing `reactLibrary` pattern.
-- [ ] Add `@testing-library/react`, `@testing-library/jest-dom`, `jsdom` as devDeps where
-      needed (UI packages only; `core` stays node env).
-- [ ] Add `test` / `test:watch` scripts to the five library packages.
-- [ ] Add one smoke test per package.
-- [ ] Confirm `turbo run test` runs all packages green; confirm `test` task `inputs` in
-      `turbo.json` still make sense (currently `$TURBO_DEFAULT$` + `.env*`).
+- [~] Add `@testing-library/react`, `@testing-library/jest-dom`, `jsdom` as devDeps where
+      needed (UI packages only; `core` stays node env). — deferred to D3 as noted above; added
+      for `ui-core` there (no `jest-dom` needed — no DOM matchers used).
+- [x] Add `test` / `test:watch` scripts to the five library packages.
+- [ ] Add one smoke test per package. — not added; shipped plumbing-only (`passWithNoTests: true`)
+      as noted above, with real coverage landing via D1/D2/D3 instead.
+- [~] Confirm `turbo run test` runs all packages green; confirm `test` task `inputs` in
+      `turbo.json` still make sense (currently `$TURBO_DEFAULT$` + `.env*`). — `turbo run test`
+      is green; the `inputs` review was not revisited.
 
 ## Acceptance criteria
 
-- [ ] `pnpm test` from the repo root runs Vitest in every library package and passes.
-- [ ] `turbo run test` shows each package executing (not "no tasks").
-- [ ] A deliberately failing assertion in any smoke test makes `turbo run test` fail
-      (proves the harness is actually wired, not silently skipped).
-- [ ] No changes to any component/library runtime code.
+- [x] `pnpm test` from the repo root runs Vitest in every library package and passes.
+- [x] `turbo run test` shows each package executing (not "no tasks").
+- [~] A deliberately failing assertion in any smoke test makes `turbo run test` fail
+      (proves the harness is actually wired, not silently skipped). — no dedicated smoke test
+      exists to deliberately break; proven instead by D1/D2/D3's real tests actually gating.
+- [x] No changes to any component/library runtime code.
 
 ## Notes
 
