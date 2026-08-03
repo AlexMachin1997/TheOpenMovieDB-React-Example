@@ -40,10 +40,10 @@ when rendered via `asChild` as something other than a native `<button>`.
 ## Requirements
 
 ### Functional
-- `startIcon`/`endIcon` accept an icon component reference (not raw markup/`ReactNode`),
-  rendered internally via the predecessor `Icon` component (see Decisions) so sizing/
-  spacing/`aria-hidden` is consistent and not re-implemented inside Button. Exact prop
-  typing is an `implementation-planning` decision.
+- `startIcon`/`endIcon` accept an icon name string (not raw markup/`ReactNode`, not a
+  component reference), rendered internally via the predecessor `Icon` component (see
+  Decisions) so sizing/spacing/`aria-hidden` is consistent and not re-implemented inside
+  Button. Exact prop typing is an `implementation-planning` decision.
 - `loading?: boolean` prop: when `true`, the button is non-interactive — both the native
   `disabled` attribute and an explicit `aria-disabled="true"` are set (native `disabled`
   governs real interactivity/tab order; `aria-disabled` is kept as an explicit, stable
@@ -148,10 +148,10 @@ should map to one test.
   value).
 
 **Icons**
-- Given a `Button` with `startIcon={PlusIcon}` and text children, when rendered, then
+- Given a `Button` with `startIcon="plus"` and text children, when rendered, then
   the icon appears before the text, sized consistently with existing icon usage
   (`size-4`), and carries `aria-hidden="true"`.
-- Given a `Button` with `endIcon={ArrowRightIcon}` and text children, when rendered,
+- Given a `Button` with `endIcon="arrow-right"` and text children, when rendered,
   then the icon appears after the text with `aria-hidden="true"`.
 - Given a `Button` with both `startIcon` and `endIcon`, when rendered, then both appear
   in their respective positions simultaneously.
@@ -220,12 +220,21 @@ should map to one test.
 - **Dedicated `Icon` component**: reversed from the earlier proposal — this is now a
   **predecessor** deliverable, not a follow-up. Button's `startIcon`/`endIcon` and
   internal spinner consume it rather than reimplementing sizing/`aria-hidden` handling
-  themselves, avoiding rework once the shared component lands. It needs its own short
-  discovery/spec (own requirements: accepted icon shapes, sizing scale, `aria-hidden`
-  handling) before Button's implementation-planning can start — not written yet.
-  Existing raw-icon usages elsewhere (e.g. `Search.tsx`'s manual `SearchIcon`/`XIcon`
-  handling) are candidates to migrate onto it too, but that migration is optional/
-  separate and not required for Button to ship.
+  themselves, avoiding rework once the shared component lands. Its spec is now written —
+  see [`icon-component.md`](icon-component.md) — but implementation is not yet done, so
+  this deliverable remains blocked per `docs/specs/README.md`.
+- **`startIcon`/`endIcon` typing reversed to a name string**: originally assumed to be an
+  icon component reference (`React.ComponentType<{ className?: string }>`); superseded by
+  Icon's own spec decision to accept a bare icon name string (Iconify-style API backed by
+  `@iconify/react`, replacing `lucide-react`), TypeScript-checked against a union of known
+  names. `startIcon`/`endIcon` now forward a name string into Icon rather than a component
+  reference. Note: Icon's spec defers offline/bundled icon data to a follow-up — for now
+  icon data resolves via `@iconify/react`'s default CDN-backed mechanism, which has a
+  first-render network-fetch gap worth re-checking once this deliverable's own
+  implementation-planning starts, given Button's spinner needs to render immediately (see
+  Icon's spec, Edge Cases). Existing raw-icon usages elsewhere (e.g. `Search.tsx`'s manual
+  `SearchIcon`/`XIcon` handling) are migrated onto `Icon` as part of the predecessor
+  deliverable itself (see its spec's Scope) — no longer optional/separate.
 
 ## Open Questions
 None remaining — see Decisions above.

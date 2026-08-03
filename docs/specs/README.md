@@ -6,7 +6,7 @@ everything in its "Depends on" column is done and merged — not just spec'd.
 
 | Deliverable | Status | Depends on | Spec | Discovery |
 |---|---|---|---|---|
-| Icon component | not started | — | not written yet | not written yet |
+| Icon component | spec written | — | [icon-component.md](icon-component.md) | [icon-component.md](../discovery/icon-component.md) |
 | Button enhancements | blocked | Icon component | [button-enhancements.md](button-enhancements.md) | [button-enhancements.md](../discovery/button-enhancements.md) |
 
 ## Why this file exists
