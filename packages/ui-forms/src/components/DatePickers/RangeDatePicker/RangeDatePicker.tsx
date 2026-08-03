@@ -1,9 +1,8 @@
-import { CalendarIcon } from 'lucide-react';
 import React from 'react';
 import type { DateRange } from 'react-day-picker';
 import { cn } from '@repo/tailwind-config';
 import { formatDateRange } from '@repo/core';
-import { Button } from '@repo/ui-core';
+import { Button, Icon } from '@repo/ui-core';
 import { Calendar } from '~/components/Calendar/components/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui-overlays';
 import { IDatePicker } from '~/components/DatePickers/types';
@@ -51,7 +50,7 @@ export const DateRangePicker = ({
 							!dateRange?.from && 'text-muted-foreground'
 						)}
 					>
-						<CalendarIcon className='mr-2 h-4 w-4' />
+						<Icon name='calendar' className='mr-2' />
 						{dateRange?.from && dateRange?.to ? (
 							<span>{formattedRange}</span>
 						) : (

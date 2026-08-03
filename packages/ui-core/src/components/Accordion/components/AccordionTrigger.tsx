@@ -1,6 +1,6 @@
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { ChevronDownIcon } from 'lucide-react';
 import { cn } from '@repo/tailwind-config';
+import { Icon } from '~/components/Icon';
 import type { IAccordionTrigger } from '~/components/Accordion/Accordion.types';
 
 export const AccordionTrigger = ({ className, children, icon, ...props }: IAccordionTrigger) => {
@@ -16,7 +16,10 @@ export const AccordionTrigger = ({ className, children, icon, ...props }: IAccor
 			>
 				{children}
 				{icon ?? (
-					<ChevronDownIcon className='text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200' />
+					<Icon
+						name='chevron-down'
+						className='text-muted-foreground pointer-events-none translate-y-0.5 transition-transform duration-200'
+					/>
 				)}
 			</AccordionPrimitive.Trigger>
 		</AccordionPrimitive.Header>

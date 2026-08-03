@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CalendarIcon, GitForkIcon, InfoIcon, StarIcon } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage, Badge, Button } from '@repo/ui-core';
+import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Icon } from '@repo/ui-core';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '~/components/HoverCard/HoverCard';
 
 const meta: Meta = {
@@ -32,7 +31,7 @@ export const Default: Story = {
 						<h4 className='text-sm font-semibold'>@nextjs</h4>
 						<p className='text-sm'>The React Framework – created and maintained by @vercel.</p>
 						<div className='flex items-center pt-2'>
-							<CalendarIcon className='mr-2 h-4 w-4 opacity-70' />
+							<Icon name='calendar' className='mr-2 opacity-70' />
 							<span className='text-xs text-muted-foreground'>Joined December 2021</span>
 						</div>
 					</div>
@@ -67,7 +66,7 @@ export const UserProfile: Story = {
 							The React component library and design system that&apos;s taking the web by storm.
 						</p>
 						<div className='flex items-center pt-2'>
-							<CalendarIcon className='mr-2 h-4 w-4 opacity-70' />
+							<Icon name='calendar' className='mr-2 opacity-70' />
 							<span className='text-xs text-muted-foreground'>Joined March 2022</span>
 						</div>
 					</div>
@@ -101,11 +100,11 @@ export const RepositoryInfo: Story = {
 							<span>TypeScript</span>
 						</div>
 						<div className='flex items-center'>
-							<StarIcon className='mr-1 h-4 w-4' />
+							<Icon name='star' className='mr-1' />
 							<span>54.2k</span>
 						</div>
 						<div className='flex items-center'>
-							<GitForkIcon className='mr-1 h-4 w-4' />
+							<Icon name='git-fork' className='mr-1' />
 							<span>3.1k</span>
 						</div>
 					</div>
@@ -123,7 +122,7 @@ export const InfoCard: Story = {
 			<HoverCard>
 				<HoverCardTrigger asChild>
 					<Button variant='ghost' size='icon' className='h-5 w-5'>
-						<InfoIcon className='h-4 w-4' />
+						<Icon name='info' />
 						<span className='sr-only'>More info</span>
 					</Button>
 				</HoverCardTrigger>
@@ -182,7 +181,7 @@ export const StatsCard: Story = {
 				<HoverCard>
 					<HoverCardTrigger asChild>
 						<Button variant='ghost' size='icon' className='h-5 w-5'>
-							<InfoIcon className='h-4 w-4' />
+							<Icon name='info' />
 						</Button>
 					</HoverCardTrigger>
 					<HoverCardContent className='w-72'>

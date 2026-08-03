@@ -1,5 +1,5 @@
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { CheckIcon } from 'lucide-react';
+import { Icon } from '@repo/ui-core';
 import { cn } from '@repo/tailwind-config';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import type { ICheckbox } from '~/components/Checkbox/Checkbox.types';
@@ -36,7 +36,7 @@ export const Checkbox = ({
 				data-slot='checkbox-indicator'
 				className='flex items-center justify-center text-current transition-none'
 			>
-				<CheckIcon className={cn('size-3.5', iconClassName)} />
+				<Icon name='check' size='sm' className={iconClassName} />
 			</CheckboxPrimitive.Indicator>
 		</CheckboxPrimitive.Root>
 	);

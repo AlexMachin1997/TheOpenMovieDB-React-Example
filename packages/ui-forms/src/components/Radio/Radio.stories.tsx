@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, within } from '@storybook/test';
+import { expect, within } from 'storybook/test';
 import { Radio, RadioLabel } from '~/components/Radio/Radio';
 
 const meta: Meta<typeof Radio> = {

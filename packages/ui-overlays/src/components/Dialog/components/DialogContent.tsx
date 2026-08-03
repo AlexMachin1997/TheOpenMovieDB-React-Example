@@ -2,7 +2,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cn } from '@repo/tailwind-config';
 import { DialogOverlay } from '~/components/Dialog/components/DialogOverlay';
 import { DialogPortal } from '~/components/Dialog/components/DialogPortal';
-import { XIcon } from 'lucide-react';
+import { Icon } from '@repo/ui-core';
 import type { IDialogContent } from '~/components/Dialog/Dialog.types';
 
 export const DialogContent = ({
@@ -30,7 +30,14 @@ export const DialogContent = ({
 						data-slot='dialog-close'
 						className="cursor-pointer ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6"
 					>
-						{icon ?? <XIcon />}
+						{/*
+						 * `size='xl'` (24px) is load-bearing, not a style choice. A consumer-supplied
+						 * `icon` with no size class picks up the button's own
+						 * `[&_svg:not([class*='size-'])]:size-6` rule above — but `Icon` always emits a
+						 * `size-*` class, which stops that rule matching. Dropping the explicit size
+						 * here would silently shrink the close button to 16px.
+						 */}
+						{icon ?? <Icon name='x' size='xl' />}
 						<span className='sr-only'>Close</span>
 					</DialogPrimitive.Close>
 				)}

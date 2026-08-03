@@ -34,7 +34,6 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"cmdk": "^1.1.1",
-		"lucide-react": "^0.541.0",
 		"react-use": "^17.6.0",
 		"tailwind-merge": "^3.3.1"
 	},
@@ -44,7 +43,6 @@
 		"@repo/typescript-config": "workspace:*",
 		"@repo/vite-config": "workspace:*",
 		"@storybook/react-vite": "^10.2.16",
-		"@storybook/test": "^8.6.15",
 		"@tailwindcss/vite": "^4.1.12",
 		"@testing-library/dom": "^10.4.0",
 		"@testing-library/react": "^16.3.0",

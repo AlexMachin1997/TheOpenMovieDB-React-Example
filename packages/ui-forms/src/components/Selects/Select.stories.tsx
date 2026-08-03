@@ -29,7 +29,7 @@ import {
 	getDialog,
 	getTrigger
 } from '~/components/Selects/__fixtures__/interactions';
-import { within, userEvent, expect } from '@storybook/test';
+import { within, userEvent, expect } from 'storybook/test';
 
 const meta: Meta<SelectProps> = {
 	title: 'UI Forms/Select',

@@ -1,8 +1,7 @@
-import { Button } from '@repo/ui-core';
+import { Button, Icon } from '@repo/ui-core';
 import { PopoverTrigger } from '@repo/ui-overlays';
 import { cn } from '@repo/tailwind-config';
 import { useCommandContext } from '@repo/ui-command';
-import { ChevronsUpDownIcon } from 'lucide-react';
 
 /**
  * Props for the SelectTrigger component
@@ -37,7 +36,7 @@ export const SelectTrigger = ({
 				)}
 			>
 				{children}
-				<ChevronsUpDownIcon className='size-4 shrink-0 opacity-50' />
+				<Icon name='chevrons-up-down' className='opacity-50' />
 			</Button>
 		</PopoverTrigger>
 	);

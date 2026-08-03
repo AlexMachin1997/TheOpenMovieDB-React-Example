@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { UserIcon, BotIcon, HeartIcon, SettingsIcon } from 'lucide-react';
-
 import { Avatar, AvatarImage, AvatarFallback } from './Avatar';
+import { Icon } from '../Icon/Icon';
 
 const meta: Meta<typeof Avatar> = {
 	title: 'UI Core/Avatar',
@@ -115,7 +114,7 @@ export const WithUserIcon: Story = {
 				title='User'
 			/>
 			<AvatarFallback asChild>
-				<UserIcon className='size-4' />
+				<Icon name='user' className='size-4' />
 			</AvatarFallback>
 		</Avatar>
 	)
@@ -126,7 +125,7 @@ export const WithHeartIcon: Story = {
 		<Avatar>
 			<AvatarImage src='/broken-image.jpg' alt='Heart' title='Heart' />
 			<AvatarFallback asChild>
-				<HeartIcon className='size-4 hover:text-red-500 transition-colors duration-200' />
+				<Icon name='heart' className='size-4 hover:text-red-500 transition-colors duration-200' />
 			</AvatarFallback>
 		</Avatar>
 	)
@@ -244,19 +243,19 @@ export const AvatarGroupWithIcons: Story = {
 			<Avatar className='border-2 border-white'>
 				<AvatarImage src='/broken-image.jpg' alt='Bot' title='Bot' />
 				<AvatarFallback asChild>
-					<BotIcon className='size-4' />
+					<Icon name='bot' className='size-4' />
 				</AvatarFallback>
 			</Avatar>
 			<Avatar className='border-2 border-white'>
 				<AvatarImage src='/broken-image.jpg' alt='Heart' title='Heart' />
 				<AvatarFallback asChild>
-					<HeartIcon className='size-4' />
+					<Icon name='heart' className='size-4' />
 				</AvatarFallback>
 			</Avatar>
 			<Avatar className='border-2 border-white'>
 				<AvatarImage src='/broken-image.jpg' alt='Settings' />
 				<AvatarFallback asChild>
-					<SettingsIcon className='size-4' />
+					<Icon name='settings' className='size-4' />
 				</AvatarFallback>
 			</Avatar>
 		</div>

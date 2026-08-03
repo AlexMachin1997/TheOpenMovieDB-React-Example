@@ -1,7 +1,6 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react';
-
 import { cn } from '@repo/tailwind-config';
+import { Icon } from '@repo/ui-core';
 
 import type {
 	IDropdownMenu,
@@ -91,7 +90,7 @@ const DropdownMenuCheckboxItem = ({
 		>
 			<span className='pointer-events-none absolute left-2 flex size-3.5 items-center justify-center'>
 				<DropdownMenuPrimitive.ItemIndicator>
-					<CheckIcon className='size-4' />
+					<Icon name='check' />
 				</DropdownMenuPrimitive.ItemIndicator>
 			</span>
 			{children}
@@ -115,7 +114,9 @@ const DropdownMenuRadioItem = ({ className, children, ...props }: IDropdownMenuR
 		>
 			<span className='pointer-events-none absolute left-2 flex size-3.5 items-center justify-center'>
 				<DropdownMenuPrimitive.ItemIndicator>
-					<CircleIcon className='size-2 fill-current' />
+					{/* `**:` targets the shape itself — the icon data sets `fill="none"` there, which
+							    beats a `fill` inherited from the svg, so a plain `fill-current` renders hollow. */}
+					<Icon name='circle' className='size-2 **:fill-current' />
 				</DropdownMenuPrimitive.ItemIndicator>
 			</span>
 			{children}
@@ -175,7 +176,7 @@ const DropdownMenuSubTrigger = ({
 			{...props}
 		>
 			{children}
-			<ChevronRightIcon className='ml-auto size-4' />
+			<Icon name='chevron-right' className='ml-auto' />
 		</DropdownMenuPrimitive.SubTrigger>
 	);
 };

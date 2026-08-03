@@ -1,14 +1,14 @@
-import { SearchIcon, XIcon } from 'lucide-react';
 import { cn } from '@repo/tailwind-config';
 
 import { useDebouncedValue } from '~/hooks';
 import { DebouncableInput } from '~/components/DebouncableInput';
 import { Button } from '~/components/Button';
+import { Icon } from '~/components/Icon';
 import { searchWrapperVariants, searchClearButtonVariants, searchDebouncableInputVariants } from '~/components/Search/Search.variants';
 import type { ISearch } from '~/components/Search/Search.types';
 
 /**
- * Enhanced Search input component combining `DebouncableInput`, a static `SearchIcon`,
+ * Enhanced Search input component combining `DebouncableInput`, a static search `Icon`,
  * and an optional clear text button.
  *
  * @component
@@ -41,7 +41,7 @@ export const Search = ({
 
 	return (
 		<div data-slot='search-wrapper' className={cn(searchWrapperVariants(), className)}>
-			<SearchIcon className='size-4 shrink-0 opacity-50' aria-hidden='true' />
+			<Icon name='search' className='opacity-50' />
 			<DebouncableInput
 				ref={ref}
 				value={localValue}
@@ -59,7 +59,7 @@ export const Search = ({
 					aria-label='Clear search'
 					aria-hidden={!isClearVisible}
 				>
-					<XIcon className='size-3 shrink-0' aria-hidden='true' />
+					<Icon name='x' size='xs' />
 				</Button>
 			)}
 		</div>

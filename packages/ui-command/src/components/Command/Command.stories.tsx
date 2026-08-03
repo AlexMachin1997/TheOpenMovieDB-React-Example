@@ -1,14 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
-import {
-	SearchIcon,
-	CalendarIcon,
-	SettingsIcon,
-	UserIcon,
-	FileTextIcon,
-	HomeIcon
-} from 'lucide-react';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { Icon } from '@repo/ui-core';
 import {
 	Command,
 	CommandDialog,
@@ -87,12 +80,12 @@ const BasicCommandTemplate = (args: CommandBasicStorybookTypes) => {
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
-								{item.value === 'calendar' && <CalendarIcon className='size-4' />}
-								{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
-								{item.value === 'calculator' && <FileTextIcon className='size-4' />}
-								{item.value === 'profile' && <UserIcon className='size-4' />}
-								{item.value === 'settings' && <SettingsIcon className='size-4' />}
-								{item.value === 'dashboard' && <HomeIcon className='size-4' />}
+								{item.value === 'calendar' && <Icon name='calendar' />}
+								{item.value === 'search-emoji' && <Icon name='search' />}
+								{item.value === 'calculator' && <Icon name='file-text' />}
+								{item.value === 'profile' && <Icon name='user' />}
+								{item.value === 'settings' && <Icon name='settings' />}
+								{item.value === 'dashboard' && <Icon name='home' />}
 								<span>{item.label}</span>
 							</CommandItem>
 						)}
@@ -219,12 +212,12 @@ const CommandInterfaceTemplate = (args: React.ComponentProps<typeof CommandInter
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
-								{item.value === 'calendar' && <CalendarIcon className='size-4' />}
-								{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
-								{item.value === 'calculator' && <FileTextIcon className='size-4' />}
-								{item.value === 'profile' && <UserIcon className='size-4' />}
-								{item.value === 'settings' && <SettingsIcon className='size-4' />}
-								{item.value === 'dashboard' && <HomeIcon className='size-4' />}
+								{item.value === 'calendar' && <Icon name='calendar' />}
+								{item.value === 'search-emoji' && <Icon name='search' />}
+								{item.value === 'calculator' && <Icon name='file-text' />}
+								{item.value === 'profile' && <Icon name='user' />}
+								{item.value === 'settings' && <Icon name='settings' />}
+								{item.value === 'dashboard' && <Icon name='home' />}
 								<span>{item.label}</span>
 							</CommandItem>
 						)}
@@ -287,12 +280,12 @@ const CommandContainerTemplate = (args: React.ComponentProps<typeof CommandInter
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
-								{item.value === 'calendar' && <CalendarIcon className='size-4' />}
-								{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
-								{item.value === 'calculator' && <FileTextIcon className='size-4' />}
-								{item.value === 'profile' && <UserIcon className='size-4' />}
-								{item.value === 'settings' && <SettingsIcon className='size-4' />}
-								{item.value === 'dashboard' && <HomeIcon className='size-4' />}
+								{item.value === 'calendar' && <Icon name='calendar' />}
+								{item.value === 'search-emoji' && <Icon name='search' />}
+								{item.value === 'calculator' && <Icon name='file-text' />}
+								{item.value === 'profile' && <Icon name='user' />}
+								{item.value === 'settings' && <Icon name='settings' />}
+								{item.value === 'dashboard' && <Icon name='home' />}
 								<span>{item.label}</span>
 							</CommandItem>
 						)}
@@ -360,11 +353,11 @@ const CommandWithShortcutsTemplate = (args: React.ComponentProps<typeof Command>
 					<CommandListItems>
 						{({ item }) => (
 							<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
-								{item.value === 'calendar' && <CalendarIcon className='size-4' />}
-								{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
-								{item.value === 'calculator' && <FileTextIcon className='size-4' />}
-								{item.value === 'go-home' && <HomeIcon className='size-4' />}
-								{item.value === 'view-profile' && <UserIcon className='size-4' />}
+								{item.value === 'calendar' && <Icon name='calendar' />}
+								{item.value === 'search-emoji' && <Icon name='search' />}
+								{item.value === 'calculator' && <Icon name='file-text' />}
+								{item.value === 'go-home' && <Icon name='home' />}
+								{item.value === 'view-profile' && <Icon name='user' />}
 								<span>{item.label}</span>
 								{item.value === 'calendar' && <CommandShortcut>⌘C</CommandShortcut>}
 								{item.value === 'search-emoji' && <CommandShortcut>⌘E</CommandShortcut>}
@@ -478,11 +471,11 @@ const CommandDialogTemplate = (args: React.ComponentProps<typeof CommandDialog>)
 						<CommandListItems>
 							{({ item }) => (
 								<CommandItem key={item.id} value={item.value} className='flex items-center gap-2'>
-									{item.value === 'calendar' && <CalendarIcon className='size-4' />}
-									{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
-									{item.value === 'calculator' && <FileTextIcon className='size-4' />}
-									{item.value === 'profile' && <UserIcon className='size-4' />}
-									{item.value === 'settings' && <SettingsIcon className='size-4' />}
+									{item.value === 'calendar' && <Icon name='calendar' />}
+									{item.value === 'search-emoji' && <Icon name='search' />}
+									{item.value === 'calculator' && <Icon name='file-text' />}
+									{item.value === 'profile' && <Icon name='user' />}
+									{item.value === 'settings' && <Icon name='settings' />}
 									<span>{item.label}</span>
 								</CommandItem>
 							)}
@@ -596,11 +589,11 @@ const DisabledItemsTemplate = (args: React.ComponentProps<typeof Command>) => {
 								className='flex items-center gap-2'
 								disabled={item.disabled}
 							>
-								{item.value === 'calendar' && <CalendarIcon className='size-4' />}
-								{item.value === 'search-emoji' && <SearchIcon className='size-4' />}
-								{item.value === 'calculator' && <FileTextIcon className='size-4' />}
-								{item.value === 'profile' && <UserIcon className='size-4' />}
-								{item.value === 'advanced-settings' && <SettingsIcon className='size-4' />}
+								{item.value === 'calendar' && <Icon name='calendar' />}
+								{item.value === 'search-emoji' && <Icon name='search' />}
+								{item.value === 'calculator' && <Icon name='file-text' />}
+								{item.value === 'profile' && <Icon name='user' />}
+								{item.value === 'advanced-settings' && <Icon name='settings' />}
 								<span>{item.label}</span>
 							</CommandItem>
 						)}
@@ -671,11 +664,13 @@ const CustomStylingTemplate = (args: React.ComponentProps<typeof Command>) => {
 								className='flex items-center gap-2 hover:bg-primary/10'
 							>
 								{item.value === 'react-components' && (
-									<SearchIcon className='size-4 text-primary' />
+									<Icon name='search' className='text-primary' />
 								)}
-								{item.value === 'typescript-tips' && <SearchIcon className='size-4 text-primary' />}
-								{item.value === 'schedule-meeting' && <CalendarIcon className='size-4' />}
-								{item.value === 'create-document' && <FileTextIcon className='size-4' />}
+								{item.value === 'typescript-tips' && (
+									<Icon name='search' className='text-primary' />
+								)}
+								{item.value === 'schedule-meeting' && <Icon name='calendar' />}
+								{item.value === 'create-document' && <Icon name='file-text' />}
 								<span
 									className={
 										item.value.includes('react') || item.value.includes('typescript')

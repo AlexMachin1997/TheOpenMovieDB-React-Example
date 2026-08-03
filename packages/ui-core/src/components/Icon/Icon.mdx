@@ -1,0 +1,148 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as IconStories from './Icon.stories';
+
+<Meta of={IconStories} />
+
+# Icon
+
+Renders an icon by name, at a consistent size, always marked decorative. Reach for it anywhere you'd otherwise drop a raw `<svg>` or import an icon component directly — it handles sizing and accessibility for you.
+
+```tsx
+import { Icon } from '@repo/ui-core';
+```
+
+## Features
+
+- Accepts a **bare icon name** — you write `name="search"`, nothing more.
+- Names are **checked as you type**. A typo is a TypeScript error in your editor, not a blank space you discover in the browser.
+- A **named size scale** replaces guessing at `size-4` / `h-4 w-4` per call site, with `className` as the escape hatch for genuine one-offs.
+- **Always decorative** — `aria-hidden="true"` is guaranteed, so an icon can never accidentally become a control's accessible name.
+
+<Canvas of={IconStories.Default} />
+
+---
+
+## Properties
+
+### `name`
+
+The icon to render, as a bare name. Required.
+
+|             |                                              |
+| ----------- | -------------------------------------------- |
+| **Type**    | `IconName` — a union of every available name |
+| **Default** | — (required)                                 |
+
+```tsx
+<Icon name='search' />
+```
+
+Anything outside the union fails to compile, so a typo surfaces in your editor rather than as a gap in the UI. These are all the names currently available:
+
+<Canvas of={IconStories.Showcase} />
+
+Need one that isn't here? It's a two-line addition — see the "Adding an icon" section of `docs/plans/icon-component.md`.
+
+### `size`
+
+The size preset.
+
+|             |                                        |
+| ----------- | -------------------------------------- |
+| **Type**    | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` |
+| **Default** | `'md'`                                 |
+
+```tsx
+<Icon name='x' size='xl' />
+```
+
+<Canvas of={IconStories.Sizes} />
+
+| Token            | Rendered | Use it for                                         |
+| ---------------- | -------- | -------------------------------------------------- |
+| `xs`             | 12px     | Clear/dismiss affordances inside a small control   |
+| `sm`             | 14px     | Checkbox and similar in-control indicators         |
+| `md` _(default)_ | 16px     | Almost everything — buttons, menus, list items     |
+| `lg`             | 20px     | Standalone icons that need a little more weight    |
+| `xl`             | 24px     | Prominent close buttons, empty-state illustrations |
+
+> If you're unsure, leave `size` off. `md` is the default because it's what the rest of the library uses, and several components — Button and the menus among them — already size their child icons to match.
+
+### `className`
+
+Additional classes, merged after the size preset.
+
+|             |              |
+| ----------- | ------------ |
+| **Type**    | `string`     |
+| **Default** | — (optional) |
+
+Because it's merged last, a `size-*` utility here overrides the `size` prop. Use it for treatments the scale deliberately doesn't cover — a filled indicator dot, for instance:
+
+<Canvas of={IconStories.WithClassName} />
+
+> **Filling an icon needs a prefixed utility.** The icon data sets `fill="none"` on the shape itself, which beats a `fill` inherited from the `<svg>` — so `fill-current` on its own leaves the shape hollow. Prefix it with the universal-descendant variant to target the shape directly: `**:fill-current`, `**:fill-primary`, and so on. Colouring via `text-*` works normally and needs no prefix.
+
+Data attributes pass through to the rendered `<svg>` too, which is useful when the icon's meaning is decided at runtime.
+
+---
+
+## Usage Examples
+
+Every example below is a live story — hit **Show code** on any of them to copy the source.
+
+### Icon with text in a button
+
+The most common case, and the one needing the least ceremony: Button already sizes its child icons to match Icon's default, and the visible text supplies the accessible name.
+
+<Canvas of={IconStories.InButtonWithText} />
+
+### An icon-only button
+
+With no visible text, the button itself must carry the name.
+
+<Canvas of={IconStories.InIconOnlyButton} />
+
+### A loading spinner
+
+`Icon` has no animation prop — spinning, pulsing and the like are applied through `className`.
+
+<Canvas of={IconStories.AsLoadingSpinner} />
+
+### A muted leading icon in a list
+
+<Canvas of={IconStories.InListItem} />
+
+### Choosing the icon at runtime
+
+`name` is a union, so a typed lookup keeps runtime-chosen icons safe — TypeScript flags an unhandled case or a misspelled name.
+
+<Canvas of={IconStories.ChosenAtRuntime} />
+
+---
+
+## Accessibility
+
+`Icon` always renders `aria-hidden="true"` and there is no prop to change that. Screen readers skip it entirely, which means **an icon on its own names nothing**.
+
+- **Icon alongside visible text** — nothing extra to do. The text is already the accessible name.
+- **Icon as the only content of a control** — the control needs `aria-label` (or `aria-labelledby`). Button emits a development-time warning if you forget.
+- **Purely ornamental icon** — nothing to do; being hidden is the correct behaviour.
+
+```tsx
+// ✗ A screen reader announces this button as unlabelled
+<Button size='icon'>
+	<Icon name='x' />
+</Button>
+
+// ✓ The button carries the name
+<Button size='icon' aria-label='Close'>
+	<Icon name='x' />
+</Button>
+```
+
+`Icon` adds no keyboard behaviour of its own — it is never focusable and never a tab stop. Keyboard interaction belongs to whatever control wraps it.
+
+---
+
+<Controls />

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Alert, AlertDescription, AlertTitle } from './Alert';
-import { InfoIcon, AlertTriangleIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
+import { Icon } from '../Icon/Icon';
 
 const meta: Meta<typeof Alert> = {
 	title: 'UI Core/Alert',
@@ -24,7 +24,7 @@ export const Default: Story = {
 		variant: 'default',
 		children: (
 			<>
-				<InfoIcon width={20} height={20} />
+				<Icon name='info' />
 				<AlertTitle>Information</AlertTitle>
 				<AlertDescription>
 					This is a default alert with an informational message. It provides general information to
@@ -40,7 +40,7 @@ export const Destructive: Story = {
 		variant: 'destructive',
 		children: (
 			<>
-				<AlertTriangleIcon width={20} height={20} />
+				<Icon name='alert-triangle' />
 				<AlertTitle>Error</AlertTitle>
 				<AlertDescription>
 					This is a destructive alert indicating an error or critical issue that requires attention.
@@ -55,7 +55,7 @@ export const Success: Story = {
 		variant: 'success',
 		children: (
 			<>
-				<CheckCircleIcon width={20} height={20} />
+				<Icon name='check-circle' />
 				<AlertTitle>Success</AlertTitle>
 				<AlertDescription>
 					Your action was completed successfully. The changes have been saved and applied.
@@ -70,7 +70,7 @@ export const Warning: Story = {
 		variant: 'warning',
 		children: (
 			<>
-				<AlertTriangleIcon width={20} height={20} />
+				<Icon name='alert-triangle' />
 				<AlertTitle>Warning</AlertTitle>
 				<AlertDescription>
 					Please review your input before proceeding. Some fields may need attention.
@@ -85,7 +85,7 @@ export const Error: Story = {
 		variant: 'error',
 		children: (
 			<>
-				<XCircleIcon width={20} height={20} />
+				<Icon name='x-circle' />
 				<AlertTitle>Error</AlertTitle>
 				<AlertDescription>
 					An error occurred while processing your request. Please try again or contact support.
@@ -100,7 +100,7 @@ export const WithLongContent: Story = {
 		variant: 'default',
 		children: (
 			<>
-				<AlertTriangleIcon width={20} height={20} />
+				<Icon name='alert-triangle' />
 				<AlertTitle>Important Notice</AlertTitle>
 				<AlertDescription>
 					This alert contains a longer description to demonstrate how the component handles extended
@@ -131,7 +131,7 @@ export const TitleOnly: Story = {
 		variant: 'default',
 		children: (
 			<>
-				<AlertTriangleIcon width={20} height={20} />
+				<Icon name='alert-triangle' />
 				<AlertTitle>Success</AlertTitle>
 			</>
 		)
@@ -143,7 +143,7 @@ export const DescriptionOnly: Story = {
 		variant: 'default',
 		children: (
 			<>
-				<CheckCircleIcon width={20} height={20} />
+				<Icon name='check-circle' />
 				<AlertDescription>
 					This alert only has a description without a title, showing the component&apos;s
 					flexibility.
@@ -184,7 +184,7 @@ export const AllVariants: Story = {
 	render: () => (
 		<div className='space-y-4 w-full max-w-md'>
 			<Alert variant='default'>
-				<InfoIcon width={20} height={20} />
+				<Icon name='info' />
 				<AlertTitle>Default Alert</AlertTitle>
 				<AlertDescription>
 					This is the default alert variant with standard styling.
@@ -192,7 +192,7 @@ export const AllVariants: Story = {
 			</Alert>
 
 			<Alert variant='success'>
-				<CheckCircleIcon width={20} height={20} />
+				<Icon name='check-circle' />
 				<AlertTitle>Success Alert</AlertTitle>
 				<AlertDescription>
 					This is the success alert variant for positive feedback.
@@ -200,7 +200,7 @@ export const AllVariants: Story = {
 			</Alert>
 
 			<Alert variant='warning'>
-				<AlertTriangleIcon width={20} height={20} />
+				<Icon name='alert-triangle' />
 				<AlertTitle>Warning Alert</AlertTitle>
 				<AlertDescription>
 					This is the warning alert variant for cautionary messages.
@@ -208,13 +208,13 @@ export const AllVariants: Story = {
 			</Alert>
 
 			<Alert variant='error'>
-				<XCircleIcon width={20} height={20} />
+				<Icon name='x-circle' />
 				<AlertTitle>Error Alert</AlertTitle>
 				<AlertDescription>This is the error alert variant for critical issues.</AlertDescription>
 			</Alert>
 
 			<Alert variant='destructive'>
-				<AlertTriangleIcon width={20} height={20} />
+				<Icon name='alert-triangle' />
 				<AlertTitle>Destructive Alert</AlertTitle>
 				<AlertDescription>
 					This is the destructive alert variant for errors and warnings.

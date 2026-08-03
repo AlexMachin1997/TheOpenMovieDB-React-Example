@@ -1,6 +1,6 @@
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
-import { CircleIcon } from 'lucide-react';
 import { cn } from '@repo/tailwind-config';
+import { Icon } from '@repo/ui-core';
 import type { IRadio } from '~/components/Radio/Radio.types';
 
 export const Radio = ({ className, disabled = false, iconClassName, ...props }: IRadio) => {
@@ -18,9 +18,15 @@ export const Radio = ({ className, disabled = false, iconClassName, ...props }: 
 				data-slot='radio-indicator'
 				className='relative flex items-center justify-center'
 			>
-				<CircleIcon
+				{/*
+				 * `**:fill-primary` targets the circle shape itself. The icon data sets
+				 * `fill="none"` on that shape, which beats a `fill` inherited from the svg — a
+				 * plain `fill-primary` here would leave the selected dot hollow.
+				 */}
+				<Icon
+					name='circle'
 					className={cn(
-						'fill-primary absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2',
+						'**:fill-primary absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2',
 						iconClassName
 					)}
 				/>

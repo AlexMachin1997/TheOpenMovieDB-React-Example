@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { Icon, type IconName } from '@repo/ui-core';
 import { DayPicker, DayPickerProps, getDefaultClassNames } from 'react-day-picker';
 import { buttonVariants, Button } from '@repo/ui-core';
 import { cn } from '@repo/tailwind-config';
@@ -107,16 +107,21 @@ export const Calendar = ({
 				Root: ({ className, rootRef, ...props }) => {
 					return <div data-slot='calendar' ref={rootRef} className={cn(className)} {...props} />;
 				},
-				Chevron: ({ className, orientation, ...props }) => {
+				Chevron: ({ className, orientation }) => {
+					// react-day-picker also passes `size` and `disabled` here. Neither is forwarded:
+					// `size` only ever arrives from the caption dropdown, where `[&>svg]:size-3.5`
+					// above already wins, and nothing styles a `disabled` svg.
+					let name: IconName = 'chevron-down';
+
 					if (orientation === 'left') {
-						return <ChevronLeftIcon className={cn('size-4', className)} {...props} />;
+						name = 'chevron-left';
 					}
 
 					if (orientation === 'right') {
-						return <ChevronRightIcon className={cn('size-4', className)} {...props} />;
+						name = 'chevron-right';
 					}
 
-					return <ChevronDownIcon className={cn('size-4', className)} {...props} />;
+					return <Icon name={name} className={className} data-orientation={orientation} />;
 				},
 				DayButton: CalendarDayButton,
 				WeekNumber: ({ children, ...props }) => {

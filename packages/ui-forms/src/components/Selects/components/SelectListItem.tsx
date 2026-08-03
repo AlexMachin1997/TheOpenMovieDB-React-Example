@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CheckIcon } from 'lucide-react';
+import { Icon } from '@repo/ui-core';
 import { cn } from '@repo/tailwind-config';
 import { CommandItem, useCommandContext } from '@repo/ui-command';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
@@ -21,7 +21,7 @@ export const SelectListItem = ({ value, children, ...props }: SelectListItemProp
 
 	return (
 		<CommandItem {...props} value={optionsMap.get(value)} onSelect={handleSelectItem}>
-			<CheckIcon className={cn('mr-2 size-4', isSelected ? 'opacity-100' : 'opacity-0')} />
+			<Icon name='check' className={cn('mr-2', isSelected ? 'opacity-100' : 'opacity-0')} />
 			{children}
 			<p>{optionsMap.get(value)}</p>
 		</CommandItem>

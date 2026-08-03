@@ -23,17 +23,20 @@ when rendered via `asChild` as something other than a native `<button>`.
   element, updated `aria-*` attributes, Storybook coverage for all of the above.
   (How the mechanism is structured/named/located is an `implementation-planning`
   decision, not part of this spec.)
-- **Not included**: an Icon-registry/mapping component, wiring the keyboard hook into
+- **Not included**: the `Icon` component itself (a predecessor deliverable, already
+  shipped — see [`icon-component.md`](icon-component.md)), wiring the keyboard hook into
   Command/Popover/other components, a `ButtonGroup`/segmented-button component,
   changes to the separate app-level `Core/Button`.
-- **Can be delivered independently**: no longer fully — this deliverable now depends on
-  a predecessor: a shared `Icon` component (own spec, not yet written) that Button's
-  `startIcon`/`endIcon`/spinner rendering consumes. See Decisions below. Independent of
-  the barrel/export conventions work (D6) elsewhere in the repo.
+- **Can be delivered independently**: no longer fully — this deliverable depends on
+  a predecessor: the shared `Icon` component (own spec,
+  [`icon-component.md`](icon-component.md)) that Button's `startIcon`/`endIcon`/spinner
+  rendering consumes. See Decisions below. Independent of the barrel/export conventions
+  work (D6) elsewhere in the repo.
 
 ## Non-Goals
-- Building a component that maps icon *names* (strings) to lucide-react/custom icons.
-  Callers pass an icon component reference directly.
+- Building the `Icon` component itself — that's a predecessor deliverable (see
+  [`icon-component.md`](icon-component.md)) which Button consumes. Extending `Icon`'s
+  name dictionary is in scope only if Button needs a name it doesn't already have.
 - Retrofitting existing consumers to use the new props — this is purely additive.
 - Any visual restyling of existing variants/sizes.
 
@@ -73,6 +76,15 @@ when rendered via `asChild` as something other than a native `<button>`.
   separate concern from synthesizing `onClick` — the latter still only happens for the
   non-native case (see Functional requirements above), so native buttons/links never
   double-fire.
+- **Documentation audience.** Button's Storybook docs are for **consumers** of the
+  component library: which props exist, how to use them, and what obligations fall on the
+  caller (e.g. supplying `aria-label` on an icon-only button). Contributor-facing material
+  — why the keyboard-activation mechanism is built the way it is, rejected alternatives,
+  constraints discovered in Radix's or React's behaviour, known limitations — belongs in
+  this deliverable's implementation plan under `docs/plans/`, not in the Storybook docs.
+  Route each piece of information by **who needs to know it**, not by how technical it is:
+  a low-level detail a consumer will trip over (as Icon's `**:fill-*` requirement is)
+  belongs in the user docs, while a simple internal procedure does not.
 
 ### Accessibility
 - Button must meet **WCAG 2.1 AA** across every variant/size/state introduced by this
@@ -100,7 +112,8 @@ when rendered via `asChild` as something other than a native `<button>`.
   caught during development rather than shipped silently.
 
 ### Integration
-- No new runtime dependency — `lucide-react` is already present in `ui-core`.
+- No new runtime dependency for Button — icons render through `@repo/ui-core`'s `Icon`,
+  which owns `@iconify/react`. `lucide-react` is no longer a dependency of any package.
 - The keyboard-activation mechanism must be reusable by `ui-forms`/`ui-overlays`/
   `ui-command` later without new cross-package plumbing — they already depend on
   `@repo/ui-core`. Where the code actually lives is an `implementation-planning`
@@ -148,15 +161,20 @@ should map to one test.
   value).
 
 **Icons**
-- Given a `Button` with `startIcon="plus"` and text children, when rendered, then
-  the icon appears before the text, sized consistently with existing icon usage
-  (`size-4`), and carries `aria-hidden="true"`.
-- Given a `Button` with `endIcon="arrow-right"` and text children, when rendered,
+- Given a `Button` with `startIcon="check"` and text children, when rendered, then
+  the icon appears before the text at `Icon`'s default size token (`md` / `size-4`),
+  and carries `aria-hidden="true"`.
+- Given a `Button` with `endIcon="chevron-right"` and text children, when rendered,
   then the icon appears after the text with `aria-hidden="true"`.
+- Note: the names used above are drawn from `Icon`'s existing dictionary. Any name
+  Button's own stories/examples need that isn't already in `ICON_NAMES` must be added
+  there as part of this deliverable.
 - Given a `Button` with both `startIcon` and `endIcon`, when rendered, then both appear
   in their respective positions simultaneously.
 
 **Loading**
+- The spinner is `<Icon name='loader-circle' className='animate-spin' />` — `Icon` has no
+  animation prop, so the spin is applied by Button via `className`.
 - Given a `Button` with `loading={true}` and an `endIcon`, when rendered, then the
   spinner appears at the end position instead of the icon, and `aria-busy="true"` is
   set.
@@ -220,9 +238,9 @@ should map to one test.
 - **Dedicated `Icon` component**: reversed from the earlier proposal — this is now a
   **predecessor** deliverable, not a follow-up. Button's `startIcon`/`endIcon` and
   internal spinner consume it rather than reimplementing sizing/`aria-hidden` handling
-  themselves, avoiding rework once the shared component lands. Its spec is now written —
-  see [`icon-component.md`](icon-component.md) — but implementation is not yet done, so
-  this deliverable remains blocked per `docs/specs/README.md`.
+  themselves, avoiding rework once the shared component lands. Its spec is written and
+  **implemented** — see [`icon-component.md`](icon-component.md) — so this deliverable is
+  no longer blocked per `docs/specs/README.md`.
 - **`startIcon`/`endIcon` typing reversed to a name string**: originally assumed to be an
   icon component reference (`React.ComponentType<{ className?: string }>`); superseded by
   Icon's own spec decision to accept a bare icon name string (Iconify-style API backed by
@@ -232,9 +250,11 @@ should map to one test.
   icon data resolves via `@iconify/react`'s default CDN-backed mechanism, which has a
   first-render network-fetch gap worth re-checking once this deliverable's own
   implementation-planning starts, given Button's spinner needs to render immediately (see
-  Icon's spec, Edge Cases). Existing raw-icon usages elsewhere (e.g. `Search.tsx`'s manual
-  `SearchIcon`/`XIcon` handling) are migrated onto `Icon` as part of the predecessor
-  deliverable itself (see its spec's Scope) — no longer optional/separate.
+  Icon's spec, Edge Cases). As shipped, `Icon` renders a correctly-sized blank `<svg>`
+  during that gap rather than nothing, so the spinner reserves its space immediately and
+  only the glyph appears late. Existing raw-icon usages elsewhere (e.g. `Search.tsx`'s
+  manual `SearchIcon`/`XIcon` handling) were migrated onto `Icon` as part of the
+  predecessor deliverable itself (see its spec's Scope).
 
 ## Open Questions
 None remaining — see Decisions above.

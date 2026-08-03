@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { XIcon } from 'lucide-react';
 import { cn } from '@repo/tailwind-config';
-import { Button } from '@repo/ui-core';
+import { Button, Icon } from '@repo/ui-core';
 
 export type ISelectItemClear = {
 	value: string;
@@ -81,7 +80,7 @@ export const SelectItemClear = ({
 			aria-label={defaultAriaLabel}
 		>
 			<div onKeyDown={handleKeyDown} role='button' tabIndex={0}>
-				<XIcon className='size-3' />
+				<Icon name='x' size='xs' />
 			</div>
 		</Button>
 	);

@@ -16,19 +16,7 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuGroup
 } from '~/components/DropdownMenu/DropdownMenu';
-import { Button } from '@repo/ui-core';
-import {
-	User,
-	CreditCard,
-	Settings,
-	Keyboard,
-	LogOut,
-	ChevronDown,
-	MoreHorizontal,
-	Sun,
-	Moon,
-	Monitor
-} from 'lucide-react';
+import { Button, Icon } from '@repo/ui-core';
 
 const meta: Meta<typeof DropdownMenu> = {
 	title: 'UI Overlays/Dropdown menu',
@@ -47,7 +35,7 @@ export const Basic: Story = {
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
 					Open Menu
-					<ChevronDown className='ml-2 h-4 w-4' />
+					<Icon name='chevron-down' className='ml-2' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
@@ -68,35 +56,35 @@ export const WithIconsAndShortcuts: Story = {
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
 					Account Settings
-					<ChevronDown className='ml-2 h-4 w-4' />
+					<Icon name='chevron-down' className='ml-2' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<DropdownMenuLabel>My Account</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>
-					<User className='mr-2 h-4 w-4' />
+					<Icon name='user' className='mr-2' />
 					Profile
 					<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<CreditCard className='mr-2 h-4 w-4' />
+					<Icon name='credit-card' className='mr-2' />
 					Billing
 					<DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<Settings className='mr-2 h-4 w-4' />
+					<Icon name='settings' className='mr-2' />
 					Settings
 					<DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<Keyboard className='mr-2 h-4 w-4' />
+					<Icon name='keyboard' className='mr-2' />
 					Keyboard shortcuts
 					<DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>
-					<LogOut className='mr-2 h-4 w-4' />
+					<Icon name='log-out' className='mr-2' />
 					Log out
 					<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
 				</DropdownMenuItem>
@@ -111,7 +99,7 @@ export const WithSubmenus: Story = {
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
 					More Options
-					<ChevronDown className='ml-2 h-4 w-4' />
+					<Icon name='chevron-down' className='ml-2' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
@@ -143,7 +131,7 @@ const WithCheckboxesComponent = () => {
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
 					View Options
-					<ChevronDown className='ml-2 h-4 w-4' />
+					<Icon name='chevron-down' className='ml-2' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
@@ -179,7 +167,7 @@ const WithRadioGroupComponent = () => {
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
 					Theme Settings
-					<ChevronDown className='ml-2 h-4 w-4' />
+					<Icon name='chevron-down' className='ml-2' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
@@ -187,15 +175,15 @@ const WithRadioGroupComponent = () => {
 				<DropdownMenuSeparator />
 				<DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
 					<DropdownMenuRadioItem value='light'>
-						<Sun className='mr-2 h-4 w-4' />
+						<Icon name='sun' className='mr-2' />
 						Light
 					</DropdownMenuRadioItem>
 					<DropdownMenuRadioItem value='dark'>
-						<Moon className='mr-2 h-4 w-4' />
+						<Icon name='moon' className='mr-2' />
 						Dark
 					</DropdownMenuRadioItem>
 					<DropdownMenuRadioItem value='system'>
-						<Monitor className='mr-2 h-4 w-4' />
+						<Icon name='monitor' className='mr-2' />
 						System
 					</DropdownMenuRadioItem>
 				</DropdownMenuRadioGroup>
@@ -213,7 +201,7 @@ export const WithGroups: Story = {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
-					<MoreHorizontal className='h-4 w-4' />
+					<Icon name='more-horizontal' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
@@ -243,7 +231,7 @@ export const WithDestructiveActions: Story = {
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
 					Actions
-					<ChevronDown className='ml-2 h-4 w-4' />
+					<Icon name='chevron-down' className='ml-2' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
@@ -265,7 +253,7 @@ export const WithInsetItems: Story = {
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
 					Navigation
-					<ChevronDown className='ml-2 h-4 w-4' />
+					<Icon name='chevron-down' className='ml-2' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
@@ -290,9 +278,9 @@ const ComplexComponent = () => {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant='outline'>
-					<Settings className='mr-2 h-4 w-4' />
+					<Icon name='settings' className='mr-2' />
 					Settings
-					<ChevronDown className='ml-2 h-4 w-4' />
+					<Icon name='chevron-down' className='ml-2' />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className='w-56'>
@@ -303,15 +291,15 @@ const ComplexComponent = () => {
 					<DropdownMenuLabel>Appearance</DropdownMenuLabel>
 					<DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
 						<DropdownMenuRadioItem value='light'>
-							<Sun className='mr-2 h-4 w-4' />
+							<Icon name='sun' className='mr-2' />
 							Light
 						</DropdownMenuRadioItem>
 						<DropdownMenuRadioItem value='dark'>
-							<Moon className='mr-2 h-4 w-4' />
+							<Icon name='moon' className='mr-2' />
 							Dark
 						</DropdownMenuRadioItem>
 						<DropdownMenuRadioItem value='system'>
-							<Monitor className='mr-2 h-4 w-4' />
+							<Icon name='monitor' className='mr-2' />
 							System
 						</DropdownMenuRadioItem>
 					</DropdownMenuRadioGroup>
@@ -340,7 +328,7 @@ const ComplexComponent = () => {
 				<DropdownMenuSeparator />
 
 				<DropdownMenuItem>
-					<LogOut className='mr-2 h-4 w-4' />
+					<Icon name='log-out' className='mr-2' />
 					Sign Out
 					<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
 				</DropdownMenuItem>
@@ -441,7 +429,7 @@ export const VeryLongContent: Story = {
 				<DropdownMenuTrigger asChild>
 					<Button variant='outline'>
 						Long Content Test
-						<ChevronDown className='ml-2 h-4 w-4' />
+						<Icon name='chevron-down' className='ml-2' />
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent>
@@ -462,7 +450,7 @@ export const VeryLongContent: Story = {
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem>
-						<User className='mr-2 h-4 w-4' />
+						<Icon name='user' className='mr-2' />
 						Profile with very long text that might cause icon alignment issues
 						<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
 					</DropdownMenuItem>
@@ -473,7 +461,7 @@ export const VeryLongContent: Story = {
 				<DropdownMenuTrigger asChild>
 					<Button variant='outline'>
 						Many Items Test
-						<ChevronDown className='ml-2 h-4 w-4' />
+						<Icon name='chevron-down' className='ml-2' />
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent>
@@ -498,7 +486,7 @@ export const NestedSubmenuEdgeCases: Story = {
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline'>
 							Right Edge Nested
-							<ChevronDown className='ml-2 h-4 w-4' />
+							<Icon name='chevron-down' className='ml-2' />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
@@ -528,7 +516,7 @@ export const NestedSubmenuEdgeCases: Story = {
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline'>
 							Left Edge Nested
-							<ChevronDown className='ml-2 h-4 w-4' />
+							<Icon name='chevron-down' className='ml-2' />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
@@ -570,7 +558,7 @@ export const ScrollableContainerTest: Story = {
 						<DropdownMenuTrigger asChild>
 							<Button variant='outline'>
 								Top of Scroll Area
-								<ChevronDown className='ml-2 h-4 w-4' />
+								<Icon name='chevron-down' className='ml-2' />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
@@ -586,7 +574,7 @@ export const ScrollableContainerTest: Story = {
 						<DropdownMenuTrigger asChild>
 							<Button variant='outline'>
 								Middle of Scroll Area
-								<ChevronDown className='ml-2 h-4 w-4' />
+								<Icon name='chevron-down' className='ml-2' />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
@@ -602,7 +590,7 @@ export const ScrollableContainerTest: Story = {
 						<DropdownMenuTrigger asChild>
 							<Button variant='outline'>
 								Bottom of Scroll Area
-								<ChevronDown className='ml-2 h-4 w-4' />
+								<Icon name='chevron-down' className='ml-2' />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
@@ -632,9 +620,9 @@ const UltimateStressTestComponent = () => {
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline'>
-							<Settings className='mr-2 h-4 w-4' />
+							<Icon name='settings' className='mr-2' />
 							Complex Top Left
-							<ChevronDown className='ml-2 h-4 w-4' />
+							<Icon name='chevron-down' className='ml-2' />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className='w-64'>
@@ -645,15 +633,15 @@ const UltimateStressTestComponent = () => {
 							<DropdownMenuLabel>Appearance</DropdownMenuLabel>
 							<DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
 								<DropdownMenuRadioItem value='light'>
-									<Sun className='mr-2 h-4 w-4' />
+									<Icon name='sun' className='mr-2' />
 									Light Theme
 								</DropdownMenuRadioItem>
 								<DropdownMenuRadioItem value='dark'>
-									<Moon className='mr-2 h-4 w-4' />
+									<Icon name='moon' className='mr-2' />
 									Dark Theme
 								</DropdownMenuRadioItem>
 								<DropdownMenuRadioItem value='system'>
-									<Monitor className='mr-2 h-4 w-4' />
+									<Icon name='monitor' className='mr-2' />
 									System Theme
 								</DropdownMenuRadioItem>
 							</DropdownMenuRadioGroup>
@@ -685,7 +673,7 @@ const UltimateStressTestComponent = () => {
 						<DropdownMenuSeparator />
 
 						<DropdownMenuItem variant='destructive'>
-							<LogOut className='mr-2 h-4 w-4' />
+							<Icon name='log-out' className='mr-2' />
 							Reset All Settings
 							<DropdownMenuShortcut>⇧⌘R</DropdownMenuShortcut>
 						</DropdownMenuItem>
@@ -697,9 +685,9 @@ const UltimateStressTestComponent = () => {
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline'>
-							<Settings className='mr-2 h-4 w-4' />
+							<Icon name='settings' className='mr-2' />
 							Complex Top Right
-							<ChevronDown className='ml-2 h-4 w-4' />
+							<Icon name='chevron-down' className='ml-2' />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className='w-64'>
@@ -710,15 +698,15 @@ const UltimateStressTestComponent = () => {
 							<DropdownMenuLabel>Appearance</DropdownMenuLabel>
 							<DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
 								<DropdownMenuRadioItem value='light'>
-									<Sun className='mr-2 h-4 w-4' />
+									<Icon name='sun' className='mr-2' />
 									Light Theme
 								</DropdownMenuRadioItem>
 								<DropdownMenuRadioItem value='dark'>
-									<Moon className='mr-2 h-4 w-4' />
+									<Icon name='moon' className='mr-2' />
 									Dark Theme
 								</DropdownMenuRadioItem>
 								<DropdownMenuRadioItem value='system'>
-									<Monitor className='mr-2 h-4 w-4' />
+									<Icon name='monitor' className='mr-2' />
 									System Theme
 								</DropdownMenuRadioItem>
 							</DropdownMenuRadioGroup>
@@ -750,7 +738,7 @@ const UltimateStressTestComponent = () => {
 						<DropdownMenuSeparator />
 
 						<DropdownMenuItem variant='destructive'>
-							<LogOut className='mr-2 h-4 w-4' />
+							<Icon name='log-out' className='mr-2' />
 							Reset All Settings
 							<DropdownMenuShortcut>⇧⌘R</DropdownMenuShortcut>
 						</DropdownMenuItem>

@@ -1,8 +1,7 @@
-import { CalendarIcon } from 'lucide-react';
 import React from 'react';
 import { cn } from '@repo/tailwind-config';
 import { formatDate } from '@repo/core';
-import { Button } from '@repo/ui-core';
+import { Button, Icon } from '@repo/ui-core';
 import { Calendar } from '~/components/Calendar/components/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui-overlays';
 import { IDatePicker } from '~/components/DatePickers/types';
@@ -42,7 +41,7 @@ export const SingleDatePicker = ({
 						className
 					)}
 				>
-					<CalendarIcon className='mr-2 h-4 w-4' />
+					<Icon name='calendar' className='mr-2' />
 					{date ? <span>{formattedDate}</span> : <span>{placeholder}</span>}
 				</Button>
 			</PopoverTrigger>
