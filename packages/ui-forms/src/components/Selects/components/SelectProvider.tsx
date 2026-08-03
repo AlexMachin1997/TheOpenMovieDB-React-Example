@@ -7,8 +7,6 @@ import { IEmptyStateConfig } from '@repo/ui-command';
 interface ISelectProviderCommonOptions {
 	/** Available options for selection */
 	options: Option[];
-	/** Whether to close the dropdown when an option is selected */
-	closeOnSelect?: boolean;
 	/** Child components to render */
 	children: React.ReactNode;
 	/** Currently selected value(s) */
@@ -38,39 +36,43 @@ interface MultiSelectProviderProps extends ISelectProviderCommonOptions {
 type SelectProviderProps = SingleSelectProviderProps | MultiSelectProviderProps;
 
 const SelectProviderInner = (props: SelectProviderProps) => {
-	const toggleValue = (value: string) => {
-		const currentValues = new Set(props?.values ?? []);
+	const toggleValue = React.useCallback(
+		(value: string) => {
+			const currentValues = new Set(props.values ?? []);
 
-		if (props.mode === 'single') {
-			if (currentValues.has(value)) {
-				props.onValuesChange('');
-			} else {
-				props.onValuesChange(value);
-			}
-		}
-
-		if (props.mode === 'multiple') {
-			if (currentValues.has(value)) {
-				currentValues.delete(value);
-			} else {
-				currentValues.add(value);
+			if (props.mode === 'single') {
+				if (currentValues.has(value)) {
+					props.onValuesChange('');
+				} else {
+					props.onValuesChange(value);
+				}
 			}
 
-			props.onValuesChange(Array.from(currentValues));
-		}
-	};
+			if (props.mode === 'multiple') {
+				if (currentValues.has(value)) {
+					currentValues.delete(value);
+				} else {
+					currentValues.add(value);
+				}
 
-	return (
-		<SelectContext.Provider
-			value={{
-				selectedValues: new Set(props.values || []),
-				toggleValue,
-				mode: props.mode
-			}}
-		>
-			{props.children}
-		</SelectContext.Provider>
+				props.onValuesChange(Array.from(currentValues));
+			}
+		},
+		// `props` is a discriminated union; listing every property actually read is correct —
+		// `[props]` would recompute on every render (the object is always a fresh reference)
+		// and defeat this memoization.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[props.mode, props.values, props.onValuesChange]
 	);
+
+	const selectedValues = React.useMemo(() => new Set(props.values ?? []), [props.values]);
+
+	const contextValue = React.useMemo(
+		() => ({ selectedValues, toggleValue, mode: props.mode }),
+		[selectedValues, toggleValue, props.mode]
+	);
+
+	return <SelectContext.Provider value={contextValue}>{props.children}</SelectContext.Provider>;
 };
 
 export const SelectProvider = (props: SelectProviderProps) => {
@@ -81,9 +83,7 @@ export const SelectProvider = (props: SelectProviderProps) => {
 			open={open}
 			setOpen={setOpen}
 			closeOnSelect={props.mode === 'single'}
-			options={props.options}
-			emptyState={props.emptyState}
-			defaultSearchValue={props.defaultSearchValue}
+			{...props}
 		>
 			<SelectProviderInner {...props} />
 		</CommandProvider>

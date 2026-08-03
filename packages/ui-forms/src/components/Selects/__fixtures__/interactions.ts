@@ -20,16 +20,18 @@ export const getDialog = () => {
 
 /**
  * Returns a specific option inside the open dialog by its accessible name.
+ * Auto-retries — the option may not exist yet if the search debounce (or, for large
+ * virtualized lists, the subsequent re-render) hasn't settled.
  */
 export const getOption = (name: string) => {
-	return within(getDialog()).getByRole('option', { name });
+	return within(getDialog()).findByRole('option', { name });
 };
 
 /**
  * Returns the search input inside the open dialog.
  */
 export const getSearchInput = () => {
-	return within(getDialog()).getByRole('combobox');
+	return within(getDialog()).getByRole('textbox');
 };
 
 // ---------------------------------------------------------------------------
@@ -72,7 +74,7 @@ export const searchFor = async (term: string) => {
  * Selects an option by its accessible name inside the open dialog.
  */
 export const selectOption = async (name: string) => {
-	const option = getOption(name);
+	const option = await getOption(name);
 	await userEvent.click(option);
 };
 
@@ -102,7 +104,7 @@ export const expectTriggerText = async (canvasElement: HTMLElement, text: string
  * Asserts a given option is visible inside the open dialog.
  */
 export const expectOptionVisible = async (name: string) => {
-	const option = getOption(name);
+	const option = await getOption(name);
 	await expect(option).toBeInTheDocument();
 };
 

@@ -3,7 +3,7 @@ import { cn } from '@repo/tailwind-config';
 import type { IProgress } from '~/components/Progress/Progress.types';
 
 const Progress = ({
-	className = 'bg-primary/20',
+	className,
 	value = 0,
 	indeterminate = false,
 	indicatorClassName = 'bg-primary',
@@ -14,7 +14,8 @@ const Progress = ({
 		<div className='relative'>
 			<ProgressPrimitive.Root
 				data-slot='progress'
-				className={cn('relative h-2 w-full overflow-hidden rounded-full', className)}
+				value={value}
+				className={cn('relative h-2 w-full overflow-hidden rounded-full bg-primary/20', className)}
 				{...props}
 			>
 				<ProgressPrimitive.Indicator

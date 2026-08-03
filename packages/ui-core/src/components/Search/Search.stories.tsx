@@ -29,6 +29,27 @@ export const WithClearButton: Story = {
 	}
 };
 
+export const CustomWrapperClassName: Story = {
+	args: {
+		showClearButton: true,
+		className: 'border-2 border-red-500'
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole('textbox');
+		const wrapper = input.closest('[data-slot="search-wrapper"]');
+
+		// A consumer `className` should only affect the outer wrapper, never leak onto the
+		// inner input.
+		expect(wrapper?.className).toContain('border-red-500');
+		expect(input.className).not.toContain('border-red-500');
+
+		await userEvent.type(input, 'test');
+		const clearButton = await canvas.findByRole('button', { name: /clear search/i });
+		expect(clearButton).toHaveAttribute('data-slot', 'search-clear-button');
+	}
+};
+
 export const InteractiveClearTest: Story = {
 	args: {
 		showClearButton: true,

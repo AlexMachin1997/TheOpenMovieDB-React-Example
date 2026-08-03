@@ -61,9 +61,7 @@ export const Select = (props: SelectProps) => {
 	);
 
 	const defaultChildren = (
-		<SelectListItems>
-			{({ item }) => <SelectListItem value={item.value} />}
-		</SelectListItems>
+		<SelectListItems>{({ item }) => <SelectListItem value={item.value} />}</SelectListItems>
 	);
 
 	return (
@@ -90,10 +88,7 @@ export const Select = (props: SelectProps) => {
 				)}
 			</SelectTrigger>
 
-			<SelectInterface
-				searchConfig={searchConfig}
-				emptyState={emptyState}
-			>
+			<SelectInterface searchConfig={searchConfig} emptyState={emptyState}>
 				{children ?? defaultChildren}
 			</SelectInterface>
 		</SelectProvider>

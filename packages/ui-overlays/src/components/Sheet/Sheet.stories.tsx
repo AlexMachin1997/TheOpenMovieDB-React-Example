@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Button } from '@repo/ui-core';
 
 import {
@@ -192,6 +193,73 @@ const RefBasedSheet = () => {
 
 export const RefBased: Story = {
 	render: () => <RefBasedSheet />
+};
+
+const RefWithControlledSheet = () => {
+	const [open, setOpen] = React.useState(false);
+	const sheetRef = React.useRef<SheetRef>(undefined);
+
+	return (
+		<div className='flex flex-col gap-4'>
+			<div className='flex gap-2'>
+				<Button onClick={() => sheetRef.current?.open()} variant='outline'>
+					Open via Ref
+				</Button>
+			</div>
+			<div className='text-sm text-muted-foreground'>
+				Sheet is currently: <span className='font-medium'>{open ? 'Open' : 'Closed'}</span>
+			</div>
+			<Sheet ref={sheetRef} open={open} onOpenChange={setOpen}>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Ref + Controlled Sheet</SheetTitle>
+						<SheetDescription>
+							Combines the imperative ref API with controlled `open`/`onOpenChange` props — the ref
+							methods must go through `onOpenChange` rather than an internal state the controlled
+							render never reads.
+						</SheetDescription>
+					</SheetHeader>
+					<SheetFooter>
+						{/* The modal Sheet disables pointer events on the rest of the page while open, so
+						the close trigger lives inside the content — same as the RefBased story above. */}
+						<Button onClick={() => sheetRef.current?.close()} variant='outline'>
+							Close via Ref
+						</Button>
+					</SheetFooter>
+				</SheetContent>
+			</Sheet>
+		</div>
+	);
+};
+
+export const RefWithControlled: Story = {
+	render: () => <RefWithControlledSheet />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		const openButton = canvas.getByRole('button', { name: /open via ref/i });
+
+		expect(documentScope.queryByText('Ref + Controlled Sheet')).not.toBeInTheDocument();
+		expect(canvas.getByText('Closed')).toBeInTheDocument();
+
+		await userEvent.click(openButton);
+
+		await waitFor(() => {
+			expect(documentScope.getByText('Ref + Controlled Sheet')).toBeInTheDocument();
+		});
+		expect(canvas.getByText('Open')).toBeInTheDocument();
+
+		// The close trigger only exists once the sheet content is mounted, and it's part of the
+		// dialog's own accessible tree (unlike the now aria-hidden background), so query it here.
+		const closeButton = await documentScope.findByRole('button', { name: /close via ref/i });
+		await userEvent.click(closeButton);
+
+		await waitFor(() => {
+			expect(documentScope.queryByText('Ref + Controlled Sheet')).not.toBeInTheDocument();
+		});
+		expect(canvas.getByText('Closed')).toBeInTheDocument();
+	}
 };
 
 export const LeftSide: Story = {

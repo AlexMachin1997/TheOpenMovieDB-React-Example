@@ -5,50 +5,38 @@ import { Checkbox, CheckboxLabel } from '~/components/Checkbox/Checkbox';
 
 type CheckboxGroupProps = {
 	options?: Option[];
-	value?: string[];
-	defaultValue?: string[];
-	onChange?: ((data: { value: string[]; name: string }) => void) | null;
+	value: string[];
+	onChange: (data: { value: string[]; name: string }) => void;
 	noOptionsAvailableMessage?: string;
 	disabled?: boolean;
 	name: string;
 	className?: string;
 };
 
-const EMPTY_OPTIONS: Option[] = [];
-const EMPTY_VALUES: string[] = [];
-
+// CheckboxGroup is controlled-only: individual Radix Checkboxes have no group primitive of
+// their own, so a parallel internal "uncontrolled" state would just be a second, easily
+// desynced source of truth for the same selection. Callers that want uncontrolled behaviour
+// should use individual `Checkbox` components with `defaultChecked` instead.
 const CheckboxGroup = ({
-	options = EMPTY_OPTIONS,
-	value = undefined,
-	onChange = null,
+	options = [],
+	value,
+	onChange,
 	noOptionsAvailableMessage = 'No options currently available.',
 	disabled = false,
 	name,
 	className,
-	defaultValue = EMPTY_VALUES,
 	...props
 }: CheckboxGroupProps) => {
-	const isControlled = React.useMemo(() => value !== undefined, [value]);
-
 	const handleValueChange = React.useCallback(
 		(optionValue: string) => {
-			if (onChange && isControlled) {
-				const wasPreviouslyChecked = value?.includes(optionValue);
+			const wasPreviouslyChecked = value.includes(optionValue);
+			const nextValues = wasPreviouslyChecked
+				? value.filter((checkbox) => checkbox !== optionValue)
+				: [...value, optionValue];
 
-				const existingCheckboxes = [...(value || [])];
-
-				const index = existingCheckboxes.findIndex((checkbox) => checkbox === optionValue);
-
-				if (wasPreviouslyChecked === false) {
-					existingCheckboxes.push(optionValue);
-				} else if (wasPreviouslyChecked === true && index !== -1) {
-					existingCheckboxes.splice(index, 1);
-				}
-
-				onChange({ value: existingCheckboxes, name });
-			}
+			onChange({ value: nextValues, name });
 		},
-		[onChange, value, isControlled, name]
+		[onChange, value, name]
 	);
 
 	return (
@@ -63,16 +51,14 @@ const CheckboxGroup = ({
 				{(options?.length ?? 0) > 0 && (
 					<div className={cn('grid gap-3', className)}>
 						{options.map((option) => {
-							const currentValues = value || defaultValue;
-							const isChecked = currentValues.includes(option.value);
+							const isChecked = value.includes(option.value);
 							const isOptionDisabled = option.disabled || disabled;
 
 							return (
 								<CheckboxGroupItem
 									key={option.id}
 									value={option.value}
-									checked={isControlled ? isChecked : undefined}
-									defaultChecked={!isControlled ? isChecked : undefined}
+									checked={isChecked}
 									onCheckedChange={() => handleValueChange(option.value)}
 									disabled={isOptionDisabled}
 									label={option.label}
@@ -109,10 +95,8 @@ const CheckboxGroupItem = ({
 				'cursor-pointer': !disabled
 			})}
 		>
-			<CheckboxLabel htmlFor={props.id} disabled={disabled}>
-				{label}
-			</CheckboxLabel>
-
+			{/* Checkbox must precede the label in the DOM — Tailwind's `peer-disabled:*` on
+			CheckboxLabel only matches a `.peer` that comes BEFORE it as a sibling. */}
 			<Checkbox
 				className={className}
 				disabled={disabled}
@@ -122,6 +106,10 @@ const CheckboxGroupItem = ({
 				name={name}
 				{...props}
 			/>
+
+			<CheckboxLabel htmlFor={props.id} disabled={disabled}>
+				{label}
+			</CheckboxLabel>
 		</div>
 	);
 };

@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import dts from 'vite-plugin-dts';
 import path from 'node:path';
-import fs from 'node:fs';
 import { DTS_EXCLUDE } from './shared.js';
 
 interface ReactLibraryOptions {
@@ -29,21 +28,11 @@ interface ReactLibraryOptions {
 export const reactLibrary = (options: ReactLibraryOptions = {}): UserConfig => {
 	const { entry = 'src/index.ts', externals = [] } = options;
 
-	let pkg: any = {};
-	try {
-		pkg = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf-8'));
-	} catch (e) {
-		console.warn(`Could not read package.json in ${process.cwd()}`);
-	}
-
-	const pkgDependencies = [
-		...Object.keys(pkg.dependencies || {}),
-		...Object.keys(pkg.peerDependencies || {})
-	];
-
-	console.log(
-		`[VITE CONFIG] Auto-externalizing ${pkgDependencies.length} dependencies in ${pkg.name}...`
-	);
+	// React must never be bundled into a library's own dist output — every package here shares
+	// a single React instance with whatever app (or sibling package) imports it. Bundling a
+	// private copy breaks hooks/context across package boundaries with "Cannot read properties
+	// of null (reading 'useState')" the moment two bundled copies render in the same tree.
+	const REACT_EXTERNALS = ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'];
 
 	return defineConfig({
 		plugins: [
@@ -72,6 +61,7 @@ export const reactLibrary = (options: ReactLibraryOptions = {}): UserConfig => {
 			rollupOptions: {
 				external: (id) => {
 					if (id.startsWith('@repo/')) return true;
+					if (REACT_EXTERNALS.some((ext) => id === ext || id.startsWith(`${ext}/`))) return true;
 					if (externals.some((ext) => id === ext || id.startsWith(`${ext}/`))) return true;
 					return false;
 				},

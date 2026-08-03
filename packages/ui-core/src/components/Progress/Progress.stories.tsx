@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from '@storybook/test';
 import { Progress } from '~/components/Progress/Progress';
 
 const meta: Meta<typeof Progress> = {
@@ -38,6 +39,27 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		value: 50
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const progressbar = canvas.getByRole('progressbar');
+		expect(progressbar).toHaveAttribute('aria-valuenow', '50');
+	}
+};
+
+export const CustomHeightOnly: Story = {
+	args: {
+		value: 60,
+		className: 'h-4'
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const progressbar = canvas.getByRole('progressbar');
+
+		// A consumer className without its own background colour must merge with the base
+		// track colour, not replace it entirely.
+		expect(progressbar.className).toContain('h-4');
+		expect(progressbar.className).toContain('bg-primary/20');
 	}
 };
 

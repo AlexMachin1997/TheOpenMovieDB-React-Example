@@ -2,7 +2,7 @@ import { cn } from '@repo/tailwind-config';
 import { Label } from '@repo/ui-core';
 import type { IRadioLabel } from '~/components/Radio/Radio.types';
 
-export const RadioLabel = ({ htmlFor, disabled, children, className }: IRadioLabel) => {
+export const RadioLabel = ({ htmlFor, disabled, children, className, ...props }: IRadioLabel) => {
 	return (
 		<Label
 			htmlFor={htmlFor}
@@ -14,6 +14,7 @@ export const RadioLabel = ({ htmlFor, disabled, children, className }: IRadioLab
 				},
 				className
 			)}
+			{...props}
 		>
 			{children}
 		</Label>

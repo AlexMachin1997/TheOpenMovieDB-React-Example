@@ -19,14 +19,11 @@ export interface ICheckboxGroup {
 	/** The list of checkbox options to render. */
 	options?: Option[];
 
-	/** The currently selected values (controlled mode). */
-	value?: string[];
-
-	/** The default selected values (uncontrolled mode). */
-	defaultValue?: string[];
+	/** The currently selected values. CheckboxGroup is controlled-only. */
+	value: string[];
 
 	/** Callback fired when the selection changes. */
-	onChange?: ((data: { value: string[]; name: string }) => void) | null;
+	onChange: (data: { value: string[]; name: string }) => void;
 
 	/** Message to display when no options are available. */
 	noOptionsAvailableMessage?: string;

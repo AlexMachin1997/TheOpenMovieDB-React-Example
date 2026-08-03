@@ -110,7 +110,6 @@ export const MultiSelectValue = ({
 								valueLabel={optionsMap.get(value)}
 								onClear={handleRemoveItem}
 								variant='badge'
-								iconSize='sm'
 								onRefChange={(el) => {
 									if (el) {
 										buttonRefs.current.set(value, el);

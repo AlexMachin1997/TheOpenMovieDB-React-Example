@@ -9,7 +9,6 @@ export type ISelectItemClear = {
 	onClear: (value: string) => void;
 	variant?: 'badge' | 'input';
 	className?: string;
-	iconSize?: 'sm' | 'md';
 	ariaLabel?: string;
 	onRefChange?: (el: HTMLElement | null) => void;
 	ref?: React.Ref<HTMLElement>;
@@ -24,7 +23,6 @@ export const SelectItemClear = ({
 	onClear,
 	variant = 'input',
 	className,
-	iconSize = 'md',
 	ariaLabel,
 	onRefChange,
 	...props
@@ -83,7 +81,7 @@ export const SelectItemClear = ({
 			aria-label={defaultAriaLabel}
 		>
 			<div onKeyDown={handleKeyDown} role='button' tabIndex={0}>
-				<XIcon className={'size-3'} size={iconSize} />
+				<XIcon className='size-3' />
 			</div>
 		</Button>
 	);

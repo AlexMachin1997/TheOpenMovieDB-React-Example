@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from '@storybook/test';
 import { Radio, RadioLabel } from '~/components/Radio/Radio';
 
 const meta: Meta<typeof Radio> = {
@@ -155,4 +156,25 @@ const ControlledRadio = () => {
 
 export const Controlled: Story = {
 	render: () => <ControlledRadio />
+};
+
+export const LabelPassthroughProps: Story = {
+	render: () => (
+		<RadioGroupPrimitive.Root name='radio-group'>
+			<div className='flex items-center space-x-2'>
+				<Radio id='passthrough' value='passthrough' />
+				<RadioLabel htmlFor='passthrough' data-testid='passthrough-label' title='extra prop'>
+					Label with passthrough props
+				</RadioLabel>
+			</div>
+		</RadioGroupPrimitive.Root>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const label = canvas.getByTestId('passthrough-label');
+
+		// RadioLabel must forward unrecognised props (id/title/data-*/etc.) onto the
+		// underlying Label element instead of silently dropping them.
+		expect(label).toHaveAttribute('title', 'extra prop');
+	}
 };

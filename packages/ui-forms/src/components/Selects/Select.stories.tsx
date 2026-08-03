@@ -649,7 +649,7 @@ export const EmptyState: StoryObj<SelectProps> = {
 		await expect(within(customDialog).getByText('No items available at the moment')).toBeInTheDocument();
 		
 		// Search triggers the other custom empty state
-		const searchInput = within(customDialog).getByRole('combobox');
+		const searchInput = within(customDialog).getByRole('textbox');
 		await userEvent.type(searchInput, 'test');
 		// Wait for debounce
 		await new Promise((resolve) => setTimeout(resolve, 350));

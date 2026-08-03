@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from '@storybook/test';
 import { Checkbox, CheckboxLabel } from '~/components/Checkbox/components';
 
 const meta: Meta<typeof Checkbox> = {
@@ -122,4 +123,23 @@ const ControlledCheckbox = () => {
 
 export const Controlled: Story = {
 	render: () => <ControlledCheckbox />
+};
+
+export const LabelPassthroughProps: Story = {
+	render: () => (
+		<div className='flex items-center space-x-2'>
+			<Checkbox id='passthrough' />
+			<CheckboxLabel htmlFor='passthrough' data-testid='passthrough-label' title='extra prop'>
+				Label with passthrough props
+			</CheckboxLabel>
+		</div>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const label = canvas.getByTestId('passthrough-label');
+
+		// CheckboxLabel must forward unrecognised props (id/title/data-*/etc.) onto the
+		// underlying Label element instead of silently dropping them.
+		expect(label).toHaveAttribute('title', 'extra prop');
+	}
 };

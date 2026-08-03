@@ -2,7 +2,7 @@ import { cn } from '@repo/tailwind-config';
 import { Label } from '@repo/ui-core';
 import type { ICheckboxLabel } from '~/components/Checkbox/Checkbox.types';
 
-export const CheckboxLabel = ({ htmlFor, disabled, children, className }: ICheckboxLabel) => {
+export const CheckboxLabel = ({ htmlFor, disabled, children, className, ...props }: ICheckboxLabel) => {
 	return (
 		<Label
 			htmlFor={htmlFor}
@@ -14,6 +14,7 @@ export const CheckboxLabel = ({ htmlFor, disabled, children, className }: ICheck
 				},
 				className
 			)}
+			{...props}
 		>
 			{children}
 		</Label>

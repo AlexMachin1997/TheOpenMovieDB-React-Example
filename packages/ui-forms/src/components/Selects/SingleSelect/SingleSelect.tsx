@@ -40,7 +40,6 @@ export const SingleSelectValue = ({
 						valueLabel={optionsMap.get(selectedValue)}
 						onClear={handleClear}
 						variant='badge'
-						iconSize='sm'
 					/>
 				)}
 			</li>

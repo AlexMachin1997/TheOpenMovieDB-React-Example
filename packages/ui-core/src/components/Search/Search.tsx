@@ -46,14 +46,12 @@ export const Search = ({
 				ref={ref}
 				value={localValue}
 				onValueChange={setLocalValue}
-				className={cn(
-					searchDebouncableInputVariants(),
-					className
-				)}
+				className={cn(searchDebouncableInputVariants())}
 				{...props}
 			/>
 			{showClearButton && (
 				<Button
+					data-slot='search-clear-button'
 					variant='ghost'
 					size='icon'
 					onClick={handleClear}

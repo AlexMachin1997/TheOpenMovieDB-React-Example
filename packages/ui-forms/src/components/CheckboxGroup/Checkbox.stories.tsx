@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { CheckboxGroup } from './CheckboxGroup';
 import type { Option } from '@repo/core';
 import { Checkbox } from '../Checkbox/Checkbox';
@@ -13,11 +14,12 @@ const meta: Meta<typeof CheckboxGroup> = {
 
 export default meta;
 
-const CheckboxGroupTemplate = ({
-	options,
-	...props
-}: React.ComponentProps<typeof CheckboxGroup>) => {
-	const [currentValues, setCurrentValues] = React.useState<string[]>(props.defaultValue || []);
+type CheckboxGroupTemplateProps = Omit<React.ComponentProps<typeof CheckboxGroup>, 'value' | 'onChange'> & {
+	initialValue?: string[];
+};
+
+const CheckboxGroupTemplate = ({ options, initialValue = [], ...props }: CheckboxGroupTemplateProps) => {
+	const [currentValues, setCurrentValues] = React.useState<string[]>(initialValue);
 
 	return (
 		<div className='space-y-4'>
@@ -63,11 +65,7 @@ const sampleOptionsWithOrder: Option[] = [
 
 export const Default: StoryObj<typeof CheckboxGroup> = {
 	render: () => (
-		<CheckboxGroupTemplate
-			options={sampleOptions}
-			name='default-group'
-			defaultValue={['option-one']}
-		/>
+		<CheckboxGroupTemplate options={sampleOptions} name='default-group' initialValue={['option-one']} />
 	)
 };
 
@@ -76,7 +74,7 @@ export const WithDisabledOption: StoryObj<typeof CheckboxGroup> = {
 		<CheckboxGroupTemplate
 			options={sampleOptionsWithDisabled}
 			name='disabled-group'
-			defaultValue={['option-one']}
+			initialValue={['option-one']}
 		/>
 	)
 };
@@ -86,7 +84,7 @@ export const WithDisabledGroup: StoryObj<typeof CheckboxGroup> = {
 		<CheckboxGroupTemplate
 			options={sampleOptions}
 			name='disabled-group'
-			defaultValue={['option-one']}
+			initialValue={['option-one']}
 			disabled={true}
 		/>
 	)
@@ -94,11 +92,7 @@ export const WithDisabledGroup: StoryObj<typeof CheckboxGroup> = {
 
 export const LabelPositionRight: StoryObj<typeof CheckboxGroup> = {
 	render: () => (
-		<CheckboxGroupTemplate
-			options={sampleOptions}
-			name='right-label-group'
-			defaultValue={['option-one']}
-		/>
+		<CheckboxGroupTemplate options={sampleOptions} name='right-label-group' initialValue={['option-one']} />
 	)
 };
 
@@ -107,6 +101,8 @@ export const NoOptionsAvailable: StoryObj<typeof CheckboxGroup> = {
 		<CheckboxGroup
 			options={[]}
 			name='empty-group'
+			value={[]}
+			onChange={() => {}}
 			noOptionsAvailableMessage='No options are currently available for selection.'
 		/>
 	)
@@ -117,6 +113,8 @@ export const CustomNoOptionsMessage: StoryObj<typeof CheckboxGroup> = {
 		<CheckboxGroup
 			options={[]}
 			name='custom-message-group'
+			value={[]}
+			onChange={() => {}}
 			noOptionsAvailableMessage='Please check back later for available options.'
 		/>
 	)
@@ -170,7 +168,7 @@ export const HorizontalLayout: StoryObj<typeof CheckboxGroup> = {
 		<CheckboxGroupTemplate
 			options={sampleOptions}
 			name='horizontal-group'
-			defaultValue={['option-one']}
+			initialValue={['option-one']}
 			className='flex space-x-4'
 		/>
 	)
@@ -178,11 +176,7 @@ export const HorizontalLayout: StoryObj<typeof CheckboxGroup> = {
 
 export const WithOrderedOptions: StoryObj<typeof CheckboxGroup> = {
 	render: () => (
-		<CheckboxGroupTemplate
-			options={sampleOptionsWithOrder}
-			name='ordered-group'
-			defaultValue={['option-one']}
-		/>
+		<CheckboxGroupTemplate options={sampleOptionsWithOrder} name='ordered-group' initialValue={['option-one']} />
 	)
 };
 
@@ -191,7 +185,7 @@ export const MultipleSelections: StoryObj<typeof CheckboxGroup> = {
 		<CheckboxGroupTemplate
 			options={sampleOptions}
 			name='multiple-group'
-			defaultValue={['option-one', 'option-three']}
+			initialValue={['option-one', 'option-three']}
 		/>
 	)
 };
@@ -201,15 +195,13 @@ export const AllOptionsSelected: StoryObj<typeof CheckboxGroup> = {
 		<CheckboxGroupTemplate
 			options={sampleOptions}
 			name='all-selected-group'
-			defaultValue={['option-one', 'option-two', 'option-three']}
+			initialValue={['option-one', 'option-two', 'option-three']}
 		/>
 	)
 };
 
 export const NoDefaultSelection: StoryObj<typeof CheckboxGroup> = {
-	render: () => (
-		<CheckboxGroupTemplate options={sampleOptions} name='no-default-group' defaultValue={[]} />
-	)
+	render: () => <CheckboxGroupTemplate options={sampleOptions} name='no-default-group' initialValue={[]} />
 };
 
 export const MixedDisabledAndEnabled: StoryObj<typeof CheckboxGroup> = {
@@ -226,7 +218,7 @@ export const MixedDisabledAndEnabled: StoryObj<typeof CheckboxGroup> = {
 			<CheckboxGroupTemplate
 				options={mixedOptions}
 				name='mixed-group'
-				defaultValue={['option-one', 'option-three']}
+				initialValue={['option-one', 'option-three']}
 			/>
 		);
 	}
@@ -237,13 +229,13 @@ export const WithCustomStyling: StoryObj<typeof CheckboxGroup> = {
 		<CheckboxGroupTemplate
 			options={sampleOptions}
 			name='custom-styled-group'
-			defaultValue={['option-one']}
+			initialValue={['option-one']}
 			className='p-4 border rounded-lg bg-gray-50'
 		/>
 	)
 };
 
-const ControlledVsUncontrolledComponent = () => {
+const ControlledUsageComponent = () => {
 	const [controlledValue, setControlledValue] = React.useState<string[]>(['option-one']);
 
 	return (
@@ -251,7 +243,8 @@ const ControlledVsUncontrolledComponent = () => {
 			<div className='space-y-4'>
 				<h4 className='text-sm font-medium leading-none'>Controlled Component</h4>
 				<p className='text-sm text-muted-foreground'>
-					State is managed externally. Changing the value prop updates the selection immediately.
+					CheckboxGroup is controlled-only: it always takes its selection from `value` and reports
+					changes via `onChange` — there is no internal/uncontrolled mode.
 				</p>
 				<CheckboxGroup
 					options={sampleOptions}
@@ -289,38 +282,15 @@ const ControlledVsUncontrolledComponent = () => {
 			</div>
 
 			<div className='space-y-4'>
-				<h4 className='text-sm font-medium leading-none'>Uncontrolled Component</h4>
-				<p className='text-sm text-muted-foreground'>
-					Uses defaultValue for initial state. Component manages its own state internally. No
-					external tracking.
-				</p>
-				<CheckboxGroup
-					options={sampleOptions}
-					name='uncontrolled-group'
-					defaultValue={['option-one']}
-				/>
-				<div className='p-3 bg-green-50 rounded border border-green-200'>
-					<p className='text-sm font-medium text-green-700'>Uncontrolled Behavior:</p>
-					<p className='text-sm text-green-600'>
-						This component manages its own state internally. No external state tracking.
-					</p>
-					<p className='text-xs text-green-500 mt-1'>
-						Note: For true form submission with uncontrolled behavior, use individual Radix UI
-						Checkbox components.
-					</p>
-				</div>
-			</div>
-
-			<div className='space-y-4'>
 				<h4 className='text-sm font-medium leading-none'>True Uncontrolled with Form Submission</h4>
 				<p className='text-sm text-muted-foreground'>
-					Using individual Radix UI Checkbox components for native form behavior.
+					For genuinely uncontrolled behaviour (e.g. native form submission), use individual Radix
+					UI Checkbox components directly instead of CheckboxGroup.
 				</p>
 				<form
 					action={(formData: FormData) => {
 						const selectedValues: string[] = [];
 
-						// This works because we're using individual Radix UI Checkbox components
 						for (const [key, value] of formData.entries()) {
 							if (key.startsWith('individual-') && value === 'on') {
 								selectedValues.push(key.replace('individual-', ''));
@@ -359,23 +329,12 @@ const ControlledVsUncontrolledComponent = () => {
 				<h5 className='text-sm font-medium text-gray-700 mb-2'>Key Differences:</h5>
 				<ul className='text-sm text-gray-600 space-y-1'>
 					<li>
-						• <strong>Controlled:</strong> Parent component manages state, value prop controls
-						selection
+						• <strong>CheckboxGroup:</strong> Always controlled — parent state drives `value`,
+						changes are reported via `onChange`.
 					</li>
 					<li>
-						• <strong>Uncontrolled:</strong> Component manages its own state, defaultValue sets
-						initial state
-					</li>
-					<li>
-						• <strong>Use Controlled when:</strong> You need to programmatically change selections
-					</li>
-					<li>
-						• <strong>Use Uncontrolled when:</strong> Simple form inputs where you only need the
-						final value
-					</li>
-					<li>
-						• <strong>Use Individual Checkboxes when:</strong> You need true form submission
-						behavior
+						• <strong>Use Individual Checkboxes when:</strong> You need true uncontrolled form
+						submission behaviour.
 					</li>
 				</ul>
 			</div>
@@ -383,6 +342,48 @@ const ControlledVsUncontrolledComponent = () => {
 	);
 };
 
-export const ControlledVsUncontrolled: StoryObj<typeof CheckboxGroup> = {
-	render: () => <ControlledVsUncontrolledComponent />
+export const ControlledUsage: StoryObj<typeof CheckboxGroup> = {
+	render: () => <ControlledUsageComponent />
+};
+
+const InteractiveControlledComponent = () => {
+	const [currentValues, setCurrentValues] = React.useState<string[]>([]);
+
+	return (
+		<CheckboxGroup
+			options={sampleOptionsWithDisabled}
+			name='interactive-group'
+			value={currentValues}
+			onChange={(data) => setCurrentValues(data.value)}
+		/>
+	);
+};
+
+export const InteractiveTest: StoryObj<typeof CheckboxGroup> = {
+	render: () => <InteractiveControlledComponent />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		const optionOneCheckbox = canvas.getByRole('checkbox', { name: 'Option One' });
+		expect(optionOneCheckbox).not.toBeChecked();
+
+		// Clicking an unchecked, enabled option must fire onChange with the updated selection
+		// and the checkbox must visually reflect the new controlled `value`.
+		await userEvent.click(optionOneCheckbox);
+		await waitFor(() => {
+			expect(optionOneCheckbox).toBeChecked();
+		});
+
+		await userEvent.click(optionOneCheckbox);
+		await waitFor(() => {
+			expect(optionOneCheckbox).not.toBeChecked();
+		});
+
+		// The disabled option's label must pick up `peer-disabled` styling now that the
+		// Checkbox (the `peer`) renders before the label in the DOM.
+		const disabledLabel = canvas.getByText('Option Two (Disabled)');
+		await waitFor(() => {
+			expect(getComputedStyle(disabledLabel).opacity).toBe('0.7');
+		});
+	}
 };
