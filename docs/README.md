@@ -16,7 +16,7 @@ is just the roadmap.
 | 01  | Icon component      | component     | ✅ done  | —          | [01-icon](01-icon/spec.md)                               |
 | 02  | Button enhancements | component     | ✅ done  | 01         | [02-button-enhancements](02-button-enhancements/spec.md) |
 | 03  | Focus indicators    | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)       |
-| 04  | ui-forms: primitive migration | architecture | ready | —   | [04-ui-forms-primitive-migration](04-ui-forms-primitive-migration/spec.md) |
+| 04  | ui-forms: primitive migration | architecture | ✅ done | —   | [04-ui-forms-primitive-migration](04-ui-forms-primitive-migration/plan.md) |
 | 05  | ui-forms: Field pattern | architecture | ready | 04     | [05-ui-forms-field-pattern](05-ui-forms-field-pattern/spec.md) |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —

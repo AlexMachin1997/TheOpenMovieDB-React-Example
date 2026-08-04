@@ -1,0 +1,98 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as RadioGroupStories from './RadioGroup.stories';
+
+<Meta of={RadioGroupStories} />
+
+# RadioGroup
+
+A single-selection group of radio options, built from `Radio` and `RadioLabel`.
+
+`Radio` on its own is a Radix `RadioGroupPrimitive.Item` and only works inside a group root. Before this component existed, using one meant importing `@radix-ui/react-radio-group` directly and reaching straight past the library. `RadioGroup` closes that gap — the same job `CheckboxGroup` already did for `Checkbox`.
+
+## Installation
+
+```tsx
+import { RadioGroup } from '@repo/ui-core';
+```
+
+## Features
+
+- Options in, selected value out — no manual `Radio` composition required.
+- Single selection enforced by the underlying Radix primitive.
+- Full keyboard support: arrows, `Home`/`End`, wraparound, and disabled options skipped.
+- Per-option `disabled`, plus a group-level `disabled`.
+- An empty state with a customisable message.
+
+<Canvas sourceState="none" of={RadioGroupStories.Default} />
+
+## Properties
+
+<Controls />
+
+The API mirrors [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs) deliberately, differing only where single selection forces it — `value` is a `string` rather than a `string[]`, and `onChange` receives `{ value: string; name: string }`.
+
+> **Controlled only.** There is no `defaultValue`. A parallel internal state would be a second, easily desynced source of truth for the same selection. If you want uncontrolled behaviour, compose `RadioGroupPrimitive.Root` with `Radio` yourself.
+
+## Usage
+
+### Basic
+
+```tsx
+import { useState } from 'react';
+import { RadioGroup } from '@repo/ui-core';
+
+const [plan, setPlan] = useState('monthly');
+
+<RadioGroup
+	name="plan"
+	options={[
+		{ id: 'plan-1', value: 'monthly', label: 'Monthly' },
+		{ id: 'plan-2', value: 'yearly', label: 'Yearly' }
+	]}
+	value={plan}
+	onChange={({ value }) => setPlan(value)}
+/>;
+```
+
+### Disabling options
+
+A single option is disabled via its own `disabled` flag; the whole group via the `disabled` prop. Disabled options are skipped by keyboard navigation rather than focused.
+
+```tsx
+<RadioGroup
+	name="plan"
+	options={[
+		{ id: 'plan-1', value: 'monthly', label: 'Monthly' },
+		{ id: 'plan-2', value: 'quarterly', label: 'Quarterly', disabled: true }
+	]}
+	value={plan}
+	onChange={({ value }) => setPlan(value)}
+/>
+```
+
+<Canvas sourceState="none" of={RadioGroupStories.WithDisabledOption} />
+
+### Empty state
+
+With no options, the group renders a message instead of an empty box. Override the wording with `noOptionsAvailableMessage`.
+
+<Canvas sourceState="none" of={RadioGroupStories.CustomNoOptionsMessage} />
+
+## Accessibility
+
+The group is a single Tab stop, which is the WAI-ARIA radio group pattern: Tab moves into the group and straight out again, and the arrow keys move between options within it.
+
+| Key | Behaviour |
+| --- | --- |
+| `Tab` | Enters the group on the selected option, or the first enabled one if nothing is selected. A second `Tab` leaves the group entirely. |
+| `ArrowDown` / `ArrowRight` | Next enabled option |
+| `ArrowUp` / `ArrowLeft` | Previous enabled option |
+| `Home` / `PageUp` | First enabled option |
+| `End` / `PageDown` | Last enabled option |
+| `Space` | Selects the focused option |
+
+Moving between options with the arrow keys **also selects** them, which is standard radio behaviour. [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs) navigates identically but does *not* toggle as you arrow past, since that would be wrong for a multi-select group.
+
+> **Reading direction is not handled.** Arrow keys are left-to-right only. This is library-wide rather than specific to this component — no `DirectionProvider` is mounted anywhere, so every Radix component here falls back to LTR. Tracked as its own piece of work.
+
+Each option's label is associated with its control via `htmlFor`, so clicking the label selects the option.

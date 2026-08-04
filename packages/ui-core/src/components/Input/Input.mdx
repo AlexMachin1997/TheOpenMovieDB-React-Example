@@ -20,6 +20,8 @@ import { Input } from '@repo/ui-core';
 - For multi-line input, use `<Textarea>` instead.
 - The `file` type gets custom button styling automatically.
 
+> **`Input` is the single native-input styling primitive in the library.** [`DebouncableInput`](?path=/docs/ui-core-debouncableinput--docs) and [`Search`](?path=/docs/ui-core-search--docs) both compose it rather than restyling an `<input>` of their own, so a change here reaches all three. Don't add a fourth — extend this one, or compose it.
+
 ## Features
 
 - Focus-visible ring with `3px` offset

@@ -5,7 +5,7 @@ import * as DebouncableInputStories from './DebouncableInput.stories';
 
 # DebouncableInput
 
-A controlled or uncontrolled text input component that natively debounces changes, avoiding the need to manually implement `useDebounce` hooks in parent components.
+[`Input`](?path=/docs/ui-core-input--docs) with debouncing layered on top — a controlled or uncontrolled text input that delays firing state updates, avoiding the need to hand-roll a `useDebounce` in every parent component.
 
 ## Installation
 
@@ -14,9 +14,20 @@ import { DebouncableInput } from '@repo/ui-core';
 ```
 
 ## Features
+- Renders `Input` internally, so it looks and behaves exactly like every other text input in the library.
 - Natively intercepts `onChange` to delay firing state updates to `onValueChange`.
 - Supports standard React 19 `ref` attributes without needing `forwardRef`.
 - Perfect for search inputs, data table filtering, or any field where delayed filtering API calls are required.
+
+> **It is `Input` plus debouncing, and nothing else.** Anything that changes how a text input looks belongs in `Input` and arrives here automatically. If you need the appearance without the delay, reach for `Input` directly — there is no second input primitive to choose between.
+
+## Relationship to `Input` and `Search`
+
+| Component | Use it when |
+| --- | --- |
+| [`Input`](?path=/docs/ui-core-input--docs) | You want a plain text input. |
+| `DebouncableInput` | Every keystroke would otherwise trigger something expensive — a network call, a large re-filter. |
+| [`Search`](?path=/docs/ui-core-search--docs) | You want a search field: `DebouncableInput` plus a search icon and an optional clear button. |
 
 <Canvas sourceState="none" of={DebouncableInputStories.Default} />
 

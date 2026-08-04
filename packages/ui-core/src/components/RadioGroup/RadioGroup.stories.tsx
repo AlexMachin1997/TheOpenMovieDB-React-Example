@@ -6,6 +6,9 @@ import { RadioGroup } from './RadioGroup';
 
 const meta: Meta<typeof RadioGroup> = {
 	title: 'UI Core/Radio group',
+	// Required for the MDX page: `<Controls />` and the primary story block both resolve their
+	// args from here. Without it the docs page renders "No Preview" and an error panel.
+	component: RadioGroup,
 	parameters: {
 		layout: 'centered'
 	}

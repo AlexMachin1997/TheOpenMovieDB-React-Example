@@ -2,8 +2,40 @@
 
 Spec: [`spec.md`](./spec.md) · Discovery: [`discovery.md`](./discovery.md)
 
-Status: **awaiting approval — no code written yet.** Rewrite this as an as-built record once the
-work ships, per [`.agent/golden-rules.md`](../../.agent/golden-rules.md) §2.
+Status: **shipped.** This is the as-built record — what was built, what was rejected, and what bit
+us on the way. Consumer-facing usage documentation lives in Storybook (`Input.mdx`,
+`DebouncableInput.mdx`, `RadioGroup.mdx`).
+
+## Outcome
+
+| Gate | Baseline | After |
+| ---- | -------- | ----- |
+| `pnpm build` | 11/11 | 11/11 ✅ |
+| `pnpm lint` | 0 errors, 40 warnings | 0 errors, 40 warnings ✅ (none new) |
+| Storybook interactions | 311 passed | **326 passed**, 0 failed ✅ |
+| `ui-core` unit tests | 22 | **60** (+38: 21 utils, 17 hook) ✅ |
+
+Shipped across five commits:
+
+| Commit | Scope |
+| ------ | ----- |
+| `fad7e20` | The stories-glob prerequisite — not part of 04 |
+| `b8085f8` | Phases 1–2: the move, barrels, dependencies, `RadioGroup` |
+| `3622cad` | Phase 3: `DebouncableInput` composes `Input` |
+| `6b3d604` | Phase 4: `useRovingTabIndex` + CheckboxGroup nav + `play()` coverage |
+| _(this)_ | Phases 6–7: MDX pass, roadmap, as-built record |
+
+Every acceptance criterion in [`spec.md`](./spec.md) was walked individually and passes. Two worth
+recording because the first check was wrong rather than the code:
+
+- The `ui-core` export check initially reported all 14 components missing. The regex in the
+  throwaway `node -e` one-liner was broken by shell escaping, not the barrel —
+  `dist/index.d.ts:15-29` exports all of them. **A hand-rolled verification script needs its own
+  sanity check before its output is believed.**
+- The "no moved primitive under `packages/ui-forms/src`" grep matched four files. All four are
+  legitimate: `DatePickers` importing `Calendar` *from `@repo/ui-core`*, a prose mention of
+  "Radio Buttons" in `Select.mdx`, and the comment in `index.ts` naming what moved. Re-run scoped
+  to definitions and re-exports, it returns nothing.
 
 ---
 
@@ -466,9 +498,34 @@ In scope — the docs this deliverable makes *wrong* if left alone:
 list from the rendered headings. A hand-maintained list of `- [Section](#section)` links goes stale
 the moment a heading is renamed, and nothing catches it.
 
-- [ ] 6.5 Turn `toc: true` on for the meaty docs. Threshold: over ~100 lines, or more than four
-      `##` headings. Of the files this deliverable touches, only `DebouncableInput.mdx` (100 lines)
-      qualifies. (6.1–6.4)
+- [x] 6.5 Table of contents enabled — **globally in `preview.ts`, because per-page is not possible
+      here.** Two findings, both from reading `addon-docs@10.2.16`'s build after the first attempt
+      rendered nothing:
+
+      - `parameters.docs.toc` **in a story meta is silently ignored for `.mdx` pages.**
+        `DocsContainer` reads `resolveOf('meta', ['meta']).preparedMeta.parameters.docs.toc` and
+        falls back to project-level parameters only *when that throws* — which it does for every
+        `.mdx` attached via `<Meta of={...} />` (`dist/blocks.js:6769-6772`). The per-file entries
+        I added first were dead config and have been removed rather than left looking functional.
+      - The default `headingSelector` is **`h3` alone**, so the first working version listed
+        `Basic` / `Disabling options` / `Empty state` while skipping every `##` above them. Set to
+        `'h2, h3'`.
+
+      **Consequence, worth a decision later:** because per-page control is unavailable for MDX,
+      every docs page now gets a ToC, including short ones — `Input.mdx` at 39 lines is the only
+      page this deliverable touches where it is arguably noise. `disable: true` per page does not
+      work either, for the same reason. The alternative is no ToC anywhere.
+
+      The threshold I had written also needed a length floor: "over ~100 lines, or more than four
+      `##` headings" alone flagged `Input.mdx`, whose five short sections all fit on one screen.
+      Revised to *over ~100 lines, or more than four `##` headings on a page of at least ~60
+      lines* — moot for now given the all-or-nothing constraint, but corrected in the
+      `storybook-standards` skill for elsewhere.
+
+- [x] 6.6 Added `component: RadioGroup` to the `RadioGroup` story meta. Without it the docs page
+      rendered "No Preview" with an error panel, because `<Controls />` and the primary block both
+      resolve their args from the meta's `component`. `CheckboxGroup`'s meta has the same gap but
+      no `.mdx`, so it never surfaced — worth fixing in `05` when that file gets its docs page.
 
 > **Not in this deliverable, but worth raising:** the two docs that most need a ToC are
 > `Selects/Select.mdx` (360 lines, 7 `##` sections) and `Button.mdx` (219 lines) — neither is
@@ -739,6 +796,15 @@ inherited as "things the migration broke".
 - **`Radio.stories.tsx` imports `@radix-ui/react-radio-group` directly** — exactly the gap this
   deliverable closes. Rewriting it to use the new `RadioGroup` is Storybook-documentation work, which
   `spec.md`'s non-goals assign to `05-ui-forms-field-pattern`.
+- **`Radio` has no `peer` class, so `RadioLabel`'s `peer-disabled:*` rules never match.**
+  `Checkbox`'s class string starts with `peer`; `Radio`'s does not. `RadioLabel` carries
+  `peer-disabled:cursor-not-allowed peer-disabled:opacity-70` that consequently do nothing — the
+  visible disabled treatment comes only from its own `disabled` prop. Not fixed here: the spec
+  requires the moved primitives keep their current Tailwind classes exactly, and adding `peer`
+  changes rendered output. Worth picking up in `05` or a focus/state pass.
+- **`CheckboxGroup`'s story meta has no `component`**, the same gap that made `RadioGroup`'s docs
+  page render "No Preview". Harmless today because `CheckboxGroup` has no `.mdx`; it will bite the
+  moment `05` gives it one.
 - **`Input.stories.tsx`'s `ContactForm` story hand-writes a raw `<textarea>`** with its own copy of
   the border/ring classes (`discovery.md:66-72`). Also `05`.
 
