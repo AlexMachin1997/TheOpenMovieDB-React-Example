@@ -9,16 +9,18 @@ The general pattern — numbered deliverable folders, the `discovery` / `spec` /
 do when one file per role isn't enough — lives in the **`deliverable-documentation`** skill. Read
 that for the rules. This file covers only what is specific to this repo.
 
-Authoritative description and the roadmap: [`docs/README.md`](../../../docs/README.md).
+[`docs/README.md`](../../../docs/README.md) holds the roadmap — the live list of deliverables, their
+statuses and dependencies. It deliberately does _not_ restate the conventions; that's this file's
+job, so the two can't drift apart.
 
 ## Layout
 
 ```
 docs/
-├── README.md                 structure + the roadmap table (every deliverable)
-├── 01-icon/                  discovery.md, spec.md, plan.md
+├── README.md                 the roadmap: every deliverable, status, dependencies
+├── 01-icon/                  discovery.md, spec.md, plan.md — only what's needed
 ├── 02-button-enhancements/
-├── 03-focus-indicators/
+├── NN-<slug>/…               see the roadmap for the current list
 └── refactor/                 legacy track, flat files, its own roadmap
 ```
 
