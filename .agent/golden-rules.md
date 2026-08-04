@@ -21,10 +21,11 @@ At the start of every conversation, the agent MUST:
 > [!IMPORTANT]
 > The agent MUST always plan before implementing, regardless of how simple the change appears.
 
-- Always create or update `implementation_plan.md` before touching any code.
-- Notify the user and request approval for the plan before execution.
+- Always plan before touching code, and get the plan approved before executing it.
 - Never skip to implementation just because the change feels small; it is hard to reason about impact without a plan.
-- For follow-up work on an existing plan, update the same `implementation_plan.md` rather than creating a new one.
+- The plan lives in the deliverable's own folder as `plan.md` — e.g. `docs/components/02-button-enhancements/plan.md`. There is no single root-level `implementation_plan.md`; a repo-wide plan file cannot describe more than one in-flight deliverable, which is why the docs are grouped per deliverable instead. See [Documentation Structure](../.claude/skills/documentation-structure/SKILL.md).
+- For follow-up work on an existing deliverable, update that deliverable's `plan.md` rather than creating a new document.
+- Once the work ships, rewrite `plan.md` as an as-built record: what was built, what was rejected, what bit you. A pre-flight checklist nobody corrected afterwards misleads the next reader.
 
 ---
 
@@ -83,9 +84,13 @@ These apply at all times:
 
 Read the relevant `SKILL.md` before starting any work in these areas:
 
-| Skill                                                      | Read when...                                                                  |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| [Monorepo Standards](./skills/monorepo-standards/SKILL.md) | Adding a package, setting up Tailwind, debugging dependency cycles or imports |
+| Skill                                                                         | Read when...                                                                  |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [Monorepo Standards](./skills/monorepo-standards/SKILL.md)                    | Adding a package, setting up Tailwind, debugging dependency cycles or imports |
+| [Documentation Structure](../.claude/skills/documentation-structure/SKILL.md) | Writing a discovery, spec, implementation plan or roadmap — or citing one     |
+
+> **Planning docs are grouped by deliverable, not by document type.** `docs/specs/`, `docs/plans/`
+> and `docs/discovery/` no longer exist. See [`docs/README.md`](../docs/README.md).
 
 ---
 

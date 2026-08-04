@@ -2,7 +2,7 @@
 
 ## Problem
 
-See [`docs/discovery/focus-indicators.md`](../discovery/focus-indicators.md).
+See [`discovery.md`](./discovery.md).
 
 In short: every focusable element in the library indicates focus with the same `--ring` colour,
 with no way to vary it per component or per region without editing the library. Measuring the ring
@@ -34,7 +34,7 @@ they are specified together.
   container indicates on its behalf.
 - **Not included**: see Non-Goals.
 - **Can be delivered independently**: yes. It depends on no other pending deliverable. It does
-  supersede the focus styling `Button` currently carries — [`button-enhancements.md`](button-enhancements.md)
+  supersede the focus styling `Button` currently carries — [`02-button-enhancements`](../../components/02-button-enhancements/spec.md)
   deliberately left focus untouched, so there is no conflict, only a later replacement.
 
 ## Non-Goals
@@ -42,7 +42,7 @@ they are specified together.
 - **Converting menu items to rings.** `DropdownMenu`'s `focus:bg-accent` treatment is the correct
   convention for roving-focus menu items and stays as it is.
 - **Restyling hover, active or pressed states.** The pressed treatment shipped with
-  [`button-enhancements.md`](button-enhancements.md) and is not revisited.
+  [`02-button-enhancements`](../../components/02-button-enhancements/spec.md) and is not revisited.
 - **Fixing unrelated accessibility debt** surfaced while working through the components.
 - **Per-component focus colours as a design exercise.** The mechanism must support variation; which
   variants actually ship a non-default colour is a design decision that can follow later without
@@ -184,7 +184,7 @@ they are specified together.
 ## Open Questions
 
 1. **Is WCAG 2.2 SC 2.4.11 the target?** The library committed to WCAG 2.1 AA in
-   [`button-enhancements.md`](button-enhancements.md); 2.4.11 is the 2.2-level successor specific to
+   [`02-button-enhancements`](../../components/02-button-enhancements/spec.md); 2.4.11 is the 2.2-level successor specific to
    focus. Under 2.1 AA alone the contrast bar is materially weaker and some current styling might
    pass. **Settle this before design** — it determines how much of the rollout is a colour change
    versus a geometry change.

@@ -1,7 +1,6 @@
 # Implementation plan: Icon component
 
-Spec: [`docs/specs/icon-component.md`](../specs/icon-component.md) ·
-Discovery: [`docs/discovery/icon-component.md`](../discovery/icon-component.md)
+Spec: [`spec.md`](./spec.md) · Discovery: [`discovery.md`](./discovery.md)
 
 Status: **shipped**. This document is the as-built record — it covers the engineering
 decisions, the non-obvious rendering traps, and the contributor workflow. User-facing usage

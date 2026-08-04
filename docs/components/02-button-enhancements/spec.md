@@ -2,7 +2,7 @@
 
 ## Problem
 
-See [`docs/discovery/button-enhancements.md`](../discovery/button-enhancements.md).
+See [`discovery.md`](./discovery.md).
 In short: `Button` is currently a thin shadcn/ui wrapper with no first-class icon
 support, no loading state, no default `type`, and no keyboard-accessible activation
 when rendered via `asChild` as something other than a native `<button>`.
@@ -27,19 +27,19 @@ when rendered via `asChild` as something other than a native `<button>`.
   (How the mechanism is structured/named/located is an `implementation-planning`
   decision, not part of this spec.)
 - **Not included**: the `Icon` component itself (a predecessor deliverable, already
-  shipped — see [`icon-component.md`](icon-component.md)), wiring the keyboard hook into
+  shipped — see [`01-icon`](../01-icon/spec.md)), wiring the keyboard hook into
   Command/Popover/other components, a `ButtonGroup`/segmented-button component,
   changes to the separate app-level `Core/Button`.
 - **Can be delivered independently**: no longer fully — this deliverable depends on
   a predecessor: the shared `Icon` component (own spec,
-  [`icon-component.md`](icon-component.md)) that Button's `startIcon`/`endIcon`/spinner
+  [`01-icon`](../01-icon/spec.md)) that Button's `startIcon`/`endIcon`/spinner
   rendering consumes. See Decisions below. Independent of the barrel/export conventions
   work (D6) elsewhere in the repo.
 
 ## Non-Goals
 
 - Building the `Icon` component itself — that's a predecessor deliverable (see
-  [`icon-component.md`](icon-component.md)) which Button consumes. Extending `Icon`'s
+  [`01-icon`](../01-icon/spec.md)) which Button consumes. Extending `Icon`'s
   name dictionary is in scope only if Button needs a name it doesn't already have.
 - Retrofitting existing consumers to use the new props — this is purely additive.
 - Any visual restyling of existing variants/sizes.
@@ -75,7 +75,7 @@ when rendered via `asChild` as something other than a native `<button>`.
 - Icon sizing/spacing is visually consistent across `sm`/`default`/`lg`/`icon` sizes.
 - Loading state is visually distinguishable at a glance (spinner replaces the end icon).
 - Keyboard-focus visual state (existing `focus-visible` ring) is unaffected. This stayed true —
-  but note the ring itself is revisited later by [`focus-indicators.md`](focus-indicators.md),
+  but note the ring itself is revisited later by [`01-focus-indicators`](../../design-system/01-focus-indicators/spec.md),
   which found it fails WCAG 2.2 SC 2.4.11 on contrast. Nothing in this deliverable caused or
   fixed that.
 - A keyboard-"active"/pressed visual treatment (distinct from `focus-visible`) applies
@@ -90,7 +90,7 @@ when rendered via `asChild` as something other than a native `<button>`.
   caller (e.g. supplying `aria-label` on an icon-only button). Contributor-facing material
   — why the keyboard-activation mechanism is built the way it is, rejected alternatives,
   constraints discovered in Radix's or React's behaviour, known limitations — belongs in
-  this deliverable's implementation plan under `docs/plans/`, not in the Storybook docs.
+  this deliverable's own `plan.md`, not in the Storybook docs.
   Route each piece of information by **who needs to know it**, not by how technical it is:
   a low-level detail a consumer will trip over (as Icon's `**:fill-*` requirement is)
   belongs in the user docs, while a simple internal procedure does not.
@@ -270,8 +270,8 @@ should map to one test.
   **predecessor** deliverable, not a follow-up. Button's `startIcon`/`endIcon` and
   internal spinner consume it rather than reimplementing sizing/`aria-hidden` handling
   themselves, avoiding rework once the shared component lands. Its spec is written and
-  **implemented** — see [`icon-component.md`](icon-component.md) — so this deliverable is
-  no longer blocked per `docs/specs/README.md`.
+  **implemented** — see [`01-icon`](../01-icon/spec.md) — so this deliverable is
+  no longer blocked per `docs/components/README.md`.
 - **`startIcon`/`endIcon` typing reversed to a name string**: originally assumed to be an
   icon component reference (`React.ComponentType<{ className?: string }>`); superseded by
   Icon's own spec decision to accept a bare icon name string (Iconify-style API backed by

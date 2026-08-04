@@ -1,6 +1,7 @@
 # Discovery: Button component enhancements
 
 ## Problem Statement
+
 `Button` (`packages/ui-core/src/components/Button/Button.tsx`) is currently a thin
 shadcn/ui-style wrapper — `variant`, `size`, `asChild`, and native prop passthrough via
 CVA's `buttonVariants`. It has no first-class support for icons, loading/pending state,
@@ -8,6 +9,7 @@ or keyboard-accessible activation when rendered as something other than a native
 `<button>` — callers hand-roll these individually and inconsistently today.
 
 ## Context
+
 - **Users**: internal consumers of `@repo/ui-core` — the `apps/the-open-movie-database`
   app and Storybook stories. Solo maintainer (Alex) is effectively also "the user" for
   future sessions.
@@ -29,6 +31,7 @@ or keyboard-accessible activation when rendered as something other than a native
     immediately reusable by all three without new plumbing.
 
 ## Constraints
+
 - Keep `ui-core` and the app's separate `Core/Button` as-is — no package merging
   (existing decision).
 - No public prop signature should silently break existing usage — this is additive.
@@ -40,6 +43,7 @@ or keyboard-accessible activation when rendered as something other than a native
   scope than a Button enhancement warrants; defer to its own discovery if wanted later.
 
 ## Assumptions
+
 - A native `<button>` (i.e. `asChild` not used) needs no manual keyboard-activation
   logic — the browser already fires `click` on Enter/Space for real buttons. Any new
   keyboard-activation hook only matters when `asChild` renders something that isn't
@@ -49,6 +53,7 @@ or keyboard-accessible activation when rendered as something other than a native
   rather than raw `ReactNode`, so Button can apply consistent sizing internally.
 
 ## Open Questions (carried into the spec's Open Questions section)
+
 - Loading spinner placement: replace the end icon specifically, or the whole content?
   Is an optional `loadingText` in scope?
 - Disabled semantics: keep native `disabled` (current, simplest) or move to
@@ -59,6 +64,7 @@ or keyboard-accessible activation when rendered as something other than a native
   scope for this deliverable?
 
 ## Success Criteria
+
 - `Button` supports `startIcon`/`endIcon`, a `loading` state, and defaults to
   `type="button"`, without breaking any existing usage.
 - `asChild`-rendered non-native elements get correct keyboard activation (Enter/Space)

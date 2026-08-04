@@ -1,7 +1,6 @@
 # Implementation plan: Button enhancements
 
-Spec: [`docs/specs/button-enhancements.md`](../specs/button-enhancements.md) ·
-Discovery: [`docs/discovery/button-enhancements.md`](../discovery/button-enhancements.md)
+Spec: [`spec.md`](./spec.md) · Discovery: [`discovery.md`](./discovery.md)
 
 Status: **shipped**. This document is the as-built record — the reasoning behind the shape of the
 code, the alternatives that were rejected, and the traps found on the way. User-facing usage
@@ -274,7 +273,7 @@ was a leftover from the scaffold and failed every time on the missing entry, bre
 - Decide whether the dev-guard passthrough `define` in `packages/vite-config/react-library.ts` is
   worth adding, which would let the diagnostic be stripped from production builds.
 - Roll `@storybook/addon-a11y`'s blocking mode out beyond Button, component by component.
-- Focus indicators are now their own deliverable — [`docs/specs/focus-indicators.md`](../specs/focus-indicators.md).
+- Focus indicators are now their own deliverable — [`docs/design-system/01-focus-indicators`](../../design-system/01-focus-indicators/spec.md).
   Button's `focus-visible:ring-ring/50` and `focus-visible:ring-destructive/20` are among the
   styles it replaces; both measure under 1.6:1 against the page, well below the 3:1 bar. Note that
   axe passed every Button story, which is expected — SC 2.4.11 contrast is not automatically

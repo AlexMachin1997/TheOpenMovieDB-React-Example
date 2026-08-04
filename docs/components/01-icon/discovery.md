@@ -1,17 +1,19 @@
 # Discovery: Icon component
 
 ## Problem Statement
+
 There is no shared `Icon` component. Every package that needs an icon
 (`ui-core`, `ui-forms`, `ui-overlays`, `ui-command`) imports a specific icon
 component directly from `lucide-react` and hand-rolls its own sizing,
 `aria-hidden` handling, and visual treatment inline — resulting in
 inconsistent sizes (`size-2` through `size-6` observed) and no shared
 accessibility convention. Button's own enhancement spec
-([`button-enhancements.md`](../specs/button-enhancements.md)) needs a
+([`02-button-enhancements`](../02-button-enhancements/spec.md)) needs a
 predecessor `Icon` component for its `startIcon`/`endIcon`/spinner rendering
 rather than re-implementing this itself.
 
 ## Context
+
 - **Users**: internal consumers of the component library packages
   (`@repo/ui-core`, `@repo/ui-forms`, `@repo/ui-overlays`, `@repo/ui-command`)
   — the `apps/the-open-movie-database` app and Storybook stories. Solo
@@ -48,6 +50,7 @@ rather than re-implementing this itself.
     spec — so this deliverable uses the default CDN-backed resolution.
 
 ## Constraints
+
 - Keep the existing package boundaries as-is — no package merging (existing
   decision).
 - Component tests are Storybook `play()` interactions, not `.spec.tsx` files.
@@ -59,6 +62,7 @@ rather than re-implementing this itself.
   deliverable).
 
 ## Assumptions
+
 - Adopting `@iconify/react` means retiring `lucide-react` as a direct
   dependency across all four packages, migrating every existing raw
   `lucide-react` import onto the new `Icon` component (confirmed in scope —
@@ -79,6 +83,7 @@ rather than re-implementing this itself.
   "invalid name" runtime case to design for.
 
 ## Open Questions (carried into the spec)
+
 - Whether Icon's named size tokens should numerically match Button's own size
   scale, or be defined independently to cover the smaller sizes already seen
   in the wild (e.g. Radio's `size-2` dot).
@@ -87,6 +92,7 @@ rather than re-implementing this itself.
   Icon's own `size` prop that needs resolving during that specific migration.
 
 ## Success Criteria
+
 - A shared `Icon` component exists in `ui-core`, accepting a bare icon name
   string (typo-checked at compile time via TypeScript), rendering via
   `@iconify/react`'s default (CDN-backed) resolution, always
