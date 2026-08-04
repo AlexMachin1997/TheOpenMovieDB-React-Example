@@ -74,4 +74,3 @@ export {
 	searchWrapperVariants,
 	searchClearButtonVariants
 } from '~/components/Search/Search.variants';
-export { debouncableInputVariants } from '~/components/DebouncableInput/DebouncableInput.variants';

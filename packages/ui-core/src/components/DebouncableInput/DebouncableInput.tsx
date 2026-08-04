@@ -1,11 +1,15 @@
 import * as React from 'react';
-import { cn } from '@repo/tailwind-config';
 import { useDebouncedValue } from '~/hooks';
-import { debouncableInputVariants } from '~/components/DebouncableInput/DebouncableInput.variants';
+import { Input } from '~/components/Input/Input';
 import type { IDebouncableInput } from '~/components/DebouncableInput/DebouncableInput.types';
 
 /**
- * A standard text input primitive that natively debounces changes.
+ * `Input` with a debounce hook layered on top.
+ *
+ * This composes `Input` rather than styling its own `<input>`: `Input` is the one native-input
+ * styling primitive in the library, and the only thing that makes this component different is the
+ * debouncing. Anything that changes how a text input looks belongs in `Input`, and arrives here
+ * for free.
  *
  * @component
  */
@@ -30,11 +34,12 @@ export const DebouncableInput = ({
 	};
 
 	return (
-		<input
+		<Input
 			{...props}
 			ref={ref}
+			// Set after the spread so it wins over `Input`'s own `data-slot='input'`.
 			data-slot='debouncable-input'
-			className={cn(debouncableInputVariants(), className)}
+			className={className}
 			value={value}
 			onChange={handleChange}
 		/>

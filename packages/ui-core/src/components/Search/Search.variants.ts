@@ -17,4 +17,10 @@ export const searchClearButtonVariants = cva(
 	}
 );
 
-export const searchDebouncableInputVariants = cva('border-none px-0 py-3 shadow-none focus-visible:ring-0');
+// `DebouncableInput` renders `Input`, which brings a border, shadow, focus ring, `h-9` and
+// `text-base md:text-sm`. Search supplies its own chrome via `searchWrapperVariants` (the `border-b`
+// wrapper), so all of that is stripped here. `h-10` and `text-sm` are not new styling — they hold
+// Search's rendered box exactly where it was before `DebouncableInput` started composing `Input`.
+export const searchDebouncableInputVariants = cva(
+	'h-10 border-none px-0 py-3 text-sm shadow-none focus-visible:ring-0'
+);
