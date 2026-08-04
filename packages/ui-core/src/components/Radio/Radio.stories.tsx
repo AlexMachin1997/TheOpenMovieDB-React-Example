@@ -5,7 +5,7 @@ import { expect, within } from 'storybook/test';
 import { Radio, RadioLabel } from '~/components/Radio/Radio';
 
 const meta: Meta<typeof Radio> = {
-	title: 'UI Forms/Radio',
+	title: 'UI Core/Radio',
 	component: Radio,
 	parameters: {
 		layout: 'centered'

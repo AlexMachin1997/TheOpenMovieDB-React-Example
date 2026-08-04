@@ -26,9 +26,6 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
-		"@radix-ui/react-checkbox": "^1.3.3",
-		"@radix-ui/react-radio-group": "^1.3.8",
-		"@radix-ui/react-slider": "^1.3.6",
 		"@repo/core": "workspace:*",
 		"@repo/ui-command": "workspace:*",
 		"@repo/ui-core": "workspace:*",

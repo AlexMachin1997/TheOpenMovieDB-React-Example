@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { Label } from '@repo/ui-core';
+import { Label } from '~/components/Label/Label';
 
 /**
  * Properties for the Checkbox component.

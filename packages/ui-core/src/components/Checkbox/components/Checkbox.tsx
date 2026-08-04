@@ -1,5 +1,5 @@
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { Icon } from '@repo/ui-core';
+import { Icon } from '~/components/Icon/Icon';
 import { cn } from '@repo/tailwind-config';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import type { ICheckbox } from '~/components/Checkbox/Checkbox.types';

@@ -1,6 +1,6 @@
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { cn } from '@repo/tailwind-config';
-import { Icon } from '@repo/ui-core';
+import { Icon } from '~/components/Icon/Icon';
 import type { IRadio } from '~/components/Radio/Radio.types';
 
 export const Radio = ({ className, disabled = false, iconClassName, ...props }: IRadio) => {

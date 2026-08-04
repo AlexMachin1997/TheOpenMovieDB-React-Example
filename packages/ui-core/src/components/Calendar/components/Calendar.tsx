@@ -1,7 +1,9 @@
-import { Icon, type IconName } from '@repo/ui-core';
 import { DayPicker, DayPickerProps, getDefaultClassNames } from 'react-day-picker';
-import { buttonVariants, Button } from '@repo/ui-core';
 import { cn } from '@repo/tailwind-config';
+import { Icon } from '~/components/Icon/Icon';
+import type { IconName } from '~/components/Icon/Icon.constants';
+import { Button } from '~/components/Button/Button';
+import { buttonVariants } from '~/components/Button/variants';
 import { CalendarDayButton } from '~/components/Calendar/components/CalendarDayButton';
 
 type ICalendar = {

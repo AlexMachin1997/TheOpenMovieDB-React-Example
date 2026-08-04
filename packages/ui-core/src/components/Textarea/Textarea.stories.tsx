@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Textarea } from '~/components/Textarea/Textarea';
-import { Label } from '@repo/ui-core';
+import { Label } from '~/components/Label/Label';
 
 const meta: Meta<typeof Textarea> = {
-	title: 'UI Forms/Textarea',
+	title: 'UI Core/Textarea',
 	component: Textarea,
 	parameters: {
 		layout: 'centered'

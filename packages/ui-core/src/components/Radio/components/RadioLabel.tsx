@@ -1,5 +1,5 @@
 import { cn } from '@repo/tailwind-config';
-import { Label } from '@repo/ui-core';
+import { Label } from '~/components/Label/Label';
 import type { IRadioLabel } from '~/components/Radio/Radio.types';
 
 export const RadioLabel = ({ htmlFor, disabled, children, className, ...props }: IRadioLabel) => {

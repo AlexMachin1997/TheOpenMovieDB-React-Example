@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Input } from '~/components/Input/Input';
-import { Label } from '@repo/ui-core';
+import { Label } from '~/components/Label/Label';
 
 const meta: Meta<typeof Input> = {
-	title: 'UI Forms/Input',
+	title: 'UI Core/Input',
 	component: Input,
 	parameters: {
 		layout: 'centered'
@@ -43,8 +43,7 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			source: {
-				code: `import { Input } from '@repo/ui-forms';
-import { Label } from '@repo/ui-core';
+				code: `import { Input, Label } from '@repo/ui-core';
 
 <Label htmlFor="default-input">Username</Label>
 <Input id="default-input" placeholder="Enter your username" />`
@@ -67,8 +66,7 @@ export const Email: Story = {
 	parameters: {
 		docs: {
 			source: {
-				code: `import { Input } from '@repo/ui-forms';
-import { Label } from '@repo/ui-core';
+				code: `import { Input, Label } from '@repo/ui-core';
 
 <Label htmlFor="email-input">Email Address</Label>
 <Input id="email-input" type="email" placeholder="Enter your email" />`
@@ -205,7 +203,7 @@ export const WithError: Story = {
 	parameters: {
 		docs: {
 			source: {
-				code: `import { Input } from '@repo/ui-forms';
+				code: `import { Input } from '@repo/ui-core';
 
 <Input type="email" placeholder="Enter your email" aria-invalid="true" />
 <p className="text-sm text-red-500">Please enter a valid email address</p>`
@@ -241,7 +239,7 @@ export const Controlled: Story = {
 		docs: {
 			source: {
 				code: `import { useState } from 'react';
-import { Input } from '@repo/ui-forms';
+import { Input } from '@repo/ui-core';
 
 const [value, setValue] = useState('');
 

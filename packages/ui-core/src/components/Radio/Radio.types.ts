@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
-import { Label } from '@repo/ui-core';
+import { Label } from '~/components/Label/Label';
 
 /**
  * Properties for the Radio component.

@@ -24,6 +24,31 @@ export {
 export { Search } from '~/components/Search/Search';
 export { DebouncableInput } from '~/components/DebouncableInput/DebouncableInput';
 
+// Form primitives. These live here rather than in `@repo/ui-forms` because the package boundary is
+// drawn by dependency footprint, not by category — nothing below needs `ui-overlays` or
+// `ui-command`. See docs/04-ui-forms-primitive-migration/spec.md, Decisions.
+export { Input } from '~/components/Input/Input';
+export { Textarea } from '~/components/Textarea/Textarea';
+export { Checkbox, CheckboxLabel } from '~/components/Checkbox/Checkbox';
+export { CheckboxGroup } from '~/components/CheckboxGroup/CheckboxGroup';
+export { Radio, RadioLabel } from '~/components/Radio/Radio';
+export { RadioGroup } from '~/components/RadioGroup/RadioGroup';
+export { SliderRange, SliderThumb, SliderTrack, SliderRoot } from '~/components/Slider/Slider';
+export { Calendar, CalendarDayButton } from '~/components/Calendar/Calendar';
+
+export type { IInput } from '~/components/Input/Input.types';
+export type { ITextarea } from '~/components/Textarea/Textarea.types';
+export type { ICheckbox, ICheckboxLabel } from '~/components/Checkbox/Checkbox.types';
+export type { ICheckboxGroup } from '~/components/CheckboxGroup/CheckboxGroup.types';
+export type { IRadio, IRadioLabel } from '~/components/Radio/Radio.types';
+export type { IRadioGroup } from '~/components/RadioGroup/RadioGroup.types';
+export type {
+	ISliderRoot,
+	ISliderTrack,
+	ISliderRange,
+	ISliderThumb
+} from '~/components/Slider/Slider.types';
+
 // Hooks
 // `useKeyboardActivation` is public because every package downstream of this one already depends
 // on `@repo/ui-core`, so adopting it later needs no new plumbing. `useDebouncedValue` stays

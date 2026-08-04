@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DayButton, getDefaultClassNames } from 'react-day-picker';
-import { Button } from '@repo/ui-core';
+import { Button } from '~/components/Button/Button';
 import { cn } from '@repo/tailwind-config';
 
 export const CalendarDayButton = ({

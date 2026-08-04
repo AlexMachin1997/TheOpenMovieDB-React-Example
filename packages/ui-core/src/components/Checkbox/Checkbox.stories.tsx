@@ -4,7 +4,7 @@ import { expect, within } from 'storybook/test';
 import { Checkbox, CheckboxLabel } from '~/components/Checkbox/components';
 
 const meta: Meta<typeof Checkbox> = {
-	title: 'UI Forms/Checkbox',
+	title: 'UI Core/Checkbox',
 	component: Checkbox,
 	parameters: {
 		layout: 'centered'

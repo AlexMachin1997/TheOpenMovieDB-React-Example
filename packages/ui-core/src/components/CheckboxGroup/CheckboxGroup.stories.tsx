@@ -6,7 +6,7 @@ import type { Option } from '@repo/core';
 import { Checkbox } from '../Checkbox/Checkbox';
 
 const meta: Meta<typeof CheckboxGroup> = {
-	title: 'UI Forms/Checkbox group',
+	title: 'UI Core/Checkbox group',
 	parameters: {
 		layout: 'centered'
 	}

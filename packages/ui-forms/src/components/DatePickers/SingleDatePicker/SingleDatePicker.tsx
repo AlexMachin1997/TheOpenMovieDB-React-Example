@@ -1,8 +1,7 @@
 import React from 'react';
 import { cn } from '@repo/tailwind-config';
 import { formatDate } from '@repo/core';
-import { Button, Icon } from '@repo/ui-core';
-import { Calendar } from '~/components/Calendar/components/Calendar';
+import { Button, Calendar, Icon } from '@repo/ui-core';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui-overlays';
 import { IDatePicker } from '~/components/DatePickers/types';
 

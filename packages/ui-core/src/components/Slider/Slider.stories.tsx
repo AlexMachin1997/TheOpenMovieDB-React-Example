@@ -1,10 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
 import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/Slider/Slider';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Label } from '@repo/ui-core';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger
+} from '~/components/Tooltip/Tooltip';
+import { Label } from '~/components/Label/Label';
 
 const meta: Meta = {
-	title: 'UI Forms/Slider',
+	title: 'UI Core/Slider',
 	parameters: {
 		layout: 'centered'
 	}
