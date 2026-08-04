@@ -387,3 +387,146 @@ export const InteractiveTest: StoryObj<typeof CheckboxGroup> = {
 		});
 	}
 };
+
+/* -------------------------------------------------------------------------------------------------
+ * Keyboard navigation
+ *
+ * The scripts below are written to be character-identical to the ones in RadioGroup.stories.tsx,
+ * apart from the role queried and the group component itself. CheckboxGroup reproduces Radix's
+ * roving-focus behaviour by hand (`useRovingTabIndex`) because Radix ships no checkbox-group
+ * primitive — so if the two ever drift apart, that must fail a test rather than reach a user.
+ * ---------------------------------------------------------------------------------------------- */
+
+const keyboardOptions: Option[] = [
+	{ id: 'kb-1', value: 'apples', label: 'Apples' },
+	{ id: 'kb-2', value: 'bananas', label: 'Bananas', disabled: true },
+	{ id: 'kb-3', value: 'cherries', label: 'Cherries' },
+	{ id: 'kb-4', value: 'dates', label: 'Dates' }
+];
+
+const KeyboardComponent = () => {
+	const [currentValues, setCurrentValues] = React.useState<string[]>([]);
+
+	return (
+		<CheckboxGroup
+			options={keyboardOptions}
+			name='keyboard-group'
+			value={currentValues}
+			onChange={(data) => setCurrentValues(data.value)}
+		/>
+	);
+};
+
+export const KeyboardNavigationSkipsDisabled: StoryObj<typeof CheckboxGroup> = {
+	render: () => <KeyboardComponent />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const items = canvas.getAllByRole('checkbox');
+
+		await step('Tab enters the group on its single tab stop', async () => {
+			await userEvent.tab();
+			await expect(items[0]).toHaveFocus();
+			await expect(items[0]).toHaveAttribute('tabindex', '0');
+			await expect(items[2]).toHaveAttribute('tabindex', '-1');
+		});
+
+		await step('ArrowDown skips the disabled option entirely', async () => {
+			await userEvent.keyboard('{ArrowDown}');
+			await expect(items[2]).toHaveFocus();
+			await expect(items[1]).not.toHaveFocus();
+		});
+
+		await step('ArrowRight advances, ArrowUp and ArrowLeft retreat', async () => {
+			await userEvent.keyboard('{ArrowRight}');
+			await expect(items[3]).toHaveFocus();
+
+			await userEvent.keyboard('{ArrowUp}');
+			await expect(items[2]).toHaveFocus();
+
+			await userEvent.keyboard('{ArrowLeft}');
+			await expect(items[0]).toHaveFocus();
+		});
+
+		await step('End jumps to the last enabled option, Home back to the first', async () => {
+			await userEvent.keyboard('{End}');
+			await expect(items[3]).toHaveFocus();
+
+			await userEvent.keyboard('{Home}');
+			await expect(items[0]).toHaveFocus();
+		});
+
+		await step('Arrowing past either end wraps around', async () => {
+			await userEvent.keyboard('{ArrowUp}');
+			await expect(items[3]).toHaveFocus();
+
+			await userEvent.keyboard('{ArrowDown}');
+			await expect(items[0]).toHaveFocus();
+		});
+	}
+};
+
+export const ArrowKeysDoNotToggle: StoryObj<typeof CheckboxGroup> = {
+	render: () => <KeyboardComponent />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const items = canvas.getAllByRole('checkbox');
+
+		await step('Arrow through every option', async () => {
+			await userEvent.tab();
+			await userEvent.keyboard('{ArrowDown}{ArrowDown}{ArrowUp}');
+			await expect(items[2]).toHaveFocus();
+		});
+
+		await step('Focus moved, but nothing became checked', async () => {
+			// The deliberate difference from RadioGroup, where arrowing also selects. Toggling
+			// every checkbox a user arrows past would be wrong for a multi-select group.
+			for (const item of items) {
+				await expect(item).toHaveAttribute('aria-checked', 'false');
+			}
+		});
+
+		await step('Space still toggles the focused option', async () => {
+			await userEvent.keyboard(' ');
+			await waitFor(() => {
+				expect(items[2]).toBeChecked();
+			});
+		});
+	}
+};
+
+const SingleTabStopComponent = () => {
+	const [currentValues, setCurrentValues] = React.useState<string[]>([]);
+
+	return (
+		<div className='space-y-2'>
+			<button type='button'>before</button>
+			<CheckboxGroup
+				options={keyboardOptions}
+				name='tab-stop-group'
+				value={currentValues}
+				onChange={(data) => setCurrentValues(data.value)}
+			/>
+			<button type='button'>after</button>
+		</div>
+	);
+};
+
+export const GroupIsASingleTabStop: StoryObj<typeof CheckboxGroup> = {
+	render: () => <SingleTabStopComponent />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('Tab reaches the group once, then leaves it entirely', async () => {
+			await userEvent.tab();
+			await expect(canvas.getByRole('button', { name: 'before' })).toHaveFocus();
+
+			await userEvent.tab();
+			await expect(canvas.getAllByRole('checkbox')[0]).toHaveFocus();
+
+			// Straight out to 'after' — not on to the second checkbox. This is the behaviour
+			// change the roving tabindex introduces, so it is pinned rather than implied.
+			await userEvent.tab();
+			await expect(canvas.getByRole('button', { name: 'after' })).toHaveFocus();
+		});
+	}
+};

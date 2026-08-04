@@ -1,22 +1,21 @@
 import * as React from 'react';
 import { cn } from '@repo/tailwind-config';
-import { type Option } from '@repo/core';
 import { Checkbox, CheckboxLabel } from '~/components/Checkbox/Checkbox';
-
-type CheckboxGroupProps = {
-	options?: Option[];
-	value: string[];
-	onChange: (data: { value: string[]; name: string }) => void;
-	noOptionsAvailableMessage?: string;
-	disabled?: boolean;
-	name: string;
-	className?: string;
-};
+import { useRovingTabIndex } from '~/hooks/useRovingTabIndex';
+import type {
+	ICheckboxGroup,
+	ICheckboxGroupItem
+} from '~/components/CheckboxGroup/CheckboxGroup.types';
 
 // CheckboxGroup is controlled-only: individual Radix Checkboxes have no group primitive of
 // their own, so a parallel internal "uncontrolled" state would just be a second, easily
 // desynced source of truth for the same selection. Callers that want uncontrolled behaviour
 // should use individual `Checkbox` components with `defaultChecked` instead.
+//
+// That same missing primitive is why keyboard navigation is hand-rolled here via
+// `useRovingTabIndex`. RadioGroup needs no equivalent — RadioGroupPrimitive.Root is already a
+// roving-focus widget. The two must feel identical to a keyboard user, so the hook reproduces
+// Radix's behaviour exactly; see docs/04-ui-forms-primitive-migration/plan.md, D1.
 const CheckboxGroup = ({
 	options = [],
 	value,
@@ -26,7 +25,7 @@ const CheckboxGroup = ({
 	name,
 	className,
 	...props
-}: CheckboxGroupProps) => {
+}: ICheckboxGroup) => {
 	const handleValueChange = React.useCallback(
 		(optionValue: string) => {
 			const wasPreviouslyChecked = value.includes(optionValue);
@@ -39,6 +38,25 @@ const CheckboxGroup = ({
 		[onChange, value, name]
 	);
 
+	const isItemDisabled = React.useCallback(
+		(index: number) => (options[index]?.disabled ?? false) || disabled,
+		[options, disabled]
+	);
+
+	// Drives only which item owns the tab stop before anything is focused, so tabbing into a
+	// part-selected group lands on the first selection rather than always on option one.
+	const isItemChecked = React.useCallback(
+		(index: number) => value.includes(options[index]?.value ?? ''),
+		[options, value]
+	);
+
+	const { getItemProps } = useRovingTabIndex({
+		itemCount: options.length,
+		isItemDisabled,
+		isItemChecked,
+		disabled
+	});
+
 	return (
 		<div className='w-full' {...props}>
 			<div className='mx-auto w-full'>
@@ -50,7 +68,7 @@ const CheckboxGroup = ({
 
 				{(options?.length ?? 0) > 0 && (
 					<div className={cn('grid gap-3', className)}>
-						{options.map((option) => {
+						{options.map((option, index) => {
 							const isChecked = value.includes(option.value);
 							const isOptionDisabled = option.disabled || disabled;
 
@@ -64,6 +82,7 @@ const CheckboxGroup = ({
 									label={option.label}
 									id={option.id}
 									name={`${name}-${option.value}`}
+									{...getItemProps(index)}
 								/>
 							);
 						})}
@@ -72,10 +91,6 @@ const CheckboxGroup = ({
 			</div>
 		</div>
 	);
-};
-
-type CheckboxGroupItemProps = React.ComponentProps<typeof Checkbox> & {
-	label: string;
 };
 
 const CheckboxGroupItem = ({
@@ -87,7 +102,7 @@ const CheckboxGroupItem = ({
 	onCheckedChange,
 	name,
 	...props
-}: CheckboxGroupItemProps) => {
+}: ICheckboxGroupItem) => {
 	return (
 		<div
 			className={cn('flex items-center space-x-2', {
@@ -118,4 +133,3 @@ CheckboxGroup.displayName = 'CheckboxGroup';
 CheckboxGroupItem.displayName = 'CheckboxGroupItem';
 
 export { CheckboxGroup };
-export type { CheckboxGroupProps };

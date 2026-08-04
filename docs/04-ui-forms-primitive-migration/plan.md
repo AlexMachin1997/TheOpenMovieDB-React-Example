@@ -34,7 +34,7 @@ installed", not "the repo is broken".
 | ------------------------------- | --------------------------------------------------------------- |
 | `pnpm install`                  | ✅ 13 packages added — the worktree was incomplete               |
 | `pnpm turbo run build --force`  | ✅ 11/11 tasks, **0 cached**, 1m36s — a genuine compile           |
-| `pnpm lint`                     | ✅ 0 errors, **1 pre-existing warning** (below)                   |
+| `pnpm lint`                     | ✅ 0 errors, **40 pre-existing warnings** (below)                 |
 | Storybook interaction suite     | ✅ **311 passed / 0 failed**, 27 files — after a one-character fix |
 
 ### Getting to that number took a one-character fix, and three wrong diagnoses first
@@ -84,10 +84,22 @@ The reusable versions of all three are now in the `storybook-standards` skill (�
 that had to land for the deliverable's test gate to mean anything, and it should be reviewed and
 committed as its own change.
 
-**The lint warning moves with its file:**
-`packages/ui-forms/src/components/Textarea/Textarea.types.ts:13` — `ITextarea` declares no members
-(`@typescript-eslint/no-empty-object-type`). It will reappear under `packages/ui-core/...` after the
-move. That is expected, not a regression. See [Flagged, not fixed](#flagged-not-fixed).
+**Lint: 40 warnings, 0 errors — all pre-existing.** 20 in `ui-overlays` (`Dialog`, `DropdownMenu`,
+`HoverCard`, `Popover` types — empty interfaces), untouched by this work. 19 already in `ui-core`
+(`Alert.types.ts`, `Avatar.types.ts`, `Label.types.ts`, `Skeleton.types.ts`, `Tabs.types.ts`,
+`Tooltip.types.ts` — empty interfaces; `DebouncableInput.stories.tsx`, `Search.stories.tsx` —
+`no-explicit-any` on `play` signatures). The last is `Textarea/Textarea.types.ts:13`, which moves
+with its file from `ui-forms` to `ui-core`.
+
+The empty-interface warning is a systemic convention problem across three packages, not a
+`Textarea` problem — see [Flagged, not fixed](#flagged-not-fixed).
+
+> **This figure was recorded wrong first time round.** The initial baseline said "1 warning",
+> because `pnpm lint` was piped through `tail -30` and the `ui-core` task's output scrolled off. The
+> corrected count came from `npx eslint --no-cache` inside each package, which prints a total. After
+> Phases 1–2 the total is still 20 and `ui-forms` is clean — so nothing new was introduced, but that
+> could only be *claimed* once the baseline was right. Same lesson as the build cache: pipe gate
+> output to a file, never to `tail`.
 
 ### Accessibility checks: left exactly as they were
 
@@ -649,6 +661,35 @@ Skipping this produces both false greens and false reds — it is what made the 
 unusable.
 
 ---
+
+## Traps found during implementation
+
+### A tapped arrow key cannot observe Radix's arrow-selects behaviour
+
+`RadioGroup`'s `ArrowKeysAlsoSelect` story failed on first write, asserting something true of the
+component but unobservable the way the test pressed the key.
+
+Radix moves focus with `setTimeout(() => focusFirst(candidateNodes))`
+(`react-roving-focus/dist/index.mjs:180`), while the flag that turns "focused" into "selected" is
+set on a **document** `keydown` and cleared on `keyup` (`react-radio-group/dist/index.mjs:237-247`).
+`userEvent.keyboard('{ArrowDown}')` dispatches press and release back to back, both landing before
+the deferred callback runs — so by the time focus arrives the flag is already `false` and nothing is
+selected. A human holds the key for ~100ms and never sees this.
+
+Fix: hold the key, `{ArrowDown>}` … `{/ArrowDown}`. The failure was an artefact of synthetic input
+speed, not a bug, and the diagnosis came from reading Radix's build output rather than its docs.
+
+Worth knowing for `05`: any assertion about "focus moved *and* something followed" in a Radix
+roving-focus widget needs the key held.
+
+### `vitest` does not typecheck, so a green spec run proves less than it looks
+
+`useRovingTabIndex.spec.ts` passed 17/17 while containing a type error
+(`elements.indexOf(document.activeElement as HTMLElement)` against an `HTMLButtonElement[]`). Only
+`pnpm build` caught it, because `check-types` runs there and not in `vitest run`. Same for
+`noUncheckedIndexedAccess` making `getAllByRole(...)[n]` an `HTMLElement | undefined` — fine inside
+`expect()`, rejected by `userEvent.click()`. Run the build, not just the specs, before believing a
+change is clean.
 
 ## Risks
 
