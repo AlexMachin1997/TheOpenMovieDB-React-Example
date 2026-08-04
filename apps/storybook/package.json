@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "vitest",
 		"dev": "vite",
-		"build": "tsc -b && vite build",
+		"_comment_build": "This app has no index.html — it is a Storybook host, not a Vite app. `vite build` was a leftover from the scaffold and always failed on the missing entry, breaking the root `pnpm build`. The static site is built by `build-storybook`.",
+		"build": "tsc -b",
 		"lint": "eslint . --cache",
 		"preview": "vite preview",
 		"storybook": "storybook dev -p 6006",
