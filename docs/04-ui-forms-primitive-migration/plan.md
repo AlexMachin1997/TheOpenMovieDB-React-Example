@@ -1,0 +1,737 @@
+# Implementation plan: ui-forms primitive migration
+
+Spec: [`spec.md`](./spec.md) · Discovery: [`discovery.md`](./discovery.md)
+
+Status: **awaiting approval — no code written yet.** Rewrite this as an as-built record once the
+work ships, per [`.agent/golden-rules.md`](../../.agent/golden-rules.md) §2.
+
+---
+
+## Baseline
+
+Measured on a clean tree at `f88172e`, before any change.
+
+### First: this worktree was never installed
+
+The first two baseline attempts were both worthless, in ways that each looked like a real finding:
+
+- `pnpm build` reported 11/11 green — but every task was a **Turbo cache replay from a different
+  worktree**. The replayed logs print `.claude/worktrees/button-enhancements-556c34` as their cwd.
+  Nothing compiled.
+- The Storybook suite failed 149/192 tests with
+  `Failed to fetch dynamically imported module: …sb-vitest/deps/react-18-*.js` — which is exactly the
+  signature of this repo's known stale-cache trap, so it read as pre-existing breakage. It wasn't:
+  `pnpm install` was missing 13 packages. Clearing the Storybook cache alone made it *worse*
+  (192 failed), because a cold optimiser cache plus missing deps is worse than a warm one.
+
+**So: `pnpm install` then `pnpm turbo run build --force` before believing any number in a fresh
+worktree.** A fast green build plus a catastrophically red test suite is the signature of "not
+installed", not "the repo is broken".
+
+### Actual baseline, after install + forced build
+
+| Gate                            | Result                                                          |
+| ------------------------------- | --------------------------------------------------------------- |
+| `pnpm install`                  | ✅ 13 packages added — the worktree was incomplete               |
+| `pnpm turbo run build --force`  | ✅ 11/11 tasks, **0 cached**, 1m36s — a genuine compile           |
+| `pnpm lint`                     | ✅ 0 errors, **1 pre-existing warning** (below)                   |
+| Storybook interaction suite     | ✅ **311 passed / 0 failed**, 27 files — after a one-character fix |
+
+### Getting to that number took a one-character fix, and three wrong diagnoses first
+
+The suite initially reported **475 passed / 25 failed across 166 "story files"** — for a library
+with about thirty components. Every failure was in
+`packages/ui-core/src/components/Button/Button.stories.tsx`, and every one read
+
+```
+expect(received).toHaveNoViolations(expected)
+Expected the HTML found at $('vite-error-overlay,.stack') to have no violations
+```
+
+**Root cause: `**` in the Storybook stories glob.** `apps/storybook/.storybook/main.ts` globbed
+`../../../packages/**/src/**/*.stories.tsx`. pnpm symlinks every workspace package into its
+dependents' `node_modules/@repo/`, so `**` also matched
+`packages/ui-forms/node_modules/@repo/ui-core/src/...` and the nested hops beyond it. Storybook's own
+indexer tolerates that; `@storybook/addon-vitest` does not — it turns each match into a test file, so
+every `ui-core` story was collected five times. The duplicates cannot be served through those paths,
+each failed to import, and Vite painted an error overlay in the shared browser page. Axe then scanned
+the overlay — which is why the only file that failed was the only one with a strict a11y gate
+([`Button.stories.tsx:46-51`](../../packages/ui-core/src/components/Button/Button.stories.tsx#L46)
+sets `a11y: { test: 'error' }`, deliberately, per `02-button-enhancements`).
+
+The fix is `packages/*/src` instead of `packages/**/src` — a single `*` cannot descend into
+`node_modules`. Result: 166 files → 27, 25 failures → 0, runtime 155s → 61s, with Button's strict
+a11y gate still on and `preview.ts` untouched at `test: 'todo'`.
+
+**Three things this cost, all avoidable:**
+
+1. **Assuming a stale cache.** The first symptom matched this repo's known cache trap exactly, so I
+   cleared the cache instead of checking the environment. The worktree had simply never been
+   installed — `pnpm install` added 13 missing packages, and `pnpm build`'s green was a Turbo cache
+   replay from a *different worktree* (`button-enhancements-556c34` appears in the replayed logs).
+   **Set the checkout up before believing any gate.**
+2. **Blaming the wrong layer.** I recorded the glob as a Storybook indexer bug. It is not — the dev
+   server's `/index.json` reports **34 import paths, none under `node_modules`**. Only the Vitest
+   side duplicates. One `fetch('/index.json')` in the browser would have settled it in seconds.
+3. **Trying to fix it in the wrong file.** `test.exclude: ['**/node_modules/**']` on the Vitest
+   project does nothing: `storybookTest` builds `include` from Storybook's own file matcher as a
+   list of explicit paths, leaving no glob for `exclude` to filter. The glob is the only lever.
+
+The reusable versions of all three are now in the `storybook-standards` skill (§13a) and the
+`implementation-planning` skill's baseline section.
+
+**Scope note:** the `main.ts` glob fix is not part of deliverable 04. It is a one-line prerequisite
+that had to land for the deliverable's test gate to mean anything, and it should be reviewed and
+committed as its own change.
+
+**The lint warning moves with its file:**
+`packages/ui-forms/src/components/Textarea/Textarea.types.ts:13` — `ITextarea` declares no members
+(`@typescript-eslint/no-empty-object-type`). It will reappear under `packages/ui-core/...` after the
+move. That is expected, not a regression. See [Flagged, not fixed](#flagged-not-fixed).
+
+### Accessibility checks: left exactly as they were
+
+Per the user's instruction, this deliverable does not do accessibility work. No change was needed to
+enforce that: `preview.ts` keeps its committed `a11y: { test: 'todo' }`, which only reports and never
+fails a test. (I briefly set it to `'off'` while diagnosing, then reverted — it was never the cause.)
+
+`Button.stories.tsx` keeps its deliberate meta-level `a11y: { test: 'error' }` from
+`02-button-enhancements`. That is the one strict a11y gate in the repo, and it passes. Note the
+precedence rule for later: **story/meta-level `a11y.test` beats the global in `preview.ts`**, so a
+global `'off'` will not silence a file that opts into `'error'`.
+
+The scope rule for this deliverable: the moved components must not *lose* any ARIA role or state they
+have today (spec, Accessibility), but no new a11y gate is turned on for them.
+
+---
+
+## Spec assumptions, verified against installed source
+
+The spec rests on several claims about Radix and the package graph. Each was checked against
+`node_modules`, not documentation.
+
+| # | Claim | Verdict |
+| - | ----- | ------- |
+| 1 | `@repo/core` has no dependency back on `ui-core`, so the new edge is not a cycle | ✅ `packages/core/package.json` declares `date-fns` and nothing else |
+| 2 | `RadioGroup` "gets equivalent behaviour for free from `RadioGroupPrimitive.Root`" | ✅ — with specifics that constrain the CheckboxGroup implementation, below |
+| 3 | `Calendar` has no `ui-overlays`/`ui-command` dependency | ✅ `react-day-picker` + `@repo/tailwind-config` + `Icon`/`Button`/`buttonVariants` only |
+| 4 | Only `apps/storybook` consumes `@repo/ui-forms` | ✅ grep across the repo finds it in `apps/storybook/package.json` and nowhere in `apps/the-open-movie-database` |
+| 5 | `CheckboxGroup` is not re-exported from the `ui-forms` root | ✅ absent from `packages/ui-forms/src/index.ts` |
+| 6 | Tailwind will still see the moved files | ✅ `apps/storybook/.storybook/tailwind.css` already `@source`s **both** `packages/ui-core/src` and `packages/ui-forms/src`; moving between them is invisible to class scanning |
+| 7 | `DebouncableInput` "independently duplicat[es] `Input`'s Tailwind classes" | ⚠️ **overstated — see correction below** |
+
+### What Radix actually does (constrains the CheckboxGroup work)
+
+From `@radix-ui/react-radio-group@1.3.8` and `@radix-ui/react-roving-focus@1.1.11`:
+
+- **Wraparound is on.** `RovingFocusGroup`'s own default is `loop = false`; `RadioGroup.Root`
+  overrides it to `loop = true` (`react-radio-group/dist/index.mjs:177`).
+- **The key map is wider than the spec's "Home/End".** `MAP_KEY_TO_FOCUS_INTENT`
+  (`react-roving-focus/dist/index.mjs:191`) is `ArrowLeft`/`ArrowUp` → prev, `ArrowRight`/`ArrowDown`
+  → next, `Home` **and `PageUp`** → first, `End` **and `PageDown`** → last. Parity means matching all
+  eight, not four.
+- **All four arrows navigate.** `orientation` is undefined by default and `getFocusIntent` only
+  filters arrows when it is set.
+- **Disabled items are skipped**, as the AC requires: items get `focusable: !isDisabled` and the
+  navigation candidate list is `getItems().filter((item) => item.focusable)`.
+- **The initial tab stop is the *checked* item**, not the first (`active: checked` on
+  `RovingFocusGroup.Item`). If nothing is checked, the first focusable item owns it.
+- **`dir="rtl"` swaps ArrowLeft/ArrowRight** via `getDirectionAwareKey`.
+- **Arrowing in a radio group also *selects*.** `RadioGroupItem`'s `onFocus` calls
+  `ref.current?.click()` while an arrow key is held. A checkbox group must **not** copy this —
+  toggling every checkbox you arrow past is wrong. See [D2](#d2--what-parity-does-and-does-not-mean).
+
+### Correction: `DebouncableInput` does not carry a copy of `Input`'s classes
+
+The spec's Requirements and Acceptance Criterion 2 say `DebouncableInput` "independently
+duplicat[es] `Input`'s Tailwind classes". It does not. The two class strings are materially
+different:
+
+| | `Input` | `debouncableInputVariants` |
+| - | ------- | -------------------------- |
+| height | `h-9` | `h-10` |
+| padding | `px-3 py-1` | `px-3 py-2` |
+| text | `text-base md:text-sm` | `text-sm` |
+| border | `border border-input` | — none — |
+| shadow | `shadow-xs` | — none — |
+| focus ring | `focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]` | — none (`outline-hidden`) — |
+| error state | `aria-invalid:*` | — none — |
+
+So the refactor is not "delete a duplicate" — it is "**adopt `Input`'s appearance**", which is a
+visible change to `DebouncableInput` and to its only consumer, `Search`. The spec's intent still
+holds (one native-input styling primitive, `DebouncableInput` composes it); only the justification
+in the prose is wrong, and this plan is the correction.
+
+Supporting evidence that `Input`'s appearance was always the intent:
+`packages/ui-core/src/components/Search/Search.variants.ts` already carries
+
+```ts
+export const searchDebouncableInputVariants = cva('border-none px-0 py-3 shadow-none focus-visible:ring-0');
+```
+
+— four overrides for classes `DebouncableInput` does not currently have. They are dead today and
+only start doing anything once this refactor lands. Handled in [D4](#d4--debouncableinput-composition-shape).
+
+---
+
+## Decisions
+
+### D1 — CheckboxGroup gets a hand-rolled `useRovingTabIndex` (resolves spec Open Question 1)
+
+**Decided: build the hook, as the spec words it. Do not add `@radix-ui/react-roving-focus`.**
+
+The alternative considered was composing Radix's own `RovingFocusGroup` — the standalone package
+its `RadioGroup`, `Tabs` and `Toolbar` all use internally — which would have made the two groups
+share a code path. Rejected on the user's call: the behaviour is small enough to own, and taking the
+dependency pulls in modules this library has no use for. `ui-core`'s dependency list is worth
+keeping honest.
+
+**Scope: this is CheckboxGroup-only.** `RadioGroup` needs nothing — `RadioGroupPrimitive.Root`
+already gives it roving focus, and it could not be made to use ours in any case. Radix simply ships
+no checkbox-group primitive, which is the entire gap being filled.
+
+**Where it lives:** `packages/ui-core/src/hooks/useRovingTabIndex.ts`, with `.types.ts` and
+`.spec.ts`, alongside `useKeyboardActivation`. **Internal** — exported from `~/hooks/index.ts` but
+*not* from `src/index.ts` — following the `useDebouncedValue` precedent recorded in
+`src/index.ts:28-30` ("stays internal until something outside this package actually needs it").
+Nothing outside `ui-core` needs it; promoting it later is a one-line barrel export.
+
+**What it must reproduce**, taken from the Radix behaviour verified above so the two groups match:
+
+| Behaviour | Detail |
+| --------- | ------ |
+| Next item | `ArrowDown`, `ArrowRight` |
+| Previous item | `ArrowUp`, `ArrowLeft` |
+| First item | `Home`, `PageUp` |
+| Last item | `End`, `PageDown` |
+| Wraparound | on (Radix's `RadioGroup` sets `loop = true`) |
+| Disabled items | skipped, never focused |
+| Initial tab stop | first *checked* item, else first enabled item |
+| All items disabled | group is not tabbable at all |
+| RTL | **not handled — LTR only, deliberately.** See below |
+
+**RTL is deliberately not handled here, and adding it would be a bug.**
+
+I first proposed reading direction off the DOM at keydown
+(`getComputedStyle(event.currentTarget).direction === 'rtl'`) — one line, no dependency. That is
+wrong for this deliverable, and checking the installed source is what showed it.
+
+`@radix-ui/react-direction`'s `useDirection` is `localDir || globalDir || 'ltr'`, and a grep of
+`packages/*/src`, `apps/*/src` and `.storybook` finds **no `DirectionProvider` and no `dir` prop
+anywhere in the repo**. So every Radix component in this library — `RadioGroup` included — is hard
+LTR today, regardless of any `dir` attribute in the DOM.
+
+Giving `CheckboxGroup` DOM-based RTL detection would therefore make it honour `dir` while
+`RadioGroup` ignored it: a direct violation of the acceptance criterion this hook exists to satisfy,
+introduced in the name of doing something nice. **The hook mirrors Radix: `ArrowLeft` is always
+"previous", `ArrowRight` always "next".**
+
+RTL across the library is a real gap — `Calendar` already carries
+`rtl:**:[.rdp-button\_next>svg]:rotate-180` classes, so parts of the codebase half-assume it works —
+but it is a cross-cutting concern spanning every Radix component, the Tailwind logical-property
+story, and whether a `DirectionProvider` gets mounted at all. It needs its own discovery and spec,
+not a corner of this one. Raised in [Follow-ups](#follow-ups).
+
+**Accepted cost:** this is a parallel implementation of behaviour Radix also implements, so the two
+groups can drift. Mitigated by writing the keyboard `play()` scripts *identically* in both story
+files (see Testing strategy), so divergence fails a test rather than reaching a user.
+
+### D2 — What parity does and does not mean
+
+**Confirmed with the user during planning: `CheckboxGroup` becomes a single Tab stop.** Tab enters
+the group, arrows move within it, Tab leaves. This changes today's behaviour, where every checkbox is
+its own Tab stop, and it is the single largest user-visible behaviour change in the deliverable —
+recorded here so it is not rediscovered as a bug later.
+
+Justified by `spec.md:80` ("the two groups' navigation must feel identical to a keyboard user") and
+by the mechanism being named roving-*tabindex*. It reads against `spec.md:184` ("Tab to reach it …
+is not itself broken"), which describes today's state in the course of explaining why this is a
+consistency choice rather than a conformance fix; the user resolved the tension in favour of parity.
+
+**One difference is deliberate and must survive:** arrowing in a `RadioGroup` also selects (radio
+semantics, and Radix's behaviour); arrowing in a `CheckboxGroup` only moves focus. The AC constrains
+*focus movement*, which does match. A `play()` test will assert that arrowing a checkbox group
+changes focus and leaves every checked state alone.
+
+### D3 — `RadioGroup` API
+
+Mirrors `CheckboxGroup` exactly, differing only where single-selection forces it — `value: string`
+rather than `string[]`:
+
+```ts
+type RadioGroupProps = {
+	options?: Option[];
+	value: string;
+	onChange: (data: { value: string; name: string }) => void;
+	noOptionsAvailableMessage?: string;
+	disabled?: boolean;
+	name: string;
+	className?: string;
+};
+```
+
+Controlled-only, per the spec's Decision. Same `noOptionsAvailableMessage` empty state, same
+`grid gap-3` layout, same internal `RadioGroupItem` sub-component shape, and the same
+control-before-label DOM ordering rule that `CheckboxGroup.tsx` documents in a comment (Tailwind's
+`peer-disabled:*` only matches a `.peer` that precedes it as a sibling).
+
+### D4 — `DebouncableInput` composition shape
+
+```tsx
+<Input
+	{...props}
+	ref={ref}
+	data-slot='debouncable-input'
+	className={className}
+	value={value}
+	onChange={handleChange}
+/>
+```
+
+- `data-slot='debouncable-input'` is preserved. `Input` sets `data-slot='input'` *before* its
+  `{...props}` spread, so a caller-supplied `data-slot` wins.
+- **`DebouncableInput.variants.ts` is deleted**, including its `debouncableInputVariants` export from
+  `packages/ui-core/src/index.ts`. A breaking public-API removal, which the spec's
+  "clean breaking change" decision permits; grep confirms the only references are its own barrel
+  files.
+- **`Search` must render identically before and after.** `cn`/tailwind-merge resolves border,
+  padding, shadow and ring in `searchDebouncableInputVariants`' favour automatically, but `h-9`
+  (was `h-10`) and `text-base md:text-sm` (was `text-sm`) would still change the rendered box. So
+  `searchDebouncableInputVariants` gains `h-10 text-sm`. That is *preservation* of existing
+  appearance, not a restyle — consistent with the spec's "Redesigning visual style" non-goal.
+
+### D5 — Incidental renames taken because the files are moving anyway
+
+- `Textarea/Texarea.stories.tsx` → `Textarea.stories.tsx` (misspelled filename).
+- `CheckboxGroup/Checkbox.stories.tsx` → `CheckboxGroup/CheckboxGroup.stories.tsx` — flagged in
+  `discovery.md:100-103` as "worth a rename while the package is being touched".
+- Story `title:` values `UI Forms/*` → `UI Core/*` for the seven moved components, so the Storybook
+  sidebar keeps matching the package layout. Non-negotiable rather than incidental: leaving them
+  would file `ui-core` components under a `UI Forms` heading.
+
+All three are `git mv`/one-line edits on files this deliverable already rewrites. Nothing else in
+either package is touched opportunistically.
+
+---
+
+## Architecture — final layout
+
+### `ui-core` gains
+
+| Path (under `packages/ui-core/src/`) | Change |
+| ------------------------------------ | ------ |
+| `components/Input/` | moved verbatim; `@repo/ui-forms` → `@repo/ui-core` in `Input.mdx` and the story `docs.source.code` snippets |
+| `components/Textarea/` | moved; story filename typo fixed |
+| `components/Checkbox/` | moved; `Icon`/`Label` imports become `~/components/…` |
+| `components/CheckboxGroup/` | moved; **gains roving focus**; story renamed |
+| `components/Radio/` | moved; `Icon`/`Label` imports become `~/components/…` |
+| `components/RadioGroup/` | **new** — `RadioGroup.tsx`, `RadioGroup.types.ts`, `index.ts`, `RadioGroup.stories.tsx` |
+| `components/Slider/` | moved verbatim |
+| `components/Calendar/` | moved; `Icon`/`IconName`/`Button`/`buttonVariants` imports become `~/components/…` |
+| `hooks/useRovingTabIndex.{ts,types.ts,spec.ts}` | **new** — internal, CheckboxGroup only (D1) |
+| `hooks/useRovingTabIndex.utils.{ts,spec.ts}` | **new** — the pure index arithmetic, extracted so it can be tested directly |
+
+### `ui-core` loses
+
+- `components/DebouncableInput/DebouncableInput.variants.ts` and its two barrel exports.
+
+### `ui-forms` keeps
+
+`Form/`, `Selects/`, `DatePickers/` — and nothing else. `DatePickers` swaps
+`import { Calendar } from '~/components/Calendar/components/Calendar'` for
+`import { Calendar } from '@repo/ui-core'` in both `SingleDatePicker.tsx` and `RangeDatePicker.tsx`.
+
+### Dependency bookkeeping
+
+| Package | Add | Remove |
+| ------- | --- | ------ |
+| `@repo/ui-core` | `@repo/core@workspace:*`, `@radix-ui/react-checkbox`, `@radix-ui/react-radio-group`, `@radix-ui/react-slider`, `react-day-picker` | — |
+
+No `@radix-ui/react-roving-focus` — see [D1](#d1--checkboxgroup-gets-a-hand-rolled-userovingtabindex-resolves-spec-open-question-1).
+| `@repo/ui-forms` | — | `@radix-ui/react-checkbox`, `@radix-ui/react-radio-group`, `@radix-ui/react-slider` |
+
+`ui-forms` **keeps** `react-day-picker` (`DateRange` type in `RangeDatePicker`), `date-fns` and
+`@repo/core`.
+
+**No config changes are needed.** `reactLibrary()` already externalises every `@repo/*` id
+(`packages/vite-config/react-library.ts`), so `ui-core`'s new `@repo/core` import needs no
+`externals` entry. Storybook's `main.ts` and `apps/storybook/vite.config.ts` already list
+`packages/ui-core/tsconfig.json` among their `tsconfigPaths` projects, and both packages define the
+same `~/*` alias, so moved files resolve unchanged.
+
+---
+
+## Tasks
+
+### Phase 0 — Baseline (done)
+
+- [x] 0.1 `pnpm install` + `pnpm turbo run build --force` + cache clear.
+- [x] 0.2 Fixed the `stories` glob in `apps/storybook/.storybook/main.ts` (`**` → `*`) so it stops
+      matching through `node_modules` symlinks. Suite goes from 25 failures to 0. Not part of 04 —
+      commit separately.
+- [x] 0.3 Baseline recorded above: build ✅, lint ✅ (1 known warning), tests 311/311 ✅.
+
+### Phase 1 — The move (mechanical; no behaviour change)
+
+- [ ] 1.1 `git mv` the seven component folders `ui-forms/src/components/*` → `ui-core/src/components/*`.
+      Use `git mv` so history follows. (Depends on: —)
+- [ ] 1.2 Rewrite cross-package imports in the moved sources: `@repo/ui-core` → `~/components/…`
+      for `Icon`, `Label`, `Button`, `buttonVariants`, `IconName`. (1.1)
+- [ ] 1.3 Rewrite the moved stories: same import fix, plus `title:` `UI Forms/*` → `UI Core/*`, plus
+      `@repo/ui-forms` → `@repo/ui-core` in `Input.mdx` and `Input.stories.tsx`'s
+      `docs.source.code` snippets. (1.1)
+- [ ] 1.4 The two renames from D5. (1.1)
+- [ ] 1.5 Repoint `DatePickers` at `@repo/ui-core` for `Calendar`. (1.1)
+
+Estimated: 0.5 day.
+
+### Phase 2 — Barrels and dependencies
+
+- [ ] 2.1 Rewrite `packages/ui-core/src/index.ts` — add the moved components and their types.
+      (Depends on: 1.2)
+- [ ] 2.2 Rewrite `packages/ui-forms/src/index.ts` — `useForm`, `Selects`, `DatePickers` only. No
+      transitional re-exports (spec Decision). (1.5)
+- [ ] 2.3 Move the dependencies between the two `package.json`s per the table above; `pnpm install`. (2.1)
+- [ ] 2.4 First real build: `pnpm build`. This is where the move either compiles or doesn't. (2.3)
+
+Estimated: 0.5 day.
+
+### Phase 3 — `DebouncableInput` composition
+
+- [ ] 3.1 Refactor `DebouncableInput` to render `Input`; delete `DebouncableInput.variants.ts` and
+      its barrel exports. (Depends on: 2.1)
+- [ ] 3.2 Add `h-10 text-sm` to `searchDebouncableInputVariants` to hold `Search` steady. (3.1)
+- [ ] 3.3 Visual check of `Search` and `DebouncableInput` in Storybook against pre-change
+      screenshots. (3.2)
+
+Estimated: 0.5 day.
+
+### Phase 4 — `RadioGroup` and CheckboxGroup keyboard navigation
+
+- [ ] 4.1 Build `RadioGroup` per D3, plus `RadioGroup.stories.tsx` with `play()` coverage:
+      click selection, controlled round-trip, arrow navigation, disabled option skipped, group-level
+      `disabled`, empty-options message. (Depends on: 2.1)
+- [ ] 4.2 Build `useRovingTabIndex.utils.ts` (pure index arithmetic) + `.spec.ts` **first** — it is
+      the part most likely to be wrong and the cheapest to test. (2.1)
+- [ ] 4.3 Build `useRovingTabIndex` (+ types + `.spec.ts`) on top of those helpers, and wire it into
+      `CheckboxGroup`. (4.2)
+- [ ] 4.4 Extend `CheckboxGroup.stories.tsx` with the parity `play()` suite. (4.3)
+
+Estimated: 2 days.
+
+### Phase 5 — Verification
+
+- [ ] 5.1 `pnpm build`, `pnpm lint`, rebuild `@repo/ui-core`, clear the Storybook cache, run the
+      Storybook suite; compare against the Phase 0 figures. (Depends on: 4.4, 3.3)
+- [ ] 5.2 Walk the spec's Success Criteria and Acceptance Criteria one by one, including the greps
+      ("no moved primitive name under `packages/ui-forms/src`", "no old import path anywhere"). (5.1)
+
+Estimated: 0.5 day.
+
+### Phase 6 — MDX sanity pass
+
+A read-through of the `.mdx` for every component this deliverable changed, against
+`storybook-standards` §9 (page structure) and §10 (Canvas blocks and callouts). Deliberately after
+verification, so it documents what was actually built rather than what was planned.
+
+In scope — the docs this deliverable makes *wrong* if left alone:
+
+- [ ] 6.1 `Input.mdx` — moves to `ui-core`; its `import { Input } from '@repo/ui-forms'` becomes
+      `@repo/ui-core`. At 37 lines it is also the thinnest doc in the repo, with no `Properties` or
+      `Accessibility` section unlike `Button.mdx`/`Icon.mdx`. Fix the import; record the structural
+      gap for `05` rather than rewriting it here. (Depends on: 5.2)
+- [ ] 6.2 `DebouncableInput.mdx` — Phase 3 changes what this component *is*. Its Features list
+      ("Natively intercepts `onChange`…") no longer tells the whole story once it composes `Input`,
+      and nothing should contradict the removal of `debouncableInputVariants`. (5.2)
+- [ ] 6.3 `Search.mdx` — check nothing describes the input's chrome in a way D4 invalidates. (5.2)
+- [ ] 6.4 `RadioGroup` — new exported component, currently no `.mdx` at all. Write a minimal one on
+      the `Button.mdx` shape: intro, Features, Properties, Usage, Accessibility, `<Controls />`.
+      Full standalone/composition/pattern treatment stays `05`'s job per the spec's non-goals. (5.2)
+
+**Tables of contents — use the built-in, not hand-written anchor lists.**
+`@storybook/addon-docs@10.2.16` supports `parameters.docs.toc`
+(`true | { contentsSelector, headingSelector, ignoreSelector, title, disable }`), which builds the
+list from the rendered headings. A hand-maintained list of `- [Section](#section)` links goes stale
+the moment a heading is renamed, and nothing catches it.
+
+- [ ] 6.5 Turn `toc: true` on for the meaty docs. Threshold: over ~100 lines, or more than four
+      `##` headings. Of the files this deliverable touches, only `DebouncableInput.mdx` (100 lines)
+      qualifies. (6.1–6.4)
+
+> **Not in this deliverable, but worth raising:** the two docs that most need a ToC are
+> `Selects/Select.mdx` (360 lines, 7 `##` sections) and `Button.mdx` (219 lines) — neither is
+> touched by 04. Same question for whether `toc` should just be switched on globally in
+> `preview.ts` rather than per file. Both are one-line changes; flagged, not taken.
+
+Estimated: 0.5 day.
+
+### Phase 7 — Ship
+
+- [ ] 7.1 Update `docs/README.md` (row 04 → `✅ done`) and rewrite this file as an as-built record.
+      (Depends on: 6.5)
+
+Estimated: 0.5 day.
+
+---
+
+## Testing strategy
+
+### Automated — Storybook `play()` (the repo's component-test convention)
+
+The moved components' **existing** stories are the regression gate for Phase 1: they move unchanged
+apart from imports and titles, so if the move broke something, they fail.
+
+New coverage, written against the spec's Acceptance Criteria:
+
+| Story | Asserts |
+| ----- | ------- |
+| `CheckboxGroup` — arrow navigation | `ArrowDown`/`ArrowRight` advance, `ArrowUp`/`ArrowLeft` retreat |
+| `CheckboxGroup` — Home/End | jump to first/last enabled option |
+| `CheckboxGroup` — wraparound | last → `ArrowDown` → first, and first → `ArrowUp` → last |
+| `CheckboxGroup` — disabled skipped | arrowing over a disabled option lands past it (spec AC 5) |
+| `CheckboxGroup` — single Tab stop | Tab from a preceding control lands on the group's tab stop; a second Tab leaves the group entirely (D2) |
+| `CheckboxGroup` — arrows don't toggle | focus moves; every `aria-checked` is unchanged (D2) |
+| `RadioGroup` — selection | click and keyboard both select; single-selection enforced (spec AC 3) |
+| `RadioGroup` — disabled skipped | same script as the CheckboxGroup case |
+| `RadioGroup` — controlled | `onChange` fires with `{ value, name }`; value round-trips |
+| `RadioGroup` — empty / disabled | `noOptionsAvailableMessage` renders; group-level `disabled` disables every item |
+
+**The disabled-skip and Home/End/wraparound scripts are deliberately written identically in both
+files**, so any future divergence between the two groups surfaces as a test failure rather than as a
+bug report.
+
+#### What those stories actually look like
+
+Written per `storybook-standards` §7, which defers the query and assertion patterns to
+`playwright-testing-conventions`: query by role, assert on ARIA rather than class names, import from
+`storybook/test` (not `@storybook/test` — this repo is on Storybook 10, skill §14).
+
+The parity script, written **character-identical** in `CheckboxGroup.stories.tsx` and
+`RadioGroup.stories.tsx` apart from the role queried:
+
+```tsx
+import { expect, userEvent, within } from 'storybook/test';
+
+// options: Apples, Bananas (disabled), Cherries, Dates
+export const KeyboardNavigationSkipsDisabled: Story = {
+	args: { options: OPTIONS_WITH_DISABLED, value: [], name: 'fruit' },
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const items = canvas.getAllByRole('checkbox'); // 'radio' in RadioGroup.stories.tsx
+
+		await step('Tab enters the group on its single tab stop', async () => {
+			await userEvent.tab();
+			await expect(items[0]).toHaveFocus();
+			await expect(items[0]).toHaveAttribute('tabindex', '0');
+			await expect(items[2]).toHaveAttribute('tabindex', '-1');
+		});
+
+		await step('ArrowDown skips the disabled option entirely', async () => {
+			await userEvent.keyboard('{ArrowDown}');
+			await expect(items[2]).toHaveFocus(); // Cherries, not Bananas
+			await expect(items[1]).not.toHaveFocus();
+		});
+
+		await step('End jumps to the last enabled option, Home back to the first', async () => {
+			await userEvent.keyboard('{End}');
+			await expect(items[3]).toHaveFocus();
+			await userEvent.keyboard('{Home}');
+			await expect(items[0]).toHaveFocus();
+		});
+
+		await step('ArrowUp from the first option wraps to the last', async () => {
+			await userEvent.keyboard('{ArrowUp}');
+			await expect(items[3]).toHaveFocus();
+		});
+	}
+};
+```
+
+The one script that must **not** be shared, because it encodes the deliberate difference in D2 —
+arrowing selects in a radio group, and must never toggle in a checkbox group:
+
+```tsx
+export const ArrowKeysDoNotToggle: Story = {
+	args: { options: OPTIONS, value: [], name: 'fruit' },
+	play: async ({ canvasElement, args, step }) => {
+		const canvas = within(canvasElement);
+		const items = canvas.getAllByRole('checkbox');
+
+		await step('Arrow through every option', async () => {
+			await userEvent.tab();
+			await userEvent.keyboard('{ArrowDown}{ArrowDown}{ArrowUp}');
+		});
+
+		await step('Focus moved but nothing became checked', async () => {
+			await expect(items[1]).toHaveFocus();
+			for (const item of items) {
+				await expect(item).toHaveAttribute('aria-checked', 'false');
+			}
+			await expect(args.onChange).not.toHaveBeenCalled();
+		});
+	}
+};
+```
+
+And the single-Tab-stop assertion from D2, which is the behaviour change most likely to be
+questioned later, so it is pinned explicitly rather than implied:
+
+```tsx
+export const GroupIsASingleTabStop: Story = {
+	render: (args) => (
+		<>
+			<button type='button'>before</button>
+			<CheckboxGroup {...args} />
+			<button type='button'>after</button>
+		</>
+	),
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('Tab reaches the group once, then leaves it entirely', async () => {
+			await userEvent.tab(); // 'before'
+			await userEvent.tab(); // the group's tab stop
+			await expect(canvas.getAllByRole('checkbox')[0]).toHaveFocus();
+			await userEvent.tab(); // straight out to 'after' — not the second checkbox
+			await expect(canvas.getByRole('button', { name: 'after' })).toHaveFocus();
+		});
+	}
+};
+```
+
+### Automated — `.spec.ts` for everything that isn't a component
+
+Rolling our own roving focus means this deliverable ships real logic, not just moved files. All of
+it gets unit tests, at the level it lives at:
+
+| File | Covers |
+| ---- | ------ |
+| `hooks/useRovingTabIndex.spec.ts` | The hook end to end via `renderHook` — one test per row of the D1 behaviour table, matching the shape of `useKeyboardActivation.spec.ts` |
+| `hooks/useRovingTabIndex.utils.spec.ts` | The pure helpers the hook is built from, tested directly |
+
+The index arithmetic is the part most likely to be wrong, and it is pure, so it is extracted rather
+than buried in the hook — a plain function is far cheaper to test exhaustively than a rendered
+group:
+
+```ts
+findNextEnabledIndex({ from, step, count, isDisabled, loop }): number
+findEdgeEnabledIndex({ edge: 'first' | 'last', count, isDisabled }): number
+resolveInitialTabStop({ count, isDisabled, isChecked }): number
+```
+
+Cases each must cover: empty group; single option; **every** option disabled (group must not be
+tabbable at all); disabled option at each edge; two adjacent disabled options; wrapping from either
+end with `loop` on and off; and `resolveInitialTabStop` preferring the first *checked* option over
+the first enabled one.
+
+This split matches the line the repo already draws — pure logic gets `.spec.ts`
+(`useDebouncedValue`, `useKeyboardActivation`), rendered components get `play()` — and it means a
+wraparound bug fails a fast unit test rather than only a browser test.
+
+### Manual
+
+- **Visual:** `Search` and `DebouncableInput` in Storybook, before/after screenshots (D4 is the only
+  intended visual change in the deliverable, and `Search` must show none).
+- **Keyboard:** tab into and out of both groups; confirm they feel the same.
+- **Storybook sidebar:** the seven moved components appear under `UI Core`, and `UI Forms` is left
+  with `Select`, the date pickers and nothing else.
+
+### Build ordering — do not skip
+
+`ui-*` packages import each other through built `dist/`, not source. After any Phase 1–4 change,
+verification requires:
+
+```bash
+pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_modules/.cache apps/storybook/node_modules/.vite
+```
+
+Skipping this produces both false greens and false reds — it is what made the Phase 0 baseline
+unusable.
+
+---
+
+## Risks
+
+| Risk | Impact | Likelihood | Mitigation |
+| ---- | ------ | ---------- | ---------- |
+| Verification runs against a not-fully-set-up worktree | Gate results are meaningless; wasted hours chasing phantom failures | Certain if skipped (observed) | Task 0.1 — `pnpm install` + `turbo run build --force` before trusting any number; `--force` because Turbo's cache is shared across worktrees |
+| Stale Storybook cache masks the move | False green **and** false red | High | The rebuild + clear command above, run before every verification |
+| `DebouncableInput` adopting `Input`'s chrome changes `Search` | Visual regression in a shipped component | High if unhandled | D4's compensating `h-10 text-sm`; before/after screenshots |
+| CheckboxGroup's single Tab stop surprises someone | Behaviour regression | Low — nothing outside Storybook consumes it | D2 records it; `play()` test pins it; called out in the ship note |
+| Hand-rolled roving focus drifts from Radix's | The two groups stop matching | Medium — accepted with D1 | Identical `play()` scripts in both story files, so divergence fails a test; `useRovingTabIndex.spec.ts` pins each behaviour individually |
+| Moved Tailwind classes stop being scanned | Missing styles | None | Verified: both `src` trees are already `@source`d |
+| `@repo/core` edge introduces a cycle | Build break | None | Verified: `@repo/core` depends only on `date-fns` |
+| Phase 1 is one large mechanical commit that is hard to review | Review fatigue | Medium | `git mv` keeps rename detection; behaviour changes land in Phases 3–4 as separate commits |
+
+---
+
+## Rollout
+
+Single branch off `claude/ui-forms-primitive-migration-c21ce8`, merged onto the integration branch
+rather than `main`. No feature flag and no staged rollout: nothing outside `apps/storybook` consumes
+either package, so the blast radius is the Storybook build. Rollback is `git revert` of the merge.
+
+Commit sequence follows the phases, so each is independently reviewable:
+
+1. `refactor(ui-core,ui-forms): move leaf primitives to ui-core` (Phases 1–2)
+2. `refactor(ui-core): compose DebouncableInput from Input` (Phase 3)
+3. `feat(ui-core): add RadioGroup and roving focus to CheckboxGroup` (Phase 4)
+4. `docs(ui-core): mdx pass for the migrated components` (Phase 6)
+5. `docs: as-built plan for 04` (Phase 7)
+
+Plus, separately and first, the `main.ts` stories-glob fix from task 0.2 — it is a prerequisite, not
+part of this deliverable.
+
+---
+
+## Flagged, not fixed
+
+Found while planning; none is in this deliverable's scope. Listed so they are not silently
+inherited as "things the migration broke".
+
+- **`ITextarea` is dead and triggers a lint warning.** `Textarea.tsx` declares its own local
+  `type TextareaProps = React.ComponentProps<'textarea'>` and never uses the `ITextarea` interface
+  that `Textarea.types.ts` exports — which is also the empty interface the baseline lint warning
+  points at. Both move as-is.
+- **`@repo/ui-forms` declares `react-use` and `zod` as dependencies with zero uses** anywhere in
+  `packages/ui-forms/src`. Unrelated to this migration; removing them is its own small change.
+- **`Radio.stories.tsx` imports `@radix-ui/react-radio-group` directly** — exactly the gap this
+  deliverable closes. Rewriting it to use the new `RadioGroup` is Storybook-documentation work, which
+  `spec.md`'s non-goals assign to `05-ui-forms-field-pattern`.
+- **`Input.stories.tsx`'s `ContactForm` story hand-writes a raw `<textarea>`** with its own copy of
+  the border/ring classes (`discovery.md:66-72`). Also `05`.
+
+---
+
+## Follow-ups
+
+### RTL / reading direction — needs its own discovery and spec
+
+Surfaced while deciding D1, and deliberately left alone here. The current state, as measured:
+
+- **No `DirectionProvider` is mounted anywhere**, and no component takes a `dir` prop. Radix's
+  `useDirection` falls back to `'ltr'`, so every Radix component in the library — `RadioGroup`,
+  `Tabs`, `Accordion`, `Slider`, the overlays — behaves as LTR no matter what the DOM says.
+- **Parts of the codebase already assume otherwise.** `Calendar` ships
+  `rtl:**:[.rdp-button\_next>svg]:rotate-180` and a matching `button_previous` rule, which only do
+  anything if a `dir="rtl"` exists to trigger them. So the library is inconsistent with itself
+  today.
+- **It is not just keyboard direction.** It spans arrow-key semantics, Tailwind logical properties
+  vs physical ones (`ml-*`/`pl-*` are used widely), icon mirroring, `Slider` orientation, and
+  overlay/popover placement.
+- **Nothing tests it.** No story sets `dir`, and the Storybook toolbar has no direction global.
+
+That is a design-system-wide question — where direction comes from, which layer owns the provider,
+what the component contract is — and it wants a `problem-discovery` pass before any spec. It sits
+naturally alongside the design-system audit already noted as planned in
+[`docs/README.md`](../README.md#planned).
+
+## Open questions
+
+1. ~~**D1: `RovingFocusGroup` or a hand-rolled hook?**~~ **Resolved** — hand-rolled
+   `useRovingTabIndex`, no new dependency. See [D1](#d1--checkboxgroup-gets-a-hand-rolled-userovingtabindex-resolves-spec-open-question-1).
+2. **Does deleting the `debouncableInputVariants` public export need calling out anywhere beyond
+   this plan?** Assumed no — nothing consumes it, and the spec already sanctions clean breaks.
+   Proceeding on that assumption; say so if it should be flagged elsewhere.
+
+Nothing is blocking. Awaiting the go-ahead to start Phase 1.

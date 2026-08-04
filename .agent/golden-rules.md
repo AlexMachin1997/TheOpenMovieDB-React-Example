@@ -88,6 +88,7 @@ Read the relevant `SKILL.md` before starting any work in these areas:
 | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | [Monorepo Standards](./skills/monorepo-standards/SKILL.md)                    | Adding a package, setting up Tailwind, debugging dependency cycles or imports |
 | [Documentation Structure](../.claude/skills/documentation-structure/SKILL.md) | Writing a discovery, spec, implementation plan or roadmap — or citing one     |
+| [Local Development](../.claude/skills/local-development/SKILL.md)             | Setting up a checkout or worktree, running build/lint/tests, or the Storybook interaction suite — **and before calling anything "already broken"** |
 
 > **Planning docs are grouped by deliverable, not by document type.** `docs/specs/`, `docs/plans/`
 > and `docs/discovery/` no longer exist. See [`docs/README.md`](../docs/README.md).

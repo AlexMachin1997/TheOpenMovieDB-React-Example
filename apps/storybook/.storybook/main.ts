@@ -5,9 +5,15 @@ import tailwindcss from '@tailwindcss/vite';
 import remarkGfm from 'remark-gfm';
 
 const config: StorybookConfig = {
+	// `packages/*/src`, not `packages/**/src`. pnpm symlinks every workspace package into its
+	// dependents' `node_modules/@repo/`, so `**` also matches
+	// `packages/ui-forms/node_modules/@repo/ui-core/src` — and the nested hops beyond it. The dev
+	// server tolerates that, but `@storybook/addon-vitest` turns the same matches into test files,
+	// which collects every ui-core story five times over; none of the copies can be served through
+	// that path, so each fails to import and leaves a Vite error overlay in the shared page.
 	stories: [
-		'../../../packages/**/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-		'../../../packages/**/src/**/*.mdx'
+		'../../../packages/*/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+		'../../../packages/*/src/**/*.mdx'
 	],
 
 	addons: [

@@ -41,6 +41,14 @@ unrelated focus idioms, a component hardcoding raw palette colours, and a WCAG 2
 in both themes. None of that is really about focus — it's what a library assembled from copied
 component code looks like when nobody has defined the system it should obey.
 
+**RTL / reading direction** would add a deliverable. Surfaced while planning `04` and not yet
+specified. The library is currently inconsistent with itself: no `DirectionProvider` is mounted and
+no component takes a `dir` prop, so every Radix component falls back to LTR — while `Calendar`
+already ships `rtl:` classes that only fire if a `dir="rtl"` exists to trigger them. The question
+spans arrow-key semantics, logical vs physical Tailwind properties, icon mirroring and overlay
+placement, so it needs its own `problem-discovery` pass rather than being settled component by
+component. See [`04-ui-forms-primitive-migration/plan.md`](04-ui-forms-primitive-migration/plan.md#follow-ups).
+
 **JSON/schema-driven form rendering** would add a deliverable once `05-ui-forms-field-pattern` ships.
 Deliberately not specified yet — schema format, validation-library integration, and extensibility for
 custom field types are all open, and it needs its own `problem-discovery` pass once the `Field`
