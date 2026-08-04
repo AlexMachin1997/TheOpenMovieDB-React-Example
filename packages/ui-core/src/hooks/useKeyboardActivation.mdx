@@ -1,0 +1,123 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title='UI Core/Hooks/useKeyboardActivation' />
+
+# useKeyboardActivation
+
+Gives a non-native control the keyboard behaviour a real `<button>` gets for free, and tracks whether it's currently being held down.
+
+```tsx
+import { useKeyboardActivation } from '@repo/ui-core';
+```
+
+A `<div role="button">` responds to a mouse but is completely inert to a keyboard. This hook closes that gap. `Button` uses it for its `asChild` support; reach for it directly when you're building a control that can't be a `<button>` — a composite widget, a row that's clickable in its entirety, a custom trigger a third-party library hands you.
+
+If you can use a real `<button>`, use a real `<button>`. This exists for when you can't.
+
+---
+
+## Usage
+
+```tsx
+const { pressed, keyboardProps } = useKeyboardActivation({
+	nativeActivation: 'none',
+	disabled
+});
+
+<div
+	role='button'
+	tabIndex={0}
+	data-pressed={pressed ? 'true' : undefined}
+	onClick={onActivate}
+	{...keyboardProps}
+>
+	Save
+</div>;
+```
+
+Three things to get right:
+
+1. Spread `keyboardProps` onto the **same element that receives focus**.
+2. Give that element `role="button"` and `tabIndex={0}` yourself — the hook deals in behaviour, not semantics.
+3. Put your handler on `onClick`, not on a key handler. The hook activates by dispatching a real click.
+
+---
+
+## Options
+
+### `nativeActivation`
+
+**Required.** What the element you're spreading onto _already_ does on its own.
+
+| Value          | Use it for                            | The hook then synthesises |
+| -------------- | ------------------------------------- | ------------------------- |
+| `'both'`       | a real `<button>`                     | nothing                   |
+| `'enter-only'` | an `<a href>`                         | Space                     |
+| `'none'`       | a `<div>`, `<span>`, custom component | Enter and Space           |
+
+This is the one option worth thinking about, because getting it wrong in the permissive direction is what makes a handler fire twice per press. You describe the element; the hook works out what's missing and fakes only that.
+
+`'enter-only'` is the non-obvious one: anchors activate on Enter but ignore Space entirely, so a link styled as a button needs exactly half of this.
+
+### `disabled`
+
+Optional, defaults to `false`. Every handler no-ops, and `pressed` is forced back to `false` in the same render.
+
+That second half matters more than it sounds. A disabled element stops receiving events, so if the control becomes disabled mid-press the keyup that would normally clear the pressed state never arrives. Pass `disabled` and the state clears as a consequence of the prop change instead of waiting for a release that isn't coming.
+
+---
+
+## Returns
+
+### `pressed`
+
+Whether Enter or Space is currently held down.
+
+Tracked for **every** `nativeActivation`, including `'both'` — that's deliberate, so a native button and a `<div>`-backed one can render an identical pressed treatment. Drive a `data-*` attribute or a class from it.
+
+It's purely a visual signal. It never activates anything by itself, so a native button reading `pressed` is not at risk of double-firing.
+
+Pointer presses are already covered by CSS `:active`, which works on any element — pair the two if you want the same look from both input methods:
+
+```tsx
+// in your variants
+'active:shadow-md data-[pressed=true]:shadow-md';
+```
+
+### `keyboardProps`
+
+`onKeyDown`, `onKeyUp` and `onBlur`, ready to spread.
+
+If your component also accepts these from a caller, **compose them** rather than picking one — spreading `keyboardProps` after a consumer's `onKeyDown` silently drops theirs, and spreading it before silently drops the keyboard behaviour.
+
+```tsx
+onKeyDown={(event) => {
+	consumerOnKeyDown?.(event);
+	if (!event.defaultPrevented) keyboardProps.onKeyDown(event);
+}}
+```
+
+`onBlur` is there for the case where focus leaves while a key is held: no keyup ever lands on the original element, and without it the control would look permanently pressed.
+
+---
+
+## How activation works
+
+The hook calls `event.currentTarget.click()` — a real DOM click on the element — rather than invoking an `onClick` you passed in. There's no `onClick` option at all, and that's on purpose.
+
+A real click runs **every** click handler on the element, in order, exactly once. A captured callback would run only the one it was given, which breaks the moment anything composes handlers — Radix's `Slot`, for instance, chains the slot's `onClick` with the child's, and a synthesised call to just one of them would silently skip the other.
+
+The practical upshot: Enter and Space are indistinguishable from a click, including for code you don't control.
+
+---
+
+## Key timing
+
+Matching the WAI-ARIA button pattern, and native `<button>` behaviour:
+
+| Key   | Fires on  | Notes                                                                       |
+| ----- | --------- | --------------------------------------------------------------------------- |
+| Enter | `keydown` | —                                                                           |
+| Space | `keyup`   | `preventDefault()` on keydown, so the page doesn't scroll while you hold it |
+
+Space firing on release is what lets a user press it, think better of it, move focus away, and not have activated anything.

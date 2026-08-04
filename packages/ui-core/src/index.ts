@@ -24,6 +24,18 @@ export {
 export { Search } from '~/components/Search/Search';
 export { DebouncableInput } from '~/components/DebouncableInput/DebouncableInput';
 
+// Hooks
+// `useKeyboardActivation` is public because every package downstream of this one already depends
+// on `@repo/ui-core`, so adopting it later needs no new plumbing. `useDebouncedValue` stays
+// internal until something outside this package actually needs it.
+export { useKeyboardActivation } from '~/hooks/useKeyboardActivation';
+export type {
+	NativeKeyboardActivation,
+	KeyboardActivationProps,
+	UseKeyboardActivationOptions,
+	UseKeyboardActivationResult
+} from '~/hooks/useKeyboardActivation.types';
+
 // Icon dictionary (the set of names `Icon` accepts)
 export { ICON_NAMES } from '~/components/Icon/Icon.constants';
 export type { IconName } from '~/components/Icon/Icon.constants';

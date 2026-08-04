@@ -72,6 +72,7 @@ These apply at all times:
 
 ### React / UI Components
 
+- **Every prop a component declares gets an explicit default in the destructure** — `loading = false`, `disabled = false`, `asChild = false` — not an implicit `undefined`. An implicit default is invisible at the call site and at the destructure, so the component's behaviour with the prop omitted has to be inferred from the body. Document it with `@default` in the JSDoc too; Storybook's controls table reads it.
 - One component per folder: `Button/Button.tsx`, `Button/Button.types.ts`, `Button/Button.variants.ts`, `Button/index.ts`.
 - Types for compound components (e.g., `Dialog`, `Sheet`) always live in the root `{ComponentName}.types.ts`, never scattered across sub-component files.
 - Do **not** import React just to use JSX (React 17+ transform is active). Only import React for hooks, `forwardRef`, or types.

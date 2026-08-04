@@ -1,12 +1,14 @@
 # Feature: Button component enhancements
 
 ## Problem
+
 See [`docs/discovery/button-enhancements.md`](../discovery/button-enhancements.md).
 In short: `Button` is currently a thin shadcn/ui wrapper with no first-class icon
 support, no loading state, no default `type`, and no keyboard-accessible activation
 when rendered via `asChild` as something other than a native `<button>`.
 
 ## Goals
+
 1. Let callers add a leading and/or trailing icon without hand-rolling sizing/spacing.
 2. Give Button a first-class `loading` state (spinner + busy semantics), replacing
    ad-hoc disabled/spinner logic callers currently write themselves.
@@ -18,6 +20,7 @@ when rendered via `asChild` as something other than a native `<button>`.
    wiring up any other component to it yet.
 
 ## Scope
+
 - **Included**: `startIcon`/`endIcon` props, `loading` prop, default `type="button"`,
   a reusable keyboard-activation mechanism applied when `asChild` renders a non-native
   element, updated `aria-*` attributes, Storybook coverage for all of the above.
@@ -34,6 +37,7 @@ when rendered via `asChild` as something other than a native `<button>`.
   work (D6) elsewhere in the repo.
 
 ## Non-Goals
+
 - Building the `Icon` component itself — that's a predecessor deliverable (see
   [`icon-component.md`](icon-component.md)) which Button consumes. Extending `Icon`'s
   name dictionary is in scope only if Button needs a name it doesn't already have.
@@ -43,6 +47,7 @@ when rendered via `asChild` as something other than a native `<button>`.
 ## Requirements
 
 ### Functional
+
 - `startIcon`/`endIcon` accept an icon name string (not raw markup/`ReactNode`, not a
   component reference), rendered internally via the predecessor `Icon` component (see
   Decisions) so sizing/spacing/`aria-hidden` is consistent and not re-implemented inside
@@ -66,9 +71,13 @@ when rendered via `asChild` as something other than a native `<button>`.
     browser already handles it; adding it there would double-fire `onClick`.
 
 ### UI/UX
+
 - Icon sizing/spacing is visually consistent across `sm`/`default`/`lg`/`icon` sizes.
 - Loading state is visually distinguishable at a glance (spinner replaces the end icon).
-- Keyboard-focus visual state (existing `focus-visible` ring) is unaffected.
+- Keyboard-focus visual state (existing `focus-visible` ring) is unaffected. This stayed true —
+  but note the ring itself is revisited later by [`focus-indicators.md`](focus-indicators.md),
+  which found it fails WCAG 2.2 SC 2.4.11 on contrast. Nothing in this deliverable caused or
+  fixed that.
 - A keyboard-"active"/pressed visual treatment (distinct from `focus-visible`) applies
   uniformly whether the underlying element is a native `<button>` or an
   `asChild`-rendered non-native element — interacting with it as a button or a link
@@ -87,6 +96,7 @@ when rendered via `asChild` as something other than a native `<button>`.
   belongs in the user docs, while a simple internal procedure does not.
 
 ### Accessibility
+
 - Button must meet **WCAG 2.1 AA** across every variant/size/state introduced by this
   deliverable (loading, icon-only, `asChild`, disabled). Verified via an automated scan
   (the already-installed `@storybook/addon-a11y`, which runs axe-core) across all
@@ -112,6 +122,7 @@ when rendered via `asChild` as something other than a native `<button>`.
   caught during development rather than shipped silently.
 
 ### Integration
+
 - No new runtime dependency for Button — icons render through `@repo/ui-core`'s `Icon`,
   which owns `@iconify/react`. `lucide-react` is no longer a dependency of any package.
 - The keyboard-activation mechanism must be reusable by `ui-forms`/`ui-overlays`/
@@ -120,6 +131,7 @@ when rendered via `asChild` as something other than a native `<button>`.
   decision.
 
 ## Edge Cases & Error Handling
+
 - `loading` + `startIcon`/`endIcon` both provided: end icon is replaced by the spinner;
   start icon remains visible.
 - `loading` with `asChild`: spinner/disabled semantics still apply even though the
@@ -141,19 +153,31 @@ when rendered via `asChild` as something other than a native `<button>`.
   consequence of `disabled`/`loading` becoming true.
 
 ## Success Criteria
+
 Deliberately short — the detailed, testable conditions live in Acceptance Criteria
 below; this is only the non-behavioral "is it actually done" checklist that AC doesn't
 cover on its own.
-- [ ] All Acceptance Criteria below pass.
-- [ ] No existing Button story's rendered output changes as a side effect (purely
-      additive — nothing here should require touching current consumers).
-- [ ] `pnpm build` / `pnpm lint` / `pnpm test` stay green.
+
+- [x] All Acceptance Criteria below pass. 26 Storybook `play()` stories plus 15
+      `useKeyboardActivation` unit tests.
+- [x] No existing Button story's rendered output changes as a side effect. `WithIcons`
+      _was_ rewritten onto `startIcon`/`endIcon` — a deliberate change, agreed up front,
+      not a side effect; its three hand-rolled inline `<svg>` blocks were exactly what
+      these props replace. `Sizes` swapped a 🔍 emoji for `<Icon name='search' />` with an
+      `aria-label`. No consumer of `Button` was touched, and all 311 story tests across
+      `ui-core`/`ui-forms`/`ui-overlays`/`ui-command` still pass.
+- [x] `pnpm build` / `pnpm lint` / `pnpm test` stay green. One caveat, pre-existing and
+      unrelated: `apps/storybook`'s `build` script ran `vite build` against an app with no
+      `index.html`, which broke the root build regardless of this work. Reduced to
+      `tsc -b`; see the implementation plan.
 
 ## Acceptance Criteria
+
 This list is meant to be the direct basis for Storybook `play()` tests — each item
 should map to one test.
 
 **`type` default**
+
 - Given a `Button` with no `type` prop, when rendered inside a `<form>`, then it has
   `type="button"` and does not submit the form when clicked.
 - Given a `Button` with `type="submit"` explicitly set, when rendered inside a `<form>`,
@@ -161,6 +185,7 @@ should map to one test.
   value).
 
 **Icons**
+
 - Given a `Button` with `startIcon="check"` and text children, when rendered, then
   the icon appears before the text at `Icon`'s default size token (`md` / `size-4`),
   and carries `aria-hidden="true"`.
@@ -173,6 +198,7 @@ should map to one test.
   in their respective positions simultaneously.
 
 **Loading**
+
 - The spinner is `<Icon name='loader-circle' className='animate-spin' />` — `Icon` has no
   animation prop, so the spin is applied by Button via `className`.
 - Given a `Button` with `loading={true}` and an `endIcon`, when rendered, then the
@@ -187,6 +213,7 @@ should map to one test.
   clicked (or activated via keyboard), then `onClick` does not fire.
 
 **Disabled**
+
 - Given a `Button` with `disabled={true}` (and `loading` not set), when rendered, then
   both `disabled` and `aria-disabled="true"` are present.
 - Given a `Button` whose keyboard-activation mechanism tracks a pressed/"active" state
@@ -198,6 +225,7 @@ should map to one test.
   asserting the pressed indicator is gone immediately after the transition.)
 
 **Keyboard activation**
+
 - Given a `Button` with `asChild` wrapping a non-native element (e.g. a `<div>`-backed
   custom component), when the element is focused and Enter or Space is pressed, then
   the `onClick` handler fires exactly once per press.
@@ -212,6 +240,7 @@ should map to one test.
   cases, and clears on release.
 
 **Icon-only accessibility**
+
 - Given a `Button` with `size="icon"` and an `aria-label`, when rendered, then no
   development-time diagnostic is emitted.
 - Given a `Button` with `size="icon"` and no `aria-label`/`aria-labelledby`/text
@@ -219,10 +248,12 @@ should map to one test.
   is emitted, and the button still renders (non-throwing).
 
 **WCAG AA**
+
 - Given every story added/modified for this deliverable, when scanned with
   `@storybook/addon-a11y`, then zero new AA violations are reported.
 
 ## Decisions (previously Open Questions)
+
 - **Spinner placement**: replaces the end icon specifically (not all content); button
   text stays visible. `loadingText` is **not** in scope for this deliverable — the
   accessible name must not change while loading (see Accessibility).
@@ -257,8 +288,10 @@ should map to one test.
   predecessor deliverable itself (see its spec's Scope).
 
 ## Open Questions
+
 None remaining — see Decisions above.
 
 ## Design References
+
 - Existing stories: `Variants`, `Sizes`, `WithIcons`, `Disabled`, `AsChild` in
   `packages/ui-core/src/components/Button/Button.stories.tsx`.

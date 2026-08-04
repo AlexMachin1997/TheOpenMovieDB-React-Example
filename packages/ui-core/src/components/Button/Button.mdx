@@ -1,0 +1,219 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './Button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+The library's standard clickable control. Beyond the variants and sizes you'd expect, it handles the three things every button ends up needing anyway: icons, a loading state, and keyboard behaviour that survives being rendered as something other than a `<button>`.
+
+```tsx
+import { Button } from '@repo/ui-core';
+```
+
+## Features
+
+- **Named icons** — `startIcon='plus'`, not an import plus a wrapper plus a size class.
+- **A first-class `loading` state** that swaps in a spinner, blocks clicks, and reports itself as busy — without changing the button's accessible name mid-action.
+- **Defaults to `type='button'`**, so dropping one into a form doesn't submit it by accident.
+- **Keyboard activation for `asChild`** — a `<div>`-backed control gets Enter and Space wired up, and a real `<button>` or link deliberately doesn't, so nothing ever fires twice.
+- **Tells you when a button has no name** — icon-only buttons without an `aria-label` warn in the console rather than shipping silently.
+
+<Canvas of={ButtonStories.Default} />
+
+---
+
+## Properties
+
+### `variant`
+
+The visual style.
+
+|             |                                                                               |
+| ----------- | ----------------------------------------------------------------------------- |
+| **Type**    | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` |
+| **Default** | `'default'`                                                                   |
+
+<Canvas of={ButtonStories.Variants} />
+
+### `size`
+
+The size preset. `'icon'` is a square button for a single icon and no text — see [Accessibility](#accessibility) for what it obliges you to add.
+
+|             |                                       |
+| ----------- | ------------------------------------- |
+| **Type**    | `'default' \| 'sm' \| 'lg' \| 'icon'` |
+| **Default** | `'default'`                           |
+
+<Canvas of={ButtonStories.Sizes} />
+
+### `startIcon` / `endIcon`
+
+An icon before or after the children, given by name.
+
+|             |                                            |
+| ----------- | ------------------------------------------ |
+| **Type**    | `IconName` — the same union `Icon` accepts |
+| **Default** | — (optional)                               |
+
+```tsx
+<Button startIcon='plus'>Add Item</Button>
+<Button endIcon='chevron-right'>Continue</Button>
+```
+
+You pass a **name**, not markup and not a component. Sizing, spacing and `aria-hidden` are handled for you, and a name outside the union is a compile error rather than a gap in the UI.
+
+<Canvas of={ButtonStories.WithIcons} />
+
+The icon stays at 16px across the whole size scale — only the button's own padding changes — so a row of mixed-size buttons stays visually consistent.
+
+<Canvas of={ButtonStories.IconSizesAcrossButtonSizes} />
+
+> **Need to colour or fill an icon?** Reach for `<Icon>` as a child instead of `startIcon`, and read the note on `**:fill-*` in the [Icon docs](?path=/docs/ui-core-icon--docs) — the shape sets `fill="none"` itself, so a plain `fill-current` leaves it hollow.
+
+### `loading`
+
+Shows a spinner and makes the button inert.
+
+|             |           |
+| ----------- | --------- |
+| **Type**    | `boolean` |
+| **Default** | `false`   |
+
+```tsx
+<Button loading={isSaving} endIcon='chevron-right'>
+	Save changes
+</Button>
+```
+
+The spinner takes the **end icon's** place. A leading icon and the button's text both stay exactly where they were, which is deliberate: the accessible name must not change halfway through an action, or a screen reader announces a different button than the one the user pressed.
+
+<Canvas of={ButtonStories.Loading} />
+
+With no `endIcon` to replace, the spinner still occupies the end position:
+
+<Canvas of={ButtonStories.LoadingWithoutEndIcon} />
+
+A loading button is genuinely non-interactive — `onClick` will not fire from a click or from the keyboard, so there's no need to guard your handler as well:
+
+<Canvas of={ButtonStories.LoadingBlocksOnClick} />
+
+### `disabled`
+
+The native prop, with one addition: Button also sets `aria-disabled="true"`. It's redundant for screen readers, and deliberately so — it gives automated tests a stable attribute to assert against.
+
+|             |           |
+| ----------- | --------- |
+| **Type**    | `boolean` |
+| **Default** | `false`   |
+
+<Canvas of={ButtonStories.Disabled} />
+
+Setting both `disabled` and `loading` behaves as disabled, but `aria-busy` still tracks `loading` specifically — so assistive tech can distinguish "unavailable" from "working on it".
+
+<Canvas of={ButtonStories.DisabledAndLoading} />
+
+### `type`
+
+|             |                                   |
+| ----------- | --------------------------------- |
+| **Type**    | `'button' \| 'submit' \| 'reset'` |
+| **Default** | `'button'`                        |
+
+The HTML default is `submit`, which means an unmarked button inside a form submits it. Button flips that: you get `type='button'` unless you ask for otherwise, and an explicit `type='submit'` is never overridden.
+
+<Canvas of={ButtonStories.InAForm} />
+
+### `asChild`
+
+Renders your element instead of a `<button>`, keeping Button's styling and behaviour.
+
+|             |           |
+| ----------- | --------- |
+| **Type**    | `boolean` |
+| **Default** | `false`   |
+
+```tsx
+<Button asChild>
+	<a href='/settings'>Settings</a>
+</Button>
+```
+
+Button looks at what you actually passed and adapts:
+
+| You pass          | What you get                                                            |
+| ----------------- | ----------------------------------------------------------------------- |
+| a real `<button>` | nothing added — it already behaves correctly                            |
+| an `<a href>`     | Space activates it (anchors ignore Space natively); Enter is left alone |
+| anything else     | `role="button"`, `tabIndex={0}`, and both Enter and Space wired up      |
+
+That last row is the useful one: a `<div>`-backed control is inert to a keyboard on its own, and Button makes it behave like the button it looks like.
+
+<Canvas of={ButtonStories.KeyboardActivation} />
+
+> **A custom component counts as "anything else."** Button can't see what your component renders, so it assumes the worst and adds full button semantics. If your component renders a real `<button>` inside, you'll get two activations per press — pass the host element directly, or let the component _be_ the button.
+
+---
+
+## Usage Examples
+
+Every example below is a live story — hit **Show code** on any of them to copy the source.
+
+### Composing with your own key handler
+
+Your `onKeyDown` is composed with Button's, not replaced by it. Calling `event.preventDefault()` in yours opts out of the built-in activation for that press.
+
+<Canvas of={ButtonStories.ConsumerKeyHandlerPreserved} />
+
+### Loading across variants
+
+<Canvas of={ButtonStories.LoadingVariants} />
+
+### The pressed state
+
+Pressing a button shrinks it slightly and pulls a tight, variant-tinted halo in around it — it sinks rather than lifts. Holding Enter or Space does exactly the same thing as holding the pointer down, and it applies whether the button is a real `<button>` or an `asChild` element, so all three feel identical.
+
+<Canvas of={ButtonStories.PressedGlowVariants} />
+
+<Canvas of={ButtonStories.PressedVisualState} />
+
+If the button becomes `disabled` or `loading` while you're still holding the key — an async action that starts on keydown, say — the pressed state clears immediately rather than sticking. A disabled element never receives the keyup that would otherwise release it.
+
+<Canvas of={ButtonStories.PressedStateClearsWhenDisabled} />
+
+---
+
+## Accessibility
+
+### Icon-only buttons need a name
+
+An icon is decorative by definition — `Icon` is always `aria-hidden`, so it names nothing. A button whose only content is an icon therefore has **no accessible name at all** unless you give it one.
+
+```tsx
+// ✗ Announced as an unlabelled button
+<Button size='icon' startIcon='x' />
+
+// ✓
+<Button size='icon' startIcon='x' aria-label='Dismiss' />
+```
+
+Button warns in the console when it spots the first form. It never throws — the button still renders — but the warning is there so you find out while building rather than after shipping.
+
+<Canvas of={ButtonStories.IconOnlyWithLabel} />
+
+### What Button handles for you
+
+- **`type='button'` by default**, so forms aren't submitted by accident.
+- **`aria-disabled` alongside the native `disabled`**, for both `disabled` and `loading`.
+- **`aria-busy` while loading**, without changing the accessible name.
+- **`role="button"` and focusability** for `asChild` elements that aren't natively buttons — and deliberately _not_ for those that are.
+- **Enter and Space** on those same elements, wired so nothing fires twice.
+
+### What's still yours
+
+- Naming icon-only buttons, as above.
+- Making sure a button that _looks_ like a link (`variant='link'`) is either genuinely a link (`asChild` with an `<a href>`) or genuinely an action. The variant only changes how it looks.
+
+---
+
+<Controls />
