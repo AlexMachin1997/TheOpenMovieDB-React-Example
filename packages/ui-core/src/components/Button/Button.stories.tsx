@@ -46,7 +46,7 @@ const meta = {
 		a11y: {
 			// Scoped to Button deliberately. The rest of the library has its own pre-existing
 			// violations, so turning this on globally in one go isn't realistic — see
-			// docs/components/02-button-enhancements/spec.md, Accessibility.
+			// docs/02-button-enhancements/spec.md, Accessibility.
 			test: 'error'
 		}
 	},

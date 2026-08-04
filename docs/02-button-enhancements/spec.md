@@ -75,7 +75,7 @@ when rendered via `asChild` as something other than a native `<button>`.
 - Icon sizing/spacing is visually consistent across `sm`/`default`/`lg`/`icon` sizes.
 - Loading state is visually distinguishable at a glance (spinner replaces the end icon).
 - Keyboard-focus visual state (existing `focus-visible` ring) is unaffected. This stayed true —
-  but note the ring itself is revisited later by [`01-focus-indicators`](../../design-system/01-focus-indicators/spec.md),
+  but note the ring itself is revisited later by [`03-focus-indicators`](../03-focus-indicators/spec.md),
   which found it fails WCAG 2.2 SC 2.4.11 on contrast. Nothing in this deliverable caused or
   fixed that.
 - A keyboard-"active"/pressed visual treatment (distinct from `focus-visible`) applies
@@ -271,7 +271,7 @@ should map to one test.
   internal spinner consume it rather than reimplementing sizing/`aria-hidden` handling
   themselves, avoiding rework once the shared component lands. Its spec is written and
   **implemented** — see [`01-icon`](../01-icon/spec.md) — so this deliverable is
-  no longer blocked per `docs/components/README.md`.
+  no longer blocked per `docs/README.md`.
 - **`startIcon`/`endIcon` typing reversed to a name string**: originally assumed to be an
   icon component reference (`React.ComponentType<{ className?: string }>`); superseded by
   Icon's own spec decision to accept a bare icon name string (Iconify-style API backed by

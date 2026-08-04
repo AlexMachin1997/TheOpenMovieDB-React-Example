@@ -23,7 +23,7 @@ At the start of every conversation, the agent MUST:
 
 - Always plan before touching code, and get the plan approved before executing it.
 - Never skip to implementation just because the change feels small; it is hard to reason about impact without a plan.
-- The plan lives in the deliverable's own folder as `plan.md` — e.g. `docs/components/02-button-enhancements/plan.md`. There is no single root-level `implementation_plan.md`; a repo-wide plan file cannot describe more than one in-flight deliverable, which is why the docs are grouped per deliverable instead. See [Documentation Structure](../.claude/skills/documentation-structure/SKILL.md).
+- The plan lives in the deliverable's own folder as `plan.md` — e.g. `docs/02-button-enhancements/plan.md`. There is no single root-level `implementation_plan.md`; a repo-wide plan file cannot describe more than one in-flight deliverable, which is why the docs are grouped per deliverable instead. See [Documentation Structure](../.claude/skills/documentation-structure/SKILL.md).
 - For follow-up work on an existing deliverable, update that deliverable's `plan.md` rather than creating a new document.
 - Once the work ships, rewrite `plan.md` as an as-built record: what was built, what was rejected, what bit you. A pre-flight checklist nobody corrected afterwards misleads the next reader.
 

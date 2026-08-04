@@ -77,7 +77,7 @@ is the button and for an offset ring is the page.
 ### Prior art in the repo
 
 `Button` gained a pressed-state treatment in the deliverable immediately before this one
-([`02-button-enhancements`](../../components/02-button-enhancements/spec.md)) which deliberately left focus styling
+([`02-button-enhancements`](../02-button-enhancements/spec.md)) which deliberately left focus styling
 untouched. That work established the pattern this one would extend: a base class carrying the
 _shape_ of a state, and per-variant classes carrying the _colour_.
 

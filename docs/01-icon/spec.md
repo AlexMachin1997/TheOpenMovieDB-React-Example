@@ -248,7 +248,7 @@ applicable — each item should map to one test or one verifiable repo state.
   across `ui-core`, `ui-forms`, `ui-overlays`, and `ui-command` (and their
   stories) are migrated as part of this deliverable, and `lucide-react` is
   removed as a direct dependency from all four.
-- **Button spec update**: `docs/components/02-button-enhancements/spec.md`'s
+- **Button spec update**: `docs/02-button-enhancements/spec.md`'s
   `startIcon`/`endIcon` requirements and acceptance criteria are updated to
   reflect icon name strings instead of component references, once this spec
   is final (tracked as part of this deliverable).

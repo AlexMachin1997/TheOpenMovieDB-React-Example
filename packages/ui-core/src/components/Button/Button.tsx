@@ -49,7 +49,7 @@ const Button = ({
 	// What the rendered element actually is decides everything below: which keys need synthesising,
 	// whether `role`/`tabIndex` are needed, and whether `type`/`disabled` are even valid attributes
 	// on it. A custom-component child is unknowable at compile time, so it is treated as non-native
-	// — see the known limitation in docs/components/02-button-enhancements/plan.md.
+	// — see the known limitation in docs/02-button-enhancements/plan.md.
 	const child = asChild && React.isValidElement(children) ? children : null;
 	const childProps = child?.props as { href?: string } | undefined;
 	const rendersButton = !asChild || child?.type === 'button';
