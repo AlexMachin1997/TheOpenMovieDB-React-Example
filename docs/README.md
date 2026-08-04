@@ -61,6 +61,25 @@ changes, so links and references stay valid. Build order lives in the track's `R
 the only source of truth for sequencing and status — if the roadmap says `03` comes before `02`,
 the roadmap is right.
 
+### When one file per role isn't enough
+
+**First check whether it's actually two deliverables.** Needing two specs is the usual symptom of a
+deliverable that should be split — the numbered folders exist precisely so work stays small and
+independently shippable. Splitting is right more often than it feels.
+
+When it genuinely is one deliverable that outgrows one file:
+
+- **Promote the role to a folder of the same name.** `spec.md` becomes `spec/` containing a
+  `README.md` entry point plus its parts, and links point at `spec/`. Never both `spec.md` and
+  `spec/` — nobody would know which is authoritative.
+- **Supporting material isn't a role.** Evidence tables, measurements, benchmark output,
+  screenshots: drop them in the deliverable folder under any sensible name, or an `evidence/`
+  subfolder. The three names above are _required roles_, not an exhaustive file list.
+- **Revisions update the original.** A deliverable revisited later doesn't get `plan-2.md`; update
+  `plan.md` and record what changed and why. `02-button-enhancements/plan.md` does this for the
+  pressed-state treatment, which was rewritten after review — the superseded reasoning is
+  documented rather than deleted or duplicated.
+
 ## The flow
 
 ```
@@ -86,3 +105,8 @@ who needs to know, not by how technical it is.
 3. Write `spec.md`; add `discovery.md` first if the problem needs establishing.
 4. Add a row to the track's `README.md` with its status and dependencies.
 5. When it ships, write `plan.md` and update the status.
+
+The general form of this layout — and the reasoning behind it — is portable, and lives in the
+`deliverable-documentation` skill. What's specific to this repo lives in
+[`.claude/skills/documentation-structure`](../.claude/skills/documentation-structure/SKILL.md),
+which Claude Code loads automatically here.
