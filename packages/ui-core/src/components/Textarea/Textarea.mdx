@@ -1,0 +1,102 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as TextareaStories from './Textarea.stories';
+
+<Meta of={TextareaStories} />
+
+# Textarea
+
+A styled multi-line text input built on the native `<textarea>`. Reach for it whenever the answer could run past a single line — a message, a bio, a description. For anything shorter, use [`Input`](?path=/docs/ui-core-input--docs).
+
+## Installation
+
+```tsx
+import { Textarea } from '@repo/ui-core';
+```
+
+## Features
+
+- Grows with its content via `field-sizing-content`, so there is no manual resize logic to write.
+- Minimum height of four lines (`min-h-16`) so an empty field still reads as multi-line.
+- Focus-visible ring matching every other control in the library.
+- Error state through `aria-invalid`, with a destructive ring.
+- Dark mode support.
+
+<Canvas sourceState="none" of={TextareaStories.Default} />
+
+## Properties
+
+<Controls />
+
+`Textarea` takes every native `<textarea>` attribute — `rows`, `maxLength`, `readOnly`, `placeholder` and the rest — and forwards them unchanged. There are no custom props.
+
+## Usage
+
+### With a label
+
+```tsx
+import { Textarea, Label } from '@repo/ui-core';
+
+<div className="grid gap-3">
+	<Label htmlFor="message">Message</Label>
+	<Textarea id="message" placeholder="Tell us what happened" />
+</div>;
+```
+
+<Canvas sourceState="none" of={TextareaStories.WithLabel} />
+
+### With helper text
+
+Describe the constraint before the user hits it, and link the description with `aria-describedby` so it is announced rather than only seen.
+
+```tsx
+<div className="grid gap-3">
+	<Label htmlFor="bio">Bio</Label>
+	<Textarea id="bio" aria-describedby="bio-hint" maxLength={200} />
+	<p id="bio-hint" className="text-sm text-muted-foreground">
+		Up to 200 characters.
+	</p>
+</div>
+```
+
+<Canvas sourceState="none" of={TextareaStories.WithHelperText} />
+
+### Controlled
+
+```tsx
+import { useState } from 'react';
+import { Textarea } from '@repo/ui-core';
+
+const [value, setValue] = useState('');
+
+<Textarea value={value} onChange={(event) => setValue(event.target.value)} />;
+```
+
+<Canvas sourceState="none" of={TextareaStories.Controlled} />
+
+### Fixed height
+
+`field-sizing-content` makes the field grow by default. Pass `rows` to pin it instead.
+
+<Canvas sourceState="none" of={TextareaStories.CustomRows} />
+
+## Accessibility
+
+`Textarea` renders a native `<textarea>`, so keyboard and screen-reader behaviour come from the browser. The obligations that remain are yours:
+
+| Obligation | How |
+| --- | --- |
+| **Give it an accessible name** | Pair with `<Label htmlFor>` matching the `id`. A `placeholder` is not a label — it vanishes on focus. |
+| **Communicate errors** | `aria-invalid="true"` for the ring, `aria-describedby` pointing at the error text so it is announced. |
+| **Describe limits up front** | A character or word limit belongs in `aria-describedby` text, not only in a counter the user discovers after overrunning. |
+
+```tsx
+<Textarea
+	id="feedback"
+	aria-invalid={!!error}
+	aria-describedby={error ? 'feedback-error' : 'feedback-hint'}
+/>
+```
+
+**Note on `Enter`.** Inside a `<textarea>`, `Enter` inserts a newline rather than submitting the form. If your form needs a keyboard submit, provide it explicitly — and do not repurpose `Enter`, since that removes the only way to type a paragraph break.
+
+Resizing is left to the browser's native grip, which is keyboard-operable. Do not disable it with `resize-none` unless the field genuinely cannot grow.

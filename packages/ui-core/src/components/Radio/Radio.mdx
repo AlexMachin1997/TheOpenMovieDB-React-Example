@@ -1,0 +1,104 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as RadioStories from './Radio.stories';
+
+<Meta of={RadioStories} />
+
+# Radio
+
+A single radio option, built on `@radix-ui/react-radio-group`'s `Item`.
+
+> **`Radio` cannot stand alone.** It is a group *item*, and renders nothing useful outside a radio group root — selection, keyboard navigation and single-selection enforcement all live on the root, not the item. In almost every case you want [`RadioGroup`](?path=/docs/ui-core-radio-group--docs), which supplies that root and takes options in and a value out. Reach for `Radio` directly only when you need per-option layout that `RadioGroup` cannot express.
+
+## Installation
+
+```tsx
+import { Radio, RadioLabel, RadioGroup } from '@repo/ui-core';
+```
+
+## Features
+
+- Circle indicator rendered through [`Icon`](?path=/docs/ui-core-icon--docs), restylable via `iconClassName`.
+- Focus-visible ring and `aria-invalid` error state.
+- Disabled state, both per-option and inherited from the group.
+
+<Canvas sourceState="none" of={RadioStories.Default} />
+
+## Properties
+
+<Controls />
+
+`Radio` forwards every `RadioGroupPrimitive.Item` prop — most importantly `value`, which identifies the option to the group — and adds `iconClassName` for the indicator.
+
+## Composition
+
+### Prefer `RadioGroup`
+
+```tsx
+import { useState } from 'react';
+import { RadioGroup } from '@repo/ui-core';
+
+const [plan, setPlan] = useState('monthly');
+
+<RadioGroup
+	name="plan"
+	options={[
+		{ id: 'plan-1', value: 'monthly', label: 'Monthly' },
+		{ id: 'plan-2', value: 'yearly', label: 'Yearly' }
+	]}
+	value={plan}
+	onChange={({ value }) => setPlan(value)}
+/>;
+```
+
+### Composing `Radio` directly
+
+When you need control over each row's markup, pair `Radio` with `RadioLabel` inside a group root. **Order matters**: Tailwind's `peer-disabled:*` on the label only matches a `.peer` that precedes it as a sibling, so the radio renders first.
+
+```tsx
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import { Radio, RadioLabel } from '@repo/ui-core';
+
+<RadioGroupPrimitive.Root value={plan} onValueChange={setPlan} className="grid gap-3">
+	<div className="flex items-center space-x-2">
+		{/* Radio first — RadioLabel's peer-disabled styles depend on it */}
+		<Radio id="monthly" value="monthly" />
+		<RadioLabel htmlFor="monthly">Monthly</RadioLabel>
+	</div>
+	<div className="flex items-center space-x-2">
+		<Radio id="yearly" value="yearly" />
+		<RadioLabel htmlFor="yearly">Yearly</RadioLabel>
+	</div>
+</RadioGroupPrimitive.Root>;
+```
+
+<Canvas sourceState="none" of={RadioStories.RadioGroup} />
+
+### Restyling the indicator
+
+```tsx
+<Radio value="custom" className="border-emerald-600" iconClassName="**:fill-emerald-600" />
+```
+
+<Canvas sourceState="none" of={RadioStories.CustomIconColor} />
+
+> The indicator uses `**:fill-*` rather than `fill-*`. The icon data sets `fill="none"` on the circle shape itself, which beats a `fill` inherited from the `svg` — a plain `fill-primary` leaves the selected dot hollow.
+
+## Accessibility
+
+Radix renders a `<button role="radio">` and keeps `aria-checked` in sync. Keyboard behaviour comes from the **group root**, which is why `Radio` needs one:
+
+| Key | Behaviour |
+| --- | --- |
+| `Tab` | Enters the group on the selected option, or the first enabled one. A second `Tab` leaves the group. |
+| `ArrowDown` / `ArrowRight` | Next enabled option — and selects it |
+| `ArrowUp` / `ArrowLeft` | Previous enabled option — and selects it |
+| `Home` / `End` | First / last enabled option |
+| `Space` | Selects the focused option |
+
+| Obligation | How |
+| --- | --- |
+| **Name each option** | `RadioLabel htmlFor` matching the radio's `id`, so clicking the label selects it. |
+| **Name the group** | `RadioGroup` handles this via `name`. Composing by hand, give the root an `aria-label` or `aria-labelledby`. |
+| **Disabled options** | Set `disabled` on the option; keyboard navigation skips it rather than focusing it. |
+
+**Radio, not checkbox.** Arrowing through a radio group *changes the selection* — that is the standard pattern and what users expect. If choices are not mutually exclusive, use [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs), which navigates identically but does not toggle as you arrow past.

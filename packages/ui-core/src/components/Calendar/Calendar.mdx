@@ -1,0 +1,136 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CalendarStories from './Calendar.stories';
+
+<Meta of={CalendarStories} />
+
+# Calendar
+
+An inline month view for picking a date or a date range, adapting [`react-day-picker`](https://daypicker.dev) to this library's tokens, [`Button`](?path=/docs/ui-core-button--docs) and [`Icon`](?path=/docs/ui-core-icon--docs).
+
+Use `Calendar` when the picker should always be visible — a booking screen, a date filter panel. When it should open from a trigger, use `SingleDatePicker` or `DateRangePicker` from `@repo/ui-forms`, which wrap this component in a popover.
+
+## Installation
+
+```tsx
+import { Calendar, CalendarDayButton } from '@repo/ui-core';
+```
+
+## Features
+
+- Single, range and multiple selection modes, inherited from `react-day-picker`.
+- Optional month/year dropdowns via `captionLayout="dropdown"`.
+- Navigation chevrons rendered through `Icon`; day cells through `Button`, so the calendar inherits the library's focus and hover treatment.
+- `locale` support for month and weekday names.
+- Week numbers, multiple months, and outside-day visibility all configurable.
+
+<Canvas sourceState="none" of={CalendarStories.Basic} />
+
+## Properties
+
+<Controls />
+
+`Calendar` takes every `DayPickerProps` — `mode`, `selected`, `onSelect`, `disabled`, `startMonth`, `endMonth`, `numberOfMonths`, `locale` and the rest — and adds one prop of its own:
+
+| Prop | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `buttonVariant` | `Button`'s `variant` | `'ghost'` | The variant used for the previous/next navigation buttons. |
+
+`classNames` is merged with the defaults rather than replacing them, so you can override one element without rebuilding the whole map.
+
+## Usage
+
+### Single date
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from '@repo/ui-core';
+
+const [date, setDate] = useState<Date | undefined>();
+
+<Calendar mode="single" selected={date} onSelect={setDate} />;
+```
+
+### Date range
+
+```tsx
+import { useState } from 'react';
+import type { DateRange } from 'react-day-picker';
+import { Calendar } from '@repo/ui-core';
+
+const [range, setRange] = useState<DateRange | undefined>();
+
+<Calendar mode="range" selected={range} onSelect={setRange} numberOfMonths={2} />;
+```
+
+<Canvas sourceState="none" of={CalendarStories.RangeSelection} />
+
+### Month and year dropdowns
+
+For dates far from today — a date of birth — give the user dropdowns rather than making them page through months.
+
+```tsx
+<Calendar
+	mode="single"
+	captionLayout="dropdown"
+	startMonth={new Date(1900, 0)}
+	endMonth={new Date(2100, 11)}
+	selected={date}
+	onSelect={setDate}
+/>
+```
+
+<Canvas sourceState="none" of={CalendarStories.WithDropdowns} />
+
+### Localised
+
+```tsx
+import { fr } from 'date-fns/locale';
+
+<Calendar mode="single" locale={fr} selected={date} onSelect={setDate} />;
+```
+
+## Composition
+
+`CalendarDayButton` is the day cell, exported so it can be replaced. Pass your own through `components.DayButton` to add content to a day — a price, an availability dot — while keeping the selection and range styling:
+
+```tsx
+import { Calendar, CalendarDayButton } from '@repo/ui-core';
+
+<Calendar
+	mode="single"
+	selected={date}
+	onSelect={setDate}
+	components={{
+		DayButton: (props) => (
+			<CalendarDayButton {...props}>
+				{props.day.date.getDate()}
+				<span>{priceFor(props.day.date)}</span>
+			</CalendarDayButton>
+		)
+	}}
+/>;
+```
+
+The `[&>span]:text-xs [&>span]:opacity-70` rule on the day button exists for exactly this — a secondary line under the date.
+
+## Accessibility
+
+`react-day-picker` renders a semantic grid with the month as its label, and `Calendar` keeps that intact. Day cells are real `<button>`s via `Button`, so they are focusable and operable by keyboard.
+
+| Key | Behaviour |
+| --- | --- |
+| `ArrowLeft` / `ArrowRight` | Previous / next day |
+| `ArrowUp` / `ArrowDown` | Same weekday, previous / next week |
+| `Home` / `End` | First / last day of the week |
+| `PageUp` / `PageDown` | Previous / next month |
+| `Enter` / `Space` | Select the focused day |
+
+| Obligation | How |
+| --- | --- |
+| **Name the calendar** | Give it an `aria-label` when its purpose is not obvious from surrounding text — "Departure date". |
+| **Announce the selection** | The grid reports focus, not your application state. Render the chosen date in text near the calendar so it is confirmed. |
+| **Explain disabled days** | `disabled` days are announced as unavailable but not *why*. Put the reason in nearby text. |
+
+Focus is managed internally: `CalendarDayButton` focuses itself when `react-day-picker` marks it focused, which is what makes arrow-key navigation across weeks and months work.
+
+> **Reading direction.** The navigation chevrons flip under `dir="rtl"` via `rtl:` classes, but no `DirectionProvider` is mounted in this library, so RTL is not exercised end to end. Tracked as its own piece of work.

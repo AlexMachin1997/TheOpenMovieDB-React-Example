@@ -1,0 +1,128 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SliderStories from './Slider.stories';
+
+<Meta of={SliderStories} />
+
+# Slider
+
+A range input for picking a value — or a pair of values — from a continuous scale, built on `@radix-ui/react-slider`.
+
+Slider ships as **four composable parts** rather than one component, so the track, the filled range and the thumbs can each be styled or replaced independently.
+
+## Installation
+
+```tsx
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '@repo/ui-core';
+```
+
+## Features
+
+- Single or dual thumbs — render one `SliderThumb` per value.
+- Controlled or uncontrolled.
+- Configurable `min`, `max` and `step`.
+- Full keyboard support from the underlying primitive.
+
+<Canvas sourceState="none" of={SliderStories.Basic} />
+
+## Component structure
+
+| Part | Role |
+| --- | --- |
+| `SliderRoot` | Owns the value, range and step. Every other part must be inside it. |
+| `SliderTrack` | The full-width rail the thumb travels along. |
+| `SliderRange` | The filled portion, from the minimum to the thumb. Renders inside `SliderTrack`. |
+| `SliderThumb` | The draggable handle. **One per value** in `value` / `defaultValue`. |
+
+## Properties
+
+<Controls />
+
+The table above documents `SliderRoot`, which carries the behavioural props. The other three take their Radix equivalents plus `className`.
+
+## Composition
+
+The nesting is not optional — `SliderRange` must sit inside `SliderTrack`, and both inside `SliderRoot`:
+
+```tsx
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '@repo/ui-core';
+
+<SliderRoot defaultValue={[50]} max={100} step={1}>
+	<SliderTrack>
+		<SliderRange />
+	</SliderTrack>
+	<SliderThumb />
+</SliderRoot>;
+```
+
+### Two thumbs
+
+Add a second `SliderThumb` and a second value. Radix stops them crossing over.
+
+```tsx
+<SliderRoot defaultValue={[25, 75]} max={100} step={1}>
+	<SliderTrack>
+		<SliderRange />
+	</SliderTrack>
+	<SliderThumb />
+	<SliderThumb />
+</SliderRoot>
+```
+
+<Canvas sourceState="none" of={SliderStories.Dual} />
+
+### Controlled
+
+```tsx
+import { useState } from 'react';
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '@repo/ui-core';
+
+const [value, setValue] = useState([40]);
+
+<SliderRoot value={value} onValueChange={setValue} max={100} step={1}>
+	<SliderTrack>
+		<SliderRange />
+	</SliderTrack>
+	<SliderThumb />
+</SliderRoot>;
+```
+
+### Restyling a part
+
+Each part takes `className`, so you can restyle one without touching the others.
+
+<Canvas sourceState="none" of={SliderStories.CustomStyling} />
+
+### Steps
+
+<Canvas sourceState="none" of={SliderStories.StepVariations} />
+
+## Accessibility
+
+Radix gives each thumb `role="slider"` with `aria-valuemin`, `aria-valuemax` and `aria-valuenow` kept in sync, so the current value is announced as it changes.
+
+| Key | Behaviour |
+| --- | --- |
+| `ArrowRight` / `ArrowUp` | Increase by one `step` |
+| `ArrowLeft` / `ArrowDown` | Decrease by one `step` |
+| `PageUp` / `PageDown` | Larger jump |
+| `Home` / `End` | Minimum / maximum |
+
+| Obligation | How |
+| --- | --- |
+| **Name it** | A slider has no visible label of its own. Give `SliderRoot` an `aria-label`, or `aria-labelledby` pointing at your own heading. |
+| **Name each thumb in a range** | With two thumbs, label them individually — `aria-label="Minimum"` / `"Maximum"` — or both announce identically. |
+| **Show the value** | `aria-valuenow` covers screen readers, but sighted users need it rendered too. Pair the slider with a visible number or a tooltip. |
+
+```tsx
+<SliderRoot defaultValue={[20, 80]} max={100} aria-label="Price range">
+	<SliderTrack>
+		<SliderRange />
+	</SliderTrack>
+	<SliderThumb aria-label="Minimum price" />
+	<SliderThumb aria-label="Maximum price" />
+</SliderRoot>
+```
+
+<Canvas sourceState="none" of={SliderStories.WithTooltips} />
+
+> **Known styling gap.** `SliderThumb` currently hardcodes raw palette colours (`bg-white`, `border-gray-300`, `focus:ring-blue-400`) instead of design tokens, so it does not follow the theme and its focus ring differs from every other control. Tracked in the focus-indicators work, not here.

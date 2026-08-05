@@ -109,3 +109,29 @@ By default, the debounce delay is `300ms`. You can increase or decrease this via
 ```
 
 <Canvas sourceState="none" of={DebouncableInputStories.Disabled} />
+
+---
+
+## Accessibility
+
+It renders `Input`, so it inherits the same native behaviour and the same obligations — pair it with a `<Label htmlFor>`, and never use the placeholder as the label. See [`Input`](?path=/docs/ui-core-input--docs) for the full detail.
+
+One obligation is specific to debouncing: **the result of typing arrives later than the typing does.** A sighted user sees a list settle; a screen-reader user gets nothing unless you announce it.
+
+| Concern | What to do |
+| --- | --- |
+| **Announce the delayed result** | Put the outcome in an `aria-live="polite"` region — "12 results" — so it is spoken when it lands rather than silently replacing the page. |
+| **Don't move focus on settle** | The debounce fires while the user is still typing. Moving focus to results would yank them out of the field mid-word. |
+| **Keep the delay modest** | 300ms is the default for a reason. A long `debounceMs` leaves assistive tech describing stale state for longer. |
+
+```tsx
+import { DebouncableInput, Label } from '@repo/ui-core';
+
+<div className="grid gap-3">
+	<Label htmlFor="filter">Filter results</Label>
+	<DebouncableInput id="filter" onValueChange={setQuery} debounceMs={300} />
+	<p aria-live="polite" className="text-sm text-muted-foreground">
+		{results.length} results
+	</p>
+</div>;
+```

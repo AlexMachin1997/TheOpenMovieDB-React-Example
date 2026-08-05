@@ -7,6 +7,8 @@ import { Checkbox } from '../Checkbox/Checkbox';
 
 const meta: Meta<typeof CheckboxGroup> = {
 	title: 'UI Core/Checkbox group',
+	// `<Controls />` and the primary block in the MDX page both resolve their args from here.
+	component: CheckboxGroup,
 	parameters: {
 		layout: 'centered'
 	}

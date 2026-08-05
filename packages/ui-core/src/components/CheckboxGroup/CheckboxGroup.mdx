@@ -1,0 +1,114 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CheckboxGroupStories from './CheckboxGroup.stories';
+
+<Meta of={CheckboxGroupStories} />
+
+# CheckboxGroup
+
+A multi-selection list of related options. Options in, selected values out — it owns the layout, the array bookkeeping and the keyboard navigation, so you are not hand-assembling [`Checkbox`](?path=/docs/ui-core-checkbox--docs) and `CheckboxLabel` pairs and reimplementing "add or remove from array" at every call site.
+
+Its single-selection counterpart is [`RadioGroup`](?path=/docs/ui-core-radio-group--docs), whose API this deliberately mirrors.
+
+## Installation
+
+```tsx
+import { CheckboxGroup } from '@repo/ui-core';
+```
+
+## Features
+
+- Takes an `Option[]` and returns the selected `string[]`.
+- Full keyboard navigation: arrows, `Home`/`End`, wraparound, disabled options skipped.
+- Per-option `disabled`, plus a group-level `disabled`.
+- An empty state with a customisable message.
+- Per-option `id` used to associate each label with its control.
+
+<Canvas sourceState="none" of={CheckboxGroupStories.Default} />
+
+## Properties
+
+<Controls />
+
+Options are `Option` objects from `@repo/core`:
+
+```ts
+type Option = {
+	label: string;
+	id: string;
+	value: string;
+	order?: number;
+	disabled?: boolean;
+	group?: string;
+};
+```
+
+> **Controlled only.** There is no `defaultValue`. Individual Radix checkboxes have no group primitive of their own, so an internal "uncontrolled" state would be a second, easily desynced source of truth for the same selection. If you want uncontrolled behaviour, use individual `Checkbox` components with `defaultChecked`.
+
+`onChange` receives `{ value: string[]; name: string }` — the full next selection, not a delta, so you can assign it straight into state.
+
+## Usage
+
+### Basic
+
+```tsx
+import { useState } from 'react';
+import { CheckboxGroup } from '@repo/ui-core';
+
+const [selected, setSelected] = useState<string[]>([]);
+
+<CheckboxGroup
+	name="interests"
+	options={[
+		{ id: 'opt-1', value: 'movies', label: 'Movies' },
+		{ id: 'opt-2', value: 'tv', label: 'TV' },
+		{ id: 'opt-3', value: 'books', label: 'Books' }
+	]}
+	value={selected}
+	onChange={({ value }) => setSelected(value)}
+/>;
+```
+
+### Disabling options
+
+A single option carries its own `disabled` flag; the whole group takes the `disabled` prop. Disabled options are skipped by keyboard navigation rather than focused.
+
+<Canvas sourceState="none" of={CheckboxGroupStories.WithDisabledOption} />
+<Canvas sourceState="none" of={CheckboxGroupStories.WithDisabledGroup} />
+
+### Layout
+
+The `className` lands on the option grid, so the layout is yours to change.
+
+```tsx
+<CheckboxGroup className="grid-flow-col auto-cols-max" {...props} />
+```
+
+<Canvas sourceState="none" of={CheckboxGroupStories.HorizontalLayout} />
+
+### Empty state
+
+With no options the group renders a message rather than an empty box.
+
+<Canvas sourceState="none" of={CheckboxGroupStories.CustomNoOptionsMessage} />
+
+## Accessibility
+
+**The group is a single Tab stop.** Tab moves into it and straight out again; the arrow keys move between options. This matches [`RadioGroup`](?path=/docs/ui-core-radio-group--docs) exactly, so the two feel identical to a keyboard user.
+
+| Key | Behaviour |
+| --- | --- |
+| `Tab` | Enters the group on the first *selected* option, or the first enabled one if nothing is selected. A second `Tab` leaves the group entirely. |
+| `ArrowDown` / `ArrowRight` | Next enabled option |
+| `ArrowUp` / `ArrowLeft` | Previous enabled option |
+| `Home` / `PageUp` | First enabled option |
+| `End` / `PageDown` | Last enabled option |
+| `Space` | Toggles the focused option |
+
+> **Arrow keys move focus without toggling.** This is the one deliberate difference from `RadioGroup`, where arrowing also selects. Toggling every checkbox a user arrows past would be wrong for a multi-select group.
+
+Radix supplies `role="checkbox"` and `aria-checked` per option, and each `id` associates a label with its control so clicking the label toggles it.
+
+Two things worth knowing:
+
+- **This goes beyond the WAI-ARIA minimum.** Checkbox groups conventionally leave each item as its own tab stop. The roving tabindex is a deliberate consistency choice with `RadioGroup`, not a conformance fix — worth stating so it is not miscited later as "checkboxes were broken".
+- **Reading direction is not handled.** Arrow keys are left-to-right only, library-wide — no `DirectionProvider` is mounted anywhere, so every Radix component here falls back to LTR. Tracked as its own piece of work.

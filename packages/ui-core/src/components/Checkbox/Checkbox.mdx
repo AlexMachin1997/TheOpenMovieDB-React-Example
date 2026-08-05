@@ -1,0 +1,108 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CheckboxStories from './Checkbox.stories';
+
+<Meta of={CheckboxStories} />
+
+# Checkbox
+
+A single on/off control, built on `@radix-ui/react-checkbox`. Use it for an independent choice — accepting terms, toggling a preference.
+
+For a **list** of related choices, use [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs) instead: it handles the array selection, layout and keyboard navigation for you. For a setting that applies immediately rather than on submit, [`Switch`](?path=/docs/ui-core-switch--docs) is usually the better signal.
+
+## Installation
+
+```tsx
+import { Checkbox, CheckboxLabel } from '@repo/ui-core';
+```
+
+## Features
+
+- Controlled or uncontrolled.
+- `onCheckedChange` always receives a plain `boolean` — Radix's third `'indeterminate'` state is normalised away.
+- Check icon rendered through [`Icon`](?path=/docs/ui-core-icon--docs), restylable via `iconClassName`.
+- Focus-visible ring and `aria-invalid` error state.
+
+<Canvas sourceState="none" of={CheckboxStories.Default} />
+
+## Properties
+
+<Controls />
+
+> **`onCheckedChange` gives you a `boolean`, not Radix's `CheckedState`.** The underlying primitive can report `'indeterminate'`; this wrapper coerces that to `false` so callers never handle a third case. There is no mixed/indeterminate visual state exposed.
+
+## Composition
+
+`Checkbox` and `CheckboxLabel` are two components, not one, so you control the layout. **The order matters**: Tailwind's `peer-disabled:*` on the label only matches a `.peer` that comes *before* it as a sibling, so the checkbox must be rendered first or the disabled styling silently stops working.
+
+```tsx
+import { Checkbox, CheckboxLabel } from '@repo/ui-core';
+
+<div className="flex items-center space-x-2">
+	{/* Checkbox first — CheckboxLabel's peer-disabled styles depend on it */}
+	<Checkbox id="terms" checked={accepted} onCheckedChange={setAccepted} />
+	<CheckboxLabel htmlFor="terms">I accept the terms</CheckboxLabel>
+</div>;
+```
+
+`CheckboxLabel` takes its own `disabled` prop for cursor styling. Pass the same value to both.
+
+<Canvas sourceState="none" of={CheckboxStories.Disabled} />
+
+## Usage
+
+### Controlled
+
+```tsx
+import { useState } from 'react';
+import { Checkbox, CheckboxLabel } from '@repo/ui-core';
+
+const [accepted, setAccepted] = useState(false);
+
+<div className="flex items-center space-x-2">
+	<Checkbox id="marketing" checked={accepted} onCheckedChange={setAccepted} />
+	<CheckboxLabel htmlFor="marketing">Email me about new releases</CheckboxLabel>
+</div>;
+```
+
+<Canvas sourceState="none" of={CheckboxStories.Controlled} />
+
+### Uncontrolled
+
+Use `defaultChecked` when the form reads values on submit rather than tracking them in state.
+
+```tsx
+<Checkbox id="remember" defaultChecked name="remember" />
+```
+
+<Canvas sourceState="none" of={CheckboxStories.Checked} />
+
+### Restyling the check icon
+
+```tsx
+<Checkbox
+	id="custom"
+	defaultChecked
+	className="data-[state=checked]:bg-emerald-600"
+	iconClassName="text-white"
+/>
+```
+
+<Canvas sourceState="none" of={CheckboxStories.CustomIconColor} />
+
+## Accessibility
+
+Radix renders a `<button role="checkbox">` and keeps `aria-checked` in sync, so assistive technology reports it correctly. What you must supply is the name and the association.
+
+| Key | Behaviour |
+| --- | --- |
+| `Tab` | Moves to the checkbox — each one is its own tab stop |
+| `Space` | Toggles it |
+| `Enter` | Nothing. Checkboxes do not activate on Enter, by design |
+
+| Obligation | How |
+| --- | --- |
+| **Give it a name** | `CheckboxLabel htmlFor` matching the checkbox's `id`, so clicking the label also toggles it. |
+| **Errors** | `aria-invalid="true"` for the destructive ring, with the reason in text. |
+| **Grouping** | Several related checkboxes need a group name — use [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs), or wrap them in a `<fieldset>` with a `<legend>`. |
+
+> **Tab behaviour differs from `CheckboxGroup`.** A standalone `Checkbox` is its own tab stop. Inside `CheckboxGroup` the whole group is a single tab stop, with the arrow keys moving between options.

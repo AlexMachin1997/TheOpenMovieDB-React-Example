@@ -11,6 +11,9 @@ import { Label } from '~/components/Label/Label';
 
 const meta: Meta = {
 	title: 'UI Core/Slider',
+	// The compound root. Slider has no single component, so `<Controls />` documents `SliderRoot` —
+	// the part that carries `value`, `min`, `max`, `step` and `onValueChange`.
+	component: SliderRoot,
 	parameters: {
 		layout: 'centered'
 	}
