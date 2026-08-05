@@ -66,18 +66,38 @@ What makes it worth asking rather than accepting:
 - `ui-command` → `ui-core` is **one component, `Search`**, in one file.
 - `ui-command` is a **single component** in its own package (1,617 LOC); `ui-overlays` is five
   (1,100 LOC), against `ui-core`'s 22 (3,587 LOC).
-- Tree-shaking is not an argument for the split: every package builds ESM with `preserveModules`,
-  so consumers drop what they do not import regardless of package boundaries.
+- **Neither `Select` nor the date pickers are form-specific.** They are compound UI components that
+  happen to be useful in forms — a `Select` is no more "form UI" than a `DropdownMenu`. On the
+  current trajectory `ui-forms` ends up holding only genuinely form-specific things (`useForm`, the
+  `Field` pattern from `05`, a future schema renderer), all of which build on `ui-core` anyway.
+
+**The real argument for the split is dependency weight, not code size**, and it is worth stating
+precisely because it is the one thing tree-shaking does *not* solve. Tree-shaking drops unused
+*code* from a bundle; it does not drop a package from the dependency tree. Folding `ui-command`
+into `ui-core` would put `cmdk`, `@tanstack/react-virtual`, `@radix-ui/react-dialog` and `react-use`
+behind every `ui-core` install — including consumers who only ever wanted a `Button`. `ui-overlays`
+brings four more Radix packages. Against `ui-core`'s current 19 direct dependencies, that is a
+material change to what "depend on ui-core" costs.
+
+How much that actually matters depends on whether these packages are ever published independently.
+Inside this monorepo, with one consuming app and everything built from source, it costs close to
+nothing.
 
 **Nothing is broken.** The current layout builds, ships and is tested. The cost is ergonomic — a
 consumer has to know that `Input` comes from `ui-core` while `Select` comes from `ui-forms`, and the
 rule that decides which is invisible at the call site.
 
-Options to weigh in the discovery: fold `ui-overlays` and `ui-command` into `ui-core`; push `Icon`
-and `Search` into a package below `ui-core` to invert the arrows; consume sibling packages from
-source rather than built `dist/` (see the note in
+Options to weigh in the discovery: fold `ui-overlays` and `ui-command` into `ui-core` and let
+application bundlers handle the unused weight; fold only `ui-overlays` (four Radix packages) and
+leave `ui-command` separate, since `cmdk` and `react-virtual` are the heavy part; push `Icon` and
+`Search` into a package below `ui-core` to invert the arrows; consume sibling packages from source
+rather than built `dist/` (see the note in
 [`04-ui-forms-primitive-migration/plan.md`](04-ui-forms-primitive-migration/plan.md#follow-ups));
-or keep the split and document the boundary rule properly. This partially revisits an earlier
+or keep the split and document the boundary rule properly.
+
+**Status: pinned, deliberately.** Known quirk of the current setup, not a blocker. Revisit when
+something forces the question — a second consuming app, a decision to publish, or `ui-forms`
+shrinking to the point where the boundary looks obviously wrong. It partially revisits an earlier
 decision to keep the packages separate, so it needs a `problem-discovery` pass and an explicit call
 rather than being folded into another deliverable.
 
