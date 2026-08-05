@@ -23,7 +23,14 @@ Shipped across five commits:
 | `b8085f8` | Phases 1–2: the move, barrels, dependencies, `RadioGroup` |
 | `3622cad` | Phase 3: `DebouncableInput` composes `Input` |
 | `6b3d604` | Phase 4: `useRovingTabIndex` + CheckboxGroup nav + `play()` coverage |
-| _(this)_ | Phases 6–7: MDX pass, roadmap, as-built record |
+| `ec3e721` | Phases 6–7: first MDX pass, roadmap, as-built record |
+| `f926718` | Phase 6.7: MDX for all ten touched components (scope extended — see 6.7) |
+
+**Documentation coverage after 6.7:** every component this deliverable touched has an `.mdx`
+covering description, API, examples, accessibility, and composition where relevant — `Input`,
+`Textarea`, `Checkbox`, `CheckboxGroup`, `Radio`, `RadioGroup`, `Slider`, `Calendar`,
+`DebouncableInput`, `Search`. Verified in the browser: 14 docs pages render, every `<Canvas of>`
+resolves, `<Controls />` populates on each.
 
 Every acceptance criterion in [`spec.md`](./spec.md) was walked individually and passes. Two worth
 recording because the first check was wrong rather than the code:
@@ -521,6 +528,19 @@ the moment a heading is renamed, and nothing catches it.
       Revised to *over ~100 lines, or more than four `##` headings on a page of at least ~60
       lines* — moot for now given the all-or-nothing constraint, but corrected in the
       `storybook-standards` skill for elsewhere.
+
+- [x] 6.7 **Scope extended after review: MDX for every component touched, not just the ones whose
+      docs the migration made wrong.** Six of the ten had no `.mdx` at all — `Textarea`, `Checkbox`,
+      `CheckboxGroup`, `Radio`, `Slider`, `Calendar` — and `Input`/`DebouncableInput` had no
+      Accessibility section, so both failed the documentation checklist agreed during this session.
+
+      This goes beyond `spec.md`'s non-goals, which assign the documentation standard to `05`.
+      Taken deliberately on the user's call: the components had just changed package, the standard
+      now exists, and leaving eight documents wrong-by-absence to be written later was the worse
+      trade. `05` still owns the `Field` pattern and the `play()` coverage bar.
+
+      Also fixed `component:` on the `CheckboxGroup` and `Slider` story metas — without it their
+      `<Controls />` tables render empty, the same failure `RadioGroup` hit in 6.6.
 
 - [x] 6.6 Added `component: RadioGroup` to the `RadioGroup` story meta. Without it the docs page
       rendered "No Preview" with an error panel, because `<Controls />` and the primary block both
