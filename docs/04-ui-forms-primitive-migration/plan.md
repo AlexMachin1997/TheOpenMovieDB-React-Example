@@ -739,6 +739,46 @@ unusable.
 
 ---
 
+## Review outcome
+
+Reviewed against the spec's acceptance criteria after shipping. Approved — nothing blocking. Two
+findings fixed on the spot (`009a517`), two recorded, one retracted.
+
+**Fixed — `useRovingTabIndex` re-created every item's `ref` callback each render.** `getItemProps`
+returned a fresh arrow function as `ref`, and it is called during render for every item. React
+compares ref callbacks by identity, so it detached and re-attached every ref on every render of the
+group — every keystroke, in practice. Never a correctness bug (focus moves happen in event handlers,
+never during commit), but avoidable churn in a hook meant to be reused. Now one stable callback per
+index, pinned by a test that was **verified to fail against the previous implementation** before
+being kept.
+
+**Fixed — dead `{...props}` spread** on both group components. Neither `ICheckboxGroup` nor
+`IRadioGroup` has an index signature, so every prop is destructured by name and the rest was always
+`{}`.
+
+**Retracted — `option.disabled || disabled` is not redundant.** The review flagged it, since Radix
+ORs its context `disabled` into the `Radio` itself. Reading `RadioGroupItem` properly: that value
+also drives the wrapper's cursor classes and `RadioLabel`'s disabled styling, neither of which the
+Radix context reaches. Dropping it would leave labels un-greyed when the whole group is disabled.
+Left as-is. *A review finding that survives only until someone reads the surrounding component is
+not a finding.*
+
+**Recorded — `Calendar`'s move made `ui-core` materially heavier.** `react-day-picker` (216K) and
+`date-fns` (129K) now sit in `ui-core`'s `dist`, and are gone from `ui-forms`' — the move was clean,
+with no duplication. But `ui-core` now *declares* `react-day-picker`, so every consumer installs it.
+This is the same dependency-weight concern raised about `cmdk`, and it shows the limit of the
+boundary rule this deliverable adopted: it sorts by **graph position, not weight**, and `Calendar`
+satisfies "depends on nothing above `ui-core`" while being one of the heaviest things in it.
+
+Two mitigations: `preserveModules` means `Button.js` carries no reference to it, so an app that
+never imports `Calendar` bundles none of it; and `ui-core` already bundled `framer-motion` at 405K,
+so it was never lightweight. Feeds the pinned package-split question in
+[`docs/README.md`](../README.md#planned) rather than being reversed here.
+
+**Recorded — test gap.** "The tab stop starts on the checked item" is unit-tested only. Every
+browser test starts from an empty selection, so the case a user meets most often — tabbing into a
+part-selected group — has no `play()` coverage. Natural addition in `05`.
+
 ## Traps found during implementation
 
 ### A tapped arrow key cannot observe Radix's arrow-selects behaviour
