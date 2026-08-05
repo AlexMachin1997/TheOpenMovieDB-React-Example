@@ -832,6 +832,34 @@ inherited as "things the migration broke".
 
 ## Follow-ups
 
+### The four-package split — needs its own discovery
+
+`Select` and the date pickers stay in `ui-forms` (spec AC6) because they need `Popover`
+(`ui-overlays`) and `Command` (`ui-command`), which sit *above* `ui-core`. Raised in review: should
+they be in `ui-core` anyway?
+
+They cannot be, as the graph stands. `ui-core` would need `ui-overlays` for `Popover`, while
+`ui-overlays` needs `ui-core` for `Icon` — each requiring the other built first, and turbo's
+`dependsOn: ["^build"]` is a topological sort, so there is no valid order.
+
+But the graph is held together by very little: **the whole `ui-overlays` → `ui-core` edge is `Icon`,
+in three files**, and `ui-command` → `ui-core` is `Search`, in one. `ui-command` is a single
+component in its own package.
+
+**One option raised in review deserves recording, because it is subtler than it looks:** consuming
+sibling packages from **source** rather than built `dist/` — a path alias to `../ui-core/src`
+instead of a `@repo/ui-core` dependency. It does dissolve the *build-ordering* problem, because that
+ordering only exists between separately-built artefacts. What it does not dissolve is the cycle
+itself, which becomes a module-level circular import (fragile initialisation order), and it changes
+what ships: `reactLibrary()` currently externalises every `@repo/*` id, so `ui-overlays`' `dist`
+*references* `Icon` rather than containing it. Aliased to source, `Icon` would be **inlined into
+every package that uses it**, so an app importing two of them ships two copies — with two module
+scopes for anything stateful. In effect it merges the packages while keeping the appearance of a
+split: the coupling of a merge, without the clarity.
+
+Full weighing of the options is in [`docs/README.md`](../README.md#planned). Nothing here is broken;
+the cost is ergonomic, and the decision is explicitly open.
+
 ### RTL / reading direction — needs its own discovery and spec
 
 Surfaced while deciding D1, and deliberately left alone here. The current state, as measured:

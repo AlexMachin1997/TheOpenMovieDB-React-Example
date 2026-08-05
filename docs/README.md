@@ -49,6 +49,38 @@ spans arrow-key semantics, logical vs physical Tailwind properties, icon mirrori
 placement, so it needs its own `problem-discovery` pass rather than being settled component by
 component. See [`04-ui-forms-primitive-migration/plan.md`](04-ui-forms-primitive-migration/plan.md#follow-ups).
 
+**The four-package split** — whether `ui-core` / `ui-overlays` / `ui-command` / `ui-forms` still earn
+their boundaries — would add a deliverable. Raised while reviewing `04` and **not yet decided in
+either direction**.
+
+The trigger: `Select` and the date pickers cannot sit alongside `Input` and `Checkbox`, because they
+need `Popover` (`ui-overlays`) and `Command` (`ui-command`), which are built *after* `ui-core`.
+Moving them down would make `ui-core` depend on its own dependents, and turbo's `dependsOn: ["^build"]`
+is a topological sort — a cycle has no valid build order at all.
+
+What makes it worth asking rather than accepting:
+
+- The entire `ui-overlays` → `ui-core` edge is **one component, `Icon`**, imported in three files
+  (Dialog close, DropdownMenu chevron, Sheet close). The `Button`/`Alert`/`Avatar`/`Badge` imports
+  are all in stories.
+- `ui-command` → `ui-core` is **one component, `Search`**, in one file.
+- `ui-command` is a **single component** in its own package (1,617 LOC); `ui-overlays` is five
+  (1,100 LOC), against `ui-core`'s 22 (3,587 LOC).
+- Tree-shaking is not an argument for the split: every package builds ESM with `preserveModules`,
+  so consumers drop what they do not import regardless of package boundaries.
+
+**Nothing is broken.** The current layout builds, ships and is tested. The cost is ergonomic — a
+consumer has to know that `Input` comes from `ui-core` while `Select` comes from `ui-forms`, and the
+rule that decides which is invisible at the call site.
+
+Options to weigh in the discovery: fold `ui-overlays` and `ui-command` into `ui-core`; push `Icon`
+and `Search` into a package below `ui-core` to invert the arrows; consume sibling packages from
+source rather than built `dist/` (see the note in
+[`04-ui-forms-primitive-migration/plan.md`](04-ui-forms-primitive-migration/plan.md#follow-ups));
+or keep the split and document the boundary rule properly. This partially revisits an earlier
+decision to keep the packages separate, so it needs a `problem-discovery` pass and an explicit call
+rather than being folded into another deliverable.
+
 **JSON/schema-driven form rendering** would add a deliverable once `05-ui-forms-field-pattern` ships.
 Deliberately not specified yet — schema format, validation-library integration, and extensibility for
 custom field types are all open, and it needs its own `problem-discovery` pass once the `Field`
