@@ -27,6 +27,12 @@ At the start of every conversation, the agent MUST:
 - For follow-up work on an existing deliverable, update that deliverable's `plan.md` rather than creating a new document.
 - Once the work ships, rewrite `plan.md` as an as-built record: what was built, what was rejected, what bit you. A pre-flight checklist nobody corrected afterwards misleads the next reader.
 
+### Executing an approved plan
+
+Follow the **`implementation-execution`** skill. In short: **change → verify → commit → tick, one
+phase at a time.** Never batch verification or commits to the end of a multi-phase job, and keep
+`plan.md` ticked off as you go rather than reconstructing it afterwards.
+
 ---
 
 ## 3. Agent Behaviour Rules
