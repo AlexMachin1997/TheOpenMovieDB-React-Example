@@ -66,6 +66,27 @@ export const useRovingTabIndex = ({
 }: UseRovingTabIndexOptions): UseRovingTabIndexResult => {
 	const itemsRef = React.useRef<(HTMLElement | null)[]>([]);
 
+	// One stable ref callback per index, created once and reused.
+	//
+	// React compares ref callbacks by identity: hand it a new function and it detaches the old one
+	// (calling it with `null`) and attaches the new one — on *every* render. A fresh arrow function
+	// inside `getItemProps` would do exactly that for every item, every time the group re-renders,
+	// which for a group is every keystroke. Caching by index costs one Map entry per item and makes
+	// the churn disappear.
+	const itemRefCallbacks = React.useRef(new Map<number, (node: HTMLElement | null) => void>());
+
+	const getItemRef = React.useCallback((index: number) => {
+		const existing = itemRefCallbacks.current.get(index);
+		if (existing) return existing;
+
+		const callback = (node: HTMLElement | null) => {
+			itemsRef.current[index] = node;
+		};
+
+		itemRefCallbacks.current.set(index, callback);
+		return callback;
+	}, []);
+
 	// `NO_INDEX` means "nothing focused yet", which is not the same as "index 0 is the tab stop" —
 	// the initial tab stop depends on which item is checked.
 	const [activeIndex, setActiveIndex] = React.useState(NO_INDEX);
@@ -101,9 +122,7 @@ export const useRovingTabIndex = ({
 		(index: number): RovingTabIndexItemProps => ({
 			tabIndex: index === tabStopIndex ? 0 : -1,
 
-			ref: (node: HTMLElement | null) => {
-				itemsRef.current[index] = node;
-			},
+			ref: getItemRef(index),
 
 			// Keeps the tab stop on whichever item the user last reached, however they reached it —
 			// including by clicking one directly.
@@ -137,7 +156,7 @@ export const useRovingTabIndex = ({
 				moveFocusTo(target);
 			}
 		}),
-		[tabStopIndex, disabled, itemCount, isDisabled, loop, moveFocusTo]
+		[tabStopIndex, disabled, itemCount, isDisabled, loop, moveFocusTo, getItemRef]
 	);
 
 	return { tabStopIndex, getItemProps };

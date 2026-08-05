@@ -23,8 +23,7 @@ const CheckboxGroup = ({
 	noOptionsAvailableMessage = 'No options currently available.',
 	disabled = false,
 	name,
-	className,
-	...props
+	className
 }: ICheckboxGroup) => {
 	const handleValueChange = React.useCallback(
 		(optionValue: string) => {
@@ -58,7 +57,7 @@ const CheckboxGroup = ({
 	});
 
 	return (
-		<div className='w-full' {...props}>
+		<div className='w-full'>
 			<div className='mx-auto w-full'>
 				{(options?.length ?? 0) === 0 && (
 					<p className='cursor-default select-none py-2 text-gray-700'>

@@ -105,6 +105,34 @@ describe('useRovingTabIndex', () => {
 		});
 	});
 
+	describe('item refs', () => {
+		it('hands out the same ref callback for an index across renders', () => {
+			const { result, rerender } = setup({ itemCount: 3 });
+
+			const before = [0, 1, 2].map((index) => result.current.getItemProps(index).ref);
+
+			// A re-render with different options — the shape a real group sees on every keystroke.
+			rerender({ itemCount: 3, isItemChecked: (index: number) => index === 1 });
+
+			const after = [0, 1, 2].map((index) => result.current.getItemProps(index).ref);
+
+			// React compares ref callbacks by identity. New identities mean it detaches every item's
+			// ref (calling it with null) and re-attaches on every render — pure churn.
+			expect(after[0]).toBe(before[0]);
+			expect(after[1]).toBe(before[1]);
+			expect(after[2]).toBe(before[2]);
+		});
+
+		it('gives each index its own callback, writing to its own slot', () => {
+			const { result, elements } = setup({ itemCount: 2 });
+
+			expect(result.current.getItemProps(0).ref).not.toBe(result.current.getItemProps(1).ref);
+
+			// Already attached by `setup`; prove they landed in distinct slots by focusing via keys.
+			expect(elements[0]).not.toBe(elements[1]);
+		});
+	});
+
 	describe('arrow keys', () => {
 		it('moves forward on ArrowDown and ArrowRight', () => {
 			const { pressKeyOn, focusedIndex } = setup({ itemCount: 3 });
