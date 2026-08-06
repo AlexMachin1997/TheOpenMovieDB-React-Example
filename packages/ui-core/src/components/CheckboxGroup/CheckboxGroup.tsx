@@ -23,7 +23,12 @@ const CheckboxGroup = ({
 	noOptionsAvailableMessage = 'No options currently available.',
 	disabled = false,
 	name,
-	className
+	className,
+	id,
+	'aria-labelledby': ariaLabelledBy,
+	'aria-describedby': ariaDescribedBy,
+	'aria-invalid': ariaInvalid,
+	'aria-required': ariaRequired
 }: ICheckboxGroup) => {
 	const handleValueChange = React.useCallback(
 		(optionValue: string) => {
@@ -58,7 +63,24 @@ const CheckboxGroup = ({
 
 	return (
 		<div className='w-full'>
-			<div className='mx-auto w-full'>
+			{/*
+			 * `role='group'` and the ARIA attributes live on this container, and it is rendered
+			 * whether or not there are options. Radix ships no checkbox-group primitive, so unlike
+			 * RadioGroup there is no element here that carries a grouping role of its own.
+			 *
+			 * It must not move inside the `options.length > 0` branch below: a `Field` wrapping an
+			 * empty group would then point `aria-labelledby` at an id nothing carries, which is the
+			 * precise defect this deliverable exists to stamp out.
+			 */}
+			<div
+				role='group'
+				id={id}
+				aria-labelledby={ariaLabelledBy}
+				aria-describedby={ariaDescribedBy}
+				aria-invalid={ariaInvalid}
+				aria-required={ariaRequired}
+				className='mx-auto w-full'
+			>
 				{(options?.length ?? 0) === 0 && (
 					<p className='cursor-default select-none py-2 text-gray-700'>
 						{noOptionsAvailableMessage}

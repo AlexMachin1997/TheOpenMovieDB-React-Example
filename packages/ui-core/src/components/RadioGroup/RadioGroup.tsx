@@ -22,7 +22,12 @@ const RadioGroup = ({
 	noOptionsAvailableMessage = 'No options currently available.',
 	disabled = false,
 	name,
-	className
+	className,
+	id,
+	'aria-labelledby': ariaLabelledBy,
+	'aria-describedby': ariaDescribedBy,
+	'aria-invalid': ariaInvalid,
+	'aria-required': ariaRequired
 }: IRadioGroup) => {
 	const handleValueChange = React.useCallback(
 		(optionValue: string) => {
@@ -34,6 +39,13 @@ const RadioGroup = ({
 	return (
 		<div className='w-full'>
 			<div className='mx-auto w-full'>
+				{/*
+				 * The empty state sits outside the Root, unlike CheckboxGroup's, because Radix's
+				 * Root is a roving-focus widget and an empty `radiogroup` is a worse thing to
+				 * announce than none at all. A `Field` around an option-less RadioGroup therefore
+				 * has nothing to point `aria-labelledby` at — an edge case, and the alternative is
+				 * naming a control that does not exist.
+				 */}
 				{(options?.length ?? 0) === 0 && (
 					<p className='cursor-default select-none py-2 text-gray-700'>
 						{noOptionsAvailableMessage}
@@ -43,6 +55,14 @@ const RadioGroup = ({
 				{(options?.length ?? 0) > 0 && (
 					<RadioGroupPrimitive.Root
 						data-slot='radio-group'
+						// No `role` here on purpose: Root already reports `role="radiogroup"`, which
+						// is more specific than `group` and is what makes assistive technology
+						// announce set position. See plan.md, D2.
+						id={id}
+						aria-labelledby={ariaLabelledBy}
+						aria-describedby={ariaDescribedBy}
+						aria-invalid={ariaInvalid}
+						aria-required={ariaRequired}
 						className={cn('grid gap-3', className)}
 						value={value}
 						onValueChange={handleValueChange}

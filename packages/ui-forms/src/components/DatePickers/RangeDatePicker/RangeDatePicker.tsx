@@ -20,7 +20,13 @@ export const DateRangePicker = ({
 	fromYear = 1900,
 	toYear = 2100,
 	locale,
-	dateFormat = 'medium'
+	dateFormat = 'medium',
+	id,
+	required,
+	'aria-labelledby': ariaLabelledBy,
+	'aria-describedby': ariaDescribedBy,
+	'aria-invalid': ariaInvalid,
+	'aria-required': ariaRequired
 }: IRangeDatePicker) => {
 	const startMonth = new Date(fromYear, 0);
 	const endMonth = new Date(toYear, 11);
@@ -44,6 +50,13 @@ export const DateRangePicker = ({
 					<Button
 						variant='outline'
 						disabled={disabled}
+						// The trigger is a <button>, a labelable element, so a Field's native
+						// <label htmlFor={id}> names it without needing aria-labelledby.
+						id={id}
+						aria-labelledby={ariaLabelledBy}
+						aria-describedby={ariaDescribedBy}
+						aria-invalid={ariaInvalid}
+						aria-required={ariaRequired ?? required}
 						className={cn(
 							'w-[300px] justify-start text-left font-normal',
 							!dateRange?.from && 'text-muted-foreground'

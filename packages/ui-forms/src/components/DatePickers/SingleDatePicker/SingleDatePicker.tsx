@@ -19,7 +19,13 @@ export const SingleDatePicker = ({
 	fromYear = 1900,
 	toYear = 2100,
 	locale,
-	dateFormat = 'fullShort'
+	dateFormat = 'fullShort',
+	id,
+	required,
+	'aria-labelledby': ariaLabelledBy,
+	'aria-describedby': ariaDescribedBy,
+	'aria-invalid': ariaInvalid,
+	'aria-required': ariaRequired
 }: ISingleDatePicker) => {
 	const startMonth = new Date(fromYear, 0);
 	const endMonth = new Date(toYear, 11);
@@ -34,6 +40,13 @@ export const SingleDatePicker = ({
 				<Button
 					variant='outline'
 					disabled={disabled}
+					// The trigger is a <button>, a labelable element, so a Field's native
+					// <label htmlFor={id}> names it without needing aria-labelledby.
+					id={id}
+					aria-labelledby={ariaLabelledBy}
+					aria-describedby={ariaDescribedBy}
+					aria-invalid={ariaInvalid}
+					aria-required={ariaRequired ?? required}
 					className={cn(
 						'max-w-md w-full justify-start text-left font-normal',
 						!date && 'text-muted-foreground',

@@ -35,7 +35,14 @@ export const Select = (props: SelectProps) => {
 		emptyState,
 		defaultSearchValue,
 		triggerClassName,
-		children
+		children,
+		id,
+		required,
+		'aria-label': ariaLabel,
+		'aria-labelledby': ariaLabelledBy,
+		'aria-describedby': ariaDescribedBy,
+		'aria-invalid': ariaInvalid,
+		'aria-required': ariaRequired
 	} = props;
 
 	// Normalise `values` to an array for SelectProvider
@@ -73,7 +80,17 @@ export const Select = (props: SelectProps) => {
 			emptyState={emptyState}
 			defaultSearchValue={defaultSearchValue}
 		>
-			<SelectTrigger className={triggerClassName ?? 'w-full'}>
+			<SelectTrigger
+				className={triggerClassName ?? 'w-full'}
+				// The trigger is a <button>, which is a labelable element — so a Field's native
+				// <label htmlFor={id}> names it without needing aria-labelledby.
+				id={id}
+				aria-label={ariaLabel}
+				aria-labelledby={ariaLabelledBy}
+				aria-describedby={ariaDescribedBy}
+				aria-invalid={ariaInvalid}
+				aria-required={ariaRequired ?? required}
+			>
 				{props.type === 'single' ? (
 					<SingleSelectValue
 						placeholder={placeholder ?? 'Select an option...'}

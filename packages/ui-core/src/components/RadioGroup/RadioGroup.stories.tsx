@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import type { Option } from '@repo/core';
 import { RadioGroup } from './RadioGroup';
+import { Field } from '../Field/Field';
 
 const meta: Meta<typeof RadioGroup> = {
 	title: 'UI Core/Radio group',
@@ -294,6 +295,81 @@ export const GroupIsASingleTabStop: StoryObj<typeof RadioGroup> = {
 
 			await userEvent.tab();
 			await expect(canvas.getByRole('button', { name: 'after' })).toHaveFocus();
+		});
+	}
+};
+
+const FieldComposition = () => {
+	const [value, setValue] = React.useState('quarterly');
+
+	return (
+		<div className='w-96'>
+			{/*
+			 * `nativeLabel={false}` because a single native <label> cannot name several controls.
+			 * Note the role: Radix's Root already reports `radiogroup`, which is more specific than
+			 * `group` and is what makes assistive technology announce set position. RadioGroup
+			 * therefore takes aria-labelledby but no role — see plan.md, D2.
+			 */}
+			<Field
+				label='Billing plan'
+				id='billing'
+				nativeLabel={false}
+				required
+				description='You can change this later.'
+			>
+				{(control) => (
+					<RadioGroup
+						{...control}
+						name='billing'
+						options={sampleOptions}
+						value={value}
+						onChange={(data) => setValue(data.value)}
+					/>
+				)}
+			</Field>
+		</div>
+	);
+};
+
+export const WithField: StoryObj<typeof RadioGroup> = {
+	render: () => <FieldComposition />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Field, RadioGroup } from '@repo/ui-core';
+
+<Field label='Billing plan' id='billing' nativeLabel={false} required>
+  {(control) => (
+    <RadioGroup {...control} name='billing' options={options} value={value} onChange={onChange} />
+  )}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('The group keeps radiogroup, and takes the heading as its name', async () => {
+			// Deliberately NOT role='group': overwriting Radix's radiogroup to match the
+			// requirement's literal wording would lose set-position announcements.
+			const group = canvas.getByRole('radiogroup', { name: /Billing plan/ });
+			await expect(group).toHaveAttribute('aria-labelledby', 'billing-label');
+			await expect(group).toHaveAttribute('aria-describedby', 'billing-message');
+			await expect(canvas.queryByRole('group')).not.toBeInTheDocument();
+		});
+
+		await step('Each option still reports its own per-item label separately', async () => {
+			await expect(canvas.getByRole('radio', { name: 'Monthly' })).toBeInTheDocument();
+			await expect(canvas.getByRole('radio', { name: 'Quarterly' })).toBeChecked();
+			await expect(canvas.getByRole('radio', { name: 'Yearly' })).toBeInTheDocument();
+		});
+
+		await step('And the group is still operable', async () => {
+			await userEvent.click(canvas.getByRole('radio', { name: 'Yearly' }));
+			await waitFor(async () => {
+				await expect(canvas.getByRole('radio', { name: 'Yearly' })).toBeChecked();
+			});
 		});
 	}
 };

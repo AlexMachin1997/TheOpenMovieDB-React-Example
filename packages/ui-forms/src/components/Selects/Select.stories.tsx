@@ -9,7 +9,7 @@ import {
 	SelectGroupedItemsVirtualized,
 	SelectGroupedListItems
 } from '~/components/Selects/components';
-import { Label } from '@repo/ui-core';
+import { Field, Label } from '@repo/ui-core';
 import {
 	frameworks,
 	programmingLanguages,
@@ -654,5 +654,59 @@ export const EmptyState: StoryObj<SelectProps> = {
 		// Wait for debounce
 		await new Promise((resolve) => setTimeout(resolve, 350));
 		await expect(within(customDialog).getByText('No items found matching "test"')).toBeInTheDocument();
+	}
+};
+
+const SelectWithField = () => {
+	const [value, setValue] = React.useState('');
+
+	return (
+		<div className='w-96'>
+			{/*
+			 * `nativeLabel` stays true: the trigger is a <button>, which IS a labelable element, so
+			 * a native <label htmlFor> names it. That only works because SelectTrigger's hardcoded
+			 * aria-label became a fallback — aria-label outranks a <label for>, so it used to win.
+			 */}
+			<Field label='Country' id='country' description='Where the card is registered.'>
+				{(control) => (
+					<Select
+						{...control}
+						type='single'
+						options={frameworks}
+						value={value}
+						onValueChange={setValue}
+					/>
+				)}
+			</Field>
+		</div>
+	);
+};
+
+export const WithField: StoryObj<SelectProps> = {
+	render: () => <SelectWithField />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Field } from '@repo/ui-core';
+import { Select } from '@repo/ui-forms';
+
+<Field label='Country' id='country'>
+  {(control) => (
+    <Select {...control} type='single' options={countries} value={value} onValueChange={setValue} />
+  )}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+		const canvas = within(canvasElement);
+
+		// The point of the story: before the fix this resolved to "Select Trigger" no matter what
+		// label pointed at it.
+		const trigger = canvas.getByRole('combobox', { name: 'Country' });
+		await expect(trigger).toHaveAttribute('id', 'country');
+		await expect(trigger).toHaveAttribute('aria-describedby', 'country-message');
+		await expect(trigger).not.toHaveAttribute('aria-label');
 	}
 };

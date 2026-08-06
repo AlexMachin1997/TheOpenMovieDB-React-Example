@@ -4,6 +4,7 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { CheckboxGroup } from './CheckboxGroup';
 import type { Option } from '@repo/core';
 import { Checkbox } from '../Checkbox/Checkbox';
+import { Field } from '../Field/Field';
 
 const meta: Meta<typeof CheckboxGroup> = {
 	title: 'UI Core/Checkbox group',
@@ -529,6 +530,78 @@ export const GroupIsASingleTabStop: StoryObj<typeof CheckboxGroup> = {
 			// change the roving tabindex introduces, so it is pinned rather than implied.
 			await userEvent.tab();
 			await expect(canvas.getByRole('button', { name: 'after' })).toHaveFocus();
+		});
+	}
+};
+
+const FieldComposition = () => {
+	const [value, setValue] = React.useState<string[]>(['option-two']);
+
+	return (
+		<div className='w-96'>
+			{/*
+			 * `nativeLabel={false}` because a single native <label> cannot name several controls.
+			 * Field renders the heading as a <span> and the group points back at it with
+			 * aria-labelledby — which is why CheckboxGroup accepts id/aria-* at all.
+			 */}
+			<Field
+				label='Notify me about'
+				id='notify'
+				nativeLabel={false}
+				required
+				description='Pick at least one.'
+			>
+				{(control) => (
+					<CheckboxGroup
+						{...control}
+						name='notify'
+						options={sampleOptions}
+						value={value}
+						onChange={(data) => setValue(data.value)}
+					/>
+				)}
+			</Field>
+		</div>
+	);
+};
+
+export const WithField: StoryObj<typeof CheckboxGroup> = {
+	render: () => <FieldComposition />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { CheckboxGroup, Field } from '@repo/ui-core';
+
+<Field label='Notify me about' id='notify' nativeLabel={false} required>
+  {(control) => (
+    <CheckboxGroup {...control} name='notify' options={options} value={value} onChange={onChange} />
+  )}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('The group reports the heading as its accessible name', async () => {
+			const group = canvas.getByRole('group', { name: /Notify me about/ });
+			await expect(group).toHaveAttribute('aria-labelledby', 'notify-label');
+			await expect(group).toHaveAttribute('aria-describedby', 'notify-message');
+			await expect(group).toHaveAttribute('aria-required', 'true');
+		});
+
+		await step('Each option still reports its own per-item label separately', async () => {
+			await expect(canvas.getByRole('checkbox', { name: 'Option One' })).toBeInTheDocument();
+			await expect(canvas.getByRole('checkbox', { name: 'Option Two' })).toBeChecked();
+			await expect(canvas.getByRole('checkbox', { name: 'Option Three' })).toBeInTheDocument();
+		});
+
+		await step('And the group is still operable', async () => {
+			await userEvent.click(canvas.getByRole('checkbox', { name: 'Option One' }));
+			await waitFor(async () => {
+				await expect(canvas.getByRole('checkbox', { name: 'Option One' })).toBeChecked();
+			});
 		});
 	}
 };

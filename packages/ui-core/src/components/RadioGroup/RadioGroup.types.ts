@@ -18,7 +18,26 @@ import { Radio } from '~/components/Radio/components/Radio';
  * />
  * ```
  */
-export interface IRadioGroup {
+export interface IRadioGroup
+	extends Pick<
+		React.AriaAttributes,
+		'aria-labelledby' | 'aria-describedby' | 'aria-invalid' | 'aria-required'
+	> {
+	/**
+	 * Applied to the group container, along with the ARIA attributes above.
+	 *
+	 * These exist so `Field` can name and describe the group as a whole: a single native `<label>`
+	 * cannot name several controls, so `Field` renders its label as a `<span>` and the container
+	 * points back at it with `aria-labelledby`. Each option keeps its own per-item `RadioLabel`
+	 * independently.
+	 *
+	 * Note there is no `role` among these. The container is Radix's `RadioGroupPrimitive.Root`,
+	 * which already reports `role="radiogroup"` — a more specific role than `group`, and the one
+	 * that makes assistive technology announce set position ("2 of 4"). It is deliberately left
+	 * alone. See docs/05-ui-forms-field-pattern/plan.md, D2.
+	 */
+	id?: string;
+
 	/** The list of radio options to render. */
 	options?: Option[];
 

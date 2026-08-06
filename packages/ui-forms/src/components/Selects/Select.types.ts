@@ -7,7 +7,31 @@ import type { ICommandSearchConfig, IEmptyStateConfig } from '@repo/ui-command';
  *
  * @interface ISelectCommonProps
  */
-interface ISelectCommonProps {
+interface ISelectCommonProps
+	extends Pick<
+		React.AriaAttributes,
+		'aria-labelledby' | 'aria-describedby' | 'aria-invalid' | 'aria-required'
+	> {
+	/**
+	 * Applied to the trigger button, along with the ARIA attributes above and `required`.
+	 *
+	 * These exist so `Field` can label and describe a `Select`. The trigger is a `<button>`, which
+	 * **is** a labelable element, so a native `<label htmlFor>` associates with it normally — no
+	 * `nativeLabel={false}` needed.
+	 */
+	id?: string;
+
+	/** Marks the trigger required. Mirrors the native attribute on a plain input. */
+	required?: boolean;
+
+	/**
+	 * Overrides the trigger's fallback accessible name.
+	 *
+	 * Rarely needed: prefer a visible label via `Field`, which supplies `id` and lets a real
+	 * `<label>` name the trigger.
+	 */
+	'aria-label'?: string;
+
 	/** Available options for selection */
 	options: Option[];
 	/** Placeholder text displayed when no value is selected */

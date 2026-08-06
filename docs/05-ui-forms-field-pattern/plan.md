@@ -612,23 +612,23 @@ Estimated: 1.5 days.
 Per D1, groups are composed inside `Field`, so they need to accept the control bag rather than grow
 a `label` prop.
 
-- [ ] 4.1 `CheckboxGroup`: accept `id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`,
+- [x] 4.1 `CheckboxGroup`: accept `id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`,
       `aria-required` and put them on the options container together with `role='group'`.
       (Depends on: 3.6)
-- [ ] 4.2 `RadioGroup`: same passthrough onto `RadioGroupPrimitive.Root`. **Do not set
+- [x] 4.2 `RadioGroup`: same passthrough onto `RadioGroupPrimitive.Root`. **Do not set
       `role='group'`** — Radix already emits `role='radiogroup'` (D2). (4.1)
-- [ ] 4.3 Verify `Slider` accepts the bag — it must reach `SliderThumb`, which already spreads
+- [x] 4.3 Verify `Slider` accepts the bag — it must reach `SliderThumb`, which already spreads
       `...props`; widen only if it doesn't. `Calendar` is **not** in this list: it is not a form
       control. (3.6)
-- [ ] 4.4 `ISelectCommonProps` gains `id?`, `required?`, `aria-describedby?`, `aria-invalid?`;
+- [x] 4.4 `ISelectCommonProps` gains `id?`, `required?`, `aria-describedby?`, `aria-invalid?`;
       thread through `Select.tsx` → `SelectTrigger` → `Button`. (3.6)
-- [ ] 4.5 **Fix `SelectTrigger`'s hardcoded `aria-label='Select Trigger'`** — make it a fallback a
+- [x] 4.5 **Fix `SelectTrigger`'s hardcoded `aria-label='Select Trigger'`** — make it a fallback a
       caller-supplied `aria-label`/`aria-labelledby` overrides. Expect
       `Selects/__fixtures__/interactions.ts` and some of `Select`'s 18 `play()` tests to need
       updating, since they query the trigger by that label. (4.4)
-- [ ] 4.6 `IDatePicker` gains the same props; thread through `SingleDatePicker` and
+- [x] 4.6 `IDatePicker` gains the same props; thread through `SingleDatePicker` and
       `RangeDatePicker` to their `Button` triggers. (4.4)
-- [ ] 4.7 Rebuild `ui-core` **and** `ui-forms`, clear caches, run the suite. (4.6)
+- [x] 4.7 Rebuild `ui-core` **and** `ui-forms`, clear caches, run the suite. (4.6)
 
 Estimated: 1 day.
 

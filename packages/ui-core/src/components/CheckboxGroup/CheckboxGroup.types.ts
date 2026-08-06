@@ -15,7 +15,21 @@ import { Checkbox } from '~/components/Checkbox/components/Checkbox';
  * />
  * ```
  */
-export interface ICheckboxGroup {
+export interface ICheckboxGroup
+	extends Pick<
+		React.AriaAttributes,
+		'aria-labelledby' | 'aria-describedby' | 'aria-invalid' | 'aria-required'
+	> {
+	/**
+	 * Applied to the group container, along with the ARIA attributes above.
+	 *
+	 * These exist so `Field` can name and describe the group as a whole: a single native `<label>`
+	 * cannot name several controls, so `Field` renders its label as a `<span>` and the container
+	 * points back at it with `aria-labelledby`. Each option keeps its own per-item `CheckboxLabel`
+	 * independently.
+	 */
+	id?: string;
+
 	/** The list of checkbox options to render. */
 	options?: Option[];
 
