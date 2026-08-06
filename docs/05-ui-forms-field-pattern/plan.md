@@ -7,21 +7,22 @@ Status: **shipped.** This is the as-built record — what was built, what change
 what bit us. Consumer-facing usage documentation lives in Storybook (`Field.mdx`, `Label.mdx`,
 `FieldMessage.mdx`, `FormField.mdx`, `fields.mdx`).
 
-> **A second pass is specified but not built.** [`spec.md` → Second pass — the form
+> **A second pass has since shipped too.** [`spec.md` → Second pass — the form
 > layer](./spec.md#second-pass--the-form-layer) covers the layer above the field: a `Form` component
 > owning the element and `noValidate`, fields locating their form by context rather than by prop, a
-> submit button, and form-level errors. Nothing below this line describes it — this document remains
-> the record of what shipped.
+> submit button, and form-level errors. Nothing between here and the
+> [Second pass](#second-pass--the-form-layer-as-built) section at the bottom describes it — the
+> intervening document remains the record of the first pass.
 
 ## Outcome
 
-| Gate | Baseline | After |
-| ---- | -------- | ----- |
-| `pnpm build` | 11/11 | 11/11 ✅ |
-| Lint | 0 errors, 40 warnings | 0 errors, **38** warnings ✅ (`ui-core` 20→18; `ui-forms` stays 0) |
-| Storybook interactions | 326 passed | **364 passed**, 0 failed ✅ |
-| `ui-core` unit tests | 62 | 62 (unchanged — none added here) |
-| `ui-forms` unit tests | **0** | **19** ✅ (the package's first) |
+| Gate                   | Baseline              | After                                                              |
+| ---------------------- | --------------------- | ------------------------------------------------------------------ |
+| `pnpm build`           | 11/11                 | 11/11 ✅                                                           |
+| Lint                   | 0 errors, 40 warnings | 0 errors, **38** warnings ✅ (`ui-core` 20→18; `ui-forms` stays 0) |
+| Storybook interactions | 326 passed            | **364 passed**, 0 failed ✅                                        |
+| `ui-core` unit tests   | 62                    | 62 (unchanged — none added here)                                   |
+| `ui-forms` unit tests  | **0**                 | **19** ✅ (the package's first)                                    |
 
 **Five defects fixed that the plan did not know about**, all found by building the thing rather than
 by reading the code:
@@ -64,8 +65,8 @@ deliverable fixes as a side effect of existing:
 > **All three counts above were understated, and the third badly.** Planning found one dangling
 > `Slider` label; the file had **19**. `Textarea.stories.tsx` turned out to carry the mirror image of
 > the `Input` defect — three raw `<input>` elements with copied classes, inside the package that
-> exports `Input`. See Outcome. *Counting the instances of a duplication problem by reading one file
-> is how you get the wrong number.*
+> exports `Input`. See Outcome. _Counting the instances of a duplication problem by reading one file
+> is how you get the wrong number._
 
 Deliverable 04 moved the primitives into `ui-core` and deliberately left the composition layer, the
 documentation standard and the `play()` bar to this one.
@@ -79,12 +80,12 @@ was **not installed** beforehand, exactly as
 [`local-development`](../../.claude/skills/local-development/SKILL.md) warns — every gate would have
 lied until it was.
 
-| Gate | Baseline |
-| ---- | -------- |
-| `pnpm turbo run build --force` | 11/11 successful, **0 cached**, 1m26.8s — a real compile, not a replayed one |
+| Gate                                       | Baseline                                                                      |
+| ------------------------------------------ | ----------------------------------------------------------------------------- |
+| `pnpm turbo run build --force`             | 11/11 successful, **0 cached**, 1m26.8s — a real compile, not a replayed one  |
 | Lint (`npx eslint --no-cache` per package) | 0 errors, **40 warnings** — 20 in `ui-core`, 20 in `ui-overlays`, 0 elsewhere |
-| Storybook interactions (`npx vitest run`) | **326 passed, 0 failed**, 28 files, 79.6s |
-| `ui-core` unit tests | **62** |
+| Storybook interactions (`npx vitest run`)  | **326 passed, 0 failed**, 28 files, 79.6s                                     |
+| `ui-core` unit tests                       | **62**                                                                        |
 
 > **Correction.** This row originally read `60`, carried over from `04`'s closing figures rather than
 > measured here. The real number is 62, and it is unchanged at the end — this deliverable added no
@@ -111,7 +112,7 @@ anticipate, and it lands in the stories rather than the component:
 
 - **`StoryObj<typeof meta>` collapses `args` to `never`.** Every story then fails to compile
   demanding an `args` property it cannot possibly satisfy (`TS2322 … Property 'args' is missing …
-  but required in type '{ args: never; }'`).
+but required in type '{ args: never; }'`).
 - **The `play` context loses its inference too**, so `({ canvasElement, step })` becomes
   `TS7031 … implicitly has an 'any' type`.
 
@@ -142,20 +143,20 @@ public component shows up), `FieldMessage` → 0 is meaningful. The package expo
 entrypoint, so absence from that barrel is absence from the API, even though
 `dist/components/FieldMessage/` exists on disk.
 
-*04 recorded a broken verification one-liner too. Check the check.*
+_04 recorded a broken verification one-liner too. Check the check._
 
 ### A native `required` lets the browser pre-empt the form library
 
 The most expensive finding, because it fails **silently and completely**.
 
-`Field`'s `required` renders a *native* `required` attribute, which is correct — it is what assistive
+`Field`'s `required` renders a _native_ `required` attribute, which is correct — it is what assistive
 technology announces, and the spec requires it. But it also switches on the browser's own constraint
 validation, and when that fails the browser **blocks the `submit` event outright**. React's
 `onSubmit` never fires, so `form.handleSubmit()` never runs, so TanStack never validates and no
 message ever appears.
 
 It surfaced as a story that submitted an empty required field and asserted the error appeared. The
-story rendered *nothing at all* in the failure dump, which looked like a crash; it was the browser
+story rendered _nothing at all_ in the failure dump, which looked like a crash; it was the browser
 quietly refusing to submit. Every form using these components needs `noValidate`. Documented in
 `fields.mdx`, `FormField.mdx` and the spec, because it is a caller obligation rather than an
 implementation detail.
@@ -163,9 +164,9 @@ implementation detail.
 ### `Calendar`'s first assertion passed against `null`
 
 The first version asserted `aria-selected="true"` on a `gridcell`. react-day-picker expresses
-selection as `data-selected-single` on the day *button*; the gridcell has no such attribute, so the
+selection as `data-selected-single` on the day _button_; the gridcell has no such attribute, so the
 assertion compared against `null` and failed — but the same shape could just as easily have passed
-vacuously somewhere else. *Assert on what the component renders, not on what the role implies.*
+vacuously somewhere else. _Assert on what the component renders, not on what the role implies._
 
 ### `Label.types.ts` was itself one of the lint warnings
 
@@ -193,19 +194,18 @@ leaving `plan.md` quietly contradicting it.
   [`spec.md:180-182`](./spec.md#L180) prescribes `role="group"` on both
   group wrappers. `RadioGroupPrimitive.Root` already emits `role="radiogroup"`, which is stronger —
   screen readers announce "radio group, N of M" from it. Overwriting it to satisfy the letter of the
-  AC would be a regression. The *outcome* the AC asks for (container reports the heading as its
+  AC would be a regression. The _outcome_ the AC asks for (container reports the heading as its
   accessible name) is met either way. `CheckboxGroup` does get `role='group'`; Radix ships no
   checkbox-group primitive.
 - **D3 — ~~`FieldMessage` is standalone and invents `info`.~~ Revised during implementation:
   `FieldMessage` composes `Alert`, and `Alert` gains a real `info` variant.** Both the spec and the
   first cut of this plan had `FieldMessage` as a new ~20-line component borrowing only `Alert`'s
-  colour *strings*, on the grounds that a bordered banner is too heavy under a single input. The
+  colour _strings_, on the grounds that a bordered banner is too heavy under a single input. The
   user reversed that: one component, so field-level and page-level messaging cannot drift into two
   palettes — which is the same failure this deliverable exists to prevent one layer down. The
   visual weight is the accepted cost and is visible in Storybook.
 
   Two things fell out of it that the standalone version would not have had:
-
   - **`Alert` had no `info` variant at all**, so the "four-state reuse" both documents described was
     only ever three states plus `default`. `info` is now added to `Alert.variants.ts` in the blue
     family, matching the shape of its `success`/`warning`/`error` entries.
@@ -215,6 +215,7 @@ leaving `plan.md` quietly contradicting it.
     region nested inside a polite one overrides it for that subtree. `Alert` sets `role` before
     spreading props, so `role={undefined}` genuinely clears it — verified by a `play()` assertion
     rather than assumed.
+
 - **D4 — `Label`'s `emphasis` defaults to `true` (`font-semibold`).** Field labels and group headings
   get heavier; `CheckboxLabel`/`RadioLabel` pass `emphasis={false}` to keep today's `font-medium`.
   A deliberate, visible change across ~30 stories.
@@ -222,7 +223,7 @@ leaving `plan.md` quietly contradicting it.
   already the one component that knows it is naming a control.
 - **D6 — the adapter is one plain function, resolving spec Open Question 1.** Verified against the
   installed `@tanstack/react-form` 1.23.8: `form.Field`'s children is `functionalUpdate(children,
-  fieldApi)` and `useField()` returns that same `FieldApi`. One function covers both. It must **not**
+fieldApi)` and `useField()` returns that same `FieldApi`. One function covers both. It must **not**
   be a hook — `useField` already calls `useStore(fieldApi.store)` with no selector, so the consuming
   component re-renders on any meta change; a hook wrapper would subscribe a second time for nothing.
 - **D8 — `ui-forms` also ships a `FormField` component, partially amending spec Decision
@@ -241,15 +242,15 @@ leaving `plan.md` quietly contradicting it.
 
 ## Architecture
 
-| File | Role |
-| ---- | ---- |
-| `ui-core/src/components/Label/Label.variants.ts` | **new** — base string + `emphasis` |
-| `ui-core/src/components/Label/Label.types.ts` | `ILabelNative` \| `ILabelNonNative` union |
-| `ui-core/src/components/Label/Label.{stories.tsx,mdx}` | **new** — `Label` has neither today |
-| `ui-core/src/components/FieldMessage/` | full component folder, deliberately **not** barrel-exported |
-| `ui-core/src/components/Field/` | `Field.tsx`, `.types.ts`, `.stories.tsx`, `.mdx`, `index.ts` |
-| `ui-forms/src/adapters/toFieldProps.{ts,types.ts,spec.ts,stories.tsx}` | the state-to-props translation |
-| `ui-forms/src/components/FormField/` | `FormField.tsx`, `.types.ts`, `.stories.tsx`, `.mdx`, `index.ts` |
+| File                                                                   | Role                                                             |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `ui-core/src/components/Label/Label.variants.ts`                       | **new** — base string + `emphasis`                               |
+| `ui-core/src/components/Label/Label.types.ts`                          | `ILabelNative` \| `ILabelNonNative` union                        |
+| `ui-core/src/components/Label/Label.{stories.tsx,mdx}`                 | **new** — `Label` has neither today                              |
+| `ui-core/src/components/FieldMessage/`                                 | full component folder, deliberately **not** barrel-exported      |
+| `ui-core/src/components/Field/`                                        | `Field.tsx`, `.types.ts`, `.stories.tsx`, `.mdx`, `index.ts`     |
+| `ui-forms/src/adapters/toFieldProps.{ts,types.ts,spec.ts,stories.tsx}` | the state-to-props translation                                   |
+| `ui-forms/src/components/FormField/`                                   | `FormField.tsx`, `.types.ts`, `.stories.tsx`, `.mdx`, `index.ts` |
 
 `FieldMessage` gets a **top-level folder**, not `Field/components/`, even though it stays private.
 Success Criteria requires it to have its own stories and `.mdx`; a stories file nested under another
@@ -274,9 +275,9 @@ export interface IFieldControlProps {
 	id: string;
 	'aria-describedby': string;
 	'aria-invalid': true | undefined;
-	'aria-labelledby'?: string;   // nativeLabel={false} only
-	required?: boolean;            // nativeLabel={true}
-	'aria-required'?: true;        // nativeLabel={false}
+	'aria-labelledby'?: string; // nativeLabel={false} only
+	required?: boolean; // nativeLabel={true}
+	'aria-required'?: true; // nativeLabel={false}
 }
 
 export interface IField {
@@ -284,9 +285,9 @@ export interface IField {
 	children: (control: IFieldControlProps) => React.ReactNode;
 	description?: string;
 	error?: string;
-	required?: boolean;      // default false
-	nativeLabel?: boolean;   // default true
-	id?: string;             // default undefined → React.useId()
+	required?: boolean; // default false
+	nativeLabel?: boolean; // default true
+	id?: string; // default undefined → React.useId()
 	className?: string;
 }
 ```
@@ -309,7 +310,9 @@ conditionally-rendered JSX elements.
 
 ```tsx
 <div data-slot='field' className={cn('grid gap-2', className)}>
-	<Label htmlFor={id} required={required} emphasis>{label}</Label>
+	<Label htmlFor={id} required={required} emphasis>
+		{label}
+	</Label>
 	{children(control)}
 	<div id={messagesId} aria-live='polite' className='grid gap-1 not-empty:mt-2'>
 		{description && <FieldMessage variant='info'>{description}</FieldMessage>}
@@ -345,7 +348,7 @@ reason `Field` owns ids at all.
 ```ts
 const fallbackId = React.useId();
 const controlId = id ?? fallbackId;
-const messageId = `${controlId}-message`;   // always derived, never independently generated
+const messageId = `${controlId}-message`; // always derived, never independently generated
 ```
 
 > **When the fallback does fire, React 19 ids contain `«` and `»`** (U+00AB/U+00BB — verified in
@@ -357,15 +360,15 @@ const messageId = `${controlId}-message`;   // always derived, never independent
 
 ### `Label` — your naming, plus `required`
 
-| Prop | Default | Effect |
-| ---- | ------- | ------ |
-| `nativeLabel` | `true` | `true` → `LabelPrimitive.Root` (`<label htmlFor>`); `false` → plain `<span>` |
-| `emphasis` | `true` | `true` → `font-semibold`; `false` → `font-medium` (today's weight) |
-| `required` | `false` | renders `<span aria-hidden='true'>*</span>` + an `sr-only` `(required)` |
+| Prop          | Default | Effect                                                                       |
+| ------------- | ------- | ---------------------------------------------------------------------------- |
+| `nativeLabel` | `true`  | `true` → `LabelPrimitive.Root` (`<label htmlFor>`); `false` → plain `<span>` |
+| `emphasis`    | `true`  | `true` → `font-semibold`; `false` → `font-medium` (today's weight)           |
+| `required`    | `false` | renders `<span aria-hidden='true'>*</span>` + an `sr-only` `(required)`      |
 
 `as='span'` must render a plain `<span>`, never `LabelPrimitive.Root` — Radix's Root adds a
 `mousedown` double-click-selection guard that is meaningless on a heading. `data-slot='label'` stays
-on both modes; it *is* a Label, and a second slot name would make every existing
+on both modes; it _is_ a Label, and a second slot name would make every existing
 `[data-slot=label]` rule need auditing.
 
 The asterisk is `aria-hidden` so nobody hears "Email star" — the control's own
@@ -388,12 +391,12 @@ alone (AC10).
 Standalone, ~20 lines: `<p data-slot='field-message'>` = `Icon` (`size='sm'`) + text. No border, no
 background.
 
-| Variant | Icon | Colour |
-| ------- | ---- | ------ |
-| `error` | `x-circle` | `text-red-600 dark:text-red-400` |
-| `warning` | `alert-triangle` | `text-amber-600 dark:text-amber-400` |
-| `success` | `check-circle` | `text-green-600 dark:text-green-400` |
-| `info` (default) | `info` | `text-muted-foreground` — see D3 |
+| Variant          | Icon             | Colour                               |
+| ---------------- | ---------------- | ------------------------------------ |
+| `error`          | `x-circle`       | `text-red-600 dark:text-red-400`     |
+| `warning`        | `alert-triangle` | `text-amber-600 dark:text-amber-400` |
+| `success`        | `check-circle`   | `text-green-600 dark:text-green-400` |
+| `info` (default) | `info`           | `text-muted-foreground` — see D3     |
 
 All four icon names already exist in `ICON_NAMES`. Absent from `src/index.ts` (AC12).
 
@@ -401,19 +404,19 @@ All four icon names already exist in `ICON_NAMES`. Absent from `src/index.ts` (A
 
 This is the matrix the plan was missing.
 
-| Control | Label mode | Where `{...control}` lands | Work needed |
-| ------- | ---------- | -------------------------- | ----------- |
-| `Input` | native | the `<input>` | none — spreads props, has `aria-invalid:*` classes |
-| `Textarea` | native | the `<textarea>` | none |
-| `Checkbox` (boolean) | native | Radix `Root` | none |
-| `Switch` (boolean) | native | Radix `Root` | none — composition story only |
-| `Radio` (standalone) | native | Radix `Item` | none |
-| **`CheckboxGroup`** | **non-native** | the options container, + `role='group'` | **passthrough (Phase 4)** |
-| **`RadioGroup`** | **non-native** | `RadioGroupPrimitive.Root`, keeping `role='radiogroup'` | **passthrough (Phase 4)** |
-| **`Slider`** | **non-native** | **`SliderThumb`**, not `SliderRoot` | none — but the story must target the thumb |
-| **`Select`** (single + multiple) | native | the trigger `<button>` | **passthrough + `aria-label` fix (Phase 4)** |
-| **`SingleDatePicker`** | native | the trigger `<button>` | **passthrough (Phase 4)** |
-| **`DateRangePicker`** | native | the trigger `<button>` | **passthrough (Phase 4)** |
+| Control                          | Label mode     | Where `{...control}` lands                              | Work needed                                        |
+| -------------------------------- | -------------- | ------------------------------------------------------- | -------------------------------------------------- |
+| `Input`                          | native         | the `<input>`                                           | none — spreads props, has `aria-invalid:*` classes |
+| `Textarea`                       | native         | the `<textarea>`                                        | none                                               |
+| `Checkbox` (boolean)             | native         | Radix `Root`                                            | none                                               |
+| `Switch` (boolean)               | native         | Radix `Root`                                            | none — composition story only                      |
+| `Radio` (standalone)             | native         | Radix `Item`                                            | none                                               |
+| **`CheckboxGroup`**              | **non-native** | the options container, + `role='group'`                 | **passthrough (Phase 4)**                          |
+| **`RadioGroup`**                 | **non-native** | `RadioGroupPrimitive.Root`, keeping `role='radiogroup'` | **passthrough (Phase 4)**                          |
+| **`Slider`**                     | **non-native** | **`SliderThumb`**, not `SliderRoot`                     | none — but the story must target the thumb         |
+| **`Select`** (single + multiple) | native         | the trigger `<button>`                                  | **passthrough + `aria-label` fix (Phase 4)**       |
+| **`SingleDatePicker`**           | native         | the trigger `<button>`                                  | **passthrough (Phase 4)**                          |
+| **`DateRangePicker`**            | native         | the trigger `<button>`                                  | **passthrough (Phase 4)**                          |
 
 **`Calendar`, `DebouncableInput` and `Search` are deliberately absent.** `Calendar` is a standalone
 date-display component — the thing a user fills in is the date picker, and `Calendar` is what that
@@ -458,7 +461,7 @@ serves `Input`'s `e.target.value` and `Checkbox`'s boolean. The full field API i
 a second argument (`(control, field) => …`) for anything that needs `handleBlur` timing or
 `meta` directly.
 
-What it deliberately does **not** do is map a control *name* to a component —
+What it deliberately does **not** do is map a control _name_ to a component —
 `<FormField control='input' />` with no children. That is the pre-wired registry
 [`spec.md:213-223`](./spec.md#L213) rejected, and it means every
 control added later needs a new entry. As written, `FormField` works with any control, including
@@ -487,7 +490,7 @@ export interface ITanStackFieldLike {
 	};
 }
 
-toFieldProps(field, { showErrorsWhen: 'touched' | 'blurred' | 'always' })  // → { error: string | undefined }
+toFieldProps(field, { showErrorsWhen: 'touched' | 'blurred' | 'always' }); // → { error: string | undefined }
 ```
 
 Named `toFieldProps` rather than `getFieldProps`: AC4 requires an inspector to see at a glance that
@@ -515,29 +518,29 @@ three zod issues into one line produces something nobody reads in a live region.
 
 The AC list is the baseline. Every row below is a real assertion, not a story that merely renders.
 
-| AC | Assertion | Where |
-| -- | --------- | ----- |
-| 1 | No error/description → only label + control render; the message region is present but empty | `Field.stories.tsx` |
-| 2, 9 | Error → text visible; `aria-invalid='true'`; `getAttribute('aria-describedby')` equals the message element's `id` (compared by attribute, never by selector) | `Field.stories.tsx` |
-| 3 | Live `useForm` + `FormField name='email'`: type invalid, blur, error appears and associates; correct it, error clears — no hand-translation at the call site | `FormField.stories.tsx` |
-| 3 (2nd) | Submit an untouched invalid form → the error still appears (the `isBlurred` trap) | `FormField.stories.tsx` |
-| 3 (3rd) | The same form written with `form.Field` + `toFieldProps` by hand, and with `useField`, behaves identically — proving `FormField` is convenience, not a fork | `toFieldProps.stories.tsx` |
-| 4 | grep `toFieldProps.ts` for `Field`/`Input`/`@repo/ui-core` → no matches. `FormField.tsx` is not the adapter and may reference `Field` (D8) | Phase 8 check |
-| 5, 6 | Every component in scope has ≥1 standalone, ≥1 composition, ≥1 common-pattern story and ≥1 `play()` | Phase 7 inventory |
-| 7 | `ContactForm` renders a `Textarea`, and no raw `<textarea>` remains in the file | `Input.stories.tsx` |
-| 8 | `getByRole('group', { name: 'Notify me about' })` and `getByRole('radiogroup', { name: 'Billing plan' })` both resolve; each option still resolves by its own per-item label; the radio group's role is still `radiogroup` (D2) | `CheckboxGroup`/`RadioGroup` stories |
-| 10 | Required → the indicator is text/symbol not colour alone, and the control is `toBeRequired()` (or carries `aria-required` in non-native mode) | `Field.stories.tsx` |
-| 11 | All four `FieldMessage` states render, each with a distinct icon; no two states share one | `FieldMessage.stories.tsx` |
-| 12 | grep the **built** `dist/index.d.ts` → `FieldMessage` absent | Phase 8 check |
-| — | The live region exists in the DOM **before** any error appears (D7) | `Field.stories.tsx` |
-| — | Native `Label` click moves focus to its `htmlFor` target; `nativeLabel={false}` does not | `Label.stories.tsx` |
-| — | `emphasis={false}` preserves `font-medium` on `CheckboxLabel`/`RadioLabel` (D4 regression guard) | `Label.stories.tsx` |
-| — | A `Field`-wrapped `Select`'s accessible name is the label, not "Select Trigger" | `Select.stories.tsx` |
-| — | `Slider` keyboard: Arrow/Home/End on the thumb | `Slider.stories.tsx` |
-| — | `Calendar`: click a day, assert `aria-selected` | `Calendar.stories.tsx` |
-| — | Tabbing into a **part-selected** `CheckboxGroup` lands on the first checked item (04's recorded gap — unit-tested only today) | `CheckboxGroup.stories.tsx` |
-| — | `Radio` disabled treatment now that `peer` matches (Phase 5) | `Radio.stories.tsx` |
-| — | Adapter unit cases: untouched-with-errors, string error, `{message}` error, multiple errors, `['', ' ', 'real']`, `[{}]`/`[null]`/`[42]`, each `showErrorsWhen` mode, and a compile-time assertion that `AnyFieldApi` is assignable to `ITanStackFieldLike` | `toFieldProps.spec.ts` |
+| AC      | Assertion                                                                                                                                                                                                                                                   | Where                                |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| 1       | No error/description → only label + control render; the message region is present but empty                                                                                                                                                                 | `Field.stories.tsx`                  |
+| 2, 9    | Error → text visible; `aria-invalid='true'`; `getAttribute('aria-describedby')` equals the message element's `id` (compared by attribute, never by selector)                                                                                                | `Field.stories.tsx`                  |
+| 3       | Live `useForm` + `FormField name='email'`: type invalid, blur, error appears and associates; correct it, error clears — no hand-translation at the call site                                                                                                | `FormField.stories.tsx`              |
+| 3 (2nd) | Submit an untouched invalid form → the error still appears (the `isBlurred` trap)                                                                                                                                                                           | `FormField.stories.tsx`              |
+| 3 (3rd) | The same form written with `form.Field` + `toFieldProps` by hand, and with `useField`, behaves identically — proving `FormField` is convenience, not a fork                                                                                                 | `toFieldProps.stories.tsx`           |
+| 4       | grep `toFieldProps.ts` for `Field`/`Input`/`@repo/ui-core` → no matches. `FormField.tsx` is not the adapter and may reference `Field` (D8)                                                                                                                  | Phase 8 check                        |
+| 5, 6    | Every component in scope has ≥1 standalone, ≥1 composition, ≥1 common-pattern story and ≥1 `play()`                                                                                                                                                         | Phase 7 inventory                    |
+| 7       | `ContactForm` renders a `Textarea`, and no raw `<textarea>` remains in the file                                                                                                                                                                             | `Input.stories.tsx`                  |
+| 8       | `getByRole('group', { name: 'Notify me about' })` and `getByRole('radiogroup', { name: 'Billing plan' })` both resolve; each option still resolves by its own per-item label; the radio group's role is still `radiogroup` (D2)                             | `CheckboxGroup`/`RadioGroup` stories |
+| 10      | Required → the indicator is text/symbol not colour alone, and the control is `toBeRequired()` (or carries `aria-required` in non-native mode)                                                                                                               | `Field.stories.tsx`                  |
+| 11      | All four `FieldMessage` states render, each with a distinct icon; no two states share one                                                                                                                                                                   | `FieldMessage.stories.tsx`           |
+| 12      | grep the **built** `dist/index.d.ts` → `FieldMessage` absent                                                                                                                                                                                                | Phase 8 check                        |
+| —       | The live region exists in the DOM **before** any error appears (D7)                                                                                                                                                                                         | `Field.stories.tsx`                  |
+| —       | Native `Label` click moves focus to its `htmlFor` target; `nativeLabel={false}` does not                                                                                                                                                                    | `Label.stories.tsx`                  |
+| —       | `emphasis={false}` preserves `font-medium` on `CheckboxLabel`/`RadioLabel` (D4 regression guard)                                                                                                                                                            | `Label.stories.tsx`                  |
+| —       | A `Field`-wrapped `Select`'s accessible name is the label, not "Select Trigger"                                                                                                                                                                             | `Select.stories.tsx`                 |
+| —       | `Slider` keyboard: Arrow/Home/End on the thumb                                                                                                                                                                                                              | `Slider.stories.tsx`                 |
+| —       | `Calendar`: click a day, assert `aria-selected`                                                                                                                                                                                                             | `Calendar.stories.tsx`               |
+| —       | Tabbing into a **part-selected** `CheckboxGroup` lands on the first checked item (04's recorded gap — unit-tested only today)                                                                                                                               | `CheckboxGroup.stories.tsx`          |
+| —       | `Radio` disabled treatment now that `peer` matches (Phase 5)                                                                                                                                                                                                | `Radio.stories.tsx`                  |
+| —       | Adapter unit cases: untouched-with-errors, string error, `{message}` error, multiple errors, `['', ' ', 'real']`, `[{}]`/`[null]`/`[42]`, each `showErrorsWhen` mode, and a compile-time assertion that `AnyFieldApi` is assignable to `ITanStackFieldLike` | `toFieldProps.spec.ts`               |
 
 `Field.stories.tsx` sets `parameters: { a11y: { test: 'error' } }` on its **meta** —
 [`Button.stories.tsx:46-51`](../../packages/ui-core/src/components/Button/Button.stories.tsx#L46) is the
@@ -555,21 +558,21 @@ an interaction test.
 
 Measured, not estimated.
 
-| Component | Today | Gap |
-| --------- | ----- | --- |
-| `Label` | **0 stories, 0 play, no `.mdx`** | whole file, both artefacts — extending it puts it in scope |
-| `Field` / `FieldMessage` | — | everything: ~13 stories, 4 `play()` |
-| `Input` | 14 / **0 play** | ~21 hand-rolled wrappers → `Field`; `ContactForm` fix; 2 `play()`; **every `docs.source.code` override rewritten** or the docs show code that no longer matches the canvas |
-| `Textarea` | 12 / **0 play** | ~18 wrappers → `Field`; 2 `play()` |
-| `Checkbox` | 9 / 1 | the existing `play()` tests prop passthrough, not toggling; +composition, +error, +1 `play()` |
-| `CheckboxGroup` | 19 / 4 | `Field` composition; part-selected tab-stop gap |
-| `Radio` | 9 / 1 | **imports `@radix-ui/react-radio-group` directly** ([`Radio.stories.tsx:2`](../../packages/ui-core/src/components/Radio/Radio.stories.tsx#L2)) — rewrite onto `RadioGroup` |
-| `RadioGroup` | 12 / 5 | `Field` composition |
-| `Slider` | 9 / **0 play** | fix the broken `htmlFor`; `Field` + `nativeLabel={false}` onto `SliderThumb`; keyboard `play()` |
-| `Calendar` | 9 / **0 play** | **CSF1 bare-function exports — `play` cannot attach.** Convert all 9 to CSF3 `StoryObj`, then cross-check every `<Canvas of>` in `Calendar.mdx` **both ways**. No `Field` composition — not a form control |
-| `Switch` | 8 / **0 play** | `Field` composition story only (the boolean control; not a 04 component, no full retrofit) |
-| `Select`, `SingleDatePicker`, `DateRangePicker` | 19+10+8 | one `Field`-composition story each with an accessible-name `play()` |
-| `FormField` / `toFieldProps` | — | ~5 stories, 3 `play()`, plus `FormField.mdx` as the primary form-authoring guide |
+| Component                                       | Today                            | Gap                                                                                                                                                                                                        |
+| ----------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Label`                                         | **0 stories, 0 play, no `.mdx`** | whole file, both artefacts — extending it puts it in scope                                                                                                                                                 |
+| `Field` / `FieldMessage`                        | —                                | everything: ~13 stories, 4 `play()`                                                                                                                                                                        |
+| `Input`                                         | 14 / **0 play**                  | ~21 hand-rolled wrappers → `Field`; `ContactForm` fix; 2 `play()`; **every `docs.source.code` override rewritten** or the docs show code that no longer matches the canvas                                 |
+| `Textarea`                                      | 12 / **0 play**                  | ~18 wrappers → `Field`; 2 `play()`                                                                                                                                                                         |
+| `Checkbox`                                      | 9 / 1                            | the existing `play()` tests prop passthrough, not toggling; +composition, +error, +1 `play()`                                                                                                              |
+| `CheckboxGroup`                                 | 19 / 4                           | `Field` composition; part-selected tab-stop gap                                                                                                                                                            |
+| `Radio`                                         | 9 / 1                            | **imports `@radix-ui/react-radio-group` directly** ([`Radio.stories.tsx:2`](../../packages/ui-core/src/components/Radio/Radio.stories.tsx#L2)) — rewrite onto `RadioGroup`                                 |
+| `RadioGroup`                                    | 12 / 5                           | `Field` composition                                                                                                                                                                                        |
+| `Slider`                                        | 9 / **0 play**                   | fix the broken `htmlFor`; `Field` + `nativeLabel={false}` onto `SliderThumb`; keyboard `play()`                                                                                                            |
+| `Calendar`                                      | 9 / **0 play**                   | **CSF1 bare-function exports — `play` cannot attach.** Convert all 9 to CSF3 `StoryObj`, then cross-check every `<Canvas of>` in `Calendar.mdx` **both ways**. No `Field` composition — not a form control |
+| `Switch`                                        | 8 / **0 play**                   | `Field` composition story only (the boolean control; not a 04 component, no full retrofit)                                                                                                                 |
+| `Select`, `SingleDatePicker`, `DateRangePicker` | 19+10+8                          | one `Field`-composition story each with an accessible-name `play()`                                                                                                                                        |
+| `FormField` / `toFieldProps`                    | —                                | ~5 stories, 3 `play()`, plus `FormField.mdx` as the primary form-authoring guide                                                                                                                           |
 
 Baseline is **326 passing**; expect roughly **380-400** after.
 
@@ -620,7 +623,7 @@ Estimated: 0.5 day.
 
 - [x] 1.1 `Label.variants.ts` — `labelVariants`, base = today's exact class string from
       `Label.tsx:9-12` minus `font-medium`, `emphasis: { true: 'font-semibold', false:
-      'font-medium' }`, default `true` (D4). (Depends on: 0.4)
+    'font-medium' }`, default `true` (D4). (Depends on: 0.4)
 - [x] 1.2 `Label.types.ts` — `ILabelNative` (`nativeLabel?: true`) | `ILabelNonNative`
       (`nativeLabel: false`, `htmlFor?: never`), `ILabel` as the union; `emphasis?`, `required?`
       on both. (1.1)
@@ -640,7 +643,7 @@ Estimated: 0.5 day.
 - [x] 1.8 `Label.mdx` — must state that `nativeLabel={false}` outside a group needs no
       `aria-labelledby` wiring (spec Edge Cases). (1.7)
 - [x] 1.9 `pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_modules/.cache
-      apps/storybook/node_modules/.vite`, run the suite. Checkbox/Radio label rendering must be
+    apps/storybook/node_modules/.vite`, run the suite. Checkbox/Radio label rendering must be
       unchanged. (1.8)
 
 Estimated: 1 day.
@@ -803,17 +806,17 @@ Estimated: 0.5 day.
 pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_modules/.cache apps/storybook/node_modules/.vite
 ```
 
-| Gate | Command | Expected |
-| ---- | ------- | -------- |
-| Build | `pnpm build` | 11/11 |
-| Lint | `npx eslint --no-cache` per package | 0 errors; **two fewer warnings** than baseline — 38 (Label in 1.2, ITextarea in 5.2) |
-| Hook/util tests | `pnpm test` | `ui-core` 60 unchanged; `ui-forms` gains `toFieldProps.spec.ts` |
-| Component tests | `cd apps/storybook && npx vitest run` | ~380-400, 0 failures |
+| Gate            | Command                               | Expected                                                                             |
+| --------------- | ------------------------------------- | ------------------------------------------------------------------------------------ |
+| Build           | `pnpm build`                          | 11/11                                                                                |
+| Lint            | `npx eslint --no-cache` per package   | 0 errors; **two fewer warnings** than baseline — 38 (Label in 1.2, ITextarea in 5.2) |
+| Hook/util tests | `pnpm test`                           | `ui-core` 60 unchanged; `ui-forms` gains `toFieldProps.spec.ts`                      |
+| Component tests | `cd apps/storybook && npx vitest run` | ~380-400, 0 failures                                                                 |
 
 `vitest` does **not** typecheck — a spec file passes green while containing a type error. Only
 `pnpm build` catches it. Run both. Other traps carried from 04: a tapped
 `userEvent.keyboard('{ArrowDown}')` fires before Radix's deferred focus lands, so any "focus moved
-*and* something followed" assertion needs the key **held** (`{ArrowDown>}` … `{/ArrowDown}`); and
+_and_ something followed" assertion needs the key **held** (`{ArrowDown>}` … `{/ArrowDown}`); and
 `noUncheckedIndexedAccess` makes `getAllByRole(...)[n]` an `HTMLElement | undefined`, which
 `expect()` tolerates and `userEvent.click()` rejects.
 
@@ -821,20 +824,20 @@ pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_module
 
 ## Risks
 
-| Risk | Impact | Likelihood | Mitigation |
-| ---- | ------ | ---------- | ---------- |
-| Gates run against the uninstalled worktree | Every number meaningless | **Certain if skipped** | Phase 0.1-0.4; a fast green build next to a red suite is the tell |
-| `ICheckboxLabel`/`IRadioLabel` break on the `Label` union (TS2312) | Build red, `vitest` silent | **Certain** | Task 1.3, same commit as 1.2 |
-| The live region ends up `display: none` | The one a11y requirement the design exists for fails, silently | High if the first shape ships | `not-empty:mt-2`, never `empty:hidden`; a `play()` asserts the region pre-exists its content; 8.4 checks it live |
-| React 19's `«r0»` ids break selector-based assertions | Opaque `SyntaxError` | Medium — the obvious way to write it is the broken one | Compare `getAttribute` against `id`; comment in `Field.stories.tsx` |
-| `emphasis` defaulting to bold shifts every existing label | Unintended visual churn | Medium | 1.5 opts the two per-item labels out; 1.9 confirms unchanged rendering before anything depends on it |
-| Fixing `SelectTrigger`'s `aria-label` breaks its 18 `play()` tests | Suite red | **High** | Explicit in 4.5; expect `__fixtures__/interactions.ts` to change alongside |
-| `Calendar`'s CSF1→CSF3 conversion desyncs `Calendar.mdx` | Docs page dies with `of={undefined}` | Medium | 7.7 requires a two-way cross-check; 8.3 confirms in the browser |
-| `Input`/`Textarea` rewrites leave `docs.source.code` showing the old code | The exact drift class this deliverable exists to stop | Medium | Explicit in 7.1/7.2; 8.3 reads every page |
-| Stale `dist`/Vite cache masks a change | False greens **and** false reds | High across 8 phases | The rebuild + cache-clear is a numbered task at the end of every phase |
-| Fixture-based adapter spec passes while the real `FieldApi` differs | False green | Medium | 6.6 is a live `useForm` story; the fixture spec alone is not sufficient evidence |
-| `FormField`'s generics don't thread through, so `name` loses autocomplete or `field` types as `any` | The main ergonomic reason it exists evaporates | Medium — `form.Field`'s `DeepKeys` generic chain is long | Type it against `form.Field`'s own signature rather than re-deriving; 6.6's story is written with a typed schema so a widened `any` shows up as a lost error at build |
-| `a11y: { test: 'error' }` on `Field` fails on an inherited violation | New strict gate blocks the deliverable | Low-medium | Turned on at 3.4, not at 8.1, so it surfaces early |
+| Risk                                                                                                | Impact                                                         | Likelihood                                               | Mitigation                                                                                                                                                            |
+| --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Gates run against the uninstalled worktree                                                          | Every number meaningless                                       | **Certain if skipped**                                   | Phase 0.1-0.4; a fast green build next to a red suite is the tell                                                                                                     |
+| `ICheckboxLabel`/`IRadioLabel` break on the `Label` union (TS2312)                                  | Build red, `vitest` silent                                     | **Certain**                                              | Task 1.3, same commit as 1.2                                                                                                                                          |
+| The live region ends up `display: none`                                                             | The one a11y requirement the design exists for fails, silently | High if the first shape ships                            | `not-empty:mt-2`, never `empty:hidden`; a `play()` asserts the region pre-exists its content; 8.4 checks it live                                                      |
+| React 19's `«r0»` ids break selector-based assertions                                               | Opaque `SyntaxError`                                           | Medium — the obvious way to write it is the broken one   | Compare `getAttribute` against `id`; comment in `Field.stories.tsx`                                                                                                   |
+| `emphasis` defaulting to bold shifts every existing label                                           | Unintended visual churn                                        | Medium                                                   | 1.5 opts the two per-item labels out; 1.9 confirms unchanged rendering before anything depends on it                                                                  |
+| Fixing `SelectTrigger`'s `aria-label` breaks its 18 `play()` tests                                  | Suite red                                                      | **High**                                                 | Explicit in 4.5; expect `__fixtures__/interactions.ts` to change alongside                                                                                            |
+| `Calendar`'s CSF1→CSF3 conversion desyncs `Calendar.mdx`                                            | Docs page dies with `of={undefined}`                           | Medium                                                   | 7.7 requires a two-way cross-check; 8.3 confirms in the browser                                                                                                       |
+| `Input`/`Textarea` rewrites leave `docs.source.code` showing the old code                           | The exact drift class this deliverable exists to stop          | Medium                                                   | Explicit in 7.1/7.2; 8.3 reads every page                                                                                                                             |
+| Stale `dist`/Vite cache masks a change                                                              | False greens **and** false reds                                | High across 8 phases                                     | The rebuild + cache-clear is a numbered task at the end of every phase                                                                                                |
+| Fixture-based adapter spec passes while the real `FieldApi` differs                                 | False green                                                    | Medium                                                   | 6.6 is a live `useForm` story; the fixture spec alone is not sufficient evidence                                                                                      |
+| `FormField`'s generics don't thread through, so `name` loses autocomplete or `field` types as `any` | The main ergonomic reason it exists evaporates                 | Medium — `form.Field`'s `DeepKeys` generic chain is long | Type it against `form.Field`'s own signature rather than re-deriving; 6.6's story is written with a typed schema so a widened `any` shows up as a lost error at build |
+| `a11y: { test: 'error' }` on `Field` fails on an inherited violation                                | New strict gate blocks the deliverable                         | Low-medium                                               | Turned on at 3.4, not at 8.1, so it surfaces early                                                                                                                    |
 
 ---
 
@@ -849,7 +852,7 @@ pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_module
 - **`Alert`'s `warning` and `success` pass AA only just** (4.85 and 4.72 against 4.5). Fine today,
   but there is no headroom, and `destructive` was left alone entirely. Belongs with the design-system
   audit already planned in [`docs/README.md`](../README.md#planned).
-- **The other 18 `Slider` stories have non-native labels that name nothing.** They no longer *lie*
+- **The other 18 `Slider` stories have non-native labels that name nothing.** They no longer _lie_
   (the dangling `htmlFor` is gone), but only `Basic` is wired to its thumb. They demonstrate styling
   rather than labelling, so this was left rather than restructured.
 - **A range `Slider` has two thumbs**, which is two controls under one heading. `Field` wraps one
@@ -868,7 +871,7 @@ pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_module
 ## Explicitly out of scope
 
 - The JSON/schema-driven renderer (spec Non-Goal — its own discovery once this ships).
-- `Alert`'s redundant `destructive`/`error` variants. (An `info` variant *was* added — see D3.)
+- `Alert`'s redundant `destructive`/`error` variants. (An `info` variant _was_ added — see D3.)
 - `play()` retrofits for components predating 04 — `Alert`, `Avatar`, `Tabs`, `Tooltip`, `Skeleton`
   all have zero. `Switch` gets a composition story only.
 - `Search` and `DebouncableInput` — search/filter affordances rather than form fields, and both
@@ -880,3 +883,132 @@ pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_module
 - `ui-forms`' unused `react-use`/`zod` dependencies and the dead
   `packages/ui-forms/src/components/Form/index.ts` — both offered and declined.
 - The four-package split and RTL, both pinned in [`docs/README.md`](../README.md).
+
+---
+
+## Second pass — the form layer (as built)
+
+Status: **shipped.** The spec section this implements is
+[`spec.md` → Second pass](./spec.md#second-pass--the-form-layer). Consumer-facing usage documentation
+lives in Storybook (`Form.mdx`, `SubmitButton.mdx`, `FormError.mdx`, `FormField.mdx`, and one page per
+bound field).
+
+### Outcome
+
+| Gate                   | Baseline              | After                                |
+| ---------------------- | --------------------- | ------------------------------------ |
+| `pnpm build`           | 11/11                 | 11/11 ✅                             |
+| Lint                   | 0 errors, 38 warnings | 0 errors, 38 warnings ✅ (unchanged) |
+| Storybook interactions | 364 passed            | **382 passed**, 0 failed ✅          |
+| `ui-forms` unit tests  | 19                    | **35** ✅                            |
+
+**Four of the spec's own decisions were reversed before any of them shipped**, each after reading
+`@tanstack/form-core@1.24.4`'s source rather than trusting the plan. All four made the result
+_simpler_, which is the tell that the original reasoning was working from an assumed mechanism.
+
+### The four reversals
+
+1. **The form-level message lives in `Form`'s state, not in the error map.** The spec put it in
+   `errorMap.onSubmit`. That slot feeds `isFormValid` → `isValid` → `canSubmit`, so a message whose
+   only job is to be _read_ would also gate submission — and clearing it becomes load-bearing rather
+   than hygiene. A caller now reports a form-level failure by **throwing**; `Form` catches it. Field
+   failures still go through `setErrorMap`, which is the right mechanism for them.
+
+2. **The submit button is natively `disabled`, never `aria-disabled`.** `buttonVariants` carries
+   `aria-disabled:pointer-events-none`
+   ([`variants.ts:19`](../../packages/ui-core/src/components/Button/variants.ts#L19)), so the
+   specified behaviour would have worked for keyboard and silently not for mouse — and
+   `userEvent.click` cannot press a `pointer-events: none` element, so the acceptance criterion could
+   not have been tested. Overriding it per-caller was offered and declined: `Button`'s disabled
+   behaviour should be identical everywhere.
+
+3. **First-invalid takes its names from field state and its order from the DOM.** The spec's
+   `[aria-invalid="true"]` query cannot run where it needs to. That attribute only lands once React
+   commits, and `await form.handleSubmit()` resolving means the _store_ settled — a DOM query on the
+   next line reads the pre-submission DOM. Because ids now default to names, a comma-joined id
+   selector gets document order with no such dependency, synchronously, inside the handler.
+
+4. **`onSubmitSuccess` was dropped.** With the mutation in the caller's own `onSubmit`, anything
+   after a successful `await` there already runs only on success.
+
+### The finding that made (2) safe
+
+`FieldApi.validateSync` ends with an explicit reset of the submit-cause error
+(`form-core/dist/esm/FieldApi.js:248-263`), and it sits **after** the validator loop rather than
+inside it — so it fires even for a field that declares no validators at all. `handleBlur` calls
+`validate('blur')` unconditionally.
+
+So a field-bound server error clears the moment the user edits or leaves that field, `isFieldsValid`
+recovers on its own, and a natively disabled submit button re-enables. Without that, native
+`disabled` would have been a trap: the only thing that could clear the state keeping the button
+disabled is a submission the disabled button prevents.
+
+_This was initially argued the other way round, and the argument was wrong. Read the source._
+
+### Traps found while building
+
+- **`Form/form.ts` cannot coexist with `Form.tsx`.** TypeScript refuses two modules whose paths
+  differ only in casing, so `~/components/Form/Form` resolved to the `useForm` re-export and the
+  barrel failed to compile — with an error naming neither file as the cause. The one-line re-export
+  moved into `Form/index.ts`.
+- **`IFormApiLike` cannot be `AnyFormApi & { Field }`.** It compiles until a form typed `{}` reaches
+  it: `DeepKeys<{}>` is `never`, which makes `pushFieldValue`'s value parameter `never`, and that
+  contravariant position rejects `AnyFormApi`'s own `any`. It is a structural interface listing the
+  four members this layer touches — matching how `ITanStackFieldLike` is declared one level down.
+- **`<Controls />` renders nothing on these pages; `<ArgTypes />` is what they want.** `Controls`
+  reflects the _selected story's args_, and every story here uses a custom `render` with no args.
+  Caught only by opening the pages in a browser. `Field.mdx` has the same bug and is
+  **pre-existing** — see Follow-ups.
+- **react-docgen does not extract props from arrow components typed by an alias**, so the prop tables
+  need explicit `argTypes`. The six bound fields share theirs from
+  `fields/__fixtures__/argTypes.ts`, which needs `as const` or the control names widen to `string`
+  and fail against Storybook's `Control` union.
+- **Clearing the Storybook cache under a running dev server breaks it** until restart, and the
+  symptom is every docs page rendering "No Preview" — which looks exactly like a broken build.
+
+### Acceptance criteria
+
+| Criterion                                                           | Where it is proved                                                   |
+| ------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `<form>` carries `noValidate`, unremovable                          | `Form.stories.tsx` → `Default` (also omitted from `IForm`)           |
+| A required field left empty validates rather than being blocked     | `Form.stories.tsx` → `Default`                                       |
+| A field with no `Form` ancestor throws, naming the component        | `useFormContext`; documented, not asserted (spec Decision)           |
+| A field's `id` is its name; `aria-describedby` resolves             | `Form.stories.tsx` → `Default`, every field story                    |
+| A submit button submits without the caller setting `type`           | `SubmitButton.stories.tsx` → `Default`                               |
+| In flight: busy, and a second press starts nothing                  | `SubmitButton.stories.tsx` → `WhileSubmitting`                       |
+| Live before the first submission even when invalid                  | `SubmitButton.stories.tsx` → `UnavailableOnlyAfterAFailedSubmission` |
+| Unavailable once invalid after a submission, and re-enables         | same story — both halves                                             |
+| Server errors keyed by field name display per field                 | `Form.stories.tsx` → `FieldBoundServerErrorClearsOnBlur`, e2e        |
+| **A server error on a validator-less field clears on edit/blur**    | `Form.stories.tsx` → `FieldBoundServerErrorClearsOnBlur`             |
+| A form-level failure displays once, announced, gone next submission | `FormError.stories.tsx` → `Default`                                  |
+| Focus moves to the first of two invalid fields, document order      | `Form.stories.tsx` → `FocusesFirstInvalidControl`                    |
+| A form-level failure leaves the form submittable                    | `Form.stories.tsx` → `RecoversFromAThrownSubmission`                 |
+| A portalled inner form does not submit the outer                    | `Form.stories.tsx` → `DoesNotSubmitAnOuterFormThroughAPortal`        |
+| Each of the six fields has its own stories file and MDX page        | `fields/*.stories.tsx` + `fields/*.mdx`                              |
+| **One story drives the whole flow end to end**                      | `Form.e2e.stories.tsx` → `FullFlow`                                  |
+
+Two criteria were rewritten in the spec rather than met as written — the `aria-disabled` one (see
+reversal 2) and the success-callback one (reversal 4). Both are struck through there rather than
+deleted.
+
+### Follow-ups
+
+- **`Field.mdx` uses `<Controls />` and its prop table is empty.** Pre-existing, same cause as the
+  trap above, one-line fix (`<ArgTypes />` plus the argTypes it already declares). Not touched here.
+- **Two dangling documentation links predate this work**: `Checkbox.mdx` → `ui-core-switch--docs` and
+  `FieldMessage.mdx` → `ui-core-alert--docs`. Neither target exists, because `Switch` and `Alert`
+  have stories but no MDX. Either give those two components an MDX page or repoint the links at a
+  story.
+- **`SelectField`'s `disabled` is cosmetic** — it applies `pointer-events-none opacity-50` to the
+  trigger with no real `disabled` or `aria-disabled`, so a keyboard user can still reach and open it.
+  Pre-existing, and it wants a `Select` change rather than a field one.
+- **A misspelled field `name` is still undetectable**, by design — recorded as an accepted risk in
+  the spec rather than mitigated.
+- **`showErrorsWhen='blurred'` interacts badly with focus-first-invalid**: a field failing an
+  `onChange` validator the user never blurred has an error but no visible message, so the form
+  refuses to submit and focus moves nowhere. Documented, not fixed — fixing it needs form state
+  inside `toFieldProps`, which it deliberately does not have.
+- **`CheckboxGroupField`, `SliderField` and date-picker fields** remain unbuilt, as the spec fixes
+  the roster at six. `FormField` covers them.
+- **`ui-forms` still declares `react-use` and `zod` with zero uses.** The dead
+  `components/Form/index.ts` duplicate that sat beside them is now a real barrel.

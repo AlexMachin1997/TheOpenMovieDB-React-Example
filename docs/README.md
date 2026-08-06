@@ -11,13 +11,13 @@ is just the roadmap.
 
 ## Roadmap
 
-| ID  | Deliverable         | Area          | Status   | Depends on | Docs                                                     |
-| --- | ------------------- | ------------- | -------- | ---------- | -------------------------------------------------------- |
-| 01  | Icon component      | component     | ✅ done  | —          | [01-icon](01-icon/spec.md)                               |
-| 02  | Button enhancements | component     | ✅ done  | 01         | [02-button-enhancements](02-button-enhancements/spec.md) |
-| 03  | Focus indicators    | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)       |
-| 04  | ui-forms: primitive migration | architecture | ✅ done | —   | [04-ui-forms-primitive-migration](04-ui-forms-primitive-migration/plan.md) |
-| 05  | ui-forms: Field pattern | architecture | ✅ done | 04   | [05-ui-forms-field-pattern](05-ui-forms-field-pattern/plan.md) |
+| ID  | Deliverable                   | Area          | Status   | Depends on | Docs                                                                       |
+| --- | ----------------------------- | ------------- | -------- | ---------- | -------------------------------------------------------------------------- |
+| 01  | Icon component                | component     | ✅ done  | —          | [01-icon](01-icon/spec.md)                                                 |
+| 02  | Button enhancements           | component     | ✅ done  | 01         | [02-button-enhancements](02-button-enhancements/spec.md)                   |
+| 03  | Focus indicators              | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)                         |
+| 04  | ui-forms: primitive migration | architecture  | ✅ done  | —          | [04-ui-forms-primitive-migration](04-ui-forms-primitive-migration/plan.md) |
+| 05  | ui-forms: Field pattern       | architecture  | ✅ done  | 04         | [05-ui-forms-field-pattern](05-ui-forms-field-pattern/plan.md)             |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -33,14 +33,10 @@ which would give the same statuses two sources of truth.
 
 ### Planned
 
-**The `ui-forms` form layer** — the layer above the field — is **specified and ready to plan**, but
-lives inside `05`'s spec rather than as its own row, because nothing has been built yet. See
-[`05-ui-forms-field-pattern/spec.md` → Second pass](05-ui-forms-field-pattern/spec.md#second-pass--the-form-layer).
-It adds a `Form` component that owns the `<form>` element and `noValidate` (today a caller
-obligation that fails silently when forgotten), moves the form from a per-field prop onto context, and
-adds a submit button and a form-level error surface. **No open questions remain** — the two that stood
-there, focus behaviour on a failed submission and the submit button's disabled-while-invalid
-mechanism, are both settled in Decisions.
+_(The `ui-forms` form layer that stood here has since shipped — it stayed inside `05` rather than
+taking a row of its own, so `05`'s single ✅ covers both passes. See
+[`spec.md` → Second pass](05-ui-forms-field-pattern/spec.md#second-pass--the-form-layer) and the
+[as-built record](05-ui-forms-field-pattern/plan.md#second-pass--the-form-layer-as-built).)_
 
 A **design-system audit** across six axes — tokens, interaction states, size scales, variant
 taxonomy, dark mode coverage, motion — would add deliverables to the table above. Not started.
@@ -63,7 +59,7 @@ their boundaries — would add a deliverable. Raised while reviewing `04` and **
 either direction**.
 
 The trigger: `Select` and the date pickers cannot sit alongside `Input` and `Checkbox`, because they
-need `Popover` (`ui-overlays`) and `Command` (`ui-command`), which are built *after* `ui-core`.
+need `Popover` (`ui-overlays`) and `Command` (`ui-command`), which are built _after_ `ui-core`.
 Moving them down would make `ui-core` depend on its own dependents, and turbo's `dependsOn: ["^build"]`
 is a topological sort — a cycle has no valid build order at all.
 
@@ -81,8 +77,8 @@ What makes it worth asking rather than accepting:
   `Field` pattern from `05`, a future schema renderer), all of which build on `ui-core` anyway.
 
 **The real argument for the split is dependency weight, not code size**, and it is worth stating
-precisely because it is the one thing tree-shaking does *not* solve. Tree-shaking drops unused
-*code* from a bundle; it does not drop a package from the dependency tree. Folding `ui-command`
+precisely because it is the one thing tree-shaking does _not_ solve. Tree-shaking drops unused
+_code_ from a bundle; it does not drop a package from the dependency tree. Folding `ui-command`
 into `ui-core` would put `cmdk`, `@tanstack/react-virtual`, `@radix-ui/react-dialog` and `react-use`
 behind every `ui-core` install — including consumers who only ever wanted a `Button`. `ui-overlays`
 brings four more Radix packages. Against `ui-core`'s current 19 direct dependencies, that is a

@@ -41,20 +41,20 @@ with a regression test, which is the whole point of splitting the work this way.
 
 ## Deliverables
 
-| ID | Deliverable | Phase | Size | Depends on | Status | Spec |
-|----|-------------|-------|------|-----------|--------|------|
-| P0 | Repo health & guardrails | 0 | M | — | ✅ done | [00-repo-health.md](00-repo-health.md) |
-| D0 | Vitest test harness | 1 | S | P0 | ✅ done | [01-test-harness.md](01-test-harness.md) |
-| D1 | Consolidate & test grouping logic | 1 | S | D0 | ✅ done | [02-grouping-logic.md](02-grouping-logic.md) |
-| D2 | Test & fix date formatting | 1 | S | D0 | ✅ done | [03-date-logic.md](03-date-logic.md) |
-| D3 | Extract `useDebouncedValue` hook | 1 | M | D0 | ✅ done | [04-debounce-hook.md](04-debounce-hook.md) |
-| D4 | Correctness bug fixes | 1 | M | D0 | todo | [05-correctness-bugs.md](05-correctness-bugs.md) |
-| D5 | Build & tooling config fixes | 2 | S | — | todo | _scoped below_ |
-| D6 | Exports & barrel conventions | 3 | M | — | todo | _scoped below_ |
-| D7 | Conventions doc + lint enforcement | 3 | S | D6 | todo | _scoped below_ |
-| D8 | Selects simplification | 4 | M | D0, D1 | todo | _scoped below_ |
-| D9 | Dialog/Sheet consolidation | 4 | M | — | todo | _scoped below_ |
-| D10 | Forms integration layer | 5 | L | D6 | todo | _scoped below_ |
+| ID  | Deliverable                        | Phase | Size | Depends on | Status  | Spec                                             |
+| --- | ---------------------------------- | ----- | ---- | ---------- | ------- | ------------------------------------------------ |
+| P0  | Repo health & guardrails           | 0     | M    | —          | ✅ done | [00-repo-health.md](00-repo-health.md)           |
+| D0  | Vitest test harness                | 1     | S    | P0         | ✅ done | [01-test-harness.md](01-test-harness.md)         |
+| D1  | Consolidate & test grouping logic  | 1     | S    | D0         | ✅ done | [02-grouping-logic.md](02-grouping-logic.md)     |
+| D2  | Test & fix date formatting         | 1     | S    | D0         | ✅ done | [03-date-logic.md](03-date-logic.md)             |
+| D3  | Extract `useDebouncedValue` hook   | 1     | M    | D0         | ✅ done | [04-debounce-hook.md](04-debounce-hook.md)       |
+| D4  | Correctness bug fixes              | 1     | M    | D0         | todo    | [05-correctness-bugs.md](05-correctness-bugs.md) |
+| D5  | Build & tooling config fixes       | 2     | S    | —          | todo    | _scoped below_                                   |
+| D6  | Exports & barrel conventions       | 3     | M    | —          | todo    | _scoped below_                                   |
+| D7  | Conventions doc + lint enforcement | 3     | S    | D6         | todo    | _scoped below_                                   |
+| D8  | Selects simplification             | 4     | M    | D0, D1     | todo    | _scoped below_                                   |
+| D9  | Dialog/Sheet consolidation         | 4     | M    | —          | todo    | _scoped below_                                   |
+| D10 | Forms integration layer            | 5     | L    | D6         | todo    | _scoped below_                                   |
 
 Size key: **S** ≈ under an hour, **M** ≈ half a session, **L** ≈ needs its own planning pass.
 
@@ -63,7 +63,9 @@ Size key: **S** ≈ under an hour, **M** ≈ half a session, **L** ≈ needs its
 ## Phase 2–5 scope (expand into full specs when picked up)
 
 ### D5 — Build & tooling config fixes (S, independent)
+
 Mechanical, high-value, no API impact.
+
 - Fix the Vite externalization bug: `pkgDependencies` is computed and logged
   ("Auto-externalizing N…") but the `external` predicate never uses it, so React/Radix/
   date-fns get bundled into every package. [`react-library.ts:38-45,72`](../../packages/vite-config/react-library.ts)
@@ -78,7 +80,9 @@ Mechanical, high-value, no API impact.
   ([`global.d.ts:47`](../../packages/typescript-config/types/global.d.ts)).
 
 ### D6 — Exports & barrel conventions (M)
+
 The library's value is consistency; this makes exports uniform.
+
 - Pick one barrel strategy and apply everywhere (dead per-component `index.ts` barrels vs.
   root importing straight from impl files — currently both exist).
 - Export **types** from every package root (currently `IButton`/`ISearch`/etc. are
@@ -94,12 +98,14 @@ The library's value is consistency; this makes exports uniform.
   (recommend the latter — fewer files, single source).
 
 ### D7 — Conventions doc + lint enforcement (S, after D6)
+
 - Write `docs/CONVENTIONS.md` (file layout, barrel rule, variants naming, `displayName`,
   one control-value contract).
 - Extend the existing custom rule
   [`folderStructure.mjs`](../../packages/eslint-config/folderStructure.mjs) to enforce it.
 
 ### D8 — Selects simplification (M, after D0/D1)
+
 - Delete the ~5 pure pass-through wrappers (`SelectGroup`, `SelectSeparator`,
   `SelectListItemsVirtualized`, `SelectGroupedListItems`, `SelectGroupedItemsVirtualized`)
   in favour of alias re-exports from `@repo/ui-command`.
@@ -113,6 +119,7 @@ The library's value is consistency; this makes exports uniform.
   `SelectProvider`) into one `selection` slice, or keep them layered.
 
 ### D9 — Dialog/Sheet consolidation (M)
+
 - Make Sheet a `side`-driven variant of a shared Dialog base — ~60-70% of the two trees
   is copy-paste (3 files byte-identical, 4 differ by one class). Deletes ~15 files.
 - Standardize on single-file-per-overlay (follow `DropdownMenu`); delete duplicate
@@ -126,6 +133,7 @@ The library's value is consistency; this makes exports uniform.
   re-exporting Dialog's parts).
 
 ### D10 — Forms integration layer (L, design-heavy, after D6)
+
 - Decide one control-value contract across all form controls (today each invents its own).
 - Build `Field` adapters over `@tanstack/react-form` with error / `aria-invalid` wiring;
   put `zod` (already a dep) to use.
@@ -138,14 +146,14 @@ The library's value is consistency; this makes exports uniform.
 
 Small, tracked deliverables that came out of getting the pipeline green. None block D0.
 
-| ID | Deliverable | Size | Why |
-|----|-------------|------|-----|
-| F1 | Type-hygiene cleanup | S | Fix the ~39 `no-empty-object-type` / `no-explicit-any` violations the now-working linter surfaced, then restore both rules from `warn` back to `error` in `packages/eslint-config/base.js`. |
-| F2 | Re-enable Storybook ESLint | S | `eslint-plugin-storybook` was removed (Storybook-10/Node-22 `require(esm)` crash). Re-add once `storybook` + `eslint-plugin-storybook` are on a compatible version. Ties into F3. |
-| F3 | Align Storybook versions | S | `@storybook/test`/`@storybook/instrumenter` are `8.6.15` vs `storybook@10.2.16` (peer warning). Unify on 10.x (also unblocks F2). |
-| F4 | Restore folder-structure lint | S | The `eslint-plugin-project-structure` rule was disabled (its parser clobbered the TS parser for all files). Re-add in an ISOLATED config/run so it can't disable code linting. Pairs with D7. |
-| F5 | `check-types` build ordering | XS | Add `dependsOn: ["^build"]` to the `check-types` task in `turbo.json` so standalone `pnpm check-types` resolves internal `@repo/*` `.d.ts` without a prior build. |
-| F6 | Unblock Storybook interaction tests | S | `apps/storybook` already runs `play()` tests via `@storybook/addon-vitest` + Playwright, but `pnpm test` there is **red**: the library `dist` bundles its own React (the **D5** externalization bug), so browser stories hit duplicate-React "hooks are null" errors. Fixing **D5** (externalize `react`/`react-dom`/Radix) should turn these green. Also **depends on F3** (align `@storybook/test` `8.6.15` → `10.x`) and pairs with F2. This is where component-behaviour coverage lives — the D0 node harness deliberately doesn't duplicate it. **Found during D3:** the identical "Invalid hook call" / duplicate-React crash also happens live in the Storybook **dev server** for every `UI Command/Command` story (crashes inside `<Popover>` on mount) — confirmed pre-existing via `git stash` (reproduces on unmodified `main`, unrelated to D3). Notable because dev-server stories load package `src` directly, not `dist` — so the dist-bundling theory alone may not fully explain it; worth re-checking root cause when picking this up. |
+| ID  | Deliverable                         | Size | Why                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| --- | ----------------------------------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F1  | Type-hygiene cleanup                | S    | Fix the ~39 `no-empty-object-type` / `no-explicit-any` violations the now-working linter surfaced, then restore both rules from `warn` back to `error` in `packages/eslint-config/base.js`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| F2  | Re-enable Storybook ESLint          | S    | `eslint-plugin-storybook` was removed (Storybook-10/Node-22 `require(esm)` crash). Re-add once `storybook` + `eslint-plugin-storybook` are on a compatible version. Ties into F3.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| F3  | Align Storybook versions            | S    | `@storybook/test`/`@storybook/instrumenter` are `8.6.15` vs `storybook@10.2.16` (peer warning). Unify on 10.x (also unblocks F2).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| F4  | Restore folder-structure lint       | S    | The `eslint-plugin-project-structure` rule was disabled (its parser clobbered the TS parser for all files). Re-add in an ISOLATED config/run so it can't disable code linting. Pairs with D7.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| F5  | `check-types` build ordering        | XS   | Add `dependsOn: ["^build"]` to the `check-types` task in `turbo.json` so standalone `pnpm check-types` resolves internal `@repo/*` `.d.ts` without a prior build.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| F6  | Unblock Storybook interaction tests | S    | `apps/storybook` already runs `play()` tests via `@storybook/addon-vitest` + Playwright, but `pnpm test` there is **red**: the library `dist` bundles its own React (the **D5** externalization bug), so browser stories hit duplicate-React "hooks are null" errors. Fixing **D5** (externalize `react`/`react-dom`/Radix) should turn these green. Also **depends on F3** (align `@storybook/test` `8.6.15` → `10.x`) and pairs with F2. This is where component-behaviour coverage lives — the D0 node harness deliberately doesn't duplicate it. **Found during D3:** the identical "Invalid hook call" / duplicate-React crash also happens live in the Storybook **dev server** for every `UI Command/Command` story (crashes inside `<Popover>` on mount) — confirmed pre-existing via `git stash` (reproduces on unmodified `main`, unrelated to D3). Notable because dev-server stories load package `src` directly, not `dist` — so the dist-bundling theory alone may not fully explain it; worth re-checking root cause when picking this up. |
 
 Also note: **D3 now also owns the `CommandSearch` stale-effect fix** — it's currently suppressed with a scoped `eslint-disable` + a pointer to D3, since the real fix is the `useDebouncedValue` extraction.
 

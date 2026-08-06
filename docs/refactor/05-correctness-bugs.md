@@ -102,7 +102,7 @@ testable end-to-end:
   `selectOption()` fired immediately after usually clicked the still-lingering (but already
   closing) element before it was actually removed — a timing race, not real "stays open"
   behaviour. It surfaced as a genuine, reproducible failure in `Multi / Virtualized (5 000
-  items)`, the one multi-select story with a real ~350ms wait (the search debounce) between
+items)`, the one multi-select story with a real ~350ms wait (the search debounce) between
   two picks — long enough for the animation to finish and the dialog to be truly gone. Fixed
   by passing `closeOnSelect={type === 'single'}` explicitly.
   [`Select.tsx`](../../packages/ui-forms/src/components/Selects/Select.tsx)

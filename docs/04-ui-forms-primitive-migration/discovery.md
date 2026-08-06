@@ -28,18 +28,18 @@ that needs form controls. They import either individual controls (`Input`, `Chec
 
 `ui-forms` exports, per [`packages/ui-forms/src/index.ts`](../../packages/ui-forms/src/index.ts):
 
-| Export | What it actually is | Depends on |
-| --- | --- | --- |
-| `useForm` | Re-export of `@tanstack/react-form`'s `useForm`, [`Form/form.ts:1`](../../packages/ui-forms/src/components/Form/form.ts) | `@tanstack/react-form` only |
-| `Input` | Styled native `<input>`, no form-specific behaviour | `@repo/tailwind-config` only |
-| `Textarea` | Styled native `<textarea>`, no form-specific behaviour | `@repo/tailwind-config` only |
-| `Checkbox`, `CheckboxLabel` | Styled `@radix-ui/react-checkbox` wrapper + label | `@repo/ui-core` (`Icon`, `Label`) |
-| `Radio`, `RadioLabel` | Styled `@radix-ui/react-radio-group` **item** wrapper + label — no group root exported | `@repo/ui-core` (`Icon`) |
-| `SliderRoot/Track/Range/Thumb` | Styled `@radix-ui/react-slider` compound parts, no assembled `Slider` | `@repo/tailwind-config` only |
-| `Calendar`, `CalendarDayButton` | Styled `react-day-picker` adapter | `@repo/tailwind-config` |
-| `SingleDatePicker`, `DateRangePicker` | Composition: `Button`/`Icon` (ui-core) + `Popover*` (ui-overlays) + `Calendar` | `ui-core`, `ui-overlays` |
-| `Select`, `SingleSelect`, `MultiSelect` | Composition: own `SelectProvider` context + `CommandInterface` (ui-command) + `PopoverContent` (ui-overlays) | `ui-core`, `ui-overlays`, `ui-command` |
-| `CheckboxGroup` (not re-exported from the package root — imported from its own path) | Composition: `Checkbox` + `CheckboxLabel` + array-selection logic | `Checkbox`/`CheckboxLabel` (ui-forms), `@repo/core` (`Option` type) |
+| Export                                                                               | What it actually is                                                                                                      | Depends on                                                          |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| `useForm`                                                                            | Re-export of `@tanstack/react-form`'s `useForm`, [`Form/form.ts:1`](../../packages/ui-forms/src/components/Form/form.ts) | `@tanstack/react-form` only                                         |
+| `Input`                                                                              | Styled native `<input>`, no form-specific behaviour                                                                      | `@repo/tailwind-config` only                                        |
+| `Textarea`                                                                           | Styled native `<textarea>`, no form-specific behaviour                                                                   | `@repo/tailwind-config` only                                        |
+| `Checkbox`, `CheckboxLabel`                                                          | Styled `@radix-ui/react-checkbox` wrapper + label                                                                        | `@repo/ui-core` (`Icon`, `Label`)                                   |
+| `Radio`, `RadioLabel`                                                                | Styled `@radix-ui/react-radio-group` **item** wrapper + label — no group root exported                                   | `@repo/ui-core` (`Icon`)                                            |
+| `SliderRoot/Track/Range/Thumb`                                                       | Styled `@radix-ui/react-slider` compound parts, no assembled `Slider`                                                    | `@repo/tailwind-config` only                                        |
+| `Calendar`, `CalendarDayButton`                                                      | Styled `react-day-picker` adapter                                                                                        | `@repo/tailwind-config`                                             |
+| `SingleDatePicker`, `DateRangePicker`                                                | Composition: `Button`/`Icon` (ui-core) + `Popover*` (ui-overlays) + `Calendar`                                           | `ui-core`, `ui-overlays`                                            |
+| `Select`, `SingleSelect`, `MultiSelect`                                              | Composition: own `SelectProvider` context + `CommandInterface` (ui-command) + `PopoverContent` (ui-overlays)             | `ui-core`, `ui-overlays`, `ui-command`                              |
+| `CheckboxGroup` (not re-exported from the package root — imported from its own path) | Composition: `Checkbox` + `CheckboxLabel` + array-selection logic                                                        | `Checkbox`/`CheckboxLabel` (ui-forms), `@repo/core` (`Option` type) |
 
 Two clearly different kinds of thing are in this one package: **leaf primitives with zero
 form-specific logic** (`Input`, `Textarea`, `Checkbox`, `Radio`, `Slider` parts), and **genuine

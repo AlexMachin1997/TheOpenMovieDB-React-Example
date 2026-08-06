@@ -74,7 +74,7 @@ Non-Goals — and gets its own future discovery once this ships.
   `useForm` stays the untouched re-export it already is. The adapter is a one-way translation from
   "shape TanStack Form happens to expose" to "shape `Field` happens to accept," not a component
   registry or a customised form hook — see Decisions.
-- `Field` wraps exactly one *control*, where a group (`CheckboxGroup`/`RadioGroup`) counts as one —
+- `Field` wraps exactly one _control_, where a group (`CheckboxGroup`/`RadioGroup`) counts as one —
   it holds one value and takes one label, description and error. `Field` is **not** extended to sit
   over two independent controls under a single label; that remains deferred. See Decisions.
 - A new, small `ui-core` component (working name `FieldMessage`) renders `Field`'s description and
@@ -270,14 +270,15 @@ Non-Goals — and gets its own future discovery once this ships.
 
   Each component is an ordinary composition over `FormField` that knows one control's change shape.
   That knowledge has to live somewhere; the alternative was copy-pasting it at every call site. What
-  the Decision above rejected — a `control='input'` style registry mapping a *name* to a component,
+  the Decision above rejected — a `control='input'` style registry mapping a _name_ to a component,
   requiring a new entry per control — is still rejected, and `FormField` stays exported as the
   escape hatch for controls with no wrapper.
 
   `CheckboxGroupField`, `SliderField` and date-picker fields were deliberately left out: they are
   the rarely-used four, and `FormField` covers them.
+
 - **Found during implementation, and it belongs in the spec because it is a caller obligation:
-  a form using these components must set `noValidate`.** `required` renders a *native* `required`
+  a form using these components must set `noValidate`.** `required` renders a _native_ `required`
   attribute — which is correct, and is what assistive technology announces. But it also enables the
   browser's own constraint validation, and when that fails the browser **blocks the `submit` event
   outright**. The React `onSubmit` handler never runs, so `form.handleSubmit()` never runs, so
@@ -307,12 +308,13 @@ Non-Goals — and gets its own future discovery once this ships.
   which is a second near-identical red beside `error`); it owns the state→icon mapping, so `error`
   cannot be paired with a tick; and it clears `role='alert'`.
 
-  **That last one is not cosmetic.** `role="alert"` is an *assertive* live region — right for a
+  **That last one is not cosmetic.** `role="alert"` is an _assertive_ live region — right for a
   page-level banner, wrong under a text input, where it interrupts a screen reader mid-keystroke
   every time a message renders or changes. `Field` wraps its messages in a single polite live
   region instead (see Accessibility → Error timing), and an assertive region nested inside a polite
   one overrides it for that subtree. `Alert` sets `role` before spreading props, so passing
   `undefined` genuinely clears it.
+
 - **`Alert` gains an `info` variant, which this deliverable adds.** The Decision above described a
   four-state palette drawn from `Alert`, but `Alert` had only
   `default`/`destructive`/`success`/`warning`/`error` — there was no neutral informational state to
@@ -357,12 +359,15 @@ Non-Goals — and gets its own future discovery once this ships.
 
 ## Second pass — the form layer
 
-**Status: specified, not built.** Everything above this line shipped (see [`plan.md`](./plan.md)).
+**Status: shipped.** Everything above this line shipped first; everything below shipped in a second
+pass — see [`plan.md` → Second pass](./plan.md#second-pass--the-form-layer-as-built) for the as-built
+record, including the four decisions below that were reversed after being checked against the form
+library's source rather than taken on trust.
 Everything below was raised after seeing the result, then interrogated into requirements in a
 follow-up session. It replaces the five loose proposals that previously sat here — the open
 questions those carried are settled below except where Open Questions says otherwise.
 
-`05` built the *pieces*. Assembling a form out of them is still manual, and three of the manual
+`05` built the _pieces_. Assembling a form out of them is still manual, and three of the manual
 steps fail **silently**:
 
 - **`noValidate` is a caller obligation** that blocks the `submit` event outright when forgotten —
@@ -546,7 +551,7 @@ form.
   presented as a safety net is worse than an honest absence.
 - **A missing `Form` throws, and is not wrapped in an error boundary.** A missing provider is a
   developer error and a structural one — if the tree renders once, it is correct forever. A boundary
-  would convert a crash in development into a caught state, making the mistake *more* likely to
+  would convert a crash in development into a caught state, making the mistake _more_ likely to
   ship, and boundaries do not catch errors outside render anyway. An error boundary for consumer
   code throwing inside a field is a separate proposal with a separate justification.
 - **The throw is documented, not asserted in a test.** A one-time authoring mistake with an
@@ -588,18 +593,18 @@ form.
   the `errors` array regardless of cause, so it needed no change either way.
 - **Field-bound server errors clear themselves, so `Form` contains no clearing machinery.**
   `FieldApi.validateSync` ends with an explicit reset of the `onSubmit` key for any non-submit cause
-  that did not itself error (`form-core/dist/esm/FieldApi.js:248-263`). It sits *after* the validator
+  that did not itself error (`form-core/dist/esm/FieldApi.js:248-263`). It sits _after_ the validator
   loop rather than inside it, so it fires even for a field that declares no validators at all, and
   `handleBlur` calls `validate('blur')` unconditionally. So editing or leaving a field clears the
   server error bound to it, and `isFieldsValid` recovers on its own. This is load-bearing for the
   disable rule below — without it a natively disabled submit button could never re-enable.
 - **~~The form-level message is read from form state, not held by the caller.~~ Amended during
   planning of the second pass: it is held by `Form`, not in the form library's error map.** The
-  original objection was to *caller*-held state, which has to be cleared at the start of every
+  original objection was to _caller_-held state, which has to be cleared at the start of every
   submission or a stale failure sits above a form that has since succeeded. `Form` owns the submit
   handler, so it clears unconditionally and that objection does not apply to it. The reason not to
   use `errorMap` is the opposite one: that slot feeds `isFormValid` → `isValid` → `canSubmit`, so a
-  message whose only job is to be *read* would also gate submission. The caller reports a form-level
+  message whose only job is to be _read_ would also gate submission. The caller reports a form-level
   failure by **throwing**; `Form` catches it, using the error's own message where it has one and
   generic wording only for a failure that produced none.
 - **A submit button exists as a component, and the reason is `type`.**
@@ -609,7 +614,7 @@ form.
   make that unforgettable, and to own the accessibility decisions above in one place rather than
   having them re-derived per application.
 - **The disable rule: never before the first submission; unavailable while invalid after it.**
-  Disable-until-valid as a *starting* state was rejected — it gives no reason, is skipped by
+  Disable-until-valid as a _starting_ state was rejected — it gives no reason, is skipped by
   keyboard and screen-reader navigation, and leaves someone stuck. The chosen rule keeps the button
   live until the user has actually asked for a result. The trade is that a user part-way through
   fixing errors sees an unavailable button — answered by the button re-enabling itself as the last
@@ -632,6 +637,7 @@ form.
   (SC 2.1.1), and `disabled` exposes its state correctly (SC 4.1.2). Error Identification and Error
   Suggestion (SC 3.3.1, 3.3.3 AA) are met by the field messages, not by the button. The original
   decision was framed as accessibility but was a usability preference.
+
 - **Field ids default to field names.** React 19's fallback ids contain characters invalid in a CSS
   selector, already documented as a trap in [`plan.md`](./plan.md). Defaulting to the name gives
   readable DOM ids, makes a field's element reachable from its name, and removes the trap from every
@@ -646,18 +652,18 @@ form.
   accident.
 
 - **A failed submission focuses the first invalid control.** The two rejected options were focusing
-  the form-level message — which announces that *something* failed without saying where, leaving a
+  the form-level message — which announces that _something_ failed without saying where, leaving a
   screen reader user to go and find it — and doing nothing, which leaves the regression from
   removing native constraint validation in place. The "aggressive" objection is answered by the
   trigger: focus moves only when the user has pressed submit and is waiting for a result, never
-  while they are typing. Focusing the *control* rather than the message is also what makes the
+  while they are typing. Focusing the _control_ rather than the message is also what makes the
   message useful, since `aria-describedby` reads it out on arrival.
 - **~~First-invalid is found in the DOM, not from field state.~~ Amended during planning of the
-  second pass: the *names* come from field state, the *order* comes from the DOM.** The original
+  second pass: the _names_ come from field state, the _order_ comes from the DOM.** The original
   decision was right that `fieldMeta` gives registration order and that document order is what
   "first" has to mean. But a `[aria-invalid="true"]` query cannot run where it needs to: the submit
   handler. `aria-invalid` only appears once React has re-rendered, and `await form.handleSubmit()`
-  resolving means the *store* settled, not that React committed — so a DOM query on the next line
+  resolving means the _store_ settled, not that React committed — so a DOM query on the next line
   reads the pre-submission DOM, and the alternatives are an effect or a scheduler heuristic.
 
   Because field ids now default to field names, both properties are available at once: take the
@@ -668,6 +674,7 @@ form.
   carries the id but a radio inside it holds the tab stop — its `[tabindex="0"]` descendant is
   preferred, then any focusable one; picking a `tabindex="-1"` item works but desynchronises Radix's
   roving tab stop.
+
 - **~~The form-level error is cleared at the start of every submission, and this is load-bearing
   rather than hygiene.~~ It is now ordinary hygiene, because the message no longer lives in the
   error map.** The original reasoning was correct for the design it described: a form-level

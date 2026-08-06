@@ -52,8 +52,8 @@ have no tests.
 - [x] A test reproduces the old ungrouped-dropping bug and now passes (the `groupOptions`
       "ungrouped kept" spec — the exact contract the old hook violated).
 - [~] `ui-command` and `Selects` Storybook grouped stories still render identically —
-      behaviourally guaranteed (all consumers now route through the unit-tested `groupOptions`);
-      the Storybook `play()` run was not executed in this session.
+  behaviourally guaranteed (all consumers now route through the unit-tested `groupOptions`);
+  the Storybook `play()` run was not executed in this session.
 
 ## Outcome
 

@@ -73,7 +73,7 @@ gates) is blocked until this is done.
 ## Out of scope
 
 - Fixing the actual lint violations the now-working linter surfaces (e.g. the `CommandSearch`
-  hook) — that's D4. P0 just makes them *visible and blocking*.
+  hook) — that's D4. P0 just makes them _visible and blocking_.
 - The Vite externalization bug, redundant externals, broken eslint exports, `no-console`
   policy, full version catalog — all D5.
 - Any component/logic changes.

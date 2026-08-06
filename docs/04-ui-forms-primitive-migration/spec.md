@@ -152,7 +152,7 @@ out of scope for both and gets its own future discovery once `05` ships.
   package boundary on its own — `Select` and `Input` are both "form UI" but have entirely different
   dependency footprints. The rule going forward: a component lives in `ui-core` if it depends on
   nothing above `ui-core` in the package chain (`core → ui-core → ui-overlays → ui-command →
-  ui-forms`); it lives in `ui-forms` if it genuinely needs `ui-overlays` and/or `ui-command`. This is
+ui-forms`); it lives in `ui-forms` if it genuinely needs `ui-overlays` and/or `ui-command`. This is
   a refinement of the original ask ("all core form UI components should live in `ui-core`"), not a
   rejection of it — it produces the same outcome for every component in this audit except that it
   also pulls `CheckboxGroup` (and the new `RadioGroup`) down into `ui-core`, since neither depends on
@@ -182,7 +182,7 @@ out of scope for both and gets its own future discovery once `05` ships.
   Per the WAI-ARIA Authoring Practices, a checkbox group's items are conventionally independent Tab
   stops — each checkbox already has working native keyboard support (Space to toggle, Tab to reach
   it) via Radix, which is not itself broken. What's missing, and what this decision adds, is
-  arrow-key navigation *between* items in the group, which `RadioGroup` gets for free from
+  arrow-key navigation _between_ items in the group, which `RadioGroup` gets for free from
   `RadioGroupPrimitive.Root` because a radio group is inherently a single-selection roving-tabindex
   widget. Giving `CheckboxGroup` the same navigation model is a deliberate consistency/efficiency
   choice, not an accessibility-conformance fix — worth being explicit about so it isn't miscited
