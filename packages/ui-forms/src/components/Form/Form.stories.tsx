@@ -406,11 +406,20 @@ export const Advanced: Story = {
 			await expect(submit).toBeEnabled();
 			await userEvent.click(submit);
 
+			// Every outstanding error, not just the first — three fields are invalid here, and a
+			// user who only sees one of them fixes it and gets refused again.
 			await waitFor(async () => {
 				await expect(canvasElement.querySelector('[id="email-message"]')).toHaveTextContent(
 					'Email address is required.'
 				);
 			});
+
+			await expect(canvasElement.querySelector('[id="country-message"]')).toHaveTextContent(
+				'Choose a country.'
+			);
+			await expect(canvasElement.querySelector('[id="terms-message"]')).toHaveTextContent(
+				'You must accept the terms.'
+			);
 
 			await expect(email).toHaveFocus();
 			await expect(submit).toBeDisabled();

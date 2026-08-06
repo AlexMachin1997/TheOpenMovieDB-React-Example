@@ -40,9 +40,15 @@ const emailRequired = {
 const SignUpForm = ({ onSave }: { onSave?: () => Promise<void> }) => {
 	const [saved, setSaved] = React.useState(false);
 
+	// Rendered as text so a story can assert how many submissions actually started. Asserting that
+	// "nothing was saved yet" would pass whether or not a second submission began, because the
+	// request is still open either way.
+	const [started, setStarted] = React.useState(0);
+
 	const form = useForm({
 		defaultValues: { email: '' },
 		onSubmit: async () => {
+			setStarted((count) => count + 1);
 			await onSave?.();
 			setSaved(true);
 		}
@@ -56,6 +62,7 @@ const SignUpForm = ({ onSave }: { onSave?: () => Promise<void> }) => {
 
 			<SubmitButton>Create account</SubmitButton>
 
+			<p data-testid='submissions-started'>{started}</p>
 			{saved && <p data-testid='saved'>Saved.</p>}
 		</Form>
 	);
@@ -200,9 +207,14 @@ export const WhileSubmitting: Story = {
 			await expect(submit).toBeDisabled();
 		});
 
-		await step('A second press starts nothing', async () => {
+		await step('A second press starts no second submission', async () => {
+			await expect(canvas.getByTestId('submissions-started')).toHaveTextContent('1');
+
 			await userEvent.click(submit, { pointerEventsCheck: 0 });
-			await expect(canvas.queryByTestId('saved')).not.toBeInTheDocument();
+
+			// Counted, not inferred. Asserting "nothing saved yet" would pass either way while the
+			// request is still open, so it would prove nothing.
+			await expect(canvas.getByTestId('submissions-started')).toHaveTextContent('1');
 		});
 
 		await step('Releasing the request completes the submission', async () => {
