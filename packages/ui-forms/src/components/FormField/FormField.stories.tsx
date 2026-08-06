@@ -97,19 +97,21 @@ export const Default: Story = {
 			source: {
 				language: 'tsx',
 				code: `import { Input } from '@repo/ui-core';
-import { FormField, useForm } from '@repo/ui-forms';
+import { Form, FormField, SubmitButton, useForm } from '@repo/ui-forms';
 
-const form = useForm({ defaultValues: { email: '' } });
+const form = useForm({ defaultValues: { email: '' }, onSubmit: async ({ value }) => save(value) });
 
-<FormField
-  form={form}
-  name='email'
-  label='Email address'
-  required
-  validators={{ onChange: ({ value }) => (value.includes('@') ? undefined : 'Enter a valid email address.') }}
->
-  {(control) => <Input {...control} type='email' />}
-</FormField>`
+<Form form={form} className='grid gap-4'>
+  <FormField
+    name='email'
+    label='Email address'
+    required
+    validators={{ onChange: ({ value }) => (value.includes('@') ? undefined : 'Enter a valid email address.') }}
+  >
+    {(control) => <Input {...control} type='email' />}
+  </FormField>
+  <SubmitButton>Create account</SubmitButton>
+</Form>`
 			}
 		}
 	},
@@ -134,14 +136,17 @@ const form = useForm({ defaultValues: { email: '' } });
 			await expect(region).toHaveTextContent('Enter a valid email address.');
 		});
 
-		await step('Correcting it clears the error, with no hand-translation at the call site', async () => {
-			await userEvent.clear(email);
-			await userEvent.type(email, 'john@example.com');
+		await step(
+			'Correcting it clears the error, with no hand-translation at the call site',
+			async () => {
+				await userEvent.clear(email);
+				await userEvent.type(email, 'john@example.com');
 
-			await waitFor(async () => {
-				await expect(email).not.toHaveAttribute('aria-invalid');
-			});
-		});
+				await waitFor(async () => {
+					await expect(email).not.toHaveAttribute('aria-invalid');
+				});
+			}
+		);
 
 		await step('The value reached the form, resolved by name', async () => {
 			await userEvent.click(canvas.getByRole('checkbox', { name: /Accept the terms/ }));

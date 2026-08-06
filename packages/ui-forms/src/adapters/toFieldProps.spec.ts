@@ -12,9 +12,7 @@ import type { ITanStackFieldLike } from '~/adapters/toFieldProps.types';
  * `AnyFieldApi` against the same interface at compile time, and `toFieldProps.stories.tsx` drives a
  * genuine `useForm` in a browser.
  */
-const field = (
-	meta: Partial<ITanStackFieldLike['state']['meta']> = {}
-): ITanStackFieldLike => ({
+const field = (meta: Partial<ITanStackFieldLike['state']['meta']> = {}): ITanStackFieldLike => ({
 	state: {
 		meta: {
 			isTouched: false,

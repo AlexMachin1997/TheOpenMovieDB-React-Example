@@ -1,0 +1,46 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './RadioGroupField.stories';
+
+<Meta of={Stories} />
+
+# Radio group field
+
+A [`RadioGroup`](?path=/docs/ui-core-radio-group--docs) bound to a form field by name.
+
+```tsx
+<Form form={form} className='grid gap-4'>
+	<RadioGroupField name='plan' label='Billing plan' options={plans} />
+</Form>
+```
+
+<Canvas of={Stories.Default} />
+
+## Properties
+
+<Controls />
+
+Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
+`showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
+errors reach a field, and [`Field`](?path=/docs/ui-core-field--docs) for the labelling and message
+layout every one of these renders.
+
+There is **no `form` prop** — it comes from the surrounding `Form`, and rendering this without one
+throws.
+
+## Why this component exists
+
+**It sets `nativeLabel={false}` for you.**
+
+A single native `<label>` cannot name several controls, so a group's label has to render as a
+`<span>` with the group pointing back at it through `aria-labelledby`. Drive a radio group through
+[`FormField`](?path=/docs/ui-forms-form-field--docs) directly and you have to remember that — and you
+get no warning when you don't. The label simply names nothing, which is invisible until someone uses
+a screen reader.
+
+## Accessibility
+
+The group keeps Radix's `radiogroup` role rather than being given the more general `group`. It is the
+more specific of the two, and assistive technology reads set position — "2 of 4" — from it.
+
+Each option keeps its own per-item label, so the group announces its heading and each radio announces
+itself.

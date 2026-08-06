@@ -10,10 +10,7 @@ import type { ICheckboxField } from '~/components/fields/fields.types';
  * <CheckboxField name='terms' label='Accept the terms' required />
  * ```
  */
-export const CheckboxField = ({
-	disabled = false,
-	...fieldProps
-}: ICheckboxField) => (
+export const CheckboxField = ({ disabled = false, ...fieldProps }: ICheckboxField) => (
 	<FormField {...fieldProps}>
 		{/*
 		 * `value` is destructured out rather than spread: Radix's Checkbox has its own `value` prop

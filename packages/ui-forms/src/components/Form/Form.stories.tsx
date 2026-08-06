@@ -109,15 +109,18 @@ const form = useForm({
 			await expect(formElement).toHaveAttribute('novalidate');
 		});
 
-		await step('Submitting an empty required form validates rather than being blocked', async () => {
-			await userEvent.click(canvas.getByRole('button', { name: 'Create account' }));
+		await step(
+			'Submitting an empty required form validates rather than being blocked',
+			async () => {
+				await userEvent.click(canvas.getByRole('button', { name: 'Create account' }));
 
-			await waitFor(async () => {
-				await expect(canvasElement.querySelector('[id="email-message"]')).toHaveTextContent(
-					'Email address is required.'
-				);
-			});
-		});
+				await waitFor(async () => {
+					await expect(canvasElement.querySelector('[id="email-message"]')).toHaveTextContent(
+						'Email address is required.'
+					);
+				});
+			}
+		);
 
 		await step('Ids default to field names, so the message region resolves', async () => {
 			const email = canvas.getByRole('textbox', { name: /Email address/ });

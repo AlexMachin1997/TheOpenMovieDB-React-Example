@@ -13,10 +13,7 @@ import type { ISwitchField } from '~/components/fields/fields.types';
  * <SwitchField name='marketing' label='Email me offers' />
  * ```
  */
-export const SwitchField = ({
-	disabled = false,
-	...fieldProps
-}: ISwitchField) => (
+export const SwitchField = ({ disabled = false, ...fieldProps }: ISwitchField) => (
 	<FormField {...fieldProps}>
 		{/* `value` destructured out for the same reason as CheckboxField — Radix's Switch also has
 		its own string `value` prop. */}

@@ -93,12 +93,22 @@ export const groupedTechOptions: Option[] = [
 
 	// DevOps & Containerization
 	{ id: 'docker', value: 'docker', label: 'Docker', group: 'DevOps & Containerization' },
-	{ id: 'kubernetes', value: 'kubernetes', label: 'Kubernetes', group: 'DevOps & Containerization' },
+	{
+		id: 'kubernetes',
+		value: 'kubernetes',
+		label: 'Kubernetes',
+		group: 'DevOps & Containerization'
+	},
 	{ id: 'helm', value: 'helm', label: 'Helm', group: 'DevOps & Containerization' },
 	{ id: 'terraform', value: 'terraform', label: 'Terraform', group: 'DevOps & Containerization' },
 	{ id: 'ansible', value: 'ansible', label: 'Ansible', group: 'DevOps & Containerization' },
 	{ id: 'jenkins', value: 'jenkins', label: 'Jenkins', group: 'DevOps & Containerization' },
-	{ id: 'gitlab-ci', value: 'gitlab-ci', label: 'GitLab CI/CD', group: 'DevOps & Containerization' },
+	{
+		id: 'gitlab-ci',
+		value: 'gitlab-ci',
+		label: 'GitLab CI/CD',
+		group: 'DevOps & Containerization'
+	},
 	{
 		id: 'github-actions',
 		value: 'github-actions',

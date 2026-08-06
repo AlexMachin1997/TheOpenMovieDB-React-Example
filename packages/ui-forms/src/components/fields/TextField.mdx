@@ -1,0 +1,44 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './TextField.stories';
+
+<Meta of={Stories} />
+
+# Text field
+
+A text [`Input`](?path=/docs/ui-core-input--docs) bound to a form field by name.
+
+The one you reach for by default. `type` is forwarded, so a password, telephone number, URL or date
+input is the same component.
+
+```tsx
+import { Form, TextField, useForm } from '@repo/ui-forms';
+
+const form = useForm({ defaultValues: { email: '' }, onSubmit: async ({ value }) => save(value) });
+
+<Form form={form} className='grid gap-4'>
+	<TextField name='email' label='Email address' type='email' required />
+</Form>;
+```
+
+<Canvas of={Stories.Default} />
+
+## Properties
+
+<Controls />
+
+Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
+`showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
+errors reach a field, and [`Field`](?path=/docs/ui-core-field--docs) for the labelling and message
+layout every one of these renders.
+
+There is **no `form` prop** — it comes from the surrounding `Form`, and rendering this without one
+throws.
+
+## Variations
+
+<Canvas of={Stories.Password} />
+
+<Canvas of={Stories.Disabled} />
+
+> **A `placeholder` is not a label.** It disappears the moment someone types, takes no part in the
+> accessible name, and fails contrast in most themes. Use `label`, and `description` for the hint.

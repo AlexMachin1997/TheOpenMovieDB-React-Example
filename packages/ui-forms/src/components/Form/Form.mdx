@@ -1,0 +1,135 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormStories from './Form.stories';
+
+<Meta of={FormStories} />
+
+# Form
+
+Owns the `<form>` element, `noValidate`, and the form instance every field below it binds to.
+
+Start every form with it. Three things that used to be the caller's job to remember — and that failed
+silently when forgotten — are structural here.
+
+```tsx
+import { Form, FormError, SubmitButton, TextField, useForm } from '@repo/ui-forms';
+
+const form = useForm({
+	defaultValues: { email: '' },
+	onSubmit: async ({ value }) => save(value)
+});
+
+<Form form={form} className='grid gap-4'>
+	<TextField name='email' label='Email address' required />
+	<FormError />
+	<SubmitButton>Save</SubmitButton>
+</Form>;
+```
+
+## What it takes off your hands
+
+| Without `Form`                                                        | With `Form`                                                       |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `noValidate` forgotten → the browser blocks submit, nothing validates | Always set, and there is no prop that turns it off                |
+| A plain `<Button>` inside a form does nothing (`type='button'`)       | [`SubmitButton`](?path=/docs/ui-forms-submit-button--docs)        |
+| A server failure belonging to no field has nowhere to go              | [`FormError`](?path=/docs/ui-forms-form-error--docs)              |
+| A failed submit leaves focus where it was                             | Focus moves to the first invalid control, in document order       |
+| Every field takes a `form` prop                                       | Fields read it from context — you write the name and nothing else |
+
+## Properties
+
+<Controls />
+
+`noValidate` and `onSubmit` are **absent from the props type**, not defaulted. Neither can be passed
+at all, so neither can be removed.
+
+## Reporting failures from your submit handler
+
+Two mechanisms, and which one you reach for depends on who the failure belongs to.
+
+```tsx
+const form = useForm({
+	defaultValues: { email: '', password: '' },
+	onSubmit: async ({ value, formApi }) => {
+		const response = await save(value);
+		if (response.ok) return;
+
+		// Belongs to a field -> bind it to the field. This is the common case, and the message
+		// renders under the control it belongs to.
+		if (response.fieldErrors) {
+			formApi.setErrorMap({ onSubmit: { fields: response.fieldErrors } });
+		}
+
+		// Belongs to nobody -> throw. <FormError /> renders it.
+		if (response.formError) throw new Error(response.formError);
+	}
+});
+```
+
+> **Prefer binding to a field.** A message a user can act on belongs next to the thing they need to
+> change. `FormError` is for what is genuinely left over — a 500, a 429, an expired session, a
+> dropped connection.
+
+**You do not need to clear field-bound errors.** Editing or leaving a field clears the server error
+attached to it, including on a field with no validators of its own. That is also what lets the
+submit button recover.
+
+**Anything after a successful `await` in your handler already runs only on success**, so closing a
+dialog or firing a toast goes there. There is no separate success callback.
+
+<Canvas of={FormStories.Default} />
+
+## Layout
+
+`Form` ships **no layout of its own**. Pass a `className`.
+
+That is deliberate rather than an omission. A form filling a `Dialog` sits between `DialogContent`
+(`max-h-[90vh] flex flex-col`) and `DialogContentArea` (`flex-1 overflow-y-auto`), and the scroll
+depends on those two being directly related. Insert an element between them that is not itself a
+flex container and the body stops scrolling, content overflows the clipped height, and the footer
+carrying the submit button is pushed out of view — a long form in a dialog becomes unsubmittable.
+
+With no default, that stays an ordinary class-name decision rather than an override of something
+invisible:
+
+```tsx
+<DialogContent>
+	<Form form={form} className='flex min-h-0 flex-1 flex-col'>
+		<DialogHeader>…</DialogHeader>
+		<DialogContentArea>…</DialogContentArea>
+		<DialogFooter>
+			<SubmitButton>Save</SubmitButton>
+		</DialogFooter>
+	</Form>
+</DialogContent>
+```
+
+## Forms inside overlays
+
+A `Form` written inside another `Form`'s JSX but rendered through a portal — a `Dialog`, a `Sheet` —
+submits only itself. React events propagate through the React tree rather than the DOM tree, so
+without that the outer form would submit too, and nothing about the DOM would show why.
+
+<Canvas of={FormStories.DoesNotSubmitAnOuterFormThroughAPortal} />
+
+## Accessibility
+
+- **A submission that does not succeed moves focus to the first invalid control**, in document order
+  — restoring what the browser's own constraint validation did before `noValidate` removed it. It
+  fires only in response to an explicit submit, never while you are typing.
+- Where the invalid thing is a group rather than a control — a radio group — focus goes to the item
+  holding the group's tab stop, not to whichever radio happens to be first.
+- Each field's message region is polite and belongs to that field. The **form-level** region is
+  assertive, because by then the user has pressed submit and stopped to wait.
+
+<Canvas of={FormStories.FocusesFirstInvalidControl} />
+
+## The one thing nothing checks
+
+A field's `name` is a plain string, and neither the compiler nor the runtime verifies it exists.
+
+This is the accepted cost of the form travelling by context: React context is not generic, so the
+form's data type cannot travel with it. Every alternative that keeps the check is a factory, and the
+field components would then come from `createForm<IAccount>()` rather than from the package barrel.
+Keeping them barrel-importable was judged worth more.
+
+**A misspelled name renders, accepts input, and silently never submits.** Nothing detects it.

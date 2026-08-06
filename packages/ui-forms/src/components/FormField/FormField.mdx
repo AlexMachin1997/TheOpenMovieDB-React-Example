@@ -5,12 +5,15 @@ import * as FormFieldStories from './FormField.stories';
 
 # Form field
 
-Binds `@repo/ui-core`'s [`Field`](?path=/docs/ui-core-field--docs) to a TanStack Form field by name,
-and hands you the bindings to put on any control.
+Binds `@repo/ui-core`'s [`Field`](?path=/docs/ui-core-field--docs) to a field of the surrounding
+[`Form`](?path=/docs/ui-forms-form--docs) by name, and hands you the bindings to put on any control.
 
-> **Reach for the [field components](?path=/docs/ui-forms-fields--docs) first.** `TextField`,
-> `SelectField` and the rest are built on this and need no render prop. `FormField` is what you use
-> when the control you want has no bound wrapper — including one that does not exist yet.
+> **Reach for a bound field component first.**
+> [`TextField`](?path=/docs/ui-forms-fields-text-field--docs),
+> [`SelectField`](?path=/docs/ui-forms-fields-select-field--docs) and the rest are built on this and
+> need no render prop. `FormField` is what you use when the control you want has no bound wrapper —
+> including one that does not exist yet. `CheckboxGroup`, `Slider` and the date pickers are the
+> deliberate gaps.
 
 ## Installation
 
@@ -20,16 +23,19 @@ import { FormField, useForm } from '@repo/ui-forms';
 
 ## Usage
 
-<Canvas sourceState="none" of={FormFieldStories.Default} />
+<Canvas sourceState='none' of={FormFieldStories.Default} />
 
 ```tsx
-<FormField form={form} name='email' label='Email address' required>
-  {(control) => <Input {...control} type='email' />}
+<FormField name='email' label='Email address' required>
+	{(control) => <Input {...control} type='email' />}
 </FormField>
 ```
 
 You name the field; its value and validation state are already resolved. The reactivity comes from
 TanStack's own `form.Field`, which `FormField` renders internally — nothing here adds to it.
+
+There is **no `form` prop**: it comes from the surrounding `Form`, and rendering this without one
+throws. The control's `id` defaults to the field's `name`, so `#email` finds it in the DOM.
 
 ## Properties
 
@@ -40,10 +46,19 @@ TanStack's own `form.Field`, which `FormField` renders internally — nothing he
 Children receive `(control, field)`. `control` extends `Field`'s accessibility bindings with the
 data wiring:
 
-| Key | From |
-| --- | ---- |
-| `id`, `aria-describedby`, `aria-invalid`, `required` / `aria-required` | `Field` |
-| `name`, `value`, `onChange`, `onBlur` | the form |
+| Key                                                                    | From     |
+| ---------------------------------------------------------------------- | -------- |
+| `id`, `aria-describedby`, `aria-invalid`, `required` / `aria-required` | `Field`  |
+| `name`, `value`, `onChange`, `onBlur`                                  | the form |
+
+`control.value` is typed `unknown` by default, because the form travels by context and React context
+cannot carry the form's data type. Declare it when you read it:
+
+```tsx
+<FormField<string> name='email' label='Email address'>
+	{(control) => <Input {...control} value={control.value} />}
+</FormField>
+```
 
 `onChange` is normalised: it accepts either a DOM change event or a raw value, so the same handler
 serves an `Input` (`event.target.value`) and a `Checkbox` (a boolean). The second argument is the
@@ -56,10 +71,10 @@ a string `value` for form submission. Spreading the bag onto them is a **type er
 bug, and the fix is to destructure:
 
 ```tsx
-<FormField form={form} name='terms' label='Accept the terms'>
-  {({ value, onChange, ...control }) => (
-    <Checkbox {...control} checked={value} onCheckedChange={onChange} />
-  )}
+<FormField<boolean> name='terms' label='Accept the terms'>
+	{({ value, onChange, ...control }) => (
+		<Checkbox {...control} checked={value} onCheckedChange={onChange} />
+	)}
 </FormField>
 ```
 
@@ -67,25 +82,31 @@ Absorbing that is precisely what `CheckboxField` exists for.
 
 ## What it deliberately does not do
 
-`FormField` never maps a control *name* to a component — there is no `<FormField control='input' />`.
+`FormField` never maps a control _name_ to a component — there is no `<FormField control='input' />`.
 That would mean holding a registry of every control and how each reports a change, and every control
 added later would need an entry in it. Connecting the control stays a one-line job, which is what
 keeps this working with controls the library has never heard of.
 
-The bound [field components](?path=/docs/ui-forms-fields--docs) are the ergonomic answer instead:
-ordinary compositions, each knowing one control, all built on this.
+The bound field components are the ergonomic answer instead: ordinary compositions, each knowing one
+control, all built on this — [text](?path=/docs/ui-forms-fields-text-field--docs),
+[textarea](?path=/docs/ui-forms-fields-textarea-field--docs),
+[checkbox](?path=/docs/ui-forms-fields-checkbox-field--docs),
+[switch](?path=/docs/ui-forms-fields-switch-field--docs),
+[select](?path=/docs/ui-forms-fields-select-field--docs) and
+[radio group](?path=/docs/ui-forms-fields-radio-group-field--docs).
 
-## 🚨 `noValidate` on your form
+## Validation timing
 
-<Canvas sourceState="none" of={FormFieldStories.SubmitSurfacesErrorsOnUnvisitedFields} />
+<Canvas sourceState='none' of={FormFieldStories.SubmitSurfacesErrorsOnUnvisitedFields} />
 
-`required` renders a native `required` attribute, which switches on the browser's own constraint
-validation — and when that fails the browser blocks the `submit` event outright, so your `onSubmit`
-never runs and TanStack never validates. Always:
+`showErrorsWhen` decides when a message becomes visible. `'touched'` (the default) covers the case
+that matters most: submitting marks every mounted field touched, so an error appears even on a field
+the user never visited.
 
-```tsx
-<form noValidate onSubmit={(event) => { event.preventDefault(); void form.handleSubmit(); }}>
-```
+> **`noValidate` used to be your problem, and no longer is.** `required` renders a _native_ `required`
+> attribute, and the browser's own constraint validation blocks the `submit` event outright when it
+> fails — the handler never runs, nothing validates, no message appears.
+> [`Form`](?path=/docs/ui-forms-form--docs) sets `noValidate` and there is no prop that turns it off.
 
 ## `toFieldProps` — the translation underneath
 
@@ -95,12 +116,12 @@ Exported separately for driving `form.Field` or `useField` yourself:
 import { toFieldProps } from '@repo/ui-forms';
 
 <form.Field name='email'>
-  {(field) => (
-    <Field label='Email address' {...toFieldProps(field)}>
-      {(control) => <Input {...control} value={field.state.value} />}
-    </Field>
-  )}
-</form.Field>
+	{(field) => (
+		<Field label='Email address' {...toFieldProps(field)}>
+			{(control) => <Input {...control} value={field.state.value} />}
+		</Field>
+	)}
+</form.Field>;
 ```
 
 It takes a TanStack field's state and returns the props `Field` accepts — nothing else. It contains

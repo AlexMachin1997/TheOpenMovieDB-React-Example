@@ -1,0 +1,80 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SubmitButtonStories from './SubmitButton.stories';
+
+<Meta of={SubmitButtonStories} />
+
+# Submit button
+
+Submits the surrounding [`Form`](?path=/docs/ui-forms-form--docs), and cannot be built without submit
+semantics.
+
+```tsx
+<Form form={form} className='grid gap-4'>
+	<TextField name='email' label='Email address' required />
+	<SubmitButton>Create account</SubmitButton>
+</Form>
+```
+
+## Why it exists
+
+[`Button`](?path=/docs/ui-core-button--docs) defaults to `type='button'` on purpose, so that a button
+in the middle of a form does not submit it by accident. The cost is that the one button that _should_
+submit looks completely correct and does nothing:
+
+```tsx
+// Renders. Looks right. Does nothing at all.
+<Button>Save</Button>
+```
+
+Nothing warns you. `SubmitButton` makes that unforgettable, and owns the availability rules in one
+place rather than having them re-derived per application.
+
+<Canvas of={SubmitButtonStories.Default} />
+
+## Properties
+
+<Controls />
+
+Three of `Button`'s props are deliberately **not** forwarded:
+
+| Prop      | Why                                                                                                                                                                   |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`    | Submit semantics are the entire point. Making it settable would reintroduce the failure above.                                                                        |
+| `loading` | Driven by the form's own submitting state — a caller value would either fight it or lie about it.                                                                     |
+| `asChild` | `Button` applies the native `disabled` attribute only when it renders a real `<button>`, so slotting would silently lose both the in-flight guarantee and the `type`. |
+
+`disabled` **is** kept, and is OR-ed with the form's own reasons — for when you have a reason of your
+own.
+
+## When it is unavailable
+
+Two situations, and they behave the same way because they are the same mechanism.
+
+**While a submission is in flight** — so a second press cannot start a second request. It reports
+`aria-busy` and shows a spinner while it does.
+
+**While the form is invalid, but only after a submission has been attempted.** Never before.
+
+> **Why not disable it from the start?** A button that dies on the first bad keystroke gives no
+> reason, is skipped over by keyboard and screen-reader navigation, and leaves someone with nothing
+> to press and nothing to read. Waiting until the user has actually asked for a result means that by
+> the time it goes unavailable, every error is on screen and focus has already been moved to the
+> first of them.
+
+**It re-enables itself** as the last outstanding field clears — which is what makes the rule safe, and
+answers "am I done yet?" better than a pressable button that just fails again would.
+
+<Canvas of={SubmitButtonStories.UnavailableOnlyAfterAFailedSubmission} />
+
+## Accessibility
+
+The unavailable state is a native `disabled`, not `aria-disabled`.
+
+`aria-disabled` was considered and rejected. `Button`'s variants include
+`aria-disabled:pointer-events-none`, so it would leave the button working for keyboard users and dead
+for mouse and touch — a split that is worse than either consistent answer. Neither option is a WCAG
+violation: disabled controls are exempt from contrast requirements, removing one from the tab order
+is not a keyboard trap, and `disabled` reports its state correctly. What decides it is that the
+errors are already on screen and the button recovers on its own.
+
+<Canvas of={SubmitButtonStories.WhileSubmitting} />

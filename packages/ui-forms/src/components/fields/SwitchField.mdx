@@ -1,0 +1,37 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './SwitchField.stories';
+
+<Meta of={Stories} />
+
+# Switch field
+
+A [`Switch`](?path=/docs/ui-core-switch--docs) bound to a **boolean** form field by name.
+
+```tsx
+<Form form={form} className='grid gap-4'>
+	<SwitchField name='marketing' label='Email me offers' />
+</Form>
+```
+
+<Canvas of={Stories.Default} />
+
+## Properties
+
+<Controls />
+
+Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
+`showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
+errors reach a field, and [`Field`](?path=/docs/ui-core-field--docs) for the labelling and message
+layout every one of these renders.
+
+There is **no `form` prop** — it comes from the surrounding `Form`, and rendering this without one
+throws.
+
+## Choosing between this and a checkbox
+
+The same data shape, and it absorbs the same Radix `value` collision that
+[`CheckboxField`](?path=/docs/ui-forms-fields-checkbox-field--docs) does. Choose on meaning rather
+than on looks: a switch reads as something that takes effect **immediately**, a checkbox as something
+that takes effect **when the form is submitted**.
+
+A switch inside a form that has a submit button is usually the wrong one.

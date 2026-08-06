@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { CommandList, useCommandContext, ICommonCommandProps, IRenderProps } from '@repo/ui-command';
+import {
+	CommandList,
+	useCommandContext,
+	ICommonCommandProps,
+	IRenderProps
+} from '@repo/ui-command';
 
 export interface ISelectListItemsProps extends ICommonCommandProps, IRenderProps {
 	className?: string;

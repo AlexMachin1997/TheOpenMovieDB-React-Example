@@ -1,0 +1,78 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormErrorStories from './FormError.stories';
+
+<Meta of={FormErrorStories} />
+
+# Form error
+
+Renders a failure that belongs to the [`Form`](?path=/docs/ui-forms-form--docs) rather than to any one
+field — a 500, a 429, an expired session, a dropped connection.
+
+```tsx
+<Form form={form} className='grid gap-4'>
+	<TextField name='email' label='Email address' required />
+	<FormError />
+	<SubmitButton>Save</SubmitButton>
+</Form>
+```
+
+## Bind errors to fields first
+
+**This is the fallback, not the default.** A response naming a field belongs under the control the
+user has to change:
+
+```tsx
+onSubmit: async ({ value, formApi }) => {
+	const response = await save(value);
+	if (response.ok) return;
+
+	// password: 'Not strong enough' -> renders under the password field.
+	formApi.setErrorMap({ onSubmit: { fields: response.fieldErrors } });
+
+	// Genuinely belongs to nobody -> throw, and this component renders it.
+	if (response.formError) throw new Error(response.formError);
+};
+```
+
+A message a user can act on should sit next to the thing they need to act on. Reach for `FormError`
+only for what is actually left over.
+
+<Canvas of={FormErrorStories.Default} />
+
+## Properties
+
+<Controls />
+
+There is **no prop for the message**. It comes from the surrounding `Form`, which sets it when a
+submission throws and clears it at the start of the next one — so it cannot go stale, and there is no
+clearing for you to forget.
+
+## Render it unconditionally
+
+```tsx
+<FormError />           {/* ✅ */}
+{error && <FormError />} {/* ❌ */}
+```
+
+The second form defeats the whole design. A live region has to already exist in the DOM before it has
+anything to say — one inserted at the same moment as its content is announced unreliably, because
+assistive technology never saw it become live. The region below is permanently mounted; only its
+contents come and go, and an empty one contributes nothing to the layout.
+
+## Messages are never invented
+
+The message the server sent is the message shown. Generic wording is reserved for a failure that
+produced **no** message at all — a thrown `Error` with nothing in it, a rejected request, a blank
+string.
+
+<Canvas of={FormErrorStories.FailureWithNoMessage} />
+
+## Accessibility
+
+The region is **assertive**, unlike the polite per-field regions inside
+[`Field`](?path=/docs/ui-core-field--docs). Polite is right while someone is typing and wrong once
+they have pressed submit and stopped to wait for a result.
+
+It composes [`Alert`](?path=/docs/ui-core-alert--docs) but **clears its `role`**. `Alert` hardcodes
+`role='alert'`, itself an assertive live region; left in place, nesting one inside the other makes the
+message announce twice.

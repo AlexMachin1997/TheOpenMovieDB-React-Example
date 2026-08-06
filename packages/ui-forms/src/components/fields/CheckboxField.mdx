@@ -1,0 +1,53 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './CheckboxField.stories';
+
+<Meta of={Stories} />
+
+# Checkbox field
+
+A [`Checkbox`](?path=/docs/ui-core-checkbox--docs) bound to a **boolean** form field by name.
+
+```tsx
+<Form form={form} className='grid gap-4'>
+	<CheckboxField name='terms' label='Accept the terms' required />
+</Form>
+```
+
+<Canvas of={Stories.Default} />
+
+## Properties
+
+<Controls />
+
+Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
+`showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
+errors reach a field, and [`Field`](?path=/docs/ui-core-field--docs) for the labelling and message
+layout every one of these renders.
+
+There is **no `form` prop** — it comes from the surrounding `Form`, and rendering this without one
+throws.
+
+## Why this component exists
+
+Radix's `Checkbox` has its own `value` prop — a string, for native form submission — which collides
+with the field's value. Driving one through
+[`FormField`](?path=/docs/ui-forms-form-field--docs) directly means destructuring `value` and
+`onChange` out of the control bag and renaming them at every call site:
+
+```tsx
+// What you would otherwise write, every time.
+<FormField<boolean> name='terms' label='Accept the terms'>
+	{({ value, onChange, ...control }) => (
+		<Checkbox {...control} checked={value} onCheckedChange={onChange} />
+	)}
+</FormField>
+```
+
+That knowledge lives here once instead. It is a type error the first time and a paper cut every time
+after.
+
+## Choosing between this and a switch
+
+Same data, different meaning. A checkbox reads as something that applies **when the form is
+submitted**; a [switch](?path=/docs/ui-forms-fields-switch-field--docs) reads as something that
+applies **immediately**.

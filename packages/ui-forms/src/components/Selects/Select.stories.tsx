@@ -128,12 +128,12 @@ export const SingleWithoutSearch: StoryObj<SelectProps> = {
 	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		await expectClosed(canvasElement, 'Select a framework...');
 		await openSelect(canvasElement);
-		
+
 		// Wait for dialog to open
 		const dialog = getDialog();
 		const searchInput = within(dialog).queryByRole('combobox');
 		await expect(searchInput).not.toBeInTheDocument();
-		
+
 		await selectOption('Next.js');
 		await expectTriggerText(canvasElement, 'Next.js');
 	}
@@ -152,7 +152,7 @@ export const SingleWithoutClearButton: StoryObj<SelectProps> = {
 	),
 	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		await expectTriggerText(canvasElement, 'Vue.js');
-		
+
 		// Look for clear button and assert it's missing
 		const trigger = getTrigger(canvasElement);
 		const clearButton = within(trigger).queryByRole('button', { name: /clear/i });
@@ -186,12 +186,12 @@ export const SingleWithGroups: StoryObj<SelectProps> = {
 	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		await expectClosed(canvasElement, 'Select a technology...');
 		await openSelect(canvasElement);
-		
+
 		// Assert groups exist by checking for option elements
 		// (We know 'React' and 'Express.js' should be in their respective groups)
 		await expectOptionVisible('React');
 		await expectOptionVisible('Express.js');
-		
+
 		await selectOption('Express.js');
 		await expectTriggerText(canvasElement, 'Express.js');
 	}
@@ -222,14 +222,14 @@ export const SingleVirtualized: StoryObj<SelectProps> = {
 	render: () => <SingleVirtualizedTemplate />,
 	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		await openSelect(canvasElement);
-		
+
 		// Search for an item deep in the list to prove it handles large datasets
 		await searchFor('Item 5000');
-		
+
 		const dialog = getDialog();
 		const option = within(dialog).getByRole('option', { name: 'Item 5000' });
 		await expect(option).toBeInTheDocument();
-		
+
 		await userEvent.click(option);
 		await expectTriggerText(canvasElement, 'Item 5000');
 	}
@@ -466,14 +466,14 @@ export const MultiVirtualized: StoryObj<SelectProps> = {
 	render: () => <MultiVirtualizedTemplate />,
 	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		await openSelect(canvasElement);
-		
+
 		// Search and select items deep in the list to prove virtualization handles filtering
 		await searchFor('Item 2500');
 		await selectOption('Item 2500');
-		
+
 		await searchFor('Item 5000');
 		await selectOption('Item 5000');
-		
+
 		await expectTriggerText(canvasElement, 'Item 2500');
 		await expectTriggerText(canvasElement, 'Item 5000');
 	}
@@ -630,30 +630,39 @@ export const EmptyState: StoryObj<SelectProps> = {
 		// First select has default empty state
 		const triggers = within(canvasElement).getAllByRole('combobox');
 		const defaultSelect = triggers[0]!;
-		
+
 		await userEvent.click(defaultSelect);
 		// Get all dialogs and find the visible one
 		const dialogs = within(document.body).getAllByRole('dialog');
-		const defaultDialog = dialogs.find(d => window.getComputedStyle(d).pointerEvents !== 'none') || dialogs[0]!;
-		await expect(within(defaultDialog).getByText('No options currently available')).toBeInTheDocument();
+		const defaultDialog =
+			dialogs.find((d) => window.getComputedStyle(d).pointerEvents !== 'none') || dialogs[0]!;
+		await expect(
+			within(defaultDialog).getByText('No options currently available')
+		).toBeInTheDocument();
 		await userEvent.keyboard('{Escape}');
-		
+
 		// Wait for closing animation
-		await new Promise(r => setTimeout(r, 200));
-		
+		await new Promise((r) => setTimeout(r, 200));
+
 		// Second select has custom empty state
 		const customSelect = triggers[1]!;
 		await userEvent.click(customSelect);
 		const currentDialogs = within(document.body).getAllByRole('dialog');
-		const customDialog = currentDialogs.find(d => window.getComputedStyle(d).pointerEvents !== 'none') || currentDialogs[currentDialogs.length - 1]!;
-		await expect(within(customDialog).getByText('No items available at the moment')).toBeInTheDocument();
-		
+		const customDialog =
+			currentDialogs.find((d) => window.getComputedStyle(d).pointerEvents !== 'none') ||
+			currentDialogs[currentDialogs.length - 1]!;
+		await expect(
+			within(customDialog).getByText('No items available at the moment')
+		).toBeInTheDocument();
+
 		// Search triggers the other custom empty state
 		const searchInput = within(customDialog).getByRole('textbox');
 		await userEvent.type(searchInput, 'test');
 		// Wait for debounce
 		await new Promise((resolve) => setTimeout(resolve, 350));
-		await expect(within(customDialog).getByText('No items found matching "test"')).toBeInTheDocument();
+		await expect(
+			within(customDialog).getByText('No items found matching "test"')
+		).toBeInTheDocument();
 	}
 };
 
