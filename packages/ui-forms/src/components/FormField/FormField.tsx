@@ -53,6 +53,7 @@ export const FormField = <TFormData, TName extends DeepKeys<TFormData>>({
 	children,
 	validators,
 	showErrorsWhen = 'touched',
+	id,
 	...fieldProps
 }: IFormField<TFormData, TName>) => {
 	const FormFieldPrimitive = form.Field;
@@ -60,7 +61,16 @@ export const FormField = <TFormData, TName extends DeepKeys<TFormData>>({
 	return (
 		<FormFieldPrimitive name={name} validators={validators}>
 			{(field: AnyFieldApi) => (
-				<Field {...fieldProps} {...toFieldProps(field, { showErrorsWhen })}>
+				<Field
+					{...fieldProps}
+					// Defaulting the control's id to the field's name gives readable DOM ids, makes a
+					// field's element reachable from its name, and avoids React 19's generated ids,
+					// which contain guillemets — valid in an attribute, invalid in a CSS selector.
+					// `Form` relies on this to move focus to the first invalid control after a failed
+					// submission. A caller-supplied id still wins.
+					id={id ?? name}
+					{...toFieldProps(field, { showErrorsWhen })}
+				>
 					{(control) =>
 						children(
 							{

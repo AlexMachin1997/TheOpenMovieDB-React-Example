@@ -1,5 +1,12 @@
 // Form
-export { useForm } from '~/components/Form/form';
+//
+// `Form` owns the `<form>` element, `noValidate` and the context every field below it binds to.
+// `useForm` stays an untouched re-export of `@tanstack/react-form`'s — nothing is wrapped.
+// See docs/05-ui-forms-field-pattern/spec.md → Second pass.
+export { Form, useForm, useFormContext } from '~/components/Form';
+export type { IForm, IFormContext } from '~/components/Form';
+// `IFormApiLike` still comes from `FormField.types` below, where it is generic over the form's data.
+// It moves here when the `form` prop is removed and that generic collapses.
 
 // `FormField` binds `@repo/ui-core`'s `Field` to a TanStack field by name. `toFieldProps` is the
 // translation underneath, exported separately for anyone driving `form.Field` or `useField`

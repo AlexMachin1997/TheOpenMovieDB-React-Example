@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import type { Option } from '@repo/core';
 import { Button } from '@repo/ui-core';
-import { useForm } from '~/components/Form/form';
+import { useForm } from '~/components/Form';
 import { TextField } from '~/components/fields/TextField';
 import { TextareaField } from '~/components/fields/TextareaField';
 import { CheckboxField } from '~/components/fields/CheckboxField';
