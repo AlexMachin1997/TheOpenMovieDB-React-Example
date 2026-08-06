@@ -1,4 +1,5 @@
 import { useStore } from '@tanstack/react-form';
+import { cn } from '@repo/tailwind-config';
 import { Button } from '@repo/ui-core';
 import { useFormContext } from '~/components/Form/hooks/useFormContext';
 import type { ISubmitButton } from '~/components/SubmitButton/SubmitButton.types';
@@ -30,7 +31,7 @@ import type { ISubmitButton } from '~/components/SubmitButton/SubmitButton.types
  * </Form>
  * ```
  */
-const SubmitButton = ({ disabled = false, ...props }: ISubmitButton) => {
+const SubmitButton = ({ disabled = false, className, ...props }: ISubmitButton) => {
 	const { form } = useFormContext('SubmitButton');
 
 	// Three narrow selectors rather than one broad one, so a re-render is driven by the single
@@ -55,6 +56,11 @@ const SubmitButton = ({ disabled = false, ...props }: ISubmitButton) => {
 			type='submit'
 			loading={isSubmitting}
 			disabled={disabled || isUnavailableWhileInvalid}
+			// Sized to its label, not to the form. A form is usually a `grid` or a `flex-col`, and a
+			// grid item stretches to the column by default — so without this the submit button spans
+			// the whole form, which is rarely what anyone wants and never what they asked for.
+			// `w-full` from a caller still wins, because `cn` merges width classes last-one-wins.
+			className={cn('w-fit', className)}
 		/>
 	);
 };
