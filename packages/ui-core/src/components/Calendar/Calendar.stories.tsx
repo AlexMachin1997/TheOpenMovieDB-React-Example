@@ -1,4 +1,5 @@
-import type { Meta } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent } from 'storybook/test';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { Calendar } from '~/components/Calendar/Calendar';
@@ -29,9 +30,13 @@ const meta: Meta<typeof Calendar> = {
 };
 
 export default meta;
+// Calendar's props are a union discriminated by `mode`, and a union collapses
+// `StoryObj<typeof meta>`'s args to `never` — the same trap Label and Select hit. Bare `StoryObj`,
+// as Slider.stories.tsx already uses.
+type Story = StoryObj;
 
 // Basic single date selection
-export const Basic = () => {
+const BasicExample = () => {
 	const [date, setDate] = useState<Date | undefined>(new Date());
 
 	return (
@@ -40,7 +45,7 @@ export const Basic = () => {
 };
 
 // Range selection
-export const RangeSelection = () => {
+const RangeSelectionExample = () => {
 	const [range, setRange] = useState<DateRange | undefined>();
 
 	return (
@@ -49,7 +54,7 @@ export const RangeSelection = () => {
 };
 
 // With month and year dropdowns
-export const WithDropdowns = () => {
+const WithDropdownsExample = () => {
 	const [date, setDate] = useState<Date | undefined>(new Date());
 
 	return (
@@ -64,7 +69,7 @@ export const WithDropdowns = () => {
 };
 
 // With custom button variant
-export const WithCustomButtonVariant = () => {
+const WithCustomButtonVariantExample = () => {
 	const [date, setDate] = useState<Date | undefined>(new Date());
 
 	return (
@@ -79,7 +84,7 @@ export const WithCustomButtonVariant = () => {
 };
 
 // Without outside days
-export const WithoutOutsideDays = () => {
+const WithoutOutsideDaysExample = () => {
 	const [date, setDate] = useState<Date | undefined>(new Date());
 
 	return (
@@ -94,7 +99,7 @@ export const WithoutOutsideDays = () => {
 };
 
 // With week numbers
-export const WithWeekNumbers = () => {
+const WithWeekNumbersExample = () => {
 	const [date, setDate] = useState<Date | undefined>(new Date());
 
 	return (
@@ -109,7 +114,7 @@ export const WithWeekNumbers = () => {
 };
 
 // Multiple months view
-export const MultipleMonths = () => {
+const MultipleMonthsExample = () => {
 	const [date, setDate] = useState<Date | undefined>(new Date());
 
 	return (
@@ -124,7 +129,7 @@ export const MultipleMonths = () => {
 };
 
 // Interactive example with date display
-export const Interactive = () => {
+const InteractiveExample = () => {
 	const [date, setDate] = useState<Date | undefined>(new Date());
 
 	return (
@@ -139,7 +144,7 @@ export const Interactive = () => {
 };
 
 // Range selection with date display
-export const InteractiveRange = () => {
+const InteractiveRangeExample = () => {
 	const [range, setRange] = useState<DateRange | undefined>();
 
 	return (
@@ -160,4 +165,64 @@ export const InteractiveRange = () => {
 			</div>
 		</div>
 	);
+};
+
+export const Basic: Story = {
+	render: () => <BasicExample />,
+	// Calendar had no interaction coverage at all, because every export in this file was a CSF1 bare
+	// function — Storybook treats those as the story itself rather than as a render function, so
+	// there is nowhere for `play` to attach. Converting the file to CSF3 is what made this possible.
+	play: async ({ canvasElement, step }) => {
+		// Selection is expressed as `data-selected-single` on the day *button*, not as
+		// `aria-selected` on the gridcell — see CalendarDayButton. Asserting the latter passes
+		// vacuously against `null`, which is how the first version of this test failed.
+		const dayButton = (label: string) =>
+			Array.from(canvasElement.querySelectorAll<HTMLButtonElement>('button[data-day]')).find(
+				(button) => button.textContent?.trim() === label
+			);
+
+		await step('A day can be selected, and reports itself as selected', async () => {
+			// The 15th rather than today: today is already selected on mount, so clicking it would
+			// assert nothing about the selection actually changing.
+			const fifteenth = dayButton('15');
+			await expect(fifteenth).toBeDefined();
+			await expect(fifteenth).not.toHaveAttribute('data-selected-single', 'true');
+
+			await userEvent.click(fifteenth as HTMLButtonElement);
+
+			await expect(dayButton('15')).toHaveAttribute('data-selected-single', 'true');
+		});
+	}
+};
+
+export const RangeSelection: Story = {
+	render: () => <RangeSelectionExample />
+};
+
+export const WithDropdowns: Story = {
+	render: () => <WithDropdownsExample />
+};
+
+export const WithCustomButtonVariant: Story = {
+	render: () => <WithCustomButtonVariantExample />
+};
+
+export const WithoutOutsideDays: Story = {
+	render: () => <WithoutOutsideDaysExample />
+};
+
+export const WithWeekNumbers: Story = {
+	render: () => <WithWeekNumbersExample />
+};
+
+export const MultipleMonths: Story = {
+	render: () => <MultipleMonthsExample />
+};
+
+export const Interactive: Story = {
+	render: () => <InteractiveExample />
+};
+
+export const InteractiveRange: Story = {
+	render: () => <InteractiveRangeExample />
 };

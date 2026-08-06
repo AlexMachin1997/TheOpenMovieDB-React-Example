@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import * as React from 'react';
 import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/Slider/Slider';
 import {
@@ -8,6 +9,7 @@ import {
 	TooltipTrigger
 } from '~/components/Tooltip/Tooltip';
 import { Label } from '~/components/Label/Label';
+import { Field } from '~/components/Field/Field';
 
 const meta: Meta = {
 	title: 'UI Core/Slider',
@@ -22,26 +24,94 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-// Basic single slider example
+// Basic single slider example — and the reference for how a Slider should be labelled.
 const BasicSingleSlider = () => {
 	const [value, setValue] = React.useState([50]);
 
 	return (
-		<div className='space-y-4 w-full max-w-md'>
-			<Label htmlFor='basic-slider'>Basic Slider</Label>
-			<SliderRoot value={value} onValueChange={setValue} min={0} max={100} step={1} className='h-6'>
-				<SliderTrack>
-					<SliderRange />
-				</SliderTrack>
-				<SliderThumb />
-			</SliderRoot>
-			<p className='text-sm text-gray-600'>Value: {value[0]}</p>
+		<div className='w-full max-w-md'>
+			{/*
+			 * `nativeLabel={false}` because the focusable control is a `<span role='slider'>`, and
+			 * `<label htmlFor>` only associates with labelable elements — never a span. This is the
+			 * case that rules out cloning a child to inject the bindings: the bag has to reach
+			 * `SliderThumb`, three levels below `SliderRoot`.
+			 *
+			 * Every story in this file previously wrote `<Label htmlFor='basic-slider'>` beside a
+			 * slider that never received that id — 19 labels naming nothing at all.
+			 */}
+			<Field
+				label='Basic slider'
+				id='basic-slider'
+				nativeLabel={false}
+				description={`Value: ${value[0]}`}
+			>
+				{(control) => (
+					<SliderRoot
+						value={value}
+						onValueChange={setValue}
+						min={0}
+						max={100}
+						step={1}
+						className='h-6'
+					>
+						<SliderTrack>
+							<SliderRange />
+						</SliderTrack>
+						<SliderThumb {...control} />
+					</SliderRoot>
+				)}
+			</Field>
 		</div>
 	);
 };
 
 export const Basic: Story = {
-	render: () => <BasicSingleSlider />
+	render: () => <BasicSingleSlider />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Field, SliderRoot, SliderTrack, SliderRange, SliderThumb } from '@repo/ui-core';
+
+<Field label='Basic slider' id='basic-slider' nativeLabel={false}>
+  {(control) => (
+    <SliderRoot value={value} onValueChange={setValue} min={0} max={100} step={1}>
+      <SliderTrack><SliderRange /></SliderTrack>
+      {/* the bag goes on the thumb — that is the element with role='slider' */}
+      <SliderThumb {...control} />
+    </SliderRoot>
+  )}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const slider = canvas.getByRole('slider', { name: 'Basic slider' });
+
+		await step('The thumb takes its name from the non-native label', async () => {
+			await expect(slider).toHaveAttribute('aria-labelledby', 'basic-slider-label');
+			await expect(slider).toHaveAttribute('aria-describedby', 'basic-slider-message');
+			await expect(slider).toHaveAttribute('aria-valuenow', '50');
+		});
+
+		await step('Arrow keys move it', async () => {
+			slider.focus();
+			await userEvent.keyboard('{ArrowRight}');
+			await expect(slider).toHaveAttribute('aria-valuenow', '51');
+
+			await userEvent.keyboard('{ArrowLeft}{ArrowLeft}');
+			await expect(slider).toHaveAttribute('aria-valuenow', '49');
+		});
+
+		await step('Home and End jump to the bounds', async () => {
+			await userEvent.keyboard('{Home}');
+			await expect(slider).toHaveAttribute('aria-valuenow', '0');
+
+			await userEvent.keyboard('{End}');
+			await expect(slider).toHaveAttribute('aria-valuenow', '100');
+		});
+	}
 };
 
 // Dual slider example
@@ -50,7 +120,7 @@ const DualSlider = () => {
 
 	return (
 		<div className='space-y-4 w-full max-w-md'>
-			<Label htmlFor='dual-slider'>Range Slider</Label>
+			<Label nativeLabel={false}>Range Slider</Label>
 			<SliderRoot value={value} onValueChange={setValue} min={0} max={100} step={1} className='h-6'>
 				<SliderTrack>
 					<SliderRange />
@@ -78,7 +148,7 @@ const CustomStylingExample = () => {
 			<h3 className='text-lg font-semibold'>Custom Styling Examples</h3>
 
 			<div className='space-y-4'>
-				<Label htmlFor='custom-track'>Custom Track & Range</Label>
+				<Label nativeLabel={false}>Custom Track & Range</Label>
 				<SliderRoot
 					value={value}
 					onValueChange={setValue}
@@ -95,7 +165,7 @@ const CustomStylingExample = () => {
 			</div>
 
 			<div className='space-y-4'>
-				<Label htmlFor='custom-thumb'>Custom Thumb</Label>
+				<Label nativeLabel={false}>Custom Thumb</Label>
 				<SliderRoot
 					value={value}
 					onValueChange={setValue}
@@ -112,7 +182,7 @@ const CustomStylingExample = () => {
 			</div>
 
 			<div className='space-y-4'>
-				<Label htmlFor='custom-all'>Custom Everything</Label>
+				<Label nativeLabel={false}>Custom Everything</Label>
 				<SliderRoot
 					value={value}
 					onValueChange={setValue}
@@ -144,7 +214,7 @@ const ThemeVariantsExample = () => {
 			<h3 className='text-lg font-semibold'>Theme Variants</h3>
 
 			<div className='space-y-4'>
-				<Label htmlFor='success-slider'>Success Theme</Label>
+				<Label nativeLabel={false}>Success Theme</Label>
 				<SliderRoot
 					value={value}
 					onValueChange={setValue}
@@ -161,7 +231,7 @@ const ThemeVariantsExample = () => {
 			</div>
 
 			<div className='space-y-4'>
-				<Label htmlFor='warning-slider'>Warning Theme</Label>
+				<Label nativeLabel={false}>Warning Theme</Label>
 				<SliderRoot
 					value={value}
 					onValueChange={setValue}
@@ -178,7 +248,7 @@ const ThemeVariantsExample = () => {
 			</div>
 
 			<div className='space-y-4'>
-				<Label htmlFor='danger-slider'>Danger Theme</Label>
+				<Label nativeLabel={false}>Danger Theme</Label>
 				<SliderRoot
 					value={value}
 					onValueChange={setValue}
@@ -210,7 +280,7 @@ const WithTooltipsExample = () => {
 			<h3 className='text-lg font-semibold'>With Tooltips</h3>
 
 			<div className='space-y-4'>
-				<Label htmlFor='tooltip-slider'>Slider with Tooltip</Label>
+				<Label nativeLabel={false}>Slider with Tooltip</Label>
 				<TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger asChild>
@@ -243,7 +313,7 @@ const WithTooltipsExample = () => {
 			</div>
 
 			<div className='space-y-4'>
-				<Label htmlFor='thumb-tooltip-slider'>Thumb Tooltip</Label>
+				<Label nativeLabel={false}>Thumb Tooltip</Label>
 				<TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger asChild>
@@ -296,7 +366,7 @@ const ResponsiveDesignExample = () => {
 			<p className='text-sm text-gray-600'>Resize the browser to see the responsive behavior</p>
 
 			<div className='space-y-4'>
-				<Label htmlFor='responsive-slider'>Responsive Slider</Label>
+				<Label nativeLabel={false}>Responsive Slider</Label>
 				<SliderRoot
 					value={value}
 					onValueChange={setValue}
@@ -328,7 +398,7 @@ const DisabledStateExample = () => {
 			<h3 className='text-lg font-semibold'>Disabled State</h3>
 
 			<div className='space-y-4'>
-				<Label htmlFor='disabled-slider'>Disabled Slider</Label>
+				<Label nativeLabel={false}>Disabled Slider</Label>
 				<SliderRoot
 					value={value}
 					onValueChange={setValue}
@@ -368,7 +438,7 @@ const StepVariationsExample = () => {
 			<h3 className='text-lg font-semibold'>Step Variations</h3>
 
 			<div className='space-y-4'>
-				<Label htmlFor='step-1-slider'>Step: 1 (Default)</Label>
+				<Label nativeLabel={false}>Step: 1 (Default)</Label>
 				<SliderRoot
 					value={value1}
 					onValueChange={setValue1}
@@ -387,7 +457,7 @@ const StepVariationsExample = () => {
 			</div>
 
 			<div className='space-y-4'>
-				<Label htmlFor='step-5-slider'>Step: 5</Label>
+				<Label nativeLabel={false}>Step: 5</Label>
 				<SliderRoot
 					value={value2}
 					onValueChange={setValue2}
@@ -406,7 +476,7 @@ const StepVariationsExample = () => {
 			</div>
 
 			<div className='space-y-4'>
-				<Label htmlFor='step-10-slider'>Step: 10</Label>
+				<Label nativeLabel={false}>Step: 10</Label>
 				<SliderRoot
 					value={value3}
 					onValueChange={setValue3}
@@ -446,7 +516,7 @@ const IndividualComponentsExample = () => {
 			<div className='space-y-4'>
 				<h4 className='font-medium text-gray-700'>Custom Slider with Individual Components</h4>
 				<div className='flex flex-col gap-4'>
-					<Label htmlFor='custom-slider'>Custom Slider</Label>
+					<Label nativeLabel={false}>Custom Slider</Label>
 					<input type='hidden' name='custom-slider' value={value[0]} readOnly aria-hidden='true' />
 
 					<TooltipProvider>
@@ -496,7 +566,7 @@ const IndividualComponentsExample = () => {
 			<div className='space-y-4'>
 				<h4 className='font-medium text-gray-700'>Minimal Slider</h4>
 				<div className='flex flex-col gap-4'>
-					<Label htmlFor='minimal-slider'>Minimal Slider</Label>
+					<Label nativeLabel={false}>Minimal Slider</Label>
 					<input type='hidden' name='minimal-slider' value={value[0]} readOnly aria-hidden='true' />
 
 					<SliderRoot
@@ -527,7 +597,7 @@ const IndividualComponentsExample = () => {
 			<div className='space-y-4'>
 				<h4 className='font-medium text-gray-700'>Premium Slider</h4>
 				<div className='flex flex-col gap-4'>
-					<Label htmlFor='premium-slider'>Premium Slider</Label>
+					<Label nativeLabel={false}>Premium Slider</Label>
 					<input type='hidden' name='premium-slider' value={value[0]} readOnly aria-hidden='true' />
 
 					<TooltipProvider>

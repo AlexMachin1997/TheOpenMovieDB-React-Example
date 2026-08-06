@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 import { Input } from '~/components/Input/Input';
-import { Label } from '~/components/Label/Label';
+import { Field } from '~/components/Field/Field';
+import { Textarea } from '~/components/Textarea/Textarea';
+import { Button } from '~/components/Button/Button';
 
 const meta: Meta<typeof Input> = {
 	title: 'UI Core/Input',
@@ -29,11 +32,18 @@ const meta: Meta<typeof Input> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Every story below composes `Field` rather than hand-assembling a <Label htmlFor> beside an
+// <Input id> inside a wrapper div. That hand-assembly is what this deliverable exists to remove:
+// this file alone carried 13 copies of it, and the copies had already drifted — `WithError` showed
+// an error with no `aria-describedby`, and `Required` faked the indicator with a literal asterisk in
+// the label text. See docs/05-ui-forms-field-pattern/plan.md.
+
 export const Default: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='default-input'>Username</Label>
-			<Input id='default-input' placeholder='Enter your username' {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Username' id='default-input'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -43,20 +53,37 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			source: {
-				code: `import { Input, Label } from '@repo/ui-core';
+				code: `import { Field, Input } from '@repo/ui-core';
 
-<Label htmlFor="default-input">Username</Label>
-<Input id="default-input" placeholder="Enter your username" />`
+<Field label='Username' id='default-input'>
+  {(control) => <Input {...control} placeholder='Enter your username' />}
+</Field>`
 			}
 		}
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole('textbox', { name: 'Username' });
+
+		await step('The label names the input via a native association', async () => {
+			await expect(input).toHaveAttribute('id', 'default-input');
+			await userEvent.click(canvas.getByText('Username'));
+			await expect(input).toHaveFocus();
+		});
+
+		await step('Typing works', async () => {
+			await userEvent.type(input, 'ada');
+			await expect(input).toHaveValue('ada');
+		});
 	}
 };
 
 export const Email: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='email-input'>Email Address</Label>
-			<Input id='email-input' type='email' placeholder='Enter your email' {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Email address' id='email-input'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -66,10 +93,11 @@ export const Email: Story = {
 	parameters: {
 		docs: {
 			source: {
-				code: `import { Input, Label } from '@repo/ui-core';
+				code: `import { Field, Input } from '@repo/ui-core';
 
-<Label htmlFor="email-input">Email Address</Label>
-<Input id="email-input" type="email" placeholder="Enter your email" />`
+<Field label='Email address' id='email-input'>
+  {(control) => <Input {...control} type='email' />}
+</Field>`
 			}
 		}
 	}
@@ -77,9 +105,10 @@ export const Email: Story = {
 
 export const Password: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='password-input'>Password</Label>
-			<Input id='password-input' type='password' placeholder='Enter your password' {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Password' id='password-input' description='At least twelve characters.'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -90,9 +119,10 @@ export const Password: Story = {
 
 export const Number: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='number-input'>Age</Label>
-			<Input id='number-input' type='number' placeholder='Enter your age' {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Age' id='number-input'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -105,9 +135,10 @@ export const Number: Story = {
 
 export const Telephone: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='tel-input'>Phone Number</Label>
-			<Input id='tel-input' type='tel' placeholder='Enter your phone number' {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Phone number' id='tel-input'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -118,9 +149,10 @@ export const Telephone: Story = {
 
 export const URL: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='url-input'>Website</Label>
-			<Input id='url-input' type='url' placeholder='Enter your website URL' {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Website' id='url-input'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -131,9 +163,10 @@ export const URL: Story = {
 
 export const Search: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='search-input'>Search</Label>
-			<Input id='search-input' type='search' placeholder='Search for something...' {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Search' id='search-input'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -144,9 +177,10 @@ export const Search: Story = {
 
 export const File: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='file-input'>Profile Picture</Label>
-			<Input id='file-input' type='file' accept='image/*' {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Profile picture' id='file-input' description='PNG or JPG, up to 2MB.'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -157,9 +191,10 @@ export const File: Story = {
 
 export const Disabled: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='disabled-input'>Disabled Input</Label>
-			<Input id='disabled-input' placeholder='Cannot enter text' disabled {...args} />
+		<div className='w-full max-w-sm'>
+			<Field label='Username' id='disabled-input' description='Sign in to change this.'>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
@@ -170,45 +205,63 @@ export const Disabled: Story = {
 
 export const Required: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='required-input'>Required Field *</Label>
-			<Input id='required-input' placeholder='This field is required' required {...args} />
+		<div className='w-full max-w-sm'>
+			{/* The indicator comes from `Field`/`Label` now. It used to be a literal `*` typed into
+			the label text, which no assistive technology could distinguish from a name. */}
+			<Field label='Full name' id='required-input' required>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
-		required: true,
 		placeholder: 'This field is required'
 	}
 };
 
 export const WithError: Story = {
 	render: (args) => (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='error-input'>Email Address</Label>
-			<Input
+		<div className='w-full max-w-sm'>
+			{/* This story previously rendered its own <p className='text-sm text-red-500'> next to an
+			`aria-invalid` input, with nothing connecting the two — visible, and invisible to a screen
+			reader. `Field` owns both halves. */}
+			<Field
+				label='Email address'
 				id='error-input'
-				type='email'
-				placeholder='Enter your email'
-				aria-invalid='true'
-				{...args}
-			/>
-			<p className='text-sm text-red-500'>Please enter a valid email address</p>
+				error='Please enter a valid email address.'
+			>
+				{(control) => <Input {...control} {...args} />}
+			</Field>
 		</div>
 	),
 	args: {
 		type: 'email',
-		placeholder: 'Enter your email',
-		'aria-invalid': true
+		placeholder: 'Enter your email'
 	},
 	parameters: {
 		docs: {
 			source: {
-				code: `import { Input } from '@repo/ui-core';
+				code: `import { Field, Input } from '@repo/ui-core';
 
-<Input type="email" placeholder="Enter your email" aria-invalid="true" />
-<p className="text-sm text-red-500">Please enter a valid email address</p>`
+<Field label='Email address' id='error-input' error='Please enter a valid email address.'>
+  {(control) => <Input {...control} type='email' />}
+</Field>`
 			}
 		}
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const input = canvas.getByRole('textbox', { name: 'Email address' });
+
+		await step('The control reports itself invalid', async () => {
+			await expect(input).toHaveAttribute('aria-invalid', 'true');
+		});
+
+		await step('And the error is actually reachable from it', async () => {
+			await expect(input).toHaveAttribute('aria-describedby', 'error-input-message');
+			await expect(canvasElement.querySelector('[id="error-input-message"]')).toHaveTextContent(
+				'Please enter a valid email address.'
+			);
+		});
 	}
 };
 
@@ -216,16 +269,21 @@ const ControlledComponent = (args: React.ComponentProps<typeof Input>) => {
 	const [value, setValue] = useState('');
 
 	return (
-		<div className='grid w-full max-w-sm items-center gap-3'>
-			<Label htmlFor='controlled-input'>Controlled Input</Label>
-			<Input
+		<div className='w-full max-w-sm'>
+			<Field
+				label='Controlled input'
 				id='controlled-input'
-				value={value}
-				onChange={(e) => setValue(e.target.value)}
-				placeholder='Type something...'
-				{...args}
-			/>
-			<p className='text-sm text-muted-foreground'>Current value: {value}</p>
+				description={value === '' ? 'Type something to see it here.' : `Current value: ${value}`}
+			>
+				{(control) => (
+					<Input
+						{...control}
+						value={value}
+						onChange={(event) => setValue(event.target.value)}
+						{...args}
+					/>
+				)}
+			</Field>
 		</div>
 	);
 };
@@ -239,15 +297,15 @@ export const Controlled: Story = {
 		docs: {
 			source: {
 				code: `import { useState } from 'react';
-import { Input } from '@repo/ui-core';
+import { Field, Input } from '@repo/ui-core';
 
 const [value, setValue] = useState('');
 
-<Input
-  value={value}
-  onChange={(e) => setValue(e.target.value)}
-  placeholder="Type something..."
-/>`
+<Field label='Controlled input' id='controlled-input'>
+  {(control) => (
+    <Input {...control} value={value} onChange={(event) => setValue(event.target.value)} />
+  )}
+</Field>`
 			}
 		}
 	}
@@ -261,86 +319,110 @@ const SignUpFormComponent = () => {
 		confirmPassword: ''
 	});
 
-	const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData((prev) => ({
-			...prev,
-			[field]: e.target.value
-		}));
+	const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData((previous) => ({ ...previous, [field]: event.target.value }));
 	};
 
-	const handleSubmit = () => {
-		console.log('Form submitted:', formData);
-	};
+	const passwordsMatch =
+		formData.confirmPassword === '' || formData.confirmPassword === formData.password;
 
 	return (
 		<div className='w-full max-w-md space-y-6'>
 			<div className='text-center'>
-				<h2 className='text-2xl font-bold'>Create Account</h2>
-				<p className='text-muted-foreground'>Join us today!</p>
+				<h2 className='text-2xl font-bold'>Create account</h2>
+				<p className='text-muted-foreground'>Join us today.</p>
 			</div>
 
-			<form action={handleSubmit} className='space-y-4'>
-				<div className='space-y-2'>
-					<Label htmlFor='username'>Username</Label>
-					<Input
-						id='username'
-						type='text'
-						placeholder='Enter your username'
-						value={formData.username}
-						onChange={handleChange('username')}
-						required
-					/>
-				</div>
+			{/* `noValidate`: `required` renders a native attribute, and the browser's own constraint
+			validation would otherwise block submission before any of this runs. */}
+			<form noValidate className='space-y-4' onSubmit={(event) => event.preventDefault()}>
+				<Field label='Username' id='signup-username' required>
+					{(control) => (
+						<Input
+							{...control}
+							type='text'
+							placeholder='Enter your username'
+							value={formData.username}
+							onChange={handleChange('username')}
+						/>
+					)}
+				</Field>
 
-				<div className='space-y-2'>
-					<Label htmlFor='email'>Email Address</Label>
-					<Input
-						id='email'
-						type='email'
-						placeholder='Enter your email'
-						value={formData.email}
-						onChange={handleChange('email')}
-						required
-					/>
-				</div>
+				<Field label='Email address' id='signup-email' required>
+					{(control) => (
+						<Input
+							{...control}
+							type='email'
+							placeholder='Enter your email'
+							value={formData.email}
+							onChange={handleChange('email')}
+						/>
+					)}
+				</Field>
 
-				<div className='space-y-2'>
-					<Label htmlFor='password'>Password</Label>
-					<Input
-						id='password'
-						type='password'
-						placeholder='Enter your password'
-						value={formData.password}
-						onChange={handleChange('password')}
-						required
-					/>
-				</div>
-
-				<div className='space-y-2'>
-					<Label htmlFor='confirm-password'>Confirm Password</Label>
-					<Input
-						id='confirm-password'
-						type='password'
-						placeholder='Confirm your password'
-						value={formData.confirmPassword}
-						onChange={handleChange('confirmPassword')}
-						required
-					/>
-				</div>
-
-				<button
-					type='submit'
-					className='w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-4 rounded-md font-medium transition-colors'
+				<Field
+					label='Password'
+					id='signup-password'
+					description='At least twelve characters.'
+					required
 				>
-					Sign Up
-				</button>
+					{(control) => (
+						<Input
+							{...control}
+							type='password'
+							placeholder='Enter your password'
+							value={formData.password}
+							onChange={handleChange('password')}
+						/>
+					)}
+				</Field>
+
+				<Field
+					label='Confirm password'
+					id='signup-confirm'
+					required
+					error={passwordsMatch ? undefined : 'Passwords do not match.'}
+				>
+					{(control) => (
+						<Input
+							{...control}
+							type='password'
+							placeholder='Confirm your password'
+							value={formData.confirmPassword}
+							onChange={handleChange('confirmPassword')}
+						/>
+					)}
+				</Field>
+
+				{/* Was a raw <button> with a hand-copied bg-primary class string. */}
+				<Button type='submit' className='w-full'>
+					Sign up
+				</Button>
 			</form>
 		</div>
 	);
 };
 
 export const SignUpForm: Story = {
-	render: () => <SignUpFormComponent />
+	render: () => <SignUpFormComponent />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('An error appears and associates itself as the user types', async () => {
+			await userEvent.type(canvas.getByLabelText(/^Password/), 'correct-horse-battery');
+			await userEvent.type(canvas.getByLabelText(/Confirm password/), 'nope');
+
+			const confirm = canvas.getByLabelText(/Confirm password/);
+			await expect(confirm).toHaveAttribute('aria-invalid', 'true');
+			await expect(confirm).toHaveAttribute('aria-describedby', 'signup-confirm-message');
+		});
+
+		await step('And clears once the two match', async () => {
+			await userEvent.clear(canvas.getByLabelText(/Confirm password/));
+			await userEvent.type(canvas.getByLabelText(/Confirm password/), 'correct-horse-battery');
+			await expect(canvas.getByLabelText(/Confirm password/)).not.toHaveAttribute('aria-invalid');
+		});
+	}
 };
 
 const ContactFormComponent = () => {
@@ -352,97 +434,109 @@ const ContactFormComponent = () => {
 		message: ''
 	});
 
-	const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData((prev) => ({
-			...prev,
-			[field]: e.target.value
-		}));
-	};
-
-	const handleSubmit = () => {
-		console.log('Contact form submitted:', formData);
-	};
+	const handleChange =
+		(field: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			setFormData((previous) => ({ ...previous, [field]: event.target.value }));
+		};
 
 	return (
 		<div className='w-full max-w-lg space-y-6'>
 			<div className='text-center'>
-				<h2 className='text-2xl font-bold'>Contact Us</h2>
-				<p className='text-muted-foreground'>We&apos;d love to hear from you</p>
+				<h2 className='text-2xl font-bold'>Contact us</h2>
+				<p className='text-muted-foreground'>We&apos;d love to hear from you.</p>
 			</div>
 
-			<form action={handleSubmit} className='space-y-4'>
+			<form noValidate className='space-y-4' onSubmit={(event) => event.preventDefault()}>
 				<div className='grid grid-cols-2 gap-4'>
-					<div className='space-y-2'>
-						<Label htmlFor='name'>Full Name</Label>
+					<Field label='Full name' id='contact-name' required>
+						{(control) => (
+							<Input
+								{...control}
+								type='text'
+								placeholder='John Doe'
+								value={formData.name}
+								onChange={handleChange('name')}
+							/>
+						)}
+					</Field>
+
+					<Field label='Phone number' id='contact-phone'>
+						{(control) => (
+							<Input
+								{...control}
+								type='tel'
+								placeholder='+1 (555) 123-4567'
+								value={formData.phone}
+								onChange={handleChange('phone')}
+							/>
+						)}
+					</Field>
+				</div>
+
+				<Field label='Email address' id='contact-email' required>
+					{(control) => (
 						<Input
-							id='name'
+							{...control}
+							type='email'
+							placeholder='john@example.com'
+							value={formData.email}
+							onChange={handleChange('email')}
+						/>
+					)}
+				</Field>
+
+				<Field label='Subject' id='contact-subject' required>
+					{(control) => (
+						<Input
+							{...control}
 							type='text'
-							placeholder='John Doe'
-							value={formData.name}
-							onChange={handleChange('name')}
-							required
+							placeholder='How can we help you?'
+							value={formData.subject}
+							onChange={handleChange('subject')}
 						/>
-					</div>
+					)}
+				</Field>
 
-					<div className='space-y-2'>
-						<Label htmlFor='phone'>Phone Number</Label>
-						<Input
-							id='phone'
-							type='tel'
-							placeholder='+1 (555) 123-4567'
-							value={formData.phone}
-							onChange={handleChange('phone')}
+				{/*
+				 * THE story this deliverable exists for. This field used to hand-write a raw
+				 * <textarea> with its own copy of the border/ring/disabled classes — inside the very
+				 * package that exports `Textarea`. See docs/05-ui-forms-field-pattern/spec.md,
+				 * Design References.
+				 */}
+				<Field label='Message' id='contact-message' required>
+					{(control) => (
+						<Textarea
+							{...control}
+							placeholder='Tell us more about your inquiry...'
+							value={formData.message}
+							onChange={handleChange('message')}
 						/>
-					</div>
-				</div>
+					)}
+				</Field>
 
-				<div className='space-y-2'>
-					<Label htmlFor='contact-email'>Email Address</Label>
-					<Input
-						id='contact-email'
-						type='email'
-						placeholder='john@example.com'
-						value={formData.email}
-						onChange={handleChange('email')}
-						required
-					/>
-				</div>
-
-				<div className='space-y-2'>
-					<Label htmlFor='subject'>Subject</Label>
-					<Input
-						id='subject'
-						type='text'
-						placeholder='How can we help you?'
-						value={formData.subject}
-						onChange={handleChange('subject')}
-						required
-					/>
-				</div>
-
-				<div className='space-y-2'>
-					<Label htmlFor='message'>Message</Label>
-					<textarea
-						id='message'
-						placeholder='Tell us more about your inquiry...'
-						value={formData.message}
-						onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
-						required
-						className='flex w-full rounded-md border border-input bg-transparent px-4 py-4 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
-					/>
-				</div>
-
-				<button
-					type='submit'
-					className='w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-4 rounded-md font-medium transition-colors'
-				>
-					Send Message
-				</button>
+				<Button type='submit' className='w-full'>
+					Send message
+				</Button>
 			</form>
 		</div>
 	);
 };
 
 export const ContactForm: Story = {
-	render: () => <ContactFormComponent />
+	render: () => <ContactFormComponent />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('The message field is a real Textarea, not a hand-rolled element', async () => {
+			const message = canvas.getByRole('textbox', { name: /Message/ });
+			await expect(message.tagName).toBe('TEXTAREA');
+			await expect(message).toHaveAttribute('data-slot', 'textarea');
+			await expect(message).toHaveAttribute('id', 'contact-message');
+		});
+
+		await step('And it is wired up like every other field', async () => {
+			await userEvent.type(canvas.getByRole('textbox', { name: /Message/ }), 'Hello');
+			await expect(canvas.getByRole('textbox', { name: /Message/ })).toHaveValue('Hello');
+		});
+	}
 };

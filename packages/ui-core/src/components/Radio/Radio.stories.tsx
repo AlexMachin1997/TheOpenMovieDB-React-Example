@@ -1,8 +1,20 @@
 import * as React from 'react';
+// Radix's Root is imported directly here, and that is not an oversight — 04 flagged it, and it
+// turns out story work cannot remove it. `Radio` is a leaf that must sit inside a radio-group
+// context to function, and `RadioGroup` is options-driven: it renders its own items, so there is no
+// way to place a bare `Radio` inside one. Demonstrating the leaf therefore needs the primitive.
+//
+// Consumers should reach for `RadioGroup` (see `WithRadioGroup` below) or `RadioGroupField`.
+// Closing the gap properly means exporting a context/root from this package — a component change,
+// recorded as a follow-up in docs/05-ui-forms-field-pattern/plan.md.
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { Radio, RadioLabel } from '~/components/Radio/Radio';
+// Aliased: this file already exports a story named `RadioGroup` (a hand-composed group of bare
+// Radio leaves), which would otherwise collide with the component import.
+import { RadioGroup as RadioGroupComponent } from '~/components/RadioGroup/RadioGroup';
+import { Field } from '~/components/Field/Field';
 
 const meta: Meta<typeof Radio> = {
 	title: 'UI Core/Radio',
@@ -211,5 +223,69 @@ export const DisabledLabelDimsWithItsRadio: Story = {
 		expect(getComputedStyle(disabledLabel).opacity).toBe('0.7');
 		expect(getComputedStyle(enabledLabel).opacity).toBe('1');
 		expect(getComputedStyle(disabledLabel).cursor).toBe('not-allowed');
+	}
+};
+
+const RadioGroupComposition = () => {
+	const [value, setValue] = React.useState('yearly');
+
+	return (
+		<div className='w-80'>
+			{/*
+			 * The supported path. `RadioGroup` owns the Radix Root, the roving focus and the per-item
+			 * labels; `Field` names the group as a whole. Reach for this rather than composing bare
+			 * `Radio` components — the stories above do that only to demonstrate the leaf itself.
+			 */}
+			<Field
+				label='Billing plan'
+				id='radio-plan'
+				nativeLabel={false}
+				description='You can change this later.'
+			>
+				{(control) => (
+					<RadioGroupComponent
+						{...control}
+						name='radio-plan'
+						options={[
+							{ id: 'monthly', value: 'monthly', label: 'Monthly' },
+							{ id: 'yearly', value: 'yearly', label: 'Yearly' }
+						]}
+						value={value}
+						onChange={(data: { value: string }) => setValue(data.value)}
+					/>
+				)}
+			</Field>
+		</div>
+	);
+};
+
+export const WithRadioGroup: Story = {
+	render: () => <RadioGroupComposition />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Field, RadioGroup } from '@repo/ui-core';
+
+<Field label='Billing plan' id='radio-plan' nativeLabel={false}>
+  {(control) => (
+    <RadioGroup {...control} name='radio-plan' options={options} value={value} onChange={onChange} />
+  )}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('The group is named, and each option keeps its own label', async () => {
+			await expect(canvas.getByRole('radiogroup', { name: /Billing plan/ })).toBeInTheDocument();
+			await expect(canvas.getByRole('radio', { name: 'Yearly' })).toBeChecked();
+		});
+
+		await step('Selecting another option works', async () => {
+			await userEvent.click(canvas.getByRole('radio', { name: 'Monthly' }));
+			await expect(canvas.getByRole('radio', { name: 'Monthly' })).toBeChecked();
+		});
 	}
 };
