@@ -444,8 +444,10 @@ form.
   ask "am I done yet?" and get an answer. A control that is both dead and unexplained is not an
   acceptable outcome of the disable rule.
 - A submit button unavailable **because a submission is in flight** reports a busy state.
-- Removing the browser's constraint validation removed its focus behaviour too. What replaces it, if
-  anything, is unresolved — see Open Questions.
+- Removing the browser's constraint validation removed its focus behaviour too. **A submission that
+  does not succeed moves focus to the first invalid control in document order**, which is what the
+  browser used to do. It fires only in response to an explicit submit, never while the user is
+  typing.
 
 ### Edge Cases & Error Handling
 
@@ -498,6 +500,10 @@ form.
 - Given a successful submission, when it completes, then `Form`'s success callback fires exactly
   once with the submitted values, and does not fire on a submission that failed validation or failed
   at the server.
+- Given a form whose first two fields are both invalid, when it is submitted, then focus moves to the
+  first of them in document order.
+- Given a form-level failure followed by no other change, when the form is submitted again, then the
+  submission runs — the previous failure did not leave the form permanently unsubmittable.
 - Given a `Form` inside a portalled overlay that is itself authored inside another `Form`, when the
   inner form is submitted, then the outer form's submit handling does not run.
 - Given the Storybook documentation, when it is inspected, then each of the six field components has
@@ -580,9 +586,10 @@ form.
   submission-attempt count, so it is observable and can be driven in a story.
 - **Unavailable-for-validity and unavailable-for-submitting are not the same mechanism.** In flight,
   the control is genuinely disabled — a brief state where a second press must not start a second
-  request. For validity it must stay focusable and still re-run validation on press. *Proposed
-  during the requirements session and not contested; flag it if native disabled is wanted in both
-  cases, at the cost of the button leaving the tab order.*
+  request. For validity it must stay focusable and still re-run validation on press. **Confirmed**
+  when this was built: `aria-disabled` for validity, native `disabled` only in flight. Native
+  disabled in both cases was offered and declined, because it takes the button out of the tab order
+  exactly when a keyboard user is trying to find out why the form will not submit.
 - **Field ids default to field names.** React 19's fallback ids contain characters invalid in a CSS
   selector, already documented as a trap in [`plan.md`](./plan.md). Defaulting to the name gives
   readable DOM ids, makes a field's element reachable from its name, and removes the trap from every
@@ -596,16 +603,26 @@ form.
   class of bug it would catch is exactly the one this deliverable shipped and had to find by
   accident.
 
+- **A failed submission focuses the first invalid control.** The two rejected options were focusing
+  the form-level message — which announces that *something* failed without saying where, leaving a
+  screen reader user to go and find it — and doing nothing, which leaves the regression from
+  removing native constraint validation in place. The "aggressive" objection is answered by the
+  trigger: focus moves only when the user has pressed submit and is waiting for a result, never
+  while they are typing. Focusing the *control* rather than the message is also what makes the
+  message useful, since `aria-describedby` reads it out on arrival.
+- **First-invalid is found in the DOM, not from field state.** A `[aria-invalid="true"]` query
+  inside the `<form>` is in document order by construction, which is what "first" has to mean;
+  reading `fieldMeta` gives registration order, which is not the same thing and is not visible to
+  the user. When the match is not itself focusable — a `radiogroup` carries the invalid state but a
+  radio inside it holds the tab stop — its first focusable descendant is used.
+- **The form-level error is cleared at the start of every submission, and this is load-bearing
+  rather than hygiene.** A form-level error makes `isFormValid` false, so `canSubmit` goes false,
+  so `handleSubmit` returns before it validates anything. Without the clear, a single 500 leaves the
+  form permanently unsubmittable. It is also what stops the previous failure sitting above a form
+  that has since succeeded.
+
 ### Open Questions
 
-1. **Does a failed submission move focus, and where?** Turning off native constraint validation also
-   removed the browser's own behaviour of focusing the first invalid control, and nothing replaced
-   it. Field ids defaulting to names makes it implementable for the first time. For: with errors
-   bound to fields, a form-level message tells a screen reader user that *something* failed without
-   telling them *where*, and focusing the first error is the default behaviour of comparable
-   libraries rather than an unusual one. Against: it was felt to be aggressive. **Unresolved** —
-   options are to focus the first invalid field, to focus the form-level message, or to do nothing
-   and record it as a known gap.
-2. **Is unavailable-for-validity implemented so the control stays focusable?** Recorded as a
-   Decision above because it was proposed and not contested, but never explicitly confirmed — and it
-   is the difference between a disabled state that can be interrogated and one that cannot.
+None. The two that stood here — whether a failed submission moves focus, and whether
+unavailable-for-validity keeps the control focusable — were both settled before implementation and
+are recorded as Decisions above.
