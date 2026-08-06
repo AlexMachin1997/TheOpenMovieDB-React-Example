@@ -33,6 +33,14 @@ which would give the same statuses two sources of truth.
 
 ### Planned
 
+**The `ui-forms` form layer** — the layer above the field — is **specified and ready to plan**, but
+lives inside `05`'s spec rather than as its own row, because nothing has been built yet. See
+[`05-ui-forms-field-pattern/spec.md` → Second pass](05-ui-forms-field-pattern/spec.md#second-pass--the-form-layer).
+It adds a `Form` component that owns the `<form>` element and `noValidate` (today a caller
+obligation that fails silently when forgotten), moves the form from a per-field prop onto context, and
+adds a submit button and a form-level error surface. Two open questions remain — focus behaviour on a
+failed submission, and the mechanism behind the submit button's disabled-while-invalid state.
+
 A **design-system audit** across six axes — tokens, interaction states, size scales, variant
 taxonomy, dark mode coverage, motion — would add deliverables to the table above. Not started.
 
@@ -101,7 +109,10 @@ shrinking to the point where the boundary looks obviously wrong. It partially re
 decision to keep the packages separate, so it needs a `problem-discovery` pass and an explicit call
 rather than being folded into another deliverable.
 
-**JSON/schema-driven form rendering** would add a deliverable once `05-ui-forms-field-pattern` ships.
-Deliberately not specified yet — schema format, validation-library integration, and extensibility for
-custom field types are all open, and it needs its own `problem-discovery` pass once the `Field`
-composition layer it would render onto actually exists.
+**JSON/schema-driven form rendering** would add a deliverable. The `Field` composition layer it would
+render onto now exists (`05` is done), so the blocker is gone — but it stays deliberately
+unspecified: schema format, validation-library integration and extensibility for custom field types
+are all open, and it needs its own `problem-discovery` pass. A declarative field-definition helper
+was raised while specifying the form-layer second pass and **explicitly kept out of it**, because
+either shape it could take — a typed component factory, or a declarative field list — reverses a
+decision taken elsewhere. That call belongs here, not as a rider on another deliverable.

@@ -355,108 +355,257 @@ Non-Goals — and gets its own future discovery once this ships.
 
 ---
 
-## Proposed extension — a second pass on `ui-forms`
+## Second pass — the form layer
 
-**Status: proposed, not specified, not agreed.** Everything above this line shipped (see
-[`plan.md`](./plan.md)). Everything below is a set of ideas raised after seeing the result, to be
-interrogated and turned into real requirements in a following session **before** any of it is built.
-None of it is committed to, and the open questions under each are genuine — several of them conflict
-with decisions taken above, and those conflicts are the point of writing them down.
+**Status: specified, not built.** Everything above this line shipped (see [`plan.md`](./plan.md)).
+Everything below was raised after seeing the result, then interrogated into requirements in a
+follow-up session. It replaces the five loose proposals that previously sat here — the open
+questions those carried are settled below except where Open Questions says otherwise.
 
-They share a theme. `05` built the *pieces*; using them still means assembling a form by hand — the
-`<form>` element, `noValidate`, threading `form` into every field, a submit button that knows
-nothing about the form's state. This pass is about the layer above the field.
+`05` built the *pieces*. Assembling a form out of them is still manual, and three of the manual
+steps fail **silently**:
 
-### P1 — A `Form` component
+- **`noValidate` is a caller obligation** that blocks the `submit` event outright when forgotten —
+  React's `onSubmit` never fires, `form.handleSubmit()` never runs, nothing validates and no message
+  appears. See Decisions above; `05` could only mitigate it by documenting it in three places.
+- **A submit button that isn't one.** `Button` defaults `type='button'` deliberately, so
+  `<Button>Save</Button>` inside a form renders, looks correct, and does nothing at all.
+- **Server errors that belong to no field have nowhere to go.** A field-attributed server error
+  already flows through `toFieldProps` via `errorMap.onServer`. A 500, a 429, an expired session or
+  a network failure does not, so every consumer hand-rolls a message above the submit button — the
+  same duplication this deliverable exists to prevent, one layer up.
 
-Wrap the native `<form>`: own `noValidate`, own the `onSubmit`/`preventDefault`/`handleSubmit`
-boilerplate, and put the form instance on React context so fields stop taking a `form` prop.
+Alongside that, every field takes a `form` prop carrying the same value as every other field in the
+form.
 
-```tsx
-<Form form={form}>
-  <TextField name='email' label='Email address' required />
-  <CheckboxField name='terms' label='Accept the terms' required />
-</Form>
-```
+### Goals
 
-**Why it is worth doing:** `noValidate` is currently a caller obligation that fails *silently and
-completely* when forgotten (see Decisions). A component that owns the `<form>` element can make that
-impossible to get wrong, which is strictly better than documenting it.
+1. Make the silent caller obligations impossible rather than documented — a form cannot be built
+   without `noValidate`, and a submit button cannot be built without submit semantics.
+2. A field locates its form without being handed it, so naming a field is the only thing a caller
+   writes.
+3. Submission becomes a first-class surface: submitting state, validity state, and a place for
+   errors that belong to the form rather than to any field.
+4. One Storybook story proves the whole flow end to end.
 
-**The hard question, which needs answering before anything is built.** React context is not generic.
-`FormField` and the field components currently infer `TFormData` from the `form` prop, and that
-inference is what makes `name` autocomplete and typo-check against the form's real shape. A
-context-supplied form arrives untyped, so `name` degrades to `string` — losing the single biggest
-ergonomic benefit these components have. Options to weigh:
+### Scope
 
-- Keep `form` as an explicit prop and let `Form` own only the element and `noValidate`. Safe; less of
-  a win.
-- Context, accepting `name: string`. Simplest; measurably worse typing.
-- TanStack's `createFormHookContexts`, which solves exactly this — but is **explicitly rejected** by
-  the Decisions above, so adopting it means reversing that and saying why.
-- A typed factory (`const { Form, TextField } = createForm<IAccount>()`), which preserves inference
-  but is a different API shape again, and is close to the registry the spec argued against.
+- **Included**: a `Form` component owning the `<form>` element, `noValidate` and the form context; a
+  submit button reflecting submitting and validity state; a form-level error surface; removing the
+  `form` prop from the six bound field components and `FormField`; defaulting each field's control
+  `id` to its `name`; stories and MDX for everything touched, including splitting the shared
+  `fields` stories into one page per field component.
+- **Not included**: restoring compile-time checking of `name`; a runtime check that a `name` exists;
+  new field components — the roster stays at the six that shipped, with `CheckboxGroupField`,
+  `SliderField` and the date-picker fields still pointed at `FormField`; any field-definition helper
+  or declarative field list, which is the deferred dynamic-form work; cross-linking every control's
+  documentation from the worked examples; `asChild`, headless rendering or nested forms.
 
-Also open: does `Form` support `asChild`/no-element rendering; does it expose submitting/valid state
-to descendants (P3 needs that); what happens to nested forms.
+### Requirements
 
-### P2 — Per-field stories and MDX
+#### Functional
 
-Each of the six field components gets its own `.stories.tsx` and `.mdx`, rather than sharing
-`fields.stories.tsx` / `fields.mdx`.
+- A `Form` component renders a native `<form>` and makes the form instance available to every
+  descendant without a prop.
+- **`noValidate` is always set and cannot be overridden.** It is not a default; there is no prop
+  that turns it off.
+- Submitting prevents the browser default, stops the event propagating further, and runs the form's
+  own submit handling.
+- `Form` accepts a callback that fires **only after a submission that succeeded**, receiving the
+  submitted values. It is for consequences belonging to the page rather than to the mutation —
+  closing a dialog, a toast, navigation. The mutation itself, and any server errors it returns, stay
+  with the form instance.
+- `Form` applies **no layout of its own**. It accepts a class name and forwards everything else to
+  the element.
+- The six bound field components and `FormField` **no longer accept a `form` prop**. A `Form`
+  ancestor is a hard requirement, and rendering any of them without one **throws**, naming the
+  component and the missing provider.
+- A field's `name` is a plain string. Nothing validates it at compile time or at runtime.
+- Each bound field defaults its control's `id` to its `name`; a caller-supplied `id` still wins.
+- A **submit button** component exists that cannot be built without submit semantics, reflects
+  whether a submission is in flight, and reflects validity per the disable rule in Decisions.
+- A **form-level error surface** renders a message belonging to the form rather than to any field.
+  The message comes from the form's own state — set by the submit handler — rather than from
+  caller-held React state, so it clears itself on the next submission and cannot go stale.
+- Messages are never invented. Neither surface substitutes generic wording for what the server
+  actually said; the generic case is reserved for a failure that produced no message at all.
+- Every component added or changed meets Goal 3's Storybook and `play()` bar.
 
-Each page documents only what is specific to that field, and **links back** to the components it
-composes instead of restating them — `TextField` → [`Field`](?path=/docs/ui-core-field--docs) and
-[`Input`](?path=/docs/ui-core-input--docs). Repetition across seven pages is how documentation
-drifts, which is the same failure mode `05` existed to fix one layer down.
+#### Accessibility
 
-Open: what stays on the shared overview page (probably the set-level table, `noValidate`, and
-validation timing) versus what moves; whether the Storybook nav groups them under `UI Forms/Fields/*`;
-whether `<Controls />` can resolve args through the generic wrapper at all.
+- The form-level error message is announced when it appears without the user having to move focus to
+  find it, and the region carrying it **exists in the DOM before it has any content** — a live
+  region inserted at the same moment as its content is unreliably announced, which is the trap
+  already hit and solved for `Field`.
+- That region is **assertive**, unlike `Field`'s polite per-field regions. Polite is right while the
+  user is typing and wrong once they have pressed submit and stopped to wait for a result.
+- A submit button rendered unavailable **because the form is invalid** must remain reachable by
+  keyboard and screen reader, and pressing it must still re-run validation — so the user can always
+  ask "am I done yet?" and get an answer. A control that is both dead and unexplained is not an
+  acceptable outcome of the disable rule.
+- A submit button unavailable **because a submission is in flight** reports a busy state.
+- Removing the browser's constraint validation removed its focus behaviour too. What replaces it, if
+  anything, is unresolved — see Open Questions.
 
-### P3 — A form-aware submit button
+### Edge Cases & Error Handling
 
-A button that knows about form state — pending while submitting, and optionally disabled until the
-form is valid.
+- **A form inside a portalled overlay, authored inside another form.** React events propagate
+  through the React tree rather than the DOM tree, so a `Form` rendered inside a `Dialog` or `Sheet`
+  written inside another `Form`'s JSX submits **both** unless propagation is stopped. The two
+  `<form>` elements are nowhere near each other in the DOM, so this is invisible on inspection.
+- **A form filling a dialog.**
+  [`DialogContent`](../../packages/ui-overlays/src/components/Dialog/components/DialogContent.tsx#L24)
+  is `max-h-[90vh] flex flex-col` and
+  [`DialogContentArea`](../../packages/ui-overlays/src/components/Dialog/components/DialogContentArea.tsx)
+  is `flex-1 overflow-y-auto`; the scroll depends on their being directly related. Wrapping header,
+  body and footer in a `Form` inserts an element between them, and if that element is not itself a
+  flex container the body stops scrolling, content overflows the clipped height, and the footer —
+  carrying the submit button — is pushed out of view. A long form in a dialog becomes unsubmittable.
+  `Form` shipping no layout is what keeps this an ordinary class-name decision rather than an
+  override of an invisible default.
+- **A misspelled field name** binds to a field that is not part of the form's data: it renders,
+  accepts input, never validates, and contributes nothing on submit. Nothing detects this.
+- **A field rendered without a `Form` ancestor** throws immediately rather than rendering degraded.
+- **The same field name rendered twice in one document** produces duplicate element ids, since ids
+  default to names. Unusual, and not defended against.
+- **A submit handler returning field errors for names that don't exist** sets them on fields nothing
+  renders, so they are invisible. Same class as a misspelled name, same treatment.
 
-**Flag before this is specified: "disable until valid" is a contested pattern, and I would push
-back on it as a default.** A disabled submit button gives no reason why it is disabled, is skipped
-by keyboard and screen-reader users navigating by control, and leaves someone stuck with no
-explanation. The usual guidance is to keep it enabled and surface the errors on submit — which the
-adapter already supports, since `handleSubmit` touches every field and `showErrorsWhen` handles the
-rest. Worth deciding deliberately rather than inheriting.
+### Acceptance Criteria
 
-The *pending* half is uncontroversial and probably the real value: disable-while-submitting plus a
-loading state, which `Button` already supports via `loading`.
+- Given a form built with `Form`, when the DOM is inspected, then the `<form>` carries `noValidate`,
+  and no combination of caller-supplied props removes it.
+- Given a required field left empty, when the form is submitted, then validation runs and the error
+  appears — the browser did not silently block the submission.
+- Given a field component rendered with no `Form` ancestor, when it renders, then it throws an error
+  naming the component and the missing provider.
+- Given a field bound by name, when the DOM is inspected, then its control's `id` is that name and
+  its `aria-describedby` resolves to its own message region.
+- Given a submit button inside a `Form`, when it is pressed, then the form submits — without the
+  caller having specified submit semantics.
+- Given a submission in flight, when the submit button is inspected, then it reports a busy state
+  and a second press does not start a second submission.
+- Given a form never yet submitted and invalid, when the submit button is inspected, then it is
+  available, and pressing it runs validation and reveals every outstanding error.
+- Given a form submitted at least once and still invalid, when the submit button is inspected, then
+  it presents as unavailable, remains reachable by keyboard, and pressing it still re-runs
+  validation.
+- Given a submit handler returning errors keyed by field name, when submission completes, then each
+  named field displays its own message, with no translation written by the caller.
+- Given a submit handler reporting a failure belonging to no field, when submission completes, then
+  the message it produced is displayed once at form level, is announced without focus being moved to
+  it, and is gone on the next submission.
+- Given a successful submission, when it completes, then `Form`'s success callback fires exactly
+  once with the submitted values, and does not fire on a submission that failed validation or failed
+  at the server.
+- Given a `Form` inside a portalled overlay that is itself authored inside another `Form`, when the
+  inner form is submitted, then the outer form's submit handling does not run.
+- Given the Storybook documentation, when it is inspected, then each of the six field components has
+  its own stories file and MDX page, documenting only what is specific to that field and linking to
+  the components it composes rather than restating them.
+- Given the Storybook documentation, when it is inspected, then one story drives a realistic
+  multi-field form end to end — validation failure, a server error bound to a field, a form-level
+  failure, and a successful submission — with `play()` coverage of the whole sequence.
 
-Open: does it live in `ui-forms` and wrap `ui-core`'s `Button`; does it read context (needs P1) or
-take `form`; what it does when validation fails on submit; whether "disabled until valid" is offered
-at all, and if so with what accessible fallback.
+### Decisions
 
-### P4 — Worked examples for every control, cross-linked
+- **The form travels by context, and `name` becomes `string`.** React context is not generic, so a
+  context-supplied form loses the `TFormData` inference that makes `name` autocomplete and
+  typo-check. Every alternative preserving that inference is a factory — TanStack's own
+  [`createFormHook`](https://tanstack.com/form/v1/docs/framework/react/guides/form-composition),
+  Mantine's [`createFormContext<T>()`](https://mantine.dev/form/create-form-context/), or a
+  hand-rolled equivalent — and a factory means the field components come from `createForm<IAccount>()`
+  rather than from the package barrel. **Keeping them importable from the barrel was judged worth
+  more than the compile-time check.** The trade, stated as a trilemma so it stays on the record: a
+  call site with no `form` prop, a typed `name`, and barrel-imported components — any two, never all
+  three.
+- **The earlier rejection of `createFormHook` was already two-thirds reversed, and is not the reason
+  for rejecting it now.** That decision rested on "no pre-bound UI components" and "no registry",
+  both of which fell when this deliverable shipped six bound field components. The reason that
+  stands on its own is different: `createFormHook` puts TanStack's own API shape (`form.AppField`)
+  at every call site, and the point of these components is that a caller writes a field name and
+  nothing else.
+- **`form` is removed rather than made optional.** An optional `form` that restores inference is
+  only a mitigation if someone passes it, and the stated 99% case never would. Dead API surface
+  presented as a safety net is worse than an honest absence.
+- **A missing `Form` throws, and is not wrapped in an error boundary.** A missing provider is a
+  developer error and a structural one — if the tree renders once, it is correct forever. A boundary
+  would convert a crash in development into a caught state, making the mistake *more* likely to
+  ship, and boundaries do not catch errors outside render anyway. An error boundary for consumer
+  code throwing inside a field is a separate proposal with a separate justification.
+- **The throw is documented, not asserted in a test.** A one-time authoring mistake with an
+  unambiguous message.
+- **Nothing checks that a `name` exists.** A dev-time warning comparing each field's `name` against
+  the form's default values was considered and rejected: naming a field is a one-time authoring act,
+  the check would have to tolerate array paths, and documentation was judged proportionate. **This
+  is an accepted risk, recorded rather than mitigated** — a misspelled name produces a field that
+  renders, accepts input, and silently never submits.
+- **`Form` ships no layout.** A default vertical rhythm was considered and dropped after the dialog
+  case above, where the correct layout is structurally different from any sensible default and a
+  caller overriding it would have to know a default existed, what it was, which parts survive a
+  class-name merge, and one non-obvious extra rule to make scrolling work. No default means no
+  invisible knowledge, and it avoids setting the repo's first above-component spacing scale by
+  accident, ahead of the design-system audit planned in [`docs/README.md`](../README.md).
+- **Propagation is stopped on submit.** Not for nested `<form>` elements, which HTML forbids, but
+  for portalled overlays — see Edge Cases.
+- **The mutation stays with the form instance; `Form`'s callback fires only on success.** The
+  deciding factor is that submitting state is true for exactly as long as the form library is
+  awaiting the handler. Moving the mutation onto `Form` would mean the form reports itself finished
+  while the request is still in flight, so the submit button would stop loading and re-enable
+  mid-save — and fixing that would need `Form` to keep its own submitting state, giving two answers
+  to one question. Keeping the mutation with the form instance also preserves the return-value
+  contract that binds server errors to fields.
+- **The callback is named for what it does.** It fires on success, so it is named for success.
+  Calling it `onSubmit` would be a lie — it does not fire on every submission — and it would sit
+  beside the form instance's own `onSubmit` with different timing and different arguments.
+- **Server errors bind to fields by default; the form-level surface is the fallback.** Mapping an
+  API response to field names is application-specific and stays in the caller's submit handler. What
+  this provides is the place the unbindable remainder renders. Field binding itself needs no new
+  code — `toFieldProps` already reads `errorMap.onServer`.
+- **The form-level message is read from form state, not held by the caller.** Caller-held state has
+  to be cleared at the start of every submission or a stale failure sits above a form that has since
+  succeeded.
+- **A submit button exists as a component, and the reason is `type`.**
+  [`Button.tsx:88`](../../packages/ui-core/src/components/Button/Button.tsx#L88) defaults
+  `type='button'` on purpose, so a plain `Button` inside a form renders correctly and does nothing —
+  a silent, complete failure of the same class as the missing `noValidate`. The component exists to
+  make that unforgettable, and to own the accessibility decisions above in one place rather than
+  having them re-derived per application.
+- **The disable rule: never before the first submission; unavailable while invalid after it.**
+  Disable-until-valid as a *starting* state was rejected — it gives no reason, is skipped by
+  keyboard and screen-reader navigation, and leaves someone stuck. The chosen rule keeps the button
+  live until the user has actually asked for a result. The trade is that a user part-way through
+  fixing errors sees an unavailable button, which is why the accessibility requirement insists it
+  stay reachable and still re-validate on press. The state derives from the form's own
+  submission-attempt count, so it is observable and can be driven in a story.
+- **Unavailable-for-validity and unavailable-for-submitting are not the same mechanism.** In flight,
+  the control is genuinely disabled — a brief state where a second press must not start a second
+  request. For validity it must stay focusable and still re-run validation on press. *Proposed
+  during the requirements session and not contested; flag it if native disabled is wanted in both
+  cases, at the cost of the button leaving the tab order.*
+- **Field ids default to field names.** React 19's fallback ids contain characters invalid in a CSS
+  selector, already documented as a trap in [`plan.md`](./plan.md). Defaulting to the name gives
+  readable DOM ids, makes a field's element reachable from its name, and removes the trap from every
+  story.
+- **Per-field stories and MDX are part of this work, not a later documentation pass.** Not as a
+  documentation project: removing the `form` prop means the existing shared stories file will not
+  compile, so those stories are being rewritten either way. Splitting them at the same time avoids
+  writing them twice.
+- **The end-to-end story is an acceptance criterion, not a nice-to-have.** It is the only artefact
+  exercising validation, field-bound server errors, form-level failure and success together — the
+  class of bug it would catch is exactly the one this deliverable shipped and had to find by
+  accident.
 
-`Field.mdx` and the `ui-forms` pages should show every control the pattern supports, each linking to
-that control's own documentation — the date-picker example linking to the date-picker docs, the
-select example to `Select`, and so on.
+### Open Questions
 
-Partly done: `Field.mdx` already has one worked example per control family. What is missing is the
-cross-links back to each control's page, and coverage of the controls that only got a passing
-mention.
-
-### P5 — Sharpen the `ui-forms` documentation
-
-Clearer composition guidance and more practical, end-to-end examples, rather than API description.
-Concretely: what belongs in `ui-core` versus `ui-forms` and why; when to reach for a field component
-versus `FormField` versus `Field` alone; a realistic multi-field form worked end to end including
-validation, submission and server errors.
-
-### Notes for the requirements session
-
-- **P1 is the load-bearing one.** P3 depends on it for form state, and P2's page structure depends on
-  whether fields still take a `form` prop. Settle the typing question first; the rest follows.
-- **Two decisions above are candidates for reversal** — `createFormHookContexts` (P1) and the
-  no-registry rule (P1's factory option). Either can be revisited, but the reversal should be
-  argued, not slipped in.
-- **`CheckboxGroupField`, `SliderField` and the date-picker fields** were deliberately not built in
-  `05`. If P4 wants worked examples for every control, that gap becomes visible; decide whether to
-  close it or keep pointing those cases at `FormField`.
+1. **Does a failed submission move focus, and where?** Turning off native constraint validation also
+   removed the browser's own behaviour of focusing the first invalid control, and nothing replaced
+   it. Field ids defaulting to names makes it implementable for the first time. For: with errors
+   bound to fields, a form-level message tells a screen reader user that *something* failed without
+   telling them *where*, and focusing the first error is the default behaviour of comparable
+   libraries rather than an unusual one. Against: it was felt to be aggressive. **Unresolved** —
+   options are to focus the first invalid field, to focus the form-level message, or to do nothing
+   and record it as a known gap.
+2. **Is unavailable-for-validity implemented so the control stays focusable?** Recorded as a
+   Decision above because it was proposed and not contested, but never explicitly confirmed — and it
+   is the difference between a disabled state that can be interrogated and one that cannot.

@@ -45,6 +45,14 @@ reaching for those is out of date.
   is under `ui-forms/Selects`).
 - **Source comments cite doc paths.** `Button.tsx`, `Button.stories.tsx` and `Icon.mdx` each
   reference a deliverable document. Grep `packages/` and `apps/` for `docs/` when moving anything.
+- **A second pass on a shipped deliverable stays in that deliverable's own `spec.md`.** It does
+  _not_ get the next number. Follow-on work that extends something already marked ✅ done goes below
+  a hard delimiter in the original spec — a heading plus a `Status: specified, not built.` line
+  saying everything above it shipped — and appears on the roadmap under **Planned**, not as a table
+  row, since no folder exists for it. `05-ui-forms-field-pattern` is the worked example: its "Second
+  pass — the form layer" section. Its `plan.md` stays the as-built record of what shipped and links
+  forward at the top, so the two never blur. Split into a new numbered folder only when the follow-on
+  is genuinely independent work rather than a continuation of the same deliverable.
 - **Consumer-facing docs go to Storybook.** A component's `.mdx` is for people _using_ the library —
   which props exist, what obligations fall on the caller. Implementation reasoning, rejected
   alternatives and known limitations go in the deliverable's `plan.md`. Route by who needs to know,

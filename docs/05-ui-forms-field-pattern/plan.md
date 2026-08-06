@@ -7,6 +7,12 @@ Status: **shipped.** This is the as-built record — what was built, what change
 what bit us. Consumer-facing usage documentation lives in Storybook (`Field.mdx`, `Label.mdx`,
 `FieldMessage.mdx`, `FormField.mdx`, `fields.mdx`).
 
+> **A second pass is specified but not built.** [`spec.md` → Second pass — the form
+> layer](./spec.md#second-pass--the-form-layer) covers the layer above the field: a `Form` component
+> owning the element and `noValidate`, fields locating their form by context rather than by prop, a
+> submit button, and form-level errors. Nothing below this line describes it — this document remains
+> the record of what shipped.
+
 ## Outcome
 
 | Gate | Baseline | After |
@@ -849,10 +855,15 @@ pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_module
 - **A range `Slider` has two thumbs**, which is two controls under one heading. `Field` wraps one
   control by design, so `Dual` is not composed with it.
 - **`CheckboxGroupField`, `SliderField` and date-picker field components** were deliberately not
-  built — the rarely-used four. `FormField` covers them.
+  built — the rarely-used four. `FormField` covers them. **Still out of scope in the second pass**,
+  which fixes the roster at six; the cross-linking work that would make the gap visible was deferred
+  with it, so the decision can be taken cold.
 - **`ui-forms` still declares `react-use` and `zod` with zero uses**, and
   `packages/ui-forms/src/components/Form/index.ts` remains a dead duplicate of `form.ts`. Both were
-  offered and declined during planning.
+  offered and declined during planning. The second pass gives that folder a real `Form` component,
+  which closes the duplicate as a side effect.
+- **The `noValidate` caller obligation is documentation-only today.** The second pass exists largely
+  to make it structural — see the spec section linked at the top of this document.
 
 ## Explicitly out of scope
 
