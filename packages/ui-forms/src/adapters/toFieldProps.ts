@@ -1,32 +1,9 @@
+import { normaliseError } from '~/adapters/normaliseError';
 import type {
 	IFieldPropsFromState,
 	ITanStackFieldLike,
 	IToFieldPropsOptions
 } from '~/adapters/toFieldProps.types';
-
-/**
- * Normalises one entry of `meta.errors` to a displayable string.
- *
- * The element type depends on which validator produced it — a plain function conventionally returns
- * a string, a Standard Schema validator (zod et al.) returns an issue object with a `message`. So
- * this has to be defensive rather than cast.
- *
- * Returns `undefined` for anything it cannot turn into text, including empty and whitespace-only
- * strings: showing a blank error would put the field in a permanently invalid-but-silent state,
- * which is worse than showing nothing.
- */
-const normalise = (candidate: unknown): string | undefined => {
-	if (typeof candidate === 'string') {
-		return candidate.trim() === '' ? undefined : candidate;
-	}
-
-	if (typeof candidate === 'object' && candidate !== null && 'message' in candidate) {
-		const { message } = candidate as { message: unknown };
-		return typeof message === 'string' && message.trim() !== '' ? message : undefined;
-	}
-
-	return undefined;
-};
 
 /**
  * Translates a TanStack Form field's state into the props `Field` accepts.
@@ -75,7 +52,7 @@ export const toFieldProps = (
 	// First renderable error only, never joined. `FieldMessage` is one line under a control, and a
 	// live region announcing three concatenated validation messages is one nobody follows.
 	for (const candidate of errors) {
-		const message = normalise(candidate);
+		const message = normaliseError(candidate);
 
 		if (message !== undefined) {
 			return { error: message };
