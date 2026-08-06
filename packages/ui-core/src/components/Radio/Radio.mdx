@@ -102,3 +102,24 @@ Radix renders a `<button role="radio">` and keeps `aria-checked` in sync. Keyboa
 | **Disabled options** | Set `disabled` on the option; keyboard navigation skips it rather than focusing it. |
 
 **Radio, not checkbox.** Arrowing through a radio group *changes the selection* — that is the standard pattern and what users expect. If choices are not mutually exclusive, use [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs), which navigates identically but does not toggle as you arrow past.
+
+## Prefer RadioGroup
+
+`Radio` is a leaf. It must sit inside a radio-group context to work at all, which means using it
+directly requires importing Radix's `RadioGroup.Root` yourself — the stories on this page do exactly
+that, and it is the reason they import from `@radix-ui/react-radio-group`.
+
+**For real use, reach for [`RadioGroup`](?path=/docs/ui-core-radio-group--docs)** instead. It owns
+the root, the roving focus and the per-item labels:
+
+```tsx
+import { Field, RadioGroup } from '@repo/ui-core';
+
+<Field label='Billing plan' id='billing' nativeLabel={false}>
+  {(control) => (
+    <RadioGroup {...control} name='billing' options={options} value={value} onChange={onChange} />
+  )}
+</Field>
+```
+
+Or [`RadioGroupField`](?path=/docs/ui-forms-fields--docs) for a TanStack-driven form.

@@ -112,3 +112,25 @@ Two things worth knowing:
 
 - **This goes beyond the WAI-ARIA minimum.** Checkbox groups conventionally leave each item as its own tab stop. The roving tabindex is a deliberate consistency choice with `RadioGroup`, not a conformance fix — worth stating so it is not miscited later as "checkboxes were broken".
 - **Reading direction is not handled.** Arrow keys are left-to-right only, library-wide — no `DirectionProvider` is mounted anywhere, so every Radix component here falls back to LTR. Tracked as its own piece of work.
+
+## Use it with Field
+
+`CheckboxGroup` accepts `id` and the ARIA attributes so [`Field`](?path=/docs/ui-core-field--docs)
+can name and describe the group as a whole:
+
+```tsx
+import { CheckboxGroup, Field } from '@repo/ui-core';
+
+<Field label='Notify me about' id='notify' nativeLabel={false} error={error}>
+  {(control) => (
+    <CheckboxGroup {...control} name='notify' options={options} value={value} onChange={onChange} />
+  )}
+</Field>
+```
+
+**`nativeLabel={false}` is required here.** A single native `<label>` cannot name several controls,
+so `Field` renders the heading as a `<span>` and the group container points back at it with
+`aria-labelledby`. The container also carries `role='group'`, added by this component because Radix
+ships no checkbox-group primitive to supply one.
+
+Each option keeps its own per-item `CheckboxLabel` independently of the group heading.

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 import { Switch } from '~/components/Switch/Switch';
+import { Field } from '~/components/Field/Field';
 
 const meta: Meta<typeof Switch> = {
 	title: 'UI Core/Switch',
@@ -194,5 +196,54 @@ export const WithDescription: Story = {
 			);
 		};
 		return <DescriptionSwitch />;
+	}
+};
+
+const SwitchWithField = () => {
+	const [enabled, setEnabled] = useState(false);
+
+	return (
+		<div className='w-80'>
+			<Field
+				label='Email me offers'
+				id='marketing'
+				description='You can turn this off at any time.'
+			>
+				{(control) => (
+					<Switch {...control} checked={enabled} onCheckedChange={setEnabled} />
+				)}
+			</Field>
+		</div>
+	);
+};
+
+export const WithField: Story = {
+	render: () => <SwitchWithField />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Field, Switch } from '@repo/ui-core';
+
+<Field label='Email me offers' id='marketing'>
+  {(control) => <Switch {...control} checked={enabled} onCheckedChange={setEnabled} />}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const toggle = canvas.getByRole('switch', { name: 'Email me offers' });
+
+		await step('It is labelled and described', async () => {
+			await expect(toggle).toHaveAttribute('id', 'marketing');
+			await expect(toggle).toHaveAttribute('aria-describedby', 'marketing-message');
+		});
+
+		await step('And toggles', async () => {
+			await expect(toggle).not.toBeChecked();
+			await userEvent.click(toggle);
+			await expect(toggle).toBeChecked();
+		});
 	}
 };

@@ -106,3 +106,21 @@ Radix renders a `<button role="checkbox">` and keeps `aria-checked` in sync, so 
 | **Grouping** | Several related checkboxes need a group name — use [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs), or wrap them in a `<fieldset>` with a `<legend>`. |
 
 > **Tab behaviour differs from `CheckboxGroup`.** A standalone `Checkbox` is its own tab stop. Inside `CheckboxGroup` the whole group is a single tab stop, with the arrow keys moving between options.
+
+## Use it with Field
+
+`CheckboxLabel` is for the inline case — a checkbox with its text beside it. When the checkbox is a
+*form field*, with a description or a validation message,
+[`Field`](?path=/docs/ui-core-field--docs) is the right wrapper:
+
+```tsx
+import { Checkbox, Field } from '@repo/ui-core';
+
+<Field label='Accept the terms' id='terms' required error={error}>
+  {(control) => <Checkbox {...control} checked={accepted} onCheckedChange={setAccepted} />}
+</Field>
+```
+
+For a TanStack-driven form, use [`CheckboxField`](?path=/docs/ui-forms-fields--docs) — it also
+absorbs a real papercut, since Radix's `Checkbox` has its own string `value` prop that collides with
+the field's value.

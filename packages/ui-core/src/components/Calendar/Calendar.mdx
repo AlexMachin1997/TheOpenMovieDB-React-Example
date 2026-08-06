@@ -134,3 +134,21 @@ The `[&>span]:text-xs [&>span]:opacity-70` rule on the day button exists for exa
 Focus is managed internally: `CalendarDayButton` focuses itself when `react-day-picker` marks it focused, which is what makes arrow-key navigation across weeks and months work.
 
 > **Reading direction.** The navigation chevrons flip under `dir="rtl"` via `rtl:` classes, but no `DirectionProvider` is mounted in this library, so RTL is not exercised end to end. Tracked as its own piece of work.
+
+## Calendar is not a form field
+
+`Calendar` displays and selects dates; it is not a labelled form control, and it does **not** get
+wrapped in [`Field`](?path=/docs/ui-core-field--docs).
+
+The thing a user fills in is a date picker — `SingleDatePicker` or `DateRangePicker` in
+`@repo/ui-forms` — and `Calendar` is what those render inside their popover. Reach for one of them
+when you need a date *field*:
+
+```tsx
+import { Field } from '@repo/ui-core';
+import { SingleDatePicker } from '@repo/ui-forms';
+
+<Field label='Departure date' id='departure' required>
+  {(control) => <SingleDatePicker {...control} date={date} onDateChange={setDate} />}
+</Field>
+```

@@ -676,24 +676,24 @@ Estimated: 1.5 days.
 
 ### Phase 7 — Storybook coverage sweep
 
-- [ ] 7.1 `Input.stories.tsx`: wrappers → `Field`; `ContactForm`'s raw `<textarea>` → `Textarea`
+- [x] 7.1 `Input.stories.tsx`: wrappers → `Field`; `ContactForm`'s raw `<textarea>` → `Textarea`
       (AC7); rewrite every `docs.source.code` override; 2 `play()`. (Depends on: 3.6)
-- [ ] 7.2 `Textarea.stories.tsx`: same. (3.6)
-- [ ] 7.3 `Checkbox` + `Switch`: `Field` composition and error stories, real toggle `play()`. (3.6)
-- [ ] 7.4 `Radio.stories.tsx`: rewrite off the direct Radix import onto `RadioGroup`; closes 04's
+- [x] 7.2 `Textarea.stories.tsx`: same. (3.6)
+- [x] 7.3 `Checkbox` + `Switch`: `Field` composition and error stories, real toggle `play()`. (3.6)
+- [x] 7.4 `Radio.stories.tsx`: rewrite off the direct Radix import onto `RadioGroup`; closes 04's
       open item. (4.7)
-- [ ] 7.5 `CheckboxGroup` + `RadioGroup`: `Field`-composition stories with the AC8 accessible-name
+- [x] 7.5 `CheckboxGroup` + `RadioGroup`: `Field`-composition stories with the AC8 accessible-name
       `play()`s, plus 04's part-selected tab-stop gap. (4.7)
-- [ ] 7.6 `Slider.stories.tsx`: fix the broken `htmlFor` by composing `Field` with
+- [x] 7.6 `Slider.stories.tsx`: fix the broken `htmlFor` by composing `Field` with
       `nativeLabel={false}` and spreading the bag onto `SliderThumb`; keyboard `play()`. (3.6)
-- [ ] 7.7 `Calendar.stories.tsx`: convert all 9 exports from CSF1 bare functions to CSF3 `StoryObj`
+- [x] 7.7 `Calendar.stories.tsx`: convert all 9 exports from CSF1 bare functions to CSF3 `StoryObj`
       — `play` cannot attach otherwise — then add one. Cross-check every `<Canvas of>` in
       `Calendar.mdx` in **both** directions. (3.6)
-- [ ] 7.8 `Select`, `SingleDatePicker`, `RangeDatePicker`: one `Field`-composition story each with an
+- [x] 7.8 `Select`, `SingleDatePicker`, `RangeDatePicker`: one `Field`-composition story each with an
       accessible-name `play()` proving 4.5. (4.7)
-- [ ] 7.9 MDX refresh across every touched component — usage examples especially, since they
+- [x] 7.9 MDX refresh across every touched component — usage examples especially, since they
       currently show hand-rolled wrappers and must stay copy-pasteable. (7.1-7.8)
-- [ ] 7.10 Rebuild, clear caches, run the suite. (7.9)
+- [x] 7.10 Rebuild, clear caches, run the suite. (7.9)
 
 Estimated: 2.5 days.
 

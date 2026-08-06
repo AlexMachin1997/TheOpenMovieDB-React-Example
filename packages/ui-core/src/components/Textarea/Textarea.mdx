@@ -100,3 +100,19 @@ const [value, setValue] = useState('');
 **Note on `Enter`.** Inside a `<textarea>`, `Enter` inserts a newline rather than submitting the form. If your form needs a keyboard submit, provide it explicitly — and do not repurpose `Enter`, since that removes the only way to type a paragraph break.
 
 Resizing is left to the browser's native grip, which is keyboard-operable. Do not disable it with `resize-none` unless the field genuinely cannot grow.
+
+## Use it with Field
+
+Wrap `Textarea` in [`Field`](?path=/docs/ui-core-field--docs) rather than hand-assembling a label
+beside it:
+
+```tsx
+import { Field, Textarea } from '@repo/ui-core';
+
+<Field label='Message' id='message' description='Tell us what happened.'>
+  {(control) => <Textarea {...control} value={value} onChange={onChange} />}
+</Field>
+```
+
+For a TanStack-driven form, [`TextareaField`](?path=/docs/ui-forms-fields--docs) does this with no
+render prop.

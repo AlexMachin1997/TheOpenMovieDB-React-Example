@@ -126,3 +126,33 @@ Radix gives each thumb `role="slider"` with `aria-valuemin`, `aria-valuemax` and
 <Canvas sourceState="none" of={SliderStories.WithTooltips} />
 
 > **Known styling gap.** `SliderThumb` currently hardcodes raw palette colours (`bg-white`, `border-gray-300`, `focus:ring-blue-400`) instead of design tokens, so it does not follow the theme and its focus ring differs from every other control. Tracked in the focus-indicators work, not here.
+
+## Labelling a Slider
+
+**A `<label htmlFor>` cannot name a slider.** The focusable control is `SliderThumb`, which renders
+a `<span role='slider'>`, and `htmlFor` only associates with labelable elements — form controls, not
+spans. Writing `<Label htmlFor='my-slider'>` beside a slider produces a label that names nothing at
+all, which is what every story on this page used to do.
+
+Use [`Field`](?path=/docs/ui-core-field--docs) with `nativeLabel={false}`:
+
+```tsx
+import { Field, SliderRoot, SliderTrack, SliderRange, SliderThumb } from '@repo/ui-core';
+
+<Field label='Budget' id='budget' nativeLabel={false}>
+  {(control) => (
+    <SliderRoot value={value} onValueChange={setValue} min={0} max={100}>
+      <SliderTrack><SliderRange /></SliderTrack>
+      <SliderThumb {...control} />
+    </SliderRoot>
+  )}
+</Field>
+```
+
+> **The bindings go on `SliderThumb`, not `SliderRoot`.** The thumb is the element with
+> `role='slider'`; putting them on the root names a `<div>` nobody can focus. This is also why
+> `Field` takes a render function rather than cloning a child — a clone can only reach the outermost
+> element.
+
+A **range** slider has two thumbs, which is two controls under one heading. `Field` wraps a single
+control by design, so give each thumb its own `aria-label` and treat the heading as a group label.

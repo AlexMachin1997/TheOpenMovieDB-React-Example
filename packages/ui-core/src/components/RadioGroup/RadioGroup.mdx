@@ -96,3 +96,28 @@ Moving between options with the arrow keys **also selects** them, which is stand
 > **Reading direction is not handled.** Arrow keys are left-to-right only. This is library-wide rather than specific to this component — no `DirectionProvider` is mounted anywhere, so every Radix component here falls back to LTR. Tracked as its own piece of work.
 
 Each option's label is associated with its control via `htmlFor`, so clicking the label selects the option.
+
+## Use it with Field
+
+`RadioGroup` accepts `id` and the ARIA attributes so [`Field`](?path=/docs/ui-core-field--docs) can
+name the group:
+
+```tsx
+import { Field, RadioGroup } from '@repo/ui-core';
+
+<Field label='Billing plan' id='billing' nativeLabel={false}>
+  {(control) => (
+    <RadioGroup {...control} name='billing' options={options} value={value} onChange={onChange} />
+  )}
+</Field>
+```
+
+**`nativeLabel={false}` is required**, for the same reason as `CheckboxGroup`: one `<label>` cannot
+name several controls.
+
+Unlike `CheckboxGroup`, no `role` is added. Radix's Root already reports `role="radiogroup"`, which
+is more specific than `group` and is what makes assistive technology announce set position — so it
+is deliberately left alone.
+
+For a TanStack-driven form, [`RadioGroupField`](?path=/docs/ui-forms-fields--docs) sets
+`nativeLabel={false}` for you.

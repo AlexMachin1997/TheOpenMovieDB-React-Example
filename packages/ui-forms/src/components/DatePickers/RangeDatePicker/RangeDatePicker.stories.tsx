@@ -4,6 +4,8 @@ import type { DateRange } from 'react-day-picker';
 import type { Locale } from 'date-fns';
 import { fr, es, de } from 'date-fns/locale';
 import { DateRangePicker } from './RangeDatePicker';
+import { Field } from '@repo/ui-core';
+import { expect, within } from 'storybook/test';
 import { type DateFormatKey } from '@repo/core';
 
 type DateRangePickerStorybookTypes = {
@@ -329,4 +331,44 @@ const WithDateFormatsTemplate = () => {
 export const WithDateFormats: Story = {
 	render: () => <WithDateFormatsTemplate />,
 	args: {}
+};
+
+const RangePickerWithField = () => {
+	const [range, setRange] = useState<DateRange | undefined>(undefined);
+
+	return (
+		<div className='w-96'>
+			<Field label='Stay dates' id='stay' description='Check-in and check-out.'>
+				{(control) => (
+					<DateRangePicker {...control} dateRange={range} onDateRangeChange={setRange} />
+				)}
+			</Field>
+		</div>
+	);
+};
+
+export const WithField: StoryObj = {
+	render: () => <RangePickerWithField />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Field } from '@repo/ui-core';
+import { DateRangePicker } from '@repo/ui-forms';
+
+<Field label='Stay dates' id='stay'>
+  {(control) => (
+    <DateRangePicker {...control} dateRange={range} onDateRangeChange={setRange} />
+  )}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+		const canvas = within(canvasElement);
+
+		const trigger = canvas.getByRole('button', { name: /Stay dates/ });
+		await expect(trigger).toHaveAttribute('id', 'stay');
+		await expect(trigger).toHaveAttribute('aria-describedby', 'stay-message');
+	}
 };

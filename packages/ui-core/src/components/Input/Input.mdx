@@ -65,3 +65,23 @@ without ringing on every mouse click. `disabled` inputs are skipped by Tab, as n
 ## Examples
 
 <Stories />
+
+## Use it with Field
+
+Every example above shows `Input` on its own. In real use, wrap it in
+[`Field`](?path=/docs/ui-core-field--docs) — it generates the `id`, renders the `Label`, and wires
+the description and error message to the control for assistive technology.
+
+```tsx
+import { Field, Input } from '@repo/ui-core';
+
+<Field label='Email address' id='email' error={error} required>
+  {(control) => <Input {...control} type='email' value={value} onChange={onChange} />}
+</Field>
+```
+
+Hand-assembling a `<Label htmlFor>` beside an `<Input id>` still works, but it is how this library
+ended up shipping an error message that was visible and had no `aria-describedby`. Prefer `Field`.
+
+For a form driven by TanStack Form, reach for
+[`TextField`](?path=/docs/ui-forms-fields--docs) instead, which needs no render prop at all.

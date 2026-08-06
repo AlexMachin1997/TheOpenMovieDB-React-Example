@@ -4,6 +4,8 @@ import type { Locale } from 'date-fns';
 import { fr, es, de, ja } from 'date-fns/locale';
 
 import { SingleDatePicker } from '~/components/DatePickers/SingleDatePicker/SingleDatePicker';
+import { Field } from '@repo/ui-core';
+import { expect, within } from 'storybook/test';
 import { getDateFormatExamples, type DateFormatKey } from '@repo/core';
 
 type SingleDatePickerStorybookTypes = {
@@ -357,4 +359,51 @@ const WithDateFormatsTemplate = () => {
 
 export const WithDateFormats: Story = {
 	render: () => <WithDateFormatsTemplate />
+};
+
+const DatePickerWithField = () => {
+	const [date, setDate] = useState<Date | undefined>(undefined);
+
+	return (
+		<div className='w-96'>
+			{/*
+			 * `nativeLabel` stays true. The trigger is a <button>, which IS a labelable element, so a
+			 * native <label htmlFor> names it — no aria-labelledby needed. That only works because
+			 * the picker now accepts an `id` and forwards it to the trigger.
+			 */}
+			<Field
+				label='Departure date'
+				id='departure'
+				required
+				description='Pick the day you want to travel.'
+			>
+				{(control) => <SingleDatePicker {...control} date={date} onDateChange={setDate} />}
+			</Field>
+		</div>
+	);
+};
+
+export const WithField: StoryObj = {
+	render: () => <DatePickerWithField />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Field } from '@repo/ui-core';
+import { SingleDatePicker } from '@repo/ui-forms';
+
+<Field label='Departure date' id='departure' required>
+  {(control) => <SingleDatePicker {...control} date={date} onDateChange={setDate} />}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+		const canvas = within(canvasElement);
+
+		const trigger = canvas.getByRole('button', { name: /Departure date/ });
+		await expect(trigger).toHaveAttribute('id', 'departure');
+		await expect(trigger).toHaveAttribute('aria-describedby', 'departure-message');
+		await expect(trigger).toHaveAttribute('aria-required', 'true');
+	}
 };

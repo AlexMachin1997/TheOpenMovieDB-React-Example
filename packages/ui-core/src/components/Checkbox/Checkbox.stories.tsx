@@ -1,7 +1,8 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { Checkbox, CheckboxLabel } from '~/components/Checkbox/components';
+import { Field } from '~/components/Field/Field';
 
 const meta: Meta<typeof Checkbox> = {
 	title: 'UI Core/Checkbox',
@@ -141,5 +142,59 @@ export const LabelPassthroughProps: Story = {
 		// CheckboxLabel must forward unrecognised props (id/title/data-*/etc.) onto the
 		// underlying Label element instead of silently dropping them.
 		expect(label).toHaveAttribute('title', 'extra prop');
+	}
+};
+
+const CheckboxWithField = () => {
+	const [accepted, setAccepted] = React.useState(false);
+
+	return (
+		<div className='w-80'>
+			<Field
+				label='Accept the terms'
+				id='terms-field'
+				required
+				description='You must accept before continuing.'
+				error={accepted ? undefined : 'You must accept the terms.'}
+			>
+				{(control) => (
+					<Checkbox {...control} checked={accepted} onCheckedChange={setAccepted} />
+				)}
+			</Field>
+		</div>
+	);
+};
+
+export const WithField: Story = {
+	render: () => <CheckboxWithField />,
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Checkbox, Field } from '@repo/ui-core';
+
+<Field label='Accept the terms' id='terms-field' required error={error}>
+  {(control) => <Checkbox {...control} checked={accepted} onCheckedChange={setAccepted} />}
+</Field>`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const checkbox = canvas.getByRole('checkbox', { name: /Accept the terms/ });
+
+		await step('It starts invalid, and says so where it can be read', async () => {
+			await expect(checkbox).toHaveAttribute('aria-invalid', 'true');
+			await expect(checkbox).toHaveAttribute('aria-describedby', 'terms-field-message');
+			await expect(canvasElement.querySelector('[id="terms-field-message"]')).toHaveTextContent(
+				'You must accept the terms.'
+			);
+		});
+
+		await step('Checking it clears the error', async () => {
+			await userEvent.click(checkbox);
+			await expect(checkbox).toBeChecked();
+			await expect(checkbox).not.toHaveAttribute('aria-invalid');
+		});
 	}
 };
