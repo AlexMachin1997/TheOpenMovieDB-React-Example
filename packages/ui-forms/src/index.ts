@@ -5,6 +5,13 @@
 // See docs/05-ui-forms-field-pattern/spec.md → Second pass.
 export { Form, useForm, useFormContext } from '~/components/Form';
 export type { IForm, IFormContext } from '~/components/Form';
+
+// A submit button that cannot be built without submit semantics, and the surface for a failure that
+// belongs to the form rather than to any field. Both require a `Form` ancestor.
+export { SubmitButton } from '~/components/SubmitButton';
+export type { ISubmitButton } from '~/components/SubmitButton';
+export { FormError } from '~/components/FormError';
+export type { IFormError } from '~/components/FormError';
 // `IFormApiLike` still comes from `FormField.types` below, where it is generic over the form's data.
 // It moves here when the `form` prop is removed and that generic collapses.
 
