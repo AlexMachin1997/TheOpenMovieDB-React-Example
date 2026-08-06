@@ -592,18 +592,18 @@ Estimated: 0.5 day.
 
 ### Phase 3 — `Field`
 
-- [ ] 3.1 `Field.types.ts` — `IField` and the exported `IFieldControlProps`, every prop JSDoc'd with
+- [x] 3.1 `Field.types.ts` — `IField` and the exported `IFieldControlProps`, every prop JSDoc'd with
       `@default`. (Depends on: 1.6, 2.2)
-- [ ] 3.2 `Field.tsx` — `useId`; the persistent `aria-live='polite'` region with `not-empty:mt-2`
+- [x] 3.2 `Field.tsx` — `useId`; the persistent `aria-live='polite'` region with `not-empty:mt-2`
       and **no `display:none`** (D7); `aria-describedby` unconditional; `nativeLabel` switching both
       the `Label` mode and the shape of the control bag. (3.1)
-- [ ] 3.3 Export `Field`, `IField`, `IFieldControlProps` from `packages/ui-core/src/index.ts`. (3.2)
-- [ ] 3.4 `Field.stories.tsx` with `a11y: { test: 'error' }` on the meta, and the `play()`s from the
+- [x] 3.3 Export `Field`, `IField`, `IFieldControlProps` from `packages/ui-core/src/index.ts`. (3.2)
+- [x] 3.4 `Field.stories.tsx` with `a11y: { test: 'error' }` on the meta, and the `play()`s from the
       test table. Add a comment explaining the `«r0»` id trap next to the `aria-describedby`
       assertion. (3.3)
-- [ ] 3.5 `Field.mdx` as the usage guide described above — one worked example per control family.
+- [x] 3.5 `Field.mdx` as the usage guide described above — one worked example per control family.
       (3.4)
-- [ ] 3.6 Rebuild `ui-core`, clear caches, run the suite. (3.5)
+- [x] 3.6 Rebuild `ui-core`, clear caches, run the suite. (3.5)
 
 Estimated: 1.5 days.
 

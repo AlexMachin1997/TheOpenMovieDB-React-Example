@@ -24,6 +24,13 @@ export {
 export { Search } from '~/components/Search/Search';
 export { DebouncableInput } from '~/components/DebouncableInput/DebouncableInput';
 
+// `Field` composes a label, a control, a description and an error, and wires them together for
+// assistive technology. It has no form-library dependency — `@repo/ui-forms`' `FormField` is the
+// TanStack layer on top. `FieldMessage`, which it renders internally, is deliberately NOT exported;
+// see docs/05-ui-forms-field-pattern/spec.md.
+export { Field } from '~/components/Field/Field';
+export type { IField, IFieldControlProps } from '~/components/Field/Field.types';
+
 // Form primitives. These live here rather than in `@repo/ui-forms` because the package boundary is
 // drawn by dependency footprint, not by category — nothing below needs `ui-overlays` or
 // `ui-command`. See docs/04-ui-forms-primitive-migration/spec.md, Decisions.

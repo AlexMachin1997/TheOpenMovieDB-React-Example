@@ -7,18 +7,18 @@ export const alertVariants = cva(
 			variant: {
 				default: 'bg-card text-card-foreground',
 				destructive:
-					'text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90',
+					'text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive',
 				success:
-					'text-green-600 bg-green-50 border-green-200 [&>svg]:text-current *:data-[slot=alert-description]:text-green-600/90 dark:text-green-400 dark:bg-green-950/20 dark:border-green-800',
+					'text-green-700 bg-green-50 border-green-200 [&>svg]:text-current *:data-[slot=alert-description]:text-green-700 dark:text-green-400 dark:bg-green-950/20 dark:border-green-800',
 				warning:
-					'text-amber-600 bg-amber-50 border-amber-200 [&>svg]:text-current *:data-[slot=alert-description]:text-amber-600/90 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-800',
+					'text-amber-700 bg-amber-50 border-amber-200 [&>svg]:text-current *:data-[slot=alert-description]:text-amber-700 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-800',
 				error:
-					'text-red-600 bg-red-50 border-red-200 [&>svg]:text-current *:data-[slot=alert-description]:text-red-600/90 dark:text-red-400 dark:bg-red-950/20 dark:border-red-800',
+					'text-red-700 bg-red-50 border-red-200 [&>svg]:text-current *:data-[slot=alert-description]:text-red-700 dark:text-red-400 dark:bg-red-950/20 dark:border-red-800',
 				// Added for `FieldMessage`, which needs a neutral/informational state alongside
 				// error/warning/success. `Alert` had none, so the "four-state palette" the Field
 				// spec described was only ever three states plus `default`.
 				// See docs/05-ui-forms-field-pattern/plan.md, D3.
-				info: 'text-blue-600 bg-blue-50 border-blue-200 [&>svg]:text-current *:data-[slot=alert-description]:text-blue-600/90 dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-800'
+				info: 'text-blue-700 bg-blue-50 border-blue-200 [&>svg]:text-current *:data-[slot=alert-description]:text-blue-700 dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-800'
 			}
 		},
 		defaultVariants: {
