@@ -3,8 +3,38 @@
 Spec: [`docs/05-ui-forms-field-pattern/spec.md`](./spec.md) ·
 Depends on: [`04-ui-forms-primitive-migration`](../04-ui-forms-primitive-migration/plan.md) (✅ done)
 
-Status: **in progress.** This is the approved pre-flight plan; it gets rewritten as an as-built
-record once shipped, per [`.agent/golden-rules.md`](../../.agent/golden-rules.md).
+Status: **shipped.** This is the as-built record — what was built, what changed along the way, and
+what bit us. Consumer-facing usage documentation lives in Storybook (`Field.mdx`, `Label.mdx`,
+`FieldMessage.mdx`, `FormField.mdx`, `fields.mdx`).
+
+## Outcome
+
+| Gate | Baseline | After |
+| ---- | -------- | ----- |
+| `pnpm build` | 11/11 | 11/11 ✅ |
+| Lint | 0 errors, 40 warnings | 0 errors, **38** warnings ✅ (`ui-core` 20→18; `ui-forms` stays 0) |
+| Storybook interactions | 326 passed | **364 passed**, 0 failed ✅ |
+| `ui-core` unit tests | 62 | 62 (unchanged — none added here) |
+| `ui-forms` unit tests | **0** | **19** ✅ (the package's first) |
+
+**Five defects fixed that the plan did not know about**, all found by building the thing rather than
+by reading the code:
+
+1. **`Alert` failed WCAG AA.** Turning axe on as a blocking gate for `Field` caught description text
+   at 4.14–4.36:1 against its tinted backgrounds. Dropping the `/90` opacity was not enough —
+   Tailwind v4's `red-600` is brighter than v3's and still measured 4.36. The tinted variants now use
+   the 700 shades: **6.28 / 5.87 / 4.85 / 4.72**, measured from painted pixels.
+2. **`SelectTrigger`'s hardcoded `aria-label`** sat after the props spread and outranks a native
+   `<label for>`, so a labelled `Select` announced itself as "Select Trigger".
+3. **`Radio` was missing `peer`**, so every `peer-disabled:*` rule on `RadioLabel` matched nothing.
+4. **`CheckboxGroup`'s group container only rendered when it had options**, so a `Field` around an
+   empty group would have pointed `aria-labelledby` at an id nothing carried.
+5. **`noValidate` is mandatory** on any form using these components — see Traps.
+
+Plus three instances of the drift the deliverable exists to prevent, where the spec recorded one:
+`Input.stories.tsx`'s raw `<textarea>`, `Textarea.stories.tsx`'s three raw `<input>`s (the mirror
+image, previously unrecorded), and **19** dangling `htmlFor` labels in `Slider.stories.tsx` rather
+than the single one cited.
 
 ---
 
@@ -21,9 +51,15 @@ deliverable fixes as a side effect of existing:
 - [`Input.stories.tsx:195`](../../packages/ui-core/src/components/Input/Input.stories.tsx#L195) —
   `WithError` renders `<p className='text-sm text-red-500'>` with `aria-invalid` but **no
   `aria-describedby`**. The error is visible and invisible to assistive technology.
-- [`Slider.stories.tsx:30`](../../packages/ui-core/src/components/Slider/Slider.stories.tsx#L30) —
-  `<Label htmlFor='basic-slider'>` points at an `id` **nothing carries**. A label associated with
-  nothing at all. Worse than the `Textarea` drift the spec cites, and not yet recorded anywhere.
+- `Slider.stories.tsx` — `<Label htmlFor='basic-slider'>` pointing at an `id` **nothing carries**. A
+  label associated with nothing at all. Worse than the `Textarea` drift the spec cites, and not
+  recorded anywhere before this deliverable.
+
+> **All three counts above were understated, and the third badly.** Planning found one dangling
+> `Slider` label; the file had **19**. `Textarea.stories.tsx` turned out to carry the mirror image of
+> the `Input` defect — three raw `<input>` elements with copied classes, inside the package that
+> exports `Input`. See Outcome. *Counting the instances of a duplication problem by reading one file
+> is how you get the wrong number.*
 
 Deliverable 04 moved the primitives into `ui-core` and deliberately left the composition layer, the
 documentation standard and the `play()` bar to this one.
@@ -42,7 +78,12 @@ lied until it was.
 | `pnpm turbo run build --force` | 11/11 successful, **0 cached**, 1m26.8s — a real compile, not a replayed one |
 | Lint (`npx eslint --no-cache` per package) | 0 errors, **40 warnings** — 20 in `ui-core`, 20 in `ui-overlays`, 0 elsewhere |
 | Storybook interactions (`npx vitest run`) | **326 passed, 0 failed**, 28 files, 79.6s |
-| `ui-core` unit tests | 60 |
+| `ui-core` unit tests | **62** |
+
+> **Correction.** This row originally read `60`, carried over from `04`'s closing figures rather than
+> measured here. The real number is 62, and it is unchanged at the end — this deliverable added no
+> `.spec.ts` to `ui-core`. Recorded because a baseline copied from another document is not a
+> baseline.
 
 Both items `04` handed over were checked rather than assumed:
 
@@ -96,6 +137,29 @@ entrypoint, so absence from that barrel is absence from the API, even though
 `dist/components/FieldMessage/` exists on disk.
 
 *04 recorded a broken verification one-liner too. Check the check.*
+
+### A native `required` lets the browser pre-empt the form library
+
+The most expensive finding, because it fails **silently and completely**.
+
+`Field`'s `required` renders a *native* `required` attribute, which is correct — it is what assistive
+technology announces, and the spec requires it. But it also switches on the browser's own constraint
+validation, and when that fails the browser **blocks the `submit` event outright**. React's
+`onSubmit` never fires, so `form.handleSubmit()` never runs, so TanStack never validates and no
+message ever appears.
+
+It surfaced as a story that submitted an empty required field and asserted the error appeared. The
+story rendered *nothing at all* in the failure dump, which looked like a crash; it was the browser
+quietly refusing to submit. Every form using these components needs `noValidate`. Documented in
+`fields.mdx`, `FormField.mdx` and the spec, because it is a caller obligation rather than an
+implementation detail.
+
+### `Calendar`'s first assertion passed against `null`
+
+The first version asserted `aria-selected="true"` on a `gridcell`. react-day-picker expresses
+selection as `data-selected-single` on the day *button*; the gridcell has no such attribute, so the
+assertion compared against `null` and failed — but the same shape could just as easily have passed
+vacuously somewhere else. *Assert on what the component renders, not on what the role implies.*
 
 ### `Label.types.ts` was itself one of the lint warnings
 
@@ -699,17 +763,17 @@ Estimated: 2.5 days.
 
 ### Phase 8 — Verify and ship
 
-- [ ] 8.1 Full gates: `pnpm build` 11/11, per-package `npx eslint --no-cache` (one fewer warning than
+- [x] 8.1 Full gates: `pnpm build` 11/11, per-package `npx eslint --no-cache` (one fewer warning than
       baseline), `pnpm test` in both packages, rebuild + cache-clear + Storybook suite. Compare
       against Phase 0. (Depends on: 7.10, 6.9)
-- [ ] 8.2 Walk every AC individually, including the two greps (AC4, AC12). (8.1)
-- [ ] 8.3 Open the docs pages on the dev server (`preview_start` name `storybook`, port 6006) and
+- [x] 8.2 Walk every AC individually, including the two greps (AC4, AC12). (8.1)
+- [x] 8.3 Open the docs pages on the dev server (`preview_start` name `storybook`, port 6006) and
       confirm every new `<Canvas of>` resolves and every `<Controls />` populates — the failure mode
       is a silent "No Preview" panel when a meta lacks `component:`. (8.1)
-- [ ] 8.4 Accessibility-tree spot check in the browser: group accessible names, `aria-describedby`
+- [x] 8.4 Accessibility-tree spot check in the browser: group accessible names, `aria-describedby`
       resolution, required announcement, and an on-blur error announced without re-focusing. AC8 says
       "inspected with an accessibility tree tool" — do it, don't infer it from the DOM. (8.3)
-- [ ] 8.5 `docs/README.md` row 05 → `✅ done`, Docs link repointed to `plan.md`; rewrite `plan.md` as
+- [x] 8.5 `docs/README.md` row 05 → `✅ done`, Docs link repointed to `plan.md`; rewrite `plan.md` as
       the as-built record; raise the follow-ups. (8.4)
 
 Estimated: 0.5 day.
@@ -767,6 +831,28 @@ pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_module
 | `a11y: { test: 'error' }` on `Field` fails on an inherited violation | New strict gate blocks the deliverable | Low-medium | Turned on at 3.4, not at 8.1, so it surfaces early |
 
 ---
+
+## Follow-ups
+
+- **`Radio` cannot be used without importing Radix directly.** `04` handed this over expecting story
+  work to close it; it cannot. `Radio` is a leaf that must sit inside a radio-group context, and
+  `RadioGroup` is options-driven — it renders its own items, so a bare `Radio` cannot be placed
+  inside one. Closing it means exporting a root/context from `ui-core`, which is a component change.
+  `Radio.stories.tsx` now says so at the import, and ships a `WithRadioGroup` story showing the
+  supported path.
+- **`Alert`'s `warning` and `success` pass AA only just** (4.85 and 4.72 against 4.5). Fine today,
+  but there is no headroom, and `destructive` was left alone entirely. Belongs with the design-system
+  audit already planned in [`docs/README.md`](../README.md#planned).
+- **The other 18 `Slider` stories have non-native labels that name nothing.** They no longer *lie*
+  (the dangling `htmlFor` is gone), but only `Basic` is wired to its thumb. They demonstrate styling
+  rather than labelling, so this was left rather than restructured.
+- **A range `Slider` has two thumbs**, which is two controls under one heading. `Field` wraps one
+  control by design, so `Dual` is not composed with it.
+- **`CheckboxGroupField`, `SliderField` and date-picker field components** were deliberately not
+  built — the rarely-used four. `FormField` covers them.
+- **`ui-forms` still declares `react-use` and `zod` with zero uses**, and
+  `packages/ui-forms/src/components/Form/index.ts` remains a dead duplicate of `form.ts`. Both were
+  offered and declined during planning.
 
 ## Explicitly out of scope
 
