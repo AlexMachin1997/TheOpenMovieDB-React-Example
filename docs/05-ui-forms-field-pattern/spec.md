@@ -74,8 +74,9 @@ Non-Goals — and gets its own future discovery once this ships.
   `useForm` stays the untouched re-export it already is. The adapter is a one-way translation from
   "shape TanStack Form happens to expose" to "shape `Field` happens to accept," not a component
   registry or a customised form hook — see Decisions.
-- `Field` wraps exactly one control. It is not extended to cover grouped controls — see the separate
-  requirement for `CheckboxGroup`/`RadioGroup` group labelling below.
+- `Field` wraps exactly one *control*, where a group (`CheckboxGroup`/`RadioGroup`) counts as one —
+  it holds one value and takes one label, description and error. `Field` is **not** extended to sit
+  over two independent controls under a single label; that remains deferred. See Decisions.
 - A new, small `ui-core` component (working name `FieldMessage`) renders `Field`'s description and
   error content as a single line of icon + text, colour- and icon-coded by state:
   `error`/`warning`/`info`/`success` — reusing `Alert`'s existing colour vocabulary
@@ -86,12 +87,17 @@ Non-Goals — and gets its own future discovery once this ships.
 - `FieldMessage` is scoped to `Field`'s internal use for this deliverable — it is not exported from
   `ui-core`'s public API. It can be promoted to a standalone export later if a second use case for an
   icon+text status line appears elsewhere in the app; none has yet.
-- `Label` gains a way to render as a non-native element (e.g. a styled `<span>`) instead of a native
-  `<label htmlFor>`, plus an optional bold/emphasised weight, both via props on the existing
-  component rather than a new one.
-- `CheckboxGroup` and `RadioGroup` (both moved/added in `04`) use `Label` in its non-native mode for
-  their group-level heading. Each individual option inside the group continues to use
-  `CheckboxLabel`/`RadioLabel` — the existing native, per-item label pairing — unchanged.
+- `Label` gains a way to render as a non-native element (a styled `<span>`) instead of a native
+  `<label htmlFor>`, plus an optional bold/emphasised weight and a required indicator, all via props
+  on the existing component rather than a new one.
+- `CheckboxGroup` and `RadioGroup` (both moved/added in `04`) accept the accessibility props `Field`
+  hands their container (`id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`,
+  `aria-required`), which is how they receive a group heading. Each individual option inside the
+  group continues to use `CheckboxLabel`/`RadioLabel` — the existing native, per-item label
+  pairing — unchanged.
+- `Select`, `SingleDatePicker` and `DateRangePicker` accept the same props on their trigger button,
+  so `Field` can associate a label and error with them. Their prop types are closed today, and
+  `SelectTrigger`'s hardcoded `aria-label` currently overrides any label pointed at it.
 - Every component moved in `04`, plus `Field` itself, ships standalone, composition (paired with
   `Field`, paired with other controls), and common-pattern (error state, disabled, controlled)
   Storybook stories.
@@ -112,12 +118,14 @@ Non-Goals — and gets its own future discovery once this ships.
 - **`FieldMessage` differentiates state by icon shape as well as colour**, for the same WCAG 1.4.1
   reason as the required-field indicator above — a colourblind user distinguishes `error` from
   `success` by the icon, not only the colour.
-- **Group headings** (`CheckboxGroup`/`RadioGroup`'s non-native `Label`) are **not** a native
+- **Group headings** (the non-native `Label` a `Field` renders around a group) are **not** a native
   `<fieldset>`/`<legend>` pairing (see Decisions), so they don't get automatic group-accessible-name
-  behaviour for free. The group wrapper must carry `role="group"` with `aria-labelledby` pointing at
-  the heading's `id`, so assistive technology still announces the heading as the group's accessible
-  name. This is the specific accessibility cost of the non-native-fieldset choice, and it must be
-  implemented explicitly rather than assumed to work like a real `<legend>` would.
+  behaviour for free. The group container must carry `aria-labelledby` pointing at the heading's
+  `id`, so assistive technology still announces the heading as the group's accessible name. It must
+  also expose a grouping role: `CheckboxGroup` needs `role="group"` added explicitly, while
+  `RadioGroup` already has Radix's more specific `role="radiogroup"` and must keep it (see
+  Decisions). This is the specific accessibility cost of the non-native-fieldset choice, and it must
+  be implemented explicitly rather than assumed to work like a real `<legend>` would.
 - **Error timing**: an error that appears after interaction (e.g. on blur) must be perceivable to
   screen reader users without requiring the control to be re-focused — `aria-describedby` is read on
   focus, so either the error must exist by the time focus lands there, or the error region uses
@@ -176,10 +184,11 @@ Non-Goals — and gets its own future discovery once this ships.
 - Given the `ContactForm`-style hand-rolled `<textarea>` currently in `Input.stories.tsx`, when this
   deliverable ships, then that story (or its replacement) uses `Field` + `Textarea` instead of a
   duplicated raw element.
-- Given `CheckboxGroup` or `RadioGroup` rendered with a group heading, when inspected with an
-  accessibility tree tool, then the group container reports the heading text as its accessible name
-  (via `role="group"` + `aria-labelledby`), and each individual option still reports its own
-  per-item label separately.
+- Given `CheckboxGroup` or `RadioGroup` composed inside a `Field`, when inspected with an
+  accessibility tree tool, then the group container reports the heading text as its accessible name,
+  and each individual option still reports its own per-item label separately. The mechanism differs
+  per component by design (see Decisions): `CheckboxGroup` gets `role="group"` + `aria-labelledby`;
+  `RadioGroup` keeps Radix's `role="radiogroup"` and gets `aria-labelledby` only.
 - Given a `Field` in an invalid state, when inspected, then its control carries `aria-invalid="true"`
   and an `aria-describedby` pointing at the visible error text.
 - Given a required `Field`, when inspected, then the required indicator is conveyed through text or
@@ -192,20 +201,38 @@ Non-Goals — and gets its own future discovery once this ships.
 
 ## Decisions
 
-- **`Field` is strictly single-control.** It never wraps more than one control under one
-  label/description/error, and it is never extended to cover grouped controls (checkbox/radio
-  groups). This keeps `Field` and this deliverable small; a multi-control field is explicitly
-  deferred until real usage demonstrates the need.
-- **Groups get their own label handling via an extended `Label`, not `Field`, and not a native
-  `<fieldset>`/`<legend>`.** `CheckboxGroup`/`RadioGroup` render a group-level heading using `Label`
-  in a new non-native (`<span>`) mode, with an optional bold weight; each option inside keeps its
-  existing native, per-item `CheckboxLabel`/`RadioLabel`. `shadcn`'s `Field` family (referenced during
-  review — [ui.shadcn.com/docs/components/radix/field](https://ui.shadcn.com/docs/components/radix/field))
+- **~~`Field` is strictly single-control.~~ Amended during planning — `Field` wraps groups too.**
+  The original decision kept `Field` to one control and gave groups a `label` prop of their own.
+  Planning `05` found the cost: a required `CheckboxGroup` then has **nowhere to display a
+  validation error**, because the error slot lives on `Field` and groups were excluded from it.
+  `Field` in non-native label mode already produces exactly the wiring a group needs — heading
+  rendered as a `<span>`, `aria-labelledby` on the group container — and brings the description and
+  error slots with it at no extra cost. So `CheckboxGroup`/`RadioGroup` do **not** gain a `label`
+  prop; they gain accessibility prop passthrough and are composed inside `Field` like every other
+  control. One way to label a control, which is the point of the deliverable. A genuinely
+  multi-control field (two inputs under one label) remains deferred.
+- **Groups are labelled via `Label`'s non-native mode, not a native `<fieldset>`/`<legend>`.**
+  `Field` renders the group-level heading using `Label` in its non-native (`<span>`) mode; each
+  option inside keeps its existing native, per-item `CheckboxLabel`/`RadioLabel`. `shadcn`'s `Field`
+  family (referenced during review —
+  [ui.shadcn.com/docs/components/radix/field](https://ui.shadcn.com/docs/components/radix/field))
   solves this with a native `FieldSet`/`FieldLegend` pair instead, which gets group-accessible-name
   behaviour from the browser for free — that alternative was considered and deliberately not taken,
   in favour of keeping one `Label` component doing this job everywhere rather than introducing a
   second, fieldset-specific component. The accessibility cost of that choice (no automatic
   `<legend>` association) is made up for explicitly — see Accessibility.
+- **`RadioGroup` keeps `role="radiogroup"`; only `CheckboxGroup` gets `role="group"`.** Amended
+  during planning. `RadioGroupPrimitive.Root` already emits `role="radiogroup"`, which is the more
+  specific role — assistive technology announces set position ("2 of 4") from it. Overwriting it
+  with `group` to match the Accessibility requirement's literal wording would be a regression, so
+  `RadioGroup` receives `aria-labelledby` alone. Radix ships no checkbox-group primitive, so
+  `CheckboxGroup` does need `role="group"` added explicitly. The outcome both requirements ask for —
+  the container reports the heading as its accessible name — is met either way.
+- **`Label`'s two new props are `nativeLabel` and `emphasis`, and `Label` owns the required
+  indicator.** `nativeLabel={false}` renders a `<span>` instead of a native `<label htmlFor>`.
+  `emphasis` defaults to `true` (bold); `CheckboxLabel`/`RadioLabel` opt out to keep their current
+  weight. `required` renders the non-colour indicator itself rather than `Field` doing it, because
+  groups need the same indicator and `Label` is the one component that knows it is naming a control.
 - **`Field` is a plain presentational component with no form-library dependency**, and the
   TanStack-Form-aware glue that feeds it lives in `ui-forms`. This keeps `Field` usable outside any
   form-library context (matches Goal 2: `ui-forms`'s job is integration, not hosting primitives) and
@@ -221,6 +248,18 @@ Non-Goals — and gets its own future discovery once this ships.
   `useField`) directly and passes its state through the adapter — the two libraries stay decoupled,
   and `Field` (already decided to have no form-library dependency) is proof the same boundary applies
   one level up: the form-state library shouldn't own the components either.
+- **Amended during planning: `ui-forms` also ships a `FormField` component built on that adapter.**
+  The decision above said `ui-forms` would export the translation and nothing else. In practice a
+  caller should be able to name a field and have its value and metadata already resolved, rather
+  than opening a `form.Field` render prop by hand at every call site. `FormField` renders TanStack's
+  own `form.Field` internally — which is where the reactivity comes from, unchanged — and composes
+  `Field` with the adapter. What the decision above actually argued against, **a registry of
+  pre-wired field components**, is still rejected: `FormField` is one generic component that hands
+  the accessibility and data bindings to its children, and never maps a control name to a component
+  or knows how any given control reports a change. Connecting `value`/`onChange` stays a one-line
+  job at the call site, which is what keeps it working with controls that don't exist yet. The
+  adapter remains separately exported and free of every `ui-core` reference, so the acceptance
+  criterion about its contents is unaffected.
 - **`useForm` remains an untouched re-export of `@tanstack/react-form`'s `useForm`.** No custom
   form hook is introduced — there's nothing for one to do once the glue is a plain adapter rather
   than a component registry.
@@ -233,15 +272,25 @@ Non-Goals — and gets its own future discovery once this ships.
   uses `error`/`warning`/`success`/`info` as its variant names, not `Alert`'s `destructive`/`error`
   pair — `Alert` having two near-identical red variants is pre-existing and out of scope to fix here
   (see Non-Goals); the new component isn't built to inherit that duplication.
+- **Correction found during planning: `info` is invented, not reused.** `Alert.variants.ts` has
+  `default`/`destructive`/`success`/`warning`/`error` and **no `info` variant**, so three of the four
+  states reuse `Alert`'s colours and the fourth cannot. `info` takes `text-muted-foreground`, which
+  is what `AlertDescription` already uses — the closest thing `Alert` has to a neutral. Recorded so
+  nobody later "restores" a reuse that never existed.
 - **The JSON/schema-driven renderer is deliberately deferred**, per Non-Goals — it's a large,
   under-specified feature that deserves its own discovery rather than being designed as a rider on an
   architectural cleanup.
 
 ## Open Questions
 
-1. **Does the state-to-props adapter work against `form.Field`'s render-prop API, `useField`, or
-   both** — and is it a hook, a plain function, or both? Implementation planning, not this spec, but
-   worth surfacing now since it's the concrete shape this deliverable has to design.
+1. ~~**Does the state-to-props adapter work against `form.Field`'s render-prop API, `useField`, or
+   both** — and is it a hook, a plain function, or both?~~ **Resolved during planning: one plain
+   function, covering both.** Verified against the installed `@tanstack/react-form` 1.23.8 —
+   `form.Field`'s `children` is `functionalUpdate(children, fieldApi)` and `useField()` returns that
+   same `FieldApi`, so both hand the caller the identical object and one function serves both. It
+   must **not** be a hook: `useField` already calls `useStore(fieldApi.store)` with no selector, so
+   the consuming component re-renders on any meta change already; a hook wrapper would subscribe a
+   second time for nothing.
 
 ## Design References
 
@@ -250,5 +299,14 @@ Non-Goals — and gets its own future discovery once this ships.
   already composes `Button`/`Icon` (`ui-core`) + `Popover*` (`ui-overlays`) + `Calendar` cleanly —
   this is what "ui-forms standardises composition" looks like when it's working. `CheckboxGroup` is
   the same story one layer down (`Checkbox` + `CheckboxLabel` composed into a selection list).
-- The drift this deliverable exists to prevent:
-  [`Input.stories.tsx:427-434`](../../packages/ui-forms/src/components/Input/Input.stories.tsx#L427-L434).
+- The drift this deliverable exists to prevent, two instances:
+  - [`Input.stories.tsx:425-432`](../../packages/ui-core/src/components/Input/Input.stories.tsx#L425-L432)
+    — `ContactForm` hand-writes a raw `<textarea>` with its own copy of the border/ring classes,
+    inside the package that exports `Textarea`. (This file moved to `ui-core` in `04`; the citation
+    above was corrected during `05`'s planning, having previously pointed at its old `ui-forms`
+    path and line numbers.)
+  - [`Slider.stories.tsx:30`](../../packages/ui-core/src/components/Slider/Slider.stories.tsx#L30)
+    — `<Label htmlFor='basic-slider'>` points at an `id` **nothing carries**. Found while planning
+    `05`. Worse than the `Textarea` case: a label associated with nothing at all, rather than a
+    duplicated element. It is also the concrete case that forces `Field`'s non-native label mode,
+    since `Slider`'s control is a `<span role='slider'>` that `htmlFor` cannot name.
