@@ -5,40 +5,64 @@ import * as Stories from './TextField.stories';
 
 # Text field
 
-A text [`Input`](?path=/docs/ui-core-input--docs) bound to a form field by name.
+A single-line text input bound to a form field by name.
 
-The one you reach for by default. `type` is forwarded, so a password, telephone number, URL or date
-input is the same component.
+The one to reach for by default. `type` is forwarded, so email, password, telephone and URL inputs
+are all this component.
+
+<Canvas of={Stories.Default} />
+
+## What it composes
+
+You get all three by naming the field. Each links to its own page if you need the detail.
+
+| Part                                 | Component                                            | What it gives you                                          |
+| ------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------------- |
+| The control                          | [`Input`](?path=/docs/ui-core-input--docs)           | The `<input>`, its states and styling                      |
+| Label, description, error and layout | [`Field`](?path=/docs/ui-core-field--docs)           | The visual and accessible wiring around the control        |
+| The binding                          | [`FormField`](?path=/docs/ui-forms-form-field--docs) | Value, change, blur and validation state, resolved by name |
+
+## Usage
+
+Validation comes from the schema on your [`Form`](?path=/docs/ui-forms-form--docs), not from props
+here:
 
 ```tsx
-import { Form, TextField, useForm } from '@repo/ui-forms';
-
-const form = useForm({ defaultValues: { email: '' }, onSubmit: async ({ value }) => save(value) });
+const schema = z.object({
+	email: z.string().min(1, 'Email address is required.').email('Enter a valid email address.')
+});
 
 <Form form={form} className='grid gap-4'>
 	<TextField name='email' label='Email address' type='email' required />
 </Form>;
 ```
 
-<Canvas of={Stories.Default} />
+## Behaviour
+
+- Messages appear once the field has been touched, or as soon as the form is submitted — whichever
+  comes first.
+- A message clears when the value becomes **valid**, not on the next keystroke. That is why the
+  schema goes on `onChange` as well as `onSubmit`.
+- A server error attached to this field clears when the user edits it.
+
+## Accessibility
+
+- The label is a real `<label>` pointing at the input, so clicking it focuses the field.
+- `required` renders a native `required` attribute and a visible indicator that is not colour alone.
+- The description and error share one region, linked by `aria-describedby`, so a screen reader reads
+  both.
+- A `placeholder` is **not** a label: it disappears on the first keystroke and takes no part in the
+  accessible name.
 
 ## Properties
 
 <ArgTypes />
 
-Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
-`showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
-errors reach a field, and [`Field`](?path=/docs/ui-core-field--docs) for the labelling and message
-layout every one of these renders.
-
-There is **no `form` prop** — it comes from the surrounding `Form`, and rendering this without one
-throws.
+`name` is the only one you always pass. There is **no `form` prop** — it comes from the surrounding
+[`Form`](?path=/docs/ui-forms-form--docs), and rendering this without one throws.
 
 ## Variations
 
 <Canvas of={Stories.Password} />
 
 <Canvas of={Stories.Disabled} />
-
-> **A `placeholder` is not a label.** It disappears the moment someone types, takes no part in the
-> accessible name, and fails contrast in most themes. Use `label`, and `description` for the hint.

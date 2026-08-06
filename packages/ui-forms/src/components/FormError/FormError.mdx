@@ -54,10 +54,9 @@ clearing for you to forget.
 {error && <FormError />} {/* ❌ */}
 ```
 
-The second form defeats the whole design. A live region has to already exist in the DOM before it has
-anything to say — one inserted at the same moment as its content is announced unreliably, because
-assistive technology never saw it become live. The region below is permanently mounted; only its
-contents come and go, and an empty one contributes nothing to the layout.
+The second form breaks the announcement. A live region has to already be on the page before it has
+anything to say, or a screen reader may miss the message entirely. Rendering it unconditionally costs
+nothing — an empty one takes up no space.
 
 ## Messages are never invented
 
@@ -73,6 +72,5 @@ The region is **assertive**, unlike the polite per-field regions inside
 [`Field`](?path=/docs/ui-core-field--docs). Polite is right while someone is typing and wrong once
 they have pressed submit and stopped to wait for a result.
 
-It composes [`Alert`](?path=/story/ui-core-alert--default) but **clears its `role`**. `Alert` hardcodes
-`role='alert'`, itself an assertive live region; left in place, nesting one inside the other makes the
-message announce twice.
+It is built on [`Alert`](?path=/story/ui-core-alert--default), with the alert's own live-region role
+removed so the message is announced once rather than twice.

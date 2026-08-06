@@ -5,16 +5,21 @@ import * as FormStories from './Form.stories';
 
 # Form
 
-Owns the `<form>` element, `noValidate`, and the form instance every field below it binds to.
+Owns the `<form>` element and the form instance every field below it binds to.
 
-Start every form with it. Three things that used to be the caller's job to remember — and that failed
-silently when forgotten — are structural here.
+Start every form with it.
 
 ```tsx
+import { z } from 'zod';
 import { Form, FormError, SubmitButton, TextField, useForm } from '@repo/ui-forms';
+
+const schema = z.object({
+	email: z.string().min(1, 'Email address is required.').email('Enter a valid email address.')
+});
 
 const form = useForm({
 	defaultValues: { email: '' },
+	validators: { onChange: schema, onSubmit: schema },
 	onSubmit: async ({ value }) => save(value)
 });
 
@@ -25,71 +30,88 @@ const form = useForm({
 </Form>;
 ```
 
-## What it takes off your hands
+## What you get for free
 
-| Without `Form`                                                        | With `Form`                                                       |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `noValidate` forgotten → the browser blocks submit, nothing validates | Always set, and there is no prop that turns it off                |
-| A plain `<Button>` inside a form does nothing (`type='button'`)       | [`SubmitButton`](?path=/docs/ui-forms-submit-button--docs)        |
-| A server failure belonging to no field has nowhere to go              | [`FormError`](?path=/docs/ui-forms-form-error--docs)              |
-| A failed submit leaves focus where it was                             | Focus moves to the first invalid control, in document order       |
-| Every field takes a `form` prop                                       | Fields read it from context — you write the name and nothing else |
+| Without `Form`                                                 | With `Form`                                                       |
+| -------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Forgetting `noValidate` lets the browser block submit silently | Always set, with no prop to turn it off                           |
+| A plain `<Button>` in a form does nothing (`type='button'`)    | [`SubmitButton`](?path=/docs/ui-forms-submit-button--docs)        |
+| A server failure belonging to no field has nowhere to go       | [`FormError`](?path=/docs/ui-forms-form-error--docs)              |
+| A failed submit leaves focus where it was                      | Focus moves to the first invalid control                          |
+| Every field takes a `form` prop                                | Fields read it from context — you write the name and nothing else |
 
-## Properties
+## Examples
 
-<ArgTypes />
+Three forms, increasing in complexity. Each is complete and copy-pasteable.
 
-`noValidate` and `onSubmit` are **absent from the props type**, not defaulted. Neither can be passed
-at all, so neither can be removed.
+### Simple
+
+Two fields, one schema, a submit button.
+
+<Canvas of={FormStories.Simple} />
+
+### Intermediate
+
+Adds descriptions, a choice, and somewhere for a failure that belongs to no field to go. Choose
+France to see it.
+
+<Canvas of={FormStories.Intermediate} />
+
+### Advanced
+
+All six field components, and every outcome a submission can have — validation failure, a server
+error bound to a field, a form-level failure, and success.
+
+<Canvas of={FormStories.Advanced} />
+
+## Validation
+
+Put a schema on the form and let it supply every message. Validate on **change as well as submit**:
+
+```tsx
+validators: { onChange: schema, onSubmit: schema }
+```
+
+> **Why both.** With submit-only validation a message disappears on the next keystroke whether or not
+> the value improved, because nothing is re-checking it. Validating on change means a message clears
+> only once the value is genuinely valid.
+
+You can still put a validator on one field with its `validators` prop, but a schema for the whole
+form is easier to keep honest.
 
 ## Reporting failures from your submit handler
 
-Two mechanisms, and which one you reach for depends on who the failure belongs to.
+Two mechanisms, and which you reach for depends on who the failure belongs to.
 
 ```tsx
-const form = useForm({
-	defaultValues: { email: '', password: '' },
-	onSubmit: async ({ value, formApi }) => {
-		const response = await save(value);
-		if (response.ok) return;
+onSubmit: async ({ value, formApi }) => {
+	const response = await save(value);
+	if (response.ok) return;
 
-		// Belongs to a field -> bind it to the field. This is the common case, and the message
-		// renders under the control it belongs to.
-		if (response.fieldErrors) {
-			formApi.setErrorMap({ onSubmit: { fields: response.fieldErrors } });
-		}
-
-		// Belongs to nobody -> throw. <FormError /> renders it.
-		if (response.formError) throw new Error(response.formError);
+	// Belongs to a field -> bind it to the field. This is the common case.
+	if (response.fieldErrors) {
+		formApi.setErrorMap({ onSubmit: { fields: response.fieldErrors } });
 	}
-});
+
+	// Belongs to nobody -> throw. <FormError /> renders it.
+	if (response.formError) throw new Error(response.formError);
+};
 ```
 
-> **Prefer binding to a field.** A message a user can act on belongs next to the thing they need to
-> change. `FormError` is for what is genuinely left over — a 500, a 429, an expired session, a
-> dropped connection.
+> **Prefer binding to a field.** A message someone can act on belongs next to the thing they need to
+> change. `FormError` is for what is genuinely left over — a 500, a 429, an expired session.
 
-**You do not need to clear field-bound errors.** Editing or leaving a field clears the server error
-attached to it, including on a field with no validators of its own. That is also what lets the
-submit button recover.
+You do not need to clear field-bound errors: editing a field clears the server error attached to it.
 
-**Anything after a successful `await` in your handler already runs only on success**, so closing a
-dialog or firing a toast goes there. There is no separate success callback.
-
-<Canvas of={FormStories.Default} />
+Anything after a successful `await` in your handler already runs only on success, so closing a dialog
+or firing a toast goes there.
 
 ## Layout
 
-`Form` ships **no layout of its own**. Pass a `className`.
+`Form` ships **no layout of its own** — pass a `className`.
 
-That is deliberate rather than an omission. A form filling a `Dialog` sits between `DialogContent`
-(`max-h-[90vh] flex flex-col`) and `DialogContentArea` (`flex-1 overflow-y-auto`), and the scroll
-depends on those two being directly related. Insert an element between them that is not itself a
-flex container and the body stops scrolling, content overflows the clipped height, and the footer
-carrying the submit button is pushed out of view — a long form in a dialog becomes unsubmittable.
-
-With no default, that stays an ordinary class-name decision rather than an override of something
-invisible:
+That matters most inside a dialog, where scrolling depends on the content area being a direct child
+of a flex column. Make the form that column:
 
 ```tsx
 <DialogContent>
@@ -106,30 +128,35 @@ invisible:
 ## Forms inside overlays
 
 A `Form` written inside another `Form`'s JSX but rendered through a portal — a `Dialog`, a `Sheet` —
-submits only itself. React events propagate through the React tree rather than the DOM tree, so
-without that the outer form would submit too, and nothing about the DOM would show why.
+submits only itself.
 
 <Canvas of={FormStories.DoesNotSubmitAnOuterFormThroughAPortal} />
 
 ## Accessibility
 
-- **A submission that does not succeed moves focus to the first invalid control**, in document order
-  — restoring what the browser's own constraint validation did before `noValidate` removed it. It
-  fires only in response to an explicit submit, never while you are typing.
-- Where the invalid thing is a group rather than a control — a radio group — focus goes to the item
-  holding the group's tab stop, not to whichever radio happens to be first.
-- Each field's message region is polite and belongs to that field. The **form-level** region is
-  assertive, because by then the user has pressed submit and stopped to wait.
+- **A failed submission moves focus to the first invalid control**, in document order — restoring
+  what the browser did before `noValidate` removed it. It only happens on an explicit submit, never
+  while you are typing.
+- Where the invalid thing is a group, focus goes to the option holding the group's tab stop.
+- Each field's message region is polite. The form-level one is assertive, because by then the user
+  has pressed submit and stopped to wait for a result.
 
 <Canvas of={FormStories.FocusesFirstInvalidControl} />
 
-## The one thing nothing checks
+<Canvas of={FormStories.FocusesPastValidFields} />
 
-A field's `name` is a plain string, and neither the compiler nor the runtime verifies it exists.
+## Properties
 
-This is the accepted cost of the form travelling by context: React context is not generic, so the
-form's data type cannot travel with it. Every alternative that keeps the check is a factory, and the
-field components would then come from `createForm<IAccount>()` rather than from the package barrel.
-Keeping them barrel-importable was judged worth more.
+<ArgTypes />
 
-**A misspelled name renders, accepts input, and silently never submits.** Nothing detects it.
+`noValidate` and `onSubmit` are absent because you cannot pass them. Both are the reason this
+component exists.
+
+## One thing to watch
+
+A field's `name` is a plain string, and nothing checks that it exists — not the compiler, not the
+runtime. **A misspelled name renders, accepts input, and silently never submits.**
+
+That is the cost of fields finding their form by context instead of by prop. The alternative would
+mean importing field components from a factory rather than from the package, which was judged the
+worse trade.

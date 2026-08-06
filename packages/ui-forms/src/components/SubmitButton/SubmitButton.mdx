@@ -68,13 +68,11 @@ answers "am I done yet?" better than a pressable button that just fails again wo
 
 ## Accessibility
 
-The unavailable state is a native `disabled`, not `aria-disabled`.
-
-`aria-disabled` was considered and rejected. `Button`'s variants include
-`aria-disabled:pointer-events-none`, so it would leave the button working for keyboard users and dead
-for mouse and touch — a split that is worse than either consistent answer. Neither option is a WCAG
-violation: disabled controls are exempt from contrast requirements, removing one from the tab order
-is not a keyboard trap, and `disabled` reports its state correctly. What decides it is that the
-errors are already on screen and the button recovers on its own.
+- While submitting it reports `aria-busy`, so assistive technology announces that something is in
+  progress rather than that the button broke.
+- The unavailable state is a native `disabled`. That is safe here because the button re-enables
+  itself as the last field is fixed — the user is never stranded with no way forward.
+- The button is never the only place an error is reported. By the time it goes unavailable, every
+  message is on screen and focus has been moved to the first one.
 
 <Canvas of={SubmitButtonStories.WhileSubmitting} />

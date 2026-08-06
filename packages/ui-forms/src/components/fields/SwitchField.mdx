@@ -5,33 +5,52 @@ import * as Stories from './SwitchField.stories';
 
 # Switch field
 
-A [`Switch`](?path=/story/ui-core-switch--default) bound to a **boolean** form field by name.
+A toggle bound to a **boolean** form field by name.
 
-```tsx
-<Form form={form} className='grid gap-4'>
-	<SwitchField name='marketing' label='Email me offers' />
-</Form>
-```
+Use it for a setting that reads as taking effect immediately.
 
 <Canvas of={Stories.Default} />
+
+## What it composes
+
+| Part                                 | Component                                            | What it gives you                                          |
+| ------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------------- |
+| The control                          | [`Switch`](?path=/story/ui-core-switch--default)     | The toggle and its states                                  |
+| Label, description, error and layout | [`Field`](?path=/docs/ui-core-field--docs)           | The visual and accessible wiring around the control        |
+| The binding                          | [`FormField`](?path=/docs/ui-forms-form-field--docs) | Value, change, blur and validation state, resolved by name |
+
+## Usage
+
+```tsx
+const schema = z.object({ marketing: z.boolean() });
+
+<Form form={form} className='grid gap-4'>
+	<SwitchField name='marketing' label='Email me offers' description='Occasional, never shared.' />
+</Form>;
+```
+
+## Behaviour
+
+- Toggling writes a boolean straight to the field — there is nothing to wire up.
+- Messages appear once the switch has been touched, or as soon as the form is submitted.
+- A server error attached to this field clears when the user changes it.
+
+## Accessibility
+
+- Reports the `switch` role, so assistive technology announces "on"/"off" rather than
+  "checked"/"unchecked".
+- The label is a real `<label>` pointing at the control, so clicking the text toggles it.
+- The description is linked by `aria-describedby`.
 
 ## Properties
 
 <ArgTypes />
 
-Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
-`showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
-errors reach a field, and [`Field`](?path=/docs/ui-core-field--docs) for the labelling and message
-layout every one of these renders.
+`name` is the only one you always pass. There is **no `form` prop** — it comes from the surrounding
+[`Form`](?path=/docs/ui-forms-form--docs), and rendering this without one throws.
 
-There is **no `form` prop** — it comes from the surrounding `Form`, and rendering this without one
-throws.
+## Switch or checkbox?
 
-## Choosing between this and a checkbox
-
-The same data shape, and it absorbs the same Radix `value` collision that
-[`CheckboxField`](?path=/docs/ui-forms-fields-checkbox-field--docs) does. Choose on meaning rather
-than on looks: a switch reads as something that takes effect **immediately**, a checkbox as something
-that takes effect **when the form is submitted**.
-
-A switch inside a form that has a submit button is usually the wrong one.
+Choose on meaning, not on looks. A switch says the change applies **now**; a
+[checkbox](?path=/docs/ui-forms-fields-checkbox-field--docs) says it applies **on submit**. If your
+form has a save button, a checkbox is usually the honest choice.

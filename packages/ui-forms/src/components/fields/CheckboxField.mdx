@@ -5,49 +5,68 @@ import * as Stories from './CheckboxField.stories';
 
 # Checkbox field
 
-A [`Checkbox`](?path=/docs/ui-core-checkbox--docs) bound to a **boolean** form field by name.
+A single checkbox bound to a **boolean** form field by name.
 
-```tsx
-<Form form={form} className='grid gap-4'>
-	<CheckboxField name='terms' label='Accept the terms' required />
-</Form>
-```
+Use it for something that takes effect when the form is submitted — accepting terms, opting in.
 
 <Canvas of={Stories.Default} />
+
+## What it composes
+
+| Part                                 | Component                                            | What it gives you                                          |
+| ------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------------- |
+| The control                          | [`Checkbox`](?path=/docs/ui-core-checkbox--docs)     | The box, its checked and disabled states                   |
+| Label, description, error and layout | [`Field`](?path=/docs/ui-core-field--docs)           | The visual and accessible wiring around the control        |
+| The binding                          | [`FormField`](?path=/docs/ui-forms-form-field--docs) | Value, change, blur and validation state, resolved by name |
+
+## Usage
+
+```tsx
+const schema = z.object({
+	terms: z.boolean().refine((accepted) => accepted, 'You must accept the terms.')
+});
+
+<Form form={form} className='grid gap-4'>
+	<CheckboxField name='terms' label='Accept the terms' required />
+</Form>;
+```
+
+## Behaviour
+
+- Messages appear once the box has been touched, or as soon as the form is submitted.
+- A message clears when the value becomes **valid** — for a required checkbox, when it is ticked.
+- A server error attached to this field clears when the user changes it.
+
+## Accessibility
+
+- The label is a real `<label>` pointing at the checkbox, so clicking the text toggles it.
+- `required` renders a visible indicator that is not colour alone, and the control reports itself as
+  required.
+- The message region is linked by `aria-describedby`, so the reason it is required is announced with
+  the control rather than found separately.
 
 ## Properties
 
 <ArgTypes />
 
-Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
-`showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
-errors reach a field, and [`Field`](?path=/docs/ui-core-field--docs) for the labelling and message
-layout every one of these renders.
+`name` is the only one you always pass. There is **no `form` prop** — it comes from the surrounding
+[`Form`](?path=/docs/ui-forms-form--docs), and rendering this without one throws.
 
-There is **no `form` prop** — it comes from the surrounding `Form`, and rendering this without one
-throws.
+## Checkbox or switch?
 
-## Why this component exists
+The same data, different meaning. A checkbox reads as something that applies **when the form is
+submitted**; a [switch](?path=/docs/ui-forms-fields-switch-field--docs) reads as something that
+applies **immediately**. A switch in a form with a save button is usually the wrong one.
 
-Radix's `Checkbox` has its own `value` prop — a string, for native form submission — which collides
-with the field's value. Driving one through
-[`FormField`](?path=/docs/ui-forms-form-field--docs) directly means destructuring `value` and
-`onChange` out of the control bag and renaming them at every call site:
+## Why not use `FormField` directly?
+
+You can — but this absorbs a sharp edge. The underlying `Checkbox` has its own `value` prop, which
+collides with the field's value, so driving one by hand means renaming two props every time:
 
 ```tsx
-// What you would otherwise write, every time.
 <FormField<boolean> name='terms' label='Accept the terms'>
 	{({ value, onChange, ...control }) => (
 		<Checkbox {...control} checked={value} onCheckedChange={onChange} />
 	)}
 </FormField>
 ```
-
-That knowledge lives here once instead. It is a type error the first time and a paper cut every time
-after.
-
-## Choosing between this and a switch
-
-Same data, different meaning. A checkbox reads as something that applies **when the form is
-submitted**; a [switch](?path=/docs/ui-forms-fields-switch-field--docs) reads as something that
-applies **immediately**.

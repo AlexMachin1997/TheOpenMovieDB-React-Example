@@ -5,42 +5,57 @@ import * as Stories from './RadioGroupField.stories';
 
 # Radio group field
 
-A [`RadioGroup`](?path=/docs/ui-core-radio-group--docs) bound to a form field by name.
+A set of mutually exclusive options bound to a form field by name.
 
-```tsx
-<Form form={form} className='grid gap-4'>
-	<RadioGroupField name='plan' label='Billing plan' options={plans} />
-</Form>
-```
+Use it when every option should be visible at once. Reach for a
+[select](?path=/docs/ui-forms-fields-select-field--docs) when the list is long.
 
 <Canvas of={Stories.Default} />
+
+## What it composes
+
+| Part                                 | Component                                             | What it gives you                                          |
+| ------------------------------------ | ----------------------------------------------------- | ---------------------------------------------------------- |
+| The control                          | [`RadioGroup`](?path=/docs/ui-core-radio-group--docs) | The group, its options and arrow-key navigation            |
+| Label, description, error and layout | [`Field`](?path=/docs/ui-core-field--docs)            | The visual and accessible wiring around the group          |
+| The binding                          | [`FormField`](?path=/docs/ui-forms-form-field--docs)  | Value, change, blur and validation state, resolved by name |
+
+## Usage
+
+```tsx
+const plans = [
+	{ id: 'monthly', value: 'monthly', label: 'Monthly' },
+	{ id: 'yearly', value: 'yearly', label: 'Yearly' }
+];
+
+const schema = z.object({ plan: z.string().min(1, 'Choose a plan.') });
+
+<Form form={form} className='grid gap-4'>
+	<RadioGroupField name='plan' label='Billing plan' options={plans} />
+</Form>;
+```
+
+## Behaviour
+
+- The whole group is one field: one value, one label, one message.
+- Messages appear once a choice has been made, or as soon as the form is submitted.
+- A server error attached to this field clears when the user changes the selection.
+
+## Accessibility
+
+**This is the main reason to use it rather than `FormField` directly.** A single native `<label>`
+cannot name several controls, so the field label has to be rendered as text with the group pointing
+back at it — wiring this component does for you. By hand it is easy to get wrong, and the failure is
+invisible: the label simply names nothing until someone uses a screen reader.
+
+- The group keeps the `radiogroup` role, so assistive technology announces set position — "2 of 4".
+- Each option keeps its own label, so the group announces its heading and each option announces
+  itself.
+- Arrow keys move between options; `Tab` moves past the whole group rather than through it.
 
 ## Properties
 
 <ArgTypes />
 
-Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
-`showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
-errors reach a field, and [`Field`](?path=/docs/ui-core-field--docs) for the labelling and message
-layout every one of these renders.
-
-There is **no `form` prop** — it comes from the surrounding `Form`, and rendering this without one
-throws.
-
-## Why this component exists
-
-**It sets `nativeLabel={false}` for you.**
-
-A single native `<label>` cannot name several controls, so a group's label has to render as a
-`<span>` with the group pointing back at it through `aria-labelledby`. Drive a radio group through
-[`FormField`](?path=/docs/ui-forms-form-field--docs) directly and you have to remember that — and you
-get no warning when you don't. The label simply names nothing, which is invisible until someone uses
-a screen reader.
-
-## Accessibility
-
-The group keeps Radix's `radiogroup` role rather than being given the more general `group`. It is the
-more specific of the two, and assistive technology reads set position — "2 of 4" — from it.
-
-Each option keeps its own per-item label, so the group announces its heading and each radio announces
-itself.
+`name` is the only one you always pass. There is **no `form` prop** — it comes from the surrounding
+[`Form`](?path=/docs/ui-forms-form--docs), and rendering this without one throws.
