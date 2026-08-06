@@ -13,7 +13,12 @@ export const alertVariants = cva(
 				warning:
 					'text-amber-600 bg-amber-50 border-amber-200 [&>svg]:text-current *:data-[slot=alert-description]:text-amber-600/90 dark:text-amber-400 dark:bg-amber-950/20 dark:border-amber-800',
 				error:
-					'text-red-600 bg-red-50 border-red-200 [&>svg]:text-current *:data-[slot=alert-description]:text-red-600/90 dark:text-red-400 dark:bg-red-950/20 dark:border-red-800'
+					'text-red-600 bg-red-50 border-red-200 [&>svg]:text-current *:data-[slot=alert-description]:text-red-600/90 dark:text-red-400 dark:bg-red-950/20 dark:border-red-800',
+				// Added for `FieldMessage`, which needs a neutral/informational state alongside
+				// error/warning/success. `Alert` had none, so the "four-state palette" the Field
+				// spec described was only ever three states plus `default`.
+				// See docs/05-ui-forms-field-pattern/plan.md, D3.
+				info: 'text-blue-600 bg-blue-50 border-blue-200 [&>svg]:text-current *:data-[slot=alert-description]:text-blue-600/90 dark:text-blue-400 dark:bg-blue-950/20 dark:border-blue-800'
 			}
 		},
 		defaultVariants: {

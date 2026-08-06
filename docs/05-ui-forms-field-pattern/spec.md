@@ -272,11 +272,30 @@ Non-Goals — and gets its own future discovery once this ships.
   uses `error`/`warning`/`success`/`info` as its variant names, not `Alert`'s `destructive`/`error`
   pair — `Alert` having two near-identical red variants is pre-existing and out of scope to fix here
   (see Non-Goals); the new component isn't built to inherit that duplication.
-- **Correction found during planning: `info` is invented, not reused.** `Alert.variants.ts` has
-  `default`/`destructive`/`success`/`warning`/`error` and **no `info` variant**, so three of the four
-  states reuse `Alert`'s colours and the fourth cannot. `info` takes `text-muted-foreground`, which
-  is what `AlertDescription` already uses — the closest thing `Alert` has to a neutral. Recorded so
-  nobody later "restores" a reuse that never existed.
+- **~~`FieldMessage` is a new, smaller component, not `Alert` reused directly.~~ Reversed during
+  implementation, on the user's call: `FieldMessage` composes `Alert`.** The decision above worried
+  about visual weight — `Alert` is a bordered, padded banner, and one per field is heavier than a
+  line of helper text. That trade was made deliberately in the other direction: sharing one
+  component means field-level and page-level messaging cannot drift into two palettes or two sets
+  of state semantics, which is the failure this deliverable exists to prevent one layer down.
+
+  `FieldMessage` therefore renders an `Alert` and changes exactly three things: it narrows the
+  variants to the four that mean something under a control (dropping `default`, and `destructive`
+  which is a second near-identical red beside `error`); it owns the state→icon mapping, so `error`
+  cannot be paired with a tick; and it clears `role='alert'`.
+
+  **That last one is not cosmetic.** `role="alert"` is an *assertive* live region — right for a
+  page-level banner, wrong under a text input, where it interrupts a screen reader mid-keystroke
+  every time a message renders or changes. `Field` wraps its messages in a single polite live
+  region instead (see Accessibility → Error timing), and an assertive region nested inside a polite
+  one overrides it for that subtree. `Alert` sets `role` before spreading props, so passing
+  `undefined` genuinely clears it.
+- **`Alert` gains an `info` variant, which this deliverable adds.** The Decision above described a
+  four-state palette drawn from `Alert`, but `Alert` had only
+  `default`/`destructive`/`success`/`warning`/`error` — there was no neutral informational state to
+  reuse, so the "four-state reuse" was only ever three. `info` is added to `Alert.variants.ts` in
+  the blue family, following the same shape as its `success`/`warning`/`error` entries, so both
+  components share all four.
 - **The JSON/schema-driven renderer is deliberately deferred**, per Non-Goals — it's a large,
   under-specified feature that deserves its own discovery rather than being designed as a rider on an
   architectural cleanup.

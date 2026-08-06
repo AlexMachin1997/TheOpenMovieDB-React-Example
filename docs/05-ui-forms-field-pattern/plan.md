@@ -78,6 +78,25 @@ repeating the annotation per story.
 One detail worth stating because it costs a compile cycle to discover: `step` returns
 `void | Promise<void>`, not `Promise<void>`. Annotating it as the latter type-errors.
 
+### Verifying AC12 needs a grep that has been checked itself
+
+`FieldMessage` must not appear in `ui-core`'s public surface. The obvious check —
+`grep "FieldMessage" packages/ui-core/dist/index.d.ts` — returned **0**, which looks like a pass.
+Its control did too: `grep "declare const Label"` also returned 0, on a component that is
+unambiguously exported.
+
+The reason is that `dist/index.d.ts` is a **40-line re-export barrel**
+(`export { Label } from './components/Label/Label';`), not flattened declarations, so no `declare`
+statement appears in it at all. A grep phrased around declarations can never match, and would
+report every export as absent.
+
+With a control that does match (`grep -c "Label"` → 7, proving the file is greppable and that a
+public component shows up), `FieldMessage` → 0 is meaningful. The package exposes a single `"."`
+entrypoint, so absence from that barrel is absence from the API, even though
+`dist/components/FieldMessage/` exists on disk.
+
+*04 recorded a broken verification one-liner too. Check the check.*
+
 ### `Label.types.ts` was itself one of the lint warnings
 
 `export interface ILabel extends React.ComponentProps<typeof LabelPrimitive.Root> {}` was an empty
@@ -107,11 +126,25 @@ leaving `plan.md` quietly contradicting it.
   AC would be a regression. The *outcome* the AC asks for (container reports the heading as its
   accessible name) is met either way. `CheckboxGroup` does get `role='group'`; Radix ships no
   checkbox-group primitive.
-- **D3 — `FieldMessage`'s `info` colour is invented, not reused.**
-  [`spec.md:81-85`](./spec.md#L81) says the four states reuse `Alert`'s
-  colour vocabulary. `Alert.variants.ts` has `default`/`destructive`/`success`/`warning`/`error` and
-  **no `info`**. `info` takes `text-muted-foreground`, what `AlertDescription` already uses. Recorded
-  as a deviation so nobody later "restores" a reuse that never existed.
+- **D3 — ~~`FieldMessage` is standalone and invents `info`.~~ Revised during implementation:
+  `FieldMessage` composes `Alert`, and `Alert` gains a real `info` variant.** Both the spec and the
+  first cut of this plan had `FieldMessage` as a new ~20-line component borrowing only `Alert`'s
+  colour *strings*, on the grounds that a bordered banner is too heavy under a single input. The
+  user reversed that: one component, so field-level and page-level messaging cannot drift into two
+  palettes — which is the same failure this deliverable exists to prevent one layer down. The
+  visual weight is the accepted cost and is visible in Storybook.
+
+  Two things fell out of it that the standalone version would not have had:
+
+  - **`Alert` had no `info` variant at all**, so the "four-state reuse" both documents described was
+    only ever three states plus `default`. `info` is now added to `Alert.variants.ts` in the blue
+    family, matching the shape of its `success`/`warning`/`error` entries.
+  - **`Alert` sets `role='alert'`, an assertive live region**, which `FieldMessage` must clear.
+    Assertive is right for a page-level banner and wrong under a text input, where it interrupts a
+    screen reader mid-keystroke. `Field` already provides one polite region (D7), and an assertive
+    region nested inside a polite one overrides it for that subtree. `Alert` sets `role` before
+    spreading props, so `role={undefined}` genuinely clears it — verified by a `play()` assertion
+    rather than assumed.
 - **D4 — `Label`'s `emphasis` defaults to `true` (`font-semibold`).** Field labels and group headings
   get heavier; `CheckboxLabel`/`RadioLabel` pass `emphasis={false}` to keep today's `font-medium`.
   A deliberate, visible change across ~30 stories.
@@ -544,14 +577,14 @@ Estimated: 1 day.
 
 ### Phase 2 — `FieldMessage`
 
-- [ ] 2.1 `FieldMessage.variants.ts` with the four colours, and a comment recording D3 — that `info`
+- [x] 2.1 `FieldMessage.variants.ts` with the four colours, and a comment recording D3 — that `info`
       has no `Alert` counterpart and comes from `AlertDescription`. (Depends on: 0.4)
-- [ ] 2.2 `FieldMessage.tsx` + `.types.ts` + `index.ts`. `data-slot='field-message'`,
+- [x] 2.2 `FieldMessage.tsx` + `.types.ts` + `index.ts`. `data-slot='field-message'`,
       `variant = 'info'` explicit in the destructure. (2.1)
-- [ ] 2.3 `FieldMessage.stories.tsx` + `.mdx`. `Icon` resolves over the Iconify CDN so first paint
+- [x] 2.3 `FieldMessage.stories.tsx` + `.mdx`. `Icon` resolves over the Iconify CDN so first paint
       is the placeholder `<svg>` — query `getByRole('img', { hidden: true })`, never wait on a
       glyph. (2.2)
-- [ ] 2.4 Verify `FieldMessage` is absent from `src/index.ts` **and from the built
+- [x] 2.4 Verify `FieldMessage` is absent from `src/index.ts` **and from the built
       `dist/index.d.ts`** (AC12). Sanity-check the grep itself before believing it — 04 recorded a
       broken one-liner that reported 14 false negatives. (2.3)
 
@@ -738,7 +771,7 @@ pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_module
 ## Explicitly out of scope
 
 - The JSON/schema-driven renderer (spec Non-Goal — its own discovery once this ships).
-- `Alert`'s redundant `destructive`/`error` variants, and adding a real `info` variant to it.
+- `Alert`'s redundant `destructive`/`error` variants. (An `info` variant *was* added — see D3.)
 - `play()` retrofits for components predating 04 — `Alert`, `Avatar`, `Tabs`, `Tooltip`, `Skeleton`
   all have zero. `Switch` gets a composition story only.
 - `Search` and `DebouncableInput` — search/filter affordances rather than form fields, and both
