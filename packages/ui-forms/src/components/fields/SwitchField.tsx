@@ -1,4 +1,3 @@
-import type { DeepKeys } from '@tanstack/react-form';
 import { Switch } from '@repo/ui-core';
 import { FormField } from '~/components/FormField/FormField';
 import type { ISwitchField } from '~/components/fields/fields.types';
@@ -11,13 +10,13 @@ import type { ISwitchField } from '~/components/fields/fields.types';
  *
  * @example
  * ```tsx
- * <SwitchField form={form} name='marketing' label='Email me offers' />
+ * <SwitchField name='marketing' label='Email me offers' />
  * ```
  */
-export const SwitchField = <TFormData, TName extends DeepKeys<TFormData>>({
+export const SwitchField = ({
 	disabled = false,
 	...fieldProps
-}: ISwitchField<TFormData, TName>) => (
+}: ISwitchField) => (
 	<FormField {...fieldProps}>
 		{/* `value` destructured out for the same reason as CheckboxField — Radix's Switch also has
 		its own string `value` prop. */}

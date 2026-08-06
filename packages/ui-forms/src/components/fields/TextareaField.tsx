@@ -1,4 +1,3 @@
-import type { DeepKeys } from '@tanstack/react-form';
 import { Textarea } from '@repo/ui-core';
 import { FormField } from '~/components/FormField/FormField';
 import type { ITextareaField } from '~/components/fields/fields.types';
@@ -8,15 +7,15 @@ import type { ITextareaField } from '~/components/fields/fields.types';
  *
  * @example
  * ```tsx
- * <TextareaField form={form} name='bio' label='Short bio' rows={4} />
+ * <TextareaField name='bio' label='Short bio' rows={4} />
  * ```
  */
-export const TextareaField = <TFormData, TName extends DeepKeys<TFormData>>({
+export const TextareaField = ({
 	placeholder,
 	rows,
 	disabled = false,
 	...fieldProps
-}: ITextareaField<TFormData, TName>) => (
+}: ITextareaField) => (
 	<FormField {...fieldProps}>
 		{(control) => (
 			<Textarea

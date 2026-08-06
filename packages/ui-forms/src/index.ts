@@ -4,7 +4,7 @@
 // `useForm` stays an untouched re-export of `@tanstack/react-form`'s — nothing is wrapped.
 // See docs/05-ui-forms-field-pattern/spec.md → Second pass.
 export { Form, useForm, useFormContext } from '~/components/Form';
-export type { IForm, IFormContext } from '~/components/Form';
+export type { IForm, IFormApiLike, IFormContext } from '~/components/Form';
 
 // A submit button that cannot be built without submit semantics, and the surface for a failure that
 // belongs to the form rather than to any field. Both require a `Form` ancestor.
@@ -12,18 +12,12 @@ export { SubmitButton } from '~/components/SubmitButton';
 export type { ISubmitButton } from '~/components/SubmitButton';
 export { FormError } from '~/components/FormError';
 export type { IFormError } from '~/components/FormError';
-// `IFormApiLike` still comes from `FormField.types` below, where it is generic over the form's data.
-// It moves here when the `form` prop is removed and that generic collapses.
 
-// `FormField` binds `@repo/ui-core`'s `Field` to a TanStack field by name. `toFieldProps` is the
-// translation underneath, exported separately for anyone driving `form.Field` or `useField`
-// directly. See docs/05-ui-forms-field-pattern/spec.md.
+// `FormField` binds `@repo/ui-core`'s `Field` to a field of the surrounding `Form`, by name.
+// `toFieldProps` is the translation underneath, exported separately for anyone driving `form.Field`
+// or `useField` directly. See docs/05-ui-forms-field-pattern/spec.md.
 export { FormField } from '~/components/FormField/FormField';
-export type {
-	IFormField,
-	IFormFieldControlProps,
-	IFormApiLike
-} from '~/components/FormField/FormField.types';
+export type { IFormField, IFormFieldControlProps } from '~/components/FormField/FormField.types';
 
 // Bound field components. Each composes `FormField` with one control, so the per-control value and
 // change wiring lives here once rather than being copy-pasted at every call site. `FormField`

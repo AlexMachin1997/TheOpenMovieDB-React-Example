@@ -1,24 +1,9 @@
-import * as React from 'react';
-import type { AnyFieldApi, DeepKeys, DeepValue, FieldComponent } from '@tanstack/react-form';
+import type * as React from 'react';
+import type { AnyFieldApi } from '@tanstack/react-form';
 import type { IField, IFieldControlProps } from '@repo/ui-core';
 import type { ShowErrorsWhen } from '~/adapters/toFieldProps.types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-/**
- * The part of a TanStack form instance `FormField` actually uses.
- *
- * The validator generics are `any` deliberately. `FieldComponent` takes twelve of them, all
- * describing which validators the form was built with — none of which this component cares about,
- * since it only renders `form.Field` and reads the resulting state. Naming them concretely would
- * make `FormField` accept forms with one validator configuration and reject others.
- *
- * `TFormData` is **not** `any`, because that is the one that matters: it is what makes `name`
- * autocomplete and typo-check against the form's real shape.
- */
-export interface IFormApiLike<TFormData> {
-	Field: FieldComponent<TFormData, any, any, any, any, any, any, any, any, any, any, any>;
-}
 
 /**
  * The bindings `FormField` hands to its children.
@@ -47,32 +32,47 @@ export interface IFormFieldControlProps<TValue> extends IFieldControlProps {
 /**
  * Properties for the FormField component.
  *
+ * **There is no `form` prop.** The form comes from the surrounding `Form`, so naming a field is the
+ * only thing a call site writes. Rendering this without a `Form` ancestor throws.
+ *
+ * The cost of that, stated plainly because it is a real trade: React context is not generic, so the
+ * form's data type cannot travel with it, and `name` is a plain `string` rather than a checked key
+ * of the form's shape. Every alternative that preserves the check is a factory — the components
+ * would come from `createForm<IAccount>()` rather than from the package barrel. Keeping them
+ * importable from the barrel was judged worth more. A misspelled name produces a field that renders,
+ * accepts input, and silently never submits; nothing detects it.
+ *
+ * `TValue` is the way back for a call site that wants its value typed.
+ *
  * @example
  * ```tsx
- * <FormField form={form} name='email' label='Email address' required>
+ * // `control.value` is `unknown` here — fine, because `Input` is given a string another way.
+ * <FormField name='email' label='Email address' required>
  *   {(control) => <Input {...control} type='email' />}
+ * </FormField>
+ *
+ * // Opt in when the value is actually read.
+ * <FormField<string> name='email' label='Email address'>
+ *   {(control) => <Input {...control} value={control.value} />}
  * </FormField>
  * ```
  */
-export interface IFormField<TFormData, TName extends DeepKeys<TFormData>>
-	extends Omit<IField, 'children' | 'error'> {
-	/** The form instance, from `useForm`. */
-	form: IFormApiLike<TFormData>;
-
-	/** The field's name. Autocompletes and typo-checks against the form's data shape. */
-	name: TName;
+export interface IFormField<TValue = unknown> extends Omit<IField, 'children' | 'error'> {
+	/**
+	 * The field's name, resolved against the surrounding form's data.
+	 *
+	 * Not checked at compile time or at runtime — see the note above.
+	 */
+	name: string;
 
 	/**
-	 * Render function receiving the bindings to spread onto the control, and the underlying TanStack
+	 * Render function receiving the bindings to spread onto the control, and the underlying form
 	 * field for anything the bindings don't cover.
 	 */
-	children: (
-		control: IFormFieldControlProps<DeepValue<TFormData, TName>>,
-		field: AnyFieldApi
-	) => React.ReactNode;
+	children: (control: IFormFieldControlProps<TValue>, field: AnyFieldApi) => React.ReactNode;
 
 	/**
-	 * Validators for this field, passed straight through to TanStack's `form.Field`.
+	 * Validators for this field, passed straight through to the form library's own field component.
 	 *
 	 * @default undefined
 	 */

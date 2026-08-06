@@ -1,6 +1,7 @@
-import type { AnyFieldApi, DeepKeys } from '@tanstack/react-form';
+import type { AnyFieldApi } from '@tanstack/react-form';
 import { Field } from '@repo/ui-core';
 import { toFieldProps } from '~/adapters/toFieldProps';
+import { useFormContext } from '~/components/Form/hooks/useFormContext';
 import type { IFormField } from '~/components/FormField/FormField.types';
 
 /**
@@ -40,22 +41,25 @@ const readChange = (next: unknown): unknown => {
  * would mean holding a registry of every control and how each reports a change, and every control
  * added later would need an entry. As written this works with controls that don't exist yet.
  *
+ * The form comes from the surrounding `Form` rather than from a prop, so naming the field is the
+ * only thing a call site writes.
+ *
  * @example
  * ```tsx
- * <FormField form={form} name='email' label='Email address' required>
+ * <FormField name='email' label='Email address' required>
  *   {(control) => <Input {...control} type='email' />}
  * </FormField>
  * ```
  */
-export const FormField = <TFormData, TName extends DeepKeys<TFormData>>({
-	form,
+export const FormField = <TValue = unknown,>({
 	name,
 	children,
 	validators,
 	showErrorsWhen = 'touched',
 	id,
 	...fieldProps
-}: IFormField<TFormData, TName>) => {
+}: IFormField<TValue>) => {
+	const { form } = useFormContext('FormField');
 	const FormFieldPrimitive = form.Field;
 
 	return (

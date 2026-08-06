@@ -1,9 +1,7 @@
 import type * as React from 'react';
 import type { Option } from '@repo/core';
-import type { DeepKeys } from '@tanstack/react-form';
 import type { IField } from '@repo/ui-core';
 import type { ShowErrorsWhen } from '~/adapters/toFieldProps.types';
-import type { IFormApiLike } from '~/components/FormField/FormField.types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -15,14 +13,18 @@ import type { IFormApiLike } from '~/components/FormField/FormField.types';
  * the caller. `nativeLabel` is also absent — each field component knows whether its control can be
  * named by a native `<label>` and sets it accordingly, which is one of the things they exist to
  * stop callers getting wrong.
+ *
+ * **There is no `form` prop.** It comes from the surrounding `Form`, and rendering any of these
+ * without one throws. See `IFormField` for the trade that makes.
  */
-export interface IBoundField<TFormData, TName extends DeepKeys<TFormData>>
-	extends Omit<IField, 'children' | 'error' | 'nativeLabel'> {
-	/** The form instance, from `useForm`. */
-	form: IFormApiLike<TFormData>;
-
-	/** The field's name. Autocompletes and typo-checks against the form's data shape. */
-	name: TName;
+export interface IBoundField extends Omit<IField, 'children' | 'error' | 'nativeLabel'> {
+	/**
+	 * The field's name, resolved against the surrounding form's data.
+	 *
+	 * A plain string: nothing checks it at compile time or at runtime, because the form travels by
+	 * context and React context cannot carry the form's data type.
+	 */
+	name: string;
 
 	/**
 	 * Validators for this field, passed straight through to TanStack's `form.Field`.
@@ -47,8 +49,7 @@ export interface IBoundField<TFormData, TName extends DeepKeys<TFormData>>
 }
 
 /** Properties for TextField. */
-export interface ITextField<TFormData, TName extends DeepKeys<TFormData>>
-	extends IBoundField<TFormData, TName> {
+export interface ITextField extends IBoundField {
 	/**
 	 * The input type.
 	 *
@@ -61,8 +62,7 @@ export interface ITextField<TFormData, TName extends DeepKeys<TFormData>>
 }
 
 /** Properties for TextareaField. */
-export interface ITextareaField<TFormData, TName extends DeepKeys<TFormData>>
-	extends IBoundField<TFormData, TName> {
+export interface ITextareaField extends IBoundField {
 	/** Placeholder text. Never a substitute for the label. */
 	placeholder?: string;
 
@@ -74,20 +74,13 @@ export interface ITextareaField<TFormData, TName extends DeepKeys<TFormData>>
 // buys nothing and costs a `no-empty-object-type` warning apiece.
 
 /** Properties for CheckboxField — a single boolean. */
-export type ICheckboxField<TFormData, TName extends DeepKeys<TFormData>> = IBoundField<
-	TFormData,
-	TName
->;
+export type ICheckboxField = IBoundField;
 
 /** Properties for SwitchField — a single boolean, presented as a toggle. */
-export type ISwitchField<TFormData, TName extends DeepKeys<TFormData>> = IBoundField<
-	TFormData,
-	TName
->;
+export type ISwitchField = IBoundField;
 
 /** Properties for SelectField. */
-export interface ISelectField<TFormData, TName extends DeepKeys<TFormData>>
-	extends IBoundField<TFormData, TName> {
+export interface ISelectField extends IBoundField {
 	/** The options to choose from. */
 	options: Option[];
 
@@ -104,8 +97,7 @@ export interface ISelectField<TFormData, TName extends DeepKeys<TFormData>>
 }
 
 /** Properties for RadioGroupField. */
-export interface IRadioGroupField<TFormData, TName extends DeepKeys<TFormData>>
-	extends IBoundField<TFormData, TName> {
+export interface IRadioGroupField extends IBoundField {
 	/** The options to choose from. */
 	options: Option[];
 

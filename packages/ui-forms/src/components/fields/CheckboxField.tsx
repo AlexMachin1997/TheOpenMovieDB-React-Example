@@ -1,4 +1,3 @@
-import type { DeepKeys } from '@tanstack/react-form';
 import { Checkbox } from '@repo/ui-core';
 import { FormField } from '~/components/FormField/FormField';
 import type { ICheckboxField } from '~/components/fields/fields.types';
@@ -8,13 +7,13 @@ import type { ICheckboxField } from '~/components/fields/fields.types';
  *
  * @example
  * ```tsx
- * <CheckboxField form={form} name='terms' label='Accept the terms' required />
+ * <CheckboxField name='terms' label='Accept the terms' required />
  * ```
  */
-export const CheckboxField = <TFormData, TName extends DeepKeys<TFormData>>({
+export const CheckboxField = ({
 	disabled = false,
 	...fieldProps
-}: ICheckboxField<TFormData, TName>) => (
+}: ICheckboxField) => (
 	<FormField {...fieldProps}>
 		{/*
 		 * `value` is destructured out rather than spread: Radix's Checkbox has its own `value` prop

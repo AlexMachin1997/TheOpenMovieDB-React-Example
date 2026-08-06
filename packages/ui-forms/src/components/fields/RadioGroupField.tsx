@@ -1,4 +1,3 @@
-import type { DeepKeys } from '@tanstack/react-form';
 import { RadioGroup } from '@repo/ui-core';
 import { FormField } from '~/components/FormField/FormField';
 import type { IRadioGroupField } from '~/components/fields/fields.types';
@@ -12,15 +11,15 @@ import type { IRadioGroupField } from '~/components/fields/fields.types';
  *
  * @example
  * ```tsx
- * <RadioGroupField form={form} name='plan' label='Billing plan' options={plans} />
+ * <RadioGroupField name='plan' label='Billing plan' options={plans} />
  * ```
  */
-export const RadioGroupField = <TFormData, TName extends DeepKeys<TFormData>>({
+export const RadioGroupField = ({
 	options,
 	noOptionsAvailableMessage,
 	disabled = false,
 	...fieldProps
-}: IRadioGroupField<TFormData, TName>) => (
+}: IRadioGroupField) => (
 	<FormField {...fieldProps} nativeLabel={false}>
 		{({ value, onChange, name, ...control }) => (
 			<RadioGroup

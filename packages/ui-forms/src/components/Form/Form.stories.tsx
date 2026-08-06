@@ -48,8 +48,7 @@ const AccountForm = () => {
 
 	return (
 		<Form form={form} className='grid w-96 gap-4'>
-			<FormField
-				form={form}
+			<FormField<string>
 				name='email'
 				label='Email address'
 				required
@@ -58,8 +57,7 @@ const AccountForm = () => {
 				{(control) => <Input {...control} type='email' />}
 			</FormField>
 
-			<FormField
-				form={form}
+			<FormField<string>
 				name='password'
 				label='Password'
 				required
@@ -181,7 +179,7 @@ const ThrowingForm = () => {
 
 	return (
 		<Form form={form} className='grid w-96 gap-4'>
-			<FormField form={form} name='email' label='Email address'>
+			<FormField<string> name='email' label='Email address'>
 				{(control) => <Input {...control} type='email' />}
 			</FormField>
 
@@ -231,7 +229,7 @@ const ServerErrorForm = () => {
 
 	return (
 		<Form form={form} className='grid w-96 gap-4'>
-			<FormField form={form} name='email' label='Email address'>
+			<FormField<string> name='email' label='Email address'>
 				{(control) => <Input {...control} type='email' />}
 			</FormField>
 

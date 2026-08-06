@@ -1,4 +1,3 @@
-import type { DeepKeys } from '@tanstack/react-form';
 import { FormField } from '~/components/FormField/FormField';
 import { Select } from '~/components/Selects/Select';
 import type { ISelectField } from '~/components/fields/fields.types';
@@ -11,16 +10,16 @@ import type { ISelectField } from '~/components/fields/fields.types';
  *
  * @example
  * ```tsx
- * <SelectField form={form} name='country' label='Country' options={countries} />
+ * <SelectField name='country' label='Country' options={countries} />
  * ```
  */
-export const SelectField = <TFormData, TName extends DeepKeys<TFormData>>({
+export const SelectField = ({
 	options,
 	type = 'single',
 	placeholder,
 	disabled = false,
 	...fieldProps
-}: ISelectField<TFormData, TName>) => (
+}: ISelectField) => (
 	<FormField {...fieldProps}>
 		{({ value, onChange, ...control }) =>
 			// The two modes are separate JSX rather than a spread, because `SelectProps` is a

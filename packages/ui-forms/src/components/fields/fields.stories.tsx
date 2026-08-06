@@ -2,8 +2,8 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import type { Option } from '@repo/core';
-import { Button } from '@repo/ui-core';
-import { useForm } from '~/components/Form';
+import { Form, useForm } from '~/components/Form';
+import { SubmitButton } from '~/components/SubmitButton/SubmitButton';
 import { TextField } from '~/components/fields/TextField';
 import { TextareaField } from '~/components/fields/TextareaField';
 import { CheckboxField } from '~/components/fields/CheckboxField';
@@ -58,20 +58,9 @@ const AccountForm = () => {
 	});
 
 	return (
-		<form
-			className='grid w-96 gap-5'
-			// See FormField.stories.tsx: a native `required` would otherwise let the browser block
-			// submission before TanStack ever validates.
-			noValidate
-			onSubmit={(event) => {
-				event.preventDefault();
-				event.stopPropagation();
-				void form.handleSubmit();
-			}}
-		>
-			{/* No render prop, no value/onChange, no nativeLabel to remember. */}
+		<Form form={form} className='grid w-96 gap-5'>
+			{/* No render prop, no value/onChange, no form, no nativeLabel to remember. */}
 			<TextField
-				form={form}
 				name='email'
 				id='account-email'
 				label='Email address'
@@ -86,7 +75,6 @@ const AccountForm = () => {
 			/>
 
 			<TextareaField
-				form={form}
 				name='bio'
 				id='account-bio'
 				label='Short bio'
@@ -95,7 +83,6 @@ const AccountForm = () => {
 			/>
 
 			<SelectField
-				form={form}
 				name='country'
 				id='account-country'
 				label='Country'
@@ -106,17 +93,15 @@ const AccountForm = () => {
 			{/* RadioGroupField sets nativeLabel={false} internally — a single <label> cannot name
 			several controls, and forgetting that is exactly the bug these components prevent. */}
 			<RadioGroupField
-				form={form}
 				name='plan'
 				id='account-plan'
 				label='Billing plan'
 				options={plans}
 			/>
 
-			<SwitchField form={form} name='marketing' id='account-marketing' label='Email me offers' />
+			<SwitchField name='marketing' id='account-marketing' label='Email me offers' />
 
 			<CheckboxField
-				form={form}
 				name='terms'
 				id='account-terms'
 				label='Accept the terms'
@@ -127,14 +112,14 @@ const AccountForm = () => {
 				}}
 			/>
 
-			<Button type='submit'>Create account</Button>
+			<SubmitButton>Create account</SubmitButton>
 
 			{submitted !== undefined && (
 				<p data-testid='submitted' className='text-muted-foreground text-sm'>
 					Submitted {submitted.email} on the {submitted.plan} plan.
 				</p>
 			)}
-		</form>
+		</Form>
 	);
 };
 
@@ -150,12 +135,12 @@ export const AllFields: Story = {
 
 const form = useForm({ defaultValues: { email: '', country: '', terms: false } });
 
-<TextField form={form} name='email' label='Email address' type='email' required />
-<TextareaField form={form} name='bio' label='Short bio' />
-<SelectField form={form} name='country' label='Country' options={countries} />
-<RadioGroupField form={form} name='plan' label='Billing plan' options={plans} />
-<SwitchField form={form} name='marketing' label='Email me offers' />
-<CheckboxField form={form} name='terms' label='Accept the terms' required />`
+<TextField name='email' label='Email address' type='email' required />
+<TextareaField name='bio' label='Short bio' />
+<SelectField name='country' label='Country' options={countries} />
+<RadioGroupField name='plan' label='Billing plan' options={plans} />
+<SwitchField name='marketing' label='Email me offers' />
+<CheckboxField name='terms' label='Accept the terms' required />`
 			}
 		}
 	},
@@ -224,9 +209,8 @@ const SelectMultipleForm = () => {
 	});
 
 	return (
-		<div className='w-96'>
+		<Form form={form} className='w-96'>
 			<SelectField
-				form={form}
 				name='interests'
 				id='interests'
 				label='Interests'
@@ -235,7 +219,7 @@ const SelectMultipleForm = () => {
 				placeholder='Choose any number…'
 				description='Pick as many as you like.'
 			/>
-		</div>
+		</Form>
 	);
 };
 

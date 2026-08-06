@@ -44,7 +44,7 @@ const FlakyForm = ({ message }: { message?: string }) => {
 
 	return (
 		<Form form={form} className='grid w-96 gap-4'>
-			<FormField form={form} name='email' label='Email address'>
+			<FormField<string> name='email' label='Email address'>
 				{(control) => <Input {...control} type='email' />}
 			</FormField>
 

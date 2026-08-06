@@ -1,8 +1,9 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { Button, Checkbox, Input, Textarea } from '@repo/ui-core';
-import { useForm } from '~/components/Form';
+import { Checkbox, Input, Textarea } from '@repo/ui-core';
+import { Form, useForm } from '~/components/Form';
+import { SubmitButton } from '~/components/SubmitButton/SubmitButton';
 import { FormField } from '~/components/FormField/FormField';
 
 const meta: Meta<typeof FormField> = {
@@ -31,24 +32,12 @@ const SignUpForm = () => {
 	});
 
 	return (
-		<form
-			className='grid w-96 gap-4'
-			// noValidate is not optional when a form library owns validation. Field emits a native
-			// `required` attribute, and the browser's own constraint validation blocks the submit
-			// event outright when it fails - so React's onSubmit never fires and TanStack never runs.
-			noValidate
-			onSubmit={(event) => {
-				event.preventDefault();
-				event.stopPropagation();
-				void form.handleSubmit();
-			}}
-		>
+		<Form form={form} className='grid w-96 gap-4'>
 			{/*
 			 * Native inputs need nothing beyond the spread: `control` already carries id, the aria
 			 * bindings, value, onChange and onBlur.
 			 */}
-			<FormField
-				form={form}
+			<FormField<string>
 				name='email'
 				label='Email address'
 				id='signup-email'
@@ -62,7 +51,7 @@ const SignUpForm = () => {
 				{(control) => <Input {...control} type='email' placeholder='john@example.com' />}
 			</FormField>
 
-			<FormField form={form} name='bio' label='Short bio' id='signup-bio'>
+			<FormField<string> name='bio' label='Short bio' id='signup-bio'>
 				{(control) => <Textarea {...control} placeholder='Tell us about yourself…' />}
 			</FormField>
 
@@ -70,8 +59,7 @@ const SignUpForm = () => {
 			 * A control with its own change vocabulary renames two props. That is the whole cost of
 			 * FormField not holding a registry of control names.
 			 */}
-			<FormField
-				form={form}
+			<FormField<boolean>
 				name='terms'
 				label='Accept the terms'
 				id='signup-terms'
@@ -91,14 +79,14 @@ const SignUpForm = () => {
 				)}
 			</FormField>
 
-			<Button type='submit'>Create account</Button>
+			<SubmitButton>Create account</SubmitButton>
 
 			{submitted !== undefined && (
 				<p data-testid='submitted' className='text-muted-foreground text-sm'>
 					Submitted: {submitted.email}
 				</p>
 			)}
-		</form>
+		</Form>
 	);
 };
 
@@ -173,26 +161,14 @@ const UnvisitedFieldForm = () => {
 	});
 
 	return (
-		<form
-			className='grid w-96 gap-4'
-			// noValidate is not optional when a form library owns validation. Field emits a native
-			// `required` attribute, and the browser's own constraint validation blocks the submit
-			// event outright when it fails - so React's onSubmit never fires and TanStack never runs.
-			noValidate
-			onSubmit={(event) => {
-				event.preventDefault();
-				event.stopPropagation();
-				void form.handleSubmit();
-			}}
-		>
+		<Form form={form} className='grid w-96 gap-4'>
 			{/*
 			 * `showErrorsWhen='blurred'` is the quieter mode — it stays silent while you type. The
 			 * point of this story is that it does NOT stay silent on submit: handleSubmit marks every
 			 * mounted field touched but blurs none, so a naive isBlurred gate would hide the error on
 			 * exactly the field the user skipped.
 			 */}
-			<FormField
-				form={form}
+			<FormField<string>
 				name='email'
 				label='Email address'
 				id='unvisited-email'
@@ -205,8 +181,8 @@ const UnvisitedFieldForm = () => {
 				{(control) => <Input {...control} type='email' />}
 			</FormField>
 
-			<Button type='submit'>Submit</Button>
-		</form>
+			<SubmitButton>Submit</SubmitButton>
+		</Form>
 	);
 };
 
