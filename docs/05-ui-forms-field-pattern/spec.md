@@ -411,10 +411,12 @@ form.
   that turns it off.
 - Submitting prevents the browser default, stops the event propagating further, and runs the form's
   own submit handling.
-- `Form` accepts a callback that fires **only after a submission that succeeded**, receiving the
+- ~~`Form` accepts a callback that fires **only after a submission that succeeded**, receiving the
   submitted values. It is for consequences belonging to the page rather than to the mutation —
-  closing a dialog, a toast, navigation. The mutation itself, and any server errors it returns, stay
-  with the form instance.
+  closing a dialog, a toast, navigation.~~ **Dropped during planning of the second pass — see
+  Decisions.** The mutation itself, and any server errors it returns, still stay with the form
+  instance, and anything written after a successful `await` inside that handler already runs only on
+  success.
 - `Form` applies **no layout of its own**. It accepts a class name and forwards everything else to
   the element.
 - The six bound field components and `FormField` **no longer accept a `form` prop**. A `Form`
@@ -425,8 +427,12 @@ form.
 - A **submit button** component exists that cannot be built without submit semantics, reflects
   whether a submission is in flight, and reflects validity per the disable rule in Decisions.
 - A **form-level error surface** renders a message belonging to the form rather than to any field.
-  The message comes from the form's own state — set by the submit handler — rather than from
-  caller-held React state, so it clears itself on the next submission and cannot go stale.
+  The message is owned by `Form` and cleared by `Form` at the start of every submission, so it cannot
+  go stale — ~~it comes from the form instance's own state~~ **amended during planning: it is not
+  held in the form library's error map, see Decisions.** It is never held by the caller.
+- **The form-level error surface is rendered unconditionally.** A caller writing
+  `{error && <FormError />}` destroys the region-exists-before-content guarantee below, which is the
+  whole reason the region is separate from its content.
 - Messages are never invented. Neither surface substitutes generic wording for what the server
   actually said; the generic case is reserved for a failure that produced no message at all.
 - Every component added or changed meets Goal 3's Storybook and `play()` bar.
@@ -439,10 +445,11 @@ form.
   already hit and solved for `Field`.
 - That region is **assertive**, unlike `Field`'s polite per-field regions. Polite is right while the
   user is typing and wrong once they have pressed submit and stopped to wait for a result.
-- A submit button rendered unavailable **because the form is invalid** must remain reachable by
-  keyboard and screen reader, and pressing it must still re-run validation — so the user can always
-  ask "am I done yet?" and get an answer. A control that is both dead and unexplained is not an
-  acceptable outcome of the disable rule.
+- ~~A submit button rendered unavailable **because the form is invalid** must remain reachable by
+  keyboard and screen reader, and pressing it must still re-run validation.~~ **Amended during
+  planning of the second pass — see Decisions.** A submit button unavailable because the form is
+  invalid is natively `disabled`, and the question it was meant to answer — "am I done yet?" — is
+  answered instead by the button **re-enabling itself** as the last outstanding field clears.
 - A submit button unavailable **because a submission is in flight** reports a busy state.
 - Removing the browser's constraint validation removed its focus behaviour too. **A submission that
   does not succeed moves focus to the first invalid control in document order**, which is what the
@@ -490,16 +497,19 @@ form.
 - Given a form never yet submitted and invalid, when the submit button is inspected, then it is
   available, and pressing it runs validation and reveals every outstanding error.
 - Given a form submitted at least once and still invalid, when the submit button is inspected, then
-  it presents as unavailable, remains reachable by keyboard, and pressing it still re-runs
-  validation.
+  it is natively disabled; and when the last outstanding field is corrected, then it becomes
+  available again without another submission.
 - Given a submit handler returning errors keyed by field name, when submission completes, then each
   named field displays its own message, with no translation written by the caller.
+- Given a field displaying a server error, when the user edits or leaves that field, then the error
+  clears and the form can be submitted again — including when that field declares no validators of
+  its own.
 - Given a submit handler reporting a failure belonging to no field, when submission completes, then
   the message it produced is displayed once at form level, is announced without focus being moved to
   it, and is gone on the next submission.
-- Given a successful submission, when it completes, then `Form`'s success callback fires exactly
+- ~~Given a successful submission, when it completes, then `Form`'s success callback fires exactly
   once with the submitted values, and does not fire on a submission that failed validation or failed
-  at the server.
+  at the server.~~ **Removed with the callback — see Decisions.**
 - Given a form whose first two fields are both invalid, when it is submitted, then focus moves to the
   first of them in document order.
 - Given a form-level failure followed by no other change, when the form is submitted again, then the
@@ -554,23 +564,44 @@ form.
   accident, ahead of the design-system audit planned in [`docs/README.md`](../README.md).
 - **Propagation is stopped on submit.** Not for nested `<form>` elements, which HTML forbids, but
   for portalled overlays — see Edge Cases.
-- **The mutation stays with the form instance; `Form`'s callback fires only on success.** The
-  deciding factor is that submitting state is true for exactly as long as the form library is
-  awaiting the handler. Moving the mutation onto `Form` would mean the form reports itself finished
-  while the request is still in flight, so the submit button would stop loading and re-enable
-  mid-save — and fixing that would need `Form` to keep its own submitting state, giving two answers
-  to one question. Keeping the mutation with the form instance also preserves the return-value
-  contract that binds server errors to fields.
-- **The callback is named for what it does.** It fires on success, so it is named for success.
-  Calling it `onSubmit` would be a lie — it does not fire on every submission — and it would sit
-  beside the form instance's own `onSubmit` with different timing and different arguments.
+- **The mutation stays with the form instance.** The deciding factor is that submitting state is
+  true for exactly as long as the form library is awaiting the handler. Moving the mutation onto
+  `Form` would mean the form reports itself finished while the request is still in flight, so the
+  submit button would stop loading and re-enable mid-save — and fixing that would need `Form` to
+  keep its own submitting state, giving two answers to one question.
+- **~~`Form`'s callback fires only on success.~~ Dropped during planning of the second pass, along
+  with the decision below about naming it.** With the mutation in the caller's own `onSubmit`,
+  anything written after a successful `await save(value)` in that handler already runs only on
+  success — the callback was a second way to say the same thing. What it would have bought is that
+  `Form` sits in the page's JSX where `closeDialog`/`navigate` are in scope, whereas `useForm`'s
+  config is often extracted into a hook. Real, but not worth a second concept, and trivial to add
+  back if the dialog case bites.
+- ~~**The callback is named for what it does.** It fires on success, so it is named for success.
+  Calling it `onSubmit` would be a lie, and it would sit beside the form instance's own `onSubmit`
+  with different timing and different arguments.~~ **Moot — there is no callback.**
 - **Server errors bind to fields by default; the form-level surface is the fallback.** Mapping an
   API response to field names is application-specific and stays in the caller's submit handler. What
-  this provides is the place the unbindable remainder renders. Field binding itself needs no new
-  code — `toFieldProps` already reads `errorMap.onServer`.
-- **The form-level message is read from form state, not held by the caller.** Caller-held state has
-  to be cleared at the start of every submission or a stale failure sits above a form that has since
-  succeeded.
+  this provides is the place the unbindable remainder renders. ~~Field binding itself needs no new
+  code — `toFieldProps` already reads `errorMap.onServer`.~~ **Corrected during planning: the key is
+  `errorMap.onSubmit`, not `onServer`** — `formApi.setErrorMap({ onSubmit: { fields } })` is what a
+  submit handler calls, and `onServer` belongs to the server-validation adapter. `toFieldProps` reads
+  the `errors` array regardless of cause, so it needed no change either way.
+- **Field-bound server errors clear themselves, so `Form` contains no clearing machinery.**
+  `FieldApi.validateSync` ends with an explicit reset of the `onSubmit` key for any non-submit cause
+  that did not itself error (`form-core/dist/esm/FieldApi.js:248-263`). It sits *after* the validator
+  loop rather than inside it, so it fires even for a field that declares no validators at all, and
+  `handleBlur` calls `validate('blur')` unconditionally. So editing or leaving a field clears the
+  server error bound to it, and `isFieldsValid` recovers on its own. This is load-bearing for the
+  disable rule below — without it a natively disabled submit button could never re-enable.
+- **~~The form-level message is read from form state, not held by the caller.~~ Amended during
+  planning of the second pass: it is held by `Form`, not in the form library's error map.** The
+  original objection was to *caller*-held state, which has to be cleared at the start of every
+  submission or a stale failure sits above a form that has since succeeded. `Form` owns the submit
+  handler, so it clears unconditionally and that objection does not apply to it. The reason not to
+  use `errorMap` is the opposite one: that slot feeds `isFormValid` → `isValid` → `canSubmit`, so a
+  message whose only job is to be *read* would also gate submission. The caller reports a form-level
+  failure by **throwing**; `Form` catches it, using the error's own message where it has one and
+  generic wording only for a failure that produced none.
 - **A submit button exists as a component, and the reason is `type`.**
   [`Button.tsx:88`](../../packages/ui-core/src/components/Button/Button.tsx#L88) defaults
   `type='button'` on purpose, so a plain `Button` inside a form renders correctly and does nothing —
@@ -581,15 +612,26 @@ form.
   Disable-until-valid as a *starting* state was rejected — it gives no reason, is skipped by
   keyboard and screen-reader navigation, and leaves someone stuck. The chosen rule keeps the button
   live until the user has actually asked for a result. The trade is that a user part-way through
-  fixing errors sees an unavailable button, which is why the accessibility requirement insists it
-  stay reachable and still re-validate on press. The state derives from the form's own
-  submission-attempt count, so it is observable and can be driven in a story.
-- **Unavailable-for-validity and unavailable-for-submitting are not the same mechanism.** In flight,
-  the control is genuinely disabled — a brief state where a second press must not start a second
-  request. For validity it must stay focusable and still re-run validation on press. **Confirmed**
-  when this was built: `aria-disabled` for validity, native `disabled` only in flight. Native
-  disabled in both cases was offered and declined, because it takes the button out of the tab order
-  exactly when a keyboard user is trying to find out why the form will not submit.
+  fixing errors sees an unavailable button — answered by the button re-enabling itself as the last
+  outstanding field clears, which the Decision above makes automatic. The state derives from the
+  form's own submission-attempt count, so it is observable and can be driven in a story.
+- **~~Unavailable-for-validity and unavailable-for-submitting are not the same mechanism.~~
+  Reversed during planning of the second pass: both are native `disabled`.** The original decision
+  used `aria-disabled` for validity so the control stayed focusable and still re-validated on press.
+  Two things killed it. `buttonVariants` carries `aria-disabled:pointer-events-none`
+  ([`variants.ts:19`](../../packages/ui-core/src/components/Button/variants.ts#L19)), so mouse and
+  touch presses would stop working while keyboard still submitted — a split that is its own quirk,
+  and one that makes the acceptance criterion untestable, because `userEvent.click` throws on
+  `pointer-events: none`. Overriding that per-caller was offered and declined: `Button`'s disabled
+  behaviour should be identical everywhere rather than negotiable by whoever renders it. And the
+  question `aria-disabled` existed to keep answerable — "am I done yet?" — is answered better by the
+  button re-enabling itself than by a control that looks dead and isn't.
+
+  **On WCAG, because it was asked directly: neither option is a violation.** Disabled controls are
+  exempt from contrast (SC 1.4.3, 1.4.11), removing one from the tab order is not a keyboard trap
+  (SC 2.1.1), and `disabled` exposes its state correctly (SC 4.1.2). Error Identification and Error
+  Suggestion (SC 3.3.1, 3.3.3 AA) are met by the field messages, not by the button. The original
+  decision was framed as accessibility but was a usability preference.
 - **Field ids default to field names.** React 19's fallback ids contain characters invalid in a CSS
   selector, already documented as a trap in [`plan.md`](./plan.md). Defaulting to the name gives
   readable DOM ids, makes a field's element reachable from its name, and removes the trap from every
@@ -610,19 +652,36 @@ form.
   trigger: focus moves only when the user has pressed submit and is waiting for a result, never
   while they are typing. Focusing the *control* rather than the message is also what makes the
   message useful, since `aria-describedby` reads it out on arrival.
-- **First-invalid is found in the DOM, not from field state.** A `[aria-invalid="true"]` query
-  inside the `<form>` is in document order by construction, which is what "first" has to mean;
-  reading `fieldMeta` gives registration order, which is not the same thing and is not visible to
-  the user. When the match is not itself focusable — a `radiogroup` carries the invalid state but a
-  radio inside it holds the tab stop — its first focusable descendant is used.
-- **The form-level error is cleared at the start of every submission, and this is load-bearing
-  rather than hygiene.** A form-level error makes `isFormValid` false, so `canSubmit` goes false,
-  so `handleSubmit` returns before it validates anything. Without the clear, a single 500 leaves the
-  form permanently unsubmittable. It is also what stops the previous failure sitting above a form
+- **~~First-invalid is found in the DOM, not from field state.~~ Amended during planning of the
+  second pass: the *names* come from field state, the *order* comes from the DOM.** The original
+  decision was right that `fieldMeta` gives registration order and that document order is what
+  "first" has to mean. But a `[aria-invalid="true"]` query cannot run where it needs to: the submit
+  handler. `aria-invalid` only appears once React has re-rendered, and `await form.handleSubmit()`
+  resolving means the *store* settled, not that React committed — so a DOM query on the next line
+  reads the pre-submission DOM, and the alternatives are an effect or a scheduler heuristic.
+
+  Because field ids now default to field names, both properties are available at once: take the
+  invalid names from `form.state.fieldMeta`, build a comma-joined id selector, and let
+  `querySelector` return the first match — which is first in **document** order, not first in the
+  list. Synchronous, inside the handler, with no dependence on `aria-invalid` having been committed.
+  Array-path names need `CSS.escape`. When the match is not itself focusable — a `radiogroup`
+  carries the id but a radio inside it holds the tab stop — its `[tabindex="0"]` descendant is
+  preferred, then any focusable one; picking a `tabindex="-1"` item works but desynchronises Radix's
+  roving tab stop.
+- **~~The form-level error is cleared at the start of every submission, and this is load-bearing
+  rather than hygiene.~~ It is now ordinary hygiene, because the message no longer lives in the
+  error map.** The original reasoning was correct for the design it described: a form-level
+  `errorMap` entry makes `isFormValid` false, so `canSubmit` goes false, so `handleSubmit` returns
+  before validating anything, and a single 500 would leave the form permanently unsubmittable. That
+  hazard is what moved the message into `Form`'s own state (see above). `Form` still clears it at
+  the start of every submission, but now only so that the previous failure does not sit above a form
   that has since succeeded.
 
 ### Open Questions
 
 None. The two that stood here — whether a failed submission moves focus, and whether
 unavailable-for-validity keeps the control focusable — were both settled before implementation and
-are recorded as Decisions above.
+are recorded as Decisions above. The second was then **reversed** when planning the build, once the
+`aria-disabled:pointer-events-none` rule in `buttonVariants` and `FieldApi`'s self-clearing of
+submit-cause errors were both read from source rather than assumed. Both reversals are recorded in
+Decisions rather than reopened here.

@@ -38,8 +38,9 @@ lives inside `05`'s spec rather than as its own row, because nothing has been bu
 [`05-ui-forms-field-pattern/spec.md` → Second pass](05-ui-forms-field-pattern/spec.md#second-pass--the-form-layer).
 It adds a `Form` component that owns the `<form>` element and `noValidate` (today a caller
 obligation that fails silently when forgotten), moves the form from a per-field prop onto context, and
-adds a submit button and a form-level error surface. Two open questions remain — focus behaviour on a
-failed submission, and the mechanism behind the submit button's disabled-while-invalid state.
+adds a submit button and a form-level error surface. **No open questions remain** — the two that stood
+there, focus behaviour on a failed submission and the submit button's disabled-while-invalid
+mechanism, are both settled in Decisions.
 
 A **design-system audit** across six axes — tokens, interaction states, size scales, variant
 taxonomy, dark mode coverage, motion — would add deliverables to the table above. Not started.
