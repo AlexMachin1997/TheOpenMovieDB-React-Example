@@ -645,32 +645,32 @@ Estimated: 0.5 day.
 
 ### Phase 6 — The adapter
 
-- [ ] 6.1 `ui-forms/src/adapters/toFieldProps.types.ts` — `ITanStackFieldLike` declaring only what it
+- [x] 6.1 `ui-forms/src/adapters/toFieldProps.types.ts` — `ITanStackFieldLike` declaring only what it
       reads, plus the options and result types. **No reference to `Field`, `IField` or any
       `ui-core` type** (AC4). (Depends on: 5.2)
-- [ ] 6.2 `toFieldProps.ts` — `normalise` helper, first-renderable-error policy,
+- [x] 6.2 `toFieldProps.ts` — `normalise` helper, first-renderable-error policy,
       `showErrorsWhen = 'touched'` default, `'blurred'` ORed with `errorMap.onSubmit`/`onServer`.
       Write this and 6.3 before the story: most likely to be wrong, cheapest to test. (6.1)
-- [ ] 6.3 `toFieldProps.spec.ts` — `ui-forms`' first `.spec.ts` (node preset, no DOM), the cases from
+- [x] 6.3 `toFieldProps.spec.ts` — `ui-forms`' first `.spec.ts` (node preset, no DOM), the cases from
       the test table, plus the compile-time `AnyFieldApi` assignability assertion. That last one is
       caught only by `check-types`, never by `vitest run`. (6.2)
-- [ ] 6.4 `ui-forms/src/components/FormField/FormField.{tsx,types.ts,index.ts}` — renders TanStack's
+- [x] 6.4 `ui-forms/src/components/FormField/FormField.{tsx,types.ts,index.ts}` — renders TanStack's
       `form.Field` internally and composes `ui-core`'s `Field` via `toFieldProps`. Its control bag is
       `IFormFieldControlProps extends IFieldControlProps` adding `name`, `value`, `onBlur` and a
       **normalised `onChange`** that accepts either a DOM change event or a raw value; children
       receive `(control, field)`. **No control registry** (D8). Generic over the form's data type so
       `name` is autocompleted and typo-checked, matching `form.Field`'s own `DeepKeys` typing. (6.2)
-- [ ] 6.5 Export `FormField`, `toFieldProps` and their types from `packages/ui-forms/src/index.ts`.
+- [x] 6.5 Export `FormField`, `toFieldProps` and their types from `packages/ui-forms/src/index.ts`.
       (6.3, 6.4)
-- [ ] 6.6 `FormField.stories.tsx` — a live `useForm` form with the two `play()`s from the test table.
+- [x] 6.6 `FormField.stories.tsx` — a live `useForm` form with the two `play()`s from the test table.
       **Must live in `ui-forms`**; `ui-core` never gains a `@tanstack/react-form` dependency. (6.5)
-- [ ] 6.7 `toFieldProps.stories.tsx` — the same form written by hand with `form.Field`, and again
+- [x] 6.7 `toFieldProps.stories.tsx` — the same form written by hand with `form.Field`, and again
       with `useField`, asserting identical behaviour (test table, AC3 3rd). (6.5)
-- [ ] 6.8 `FormField.mdx` — the primary usage guide: naming a field, the `(control, field)` contract,
+- [x] 6.8 `FormField.mdx` — the primary usage guide: naming a field, the `(control, field)` contract,
       one worked example per control family, why `value`/`onChange` stay yours, and the timing and
       error-normalisation policies. Covers `toFieldProps` as the escape hatch, and why it is a plain
       function rather than a hook (D6). (6.7)
-- [ ] 6.9 Rebuild `ui-forms`, clear caches, run the suite. (6.8)
+- [x] 6.9 Rebuild `ui-forms`, clear caches, run the suite. (6.8)
 
 Estimated: 1.5 days.
 

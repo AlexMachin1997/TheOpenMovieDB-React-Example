@@ -1,0 +1,114 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as FieldStories from './fields.stories';
+
+<Meta of={FieldStories} />
+
+# Fields
+
+Bound form controls. Each one takes a `form` and a `name`, resolves that field's value and
+validation state, and renders a labelled, described, accessible control around it.
+
+This is the layer you should be building forms with.
+
+```tsx
+import { CheckboxField, SelectField, TextField, useForm } from '@repo/ui-forms';
+
+const form = useForm({ defaultValues: { email: '', country: '', terms: false } });
+
+<TextField form={form} name='email' label='Email address' type='email' required />
+<SelectField form={form} name='country' label='Country' options={countries} />
+<CheckboxField form={form} name='terms' label='Accept the terms' required />
+```
+
+No render prop, no `value`/`onChange`, and nothing to remember about how each control reports a
+change or whether its label can be native.
+
+## The set
+
+| Component | Control | Value type | Notes |
+| --------- | ------- | ---------- | ----- |
+| `TextField` | `Input` | `string` | Takes `type` for `email`, `password`, `tel`, … |
+| `TextareaField` | `Textarea` | `string` | Takes `rows` |
+| `CheckboxField` | `Checkbox` | `boolean` | |
+| `SwitchField` | `Switch` | `boolean` | Same shape as `CheckboxField`; use when the setting applies immediately |
+| `SelectField` | `Select` | `string` or `string[]` | `type='multiple'` switches the value to an array |
+| `RadioGroupField` | `RadioGroup` | `string` | Sets `nativeLabel={false}` for you |
+
+<Canvas sourceState="none" of={FieldStories.AllFields} />
+
+## Shared properties
+
+Every field accepts the same base, which is `Field`'s presentational API plus the binding:
+
+| Prop | Purpose |
+| ---- | ------- |
+| `form`, `name` | The binding. `name` autocompletes and typo-checks against the form's data shape. |
+| `label` | Required. The field's visible name. |
+| `id` | Optional but recommended — ids then read as `email` / `email-message` rather than `«r3»`. |
+| `description` | Guidance, shown alongside any error. |
+| `required` | Renders the indicator and sets the control's `required`/`aria-required`. |
+| `disabled` | Disables the control. |
+| `validators` | Passed straight through to TanStack's `form.Field`. |
+| `showErrorsWhen` | `'touched'` (default), `'blurred'`, or `'always'`. |
+
+Note there is no `error` prop: the error comes from form state. And no `nativeLabel` — each
+component already knows whether its control can be named by a native `<label>`.
+
+## 🚨 Put `noValidate` on your form
+
+This is not optional, and getting it wrong fails silently.
+
+```tsx
+<form noValidate onSubmit={(event) => { event.preventDefault(); void form.handleSubmit(); }}>
+```
+
+`required` renders a **native** `required` attribute, which is correct — it is what assistive
+technology announces. But it also switches on the browser's own constraint validation, and when that
+fails the browser **blocks the `submit` event entirely**. Your `onSubmit` handler never runs, so
+`form.handleSubmit()` never runs, so TanStack never validates and no message ever appears. You get a
+browser tooltip instead of your own error, and only on the first invalid field.
+
+This was found by a test that submitted an empty required field and got nothing back at all.
+
+## Multi-select
+
+<Canvas sourceState="none" of={FieldStories.MultiSelect} />
+
+```tsx
+<SelectField form={form} name='interests' label='Interests' type='multiple' options={options} />
+```
+
+The field's value should be a `string[]` in the form's `defaultValues` when `type='multiple'`.
+
+## Validation timing
+
+`showErrorsWhen` controls when a message becomes visible. It does not change *when validation runs*
+— that is TanStack's business, driven by which `validators` keys you supply.
+
+| Value | Behaviour |
+| ----- | --------- |
+| `'touched'` (default) | Once the user has changed or left the field, or the form has been submitted. |
+| `'blurred'` | Only once the user has left the field — plus any submit- or server-sourced error. Quieter while typing. |
+| `'always'` | As soon as the error exists, including before any interaction. |
+
+> **`'blurred'` still shows submit errors, deliberately.** `handleSubmit` marks every mounted field
+> touched but blurs none, so a naive "only when blurred" rule would hide errors on exactly the fields
+> a user skipped — the ones most likely to be wrong. There is a test for this.
+
+Only the first message is shown when a validator produces several. A live region reading three
+concatenated validation messages is one nobody follows.
+
+## When there is no field component
+
+Reach for [`FormField`](?path=/docs/ui-forms-form-field--docs). It takes the same `form`/`name`
+binding and hands you the bindings to wire onto any control — including one that doesn't exist yet.
+These six components are all built on it, and are thin.
+
+## Accessibility
+
+Each field renders a [`Field`](?path=/docs/ui-core-field--docs), so it inherits all of its wiring:
+native `<label htmlFor>` where the control allows it and `aria-labelledby` where it does not,
+`aria-invalid` while an error is present, a single polite live region per field, and a required
+indicator conveyed by symbol and text rather than colour.
+
+The one obligation left with you is `noValidate`, above.

@@ -260,6 +260,29 @@ Non-Goals — and gets its own future discovery once this ships.
   job at the call site, which is what keeps it working with controls that don't exist yet. The
   adapter remains separately exported and free of every `ui-core` reference, so the acceptance
   criterion about its contents is unaffected.
+- **Amended again during implementation: `ui-forms` also ships six bound field components** —
+  `TextField`, `TextareaField`, `CheckboxField`, `SwitchField`, `SelectField`, `RadioGroupField`.
+  `FormField` alone left real friction at every call site, and the friction was not cosmetic: the
+  control bag's `value` **collides with Radix's own `value` prop** on `Checkbox` and `Switch`, so
+  those controls need `{({ value, onChange, ...control })` destructuring rather than a plain spread —
+  a type error the first time, and a paper cut every time after. `RadioGroupField` also has to
+  remember `nativeLabel={false}`, which a caller silently gets wrong.
+
+  Each component is an ordinary composition over `FormField` that knows one control's change shape.
+  That knowledge has to live somewhere; the alternative was copy-pasting it at every call site. What
+  the Decision above rejected — a `control='input'` style registry mapping a *name* to a component,
+  requiring a new entry per control — is still rejected, and `FormField` stays exported as the
+  escape hatch for controls with no wrapper.
+
+  `CheckboxGroupField`, `SliderField` and date-picker fields were deliberately left out: they are
+  the rarely-used four, and `FormField` covers them.
+- **Found during implementation, and it belongs in the spec because it is a caller obligation:
+  a form using these components must set `noValidate`.** `required` renders a *native* `required`
+  attribute — which is correct, and is what assistive technology announces. But it also enables the
+  browser's own constraint validation, and when that fails the browser **blocks the `submit` event
+  outright**. The React `onSubmit` handler never runs, so `form.handleSubmit()` never runs, so
+  nothing validates and no message appears. Found by a test that submitted an empty required field
+  and got back nothing at all.
 - **`useForm` remains an untouched re-export of `@tanstack/react-form`'s `useForm`.** No custom
   form hook is introduced — there's nothing for one to do once the glue is a plain adapter rather
   than a component registry.

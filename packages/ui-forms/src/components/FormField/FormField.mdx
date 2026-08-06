@@ -1,0 +1,121 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FormFieldStories from './FormField.stories';
+
+<Meta of={FormFieldStories} />
+
+# Form field
+
+Binds `@repo/ui-core`'s [`Field`](?path=/docs/ui-core-field--docs) to a TanStack Form field by name,
+and hands you the bindings to put on any control.
+
+> **Reach for the [field components](?path=/docs/ui-forms-fields--docs) first.** `TextField`,
+> `SelectField` and the rest are built on this and need no render prop. `FormField` is what you use
+> when the control you want has no bound wrapper — including one that does not exist yet.
+
+## Installation
+
+```tsx
+import { FormField, useForm } from '@repo/ui-forms';
+```
+
+## Usage
+
+<Canvas sourceState="none" of={FormFieldStories.Default} />
+
+```tsx
+<FormField form={form} name='email' label='Email address' required>
+  {(control) => <Input {...control} type='email' />}
+</FormField>
+```
+
+You name the field; its value and validation state are already resolved. The reactivity comes from
+TanStack's own `form.Field`, which `FormField` renders internally — nothing here adds to it.
+
+## Properties
+
+<Controls />
+
+## The `control` bag
+
+Children receive `(control, field)`. `control` extends `Field`'s accessibility bindings with the
+data wiring:
+
+| Key | From |
+| --- | ---- |
+| `id`, `aria-describedby`, `aria-invalid`, `required` / `aria-required` | `Field` |
+| `name`, `value`, `onChange`, `onBlur` | the form |
+
+`onChange` is normalised: it accepts either a DOM change event or a raw value, so the same handler
+serves an `Input` (`event.target.value`) and a `Checkbox` (a boolean). The second argument is the
+full TanStack field API, for anything the bag doesn't cover.
+
+### Controls with their own `value`
+
+Some controls have a `value` prop meaning something else — Radix's `Checkbox` and `Switch` both take
+a string `value` for form submission. Spreading the bag onto them is a **type error**, not a silent
+bug, and the fix is to destructure:
+
+```tsx
+<FormField form={form} name='terms' label='Accept the terms'>
+  {({ value, onChange, ...control }) => (
+    <Checkbox {...control} checked={value} onCheckedChange={onChange} />
+  )}
+</FormField>
+```
+
+Absorbing that is precisely what `CheckboxField` exists for.
+
+## What it deliberately does not do
+
+`FormField` never maps a control *name* to a component — there is no `<FormField control='input' />`.
+That would mean holding a registry of every control and how each reports a change, and every control
+added later would need an entry in it. Connecting the control stays a one-line job, which is what
+keeps this working with controls the library has never heard of.
+
+The bound [field components](?path=/docs/ui-forms-fields--docs) are the ergonomic answer instead:
+ordinary compositions, each knowing one control, all built on this.
+
+## 🚨 `noValidate` on your form
+
+<Canvas sourceState="none" of={FormFieldStories.SubmitSurfacesErrorsOnUnvisitedFields} />
+
+`required` renders a native `required` attribute, which switches on the browser's own constraint
+validation — and when that fails the browser blocks the `submit` event outright, so your `onSubmit`
+never runs and TanStack never validates. Always:
+
+```tsx
+<form noValidate onSubmit={(event) => { event.preventDefault(); void form.handleSubmit(); }}>
+```
+
+## `toFieldProps` — the translation underneath
+
+Exported separately for driving `form.Field` or `useField` yourself:
+
+```tsx
+import { toFieldProps } from '@repo/ui-forms';
+
+<form.Field name='email'>
+  {(field) => (
+    <Field label='Email address' {...toFieldProps(field)}>
+      {(control) => <Input {...control} value={field.state.value} />}
+    </Field>
+  )}
+</form.Field>
+```
+
+It takes a TanStack field's state and returns the props `Field` accepts — nothing else. It contains
+no reference to any `ui-core` component.
+
+**One plain function covers both of TanStack's APIs**, because `form.Field`'s render prop and
+`useField()` hand back the same `FieldApi` object. It is deliberately **not** a hook: `useField`
+already calls `useStore(fieldApi.store)` with no selector, so the consuming component re-renders on
+any state change already, and a hook here would subscribe a second time for nothing.
+
+### Error normalisation
+
+`meta.errors` holds whatever the validators produced — a `string` from a plain function, a
+`{ message }` issue object from a Standard Schema validator like zod. `toFieldProps` reads both, and
+returns `undefined` for anything it cannot render as text rather than leaving the field permanently
+invalid-but-silent.
+
+Only the first renderable message is returned, never a joined list.
