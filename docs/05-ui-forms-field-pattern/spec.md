@@ -352,3 +352,111 @@ Non-Goals — and gets its own future discovery once this ships.
     `05`. Worse than the `Textarea` case: a label associated with nothing at all, rather than a
     duplicated element. It is also the concrete case that forces `Field`'s non-native label mode,
     since `Slider`'s control is a `<span role='slider'>` that `htmlFor` cannot name.
+
+---
+
+## Proposed extension — a second pass on `ui-forms`
+
+**Status: proposed, not specified, not agreed.** Everything above this line shipped (see
+[`plan.md`](./plan.md)). Everything below is a set of ideas raised after seeing the result, to be
+interrogated and turned into real requirements in a following session **before** any of it is built.
+None of it is committed to, and the open questions under each are genuine — several of them conflict
+with decisions taken above, and those conflicts are the point of writing them down.
+
+They share a theme. `05` built the *pieces*; using them still means assembling a form by hand — the
+`<form>` element, `noValidate`, threading `form` into every field, a submit button that knows
+nothing about the form's state. This pass is about the layer above the field.
+
+### P1 — A `Form` component
+
+Wrap the native `<form>`: own `noValidate`, own the `onSubmit`/`preventDefault`/`handleSubmit`
+boilerplate, and put the form instance on React context so fields stop taking a `form` prop.
+
+```tsx
+<Form form={form}>
+  <TextField name='email' label='Email address' required />
+  <CheckboxField name='terms' label='Accept the terms' required />
+</Form>
+```
+
+**Why it is worth doing:** `noValidate` is currently a caller obligation that fails *silently and
+completely* when forgotten (see Decisions). A component that owns the `<form>` element can make that
+impossible to get wrong, which is strictly better than documenting it.
+
+**The hard question, which needs answering before anything is built.** React context is not generic.
+`FormField` and the field components currently infer `TFormData` from the `form` prop, and that
+inference is what makes `name` autocomplete and typo-check against the form's real shape. A
+context-supplied form arrives untyped, so `name` degrades to `string` — losing the single biggest
+ergonomic benefit these components have. Options to weigh:
+
+- Keep `form` as an explicit prop and let `Form` own only the element and `noValidate`. Safe; less of
+  a win.
+- Context, accepting `name: string`. Simplest; measurably worse typing.
+- TanStack's `createFormHookContexts`, which solves exactly this — but is **explicitly rejected** by
+  the Decisions above, so adopting it means reversing that and saying why.
+- A typed factory (`const { Form, TextField } = createForm<IAccount>()`), which preserves inference
+  but is a different API shape again, and is close to the registry the spec argued against.
+
+Also open: does `Form` support `asChild`/no-element rendering; does it expose submitting/valid state
+to descendants (P3 needs that); what happens to nested forms.
+
+### P2 — Per-field stories and MDX
+
+Each of the six field components gets its own `.stories.tsx` and `.mdx`, rather than sharing
+`fields.stories.tsx` / `fields.mdx`.
+
+Each page documents only what is specific to that field, and **links back** to the components it
+composes instead of restating them — `TextField` → [`Field`](?path=/docs/ui-core-field--docs) and
+[`Input`](?path=/docs/ui-core-input--docs). Repetition across seven pages is how documentation
+drifts, which is the same failure mode `05` existed to fix one layer down.
+
+Open: what stays on the shared overview page (probably the set-level table, `noValidate`, and
+validation timing) versus what moves; whether the Storybook nav groups them under `UI Forms/Fields/*`;
+whether `<Controls />` can resolve args through the generic wrapper at all.
+
+### P3 — A form-aware submit button
+
+A button that knows about form state — pending while submitting, and optionally disabled until the
+form is valid.
+
+**Flag before this is specified: "disable until valid" is a contested pattern, and I would push
+back on it as a default.** A disabled submit button gives no reason why it is disabled, is skipped
+by keyboard and screen-reader users navigating by control, and leaves someone stuck with no
+explanation. The usual guidance is to keep it enabled and surface the errors on submit — which the
+adapter already supports, since `handleSubmit` touches every field and `showErrorsWhen` handles the
+rest. Worth deciding deliberately rather than inheriting.
+
+The *pending* half is uncontroversial and probably the real value: disable-while-submitting plus a
+loading state, which `Button` already supports via `loading`.
+
+Open: does it live in `ui-forms` and wrap `ui-core`'s `Button`; does it read context (needs P1) or
+take `form`; what it does when validation fails on submit; whether "disabled until valid" is offered
+at all, and if so with what accessible fallback.
+
+### P4 — Worked examples for every control, cross-linked
+
+`Field.mdx` and the `ui-forms` pages should show every control the pattern supports, each linking to
+that control's own documentation — the date-picker example linking to the date-picker docs, the
+select example to `Select`, and so on.
+
+Partly done: `Field.mdx` already has one worked example per control family. What is missing is the
+cross-links back to each control's page, and coverage of the controls that only got a passing
+mention.
+
+### P5 — Sharpen the `ui-forms` documentation
+
+Clearer composition guidance and more practical, end-to-end examples, rather than API description.
+Concretely: what belongs in `ui-core` versus `ui-forms` and why; when to reach for a field component
+versus `FormField` versus `Field` alone; a realistic multi-field form worked end to end including
+validation, submission and server errors.
+
+### Notes for the requirements session
+
+- **P1 is the load-bearing one.** P3 depends on it for form state, and P2's page structure depends on
+  whether fields still take a `form` prop. Settle the typing question first; the rest follows.
+- **Two decisions above are candidates for reversal** — `createFormHookContexts` (P1) and the
+  no-registry rule (P1's factory option). Either can be revisited, but the reversal should be
+  argued, not slipped in.
+- **`CheckboxGroupField`, `SliderField` and the date-picker fields** were deliberately not built in
+  `05`. If P4 wants worked examples for every control, that gap becomes visible; decide whether to
+  close it or keep pointing those cases at `FormField`.
