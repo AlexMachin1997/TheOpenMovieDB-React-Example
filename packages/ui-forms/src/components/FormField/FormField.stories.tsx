@@ -5,12 +5,27 @@ import { Checkbox, Input, Textarea } from '@repo/ui-core';
 import { Form, useForm } from '~/components/Form';
 import { SubmitButton } from '~/components/SubmitButton/SubmitButton';
 import { FormField } from '~/components/FormField/FormField';
+import { boundFieldArgTypes } from '~/components/fields/__fixtures__/argTypes';
 
 const meta: Meta<typeof FormField> = {
 	title: 'UI Forms/Form field',
 	component: FormField,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		...boundFieldArgTypes,
+		nativeLabel: {
+			control: 'boolean',
+			description:
+				'Set to false for a control a native `<label>` cannot name — a group. The bound field components decide this for you.',
+			table: { defaultValue: { summary: 'true' } }
+		},
+		children: {
+			control: false,
+			description:
+				'Render function receiving `(control, field)`. Spread `control` onto your control.'
+		}
 	}
 };
 

@@ -1,4 +1,4 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import * as Stories from './TextareaField.stories';
 
 <Meta of={Stories} />
@@ -20,7 +20,7 @@ renders and the `rows` prop. Reach for it when the answer runs to more than one 
 
 ## Properties
 
-<Controls />
+<ArgTypes />
 
 Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
 `showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server

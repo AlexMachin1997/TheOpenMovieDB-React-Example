@@ -3,12 +3,21 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Form, useForm } from '~/components/Form';
 import { TextareaField } from '~/components/fields/TextareaField';
 import type { ITextareaField } from '~/components/fields/fields.types';
+import { boundFieldArgTypes } from '~/components/fields/__fixtures__/argTypes';
 
 const meta = {
 	title: 'UI Forms/Fields/Textarea field',
 	component: TextareaField,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		...boundFieldArgTypes,
+		rows: {
+			control: 'number',
+			description: 'Visible rows before scrolling. Does not limit what can be typed.'
+		},
+		placeholder: { control: 'text', description: 'Never a substitute for the label.' }
 	}
 } satisfies Meta<typeof TextareaField>;
 

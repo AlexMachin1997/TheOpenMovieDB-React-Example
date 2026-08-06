@@ -1,4 +1,4 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import * as FormStories from './Form.stories';
 
 <Meta of={FormStories} />
@@ -37,7 +37,7 @@ const form = useForm({
 
 ## Properties
 
-<Controls />
+<ArgTypes />
 
 `noValidate` and `onSubmit` are **absent from the props type**, not defaulted. Neither can be passed
 at all, so neither can be removed.

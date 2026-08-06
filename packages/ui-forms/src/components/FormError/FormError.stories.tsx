@@ -12,6 +12,14 @@ const meta = {
 	component: FormError,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		className: { control: 'text', description: 'Applied to the persistent live region.' },
+		children: {
+			control: false,
+			description:
+				'Not used. The message comes from the surrounding `Form`, so it cannot go stale and there is no clearing to forget.'
+		}
 	}
 } satisfies Meta<typeof FormError>;
 

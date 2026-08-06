@@ -1,4 +1,4 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import * as Stories from './TextField.stories';
 
 <Meta of={Stories} />
@@ -24,7 +24,7 @@ const form = useForm({ defaultValues: { email: '' }, onSubmit: async ({ value })
 
 ## Properties
 
-<Controls />
+<ArgTypes />
 
 Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
 `showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server

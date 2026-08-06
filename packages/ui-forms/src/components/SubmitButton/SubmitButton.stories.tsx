@@ -11,6 +11,21 @@ const meta = {
 	component: SubmitButton,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		children: { control: 'text', description: 'The button label.' },
+		variant: {
+			control: 'select',
+			options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link']
+		},
+		size: { control: 'select', options: ['default', 'sm', 'lg', 'icon'] },
+		disabled: {
+			control: 'boolean',
+			description: "Your own reason to disable it, OR-ed with the form's.",
+			table: { defaultValue: { summary: 'false' } }
+		},
+		startIcon: { control: false, description: 'Rendered before the label.' },
+		endIcon: { control: false, description: 'Replaced by the spinner while submitting.' }
 	}
 } satisfies Meta<typeof SubmitButton>;
 

@@ -1,4 +1,4 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import * as FormErrorStories from './FormError.stories';
 
 <Meta of={FormErrorStories} />
@@ -41,7 +41,7 @@ only for what is actually left over.
 
 ## Properties
 
-<Controls />
+<ArgTypes />
 
 There is **no prop for the message**. It comes from the surrounding `Form`, which sets it when a
 submission throws and clears it at the start of the next one — so it cannot go stale, and there is no
@@ -73,6 +73,6 @@ The region is **assertive**, unlike the polite per-field regions inside
 [`Field`](?path=/docs/ui-core-field--docs). Polite is right while someone is typing and wrong once
 they have pressed submit and stopped to wait for a result.
 
-It composes [`Alert`](?path=/docs/ui-core-alert--docs) but **clears its `role`**. `Alert` hardcodes
+It composes [`Alert`](?path=/story/ui-core-alert--default) but **clears its `role`**. `Alert` hardcodes
 `role='alert'`, itself an assertive live region; left in place, nesting one inside the other makes the
 message announce twice.

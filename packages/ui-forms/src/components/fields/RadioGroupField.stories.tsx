@@ -4,12 +4,18 @@ import { Form, useForm } from '~/components/Form';
 import { RadioGroupField } from '~/components/fields/RadioGroupField';
 import type { IRadioGroupField } from '~/components/fields/fields.types';
 import { plans } from '~/components/fields/__fixtures__/options';
+import { boundFieldArgTypes } from '~/components/fields/__fixtures__/argTypes';
 
 const meta = {
 	title: 'UI Forms/Fields/Radio group field',
 	component: RadioGroupField,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		...boundFieldArgTypes,
+		options: { control: 'object', description: 'The options to choose from.' },
+		noOptionsAvailableMessage: { control: 'text', description: 'Shown when options is empty.' }
 	}
 } satisfies Meta<typeof RadioGroupField>;
 

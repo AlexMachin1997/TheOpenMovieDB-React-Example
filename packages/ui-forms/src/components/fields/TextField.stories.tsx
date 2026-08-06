@@ -4,12 +4,22 @@ import { Form, useForm } from '~/components/Form';
 import { SubmitButton } from '~/components/SubmitButton/SubmitButton';
 import { TextField } from '~/components/fields/TextField';
 import type { ITextField } from '~/components/fields/fields.types';
+import { boundFieldArgTypes } from '~/components/fields/__fixtures__/argTypes';
 
 const meta = {
 	title: 'UI Forms/Fields/Text field',
 	component: TextField,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		...boundFieldArgTypes,
+		type: {
+			control: 'text',
+			description: 'Forwarded to the underlying Input.',
+			table: { defaultValue: { summary: 'text' } }
+		},
+		placeholder: { control: 'text', description: 'Never a substitute for the label.' }
 	}
 } satisfies Meta<typeof TextField>;
 

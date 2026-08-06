@@ -4,12 +4,24 @@ import { Form, useForm } from '~/components/Form';
 import { SelectField } from '~/components/fields/SelectField';
 import type { ISelectField } from '~/components/fields/fields.types';
 import { countries } from '~/components/fields/__fixtures__/options';
+import { boundFieldArgTypes } from '~/components/fields/__fixtures__/argTypes';
 
 const meta = {
 	title: 'UI Forms/Fields/Select field',
 	component: SelectField,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		...boundFieldArgTypes,
+		options: { control: 'object', description: 'The options to choose from.' },
+		type: {
+			control: 'radio',
+			options: ['single', 'multiple'],
+			description: "'single' binds a string, 'multiple' binds a string[].",
+			table: { defaultValue: { summary: 'single' } }
+		},
+		placeholder: { control: 'text', description: 'Shown on the trigger when nothing is selected.' }
 	}
 } satisfies Meta<typeof SelectField>;
 

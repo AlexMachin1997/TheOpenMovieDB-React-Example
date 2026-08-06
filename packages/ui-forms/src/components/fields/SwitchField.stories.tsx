@@ -3,12 +3,16 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Form, useForm } from '~/components/Form';
 import { SwitchField } from '~/components/fields/SwitchField';
 import type { ISwitchField } from '~/components/fields/fields.types';
+import { boundFieldArgTypes } from '~/components/fields/__fixtures__/argTypes';
 
 const meta = {
 	title: 'UI Forms/Fields/Switch field',
 	component: SwitchField,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		...boundFieldArgTypes
 	}
 } satisfies Meta<typeof SwitchField>;
 

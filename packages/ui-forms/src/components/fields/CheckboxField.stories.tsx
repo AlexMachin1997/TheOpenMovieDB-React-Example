@@ -4,12 +4,16 @@ import { Form, useForm } from '~/components/Form';
 import { SubmitButton } from '~/components/SubmitButton/SubmitButton';
 import { CheckboxField } from '~/components/fields/CheckboxField';
 import type { ICheckboxField } from '~/components/fields/fields.types';
+import { boundFieldArgTypes } from '~/components/fields/__fixtures__/argTypes';
 
 const meta = {
 	title: 'UI Forms/Fields/Checkbox field',
 	component: CheckboxField,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		...boundFieldArgTypes
 	}
 } satisfies Meta<typeof CheckboxField>;
 

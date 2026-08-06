@@ -13,6 +13,14 @@ const meta: Meta<typeof Form> = {
 	component: Form,
 	parameters: {
 		layout: 'centered'
+	},
+	argTypes: {
+		form: { control: false, description: 'The form instance, from `useForm`.' },
+		className: {
+			control: 'text',
+			description: '`Form` ships no layout of its own — this is where it comes from.'
+		},
+		children: { control: false, description: 'Fields, a `FormError` and a `SubmitButton`.' }
 	}
 };
 

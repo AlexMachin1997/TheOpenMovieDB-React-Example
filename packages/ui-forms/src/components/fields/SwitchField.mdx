@@ -1,11 +1,11 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import * as Stories from './SwitchField.stories';
 
 <Meta of={Stories} />
 
 # Switch field
 
-A [`Switch`](?path=/docs/ui-core-switch--docs) bound to a **boolean** form field by name.
+A [`Switch`](?path=/story/ui-core-switch--default) bound to a **boolean** form field by name.
 
 ```tsx
 <Form form={form} className='grid gap-4'>
@@ -17,7 +17,7 @@ A [`Switch`](?path=/docs/ui-core-switch--docs) bound to a **boolean** form field
 
 ## Properties
 
-<Controls />
+<ArgTypes />
 
 Shared with every bound field: `name`, `label`, `description`, `required`, `disabled`, `validators`,
 `showErrorsWhen`, `id`. See [`Form`](?path=/docs/ui-forms-form--docs) for how validation and server
