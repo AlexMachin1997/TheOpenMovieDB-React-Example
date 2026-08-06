@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { Label } from '~/components/Label/Label';
+import type { ILabelNative } from '~/components/Label/Label.types';
 
 /**
  * Properties for the Checkbox component.
@@ -19,8 +19,14 @@ export interface ICheckbox
 	iconClassName?: string;
 }
 
-/** Properties for CheckboxLabel. */
-export interface ICheckboxLabel extends React.ComponentProps<typeof Label> {
+/**
+ * Properties for CheckboxLabel.
+ *
+ * Extends `ILabelNative` rather than `React.ComponentProps<typeof Label>`: `Label`'s props are a
+ * union of its native and non-native modes, and an interface cannot extend a union. `ILabelNative`
+ * is also the correct half — a `CheckboxLabel` always names one checkbox via `htmlFor`.
+ */
+export interface ICheckboxLabel extends ILabelNative {
 	/** When true, applies disabled cursor styling. */
 	disabled?: boolean;
 }

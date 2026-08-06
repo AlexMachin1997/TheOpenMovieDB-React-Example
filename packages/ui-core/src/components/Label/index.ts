@@ -1,2 +1,3 @@
 export { Label } from '~/components/Label/Label';
-export type { ILabel } from '~/components/Label/Label.types';
+export { labelVariants } from '~/components/Label/Label.variants';
+export type { ILabel, ILabelNative, ILabelNonNative } from '~/components/Label/Label.types';

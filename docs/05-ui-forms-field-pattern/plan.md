@@ -53,6 +53,40 @@ Both items `04` handed over were checked rather than assumed:
 
 ---
 
+## Traps found during implementation
+
+Recorded as they were hit, while the detail was fresh.
+
+### A union props type breaks Storybook's story typing, twice
+
+Making `ILabel` a union to keep `htmlFor` out of non-native mode has a cost the plan did not
+anticipate, and it lands in the stories rather than the component:
+
+- **`StoryObj<typeof meta>` collapses `args` to `never`.** Every story then fails to compile
+  demanding an `args` property it cannot possibly satisfy (`TS2322 … Property 'args' is missing …
+  but required in type '{ args: never; }'`).
+- **The `play` context loses its inference too**, so `({ canvasElement, step })` becomes
+  `TS7031 … implicitly has an 'any' type`.
+
+Neither is a new problem. `Select`'s props are also a discriminated union, and
+[`Select.stories.tsx:33`](../../packages/ui-forms/src/components/Selects/Select.stories.tsx#L33)
+already solved it: type the meta and each story against **the props type directly**
+(`Meta<SelectProps>` / `StoryObj<SelectProps>`) rather than against `typeof meta`, and annotate the
+`play` context by hand. `Label` follows the same shape, with one `PlayContext` alias instead of
+repeating the annotation per story.
+
+One detail worth stating because it costs a compile cycle to discover: `step` returns
+`void | Promise<void>`, not `Promise<void>`. Annotating it as the latter type-errors.
+
+### `Label.types.ts` was itself one of the lint warnings
+
+`export interface ILabel extends React.ComponentProps<typeof LabelPrimitive.Root> {}` was an empty
+interface, and one of `ui-core`'s 20 `no-empty-object-type` warnings. Turning it into a union
+cleared it, so `ui-core` is at **19** after Phase 1. The plan predicted the deliverable would end
+one warning down, from `ITextarea` alone; it will actually end **two** down, at 38 total.
+
+---
+
 ## Decisions taken during planning
 
 Three amend the spec. The spec is the source of truth, so tasks 0.7-0.8 amend it rather than
@@ -481,28 +515,28 @@ Estimated: 0.5 day.
 
 ### Phase 1 — `Label`
 
-- [ ] 1.1 `Label.variants.ts` — `labelVariants`, base = today's exact class string from
+- [x] 1.1 `Label.variants.ts` — `labelVariants`, base = today's exact class string from
       `Label.tsx:9-12` minus `font-medium`, `emphasis: { true: 'font-semibold', false:
       'font-medium' }`, default `true` (D4). (Depends on: 0.4)
-- [ ] 1.2 `Label.types.ts` — `ILabelNative` (`nativeLabel?: true`) | `ILabelNonNative`
+- [x] 1.2 `Label.types.ts` — `ILabelNative` (`nativeLabel?: true`) | `ILabelNonNative`
       (`nativeLabel: false`, `htmlFor?: never`), `ILabel` as the union; `emphasis?`, `required?`
       on both. (1.1)
-- [ ] 1.3 Repoint `Checkbox.types.ts:23` and `Radio.types.ts:19` from
+- [x] 1.3 Repoint `Checkbox.types.ts:23` and `Radio.types.ts:19` from
       `React.ComponentProps<typeof Label>` to `ILabelNative`. **Without this `check-types` fails
       with TS2312 and `vitest` will not tell you.** (1.2)
-- [ ] 1.4 `Label.tsx` — `nativeLabel = true`, `emphasis = true`, `required = false` explicit in the
+- [x] 1.4 `Label.tsx` — `nativeLabel = true`, `emphasis = true`, `required = false` explicit in the
       destructure; `nativeLabel === false` renders a plain `<span>`, never `LabelPrimitive.Root`;
       `required` renders the `aria-hidden` asterisk + `sr-only` `(required)`. (1.2)
-- [ ] 1.5 Pass `emphasis={false}` from `CheckboxLabel` and `RadioLabel` to preserve `font-medium`.
+- [x] 1.5 Pass `emphasis={false}` from `CheckboxLabel` and `RadioLabel` to preserve `font-medium`.
       (1.4)
-- [ ] 1.6 Export `labelVariants`, `ILabel`, `ILabelNative`, `ILabelNonNative` from
+- [x] 1.6 Export `labelVariants`, `ILabel`, `ILabelNative`, `ILabelNonNative` from
       `packages/ui-core/src/index.ts` under the existing Variants block. (1.4)
-- [ ] 1.7 `Label.stories.tsx` — **the component has none today.** Meta needs `component: Label` or
+- [x] 1.7 `Label.stories.tsx` — **the component has none today.** Meta needs `component: Label` or
       `<Controls />` renders empty. Stories: native, native + `htmlFor` focus, `nativeLabel={false}`,
       both emphasis weights, `required`. `play()` per the test table. (1.5)
-- [ ] 1.8 `Label.mdx` — must state that `nativeLabel={false}` outside a group needs no
+- [x] 1.8 `Label.mdx` — must state that `nativeLabel={false}` outside a group needs no
       `aria-labelledby` wiring (spec Edge Cases). (1.7)
-- [ ] 1.9 `pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_modules/.cache
+- [x] 1.9 `pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_modules/.cache
       apps/storybook/node_modules/.vite`, run the suite. Checkbox/Radio label rendering must be
       unchanged. (1.8)
 
@@ -669,7 +703,7 @@ pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_module
 | Gate | Command | Expected |
 | ---- | ------- | -------- |
 | Build | `pnpm build` | 11/11 |
-| Lint | `npx eslint --no-cache` per package | 0 errors; **one fewer warning** than baseline (5.2) |
+| Lint | `npx eslint --no-cache` per package | 0 errors; **two fewer warnings** than baseline — 38 (Label in 1.2, ITextarea in 5.2) |
 | Hook/util tests | `pnpm test` | `ui-core` 60 unchanged; `ui-forms` gains `toFieldProps.spec.ts` |
 | Component tests | `cd apps/storybook && npx vitest run` | ~380-400, 0 failures |
 

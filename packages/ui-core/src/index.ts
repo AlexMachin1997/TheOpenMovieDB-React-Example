@@ -36,6 +36,7 @@ export { RadioGroup } from '~/components/RadioGroup/RadioGroup';
 export { SliderRange, SliderThumb, SliderTrack, SliderRoot } from '~/components/Slider/Slider';
 export { Calendar, CalendarDayButton } from '~/components/Calendar/Calendar';
 
+export type { ILabel, ILabelNative, ILabelNonNative } from '~/components/Label/Label.types';
 export type { IInput } from '~/components/Input/Input.types';
 export type { ITextarea } from '~/components/Textarea/Textarea.types';
 export type { ICheckbox, ICheckboxLabel } from '~/components/Checkbox/Checkbox.types';
@@ -70,6 +71,7 @@ export { buttonVariants } from '~/components/Button/variants';
 export { iconVariants } from '~/components/Icon/Icon.variants';
 export { badgeVariants } from '~/components/Badge/Badge.variants';
 export { alertVariants } from '~/components/Alert/Alert.variants';
+export { labelVariants } from '~/components/Label/Label.variants';
 export {
 	searchWrapperVariants,
 	searchClearButtonVariants

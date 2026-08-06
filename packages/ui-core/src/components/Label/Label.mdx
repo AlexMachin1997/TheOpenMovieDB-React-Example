@@ -1,0 +1,134 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as LabelStories from './Label.stories';
+
+<Meta of={LabelStories} />
+
+# Label
+
+Names a form control. Reach for `Label` whenever a control needs a visible name — which is almost
+always, since a placeholder is not a label and disappears the moment someone types.
+
+Most of the time you will not use `Label` directly: [`Field`](?path=/docs/ui-core-field--docs)
+renders one for you, and wires the label, description and error to the control. Use `Label` on its
+own when you are laying out a control by hand, or when you need a styled heading that happens to
+match the library's label typography.
+
+## Installation
+
+```tsx
+import { Label } from '@repo/ui-core';
+```
+
+## Features
+
+- Renders either a native `<label htmlFor>` or a plain `<span>`, so it can name a single control or
+  a whole group.
+- An emphasis switch, so a field heading and a per-item option label can differ without either one
+  hand-writing a Tailwind class.
+- A built-in required indicator that satisfies WCAG 1.4.1 — symbol plus text, never colour alone.
+- Exports `labelVariants` for consumers extending the styling.
+
+<Canvas sourceState="none" of={LabelStories.Default} />
+
+## Properties
+
+<Controls />
+
+## Usage
+
+### Basic
+
+```tsx
+import { Input, Label } from '@repo/ui-core';
+
+<Label htmlFor='email'>Email address</Label>
+<Input id='email' type='email' />
+```
+
+The `htmlFor` must match the control's `id`. That association is what lets someone click the label
+to focus the control, and what a screen reader reads when focus lands there.
+
+### Required fields
+
+<Canvas sourceState="none" of={LabelStories.Required} />
+
+```tsx
+<Label htmlFor='full-name' required>Full name</Label>
+<Input id='full-name' type='text' required />
+```
+
+> **Mark the control as well as the label.** The `*` is `aria-hidden`, so assistive technology takes
+> required-ness from the control's own `required`/`aria-required` — not from the indicator. Setting
+> one without the other gives you a field that looks required but doesn't announce as required, or
+> vice versa.
+
+### Weights
+
+<Canvas sourceState="none" of={LabelStories.Weights} />
+
+`emphasis` defaults to `true`. Pass `emphasis={false}` for a label that sits *beside* its control
+rather than above a whole field — which is exactly what `CheckboxLabel` and `RadioLabel` do
+internally, so you rarely need to set it yourself.
+
+### Non-native mode
+
+<Canvas sourceState="none" of={LabelStories.NonNative} />
+
+```tsx
+<Label nativeLabel={false}>Section heading</Label>
+```
+
+`nativeLabel={false}` renders a `<span>`. Two reasons to reach for it:
+
+1. **Naming a group of controls.** A single `<label>` cannot name several controls at once.
+2. **Naming a control that is not a labelable element.** `<label htmlFor>` only associates with
+   form elements — a `Slider`'s thumb is a `<span role='slider'>`, which `htmlFor` cannot reach.
+
+Used as a plain styled heading outside either case, it needs no association wiring at all.
+
+## Composition
+
+### Labelling a group
+
+<Canvas sourceState="none" of={LabelStories.AsAGroupHeading} />
+
+```tsx
+import { Checkbox, CheckboxLabel, Label } from '@repo/ui-core';
+
+<Label nativeLabel={false} id='notify-heading' required>Notify me about</Label>
+
+<div role='group' aria-labelledby='notify-heading' aria-required='true'>
+  <Checkbox id='notify-comments' />
+  <CheckboxLabel htmlFor='notify-comments'>Comments</CheckboxLabel>
+</div>
+```
+
+**The association runs the opposite way from a native label.** A `<label htmlFor>` reaches out and
+claims its control; a `<span>` cannot, so the group container has to point back at the heading's
+`id` with `aria-labelledby`. That is why `htmlFor` is typed as `never` in non-native mode — wiring
+it up as though it labelled one specific control is a compile error rather than a silent
+accessibility bug.
+
+In practice, [`Field`](?path=/docs/ui-core-field--docs) does this wiring for you when you compose it
+around a `CheckboxGroup` or `RadioGroup`. Write it by hand only if you are not using `Field`.
+
+### What builds on Label
+
+- [`Field`](?path=/docs/ui-core-field--docs) — renders a `Label` and connects it to the control,
+  along with description and error messaging.
+- [`CheckboxLabel`](?path=/docs/ui-core-checkbox--docs) and
+  [`RadioLabel`](?path=/docs/ui-core-radio--docs) — per-item option labels. Both are `Label` with
+  `emphasis={false}` and some cursor styling.
+
+## Accessibility
+
+| Concern | Behaviour |
+| ------- | --------- |
+| Click target | Clicking a native `Label` focuses the control named by `htmlFor`. A non-native `Label` has no such behaviour. |
+| Required indicator | The `*` is `aria-hidden`; a visually-hidden `(required)` carries the meaning. Conveyed by symbol and text, never colour alone (WCAG 1.4.1). |
+| Group naming | Non-native mode carries no implicit association. The group container must supply `aria-labelledby` and a grouping role. |
+| Disabled controls | The base styling responds to `peer-disabled:*` and `group-data-[disabled=true]:*`, so a label dims alongside the control it names — provided the control precedes it in the DOM and carries the `peer` class. |
+
+**The caller's obligation:** a `Label` that names nothing is worse than no label, because it looks
+correct in a review. In native mode, check the `htmlFor` matches a real `id`. In non-native mode,
+check something points back with `aria-labelledby` — or that the label is genuinely decorative.
