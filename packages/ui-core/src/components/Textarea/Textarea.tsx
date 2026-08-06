@@ -1,9 +1,7 @@
-import * as React from 'react';
 import { cn } from '@repo/tailwind-config';
+import type { ITextarea } from '~/components/Textarea/Textarea.types';
 
-type TextareaProps = React.ComponentProps<'textarea'>;
-
-const Textarea = ({ className, ...props }: TextareaProps) => {
+const Textarea = ({ className, ...props }: ITextarea) => {
 	return (
 		<textarea
 			data-slot='textarea'

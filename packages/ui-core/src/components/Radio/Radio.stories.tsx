@@ -178,3 +178,38 @@ export const LabelPassthroughProps: Story = {
 		expect(label).toHaveAttribute('title', 'extra prop');
 	}
 };
+
+export const DisabledLabelDimsWithItsRadio: Story = {
+	render: () => (
+		<RadioGroupPrimitive.Root name='peer-check'>
+			<div className='flex items-center space-x-2'>
+				<Radio id='peer-disabled' value='peer-disabled' disabled />
+				<RadioLabel htmlFor='peer-disabled' data-testid='disabled-label'>
+					Disabled option
+				</RadioLabel>
+			</div>
+			<div className='flex items-center space-x-2'>
+				<Radio id='peer-enabled' value='peer-enabled' />
+				<RadioLabel htmlFor='peer-enabled' data-testid='enabled-label'>
+					Enabled option
+				</RadioLabel>
+			</div>
+		</RadioGroupPrimitive.Root>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		// RadioLabel has always carried `peer-disabled:opacity-70`, but Radio's class string was
+		// missing `peer`, and Tailwind's `peer-*` only matches a `.peer` preceding it as a sibling —
+		// so the rule silently matched nothing. Flagged in 04, fixed in 05. Asserting the computed
+		// style rather than the class, because the class was present all along; it was the selector
+		// that never fired.
+		const disabledLabel = canvas.getByTestId('disabled-label');
+		const enabledLabel = canvas.getByTestId('enabled-label');
+
+		expect(canvas.getByTestId('disabled-label').previousElementSibling).toHaveClass('peer');
+		expect(getComputedStyle(disabledLabel).opacity).toBe('0.7');
+		expect(getComputedStyle(enabledLabel).opacity).toBe('1');
+		expect(getComputedStyle(disabledLabel).cursor).toBe('not-allowed');
+	}
+};

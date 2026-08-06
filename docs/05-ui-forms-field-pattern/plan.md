@@ -634,11 +634,11 @@ Estimated: 1 day.
 
 ### Phase 5 — The two defects 04 handed to 05
 
-- [ ] 5.1 Add `peer` to `Radio`'s class string
+- [x] 5.1 Add `peer` to `Radio`'s class string
       ([`Radio.tsx:11`](../../packages/ui-core/src/components/Radio/components/Radio.tsx#L11)) so
       `RadioLabel`'s `peer-disabled:*` rules match. Changes rendered output — cover with a `play()`.
       (Depends on: 4.7)
-- [ ] 5.2 Wire `Textarea.tsx` onto the `ITextarea` it already exports and delete the local
+- [x] 5.2 Wire `Textarea.tsx` onto the `ITextarea` it already exports and delete the local
       `TextareaProps`. `pnpm lint` should drop by one warning. (—)
 
 Estimated: 0.5 day.
