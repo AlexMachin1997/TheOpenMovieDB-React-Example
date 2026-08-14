@@ -17,9 +17,11 @@ Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 | --- | ----------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------------- |
 | 03  | Focus indicators        | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)               |
 | 13  | Exports & conventions   | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)         |
-| 14  | Component consolidation | component     | 🟢 ready | 13         | [14-component-consolidation](14-component-consolidation/spec.md) |
+| 14  | Component consolidation | component     | 🟡 in progress | —     | [14-component-consolidation](14-component-consolidation/spec.md) |
 | 15  | Storybook lint + tests  | tooling       | 🟢 ready | — (12 ✅)  | [15-storybook-lint-tests](15-storybook-lint-tests/spec.md)       |
 | 16  | Type-hygiene cleanup    | tooling       | 🟢 ready | —          | [16-type-hygiene](16-type-hygiene/spec.md)                       |
+| 17  | One list per Command    | component     | 🟢 ready | —          | [17-command-list-nesting](17-command-list-nesting/spec.md)       |
+| 18  | A common overlay API    | component     | 🟢 ready | 14         | [18-overlay-api](18-overlay-api/spec.md)                         |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -33,8 +35,17 @@ merged or renumbered, as `12`–`16` were when the first cut of them was split t
 
 ### Suggested order
 
-`12` has shipped, so `15` is unblocked and can go next. `13` before `14`, so the barrel decision is
-made once. `16` is independent and small.
+`12` has shipped, so `15` is unblocked and can go next. `16` is independent and small.
+
+`14` **no longer depends on `13`.** The dependency existed to avoid touching the same barrels twice,
+but `14`'s barrel edits turned out to be confined to five entries in one file, and `13`'s own open
+question — which barrel strategy — is the larger decision. `14` deliberately leaves the eight
+byte-identical duplicate barrels alone, so `13` can still settle that once.
+
+`17` and `18` were split out of `14` while reviewing its spec against the code: `17` is a
+`ui-command` defect `14` had mislocated in `ui-forms`, and `18` is a public API addition rather than
+consolidation. `17` is independent and can go any time. `18` builds directly on the shared overlay
+internals `14` creates, so it wants `14` first.
 
 ## Planned
 
@@ -58,6 +69,33 @@ already ships `rtl:` classes that only fire if a `dir="rtl"` exists to trigger t
 spans arrow-key semantics, logical vs physical Tailwind properties, icon mirroring and overlay
 placement, so it needs its own `problem-discovery` pass rather than being settled component by
 component. See [`04-ui-forms-primitive-migration/plan.md`](04-ui-forms-primitive-migration/plan.md#follow-ups).
+
+**The native `<dialog>` element** — whether `Dialog` and `Sheet` should drop
+`@radix-ui/react-dialog` for the platform primitive — would add a deliverable. Raised while
+reviewing `14` and **not yet decided**.
+
+What native buys is real: `showModal()` gives a focus trap, an inert background, top-layer stacking
+that fixes nesting for free, and Esc-to-close, with no library involved. What it does **not** buy is
+worth stating precisely, because it is where the idea is usually oversold:
+
+- **It does not give an accessible name.** You still supply `aria-label` or `aria-labelledby`
+  yourself. That is the problem `14` and `18` exist to solve, and native does not touch it.
+- **It does not lock body scroll.** A native modal makes the background inert to interaction, but the
+  page behind it still scrolls. Radix handles this today.
+- **It does not remove the dependency.** `@radix-ui/react-dialog` is also a direct dependency of
+  `@repo/ui-command` — `cmdk`'s own `Command.Dialog` and our `CommandDialog` both use it — so it
+  stays in the tree regardless.
+
+The cost is concentrated in two places. Native `<dialog>` has no `data-state` attribute, so the whole
+animation layer — `data-[state=open]:animate-in`, all four Sheet slide directions, Dialog's zoom and
+fade — has to be rebuilt on `@starting-style`, `transition-behavior: allow-discrete` and `overlay`
+transitions. And its open state is imperative (`showModal()` / `close()`) rather than declarative, so
+the controlled `open` prop and Sheet's imperative ref both need rewiring through effects — a
+well-known source of desync bugs.
+
+That is a primitive swap with an animation and state-management rewrite attached, not a dependency
+removal. It needs its own `problem-discovery` pass rather than being folded into an overlay
+deliverable.
 
 **The four-package split** — whether `ui-core` / `ui-overlays` / `ui-command` / `ui-forms` still earn
 their boundaries — would add a deliverable. Raised while reviewing `04` and **not yet decided in
