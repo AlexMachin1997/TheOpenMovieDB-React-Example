@@ -25,20 +25,31 @@ Both halves matter, and skipping either produces convincing nonsense:
   like the stale-cache trap below and is not.
 - **`--force`** — Turbo's cache is shared across worktrees and keyed on inputs, not location. An
   untouched worktree reports `11/11 successful, FULL TURBO` in ~2s having compiled nothing; the
-  replayed logs give it away by printing a *different* worktree's path (e.g.
-  `.claude/worktrees/button-enhancements-556c34`). A real build here takes ~1m36s.
+  replayed logs give it away by printing a _different_ worktree's path (e.g.
+  `.claude/worktrees/button-enhancements-556c34`). A real build here takes ~1m36s–2m40s.
 
 The tell for "not set up": a suspiciously fast green `pnpm build` next to a catastrophically red
 test suite.
 
+**Deleting things does not defeat the cache.** The cache lives outside the worktree, so wiping
+`node_modules`, every `dist/`, every `.turbo/` and every `*.tsbuildinfo`, then reinstalling from
+scratch, still replayed `11/11 successful, FULL TURBO` in 995ms. `--force` is the only lever. Never
+report a build time or a "clean build is green" without it.
+
 ## The gates
 
-| Gate | Command | Notes |
-| ---- | ------- | ----- |
-| Build | `pnpm build` | `pnpm turbo run build --force` when baselining |
-| Lint | `pnpm lint` | One known warning: `ITextarea` is an empty interface |
-| Component tests | `cd apps/storybook && npx vitest run` | Storybook `play()` interactions, Playwright/Chromium. ~60s |
-| Hook/util tests | `pnpm test` in the owning package | `.spec.ts` only — pure logic, never components |
+| Gate            | Command                                             | Notes                                                                                                                    |
+| --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Build           | `pnpm build`                                        | `pnpm turbo run build --force` when baselining                                                                           |
+| Lint            | `pnpm lint`                                         | Warnings only, never errors — `eslint-plugin-only-warn` downgrades everything. Healthy today: 18 + 20 warnings, 0 errors |
+| Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                       |
+| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~150s                                                              |
+| Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                           |
+
+`turbo.json` gives `check-types` `dependsOn: ["^build"]`, not `^check-types`. That is load-bearing:
+packages resolve each other through built `dist/*.d.ts`, and `tsc --noEmit` emits nothing, so
+`^check-types` left every `@repo/*` import unresolvable from a clean tree (~100 `TS2307`s). Do not
+"optimise" it back.
 
 Component tests are Storybook `play()` functions, never `.spec.tsx`. Pure logic (hooks, utils) uses
 `.spec.ts`. See `storybook-standards`.
@@ -58,6 +69,24 @@ rm -rf apps/storybook/node_modules/.cache apps/storybook/node_modules/.vite
 
 Skipping this gives both false greens and false reds.
 
+## Dependencies are external, and `package.json` is what decides
+
+`packages/vite-config/shared.ts` reads the building package's own `dependencies` +
+`peerDependencies` and externalizes every one, on top of React and `@repo/*`. A package's `dist/`
+therefore contains that package's source and nothing else — no `dist/node_modules/` tree.
+
+Two consequences:
+
+- **Declaring a dependency is how you externalize it.** There is no allow-list to update. A package
+  that imports something it does not declare will have it silently inlined instead, so a sudden
+  `dist/node_modules/` directory means a missing `package.json` entry.
+- **The two presets take `bundle: []` for the rare dependency that must be inlined.** It cannot
+  override React or `@repo/*` — those are external for correctness (two React copies in one tree
+  crash with `Cannot read properties of null (reading 'useState')`), not for output size.
+
+Build plugins (`@vitejs/plugin-react-swc`, `@tailwindcss/vite`, `vite-plugin-dts`) are declared by
+`vite-config` alone. Do not re-add them to a UI package; nothing there imports them.
+
 ## The stories glob must use `packages/*/src`, never `packages/**/src`
 
 `apps/storybook/.storybook/main.ts` globs `../../../packages/*/src/**/*.stories.*`. The single `*`
@@ -70,7 +99,7 @@ matches `packages/ui-forms/node_modules/@repo/ui-core/src/...`, plus nested hops
 Storybook's own indexer ignores those; `@storybook/addon-vitest` does not. With `**` the suite
 collected **166 story files for ~30 components**, 97 of them unservable duplicates that each failed
 to import and left a Vite error overlay in the shared page — which then failed `Button`'s a11y gate
-on the *overlay's* markup. With `*`: 27 files, 311 tests, 0 failures, 155s → 61s.
+on the _overlay's_ markup. With `*`: 27 files, 311 tests, 0 failures, 155s → 61s.
 
 `test.exclude: ['**/node_modules/**']` in `apps/storybook/vite.config.ts` does **not** fix this;
 `storybookTest` builds its `include` from Storybook's file matcher as explicit paths, so there is no
@@ -97,13 +126,16 @@ There is no separate test config: `apps/storybook/vite.config.ts` points
 Fastest check — start the dev server, then in the browser console:
 
 ```js
-fetch('/index.json').then(r => r.json()).then(j => {
-	const paths = [...new Set(Object.values(j.entries).map(e => e.importPath))];
-	console.log({ entries: Object.keys(j.entries).length, files: paths.length });
-});
+fetch('/index.json')
+	.then((r) => r.json())
+	.then((j) => {
+		const paths = [...new Set(Object.values(j.entries).map((e) => e.importPath))];
+		console.log({ entries: Object.keys(j.entries).length, files: paths.length });
+	});
 ```
 
-Healthy today: **318 entries across 34 import paths, none under `node_modules`**. Compare with
+Healthy today: **412 entries across 68 import paths, none under `node_modules`**, matching a suite
+of 41 passed + 27 skipped files and 385 tests. Compare with
 `cd apps/storybook && npx vitest list --filesOnly`. If Vitest's count is higher, it is collecting
 files Storybook never indexed, and that difference is the bug.
 

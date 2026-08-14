@@ -41,12 +41,6 @@ declare global {
 	type Brand<T, U> = T & { __brand: U };
 
 	/**
-	 * Utility function for filtering out falsy values with proper type narrowing
-	 * @example [1, 2, undefined].filter(isTruthy) // number[]
-	 */
-	var isTruthy: <T>(value: T) => value is NonNullable<T>;
-
-	/**
 	 * Environment variables that should be available globally
 	 */
 	namespace NodeJS {

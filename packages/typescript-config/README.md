@@ -236,9 +236,6 @@ You can test configurations locally by running:
 ```bash
 # From the root directory
 pnpm check-types
-
-# From this package directory
-pnpm ts-validate
 ```
 
 ## Architecture

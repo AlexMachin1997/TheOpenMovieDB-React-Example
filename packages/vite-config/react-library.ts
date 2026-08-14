@@ -3,15 +3,17 @@ import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import dts from 'vite-plugin-dts';
 import path from 'node:path';
-import { DTS_EXCLUDE } from './shared.js';
+import { createExternalMatcher, DTS_EXCLUDE } from './shared.js';
 
 interface ReactLibraryOptions {
 	/** Path to the library entry file (default: 'src/index.ts') */
 	entry?: string;
 	/** Library name for UMD builds */
 	name?: string;
-	/** Additional external dependencies to exclude from the bundle */
+	/** Package names to externalize on top of the package's declared dependencies */
 	externals?: string[];
+	/** Declared dependencies to bundle into `dist/` anyway */
+	bundle?: string[];
 }
 
 /**
@@ -24,15 +26,10 @@ interface ReactLibraryOptions {
  * - Tree-shakeable output via preserveModules
  * - CSS code splitting per component
  * - Path alias: `~` -> `./src`
+ * - Externalization of React, `@repo/*` and the package's own declared dependencies
  */
 export const reactLibrary = (options: ReactLibraryOptions = {}): UserConfig => {
-	const { entry = 'src/index.ts', externals = [] } = options;
-
-	// React must never be bundled into a library's own dist output — every package here shares
-	// a single React instance with whatever app (or sibling package) imports it. Bundling a
-	// private copy breaks hooks/context across package boundaries with "Cannot read properties
-	// of null (reading 'useState')" the moment two bundled copies render in the same tree.
-	const REACT_EXTERNALS = ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'];
+	const { entry = 'src/index.ts', externals = [], bundle = [] } = options;
 
 	return defineConfig({
 		plugins: [
@@ -59,12 +56,7 @@ export const reactLibrary = (options: ReactLibraryOptions = {}): UserConfig => {
 			outDir: 'dist',
 			target: 'ES2022',
 			rollupOptions: {
-				external: (id) => {
-					if (id.startsWith('@repo/')) return true;
-					if (REACT_EXTERNALS.some((ext) => id === ext || id.startsWith(`${ext}/`))) return true;
-					if (externals.some((ext) => id === ext || id.startsWith(`${ext}/`))) return true;
-					return false;
-				},
+				external: createExternalMatcher({ externals, bundle }),
 				output: {
 					preserveModules: true,
 					preserveModulesRoot: 'src',

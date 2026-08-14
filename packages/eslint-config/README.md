@@ -32,14 +32,6 @@ A comprehensive React configuration that extends the base config and includes:
 - Storybook plugin
 - React 17+ JSX transform optimizations
 
-### Next.js Config (`@repo/eslint-config/next`)
-
-Configuration specifically for Next.js applications.
-
-### React Internal Config (`@repo/eslint-config/react-internal`)
-
-A lighter React configuration for internal libraries.
-
 ## Usage
 
 ### Basic Setup

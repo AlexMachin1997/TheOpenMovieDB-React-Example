@@ -13,14 +13,13 @@ is just the roadmap.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable                | Area          | Status   | Depends on | Docs                                                               |
-| --- | -------------------------- | ------------- | -------- | ---------- | ------------------------------------------------------------------ |
-| 03  | Focus indicators           | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)                 |
-| 12  | Build & dependency tooling | tooling       | 🟢 ready | —          | [12-build-dependency-tooling](12-build-dependency-tooling/spec.md) |
-| 13  | Exports & conventions      | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)           |
-| 14  | Component consolidation    | component     | 🟢 ready | 13         | [14-component-consolidation](14-component-consolidation/spec.md)   |
-| 15  | Storybook lint + tests     | tooling       | 🟢 ready | 12         | [15-storybook-lint-tests](15-storybook-lint-tests/spec.md)         |
-| 16  | Type-hygiene cleanup       | tooling       | 🟢 ready | —          | [16-type-hygiene](16-type-hygiene/spec.md)                         |
+| ID  | Deliverable             | Area          | Status   | Depends on | Docs                                                             |
+| --- | ----------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------------- |
+| 03  | Focus indicators        | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)               |
+| 13  | Exports & conventions   | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)         |
+| 14  | Component consolidation | component     | 🟢 ready | 13         | [14-component-consolidation](14-component-consolidation/spec.md) |
+| 15  | Storybook lint + tests  | tooling       | 🟢 ready | — (12 ✅)  | [15-storybook-lint-tests](15-storybook-lint-tests/spec.md)       |
+| 16  | Type-hygiene cleanup    | tooling       | 🟢 ready | —          | [16-type-hygiene](16-type-hygiene/spec.md)                       |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -34,8 +33,8 @@ merged or renumbered, as `12`–`16` were when the first cut of them was split t
 
 ### Suggested order
 
-`12` first — it is the dependency-management friction that prompted this roadmap, and `15` depends
-on it. `13` before `14`, so the barrel decision is made once. `16` is independent and small.
+`12` has shipped, so `15` is unblocked and can go next. `13` before `14`, so the barrel decision is
+made once. `16` is independent and small.
 
 ## Planned
 
@@ -136,3 +135,4 @@ Kept for reference; each links to its as-built record. These rows do not change.
 | 09  | Test & fix date formatting    | [09-date-logic](09-date-logic/plan.md)                                     |
 | 10  | Extract `useDebouncedValue`   | [10-debounce-hook](10-debounce-hook/plan.md)                               |
 | 11  | Correctness bug fixes         | [11-correctness-bugs](11-correctness-bugs/plan.md)                         |
+| 12  | Build & dependency tooling    | [12-build-dependency-tooling](12-build-dependency-tooling/plan.md)         |

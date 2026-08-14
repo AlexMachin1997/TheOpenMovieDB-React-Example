@@ -1,14 +1,16 @@
 import { defineConfig, type UserConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-import { DTS_EXCLUDE } from './shared.js';
+import { createExternalMatcher, DTS_EXCLUDE } from './shared.js';
 
 interface TypescriptLibraryOptions {
 	/** Path to the library entry file (default: 'src/index.ts') */
 	entry?: string;
 	/** Library name */
 	name?: string;
-	/** Additional external dependencies */
+	/** Package names to externalize on top of the package's declared dependencies */
 	externals?: string[];
+	/** Declared dependencies to bundle into `dist/` anyway */
+	bundle?: string[];
 }
 
 /**
@@ -17,10 +19,11 @@ interface TypescriptLibraryOptions {
  * Includes:
  * - DTS generation
  * - Tree-shakeable output via preserveModules
+ * - Externalization of `@repo/*` and the package's own declared dependencies
  * - No React, no Tailwind
  */
 export const typescriptLibrary = (options: TypescriptLibraryOptions = {}): UserConfig => {
-	const { entry = 'src/index.ts', externals = [] } = options;
+	const { entry = 'src/index.ts', externals = [], bundle = [] } = options;
 
 	return defineConfig({
 		plugins: [
@@ -44,7 +47,7 @@ export const typescriptLibrary = (options: TypescriptLibraryOptions = {}): UserC
 			outDir: 'dist',
 			target: 'ES2022',
 			rollupOptions: {
-				external: [/^@repo\/.*/, ...externals],
+				external: createExternalMatcher({ externals, bundle }),
 				output: {
 					preserveModules: true,
 					preserveModulesRoot: 'src',

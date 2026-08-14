@@ -3,8 +3,11 @@ packages:
   - "packages/*"
 
 # Single source of truth for shared dev-tool versions (referenced as "catalog:").
-# Expand this in D5 to cover eslint / prettier / vite / vitest etc.
+# A tool used by more than one package belongs here, so it is stated once and changed once.
 catalog:
+  "@vitest/coverage-v8": ^4.0.18
+  eslint: ^9.39.1
+  tsup: ^8.3.5
   typescript: ^5.8.2
   vite: ^7.3.6
   vitest: ^4.0.18

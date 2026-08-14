@@ -28,7 +28,7 @@
 		"vitest": "catalog:"
 	},
 	"devDependencies": {
-		"eslint": "^9.34.0",
+		"eslint": "catalog:",
 		"prettier": "^3.6.2"
 	},
 	"files": [

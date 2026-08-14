@@ -17,7 +17,7 @@
 			"dependsOn": ["^prettier"]
 		},
 		"check-types": {
-			"dependsOn": ["^check-types"],
+			"dependsOn": ["^build"],
 			"outputs": ["*.tsbuildinfo", "tsconfig.tsbuildinfo"]
 		},
 		"test": {
