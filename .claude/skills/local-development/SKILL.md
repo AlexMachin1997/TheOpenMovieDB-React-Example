@@ -87,6 +87,13 @@ Two consequences:
 Build plugins (`@vitejs/plugin-react-swc`, `@tailwindcss/vite`, `vite-plugin-dts`) are declared by
 `vite-config` alone. Do not re-add them to a UI package; nothing there imports them.
 
+**Two React versions are installed** (verified 2026-08-14): both apps resolve `react@19.1.1` via the
+root `pnpm.overrides`, while all four UI packages resolve `react@19.2.4` — they declare `react` only
+as a `peerDependencies` range (`>=18.0.0`), which the override does not rewrite, so pnpm picks the
+highest in the tree. Nothing breaks today because the packages externalize React and the bundler
+dedupes at the consuming end, but if a `useState`-of-null crash ever reappears, check this first
+rather than assuming the build config regressed.
+
 ## The stories glob must use `packages/*/src`, never `packages/**/src`
 
 `apps/storybook/.storybook/main.ts` globs `../../../packages/*/src/**/*.stories.*`. The single `*`
