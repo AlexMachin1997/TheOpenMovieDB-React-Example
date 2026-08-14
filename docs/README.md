@@ -17,11 +17,10 @@ Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 | --- | ----------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------------- |
 | 03  | Focus indicators        | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)               |
 | 13  | Exports & conventions   | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)         |
-| 14  | Component consolidation | component     | 🟡 in progress | —     | [14-component-consolidation](14-component-consolidation/spec.md) |
 | 15  | Storybook lint + tests  | tooling       | 🟢 ready | — (12 ✅)  | [15-storybook-lint-tests](15-storybook-lint-tests/spec.md)       |
 | 16  | Type-hygiene cleanup    | tooling       | 🟢 ready | —          | [16-type-hygiene](16-type-hygiene/spec.md)                       |
 | 17  | One list per Command    | component     | 🟢 ready | —          | [17-command-list-nesting](17-command-list-nesting/spec.md)       |
-| 18  | A common overlay API    | component     | 🟢 ready | 14         | [18-overlay-api](18-overlay-api/spec.md)                         |
+| 18  | A common overlay API    | component     | 🟢 ready | — (14 ✅)  | [18-overlay-api](18-overlay-api/spec.md)                         |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -44,8 +43,10 @@ byte-identical duplicate barrels alone, so `13` can still settle that once.
 
 `17` and `18` were split out of `14` while reviewing its spec against the code: `17` is a
 `ui-command` defect `14` had mislocated in `ui-forms`, and `18` is a public API addition rather than
-consolidation. `17` is independent and can go any time. `18` builds directly on the shared overlay
-internals `14` creates, so it wants `14` first.
+consolidation. `17` is independent and can go any time. `14` has shipped, so `18` is unblocked — and
+it inherits two things `14` deliberately left it: giving every overlay story a `play()` so the a11y
+guard reaches more than the two stories it currently does, and removing the caller's ability to
+forget an accessible name at all.
 
 ## Planned
 
@@ -174,3 +175,4 @@ Kept for reference; each links to its as-built record. These rows do not change.
 | 10  | Extract `useDebouncedValue`   | [10-debounce-hook](10-debounce-hook/plan.md)                               |
 | 11  | Correctness bug fixes         | [11-correctness-bugs](11-correctness-bugs/plan.md)                         |
 | 12  | Build & dependency tooling    | [12-build-dependency-tooling](12-build-dependency-tooling/plan.md)         |
+| 14  | Component consolidation       | [14-component-consolidation](14-component-consolidation/plan.md)           |
