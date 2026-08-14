@@ -13,7 +13,7 @@ nothing, and the build had three stacked failures. All resolved:
   1. `eslint-plugin-storybook` crashed ESLint at config load (Storybook 10 + Node 22
      `require(esm)` cycle) → removed from `packages/eslint-config/react.js` (no rules used it).
   2. `eslint-plugin-project-structure` set its parser on all `.ts/.tsx`, overriding the TS
-     parser so **every** code rule ran against an empty AST → block disabled (restore via `16`).
+     parser so **every** code rule ran against an empty AST → block disabled (restore via `13`).
   3. `.husky/pre-commit` used `&` (lint backgrounded, exit code discarded) → `&&`.
 - **Build tool (`tsc`) missing** → `typescript` declared in the 5 packages that run it,
   single-sourced via a pnpm **catalog** (needed pnpm ≥ 9.5, so `packageManager` bumped to
@@ -22,13 +22,13 @@ nothing, and the build had three stacked failures. All resolved:
   (fails on 22.17.0 AND latest 22.23.2; **builds clean on Node 24.18.1**). Pinned via
   `.node-version` (24), `engines.node >= 24`, and CI now reads `.node-version`.
 - **Lint backlog** (39 pre-existing nits) deferred by downgrading `no-empty-object-type` /
-  `no-explicit-any` to `warn` (`20` restores them to `error` after cleanup). The 2 real hook
+  `no-explicit-any` to `warn` (`16` restores them to `error` after cleanup). The 2 real hook
   bugs: `rules-of-hooks` fixed; `exhaustive-deps` suppressed with a pointer to `10`.
 
 **Remaining to fully close:** the developer must update their **system** Node install to 24
 (turbo spawns builds through the Program Files Node, which fnm can't override), then
 `pnpm install && pnpm build` should be green end-to-end. The follow-ups this raised are now
-deliverables `14`, `16`, `19` and `20` in the roadmap.
+deliverables `12`, `13`, `15` and `16` in the roadmap.
 
 ---
 
@@ -63,7 +63,7 @@ gates) is blocked until this is done.
 - Declare `typescript` in every package that runs `tsc` (`ui-core`, `ui-command`,
   `ui-forms`, `ui-overlays`, `vite-config`). Use a single version — ideally seed a pnpm
   `catalog:` entry now (`typescript` is at `5.7.2` in one place, `^5.8.2` in two others) so
-  there's one source of truth. Full version-catalog rollout stays in `13`.
+  there's one source of truth. Full version-catalog rollout stays in `12`.
 - Fix [.husky/pre-commit](../../.husky/pre-commit): `&` → `&&`. Optionally add `lint-staged`
   so it lints only staged files instead of the whole repo on every commit.
 - Verify the eslint crash: run `pnpm lint` after a clean `pnpm install`; if it still crashes,
@@ -77,7 +77,7 @@ gates) is blocked until this is done.
 - Fixing the actual lint violations the now-working linter surfaces (e.g. the `CommandSearch`
   hook) — that's `11`. `06` just makes them _visible and blocking_.
 - The Vite externalization bug, redundant externals, broken eslint exports, `no-console`
-  policy, full version catalog — now `12`, `13` and `14`.
+  policy, full version catalog — now all part of `12`.
 - Any component/logic changes.
 
 ## Approach

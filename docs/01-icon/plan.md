@@ -247,7 +247,7 @@ This is an accepted trade-off for this deliverable, explicitly deferred by the s
   bundled and the build mechanism. When it lands: remove `Icon.tsx`'s `fallback` prop, add
   glyph-level `play()` assertions, and drop the limitation section from `Icon.mdx`.
 - **`Icon.constants.ts` is not registered in `packages/eslint-config/folderStructure.mjs`.** That
-  rule is currently disabled; when `15`/`16` re-enables it, add a `{ name: '{folderName}.constants.ts' }`
+  rule is currently disabled; when `13` re-enables it, add a `{ name: '{folderName}.constants.ts' }`
   entry or the file will fail lint.
 - **Root barrel now exports a type** (`IconName`) where it previously exported values only — an
-  additive deviation for `15`'s export-conventions work to normalise.
+  additive deviation for `13`'s export-conventions work to normalise.

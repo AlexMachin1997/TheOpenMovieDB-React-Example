@@ -37,8 +37,8 @@ not duplicate it. While this is off, component behaviour is effectively untested
   interaction suite to a known-good state.
 - **Not included**: writing new stories or new interaction coverage. Upgrading Storybook beyond what
   is needed to unblock. The folder-structure lint rule, which is
-  [`16-conventions-lint`](../16-conventions-lint/spec.md).
-- **Sequencing**: run after [`12-build-externalization`](../12-build-externalization/spec.md), since
+  [`13-exports-conventions`](../13-exports-conventions/spec.md).
+- **Sequencing**: run after [`12-build-dependency-tooling`](../12-build-dependency-tooling/spec.md), since
   externalizing the remaining dependencies may change the outcome — but do not assume it fixes it.
 
 ## Non-Goals

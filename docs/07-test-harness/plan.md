@@ -7,7 +7,7 @@ so there is no separate `spec.md` or `discovery.md`.
 > **Implementation note.** Landed as a **node-environment** harness: Vitest covers pure
 > logic only, while component behaviour is tested via Storybook `play()` tests. Consequences:
 > jsdom + React Testing Library are **deferred to `10`** (first real need is `renderHook` for
-> `useDebouncedValue`); the existing Storybook interaction tests are tracked under **`19`**
+> `useDebouncedValue`); the existing Storybook interaction tests are tracked under **`15`**
 > (blocked at the time by the React-externalization bug, since fixed in `11`; the remaining externalization work is `12`). This deliverable ships **plumbing only** —
 > every library package is wired (config + `test`/`test:watch` scripts) but carries **no test
 > files yet**, staying green via `passWithNoTests: true`. Real coverage lands on top of this
@@ -41,12 +41,12 @@ This is the keystone: `08`–`11` all ship with regression tests, which requires
 - Add one trivial smoke test per package (e.g. render `Button`, import a `core` helper) to
   prove the harness runs green in CI/Turbo.
 - Pin `vitest` to one version across packages (`core` is on v3, others v4) — or defer the
-  version unification to `13` and just match `core` up to v4 here if low-effort.
+  version unification to `12` and just match `core` up to v4 here if low-effort.
 
 ## Out of scope
 
 - Any real unit tests for grouping / dates / debounce (those are `08`, `09`, `10`).
-- Any component or config bug fixes (`11`; config work is now `12`–`14`).
+- Any component or config bug fixes (`11`; config work is now `12`).
 - Coverage thresholds and CI gating (follow-up once tests exist).
 
 ## Approach

@@ -11,28 +11,16 @@ is just the roadmap.
 
 ## Roadmap
 
-| ID  | Deliverable                   | Area          | Status     | Depends on | Docs                                                                       |
-| --- | ----------------------------- | ------------- | ---------- | ---------- | -------------------------------------------------------------------------- |
-| 01  | Icon component                | component     | ✅ done    | —          | [01-icon](01-icon/spec.md)                                                 |
-| 02  | Button enhancements           | component     | ✅ done    | 01         | [02-button-enhancements](02-button-enhancements/spec.md)                   |
-| 03  | Focus indicators              | design system | 📝 draft   | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)                         |
-| 04  | ui-forms: primitive migration | architecture  | ✅ done    | —          | [04-ui-forms-primitive-migration](04-ui-forms-primitive-migration/plan.md) |
-| 05  | ui-forms: Field pattern       | architecture  | ✅ done    | 04         | [05-ui-forms-field-pattern](05-ui-forms-field-pattern/plan.md)             |
-| 06  | Repo health & guardrails      | tooling       | ✅ done    | —          | [06-repo-health](06-repo-health/plan.md)                                   |
-| 07  | Vitest test harness           | tooling       | ✅ done    | 06         | [07-test-harness](07-test-harness/plan.md)                                 |
-| 08  | Consolidate grouping logic    | correctness   | ✅ done    | 07         | [08-grouping-logic](08-grouping-logic/plan.md)                             |
-| 09  | Test & fix date formatting    | correctness   | ✅ done    | 07         | [09-date-logic](09-date-logic/plan.md)                                     |
-| 10  | Extract `useDebouncedValue`   | correctness   | ✅ done    | 07         | [10-debounce-hook](10-debounce-hook/plan.md)                               |
-| 11  | Correctness bug fixes         | correctness   | ✅ done    | 07         | [11-correctness-bugs](11-correctness-bugs/plan.md)                         |
-| 12  | Build externalization         | tooling       | 🟢 ready   | —          | [12-build-externalization](12-build-externalization/spec.md)               |
-| 13  | Dependency version sourcing   | tooling       | 🟢 ready   | —          | [13-dependency-versions](13-dependency-versions/spec.md)                   |
-| 14  | Config cruft removal          | tooling       | 🟢 ready   | —          | [14-config-cruft](14-config-cruft/spec.md)                                 |
-| 15  | Exports & barrel conventions  | architecture  | 🟢 ready   | —          | [15-exports-conventions](15-exports-conventions/spec.md)                   |
-| 16  | Conventions doc + lint        | architecture  | ⛔ blocked | 15         | [16-conventions-lint](16-conventions-lint/spec.md)                         |
-| 17  | Selects simplification        | component     | 🟢 ready   | —          | [17-selects-simplification](17-selects-simplification/spec.md)             |
-| 18  | Dialog/Sheet consolidation    | component     | 🟢 ready   | —          | [18-dialog-sheet-consolidation](18-dialog-sheet-consolidation/spec.md)     |
-| 19  | Storybook lint + tests        | tooling       | 🟢 ready   | —          | [19-storybook-lint-tests](19-storybook-lint-tests/spec.md)                 |
-| 20  | Type-hygiene cleanup          | tooling       | 🟢 ready   | —          | [20-type-hygiene](20-type-hygiene/spec.md)                                 |
+Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
+
+| ID  | Deliverable                | Area          | Status   | Depends on | Docs                                                               |
+| --- | -------------------------- | ------------- | -------- | ---------- | ------------------------------------------------------------------ |
+| 03  | Focus indicators           | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)                 |
+| 12  | Build & dependency tooling | tooling       | 🟢 ready | —          | [12-build-dependency-tooling](12-build-dependency-tooling/spec.md) |
+| 13  | Exports & conventions      | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)           |
+| 14  | Component consolidation    | component     | 🟢 ready | 13         | [14-component-consolidation](14-component-consolidation/spec.md)   |
+| 15  | Storybook lint + tests     | tooling       | 🟢 ready | 12         | [15-storybook-lint-tests](15-storybook-lint-tests/spec.md)         |
+| 16  | Type-hygiene cleanup       | tooling       | 🟢 ready | —          | [16-type-hygiene](16-type-hygiene/spec.md)                         |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -41,15 +29,15 @@ waiting on its dependencies · `in progress` · `done` — shipped, with an as-b
 
 **Numbers are allocation order, not chronology.** `06`–`11` shipped _before_ `01`–`05`; they carry
 higher numbers because they were migrated into this layout later. An ID is an identifier, nothing
-more.
+more. Once work has **shipped** under an ID that ID is fixed forever; unstarted specs can still be
+merged or renumbered, as `12`–`16` were when the first cut of them was split too finely.
 
 ### Suggested order
 
-`12` is the one to pick up first — it is the dependency-management friction that motivated
-consolidating these roadmaps, and `19` may depend on it being done. `13` and `14` pair naturally
-with it. `15` unblocks `16`. `17`, `18` and `20` are independent.
+`12` first — it is the dependency-management friction that prompted this roadmap, and `15` depends
+on it. `13` before `14`, so the barrel decision is made once. `16` is independent and small.
 
-### Planned
+## Planned
 
 _(The `ui-forms` form layer that stood here has since shipped — it stayed inside `05` rather than
 taking a row of its own, so `05`'s single ✅ covers both passes. See
@@ -131,3 +119,20 @@ are all open, and it needs its own `problem-discovery` pass. A declarative field
 was raised while specifying the form-layer second pass and **explicitly kept out of it**, because
 either shape it could take — a typed component factory, or a declarative field list — reverses a
 decision taken elsewhere. That call belongs here, not as a rider on another deliverable.
+
+## Shipped
+
+Kept for reference; each links to its as-built record. These rows do not change.
+
+| ID  | Deliverable                   | Docs                                                                       |
+| --- | ----------------------------- | -------------------------------------------------------------------------- |
+| 01  | Icon component                | [01-icon](01-icon/plan.md)                                                 |
+| 02  | Button enhancements           | [02-button-enhancements](02-button-enhancements/plan.md)                   |
+| 04  | ui-forms: primitive migration | [04-ui-forms-primitive-migration](04-ui-forms-primitive-migration/plan.md) |
+| 05  | ui-forms: Field pattern       | [05-ui-forms-field-pattern](05-ui-forms-field-pattern/plan.md)             |
+| 06  | Repo health & guardrails      | [06-repo-health](06-repo-health/plan.md)                                   |
+| 07  | Vitest test harness           | [07-test-harness](07-test-harness/plan.md)                                 |
+| 08  | Consolidate grouping logic    | [08-grouping-logic](08-grouping-logic/plan.md)                             |
+| 09  | Test & fix date formatting    | [09-date-logic](09-date-logic/plan.md)                                     |
+| 10  | Extract `useDebouncedValue`   | [10-debounce-hook](10-debounce-hook/plan.md)                               |
+| 11  | Correctness bug fixes         | [11-correctness-bugs](11-correctness-bugs/plan.md)                         |

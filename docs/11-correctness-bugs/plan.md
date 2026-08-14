@@ -4,13 +4,12 @@ Status: **shipped.** This is the as-built record. Built on the test harness in
 [`07-test-harness`](../07-test-harness/plan.md). Migrated from the legacy refactor track, where this
 was `D4`; it was written as a single file, so there is no separate `spec.md` or `discovery.md`.
 
-> **Scope note.** The commit that shipped this (`f8d5590`) also fixed bullets belonging to three
-> other pieces of work: it externalized `react`/`react-dom` in `vite-config` (see
-> [`12-build-externalization`](../12-build-externalization/spec.md)), memoized the `SelectProvider`
-> context (see [`17-selects-simplification`](../17-selects-simplification/spec.md)), and fixed the
-> `SheetProvider` controlled-mode ref (see
-> [`18-dialog-sheet-consolidation`](../18-dialog-sheet-consolidation/spec.md)). Those deliverables
-> record what remains. This overreach is part of why the legacy roadmap's statuses rotted.
+> **Scope note.** The commit that shipped this (`f8d5590`) also fixed bullets belonging to other
+> pieces of work: it externalized `react`/`react-dom` in `vite-config` (see
+> [`12-build-dependency-tooling`](../12-build-dependency-tooling/spec.md)), and both memoized the
+> `SelectProvider` context and fixed the `SheetProvider` controlled-mode ref (see
+> [`14-component-consolidation`](../14-component-consolidation/spec.md)). Those deliverables record
+> what remains. This overreach is part of why the legacy roadmap's statuses rotted.
 
 ## Goal
 
@@ -71,7 +70,7 @@ early so later refactors build on correct behaviour.
       Move it to a real prop on the element.
       [`Search.variants.ts:6`](../../packages/ui-core/src/components/Search/Search.variants.ts)
 
-## Related perf (fold in if cheap, else defer to `17`)
+## Related perf (fold in if cheap, else defer to `14`)
 
 - [x] `SelectProvider` context value unmemoized / new `Set` every render.
       [`SelectProvider.tsx:64-70`](../../packages/ui-forms/src/components/Selects/components/SelectProvider.tsx)
@@ -132,9 +131,9 @@ items)`, the one multi-select story with a real ~350ms wait (the search debounce
 
 ## Out of scope
 
-- The nested-`CommandList` scroll bug (structural — `17`).
+- The nested-`CommandList` scroll bug (structural — `14`).
 - Grouping fork bug (`08`) and date bug (`09`) — their own deliverables.
-- `Slider` hardcoded colours and other theming/consistency items (`15`/`18`).
+- `Slider` hardcoded colours and other theming/consistency items (`13`/`14`).
 
 ## Acceptance criteria
 

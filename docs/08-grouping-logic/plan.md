@@ -32,7 +32,7 @@ have no tests.
 
 ## Out of scope
 
-- Selects pass-through cleanup (that's `17`; this deliverable keeps Selects working via the
+- Selects pass-through cleanup (that's `14`; this deliverable keeps Selects working via the
   shared functions it already consumes).
 - Virtualization/keyboard-nav behaviour changes.
 

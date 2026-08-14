@@ -62,7 +62,7 @@ reaching for those is out of date.
   deliverable's `plan.md` is the as-built record and should cite current paths; its `discovery.md`
   and `spec.md` describe the world as it was.
 - **Do not cite a deliverable document from source code.** A comment saying
-  `see docs/20-type-hygiene/spec.md` couples code to a numbering scheme that moves: deliverables get
+  `see docs/NN-some-deliverable/spec.md` couples code to a numbering scheme that moves: deliverables get
   renumbered, merged and retired, and nothing fails when the path goes stale. Put the _reason_ in
   the comment instead — it is what the reader needs, and it cannot rot. Source outlives planning
   docs.
