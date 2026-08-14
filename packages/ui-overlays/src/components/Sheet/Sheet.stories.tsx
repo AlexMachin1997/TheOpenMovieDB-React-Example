@@ -29,7 +29,12 @@ const meta: Meta<typeof Sheet> = {
 	title: 'UI Overlays/Sheet',
 	component: Sheet,
 	parameters: {
-		layout: 'centered'
+		layout: 'centered',
+		// Promoted from the global `todo` deliberately. Radix requires every sheet to have an
+		// accessible name, and nothing in the component enforces it — so axe is what enforces it.
+		// A Title rendered outside the content, or omitted, fails `aria-dialog-name` here rather
+		// than shipping silently.
+		a11y: { test: 'error' }
 	}
 };
 
@@ -109,14 +114,14 @@ const ControlledSheet = () => {
 					</SheetHeader>
 					<SheetInnerContent className='grid gap-4 p-6'>
 						<div className='space-y-2'>
-							<h4 className='font-medium'>Current State</h4>
+							<h3 className='font-medium'>Current State</h3>
 							<p className='text-sm text-muted-foreground'>
 								The sheet is currently {open ? 'open' : 'closed'}. You can control this state from
 								outside the component.
 							</p>
 						</div>
 						<div className='space-y-2'>
-							<h4 className='font-medium'>Usage</h4>
+							<h3 className='font-medium'>Usage</h3>
 							<p className='text-sm text-muted-foreground'>
 								This pattern is useful when you need to control the sheet state from a parent
 								component or based on external events.
@@ -166,14 +171,14 @@ const RefBasedSheet = () => {
 					</SheetHeader>
 					<SheetInnerContent className='grid gap-4 p-6'>
 						<div className='space-y-2'>
-							<h4 className='font-medium'>Imperative API</h4>
+							<h3 className='font-medium'>Imperative API</h3>
 							<p className='text-sm text-muted-foreground'>
 								Use the ref to programmatically control the sheet:{' '}
 								<code>sheetRef.current?.open()</code>
 							</p>
 						</div>
 						<div className='space-y-2'>
-							<h4 className='font-medium'>SheetClose Compatibility</h4>
+							<h3 className='font-medium'>SheetClose Compatibility</h3>
 							<p className='text-sm text-muted-foreground'>
 								The existing SheetClose component works seamlessly with the new ref-based approach.
 							</p>
@@ -192,7 +197,47 @@ const RefBasedSheet = () => {
 };
 
 export const RefBased: Story = {
-	render: () => <RefBasedSheet />
+	render: () => <RefBasedSheet />,
+	// The uncontrolled half of the imperative ref. `RefWithControlled` below covers the controlled
+	// half, which is the path that was broken and got fixed; this one guards the branch that
+	// drives internal state, so a change to either cannot quietly break the other.
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		expect(documentScope.queryByText('Ref-Based Sheet')).not.toBeInTheDocument();
+
+		// `toggle()` from closed proves the handle reads the *current* open state rather than a
+		// value captured when it was created.
+		await userEvent.click(canvas.getByRole('button', { name: /toggle via ref/i }));
+		await waitFor(() => {
+			expect(documentScope.getByText('Ref-Based Sheet')).toBeInTheDocument();
+		});
+
+		// While the sheet is open Radix marks the background `aria-hidden`, so the trigger row is
+		// no longer in the accessibility tree. Close from the sheet's own footer, which is.
+		const dialog = await documentScope.findByRole('dialog');
+		await userEvent.click(await within(dialog).findByRole('button', { name: /close via ref/i }));
+
+		// Radix keeps the closed content mounted while it animates out, so assert on the dialog's
+		// own state rather than on the text merely being gone.
+		await waitFor(() => {
+			expect(dialog).toHaveAttribute('data-state', 'closed');
+		});
+
+		// `data-state="closed"` is not the end of it: the background stays `aria-hidden` until the
+		// exit animation finishes and the content unmounts, so the trigger row is still outside the
+		// accessibility tree at this point. Wait for the unmount before reaching for it again.
+		await waitFor(() => {
+			expect(documentScope.queryByRole('dialog')).not.toBeInTheDocument();
+		});
+
+		// `open()` on a handle that has already been through a full open/close cycle.
+		await userEvent.click(canvas.getByRole('button', { name: /open via ref/i }));
+		await waitFor(() => {
+			expect(documentScope.getByRole('dialog')).toHaveAttribute('data-state', 'open');
+		});
+	}
 };
 
 const RefWithControlledSheet = () => {
@@ -357,7 +402,7 @@ export const CustomWidth: Story = {
 				</SheetHeader>
 				<div className='grid gap-6 p-6'>
 					<div className='space-y-2'>
-						<h4 className='font-medium'>Performance</h4>
+						<h3 className='font-medium'>Performance</h3>
 						<div className='space-y-2'>
 							<label className='flex items-center space-x-2'>
 								<input type='checkbox' className='rounded' />
@@ -370,7 +415,7 @@ export const CustomWidth: Story = {
 						</div>
 					</div>
 					<div className='space-y-2'>
-						<h4 className='font-medium'>Privacy</h4>
+						<h3 className='font-medium'>Privacy</h3>
 						<div className='space-y-2'>
 							<label className='flex items-center space-x-2'>
 								<input type='checkbox' className='rounded' />
@@ -745,7 +790,7 @@ export const WithSheetClose: Story = {
 				</SheetHeader>
 				<SheetInnerContent className='grid gap-4 p-6'>
 					<div className='space-y-4'>
-						<h4 className='font-medium'>Close Button Examples</h4>
+						<h3 className='font-medium'>Close Button Examples</h3>
 
 						{/* Basic SheetClose as a button */}
 						<div className='space-y-2'>

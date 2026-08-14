@@ -101,6 +101,16 @@ adopts Dialog's: a 24px icon, the accent open state, `cursor-pointer`, a `data-s
 intentional. Everything else — Dialog's surface, all four Sheet surfaces, the backdrop — is
 unchanged, proven by comparing composed class sets rather than by eye.
 
+**The a11y guard only reaches overlays a test actually opens.** `a11y: { test: 'error' }` runs axe
+against the *rendered* story. An overlay that is never opened contributes no dialog to the DOM, so
+`aria-dialog-name` has nothing to judge — a story whose `Title` is missing entirely still passes,
+confirmed by removing one and watching the suite stay green. The guard is real, and demonstrated:
+with the overlay open, axe fails with `aria-dialog-name`. But its reach today is the two Sheet
+stories that open one, out of twenty-six Dialog and Sheet stories. Closing that gap means giving
+every overlay story a `play()` that opens it, which is left for
+[`18-overlay-api`](../18-overlay-api/spec.md) — where those stories are being rewritten anyway, and
+where the accessible name stops depending on the caller at all.
+
 **A file named for a provider that isn't one.** Requirement 3 also indicts `PopoverProvider.tsx`, which exports `PopoverProvider` — a Radix `Root`
 wrapper containing no provider — and is aliased to `Popover` at its barrel. Popover is explicitly out
 of scope here, so this one is **knowingly left in place** and travels with the rest of Popover rather

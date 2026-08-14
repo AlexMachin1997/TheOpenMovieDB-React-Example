@@ -17,7 +17,12 @@ const meta: Meta<typeof Dialog> = {
 	title: 'UI Overlays/Dialog',
 	component: Dialog,
 	parameters: {
-		layout: 'centered'
+		layout: 'centered',
+		// Promoted from the global `todo` deliberately. Radix requires every dialog to have an
+		// accessible name, and nothing in the component enforces it — so axe is what enforces it.
+		// A Title rendered outside the content, or omitted, fails `aria-dialog-name` here rather
+		// than shipping silently.
+		a11y: { test: 'error' }
 	},
 	argTypes: {
 		open: {
