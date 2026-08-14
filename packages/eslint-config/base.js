@@ -39,9 +39,9 @@ export const config = [
 			'@typescript-eslint/no-empty-function': 'off',
 			'@typescript-eslint/no-var-requires': 'off',
 			'import/extensions': 'off',
-			// TEMPORARY: downgraded to 'warn' so the newly-enforced linter (previously dead — see
-			// docs/06-repo-health/plan.md) doesn't block commits on ~39 pre-existing violations.
-			// Fix these and restore to 'error' — that's docs/20-type-hygiene/spec.md.
+			// TEMPORARY: downgraded to 'warn' when the linter was first made to actually run, so a
+			// backlog of pre-existing violations didn't block every commit. Restore both to 'error'
+			// once that backlog is cleared — a 'warn' gates nothing and the count can only grow.
 			'@typescript-eslint/no-empty-object-type': 'warn',
 			'@typescript-eslint/no-explicit-any': 'warn'
 		}

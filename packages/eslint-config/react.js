@@ -76,7 +76,7 @@ export const config = [
 	// TypeScript parser for all *.ts/*.tsx and every code rule (react-hooks, no-debugger,
 	// exhaustive-deps, ...) ran against an empty AST and silently passed. Folder-structure
 	// enforcement must be re-added in an ISOLATED config that does not share a parser with
-	// code linting (see docs/16-conventions-lint/spec.md). Restoring code linting takes priority.
+	// code linting. Restoring code linting takes priority.
 	//
 	// {
 	// 	files: ['**/*.{ts,tsx,js,jsx}'],

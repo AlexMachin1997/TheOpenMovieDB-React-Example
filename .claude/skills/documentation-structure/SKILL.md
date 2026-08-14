@@ -61,8 +61,18 @@ reaching for those is out of date.
   code was _before_ the move, so repointing them would make them less accurate, not more. A
   deliverable's `plan.md` is the as-built record and should cite current paths; its `discovery.md`
   and `spec.md` describe the world as it was.
-- **Source comments cite doc paths.** `Button.tsx`, `Button.stories.tsx` and `Icon.mdx` each
-  reference a deliverable document. Grep `packages/` and `apps/` for `docs/` when moving anything.
+- **Do not cite a deliverable document from source code.** A comment saying
+  `see docs/20-type-hygiene/spec.md` couples code to a numbering scheme that moves: deliverables get
+  renumbered, merged and retired, and nothing fails when the path goes stale. Put the _reason_ in
+  the comment instead — it is what the reader needs, and it cannot rot. Source outlives planning
+  docs.
+
+  About 17 such citations predate this rule (`ui-core/index.ts`, `ui-forms/index.ts`,
+  `Button.tsx`, `Label.variants.ts`, `RadioGroup.types.ts`, `Icon.mdx` and others). They are not
+  being chased down, but do not add more, and prefer removing one to updating it when you are
+  already editing that line. Grep `packages/` and `apps/` for `docs/` before moving any deliverable
+  folder — and note that most `?path=/docs/…` hits are Storybook links, which are fine.
+
 - **A second pass on a shipped deliverable stays in that deliverable's own `spec.md`.** It does
   _not_ get the next number. Follow-on work that extends something already marked ✅ done goes below
   a hard delimiter in the original spec — a heading plus a `Status: specified, not built.` line
