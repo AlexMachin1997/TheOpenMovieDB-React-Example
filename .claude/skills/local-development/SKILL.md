@@ -43,8 +43,28 @@ report a build time or a "clean build is green" without it.
 | Build           | `pnpm build`                                        | `pnpm turbo run build --force` when baselining                                                                           |
 | Lint            | `pnpm lint`                                         | Warnings only, never errors — `eslint-plugin-only-warn` downgrades everything. Healthy today: 18 + 20 warnings, 0 errors |
 | Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                       |
-| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~150s                                                              |
+| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~135s. **One pre-existing failure** — see below                    |
 | Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                           |
+
+### The suite is not green — one failure is pre-existing
+
+Baselined 2026-08-15 on an untouched tree: **1 failed | 40 passed | 27 skipped (68 files)**,
+**1 failed | 384 passed (385 tests)**, ~134s.
+
+The failure is `packages/ui-core/src/components/Calendar/Calendar.stories.tsx > Basic`, at
+`Calendar.stories.tsx:233`:
+
+```
+expect(element).not.toHaveAttribute("data-selected-single", "true")
+Received: data-selected-single="true"
+```
+
+The story clicks a selected day expecting it to deselect, and it stays selected. Nobody has adopted
+it; it is not owned by any in-flight deliverable.
+
+**So "the suite passes" here means one failure, and that one only.** Do not read this failure as your
+own regression, and do not fix it as a side quest — it belongs to whoever picks up `Calendar`.
+Compare failure *lists* against a baseline you captured yourself, never a bare pass/fail.
 
 `turbo.json` gives `check-types` `dependsOn: ["^build"]`, not `^check-types`. That is load-bearing:
 packages resolve each other through built `dist/*.d.ts`, and `tsc --noEmit` emits nothing, so
@@ -144,7 +164,7 @@ fetch('/index.json')
 ```
 
 Healthy today: **412 entries across 68 import paths, none under `node_modules`**, matching a suite
-of 41 passed + 27 skipped files and 385 tests. Compare with
+of 68 files and 385 tests. Compare with
 `cd apps/storybook && npx vitest list --filesOnly`. If Vitest's count is higher, it is collecting
 files Storybook never indexed, and that difference is the bug.
 
