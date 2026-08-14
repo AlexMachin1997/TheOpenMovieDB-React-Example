@@ -1,29 +1,14 @@
-import { ICommandProvider } from '@repo/ui-command';
-
-/**
- * Base provider props interface for select components
- *
- * This interface extends the command provider props with select-specific
- * configuration like selection mode and initial values.
- *
- * @interface IBaseSelectProviderProps
- * @extends ICommandProvider
- */
-export interface IBaseSelectProviderProps extends ICommandProvider {
-	/** Selection mode - either 'single' or 'multiple' */
-	mode: 'single' | 'multiple';
-	/** Initial selected values */
-	initialSelectedValues?: string[];
-	/** Callback when selection changes */
-	onSelectionChange?: (selectedValues: string[]) => void;
-}
-
 /**
  * Context value interface for select functionality
  *
- * This interface defines select-specific functionality without extending
- * the command context. Command functionality should be accessed directly
- * through useCommandContext when needed.
+ * This interface defines select-specific functionality without extending the command context.
+ * Command functionality is reached directly through `useCommandContext`.
+ *
+ * The two contexts stay layered rather than merged, deliberately. `Command` is a standalone
+ * component that `Select` happens to be built from — it has to keep working on its own, as a search
+ * dialog for instance — so folding selection state into it would couple the two. They are also
+ * disjoint in practice: everything below is selection, and nothing below is something
+ * `ICommandContext` already carries.
  *
  * @interface SelectContext
  */
