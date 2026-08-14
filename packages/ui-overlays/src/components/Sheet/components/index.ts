@@ -1,4 +1,4 @@
-export { Sheet } from '~/components/Sheet/components/SheetProvider';
+export { Sheet } from '~/components/Sheet/components/Sheet';
 export { SheetTrigger } from '~/components/Sheet/components/SheetTrigger';
 export { SheetClose } from '~/components/Sheet/components/SheetClose';
 export { SheetPortal } from '~/components/Sheet/components/SheetPortal';

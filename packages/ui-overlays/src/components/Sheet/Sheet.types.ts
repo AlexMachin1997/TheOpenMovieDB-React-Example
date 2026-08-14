@@ -1,18 +1,7 @@
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import type { SheetRef } from '~/components/Sheet/types/sheet-ref';
 
-/**
- * Imperative handle for external control of the Sheet.
- * @see SheetProvider
- */
-export interface ISheetRef {
-	open: () => void;
-	close: () => void;
-	toggle: () => void;
-	isOpen: boolean;
-}
-
-/** Properties for the Sheet root component (managed via SheetProvider). */
+/** Properties for the Sheet root component. */
 export type ISheet = React.ComponentProps<typeof SheetPrimitive.Root> & {
 	className?: string;
 	ref?: React.RefObject<SheetRef | undefined>;
@@ -41,10 +30,18 @@ export interface ISheetOverlay extends React.ComponentProps<typeof SheetPrimitiv
 /**
  * Properties for SheetContent.
  * @param {'top'|'right'|'bottom'|'left'} [side='right'] - The slide-in direction
+ * @param {boolean} [showCloseButton=true] - Whether to render the close button
+ * @param {React.ReactNode} [icon] - Custom icon for the close button
  */
 export interface ISheetContent extends React.ComponentProps<typeof SheetPrimitive.Content> {
 	/** The edge the sheet slides in from. Defaults to `'right'`. */
 	side?: 'top' | 'right' | 'bottom' | 'left';
+
+	/** Whether to show the close (X) button. Defaults to `true`. */
+	showCloseButton?: boolean;
+
+	/** Custom icon to replace the default X icon. */
+	icon?: React.ReactNode;
 }
 
 /** Properties for SheetInnerContent. */

@@ -89,9 +89,19 @@ context memoization, and the `SheetProvider` controlled-mode imperative-ref fix.
 4. An overlay rendered without an accessible title fails the test suite.
 5. Anything deleted must be provably unused first.
 
-### Deliberate deviation
+### Deliberate deviations
 
-Requirement 3 also indicts `PopoverProvider.tsx`, which exports `PopoverProvider` — a Radix `Root`
+**Sheet's close button changes appearance.** The drift between the two close buttons was not only
+structural: Dialog's icon is 24px (`Icon` `size='xl'`) against Sheet's 16px (`Icon`'s `md` default),
+and their open-state backgrounds differ (`bg-accent` + `text-muted-foreground` against
+`bg-secondary`). Unifying only the *API* would have satisfied the criterion above while leaving the
+drift the Problem section calls unintended. The call was made to unify fully, so Sheet's close button
+adopts Dialog's: a 24px icon, the accent open state, `cursor-pointer`, a `data-slot`, and the three
+`[&_svg…]` rules it previously lacked. This is a visible change on every Sheet story and is
+intentional. Everything else — Dialog's surface, all four Sheet surfaces, the backdrop — is
+unchanged, proven by comparing composed class sets rather than by eye.
+
+**A file named for a provider that isn't one.** Requirement 3 also indicts `PopoverProvider.tsx`, which exports `PopoverProvider` — a Radix `Root`
 wrapper containing no provider — and is aliased to `Popover` at its barrel. Popover is explicitly out
 of scope here, so this one is **knowingly left in place** and travels with the rest of Popover rather
 than being fixed piecemeal.
@@ -128,7 +138,8 @@ than being fixed piecemeal.
 - [ ] An overlay without an accessible title fails the suite, demonstrated by a captured failure.
 - [ ] Sheet's controlled-mode imperative ref still works, covered by a test so the `11` fix cannot
       silently regress — and the uncontrolled path is covered too.
-- [ ] Rendered output and animation behaviour unchanged for Dialog and for every Sheet side.
+- [ ] Rendered output and animation behaviour unchanged for Dialog and for every Sheet side —
+      except Sheet's close button, deliberately excepted below.
 
 ## Decisions
 

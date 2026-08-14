@@ -1,6 +1,6 @@
 /**
  * @description Imperative handle for external control of the sheet component.
- * @see SheetProvider
+ * @see Sheet
  */
 interface SheetRef {
 	open: () => void;
