@@ -11,25 +11,43 @@ is just the roadmap.
 
 ## Roadmap
 
-| ID  | Deliverable                   | Area          | Status   | Depends on | Docs                                                                       |
-| --- | ----------------------------- | ------------- | -------- | ---------- | -------------------------------------------------------------------------- |
-| 01  | Icon component                | component     | ✅ done  | —          | [01-icon](01-icon/spec.md)                                                 |
-| 02  | Button enhancements           | component     | ✅ done  | 01         | [02-button-enhancements](02-button-enhancements/spec.md)                   |
-| 03  | Focus indicators              | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)                         |
-| 04  | ui-forms: primitive migration | architecture  | ✅ done  | —          | [04-ui-forms-primitive-migration](04-ui-forms-primitive-migration/plan.md) |
-| 05  | ui-forms: Field pattern       | architecture  | ✅ done  | 04         | [05-ui-forms-field-pattern](05-ui-forms-field-pattern/plan.md)             |
+| ID  | Deliverable                   | Area          | Status     | Depends on | Docs                                                                       |
+| --- | ----------------------------- | ------------- | ---------- | ---------- | -------------------------------------------------------------------------- |
+| 01  | Icon component                | component     | ✅ done    | —          | [01-icon](01-icon/spec.md)                                                 |
+| 02  | Button enhancements           | component     | ✅ done    | 01         | [02-button-enhancements](02-button-enhancements/spec.md)                   |
+| 03  | Focus indicators              | design system | 📝 draft   | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)                         |
+| 04  | ui-forms: primitive migration | architecture  | ✅ done    | —          | [04-ui-forms-primitive-migration](04-ui-forms-primitive-migration/plan.md) |
+| 05  | ui-forms: Field pattern       | architecture  | ✅ done    | 04         | [05-ui-forms-field-pattern](05-ui-forms-field-pattern/plan.md)             |
+| 06  | Repo health & guardrails      | tooling       | ✅ done    | —          | [06-repo-health](06-repo-health/plan.md)                                   |
+| 07  | Vitest test harness           | tooling       | ✅ done    | 06         | [07-test-harness](07-test-harness/plan.md)                                 |
+| 08  | Consolidate grouping logic    | correctness   | ✅ done    | 07         | [08-grouping-logic](08-grouping-logic/plan.md)                             |
+| 09  | Test & fix date formatting    | correctness   | ✅ done    | 07         | [09-date-logic](09-date-logic/plan.md)                                     |
+| 10  | Extract `useDebouncedValue`   | correctness   | ✅ done    | 07         | [10-debounce-hook](10-debounce-hook/plan.md)                               |
+| 11  | Correctness bug fixes         | correctness   | ✅ done    | 07         | [11-correctness-bugs](11-correctness-bugs/plan.md)                         |
+| 12  | Build externalization         | tooling       | 🟢 ready   | —          | [12-build-externalization](12-build-externalization/spec.md)               |
+| 13  | Dependency version sourcing   | tooling       | 🟢 ready   | —          | [13-dependency-versions](13-dependency-versions/spec.md)                   |
+| 14  | Config cruft removal          | tooling       | 🟢 ready   | —          | [14-config-cruft](14-config-cruft/spec.md)                                 |
+| 15  | Exports & barrel conventions  | architecture  | 🟢 ready   | —          | [15-exports-conventions](15-exports-conventions/spec.md)                   |
+| 16  | Conventions doc + lint        | architecture  | ⛔ blocked | 15         | [16-conventions-lint](16-conventions-lint/spec.md)                         |
+| 17  | Selects simplification        | component     | 🟢 ready   | —          | [17-selects-simplification](17-selects-simplification/spec.md)             |
+| 18  | Dialog/Sheet consolidation    | component     | 🟢 ready   | —          | [18-dialog-sheet-consolidation](18-dialog-sheet-consolidation/spec.md)     |
+| 19  | Storybook lint + tests        | tooling       | 🟢 ready   | —          | [19-storybook-lint-tests](19-storybook-lint-tests/spec.md)                 |
+| 20  | Type-hygiene cleanup          | tooling       | 🟢 ready   | —          | [20-type-hygiene](20-type-hygiene/spec.md)                                 |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
 
 **Area is a label, not a location.** Nothing about a deliverable's folder depends on it.
 
-### Legacy
+**Numbers are allocation order, not chronology.** `06`–`11` shipped _before_ `01`–`05`; they carry
+higher numbers because they were migrated into this layout later. An ID is an identifier, nothing
+more.
 
-[`refactor/`](refactor/README.md) predates this layout: flat files, its own status table,
-deliverable IDs `P0` and `D0`–`D10`. Left alone deliberately, and **closed to new work** — anything
-new goes in the table above. It keeps its own roadmap rather than having its rows duplicated here,
-which would give the same statuses two sources of truth.
+### Suggested order
+
+`12` is the one to pick up first — it is the dependency-management friction that motivated
+consolidating these roadmaps, and `19` may depend on it being done. `13` and `14` pair naturally
+with it. `15` unblocks `16`. `17`, `18` and `20` are independent.
 
 ### Planned
 

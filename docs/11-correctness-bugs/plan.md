@@ -1,6 +1,16 @@
-# D4 — Correctness bug fixes
+# Implementation plan: Correctness bug fixes
 
-**Phase:** 1 · **Size:** M · **Depends on:** D0 · **Status:** ✅ done
+Status: **shipped.** This is the as-built record. Built on the test harness in
+[`07-test-harness`](../07-test-harness/plan.md). Migrated from the legacy refactor track, where this
+was `D4`; it was written as a single file, so there is no separate `spec.md` or `discovery.md`.
+
+> **Scope note.** The commit that shipped this (`f8d5590`) also fixed bullets belonging to three
+> other pieces of work: it externalized `react`/`react-dom` in `vite-config` (see
+> [`12-build-externalization`](../12-build-externalization/spec.md)), memoized the `SelectProvider`
+> context (see [`17-selects-simplification`](../17-selects-simplification/spec.md)), and fixed the
+> `SheetProvider` controlled-mode ref (see
+> [`18-dialog-sheet-consolidation`](../18-dialog-sheet-consolidation/spec.md)). Those deliverables
+> record what remains. This overreach is part of why the legacy roadmap's statuses rotted.
 
 ## Goal
 
@@ -29,16 +39,16 @@ early so later refactors build on correct behaviour.
 - [x] **`CheckboxGroup` swallows changes when uncontrolled.** `handleValueChange` is gated
       on `isControlled`, so with no `value` prop selection fires nothing. Handle the
       uncontrolled path.
-      [`CheckboxGroup.tsx:33-52`](../../packages/ui-forms/src/components/CheckboxGroup/CheckboxGroup.tsx)
+      [`CheckboxGroup.tsx:33-52`](../../packages/ui-core/src/components/CheckboxGroup/CheckboxGroup.tsx)
       — resolved by making `CheckboxGroup` controlled-only (`value`/`onChange` now required,
       `defaultValue` removed) rather than maintaining a second internal state machine; see
       note below.
 - [x] **`CheckboxLabel` / `RadioLabel` drop `...props`.** Typed as full Label props but only
       destructure 4 keys, silently discarding `ref`/`id`/`onClick`/etc. Spread the rest.
-      [`CheckboxLabel.tsx:5`](../../packages/ui-forms/src/components/Checkbox/components/CheckboxLabel.tsx) · [`RadioLabel.tsx:5`](../../packages/ui-forms/src/components/Radio/components/RadioLabel.tsx)
+      [`CheckboxLabel.tsx:5`](../../packages/ui-core/src/components/Checkbox/components/CheckboxLabel.tsx) · [`RadioLabel.tsx:5`](../../packages/ui-core/src/components/Radio/components/RadioLabel.tsx)
 - [x] **`CheckboxGroup` `peer-disabled` never triggers.** Label renders before the checkbox,
       but Tailwind `peer-*` needs the peer to precede the target. Reorder or restructure.
-      [`CheckboxGroup.tsx:112-124`](../../packages/ui-forms/src/components/CheckboxGroup/CheckboxGroup.tsx)
+      [`CheckboxGroup.tsx:112-124`](../../packages/ui-core/src/components/CheckboxGroup/CheckboxGroup.tsx)
 - [x] **Sheet imperative ref is a no-op in controlled mode.** `open()/close()/toggle()` call
       `setIsOpen`, but render ignores it when the `open` prop is set; call `onOpenChange`
       when controlled. (Consider extracting `useSheetState(props, ref)` and testing it.)
@@ -61,7 +71,7 @@ early so later refactors build on correct behaviour.
       Move it to a real prop on the element.
       [`Search.variants.ts:6`](../../packages/ui-core/src/components/Search/Search.variants.ts)
 
-## Related perf (fold in if cheap, else defer to D8)
+## Related perf (fold in if cheap, else defer to `17`)
 
 - [x] `SelectProvider` context value unmemoized / new `Set` every render.
       [`SelectProvider.tsx:64-70`](../../packages/ui-forms/src/components/Selects/components/SelectProvider.tsx)
@@ -76,9 +86,9 @@ same selection. `value`/`onChange` are now required; `defaultValue` is removed. 
 prop-signature change beyond the `iconSize` removal the acceptance criteria below originally
 scoped — no other consumers of `@repo/ui-forms`'s `CheckboxGroup` exist in the monorepo (the
 app-level `CheckboxGroup` under `apps/the-open-movie-database` is a separate, unrelated
-component), so this shipped as part of D4 rather than a follow-up.
+component), so this shipped as part of `11` rather than a follow-up.
 
-## Additional fixes discovered while verifying D4
+## Additional fixes discovered while verifying `11`
 
 Two more pre-existing bugs surfaced (and got fixed) while getting Select/Command actually
 testable end-to-end:
@@ -122,9 +132,9 @@ items)`, the one multi-select story with a real ~350ms wait (the search debounce
 
 ## Out of scope
 
-- The nested-`CommandList` scroll bug (structural — D8).
-- Grouping fork bug (D1) and date bug (D2) — their own deliverables.
-- `Slider` hardcoded colours and other theming/consistency items (D6/D9).
+- The nested-`CommandList` scroll bug (structural — `17`).
+- Grouping fork bug (`08`) and date bug (`09`) — their own deliverables.
+- `Slider` hardcoded colours and other theming/consistency items (`15`/`18`).
 
 ## Acceptance criteria
 

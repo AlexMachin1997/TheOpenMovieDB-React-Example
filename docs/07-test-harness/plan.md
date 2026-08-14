@@ -1,15 +1,17 @@
-# D0 — Vitest test harness
+# Implementation plan: Vitest test harness
 
-**Phase:** 1 · **Size:** S · **Depends on:** none · **Status:** ✅ done
+Status: **shipped.** This is the as-built record — what was built and the deliberate scope limit on
+it. Migrated from the legacy refactor track, where this was `D0`; it was written as a single file,
+so there is no separate `spec.md` or `discovery.md`.
 
 > **Implementation note.** Landed as a **node-environment** harness: Vitest covers pure
 > logic only, while component behaviour is tested via Storybook `play()` tests. Consequences:
-> jsdom + React Testing Library are **deferred to D3** (first real need is `renderHook` for
-> `useDebouncedValue`); the existing Storybook interaction tests are tracked under **F6**
-> (blocked by the D5 React-externalization bug). This deliverable ships **plumbing only** —
+> jsdom + React Testing Library are **deferred to `10`** (first real need is `renderHook` for
+> `useDebouncedValue`); the existing Storybook interaction tests are tracked under **`19`**
+> (blocked at the time by the React-externalization bug, since fixed in `11`; the remaining externalization work is `12`). This deliverable ships **plumbing only** —
 > every library package is wired (config + `test`/`test:watch` scripts) but carries **no test
 > files yet**, staying green via `passWithNoTests: true`. Real coverage lands on top of this
-> harness in **D1** (grouping), **D2** (dates), and **D3** (debounce). The shared preset lives
+> harness in **`08`** (grouping), **`09`** (dates), and **`10`** (debounce). The shared preset lives
 > in `@repo/vite-config/vitest-base`; the DTS `exclude` and Vitest `include` are single-sourced
 > in `packages/vite-config/shared.ts`.
 
@@ -28,7 +30,7 @@ the plumbing and one smoke test per package — no product logic changes.
 - `turbo.json` already declares a `test` task, so the graph is ready — only the per-package
   wiring is missing.
 
-This is the keystone: D1–D4 all ship with regression tests, which requires this first.
+This is the keystone: `08`–`11` all ship with regression tests, which requires this first.
 
 ## Scope
 
@@ -39,12 +41,12 @@ This is the keystone: D1–D4 all ship with regression tests, which requires thi
 - Add one trivial smoke test per package (e.g. render `Button`, import a `core` helper) to
   prove the harness runs green in CI/Turbo.
 - Pin `vitest` to one version across packages (`core` is on v3, others v4) — or defer the
-  version unification to D5 and just match `core` up to v4 here if low-effort.
+  version unification to `13` and just match `core` up to v4 here if low-effort.
 
 ## Out of scope
 
-- Any real unit tests for grouping / dates / debounce (those are D1, D2, D3).
-- Any component or config bug fixes (D4, D5).
+- Any real unit tests for grouping / dates / debounce (those are `08`, `09`, `10`).
+- Any component or config bug fixes (`11`; config work is now `12`–`14`).
 - Coverage thresholds and CI gating (follow-up once tests exist).
 
 ## Approach
@@ -53,11 +55,11 @@ This is the keystone: D1–D4 all ship with regression tests, which requires thi
       **or** a small shared preset in `@repo/vite-config` (e.g. `vitest-base.ts`) that each
       package extends. Prefer the shared preset — matches the existing `reactLibrary` pattern.
 - [~] Add `@testing-library/react`, `@testing-library/jest-dom`, `jsdom` as devDeps where
-  needed (UI packages only; `core` stays node env). — deferred to D3 as noted above; added
+  needed (UI packages only; `core` stays node env). — deferred to `10` as noted above; added
   for `ui-core` there (no `jest-dom` needed — no DOM matchers used).
 - [x] Add `test` / `test:watch` scripts to the five library packages.
 - [ ] Add one smoke test per package. — not added; shipped plumbing-only (`passWithNoTests: true`)
-      as noted above, with real coverage landing via D1/D2/D3 instead.
+      as noted above, with real coverage landing via `08`/`09`/`10` instead.
 - [~] Confirm `turbo run test` runs all packages green; confirm `test` task `inputs` in
   `turbo.json` still make sense (currently `$TURBO_DEFAULT$` + `.env*`). — `turbo run test`
   is green; the `inputs` review was not revisited.
@@ -68,7 +70,7 @@ This is the keystone: D1–D4 all ship with regression tests, which requires thi
 - [x] `turbo run test` shows each package executing (not "no tasks").
 - [~] A deliberately failing assertion in any smoke test makes `turbo run test` fail
   (proves the harness is actually wired, not silently skipped). — no dedicated smoke test
-  exists to deliberately break; proven instead by D1/D2/D3's real tests actually gating.
+  exists to deliberately break; proven instead by `08`/`09`/`10`'s real tests actually gating.
 - [x] No changes to any component/library runtime code.
 
 ## Notes

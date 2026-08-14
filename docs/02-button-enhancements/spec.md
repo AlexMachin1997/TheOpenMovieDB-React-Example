@@ -34,7 +34,7 @@ when rendered via `asChild` as something other than a native `<button>`.
   a predecessor: the shared `Icon` component (own spec,
   [`01-icon`](../01-icon/spec.md)) that Button's `startIcon`/`endIcon`/spinner
   rendering consumes. See Decisions below. Independent of the barrel/export conventions
-  work (D6) elsewhere in the repo.
+  work (`15`) elsewhere in the repo.
 
 ## Non-Goals
 

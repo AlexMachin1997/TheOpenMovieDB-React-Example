@@ -40,8 +40,8 @@ export const config = [
 			'@typescript-eslint/no-var-requires': 'off',
 			'import/extensions': 'off',
 			// TEMPORARY: downgraded to 'warn' so the newly-enforced linter (previously dead — see
-			// docs/refactor P0) doesn't block commits on ~39 pre-existing violations. Fix these and
-			// restore to 'error' in the "type-hygiene cleanup" deliverable.
+			// docs/06-repo-health/plan.md) doesn't block commits on ~39 pre-existing violations.
+			// Fix these and restore to 'error' — that's docs/20-type-hygiene/spec.md.
 			'@typescript-eslint/no-empty-object-type': 'warn',
 			'@typescript-eslint/no-explicit-any': 'warn'
 		}

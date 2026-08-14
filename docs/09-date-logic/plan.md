@@ -1,6 +1,8 @@
-# D2 — Test & fix date formatting
+# Implementation plan: Test & fix date formatting
 
-**Phase:** 1 · **Size:** S · **Depends on:** D0 · **Status:** ✅ done
+Status: **shipped.** This is the as-built record. Built on the test harness in
+[`07-test-harness`](../07-test-harness/plan.md). Migrated from the legacy refactor track, where this
+was `D2`; it was written as a single file, so there is no separate `spec.md` or `discovery.md`.
 
 ## Goal
 
@@ -31,7 +33,7 @@ and has zero tests. It also has a live bug:
 ## Out of scope
 
 - DatePicker component behaviour (they already delegate to these helpers correctly).
-- Adding a `test` script to `core` — done in D0.
+- Adding a `test` script to `core` — done in `07`.
 
 ## Approach
 

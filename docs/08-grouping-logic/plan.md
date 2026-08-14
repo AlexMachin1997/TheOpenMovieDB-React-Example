@@ -1,6 +1,8 @@
-# D1 — Consolidate & test grouping logic
+# Implementation plan: Consolidate & test grouping logic
 
-**Phase:** 1 · **Size:** S · **Depends on:** D0 · **Status:** ✅ done
+Status: **shipped.** This is the as-built record. Built on the test harness in
+[`07-test-harness`](../07-test-harness/plan.md). Migrated from the legacy refactor track, where this
+was `D1`; it was written as a single file, so there is no separate `spec.md` or `discovery.md`.
 
 ## Goal
 
@@ -30,7 +32,7 @@ have no tests.
 
 ## Out of scope
 
-- Selects pass-through cleanup (that's D8; this deliverable keeps Selects working via the
+- Selects pass-through cleanup (that's `17`; this deliverable keeps Selects working via the
   shared functions it already consumes).
 - Virtualization/keyboard-nav behaviour changes.
 

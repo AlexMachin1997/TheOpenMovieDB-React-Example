@@ -43,7 +43,7 @@ re-implementing this itself.
   needs one and would otherwise be blocked on a name that doesn't exist yet.
 - **Can be delivered independently**: yes, as a predecessor to Button's
   enhancements — this deliverable does not require Button's spec to be
-  implemented first. Independent of the barrel/export conventions work (D6)
+  implemented first. Independent of the barrel/export conventions work (`15`)
   elsewhere in the repo.
 
 ## Non-Goals

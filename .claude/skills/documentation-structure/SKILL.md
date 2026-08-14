@@ -20,9 +20,13 @@ docs/
 ├── README.md                 the roadmap: every deliverable, status, dependencies
 ├── 01-icon/                  discovery.md, spec.md, plan.md — only what's needed
 ├── 02-button-enhancements/
-├── NN-<slug>/…               see the roadmap for the current list
-└── refactor/                 legacy track, flat files, its own roadmap
+└── NN-<slug>/…               see the roadmap for the current list
 ```
+
+**One layout, one roadmap.** There is no second track. `docs/refactor/` used to hold a parallel set
+of deliverables with its own status table and its own IDs (`P0`, `D0`–`D10`, `F1`–`F6`); it was
+migrated into the numbered set and deleted. If a document, comment or memory still refers to
+`docs/refactor/` or to a `D`-prefixed deliverable ID, it is out of date.
 
 **Deliverables are flat and numbered.** There are no per-area subfolders — no `components/`, no
 `design-system/`. Those existed briefly and were removed: deciding whether a piece of work is
@@ -36,13 +40,27 @@ reaching for those is out of date.
 
 ## Repo quirks
 
-- **New work goes in the flat numbered set; `docs/refactor/` is closed to new deliverables.** It
-  predates the layout, keeps flat files and its own status table (IDs `P0`, `D0`–`D10`), and is left
-  alone deliberately — restructuring shipped work buys nothing.
-- **Two pre-existing broken links** are known and left alone: `.agent/workflows/README.md:11` points
-  at a `new-ui-component.md` that was never written, and `docs/refactor/04-debounce-hook.md:19`
-  cites a `DebouncableInput/__fixtures__/interactions.ts` that does not exist (the only such fixture
-  is under `ui-forms/Selects`).
+- **Numbers are allocation order, not chronology.** `06`–`11` shipped _before_ `01`–`05`; they carry
+  higher numbers because they were migrated into this layout later. An ID identifies a deliverable
+  and says nothing about when it happened. Do not renumber to "fix" the order.
+- **Deliverable state lives in the roadmap; task progress lives in `plan.md`.** These are different
+  questions and must not be duplicated. `docs/README.md` is the only place `todo`/`ready`/`✅ done`
+  appears. A `plan.md` opens with `Status: **shipped.**` — a statement about the document being an
+  as-built record — and tracks its own steps as checkboxes. A `spec.md` carries no status at all,
+  except the documented second-pass delimiter below. The legacy track duplicated deliverable state
+  into each spec's header, the two drifted, and a shipped deliverable sat marked `todo` for weeks.
+- **`D<n>` is an overloaded prefix — read the context.** Deliverables `04` and `05` both use
+  `D1`, `D2`, `D3`… as _internal decision IDs_ within their own `plan.md`, with anchor links like
+  `#d1--…`. Source comments referencing `plan.md, D3` mean those, not a deliverable. The retired
+  legacy track also used `D0`–`D10` for whole deliverables. Never bulk-rewrite a `D<n>` without
+  checking which of the two it is.
+- **Known broken links, left alone deliberately.** `.agent/workflows/README.md:11` points at a
+  `new-ui-component.md` that was never written. Separately, `04-ui-forms-primitive-migration`'s
+  `discovery.md` and `spec.md` carry 11 links to `packages/ui-forms/…` paths for components that
+  deliverable itself moved to `ui-core`. Those are pre-implementation documents describing where the
+  code was _before_ the move, so repointing them would make them less accurate, not more. A
+  deliverable's `plan.md` is the as-built record and should cite current paths; its `discovery.md`
+  and `spec.md` describe the world as it was.
 - **Source comments cite doc paths.** `Button.tsx`, `Button.stories.tsx` and `Icon.mdx` each
   reference a deliverable document. Grep `packages/` and `apps/` for `docs/` when moving anything.
 - **A second pass on a shipped deliverable stays in that deliverable's own `spec.md`.** It does
