@@ -39,7 +39,6 @@ export const config = [
 			'@typescript-eslint/no-empty-function': 'off',
 			'@typescript-eslint/no-var-requires': 'off',
 			'import/extensions': 'off',
-			// Keeps the `interface IFoo extends Bar {}` prop idiom legal — docs/16-type-hygiene/plan.md.
 			'@typescript-eslint/no-empty-object-type': [
 				'error',
 				{ allowInterfaces: 'with-single-extends' }

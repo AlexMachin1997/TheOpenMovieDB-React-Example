@@ -20,6 +20,44 @@ A base configuration that includes:
 - Turbo plugin for monorepo best practices
 - Common ignore patterns
 
+#### `no-empty-object-type` allows one specific shape
+
+The base config sets `allowInterfaces: 'with-single-extends'`, so this lints clean:
+
+```ts
+export interface ITabs extends React.ComponentProps<typeof TabsPrimitive.Root> {}
+```
+
+That is the pass-through idiom for a component's prop interface, used by ~33 types across the UI
+packages. The `I` prefix is deliberate — it lets the prop interface be named after the component
+without colliding with the component's own export. **Do not "fix" one of these into a type alias.**
+
+Everything the rule actually exists to catch still errors: `interface X {}` with no supertype,
+`type X = {}`, and a bare `{}` annotation, which means "any value except `null`/`undefined`" rather
+than "an empty object".
+
+Note the rule **never** reports an interface with two or more supertypes, at any setting
+(`no-empty-object-type.js:71`). That is not something this config chose. It is worth knowing when
+reconciling a violation count that will not add up — it is why `@repo/ui-command` reported zero
+warnings while holding five empty interfaces.
+
+The `I`-prefix convention itself is not currently enforced by any rule, so nothing stops a new type
+being written without it. See `docs/13-exports-conventions/spec.md`.
+
+#### `no-explicit-any` is `error`, with one sanctioned exception
+
+Both this and `no-empty-object-type` sat at `warn` from `06` until `16`, so a linter that had never
+run could be switched on without blocking on a backlog. That backlog is cleared and the tree is
+warning-free; any lint output is now a regression.
+
+One `eslint-disable` for `no-explicit-any` remains, in
+`packages/ui-forms/src/components/Form/Form.types.ts`, and it carries its reasoning in-file. Prefer
+deriving a real type over adding another — `FieldValidatorsLike` in
+`packages/ui-forms/src/components/FormField/FormField.types.ts` shows the pattern for a third-party
+type too generic to name.
+
+Full rationale for both: `docs/16-type-hygiene/plan.md`.
+
 ### React Config (`@repo/eslint-config/react`)
 
 A comprehensive React configuration that extends the base config and includes:
