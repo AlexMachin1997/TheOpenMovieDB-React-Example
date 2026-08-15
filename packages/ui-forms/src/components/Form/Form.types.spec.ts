@@ -1,12 +1,7 @@
 import { describe, it, expectTypeOf } from 'vitest';
 import { useForm } from '@tanstack/react-form';
 import type { IFormApiLike } from '~/components/Form/Form.types';
-
-interface IAccount {
-	email: string;
-	age: number;
-}
-
+import type { FieldValidatorsLike } from '~/components/FormField/FormField.types';
 /**
  * Never called. It exists so TypeScript infers a genuine `useForm` result — with all twelve
  * generics resolved the way a real call site resolves them — for the assertion below to check
@@ -15,7 +10,7 @@ interface IAccount {
  */
 const useAccountForm = () =>
 	useForm({
-		defaultValues: { email: '', age: 0 } satisfies IAccount,
+		defaultValues: { email: '', age: 0 },
 		onSubmit: async () => {}
 	});
 
@@ -33,5 +28,21 @@ describe('IFormApiLike', () => {
 	// `form.Field`'s own typing working instead of being cast around.
 	it('leaves field names as plain strings', () => {
 		expectTypeOf<Parameters<IFormApiLike['Field']>[0]['name']>().toEqualTypeOf<string>();
+	});
+});
+
+describe('FieldValidatorsLike', () => {
+	// `validators` used to be `any` behind a file-level eslint-disable. It is derived off
+	// `form.Field` instead, which only helps if the derivation lands on TanStack's real
+	// `FieldValidators` rather than collapsing to `any` — an `any` would typecheck everywhere and
+	// check nothing. These pin that. Only `check-types` runs them; `vitest run` does not typecheck.
+	it('is not any', () => {
+		expectTypeOf<FieldValidatorsLike>().not.toBeAny();
+	});
+
+	it('carries the validator members callers actually pass', () => {
+		expectTypeOf<FieldValidatorsLike>().toHaveProperty('onChange');
+		expectTypeOf<FieldValidatorsLike>().toHaveProperty('onBlur');
+		expectTypeOf<FieldValidatorsLike>().toHaveProperty('onSubmit');
 	});
 });

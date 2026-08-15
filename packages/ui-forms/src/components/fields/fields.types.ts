@@ -2,8 +2,7 @@ import type * as React from 'react';
 import type { Option } from '@repo/core';
 import type { IField } from '@repo/ui-core';
 import type { ShowErrorsWhen } from '~/adapters/toFieldProps.types';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { FieldValidatorsLike } from '~/components/FormField/FormField.types';
 
 /**
  * What every bound field component accepts.
@@ -31,7 +30,7 @@ export interface IBoundField extends Omit<IField, 'children' | 'error' | 'native
 	 *
 	 * @default undefined
 	 */
-	validators?: any;
+	validators?: FieldValidatorsLike;
 
 	/**
 	 * When the field's error becomes visible.

@@ -2,8 +2,16 @@ import type * as React from 'react';
 import type { AnyFieldApi } from '@tanstack/react-form';
 import type { IField, IFieldControlProps } from '@repo/ui-core';
 import type { ShowErrorsWhen } from '~/adapters/toFieldProps.types';
+import type { IFormApiLike } from '~/components/Form/Form.types';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * The `validators` bag `form.Field` accepts, derived rather than named.
+ *
+ * TanStack's `FieldValidators` takes twelve generic parameters, so it cannot be written out here
+ * without spelling `any` twelve times. Reading it back off `IFormApiLike['Field']` gets the real
+ * type instead — see `Form.types.ts` for why that form's own slots are `any`.
+ */
+export type FieldValidatorsLike = NonNullable<Parameters<IFormApiLike['Field']>[0]['validators']>;
 
 /**
  * The bindings `FormField` hands to its children.
@@ -76,7 +84,7 @@ export interface IFormField<TValue = unknown> extends Omit<IField, 'children' | 
 	 *
 	 * @default undefined
 	 */
-	validators?: any;
+	validators?: FieldValidatorsLike;
 
 	/**
 	 * When the field's error becomes visible.
