@@ -546,7 +546,6 @@ const FormTemplate = () => {
 };
 
 export const FormIntegration: StoryObj<SelectProps> = {
-	name: 'Form Integration',
 	render: () => <FormTemplate />
 };
 
@@ -571,7 +570,6 @@ const CustomStylingTemplate = () => {
 };
 
 export const CustomStyling: StoryObj<SelectProps> = {
-	name: 'Custom Styling',
 	render: () => <CustomStylingTemplate />,
 	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		const trigger = getTrigger(canvasElement);
@@ -624,7 +622,6 @@ const EmptyStateTemplate = () => {
 };
 
 export const EmptyState: StoryObj<SelectProps> = {
-	name: 'Empty State',
 	render: () => <EmptyStateTemplate />,
 	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		// First select has default empty state
