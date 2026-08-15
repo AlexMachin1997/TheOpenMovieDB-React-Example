@@ -33,10 +33,41 @@ A comprehensive React configuration that extends the base config and includes:
   `.storybook/main.*`)
 - React 17+ JSX transform optimizations
 
-The Storybook spread is placed **above** this config's own rules block on purpose.
-`flat/recommended` disables `react-hooks/rules-of-hooks` on story files, and the rules block below
-it matches every file, so last-match-wins restores `error`. Moving the spread down would silently
-turn that rule off across every story file.
+#### The Storybook spread must stay above the rules block
+
+`flat/recommended` sets `react-hooks/rules-of-hooks` to `off` on `**/*.stories.*`. This config's own
+rules block has no `files` key, so it matches every file, and flat config resolves last-match-wins
+per rule. With the spread **above** it, the repo's `error` is restored for story files and only the
+`storybook/*` rules are added. Move the spread below and that rule silently switches off across every
+story file — the same invisible degradation the `project-structure` parser caused, and the rule that
+caught a real conditional-hook bug in `CommandSearch`.
+
+Storybook's own documentation does not mention this. Its example happens to place your rules after
+the spread, but says nothing about why the order matters.
+
+Verify with `eslint --print-config <a story file>` after any change here: `react-hooks/rules-of-hooks`
+must resolve to `2`, and no rule should disappear or drop severity relative to before.
+
+`flat/recommended` also disables `import-x/no-anonymous-default-export`. That plugin is not installed
+here, which is harmless — ESLint skips plugin resolution entirely for a rule set to `off`.
+
+#### It requires Node 24, not just a Storybook version
+
+The plugin was removed from this config for a while because it crashed ESLint at config load with
+`ERR_REQUIRE_CYCLE_MODULE`, and the recorded fix was to wait for aligned Storybook versions. That was
+never the cause — the versions were already aligned. `storybook` is ESM-only and its
+`./internal/csf` subpath (the plugin's only Storybook-internal import) has no `require` condition, so
+loading it through `require()` hits Node 22's rule that a cycle crossing the `require(esm)` boundary
+is fatal. Node 24 relaxed that.
+
+On the current lockfile it still crashes under Node 22.23.2 and imports cleanly under 24.18.1, so the
+`.node-version` pin is load-bearing. Note it has to hold for the **system** Node as well, since turbo
+spawns tasks through that rather than through fnm's shim.
+
+One known gap: `storybook/await-interactions` cannot fire in this repo. It gates on the import source
+and recognises only `@storybook/testing-library`, `@storybook/test` and `@storybook/jest`, while
+every story here imports from `storybook/test`. The rule is enabled and structurally unable to report
+anything.
 
 ## Usage
 

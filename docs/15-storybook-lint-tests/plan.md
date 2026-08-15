@@ -237,13 +237,15 @@ Left alone on purpose: `docs/06-repo-health/plan.md`, `docs/07-test-harness/plan
 ## Found, not adopted
 
 - **The CI Prettier job cannot fail.** `.github/workflows/linting-action.yml` runs `pnpm prettier`,
-  which is `turbo run prettier` → `prettier --write ./src`. It rewrites its own checkout and exits 0
-  unconditionally. **22 files in the repo are currently not prettier-clean** (`npx prettier
-  --check`), so the gate has been passing over a real backlog. Same failure class as this
-  deliverable: a gate that looks green and enforces nothing.
-- **CI has no test job at all** — only ESLint, Prettier and TypeCheck. The interaction suite is now
-  trustworthy and still enforced by nobody. Running it in CI needs a Playwright browser install step
-  and ~60–120s.
+  which is `turbo run prettier` → `prettier --write ./src`. Formatting on write is the intent and is
+  fine; the consequence is that the CI step rewrites its own checkout and exits 0 unconditionally, so
+  it reports "formatted" rather than checking anything. **22 files in the repo are currently not
+  prettier-clean** (`npx prettier --check`). Either run `--write` and commit the result, or switch
+  the CI step to `--check` — today it does neither.
+- **The interaction suite is deliberately out of CI**, not overlooked: running Playwright/Chromium on
+  every push costs money, and the components are not stable enough yet to be worth it. Revisit when
+  they are. Until then the suite is trustworthy but locally-run, which is a decision rather than a
+  gap.
 - **`storybook/await-interactions` is inert here** (see above).
 - **`apps/the-open-movie-database`'s 35 stories are linted but never interaction-tested** —
   `main.ts` globs `packages/*/src` only, and the app has no `@storybook/addon-vitest`.

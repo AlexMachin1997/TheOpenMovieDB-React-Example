@@ -44,7 +44,7 @@ report a build time or a "clean build is green" without it.
 | Lint            | `pnpm lint`                                         | Errors DO fail it. Healthy today: 18 + 20 warnings, 0 errors                                                             |
 | Prettier        | `pnpm prettier`                                     | ⚠️ **`--write`, not `--check`. It cannot fail and it rewrites your tree** — see below                                     |
 | Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                       |
-| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 385 passed, 27 skipped                            |
+| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 385 passed, 27 skipped. **Local only, on purpose** — see below |
 | Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                           |
 
 ### `eslint-plugin-only-warn` is NOT wired up — lint errors are real
@@ -59,17 +59,19 @@ config — a new error will block your commit.
 Verified 2026-08-15 by introducing a conditional `useState` into a story file: reported as an
 `error`, exit 1.
 
-### 🚨 `pnpm prettier` rewrites your working tree and always passes
+### `pnpm prettier` writes — it is not a check
 
-The root script is `turbo run prettier`, and each package's is `prettier --write ./src`. Running it
-mid-task silently reformats files you never touched — **22 files in this repo are not
-prettier-clean**, so it produces a ~2,200-line diff that is trivially easy to sweep into a commit
-with `git add -A`. Use `npx prettier --check` when you want to *know*, and never run `pnpm prettier`
-as a verification step.
+The root script is `turbo run prettier`, and each package's is `prettier --write ./src`. Writing is
+the intent, and keeping the tree formatted is wanted here. What it is *not* is a verification step:
+it always exits 0, and **22 files in this repo are not currently prettier-clean**, so running it
+mid-task produces a ~2,200-line diff across files you never touched. That is trivially easy to sweep
+into an unrelated commit with `git add -A`.
 
-The same fact means the CI **Prettier** job (`.github/workflows/linting-action.yml`, `run: pnpm
-prettier`) rewrites its own checkout and exits 0 unconditionally. That gate has never been able to
-fail. Not adopted by any deliverable.
+So: use `npx prettier --check` to find out whether something is formatted, run `pnpm prettier` only
+when you intend to reformat, and commit the result on its own rather than folded into feature work.
+
+Same reason, the CI **Prettier** job (`.github/workflows/linting-action.yml`, `run: pnpm prettier`)
+rewrites its own checkout and passes unconditionally. Not adopted by any deliverable.
 
 ### The suite is green — 385 passed, 27 skipped
 
@@ -82,6 +84,12 @@ selected. It failed on the 15th of every month and passed the other ~29 days. `1
 freezing the clock for the whole suite in `apps/storybook/.storybook/vitest.setup.ts`
 (`vi.useFakeTimers({ toFake: ['Date'] })` — `Date` only, because blanket fake timers stall
 `userEvent`).
+
+**CI runs no tests, deliberately.** `.github/workflows/linting-action.yml` has three jobs — ESLint,
+Prettier, TypeCheck — and no test job. Running Playwright/Chromium on every push costs money, and the
+components are not stable enough yet to justify it. Do not "fix" this by adding a CI test job; it is
+a decision, to be revisited when the component library settles. It does mean the suite is only ever
+as green as the last person who ran it locally.
 
 Two traps that cost real time here, worth keeping:
 

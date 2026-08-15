@@ -27,23 +27,8 @@ export const config = [
 		}
 	},
 
-	// This spread MUST stay ABOVE the rules block below — the ordering is the only thing keeping it
-	// safe. `flat/recommended`'s stories entry is scoped to `**/*.stories.*` and sets
-	// `react-hooks/rules-of-hooks` to 'off'. The block below has no `files` key, so it matches every
-	// file, and flat config resolves last-match-wins per rule: from here, the repo's 'error' is
-	// restored for stories and only the `storybook/*` rules are added. Below the block, Storybook
-	// would silently disable rules-of-hooks across every story file — the same invisible
-	// degradation the project-structure parser caused, and that rule is what caught a real
-	// conditional-hook bug in CommandSearch.
-	//
-	// It also disables `import-x/no-anonymous-default-export`; that plugin is not installed here,
-	// which is harmless because ESLint skips plugin resolution for a rule set to 'off'.
-	//
-	// The plugin was previously removed because it crashed ESLint at config load with
-	// ERR_REQUIRE_CYCLE_MODULE. That is a Node 22 `require(esm)` restriction, not a version
-	// mismatch: on these exact versions it still crashes on Node 22.23.2 and imports cleanly on
-	// 24.18.1. The repo pins Node 24, so it is safe — but note the pin has to hold for the
-	// *system* Node too, since turbo spawns tasks through that rather than through fnm's shim.
+	// Must stay ABOVE the rules block below: `flat/recommended` turns `react-hooks/rules-of-hooks`
+	// off on story files, and the block below is what restores it. See this package's README.
 	...pluginStorybook.configs['flat/recommended'],
 
 	{
