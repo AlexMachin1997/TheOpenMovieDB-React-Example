@@ -23,6 +23,16 @@ enforced by nothing at all:
   component without colliding with its export. Nothing stops a new type skipping it, and `16` left
   the tree already split: `ITextarea` is an interface while `ICheckboxField` and `ISwitchField` are
   `type` aliases. See [`16-type-hygiene`](../16-type-hygiene/plan.md#found-not-adopted).
+
+  **This one may not be mechanically enforceable, and that needs settling before it is attempted.**
+  A blanket `naming-convention` with `prefix: ['I']` on `selector: 'interface'` would flag ~20+
+  interfaces that deliberately do not carry it — `UseDebouncedValueOptions`,
+  `UseRovingTabIndexResult`, `FormatDateOptions`, `FindNextEnabledIndexOptions`,
+  `KeyboardActivationProps`, `SelectListItemProps`. Those are a second, equally deliberate
+  convention: a hook's options/result and a utility's option bag are named for what they are. No
+  selector distinguishes "component prop interface" from "hook options interface", so enforcement
+  needs either a `filter` regex keyed on file location, or an accepted rule that both naming families
+  are legitimate. Decide which before writing the rule.
 - **`displayName`**, present on all 37 component directories, while
   `packages/eslint-config/react.js` sets `react/display-name` to `off`.
 
@@ -127,9 +137,10 @@ root. The `CheckboxGroup` export item is obsolete — it moved to `ui-core` duri
 - [ ] Each settled convention is enforced by a named rule, or documented in the owning package's
       README — covering file layout, barrels, variants naming, `displayName`, the `I` prefix and the
       control-value contract, and matching the barrel strategy actually implemented.
-- [ ] `@typescript-eslint/naming-convention` enforces the `I` prefix, and the `ITextarea` /
-      `ICheckboxField` interface-vs-alias split is resolved either way.
-- [ ] `react/display-name` is enabled, or its staying `off` is recorded with a reason.
+- [ ] The `I` prefix is either enforced, or recorded as unenforceable with the reason — and the
+      `ITextarea` / `ICheckboxField` interface-vs-alias split is resolved either way.
+- [ ] `react/display-name` is `error`. Measured during `16`: **0 violations**, and the rule was
+      confirmed able to fire (an anonymous `React.memo` probe reports). A one-line change.
 - [ ] `pnpm lint` exits non-zero on a warning — `--max-warnings 0`, proven with a deliberate warning.
 - [ ] The CI Prettier job fails on unformatted input, proven the same way.
 - [ ] The folder-structure rule is enabled and running.
