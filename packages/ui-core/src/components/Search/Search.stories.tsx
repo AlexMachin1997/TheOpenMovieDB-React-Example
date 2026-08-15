@@ -55,7 +55,7 @@ export const InteractiveClearTest: Story = {
 		showClearButton: true,
 		debounceMs: 50 // Short debounce for testing
 	},
-	play: async ({ canvasElement, args, step }: any) => {
+	play: async ({ canvasElement, args, step }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
 

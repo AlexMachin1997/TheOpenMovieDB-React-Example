@@ -32,7 +32,7 @@ export const WithCustomDebounce: Story = {
 		debounceMs: 1000,
 		placeholder: '1 second debounce...'
 	},
-	play: async ({ canvasElement, args, step }: any) => {
+	play: async ({ canvasElement, args, step }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
 
@@ -59,7 +59,7 @@ export const Disabled: Story = {
 		disabled: true,
 		placeholder: 'Disabled input'
 	},
-	play: async ({ canvasElement, args, step }: any) => {
+	play: async ({ canvasElement, args, step }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
 
@@ -74,7 +74,7 @@ export const WithDefaultValue: Story = {
 	args: {
 		defaultValue: 'Initial value'
 	},
-	play: async ({ canvasElement, step }: any) => {
+	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
 
@@ -88,7 +88,7 @@ export const InteractiveDebounceTest: Story = {
 	args: {
 		debounceMs: 300
 	},
-	play: async ({ canvasElement, args, step }: any) => {
+	play: async ({ canvasElement, args, step }) => {
 		const canvas = within(canvasElement);
 		const input = canvas.getByRole('textbox');
 
