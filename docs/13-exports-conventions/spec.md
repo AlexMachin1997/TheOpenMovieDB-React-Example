@@ -73,7 +73,8 @@ root. The `CheckboxGroup` export item is obsolete — it moved to `ui-core` duri
   the byte-identical duplicates; resolving the `RangeDatePicker`/`DateRangePicker` mismatch;
   re-enabling the folder-structure rule in an isolated config; extending `folderStructure.mjs` to
   match; and the four guardrail gaps above — `--max-warnings 0`, CI Prettier as `--check`,
-  `@typescript-eslint/naming-convention` for the `I` prefix, and `react/display-name`.
+  `react/display-name`, and **settling** whether the `I` prefix can be enforced (deciding it cannot,
+  with the reason recorded, is a valid outcome).
 - **Not included**: changing which package a component lives in, or any component's public props.
   Changing component code to satisfy the rule — if it finds violations, record and raise them.
   Re-enabling `eslint-plugin-storybook`, which is
