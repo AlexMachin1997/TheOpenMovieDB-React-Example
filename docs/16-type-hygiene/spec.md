@@ -15,9 +15,14 @@ so that a linter which had never actually run could be turned on without blockin
 violations. That was the right call then. But a `warn` is not a gate: new violations can be added
 freely, and the count can grow without anything failing.
 
-The scale looks materially smaller now than the ~39 originally recorded — a rough scan finds around
-10 candidate sites — so this is likely a modest cleanup rather than the large one it was when
-deferred.
+> **Corrected after implementation.** This paragraph originally read: "The scale looks materially
+> smaller now than the ~39 originally recorded — a rough scan finds around 10 candidate sites — so
+> this is likely a modest cleanup rather than the large one it was when deferred."
+>
+> That was wrong by nearly 4×. The measured baseline was **38**, against the 39 originally recorded —
+> essentially nothing had been cleaned up. The rough scan missed every declaration whose `extends`
+> wraps onto a second line, and counted only the `no-explicit-any` sites. See
+> [`plan.md`](plan.md#the-count-38-not-10).
 
 ## Goals
 

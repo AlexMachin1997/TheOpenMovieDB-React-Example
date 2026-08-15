@@ -41,7 +41,7 @@ report a build time or a "clean build is green" without it.
 | Gate            | Command                                             | Notes                                                                                                                                 |
 | --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | Build           | `pnpm build`                                        | `pnpm turbo run build --force` when baselining                                                                                        |
-| Lint            | `pnpm lint`                                         | Errors DO fail it. Healthy today: 18 + 20 warnings, 0 errors                                                                          |
+| Lint            | `pnpm lint`                                         | Errors DO fail it. Healthy today: **0 errors, 0 warnings** — any output is a regression                                               |
 | Prettier        | `pnpm prettier`                                     | ⚠️ **`--write`, not `--check`. It cannot fail and it rewrites your tree** — see below                                                 |
 | Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                                    |
 | Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 385 passed, 27 skipped. **Local only, on purpose** — see below |
@@ -50,14 +50,31 @@ report a build time or a "clean build is green" without it.
 ### `eslint-plugin-only-warn` is NOT wired up — lint errors are real
 
 It is declared in `packages/eslint-config/package.json` and imported by **no config**; in flat
-config a plugin only patches severity if it is loaded. Grep it before believing otherwise. What
-actually produces a warnings-only tree is narrow and deliberate: `base.js` downgrades exactly two
-rules (`no-empty-object-type`, `no-explicit-any`). Everything else is `error`, and `pnpm lint` gates
-both `.husky/pre-commit` and the CI `ESLint` job. "0 errors" is a fact about the code, not about the
-config — a new error will block your commit.
+config a plugin only patches severity if it is loaded. Grep it before believing otherwise.
+
+**Every rule is `error`, and the tree is warning-free as of `16`.** The two downgrades that used to
+sit in `base.js` (`no-empty-object-type`, `no-explicit-any`) are gone. `pnpm lint` gates both
+`.husky/pre-commit` and the CI `ESLint` job, so any output at all is now a regression rather than
+background noise.
 
 Verified 2026-08-15 by introducing a conditional `useState` into a story file: reported as an
 `error`, exit 1.
+
+### `no-empty-object-type` allows one specific shape, on purpose
+
+`base.js` sets `allowInterfaces: 'with-single-extends'`, so
+`interface IFoo extends React.ComponentProps<'div'> {}` lints clean. That is the pass-through idiom
+for a component's prop interface — the `I` prefix exists so the type can be named after the component
+without colliding with it. **Do not "fix" one of these into a type alias**; ~33 of them are load-
+bearing convention. See `docs/16-type-hygiene/plan.md`.
+
+Still `error`: `interface X {}` (no extends), `type X = {}`, and a bare `{}` annotation — which means
+"anything except null/undefined", and is the footgun the rule actually exists for.
+
+Note the rule **never** reports an interface with 2+ supertypes, at any setting
+(`no-empty-object-type.js:71`). That is why `ui-command` reported zero warnings while holding five
+empty interfaces. If you are reconciling a violation count and the arithmetic will not close, this is
+usually why.
 
 ### `pnpm prettier` writes — it is not a check
 
