@@ -78,6 +78,22 @@ short of changing the public API. This deliverable is that change.
    controlled and uncontrolled modes.
 7. Existing behaviour and rendered appearance are unchanged for call sites that do not adopt the new
    props.
+8. An overlay can be named **without rendering a visible heading**, and doing so requires no
+   hand-built hidden markup.
+
+## The call site that proves requirement 8
+
+`CommandDialog` is a command palette: the search input is the visible affordance, and a heading above
+it would be noise. But it still needs a name. Today it satisfies that with a hand-built
+`<DialogHeader className='sr-only'>` wrapping a `DialogTitle` — and until
+[`14`](../14-component-consolidation/plan.md) it had that header *outside* `DialogContent`, where
+Radix never carried it into the portal, so the dialog shipped with no name at all. The pattern is
+easy to get wrong precisely because it is hand-built.
+
+Under this deliverable that whole block should collapse to naming the overlay directly — an
+`aria-label`, or a `title` the component knows to hide — with no `sr-only` markup at the call site.
+Treat `CommandDialog` as the acceptance test for requirement 8: if it still needs a hand-written
+hidden header afterwards, the API has not solved the problem.
 
 ## Edge Cases & Error Handling
 
@@ -117,6 +133,14 @@ short of changing the public API. This deliverable is that change.
 
 ## Open Questions
 
+- **Can the built-in close button be intercepted?** Today it cannot. Radix's `onOpenChange` reports
+  a close, it cannot veto one, so "confirm before closing" has no route through the `X` — a caller
+  must control `open` and refuse to clear it. `Sheet.stories.tsx`'s `WithConfirmationDialog` works
+  around this with a separate footer button, and its own description
+  (*"Use the close button to test the confirmation dialog"*) is wrong about it: the `X` closes
+  immediately, bypassing the confirmation. Either give the close button a way to be intercepted, or
+  document that guarded closing requires the controlled pattern — and fix that story's prose either
+  way.
 - Should `footer` be a `ReactNode`, or an object carrying both content and per-part props? The
   simpler shape is proposed above; the richer one only earns its cost if call sites routinely need
   to restyle the footer.

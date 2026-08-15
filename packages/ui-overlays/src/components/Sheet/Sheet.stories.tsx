@@ -201,41 +201,44 @@ export const RefBased: Story = {
 	// The uncontrolled half of the imperative ref. `RefWithControlled` below covers the controlled
 	// half, which is the path that was broken and got fixed; this one guards the branch that
 	// drives internal state, so a change to either cannot quietly break the other.
-	play: async ({ canvasElement }) => {
+	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 		const documentScope = within(document.body);
 
-		expect(documentScope.queryByText('Ref-Based Sheet')).not.toBeInTheDocument();
-
-		// `toggle()` from closed proves the handle reads the *current* open state rather than a
-		// value captured when it was created.
-		await userEvent.click(canvas.getByRole('button', { name: /toggle via ref/i }));
-		await waitFor(() => {
-			expect(documentScope.getByText('Ref-Based Sheet')).toBeInTheDocument();
+		await step('The sheet starts closed', async () => {
+			await expect(documentScope.queryByRole('dialog')).not.toBeInTheDocument();
 		});
 
-		// While the sheet is open Radix marks the background `aria-hidden`, so the trigger row is
-		// no longer in the accessibility tree. Close from the sheet's own footer, which is.
+		await step('toggle() reads the current open state rather than a stale one', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: /toggle via ref/i }));
+			await waitFor(async () => {
+				await expect(documentScope.getByRole('dialog')).toHaveAttribute('data-state', 'open');
+			});
+		});
+
 		const dialog = await documentScope.findByRole('dialog');
-		await userEvent.click(await within(dialog).findByRole('button', { name: /close via ref/i }));
 
-		// Radix keeps the closed content mounted while it animates out, so assert on the dialog's
-		// own state rather than on the text merely being gone.
-		await waitFor(() => {
-			expect(dialog).toHaveAttribute('data-state', 'closed');
+		await step('close() closes it, asserted on state rather than on absence', async () => {
+			// While the sheet is open Radix marks the background `aria-hidden`, so the trigger row is
+			// out of the accessibility tree. Close from the sheet's own footer, which is in it.
+			await userEvent.click(await within(dialog).findByRole('button', { name: /close via ref/i }));
+			await waitFor(async () => {
+				await expect(dialog).toHaveAttribute('data-state', 'closed');
+			});
 		});
 
-		// `data-state="closed"` is not the end of it: the background stays `aria-hidden` until the
-		// exit animation finishes and the content unmounts, so the trigger row is still outside the
-		// accessibility tree at this point. Wait for the unmount before reaching for it again.
-		await waitFor(() => {
-			expect(documentScope.queryByRole('dialog')).not.toBeInTheDocument();
-		});
+		await step('open() still works after a full open/close cycle', async () => {
+			// `data-state="closed"` is not the end of it: the background stays `aria-hidden` until the
+			// exit animation finishes and the content unmounts, so the trigger row is still outside
+			// the accessibility tree here. Wait for the unmount before reaching for it.
+			await waitFor(async () => {
+				await expect(documentScope.queryByRole('dialog')).not.toBeInTheDocument();
+			});
 
-		// `open()` on a handle that has already been through a full open/close cycle.
-		await userEvent.click(canvas.getByRole('button', { name: /open via ref/i }));
-		await waitFor(() => {
-			expect(documentScope.getByRole('dialog')).toHaveAttribute('data-state', 'open');
+			await userEvent.click(canvas.getByRole('button', { name: /open via ref/i }));
+			await waitFor(async () => {
+				await expect(documentScope.getByRole('dialog')).toHaveAttribute('data-state', 'open');
+			});
 		});
 	}
 };
