@@ -33,6 +33,7 @@ enforced by nothing at all:
   selector distinguishes "component prop interface" from "hook options interface", so enforcement
   needs either a `filter` regex keyed on file location, or an accepted rule that both naming families
   are legitimate. Decide which before writing the rule.
+
 - **`displayName`**, present on all 37 component directories, while
   `packages/eslint-config/react.js` sets `react/display-name` to `off`.
 
