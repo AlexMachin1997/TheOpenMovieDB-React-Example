@@ -60,21 +60,11 @@ background noise.
 Verified 2026-08-15 by introducing a conditional `useState` into a story file: reported as an
 `error`, exit 1.
 
-### `no-empty-object-type` allows one specific shape, on purpose
-
-`base.js` sets `allowInterfaces: 'with-single-extends'`, so
-`interface IFoo extends React.ComponentProps<'div'> {}` lints clean. That is the pass-through idiom
-for a component's prop interface — the `I` prefix exists so the type can be named after the component
-without colliding with it. **Do not "fix" one of these into a type alias**; ~33 of them are load-
-bearing convention. See `docs/16-type-hygiene/plan.md`.
-
-Still `error`: `interface X {}` (no extends), `type X = {}`, and a bare `{}` annotation — which means
-"anything except null/undefined", and is the footgun the rule actually exists for.
-
-Note the rule **never** reports an interface with 2+ supertypes, at any setting
-(`no-empty-object-type.js:71`). That is why `ui-command` reported zero warnings while holding five
-empty interfaces. If you are reconciling a violation count and the arithmetic will not close, this is
-usually why.
+One trap worth knowing before you reconcile a violation count: `no-empty-object-type` is configured
+to allow `interface IFoo extends Bar {}`, and **never** reports an interface with 2+ supertypes at
+any setting. **Do not "fix" one of those into a type alias.** Why, and what still errors, is in
+[`packages/eslint-config/README.md`](../../../packages/eslint-config/README.md) — that is the home
+for rule rationale, not this file and not a comment in `base.js`.
 
 ### `pnpm prettier` writes — it is not a check
 
