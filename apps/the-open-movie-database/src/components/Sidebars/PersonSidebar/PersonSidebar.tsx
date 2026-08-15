@@ -86,7 +86,7 @@ const PersonSidebar = ({
 								<p className='font-light' key={`${word}-${index}`}>
 									{word}
 								</p>
-						  ))
+							))
 						: 'N/A'}
 				</li>
 			</ul>

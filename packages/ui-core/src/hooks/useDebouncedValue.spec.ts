@@ -12,7 +12,9 @@ describe('useDebouncedValue', () => {
 
 	it('does not emit on initial mount', () => {
 		const onValueChange = vi.fn();
-		renderHook(() => useDebouncedValue({ defaultValue: 'initial', debounceMs: 300, onValueChange }));
+		renderHook(() =>
+			useDebouncedValue({ defaultValue: 'initial', debounceMs: 300, onValueChange })
+		);
 
 		act(() => {
 			vi.advanceTimersByTime(300);
@@ -23,7 +25,9 @@ describe('useDebouncedValue', () => {
 
 	it('emits once the debounce delay elapses', () => {
 		const onValueChange = vi.fn();
-		const { result } = renderHook(() => useDebouncedValue({ defaultValue: '', debounceMs: 300, onValueChange }));
+		const { result } = renderHook(() =>
+			useDebouncedValue({ defaultValue: '', debounceMs: 300, onValueChange })
+		);
 
 		act(() => {
 			result.current.setValue('a');
@@ -42,7 +46,9 @@ describe('useDebouncedValue', () => {
 
 	it('coalesces rapid changes into a single emit of the final value', () => {
 		const onValueChange = vi.fn();
-		const { result } = renderHook(() => useDebouncedValue({ defaultValue: '', debounceMs: 300, onValueChange }));
+		const { result } = renderHook(() =>
+			useDebouncedValue({ defaultValue: '', debounceMs: 300, onValueChange })
+		);
 
 		act(() => {
 			result.current.setValue('a');
@@ -83,7 +89,9 @@ describe('useDebouncedValue', () => {
 
 	it('does not emit when the value settles back to the last-emitted value', () => {
 		const onValueChange = vi.fn();
-		const { result } = renderHook(() => useDebouncedValue({ defaultValue: 'x', debounceMs: 300, onValueChange }));
+		const { result } = renderHook(() =>
+			useDebouncedValue({ defaultValue: 'x', debounceMs: 300, onValueChange })
+		);
 
 		act(() => {
 			result.current.setValue('x');
@@ -97,7 +105,9 @@ describe('useDebouncedValue', () => {
 
 	it('emits synchronously with no scheduled timer when debounceMs is 0', () => {
 		const onValueChange = vi.fn();
-		const { result } = renderHook(() => useDebouncedValue({ defaultValue: '', debounceMs: 0, onValueChange }));
+		const { result } = renderHook(() =>
+			useDebouncedValue({ defaultValue: '', debounceMs: 0, onValueChange })
+		);
 
 		act(() => {
 			result.current.setValue('typed');

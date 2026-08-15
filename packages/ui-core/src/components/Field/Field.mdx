@@ -31,7 +31,7 @@ validation state for you and renders this underneath.
 - Sets `aria-invalid` and `aria-describedby` on the control, and `required`/`aria-required`.
 - Handles controls that a native `<label>` cannot name — groups, and non-labelable elements.
 
-<Canvas sourceState="none" of={FieldStories.Default} />
+<Canvas sourceState='none' of={FieldStories.Default} />
 
 ## Properties
 
@@ -44,7 +44,7 @@ spread onto whatever the control turns out to be:
 
 ```tsx
 <Field label='Email address' id='email'>
-  {(control) => <Input {...control} type='email' />}
+	{(control) => <Input {...control} type='email' />}
 </Field>
 ```
 
@@ -53,7 +53,7 @@ spread onto whatever the control turns out to be:
 presentational and knows nothing about form state.
 
 > **Why a render function rather than `<Field><Input /></Field>`?** Because the bindings often
-> belong on an element *inside* what you render. A `Slider`'s control is a `<span role='slider'>`
+> belong on an element _inside_ what you render. A `Slider`'s control is a `<span role='slider'>`
 > several levels below `SliderRoot`; cloning a child could only ever reach the outermost element,
 > and would silently put `aria-describedby` on a positioning wrapper where it does nothing. A render
 > function lets you say exactly where they go.
@@ -63,7 +63,9 @@ presentational and knows nothing about form state.
 ### Supply an `id`
 
 ```tsx
-<Field label='Email address' id='email'>…</Field>
+<Field label='Email address' id='email'>
+	…
+</Field>
 ```
 
 Optional, but do it. Ids then read as `email` and `email-message` in the DOM. Omit it and `Field`
@@ -72,7 +74,7 @@ valid in an attribute, and a syntax error if you ever try `querySelector('#' + i
 
 ### Description and error
 
-<Canvas sourceState="none" of={FieldStories.WithDescriptionAndError} />
+<Canvas sourceState='none' of={FieldStories.WithDescriptionAndError} />
 
 Both can show at once; the description renders first. Passing `error` is what puts the field into an
 invalid state — there is no separate `invalid` prop, because two sources of truth for one fact is
@@ -80,9 +82,9 @@ how a control and its field end up disagreeing.
 
 ### Required
 
-<Canvas sourceState="none" of={FieldStories.RequiredField} />
+<Canvas sourceState='none' of={FieldStories.RequiredField} />
 
-Sets the indicator on the label *and* `required` on the control. Both matter: the `*` is
+Sets the indicator on the label _and_ `required` on the control. Both matter: the `*` is
 `aria-hidden`, so the control's own attribute is what actually announces.
 
 ## Composition — one example per control family
@@ -91,27 +93,27 @@ Sets the indicator on the label *and* `required` on the control. Both matter: th
 
 ```tsx
 <Field label='Email address' id='email' error={error}>
-  {(control) => <Input {...control} type='email' value={value} onChange={onChange} />}
+	{(control) => <Input {...control} type='email' value={value} onChange={onChange} />}
 </Field>
 ```
 
 ### Textarea
 
-<Canvas sourceState="none" of={FieldStories.WithTextarea} />
+<Canvas sourceState='none' of={FieldStories.WithTextarea} />
 
 Identical — `Textarea` accepts the same bag.
 
 ### Booleans
 
-<Canvas sourceState="none" of={FieldStories.WithCheckbox} />
+<Canvas sourceState='none' of={FieldStories.WithCheckbox} />
 
 ```tsx
 <Field label='Accept the terms' id='terms' required>
-  {(control) => <Checkbox {...control} checked={checked} onCheckedChange={setChecked} />}
+	{(control) => <Checkbox {...control} checked={checked} onCheckedChange={setChecked} />}
 </Field>
 ```
 
-`Switch` works the same way. Note the label sits *above* the control here, which suits a field with
+`Switch` works the same way. Note the label sits _above_ the control here, which suits a field with
 a description or error. For a checkbox that reads inline beside its text, use
 [`CheckboxLabel`](?path=/docs/ui-core-checkbox--docs) directly instead — that is a different layout,
 not a worse one.
@@ -119,15 +121,10 @@ not a worse one.
 ### Groups
 
 ```tsx
-<Field
-  label='Notify me about'
-  id='notify'
-  nativeLabel={false}
-  error='Choose at least one.'
->
-  {(control) => (
-    <CheckboxGroup {...control} name='notify' options={options} value={value} onChange={onChange} />
-  )}
+<Field label='Notify me about' id='notify' nativeLabel={false} error='Choose at least one.'>
+	{(control) => (
+		<CheckboxGroup {...control} name='notify' options={options} value={value} onChange={onChange} />
+	)}
 </Field>
 ```
 
@@ -136,16 +133,18 @@ not a worse one.
 
 ### Slider
 
-<Canvas sourceState="none" of={FieldStories.NonNativeLabel} />
+<Canvas sourceState='none' of={FieldStories.NonNativeLabel} />
 
 ```tsx
 <Field label='Budget' id='budget' nativeLabel={false}>
-  {(control) => (
-    <SliderRoot defaultValue={[40]} max={100}>
-      <SliderTrack><SliderRange /></SliderTrack>
-      <SliderThumb {...control} />
-    </SliderRoot>
-  )}
+	{(control) => (
+		<SliderRoot defaultValue={[40]} max={100}>
+			<SliderTrack>
+				<SliderRange />
+			</SliderTrack>
+			<SliderThumb {...control} />
+		</SliderRoot>
+	)}
 </Field>
 ```
 
@@ -156,27 +155,27 @@ not a worse one.
 
 ```tsx
 <Field label='Country' id='country'>
-  {(control) => (
-    <Select {...control} type='single' options={countries} value={value} onValueChange={onChange} />
-  )}
+	{(control) => (
+		<Select {...control} type='single' options={countries} value={value} onValueChange={onChange} />
+	)}
 </Field>
 ```
 
-These render a `<button>` trigger. A `<button>` *is* a labelable element, so `nativeLabel` stays
+These render a `<button>` trigger. A `<button>` _is_ a labelable element, so `nativeLabel` stays
 `true` and `htmlFor` associates normally.
 
 ## `nativeLabel` — when to turn it off
 
-| Situation | `nativeLabel` |
-| --------- | ------------- |
-| `Input`, `Textarea`, `Checkbox`, `Switch`, `Radio` | `true` (default) |
-| `Select`, `SingleDatePicker`, `DateRangePicker` | `true` — the trigger is a `<button>` |
-| `CheckboxGroup`, `RadioGroup` | **`false`** — one label cannot name several controls |
-| `Slider` | **`false`** — a `<span role='slider'>` is not labelable |
+| Situation                                          | `nativeLabel`                                           |
+| -------------------------------------------------- | ------------------------------------------------------- |
+| `Input`, `Textarea`, `Checkbox`, `Switch`, `Radio` | `true` (default)                                        |
+| `Select`, `SingleDatePicker`, `DateRangePicker`    | `true` — the trigger is a `<button>`                    |
+| `CheckboxGroup`, `RadioGroup`                      | **`false`** — one label cannot name several controls    |
+| `Slider`                                           | **`false`** — a `<span role='slider'>` is not labelable |
 
 ## Accessibility
 
-<Canvas sourceState="none" of={FieldStories.ErrorAppearsAfterBlur} />
+<Canvas sourceState='none' of={FieldStories.ErrorAppearsAfterBlur} />
 
 **The message region is always rendered, even when empty**, and `aria-describedby` always points at
 it. This is not tidiness — `aria-describedby` is read when focus lands on a control, so an error
@@ -188,15 +187,15 @@ For the same reason it is never hidden with `display: none`, which would remove 
 accessibility tree entirely and reproduce the exact problem. It has zero height and zero margin when
 empty instead.
 
-| Concern | Behaviour |
-| ------- | --------- |
-| Naming | Native `<label htmlFor>` where possible, `aria-labelledby` where not. Never both. |
-| Errors | `aria-invalid='true'` on the control, message reachable via `aria-describedby`. |
-| Announcements | One `aria-live='polite'` region. Polite, not assertive — an assertive region interrupts mid-keystroke. |
-| Required | Symbol plus visually-hidden text on the label, `required`/`aria-required` on the control. Never colour alone. |
+| Concern       | Behaviour                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------- |
+| Naming        | Native `<label htmlFor>` where possible, `aria-labelledby` where not. Never both.                             |
+| Errors        | `aria-invalid='true'` on the control, message reachable via `aria-describedby`.                               |
+| Announcements | One `aria-live='polite'` region. Polite, not assertive — an assertive region interrupts mid-keystroke.        |
+| Required      | Symbol plus visually-hidden text on the label, `required`/`aria-required` on the control. Never colour alone. |
 
 > **A control must not render its own error as well.** If a control ever grows built-in error
-> display, do not pass `error` to `Field` *and* let the control show it — the message would appear
+> display, do not pass `error` to `Field` _and_ let the control show it — the message would appear
 > twice and be announced twice. `Field` owns the error slot.
 
 **This file's stories run axe as a blocking gate** (`a11y: { test: 'error' }`), unlike most of the

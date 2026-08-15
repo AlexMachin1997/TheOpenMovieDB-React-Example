@@ -47,7 +47,7 @@ const Review = ({
 									renderLink({
 										content: `A review by ${username}`
 									})
-							  )
+								)
 							: `A review by ${username}`}
 
 						<div className='md:ml-1'>

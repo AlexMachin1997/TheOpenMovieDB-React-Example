@@ -7,15 +7,21 @@ heading, a body and a footer currently reads:
 
 ```tsx
 <Sheet>
-  <SheetTrigger asChild><Button>Edit profile</Button></SheetTrigger>
-  <SheetContent side='right'>
-    <SheetHeader>
-      <SheetTitle>Edit profile</SheetTitle>
-      <SheetDescription>Update your details.</SheetDescription>
-    </SheetHeader>
-    <SheetInnerContent><ProfileForm /></SheetInnerContent>
-    <SheetFooter><Button type='submit'>Save</Button></SheetFooter>
-  </SheetContent>
+	<SheetTrigger asChild>
+		<Button>Edit profile</Button>
+	</SheetTrigger>
+	<SheetContent side='right'>
+		<SheetHeader>
+			<SheetTitle>Edit profile</SheetTitle>
+			<SheetDescription>Update your details.</SheetDescription>
+		</SheetHeader>
+		<SheetInnerContent>
+			<ProfileForm />
+		</SheetInnerContent>
+		<SheetFooter>
+			<Button type='submit'>Save</Button>
+		</SheetFooter>
+	</SheetContent>
 </Sheet>
 ```
 
@@ -86,7 +92,7 @@ short of changing the public API. This deliverable is that change.
 `CommandDialog` is a command palette: the search input is the visible affordance, and a heading above
 it would be noise. But it still needs a name. Today it satisfies that with a hand-built
 `<DialogHeader className='sr-only'>` wrapping a `DialogTitle` — and until
-[`14`](../14-component-consolidation/plan.md) it had that header *outside* `DialogContent`, where
+[`14`](../14-component-consolidation/plan.md) it had that header _outside_ `DialogContent`, where
 Radix never carried it into the portal, so the dialog shipped with no name at all. The pattern is
 easy to get wrong precisely because it is hand-built.
 
@@ -137,7 +143,7 @@ hidden header afterwards, the API has not solved the problem.
   a close, it cannot veto one, so "confirm before closing" has no route through the `X` — a caller
   must control `open` and refuse to clear it. `Sheet.stories.tsx`'s `WithConfirmationDialog` works
   around this with a separate footer button, and its own description
-  (*"Use the close button to test the confirmation dialog"*) is wrong about it: the `X` closes
+  (_"Use the close button to test the confirmation dialog"_) is wrong about it: the `X` closes
   immediately, bypassing the confirmation. Either give the close button a way to be intercepted, or
   document that guarded closing requires the controlled pattern — and fix that story's prose either
   way.

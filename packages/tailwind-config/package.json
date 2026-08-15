@@ -21,7 +21,7 @@
 		"dev": "tsup src/index.ts --format esm,cjs --dts --watch",
 		"check-types": "tsc --noEmit --incremental",
 		"lint": "eslint --cache",
-		"prettier": "prettier --write ./src"
+		"prettier": "prettier --write ."
 	},
 	"dependencies": {
 		"clsx": "^2.1.1",

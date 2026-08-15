@@ -23,7 +23,7 @@ import { RadioGroup } from '@repo/ui-core';
 - Per-option `disabled`, plus a group-level `disabled`.
 - An empty state with a customisable message.
 
-<Canvas sourceState="none" of={RadioGroupStories.Default} />
+<Canvas sourceState='none' of={RadioGroupStories.Default} />
 
 ## Properties
 
@@ -44,7 +44,7 @@ import { RadioGroup } from '@repo/ui-core';
 const [plan, setPlan] = useState('monthly');
 
 <RadioGroup
-	name="plan"
+	name='plan'
 	options={[
 		{ id: 'plan-1', value: 'monthly', label: 'Monthly' },
 		{ id: 'plan-2', value: 'yearly', label: 'Yearly' }
@@ -60,7 +60,7 @@ A single option is disabled via its own `disabled` flag; the whole group via the
 
 ```tsx
 <RadioGroup
-	name="plan"
+	name='plan'
 	options={[
 		{ id: 'plan-1', value: 'monthly', label: 'Monthly' },
 		{ id: 'plan-2', value: 'quarterly', label: 'Quarterly', disabled: true }
@@ -70,28 +70,28 @@ A single option is disabled via its own `disabled` flag; the whole group via the
 />
 ```
 
-<Canvas sourceState="none" of={RadioGroupStories.WithDisabledOption} />
+<Canvas sourceState='none' of={RadioGroupStories.WithDisabledOption} />
 
 ### Empty state
 
 With no options, the group renders a message instead of an empty box. Override the wording with `noOptionsAvailableMessage`.
 
-<Canvas sourceState="none" of={RadioGroupStories.CustomNoOptionsMessage} />
+<Canvas sourceState='none' of={RadioGroupStories.CustomNoOptionsMessage} />
 
 ## Accessibility
 
 The group is a single Tab stop, which is the WAI-ARIA radio group pattern: Tab moves into the group and straight out again, and the arrow keys move between options within it.
 
-| Key | Behaviour |
-| --- | --- |
-| `Tab` | Enters the group on the selected option, or the first enabled one if nothing is selected. A second `Tab` leaves the group entirely. |
-| `ArrowDown` / `ArrowRight` | Next enabled option |
-| `ArrowUp` / `ArrowLeft` | Previous enabled option |
-| `Home` / `PageUp` | First enabled option |
-| `End` / `PageDown` | Last enabled option |
-| `Space` | Selects the focused option |
+| Key                        | Behaviour                                                                                                                           |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `Tab`                      | Enters the group on the selected option, or the first enabled one if nothing is selected. A second `Tab` leaves the group entirely. |
+| `ArrowDown` / `ArrowRight` | Next enabled option                                                                                                                 |
+| `ArrowUp` / `ArrowLeft`    | Previous enabled option                                                                                                             |
+| `Home` / `PageUp`          | First enabled option                                                                                                                |
+| `End` / `PageDown`         | Last enabled option                                                                                                                 |
+| `Space`                    | Selects the focused option                                                                                                          |
 
-Moving between options with the arrow keys **also selects** them, which is standard radio behaviour. [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs) navigates identically but does *not* toggle as you arrow past, since that would be wrong for a multi-select group.
+Moving between options with the arrow keys **also selects** them, which is standard radio behaviour. [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs) navigates identically but does _not_ toggle as you arrow past, since that would be wrong for a multi-select group.
 
 > **Reading direction is not handled.** Arrow keys are left-to-right only. This is library-wide rather than specific to this component — no `DirectionProvider` is mounted anywhere, so every Radix component here falls back to LTR. Tracked as its own piece of work.
 
@@ -106,10 +106,10 @@ name the group:
 import { Field, RadioGroup } from '@repo/ui-core';
 
 <Field label='Billing plan' id='billing' nativeLabel={false}>
-  {(control) => (
-    <RadioGroup {...control} name='billing' options={options} value={value} onChange={onChange} />
-  )}
-</Field>
+	{(control) => (
+		<RadioGroup {...control} name='billing' options={options} value={value} onChange={onChange} />
+	)}
+</Field>;
 ```
 
 **`nativeLabel={false}` is required**, for the same reason as `CheckboxGroup`: one `<label>` cannot

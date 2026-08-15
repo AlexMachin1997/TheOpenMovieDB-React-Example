@@ -224,11 +224,7 @@ export const WithError: Story = {
 			{/* This story previously rendered its own <p className='text-sm text-red-500'> next to an
 			`aria-invalid` input, with nothing connecting the two — visible, and invisible to a screen
 			reader. `Field` owns both halves. */}
-			<Field
-				label='Email address'
-				id='error-input'
-				error='Please enter a valid email address.'
-			>
+			<Field label='Email address' id='error-input' error='Please enter a valid email address.'>
 				{(control) => <Input {...control} {...args} />}
 			</Field>
 		</div>

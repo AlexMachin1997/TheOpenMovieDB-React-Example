@@ -2,7 +2,10 @@ import { cn } from '@repo/tailwind-config';
 import { Alert, AlertDescription } from '~/components/Alert/Alert';
 import { Icon } from '~/components/Icon/Icon';
 import type { IconName } from '~/components/Icon/Icon.constants';
-import type { FieldMessageVariant, IFieldMessage } from '~/components/FieldMessage/FieldMessage.types';
+import type {
+	FieldMessageVariant,
+	IFieldMessage
+} from '~/components/FieldMessage/FieldMessage.types';
 
 // One distinct shape per state, so `error` and `success` stay distinguishable to a reader who cannot
 // tell red from green (WCAG 1.4.1). Not exported — the mapping is an implementation detail, and

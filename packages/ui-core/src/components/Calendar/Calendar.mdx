@@ -23,7 +23,7 @@ import { Calendar, CalendarDayButton } from '@repo/ui-core';
 - `locale` support for month and weekday names.
 - Week numbers, multiple months, and outside-day visibility all configurable.
 
-<Canvas sourceState="none" of={CalendarStories.Basic} />
+<Canvas sourceState='none' of={CalendarStories.Basic} />
 
 ## Properties
 
@@ -31,8 +31,8 @@ import { Calendar, CalendarDayButton } from '@repo/ui-core';
 
 `Calendar` takes every `DayPickerProps` — `mode`, `selected`, `onSelect`, `disabled`, `startMonth`, `endMonth`, `numberOfMonths`, `locale` and the rest — and adds one prop of its own:
 
-| Prop | Type | Default | Purpose |
-| --- | --- | --- | --- |
+| Prop            | Type                 | Default   | Purpose                                                    |
+| --------------- | -------------------- | --------- | ---------------------------------------------------------- |
 | `buttonVariant` | `Button`'s `variant` | `'ghost'` | The variant used for the previous/next navigation buttons. |
 
 `classNames` is merged with the defaults rather than replacing them, so you can override one element without rebuilding the whole map.
@@ -47,7 +47,7 @@ import { Calendar } from '@repo/ui-core';
 
 const [date, setDate] = useState<Date | undefined>();
 
-<Calendar mode="single" selected={date} onSelect={setDate} />;
+<Calendar mode='single' selected={date} onSelect={setDate} />;
 ```
 
 ### Date range
@@ -59,10 +59,10 @@ import { Calendar } from '@repo/ui-core';
 
 const [range, setRange] = useState<DateRange | undefined>();
 
-<Calendar mode="range" selected={range} onSelect={setRange} numberOfMonths={2} />;
+<Calendar mode='range' selected={range} onSelect={setRange} numberOfMonths={2} />;
 ```
 
-<Canvas sourceState="none" of={CalendarStories.RangeSelection} />
+<Canvas sourceState='none' of={CalendarStories.RangeSelection} />
 
 ### Month and year dropdowns
 
@@ -70,8 +70,8 @@ For dates far from today — a date of birth — give the user dropdowns rather 
 
 ```tsx
 <Calendar
-	mode="single"
-	captionLayout="dropdown"
+	mode='single'
+	captionLayout='dropdown'
 	startMonth={new Date(1900, 0)}
 	endMonth={new Date(2100, 11)}
 	selected={date}
@@ -79,14 +79,14 @@ For dates far from today — a date of birth — give the user dropdowns rather 
 />
 ```
 
-<Canvas sourceState="none" of={CalendarStories.WithDropdowns} />
+<Canvas sourceState='none' of={CalendarStories.WithDropdowns} />
 
 ### Localised
 
 ```tsx
 import { fr } from 'date-fns/locale';
 
-<Calendar mode="single" locale={fr} selected={date} onSelect={setDate} />;
+<Calendar mode='single' locale={fr} selected={date} onSelect={setDate} />;
 ```
 
 ## Composition
@@ -97,7 +97,7 @@ import { fr } from 'date-fns/locale';
 import { Calendar, CalendarDayButton } from '@repo/ui-core';
 
 <Calendar
-	mode="single"
+	mode='single'
 	selected={date}
 	onSelect={setDate}
 	components={{
@@ -117,19 +117,19 @@ The `[&>span]:text-xs [&>span]:opacity-70` rule on the day button exists for exa
 
 `react-day-picker` renders a semantic grid with the month as its label, and `Calendar` keeps that intact. Day cells are real `<button>`s via `Button`, so they are focusable and operable by keyboard.
 
-| Key | Behaviour |
-| --- | --- |
-| `ArrowLeft` / `ArrowRight` | Previous / next day |
-| `ArrowUp` / `ArrowDown` | Same weekday, previous / next week |
-| `Home` / `End` | First / last day of the week |
-| `PageUp` / `PageDown` | Previous / next month |
-| `Enter` / `Space` | Select the focused day |
+| Key                        | Behaviour                          |
+| -------------------------- | ---------------------------------- |
+| `ArrowLeft` / `ArrowRight` | Previous / next day                |
+| `ArrowUp` / `ArrowDown`    | Same weekday, previous / next week |
+| `Home` / `End`             | First / last day of the week       |
+| `PageUp` / `PageDown`      | Previous / next month              |
+| `Enter` / `Space`          | Select the focused day             |
 
-| Obligation | How |
-| --- | --- |
-| **Name the calendar** | Give it an `aria-label` when its purpose is not obvious from surrounding text — "Departure date". |
+| Obligation                 | How                                                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **Name the calendar**      | Give it an `aria-label` when its purpose is not obvious from surrounding text — "Departure date".                        |
 | **Announce the selection** | The grid reports focus, not your application state. Render the chosen date in text near the calendar so it is confirmed. |
-| **Explain disabled days** | `disabled` days are announced as unavailable but not *why*. Put the reason in nearby text. |
+| **Explain disabled days**  | `disabled` days are announced as unavailable but not _why_. Put the reason in nearby text.                               |
 
 Focus is managed internally: `CalendarDayButton` focuses itself when `react-day-picker` marks it focused, which is what makes arrow-key navigation across weeks and months work.
 
@@ -142,13 +142,13 @@ wrapped in [`Field`](?path=/docs/ui-core-field--docs).
 
 The thing a user fills in is a date picker — `SingleDatePicker` or `DateRangePicker` in
 `@repo/ui-forms` — and `Calendar` is what those render inside their popover. Reach for one of them
-when you need a date *field*:
+when you need a date _field_:
 
 ```tsx
 import { Field } from '@repo/ui-core';
 import { SingleDatePicker } from '@repo/ui-forms';
 
 <Field label='Departure date' id='departure' required>
-  {(control) => <SingleDatePicker {...control} date={date} onDateChange={setDate} />}
-</Field>
+	{(control) => <SingleDatePicker {...control} date={date} onDateChange={setDate} />}
+</Field>;
 ```

@@ -623,7 +623,7 @@ Estimated: 0.5 day.
 
 - [x] 1.1 `Label.variants.ts` — `labelVariants`, base = today's exact class string from
       `Label.tsx:9-12` minus `font-medium`, `emphasis: { true: 'font-semibold', false:
-  'font-medium' }`, default `true` (D4). (Depends on: 0.4)
+'font-medium' }`, default `true` (D4). (Depends on: 0.4)
 - [x] 1.2 `Label.types.ts` — `ILabelNative` (`nativeLabel?: true`) | `ILabelNonNative`
       (`nativeLabel: false`, `htmlFor?: never`), `ILabel` as the union; `emphasis?`, `required?`
       on both. (1.1)
@@ -643,7 +643,7 @@ Estimated: 0.5 day.
 - [x] 1.8 `Label.mdx` — must state that `nativeLabel={false}` outside a group needs no
       `aria-labelledby` wiring (spec Edge Cases). (1.7)
 - [x] 1.9 `pnpm turbo run build --filter=@repo/ui-core && rm -rf apps/storybook/node_modules/.cache
-  apps/storybook/node_modules/.vite`, run the suite. Checkbox/Radio label rendering must be
+apps/storybook/node_modules/.vite`, run the suite. Checkbox/Radio label rendering must be
       unchanged. (1.8)
 
 Estimated: 1 day.

@@ -17,11 +17,18 @@ const meta: Meta<typeof CheckboxGroup> = {
 
 export default meta;
 
-type CheckboxGroupTemplateProps = Omit<React.ComponentProps<typeof CheckboxGroup>, 'value' | 'onChange'> & {
+type CheckboxGroupTemplateProps = Omit<
+	React.ComponentProps<typeof CheckboxGroup>,
+	'value' | 'onChange'
+> & {
 	initialValue?: string[];
 };
 
-const CheckboxGroupTemplate = ({ options, initialValue = [], ...props }: CheckboxGroupTemplateProps) => {
+const CheckboxGroupTemplate = ({
+	options,
+	initialValue = [],
+	...props
+}: CheckboxGroupTemplateProps) => {
 	const [currentValues, setCurrentValues] = React.useState<string[]>(initialValue);
 
 	return (
@@ -68,7 +75,11 @@ const sampleOptionsWithOrder: Option[] = [
 
 export const Default: StoryObj<typeof CheckboxGroup> = {
 	render: () => (
-		<CheckboxGroupTemplate options={sampleOptions} name='default-group' initialValue={['option-one']} />
+		<CheckboxGroupTemplate
+			options={sampleOptions}
+			name='default-group'
+			initialValue={['option-one']}
+		/>
 	)
 };
 
@@ -95,7 +106,11 @@ export const WithDisabledGroup: StoryObj<typeof CheckboxGroup> = {
 
 export const LabelPositionRight: StoryObj<typeof CheckboxGroup> = {
 	render: () => (
-		<CheckboxGroupTemplate options={sampleOptions} name='right-label-group' initialValue={['option-one']} />
+		<CheckboxGroupTemplate
+			options={sampleOptions}
+			name='right-label-group'
+			initialValue={['option-one']}
+		/>
 	)
 };
 
@@ -179,7 +194,11 @@ export const HorizontalLayout: StoryObj<typeof CheckboxGroup> = {
 
 export const WithOrderedOptions: StoryObj<typeof CheckboxGroup> = {
 	render: () => (
-		<CheckboxGroupTemplate options={sampleOptionsWithOrder} name='ordered-group' initialValue={['option-one']} />
+		<CheckboxGroupTemplate
+			options={sampleOptionsWithOrder}
+			name='ordered-group'
+			initialValue={['option-one']}
+		/>
 	)
 };
 
@@ -204,7 +223,9 @@ export const AllOptionsSelected: StoryObj<typeof CheckboxGroup> = {
 };
 
 export const NoDefaultSelection: StoryObj<typeof CheckboxGroup> = {
-	render: () => <CheckboxGroupTemplate options={sampleOptions} name='no-default-group' initialValue={[]} />
+	render: () => (
+		<CheckboxGroupTemplate options={sampleOptions} name='no-default-group' initialValue={[]} />
+	)
 };
 
 export const MixedDisabledAndEnabled: StoryObj<typeof CheckboxGroup> = {

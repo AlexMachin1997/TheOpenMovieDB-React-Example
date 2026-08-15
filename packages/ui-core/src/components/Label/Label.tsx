@@ -38,11 +38,7 @@ const Label = ({
 	// which element renders; only the compiler's view of `props` needs the nudge.
 	if (!nativeLabel) {
 		return (
-			<span
-				data-slot='label'
-				className={classes}
-				{...(props as React.ComponentProps<'span'>)}
-			>
+			<span data-slot='label' className={classes} {...(props as React.ComponentProps<'span'>)}>
 				{content}
 			</span>
 		);

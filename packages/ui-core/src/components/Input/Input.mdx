@@ -37,22 +37,27 @@ import { Input } from '@repo/ui-core';
 ## Accessibility
 
 `Input` renders a native `<input>`, so it inherits the browser's own keyboard and screen-reader
-behaviour. What it does *not* do is name itself — that obligation falls on you.
+behaviour. What it does _not_ do is name itself — that obligation falls on you.
 
-| Obligation | How |
-| --- | --- |
-| **Give it an accessible name** | Pair with a `<Label htmlFor>` matching the input's `id`. A `placeholder` is not a label: it disappears on focus and is not reliably announced. |
-| **Communicate errors** | Set `aria-invalid="true"`, which triggers the destructive ring. Point `aria-describedby` at the element holding the error text so it is announced, not just seen. |
-| **Never rely on colour alone** | The error ring is reinforcement, not the message. Always render the reason in text. |
+| Obligation                     | How                                                                                                                                                               |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Give it an accessible name** | Pair with a `<Label htmlFor>` matching the input's `id`. A `placeholder` is not a label: it disappears on focus and is not reliably announced.                    |
+| **Communicate errors**         | Set `aria-invalid="true"`, which triggers the destructive ring. Point `aria-describedby` at the element holding the error text so it is announced, not just seen. |
+| **Never rely on colour alone** | The error ring is reinforcement, not the message. Always render the reason in text.                                                                               |
 
 ```tsx
 import { Input, Label } from '@repo/ui-core';
 
-<div className="grid gap-3">
-	<Label htmlFor="email">Email address</Label>
-	<Input id="email" type="email" aria-invalid={!!error} aria-describedby={error ? 'email-error' : undefined} />
+<div className='grid gap-3'>
+	<Label htmlFor='email'>Email address</Label>
+	<Input
+		id='email'
+		type='email'
+		aria-invalid={!!error}
+		aria-describedby={error ? 'email-error' : undefined}
+	/>
 	{error ? (
-		<p id="email-error" className="text-sm text-destructive">
+		<p id='email-error' className='text-sm text-destructive'>
 			{error}
 		</p>
 	) : null}
@@ -76,8 +81,8 @@ the description and error message to the control for assistive technology.
 import { Field, Input } from '@repo/ui-core';
 
 <Field label='Email address' id='email' error={error} required>
-  {(control) => <Input {...control} type='email' value={value} onChange={onChange} />}
-</Field>
+	{(control) => <Input {...control} type='email' value={value} onChange={onChange} />}
+</Field>;
 ```
 
 Hand-assembling a `<Label htmlFor>` beside an `<Input id>` still works, but it is how this library

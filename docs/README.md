@@ -13,13 +13,13 @@ is just the roadmap.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable             | Area          | Status   | Depends on | Docs                                                             |
-| --- | ----------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------------- |
-| 03  | Focus indicators        | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)               |
-| 13  | Exports & conventions   | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)         |
-| 16  | Type-hygiene cleanup    | tooling       | 🟢 ready | —          | [16-type-hygiene](16-type-hygiene/spec.md)                       |
-| 17  | One list per Command    | component     | 🟢 ready | —          | [17-command-list-nesting](17-command-list-nesting/spec.md)       |
-| 18  | A common overlay API    | component     | 🟢 ready | — (14 ✅)  | [18-overlay-api](18-overlay-api/spec.md)                         |
+| ID  | Deliverable           | Area          | Status   | Depends on | Docs                                                       |
+| --- | --------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------- |
+| 03  | Focus indicators      | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)         |
+| 13  | Exports & conventions | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)   |
+| 16  | Type-hygiene cleanup  | tooling       | 🟢 ready | —          | [16-type-hygiene](16-type-hygiene/spec.md)                 |
+| 17  | One list per Command  | component     | 🟢 ready | —          | [17-command-list-nesting](17-command-list-nesting/spec.md) |
+| 18  | A common overlay API  | component     | 🟢 ready | — (14 ✅)  | [18-overlay-api](18-overlay-api/spec.md)                   |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.

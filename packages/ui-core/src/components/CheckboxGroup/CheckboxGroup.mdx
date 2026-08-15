@@ -23,7 +23,7 @@ import { CheckboxGroup } from '@repo/ui-core';
 - An empty state with a customisable message.
 - Per-option `id` used to associate each label with its control.
 
-<Canvas sourceState="none" of={CheckboxGroupStories.Default} />
+<Canvas sourceState='none' of={CheckboxGroupStories.Default} />
 
 ## Properties
 
@@ -57,7 +57,7 @@ import { CheckboxGroup } from '@repo/ui-core';
 const [selected, setSelected] = useState<string[]>([]);
 
 <CheckboxGroup
-	name="interests"
+	name='interests'
 	options={[
 		{ id: 'opt-1', value: 'movies', label: 'Movies' },
 		{ id: 'opt-2', value: 'tv', label: 'TV' },
@@ -72,37 +72,37 @@ const [selected, setSelected] = useState<string[]>([]);
 
 A single option carries its own `disabled` flag; the whole group takes the `disabled` prop. Disabled options are skipped by keyboard navigation rather than focused.
 
-<Canvas sourceState="none" of={CheckboxGroupStories.WithDisabledOption} />
-<Canvas sourceState="none" of={CheckboxGroupStories.WithDisabledGroup} />
+<Canvas sourceState='none' of={CheckboxGroupStories.WithDisabledOption} />
+<Canvas sourceState='none' of={CheckboxGroupStories.WithDisabledGroup} />
 
 ### Layout
 
 The `className` lands on the option grid, so the layout is yours to change.
 
 ```tsx
-<CheckboxGroup className="grid-flow-col auto-cols-max" {...props} />
+<CheckboxGroup className='grid-flow-col auto-cols-max' {...props} />
 ```
 
-<Canvas sourceState="none" of={CheckboxGroupStories.HorizontalLayout} />
+<Canvas sourceState='none' of={CheckboxGroupStories.HorizontalLayout} />
 
 ### Empty state
 
 With no options the group renders a message rather than an empty box.
 
-<Canvas sourceState="none" of={CheckboxGroupStories.CustomNoOptionsMessage} />
+<Canvas sourceState='none' of={CheckboxGroupStories.CustomNoOptionsMessage} />
 
 ## Accessibility
 
 **The group is a single Tab stop.** Tab moves into it and straight out again; the arrow keys move between options. This matches [`RadioGroup`](?path=/docs/ui-core-radio-group--docs) exactly, so the two feel identical to a keyboard user.
 
-| Key | Behaviour |
-| --- | --- |
-| `Tab` | Enters the group on the first *selected* option, or the first enabled one if nothing is selected. A second `Tab` leaves the group entirely. |
-| `ArrowDown` / `ArrowRight` | Next enabled option |
-| `ArrowUp` / `ArrowLeft` | Previous enabled option |
-| `Home` / `PageUp` | First enabled option |
-| `End` / `PageDown` | Last enabled option |
-| `Space` | Toggles the focused option |
+| Key                        | Behaviour                                                                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Tab`                      | Enters the group on the first _selected_ option, or the first enabled one if nothing is selected. A second `Tab` leaves the group entirely. |
+| `ArrowDown` / `ArrowRight` | Next enabled option                                                                                                                         |
+| `ArrowUp` / `ArrowLeft`    | Previous enabled option                                                                                                                     |
+| `Home` / `PageUp`          | First enabled option                                                                                                                        |
+| `End` / `PageDown`         | Last enabled option                                                                                                                         |
+| `Space`                    | Toggles the focused option                                                                                                                  |
 
 > **Arrow keys move focus without toggling.** This is the one deliberate difference from `RadioGroup`, where arrowing also selects. Toggling every checkbox a user arrows past would be wrong for a multi-select group.
 
@@ -122,10 +122,10 @@ can name and describe the group as a whole:
 import { CheckboxGroup, Field } from '@repo/ui-core';
 
 <Field label='Notify me about' id='notify' nativeLabel={false} error={error}>
-  {(control) => (
-    <CheckboxGroup {...control} name='notify' options={options} value={value} onChange={onChange} />
-  )}
-</Field>
+	{(control) => (
+		<CheckboxGroup {...control} name='notify' options={options} value={value} onChange={onChange} />
+	)}
+</Field>;
 ```
 
 **`nativeLabel={false}` is required here.** A single native `<label>` cannot name several controls,

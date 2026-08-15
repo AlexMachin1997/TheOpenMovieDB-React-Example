@@ -130,7 +130,12 @@ export const AsAGroupHeading: Story = {
 
 			{/* The association runs the opposite way from a native label: the group points back at
 			the heading's id, because a <span> cannot claim a control with htmlFor. */}
-			<div role='group' aria-labelledby='notify-heading' aria-required='true' className='grid gap-3'>
+			<div
+				role='group'
+				aria-labelledby='notify-heading'
+				aria-required='true'
+				className='grid gap-3'
+			>
 				<div className='flex items-center space-x-2'>
 					<Checkbox id='notify-comments' />
 					<CheckboxLabel htmlFor='notify-comments'>Comments</CheckboxLabel>
@@ -255,10 +260,13 @@ export const EmphasisRegressionGuard: Story = {
 			await expect(canvas.getByTestId('default-weight')).toHaveClass('font-semibold');
 		});
 
-		await step('CheckboxLabel opts out, keeping the weight it had before `emphasis` existed', async () => {
-			const checkboxLabel = canvas.getByTestId('checkbox-weight');
-			await expect(checkboxLabel).toHaveClass('font-medium');
-			await expect(checkboxLabel).not.toHaveClass('font-semibold');
-		});
+		await step(
+			'CheckboxLabel opts out, keeping the weight it had before `emphasis` existed',
+			async () => {
+				const checkboxLabel = canvas.getByTestId('checkbox-weight');
+				await expect(checkboxLabel).toHaveClass('font-medium');
+				await expect(checkboxLabel).not.toHaveClass('font-semibold');
+			}
+		);
 	}
 };

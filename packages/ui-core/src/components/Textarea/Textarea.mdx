@@ -21,7 +21,7 @@ import { Textarea } from '@repo/ui-core';
 - Error state through `aria-invalid`, with a destructive ring.
 - Dark mode support.
 
-<Canvas sourceState="none" of={TextareaStories.Default} />
+<Canvas sourceState='none' of={TextareaStories.Default} />
 
 ## Properties
 
@@ -36,29 +36,29 @@ import { Textarea } from '@repo/ui-core';
 ```tsx
 import { Textarea, Label } from '@repo/ui-core';
 
-<div className="grid gap-3">
-	<Label htmlFor="message">Message</Label>
-	<Textarea id="message" placeholder="Tell us what happened" />
+<div className='grid gap-3'>
+	<Label htmlFor='message'>Message</Label>
+	<Textarea id='message' placeholder='Tell us what happened' />
 </div>;
 ```
 
-<Canvas sourceState="none" of={TextareaStories.WithLabel} />
+<Canvas sourceState='none' of={TextareaStories.WithLabel} />
 
 ### With helper text
 
 Describe the constraint before the user hits it, and link the description with `aria-describedby` so it is announced rather than only seen.
 
 ```tsx
-<div className="grid gap-3">
-	<Label htmlFor="bio">Bio</Label>
-	<Textarea id="bio" aria-describedby="bio-hint" maxLength={200} />
-	<p id="bio-hint" className="text-sm text-muted-foreground">
+<div className='grid gap-3'>
+	<Label htmlFor='bio'>Bio</Label>
+	<Textarea id='bio' aria-describedby='bio-hint' maxLength={200} />
+	<p id='bio-hint' className='text-sm text-muted-foreground'>
 		Up to 200 characters.
 	</p>
 </div>
 ```
 
-<Canvas sourceState="none" of={TextareaStories.WithHelperText} />
+<Canvas sourceState='none' of={TextareaStories.WithHelperText} />
 
 ### Controlled
 
@@ -71,27 +71,27 @@ const [value, setValue] = useState('');
 <Textarea value={value} onChange={(event) => setValue(event.target.value)} />;
 ```
 
-<Canvas sourceState="none" of={TextareaStories.Controlled} />
+<Canvas sourceState='none' of={TextareaStories.Controlled} />
 
 ### Fixed height
 
 `field-sizing-content` makes the field grow by default. Pass `rows` to pin it instead.
 
-<Canvas sourceState="none" of={TextareaStories.CustomRows} />
+<Canvas sourceState='none' of={TextareaStories.CustomRows} />
 
 ## Accessibility
 
 `Textarea` renders a native `<textarea>`, so keyboard and screen-reader behaviour come from the browser. The obligations that remain are yours:
 
-| Obligation | How |
-| --- | --- |
-| **Give it an accessible name** | Pair with `<Label htmlFor>` matching the `id`. A `placeholder` is not a label — it vanishes on focus. |
-| **Communicate errors** | `aria-invalid="true"` for the ring, `aria-describedby` pointing at the error text so it is announced. |
-| **Describe limits up front** | A character or word limit belongs in `aria-describedby` text, not only in a counter the user discovers after overrunning. |
+| Obligation                     | How                                                                                                                       |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| **Give it an accessible name** | Pair with `<Label htmlFor>` matching the `id`. A `placeholder` is not a label — it vanishes on focus.                     |
+| **Communicate errors**         | `aria-invalid="true"` for the ring, `aria-describedby` pointing at the error text so it is announced.                     |
+| **Describe limits up front**   | A character or word limit belongs in `aria-describedby` text, not only in a counter the user discovers after overrunning. |
 
 ```tsx
 <Textarea
-	id="feedback"
+	id='feedback'
 	aria-invalid={!!error}
 	aria-describedby={error ? 'feedback-error' : 'feedback-hint'}
 />
@@ -110,8 +110,8 @@ beside it:
 import { Field, Textarea } from '@repo/ui-core';
 
 <Field label='Message' id='message' description='Tell us what happened.'>
-  {(control) => <Textarea {...control} value={value} onChange={onChange} />}
-</Field>
+	{(control) => <Textarea {...control} value={value} onChange={onChange} />}
+</Field>;
 ```
 
 For a TanStack-driven form, [`TextareaField`](?path=/docs/ui-forms-fields-textarea-field--docs) does this with no

@@ -169,11 +169,7 @@ export const RequiredField: Story = {
 export const Disabled: Story = {
 	render: () => (
 		<div className='w-80'>
-			<Field
-				label='Email address'
-				id='email-disabled'
-				description='Sign in to change your email.'
-			>
+			<Field label='Email address' id='email-disabled' description='Sign in to change your email.'>
 				{(control) => <Input {...control} type='email' defaultValue='john@example.com' disabled />}
 			</Field>
 		</div>

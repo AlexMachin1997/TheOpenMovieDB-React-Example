@@ -38,14 +38,14 @@ report a build time or a "clean build is green" without it.
 
 ## The gates
 
-| Gate            | Command                                             | Notes                                                                                                                    |
-| --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Build           | `pnpm build`                                        | `pnpm turbo run build --force` when baselining                                                                           |
-| Lint            | `pnpm lint`                                         | Errors DO fail it. Healthy today: 18 + 20 warnings, 0 errors                                                             |
-| Prettier        | `pnpm prettier`                                     | ⚠️ **`--write`, not `--check`. It cannot fail and it rewrites your tree** — see below                                     |
-| Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                       |
+| Gate            | Command                                             | Notes                                                                                                                                 |
+| --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Build           | `pnpm build`                                        | `pnpm turbo run build --force` when baselining                                                                                        |
+| Lint            | `pnpm lint`                                         | Errors DO fail it. Healthy today: 18 + 20 warnings, 0 errors                                                                          |
+| Prettier        | `pnpm prettier`                                     | ⚠️ **`--write`, not `--check`. It cannot fail and it rewrites your tree** — see below                                                 |
+| Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                                    |
 | Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 385 passed, 27 skipped. **Local only, on purpose** — see below |
-| Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                           |
+| Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                                        |
 
 ### `eslint-plugin-only-warn` is NOT wired up — lint errors are real
 
@@ -61,17 +61,29 @@ Verified 2026-08-15 by introducing a conditional `useState` into a story file: r
 
 ### `pnpm prettier` writes — it is not a check
 
-The root script is `turbo run prettier`, and each package's is `prettier --write ./src`. Writing is
-the intent, and keeping the tree formatted is wanted here. What it is *not* is a verification step:
-it always exits 0, and **22 files in this repo are not currently prettier-clean**, so running it
-mid-task produces a ~2,200-line diff across files you never touched. That is trivially easy to sweep
-into an unrelated commit with `git add -A`.
+The root script is `turbo run prettier`, and each package's is `prettier --write`. Writing is the
+intent. What it is _not_ is a verification step: it always exits 0, so it can never tell you whether
+something was already formatted.
 
-So: use `npx prettier --check` to find out whether something is formatted, run `pnpm prettier` only
-when you intend to reformat, and commit the result on its own rather than folded into feature work.
+**The tree is fully prettier-clean as of 2026-08-15** (`npx prettier --check .` → "All matched files
+use Prettier code style"), so a stray `pnpm prettier` should now be a no-op. Before that it rewrote
+22 files it had no business touching, which is trivially easy to sweep into an unrelated commit with
+`git add -A`. If you ever see it produce a large diff again, the tree has drifted — commit that
+separately, never folded into feature work.
 
-Same reason, the CI **Prettier** job (`.github/workflows/linting-action.yml`, `run: pnpm prettier`)
-rewrites its own checkout and passes unconditionally. Not adopted by any deliverable.
+Use `npx prettier --check` when you want to _know_.
+
+Two coverage facts that keep it from drifting, worth not undoing:
+
+- Every package's script is now `prettier --write` with no `./src` argument, so files outside `src/`
+  are covered too. `apps/storybook` had **no prettier script at all** until `15`, which is why
+  `.storybook/*.ts` sat unformatted.
+- `.prettierignore` excludes `pnpm-lock.yaml` and `*.tsbuildinfo`. Do not remove those — a
+  reformatted lockfile is churn at best.
+
+Still open: the CI **Prettier** job (`.github/workflows/linting-action.yml`, `run: pnpm prettier`)
+rewrites its own checkout and passes unconditionally, so it reports success without checking
+anything. Switching it to `--check` is the obvious fix and has not been decided.
 
 ### The suite is green — 385 passed, 27 skipped
 
@@ -79,7 +91,7 @@ Re-baselined 2026-08-15 after `15`: **41 passed | 27 skipped (68 files)**, **385
 tests)**, ~62s warm / ~120s cold. The 27 skipped are the `.mdx` docs pages, which carry no tests.
 
 The one failure that used to sit here was **date-dependent, not a `Calendar` bug**: `Basic` seeds
-`useState(new Date())` so today is selected on mount, while its `play()` asserted the 15th was *not*
+`useState(new Date())` so today is selected on mount, while its `play()` asserted the 15th was _not_
 selected. It failed on the 15th of every month and passed the other ~29 days. `15` fixed it by
 freezing the clock for the whole suite in `apps/storybook/.storybook/vitest.setup.ts`
 (`vi.useFakeTimers({ toFake: ['Date'] })` — `Date` only, because blanket fake timers stall
@@ -141,7 +153,7 @@ Build plugins (`@vitejs/plugin-react-swc`, `@tailwindcss/vite`, `vite-plugin-dts
 `vite-config` alone. Do not re-add them to a UI package; nothing there imports them.
 
 **Two React versions are installed** (verified 2026-08-14): both apps resolve `react@19.1.1`, all
-four UI packages resolve `react@19.2.4`. The root `pnpm.overrides` entry is a *range*
+four UI packages resolve `react@19.2.4`. The root `pnpm.overrides` entry is a _range_
 (`"react": "^19.1.1"`), and 19.2.4 satisfies it, so the override does not collapse the tree to one
 copy — note the same block pins `@types/react` exactly, so the range looks unintentional. Nothing
 breaks today: the packages externalize React and Storybook's Vite config dedupes it at the consuming

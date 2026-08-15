@@ -19,7 +19,7 @@ A description or validation message belonging to one form control.
 - Four states, each with a distinct icon shape as well as a distinct colour.
 - No assertive live region, so it can sit inside `Field`'s polite one without interrupting anyone.
 
-<Canvas sourceState="none" of={FieldMessageStories.Default} />
+<Canvas sourceState='none' of={FieldMessageStories.Default} />
 
 ## Properties
 
@@ -27,14 +27,14 @@ A description or validation message belonging to one form control.
 
 ## States
 
-<Canvas sourceState="none" of={FieldMessageStories.AllStates} />
+<Canvas sourceState='none' of={FieldMessageStories.AllStates} />
 
-| Variant | Icon | Meaning |
-| ------- | ---- | ------- |
-| `info` (default) | `info` | A plain description. Not validation — just guidance about the field. |
-| `error` | `x-circle` | Something is wrong and the user must fix it. |
-| `warning` | `alert-triangle` | Allowed, but worth a second look. |
-| `success` | `check-circle` | Confirmed as valid. |
+| Variant          | Icon             | Meaning                                                              |
+| ---------------- | ---------------- | -------------------------------------------------------------------- |
+| `info` (default) | `info`           | A plain description. Not validation — just guidance about the field. |
+| `error`          | `x-circle`       | Something is wrong and the user must fix it.                         |
+| `warning`        | `alert-triangle` | Allowed, but worth a second look.                                    |
+| `success`        | `check-circle`   | Confirmed as valid.                                                  |
 
 **Every state has its own icon shape, and this is load-bearing rather than decorative.** A reader who
 cannot distinguish red from green has only the shape to go on, so `error` and `success` must never
@@ -68,7 +68,7 @@ share one (WCAG 1.4.1, Use of Colour). The same reasoning drives the required in
 
 Two obligations fall on whatever renders a `FieldMessage`:
 
-| Concern | Obligation |
-| ------- | ---------- |
-| Association | The message must be reachable from the control via `aria-describedby`, or a screen-reader user will never hear it. `Field` does this; hand-rolled markup must too. |
-| Wording | The icon is `aria-hidden`, so the text is the only thing assistive technology receives. "Enter a valid email address" works; "Invalid" alongside a red icon does not. |
+| Concern     | Obligation                                                                                                                                                            |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Association | The message must be reachable from the control via `aria-describedby`, or a screen-reader user will never hear it. `Field` does this; hand-rolled markup must too.    |
+| Wording     | The icon is `aria-hidden`, so the text is the only thing assistive technology receives. "Enter a valid email address" works; "Invalid" alongside a red icon does not. |

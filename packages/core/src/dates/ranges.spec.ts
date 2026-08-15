@@ -6,12 +6,15 @@ describe('formatDateRange', () => {
 	});
 
 	describe('same month', () => {
-		it.each(['medium', 'long'] as const)('formats an abbreviated range for the %s key', formatKey => {
-			const startDate = new Date(2022, 3, 4); // Apr 4, 2022
-			const endDate = new Date(2022, 3, 8); // Apr 8, 2022
+		it.each(['medium', 'long'] as const)(
+			'formats an abbreviated range for the %s key',
+			(formatKey) => {
+				const startDate = new Date(2022, 3, 4); // Apr 4, 2022
+				const endDate = new Date(2022, 3, 8); // Apr 8, 2022
 
-			expect(formatDateRange({ startDate, endDate, formatKey })).toBe('Apr 4 - 8, 2022');
-		});
+				expect(formatDateRange({ startDate, endDate, formatKey })).toBe('Apr 4 - 8, 2022');
+			}
+		);
 
 		it('matches the documented example from the JSDoc header', () => {
 			const startDate = new Date(2024, 3, 15); // Apr 15, 2024
@@ -46,7 +49,9 @@ describe('formatDateRange', () => {
 			const startDate = new Date(2022, 3, 4); // Apr 4, 2022
 			const endDate = new Date(2022, 4, 8); // May 8, 2022
 
-			expect(formatDateRange({ startDate, endDate, formatKey: 'medium' })).toBe('Apr 4 - May 8, 2022');
+			expect(formatDateRange({ startDate, endDate, formatKey: 'medium' })).toBe(
+				'Apr 4 - May 8, 2022'
+			);
 		});
 
 		it('always abbreviates the start month, even for the long key', () => {
@@ -56,7 +61,9 @@ describe('formatDateRange', () => {
 			const startDate = new Date(2022, 3, 4); // Apr 4, 2022
 			const endDate = new Date(2022, 5, 8); // Jun 8, 2022
 
-			expect(formatDateRange({ startDate, endDate, formatKey: 'long' })).toBe('Apr 4 - June 8, 2022');
+			expect(formatDateRange({ startDate, endDate, formatKey: 'long' })).toBe(
+				'Apr 4 - June 8, 2022'
+			);
 		});
 	});
 
@@ -65,7 +72,9 @@ describe('formatDateRange', () => {
 			const startDate = new Date(2022, 11, 28); // Dec 28, 2022
 			const endDate = new Date(2023, 0, 3); // Jan 3, 2023
 
-			expect(formatDateRange({ startDate, endDate, formatKey: 'medium' })).toBe('Dec 28, 2022 - Jan 3, 2023');
+			expect(formatDateRange({ startDate, endDate, formatKey: 'medium' })).toBe(
+				'Dec 28, 2022 - Jan 3, 2023'
+			);
 		});
 
 		it('formats both dates in full for the long key', () => {
@@ -83,7 +92,9 @@ describe('formatDateRange', () => {
 			const startDate = new Date(2022, 3, 4); // Apr 4, 2022
 			const endDate = new Date(2022, 3, 8); // Apr 8, 2022
 
-			expect(formatDateRange({ startDate, endDate, formatKey: 'short' })).toBe('4/4/2022 - 4/8/2022');
+			expect(formatDateRange({ startDate, endDate, formatKey: 'short' })).toBe(
+				'4/4/2022 - 4/8/2022'
+			);
 		});
 	});
 
@@ -103,7 +114,9 @@ describe('formatDateRange', () => {
 		it('uses a custom singleDatePrefix', () => {
 			const startDate = new Date(2022, 3, 4); // Apr 4, 2022
 
-			expect(formatDateRange({ startDate, singleDatePrefix: 'Starting ' })).toBe('Starting Apr 4, 2022');
+			expect(formatDateRange({ startDate, singleDatePrefix: 'Starting ' })).toBe(
+				'Starting Apr 4, 2022'
+			);
 		});
 
 		it('ignores a custom singleDatePrefix when showFromPrefix is false', () => {
@@ -149,7 +162,9 @@ describe('formatDateRange', () => {
 			const startDate = new Date(2022, 11, 28); // Dec 28, 2022
 			const endDate = new Date(2023, 0, 3); // Jan 3, 2023
 
-			expect(formatDateRange({ startDate, endDate, separator: ' | ' })).toBe('Dec 28, 2022 | Jan 3, 2023');
+			expect(formatDateRange({ startDate, endDate, separator: ' | ' })).toBe(
+				'Dec 28, 2022 | Jan 3, 2023'
+			);
 		});
 	});
 

@@ -22,7 +22,7 @@ import { Checkbox, CheckboxLabel } from '@repo/ui-core';
 - Check icon rendered through [`Icon`](?path=/docs/ui-core-icon--docs), restylable via `iconClassName`.
 - Focus-visible ring and `aria-invalid` error state.
 
-<Canvas sourceState="none" of={CheckboxStories.Default} />
+<Canvas sourceState='none' of={CheckboxStories.Default} />
 
 ## Properties
 
@@ -32,21 +32,21 @@ import { Checkbox, CheckboxLabel } from '@repo/ui-core';
 
 ## Composition
 
-`Checkbox` and `CheckboxLabel` are two components, not one, so you control the layout. **The order matters**: Tailwind's `peer-disabled:*` on the label only matches a `.peer` that comes *before* it as a sibling, so the checkbox must be rendered first or the disabled styling silently stops working.
+`Checkbox` and `CheckboxLabel` are two components, not one, so you control the layout. **The order matters**: Tailwind's `peer-disabled:*` on the label only matches a `.peer` that comes _before_ it as a sibling, so the checkbox must be rendered first or the disabled styling silently stops working.
 
 ```tsx
 import { Checkbox, CheckboxLabel } from '@repo/ui-core';
 
-<div className="flex items-center space-x-2">
+<div className='flex items-center space-x-2'>
 	{/* Checkbox first — CheckboxLabel's peer-disabled styles depend on it */}
-	<Checkbox id="terms" checked={accepted} onCheckedChange={setAccepted} />
-	<CheckboxLabel htmlFor="terms">I accept the terms</CheckboxLabel>
+	<Checkbox id='terms' checked={accepted} onCheckedChange={setAccepted} />
+	<CheckboxLabel htmlFor='terms'>I accept the terms</CheckboxLabel>
 </div>;
 ```
 
 `CheckboxLabel` takes its own `disabled` prop for cursor styling. Pass the same value to both.
 
-<Canvas sourceState="none" of={CheckboxStories.Disabled} />
+<Canvas sourceState='none' of={CheckboxStories.Disabled} />
 
 ## Usage
 
@@ -58,67 +58,67 @@ import { Checkbox, CheckboxLabel } from '@repo/ui-core';
 
 const [accepted, setAccepted] = useState(false);
 
-<div className="flex items-center space-x-2">
-	<Checkbox id="marketing" checked={accepted} onCheckedChange={setAccepted} />
-	<CheckboxLabel htmlFor="marketing">Email me about new releases</CheckboxLabel>
+<div className='flex items-center space-x-2'>
+	<Checkbox id='marketing' checked={accepted} onCheckedChange={setAccepted} />
+	<CheckboxLabel htmlFor='marketing'>Email me about new releases</CheckboxLabel>
 </div>;
 ```
 
-<Canvas sourceState="none" of={CheckboxStories.Controlled} />
+<Canvas sourceState='none' of={CheckboxStories.Controlled} />
 
 ### Uncontrolled
 
 Use `defaultChecked` when the form reads values on submit rather than tracking them in state.
 
 ```tsx
-<Checkbox id="remember" defaultChecked name="remember" />
+<Checkbox id='remember' defaultChecked name='remember' />
 ```
 
-<Canvas sourceState="none" of={CheckboxStories.Checked} />
+<Canvas sourceState='none' of={CheckboxStories.Checked} />
 
 ### Restyling the check icon
 
 ```tsx
 <Checkbox
-	id="custom"
+	id='custom'
 	defaultChecked
-	className="data-[state=checked]:bg-emerald-600"
-	iconClassName="text-white"
+	className='data-[state=checked]:bg-emerald-600'
+	iconClassName='text-white'
 />
 ```
 
-<Canvas sourceState="none" of={CheckboxStories.CustomIconColor} />
+<Canvas sourceState='none' of={CheckboxStories.CustomIconColor} />
 
 ## Accessibility
 
 Radix renders a `<button role="checkbox">` and keeps `aria-checked` in sync, so assistive technology reports it correctly. What you must supply is the name and the association.
 
-| Key | Behaviour |
-| --- | --- |
-| `Tab` | Moves to the checkbox — each one is its own tab stop |
-| `Space` | Toggles it |
+| Key     | Behaviour                                               |
+| ------- | ------------------------------------------------------- |
+| `Tab`   | Moves to the checkbox — each one is its own tab stop    |
+| `Space` | Toggles it                                              |
 | `Enter` | Nothing. Checkboxes do not activate on Enter, by design |
 
-| Obligation | How |
-| --- | --- |
-| **Give it a name** | `CheckboxLabel htmlFor` matching the checkbox's `id`, so clicking the label also toggles it. |
-| **Errors** | `aria-invalid="true"` for the destructive ring, with the reason in text. |
-| **Grouping** | Several related checkboxes need a group name — use [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs), or wrap them in a `<fieldset>` with a `<legend>`. |
+| Obligation         | How                                                                                                                                                               |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Give it a name** | `CheckboxLabel htmlFor` matching the checkbox's `id`, so clicking the label also toggles it.                                                                      |
+| **Errors**         | `aria-invalid="true"` for the destructive ring, with the reason in text.                                                                                          |
+| **Grouping**       | Several related checkboxes need a group name — use [`CheckboxGroup`](?path=/docs/ui-core-checkbox-group--docs), or wrap them in a `<fieldset>` with a `<legend>`. |
 
 > **Tab behaviour differs from `CheckboxGroup`.** A standalone `Checkbox` is its own tab stop. Inside `CheckboxGroup` the whole group is a single tab stop, with the arrow keys moving between options.
 
 ## Use it with Field
 
 `CheckboxLabel` is for the inline case — a checkbox with its text beside it. When the checkbox is a
-*form field*, with a description or a validation message,
+_form field_, with a description or a validation message,
 [`Field`](?path=/docs/ui-core-field--docs) is the right wrapper:
 
 ```tsx
 import { Checkbox, Field } from '@repo/ui-core';
 
 <Field label='Accept the terms' id='terms' required error={error}>
-  {(control) => <Checkbox {...control} checked={accepted} onCheckedChange={setAccepted} />}
-</Field>
+	{(control) => <Checkbox {...control} checked={accepted} onCheckedChange={setAccepted} />}
+</Field>;
 ```
 
 For a TanStack-driven form, use [`CheckboxField`](?path=/docs/ui-forms-fields-checkbox-field--docs) — it also

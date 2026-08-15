@@ -14,6 +14,7 @@ import { DebouncableInput } from '@repo/ui-core';
 ```
 
 ## Features
+
 - Renders `Input` internally, so it looks and behaves exactly like every other text input in the library.
 - Natively intercepts `onChange` to delay firing state updates to `onValueChange`.
 - Supports standard React 19 `ref` attributes without needing `forwardRef`.
@@ -23,13 +24,13 @@ import { DebouncableInput } from '@repo/ui-core';
 
 ## Relationship to `Input` and `Search`
 
-| Component | Use it when |
-| --- | --- |
-| [`Input`](?path=/docs/ui-core-input--docs) | You want a plain text input. |
-| `DebouncableInput` | Every keystroke would otherwise trigger something expensive — a network call, a large re-filter. |
-| [`Search`](?path=/docs/ui-core-search--docs) | You want a search field: `DebouncableInput` plus a search icon and an optional clear button. |
+| Component                                    | Use it when                                                                                      |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [`Input`](?path=/docs/ui-core-input--docs)   | You want a plain text input.                                                                     |
+| `DebouncableInput`                           | Every keystroke would otherwise trigger something expensive — a network call, a large re-filter. |
+| [`Search`](?path=/docs/ui-core-search--docs) | You want a search field: `DebouncableInput` plus a search icon and an optional clear button.     |
 
-<Canvas sourceState="none" of={DebouncableInputStories.Default} />
+<Canvas sourceState='none' of={DebouncableInputStories.Default} />
 
 ## Properties
 
@@ -40,10 +41,12 @@ import { DebouncableInput } from '@repo/ui-core';
 ## Guidelines & Use Cases
 
 ### When to use `DebouncableInput`
+
 - **Search fields**: When typing into an input triggers an API call or expensive DOM filtering.
 - **Auto-saving forms**: If you need to trigger a save mutation X milliseconds after the user finishes typing.
 
 ### Best Practices
+
 - **Do not wrap `DebouncableInput` in another debounce hook**: The component manages its own internal deferral. Hooking it to an external `useDebounce` is redundant.
 - **Rely on `onValueChange`**: The standard `onChange` DOM event is still accessible as a pass-through primitive, but you must strictly use `onValueChange={(val: string) => void}` to capture the deferred output correctly.
 
@@ -58,18 +61,18 @@ import { useState } from 'react';
 import { DebouncableInput } from '@repo/ui-core';
 
 export function SearchExample() {
-  const handleSearch = (searchTerm: string) => {
-    // This will only fire 300ms after the user stops typing
-    console.log("Searching for:", searchTerm);
-  };
+	const handleSearch = (searchTerm: string) => {
+		// This will only fire 300ms after the user stops typing
+		console.log('Searching for:', searchTerm);
+	};
 
-  return (
-    <DebouncableInput 
-      placeholder="Search for something..." 
-      onValueChange={handleSearch} 
-      debounceMs={300} 
-    />
-  );
+	return (
+		<DebouncableInput
+			placeholder='Search for something...'
+			onValueChange={handleSearch}
+			debounceMs={300}
+		/>
+	);
 }
 ```
 
@@ -79,36 +82,29 @@ By default, the debounce delay is `300ms`. You can increase or decrease this via
 
 ```tsx
 <DebouncableInput
-  debounceMs={1000}
-  placeholder="1 second debounce..."
-  onValueChange={handleSearch}
+	debounceMs={1000}
+	placeholder='1 second debounce...'
+	onValueChange={handleSearch}
 />
 ```
 
-<Canvas sourceState="none" of={DebouncableInputStories.WithCustomDebounce} />
+<Canvas sourceState='none' of={DebouncableInputStories.WithCustomDebounce} />
 
 ### With Default Value
 
 ```tsx
-<DebouncableInput
-  defaultValue="Initial starting value"
-  onValueChange={handleSearch}
-/>
+<DebouncableInput defaultValue='Initial starting value' onValueChange={handleSearch} />
 ```
 
-<Canvas sourceState="none" of={DebouncableInputStories.WithDefaultValue} />
+<Canvas sourceState='none' of={DebouncableInputStories.WithDefaultValue} />
 
 ### Disabled State
 
 ```tsx
-<DebouncableInput
-  disabled
-  placeholder="Disabled input"
-  onValueChange={handleSearch}
-/>
+<DebouncableInput disabled placeholder='Disabled input' onValueChange={handleSearch} />
 ```
 
-<Canvas sourceState="none" of={DebouncableInputStories.Disabled} />
+<Canvas sourceState='none' of={DebouncableInputStories.Disabled} />
 
 ---
 
@@ -118,19 +114,19 @@ It renders `Input`, so it inherits the same native behaviour and the same obliga
 
 One obligation is specific to debouncing: **the result of typing arrives later than the typing does.** A sighted user sees a list settle; a screen-reader user gets nothing unless you announce it.
 
-| Concern | What to do |
-| --- | --- |
+| Concern                         | What to do                                                                                                                                |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | **Announce the delayed result** | Put the outcome in an `aria-live="polite"` region — "12 results" — so it is spoken when it lands rather than silently replacing the page. |
-| **Don't move focus on settle** | The debounce fires while the user is still typing. Moving focus to results would yank them out of the field mid-word. |
-| **Keep the delay modest** | 300ms is the default for a reason. A long `debounceMs` leaves assistive tech describing stale state for longer. |
+| **Don't move focus on settle**  | The debounce fires while the user is still typing. Moving focus to results would yank them out of the field mid-word.                     |
+| **Keep the delay modest**       | 300ms is the default for a reason. A long `debounceMs` leaves assistive tech describing stale state for longer.                           |
 
 ```tsx
 import { DebouncableInput, Label } from '@repo/ui-core';
 
-<div className="grid gap-3">
-	<Label htmlFor="filter">Filter results</Label>
-	<DebouncableInput id="filter" onValueChange={setQuery} debounceMs={300} />
-	<p aria-live="polite" className="text-sm text-muted-foreground">
+<div className='grid gap-3'>
+	<Label htmlFor='filter'>Filter results</Label>
+	<DebouncableInput id='filter' onValueChange={setQuery} debounceMs={300} />
+	<p aria-live='polite' className='text-sm text-muted-foreground'>
 		{results.length} results
 	</p>
 </div>;

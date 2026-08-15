@@ -75,7 +75,7 @@ This is why the defect has gone unnoticed. The two containers mask each other.
 
 - **Publishing a DOM node down the tree fails silently if done with a ref.** A ref mutation is not a
   state change, so nothing re-renders when the node attaches. This works today only because the ref
-  and the virtualizer live in the *same* component, where the virtualizer's effect runs after the ref
+  and the virtualizer live in the _same_ component, where the virtualizer's effect runs after the ref
   is populated in the same commit. Once the node is created by a parent and read by a child, the
   child must re-render when the node arrives — otherwise `getScrollElement()` returns `null`
   forever and the virtualizer never measures. The symptom is an empty list, not an error.

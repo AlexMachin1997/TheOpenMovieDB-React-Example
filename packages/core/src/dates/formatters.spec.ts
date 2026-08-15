@@ -72,7 +72,9 @@ describe('formatDateCustom', () => {
 	});
 
 	it('formats using a format string with literal text', () => {
-		expect(formatDateCustom({ date: SAMPLE_DATE, formatString: "'Week of' MMM d" })).toBe('Week of Apr 4');
+		expect(formatDateCustom({ date: SAMPLE_DATE, formatString: "'Week of' MMM d" })).toBe(
+			'Week of Apr 4'
+		);
 	});
 
 	it('returns an empty string when date is undefined', () => {

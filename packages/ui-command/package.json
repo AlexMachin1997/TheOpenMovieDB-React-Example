@@ -20,7 +20,7 @@
 		"build-lib": "vite build",
 		"check-types": "tsc --noEmit --incremental",
 		"lint": "eslint --cache",
-		"prettier": "prettier --write ./src",
+		"prettier": "prettier --write .",
 		"validate": "echo 'Validation dependencies handled by Turbo'",
 		"test": "vitest run",
 		"test:watch": "vitest"

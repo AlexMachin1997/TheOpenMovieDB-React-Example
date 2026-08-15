@@ -157,9 +157,7 @@ const CheckboxWithField = () => {
 				description='You must accept before continuing.'
 				error={accepted ? undefined : 'You must accept the terms.'}
 			>
-				{(control) => (
-					<Checkbox {...control} checked={accepted} onCheckedChange={setAccepted} />
-				)}
+				{(control) => <Checkbox {...control} checked={accepted} onCheckedChange={setAccepted} />}
 			</Field>
 		</div>
 	);

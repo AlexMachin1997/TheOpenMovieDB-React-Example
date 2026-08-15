@@ -101,7 +101,9 @@ export const AllStates: Story = {
 		);
 
 		await step('Every state renders, in order', async () => {
-			await expect(canvas.getAllByText(/Neutral|Something is wrong|second look|Confirmed/)).toHaveLength(4);
+			await expect(
+				canvas.getAllByText(/Neutral|Something is wrong|second look|Confirmed/)
+			).toHaveLength(4);
 			await expect(messages.map((message) => message.getAttribute('data-variant'))).toEqual([
 				'info',
 				'error',

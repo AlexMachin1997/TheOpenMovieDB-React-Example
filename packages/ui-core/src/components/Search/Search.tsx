@@ -4,7 +4,11 @@ import { useDebouncedValue } from '~/hooks';
 import { DebouncableInput } from '~/components/DebouncableInput';
 import { Button } from '~/components/Button';
 import { Icon } from '~/components/Icon';
-import { searchWrapperVariants, searchClearButtonVariants, searchDebouncableInputVariants } from '~/components/Search/Search.variants';
+import {
+	searchWrapperVariants,
+	searchClearButtonVariants,
+	searchDebouncableInputVariants
+} from '~/components/Search/Search.variants';
 import type { ISearch } from '~/components/Search/Search.types';
 
 /**

@@ -49,8 +49,8 @@ Storybook-internal import — exports **only** an ESM `default` with no `require
 ### Why the `.node-version` pin alone did not fix it
 
 [`06-repo-health`](../06-repo-health/plan.md) pinned Node 24 via `.node-version` and `engines.node`,
-but listed as still outstanding: *"the developer must update their system Node install to 24 (turbo
-spawns builds through the Program Files Node, which fnm can't override)"*. That has since happened —
+but listed as still outstanding: _"the developer must update their system Node install to 24 (turbo
+spawns builds through the Program Files Node, which fnm can't override)"_. That has since happened —
 `C:\Program Files\nodejs\node.exe --version` is now `v24.18.1`, matching the shell. That is the
 change that actually unblocked this, and it happened as a side effect of unrelated work, which is
 why nobody connected it.
@@ -77,11 +77,11 @@ Proven two independent ways, because a degraded linter is indistinguishable from
 **1. Resolved-config diff** (`eslint --print-config`, before vs after, compared semantically rather
 than textually):
 
-| File | `removed` | `changed` | `added` |
-| --- | --- | --- | --- |
-| `Calendar.stories.tsx` | `[]` | `[]` | 10 × `storybook/*`, plus `import-x/no-anonymous-default-export: [0]` |
-| `Calendar.tsx` (non-story) | `[]` | `[]` | `[]` |
-| `apps/storybook/.storybook/main.ts` | `[]` | `[]` | `storybook/no-uninstalled-addons: [2]` |
+| File                                | `removed` | `changed` | `added`                                                              |
+| ----------------------------------- | --------- | --------- | -------------------------------------------------------------------- |
+| `Calendar.stories.tsx`              | `[]`      | `[]`      | 10 × `storybook/*`, plus `import-x/no-anonymous-default-export: [0]` |
+| `Calendar.tsx` (non-story)          | `[]`      | `[]`      | `[]`                                                                 |
+| `apps/storybook/.storybook/main.ts` | `[]`      | `[]`      | `storybook/no-uninstalled-addons: [2]`                               |
 
 Total resolved rules on a story file: **480 → 491**. Nothing removed, nothing weakened.
 `react-hooks/rules-of-hooks` is `[2]` before and after; so are `exhaustive-deps` and
@@ -127,7 +127,7 @@ ESLint does lint).
 The rule gates on the import source and recognises only `@storybook/testing-library`,
 `@storybook/test` and `@storybook/jest`. Every story in this repo imports from **`storybook/test`**,
 which is not on that list — so the rule is loaded, enabled at `error`, and structurally unable to
-report anything. Its sibling `use-storybook-expect` *does* list `storybook/test`, so this is an
+report anything. Its sibling `use-storybook-expect` _does_ list `storybook/test`, so this is an
 upstream inconsistency rather than a misconfiguration here.
 
 Not worked around. Recorded so nobody counts un-awaited interactions as covered.
@@ -154,15 +154,15 @@ the dev-server contradiction the spec flagged never resolved.
 
 `packages/ui-core/src/components/Calendar/Calendar.stories.tsx > Basic`. `BasicExample` seeds
 `useState<Date | undefined>(new Date())`, so **today is selected on mount**. The `play()` picks the
-15th and asserts it is *not* already selected before clicking it.
+15th and asserts it is _not_ already selected before clicking it.
 
 On the 15th of any month, the target **is** today, and the precondition fails. It passed on the
 other ~29 days. The baseline above was captured on 2026-08-15.
 
 Two things had made this hard to see:
 
-- The recorded diagnosis — *"clicks a selected day expecting it to deselect, and it stays
-  selected"* — describes a toggle test the file does not contain.
+- The recorded diagnosis — _"clicks a selected day expecting it to deselect, and it stays
+  selected"_ — describes a toggle test the file does not contain.
 - The stack trace says `Calendar.stories.tsx:233` in a **229-line** file. It points into Storybook's
   instrumented copy, not the source. The real assertion is at `:189`.
 
@@ -213,22 +213,22 @@ This matters for reading the older records: `docs/12-build-dependency-tooling/pl
 
 ## Acceptance criteria
 
-| Criterion | Outcome |
-| --- | --- |
-| Current state of both established empirically, replacing the stale diagnoses | ✅ Both recorded diagnoses were wrong. Measurements above; corrections listed below |
-| `eslint-plugin-storybook` loaded and its rules run — or blocker linked | ✅ Loaded and running. Not blocked upstream, so that branch did not apply |
-| A deliberately introduced lint error is still caught | ✅ Two, both `error`, `exit=1`, reverted and re-verified clean |
-| Suite runs, result explained | ✅ Green: 385 passed / 27 skipped / 0 failed. The former failure is root-caused and fixed |
-| The stale "version alignment unblocks it" claim corrected wherever it appears | ✅ See below |
+| Criterion                                                                     | Outcome                                                                                   |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Current state of both established empirically, replacing the stale diagnoses  | ✅ Both recorded diagnoses were wrong. Measurements above; corrections listed below       |
+| `eslint-plugin-storybook` loaded and its rules run — or blocker linked        | ✅ Loaded and running. Not blocked upstream, so that branch did not apply                 |
+| A deliberately introduced lint error is still caught                          | ✅ Two, both `error`, `exit=1`, reverted and re-verified clean                            |
+| Suite runs, result explained                                                  | ✅ Green: 385 passed / 27 skipped / 0 failed. The former failure is root-caused and fixed |
+| The stale "version alignment unblocks it" claim corrected wherever it appears | ✅ See below                                                                              |
 
 ## Corrections made
 
-| File | Was | Now |
-| --- | --- | --- |
-| `packages/eslint-config/react.js` | A `NOTE:` saying to re-add "once … on a version without the require(esm) cycle" | Comment deleted with the plugin's re-enablement; replaced by the ordering constraint and the real Node condition |
-| `packages/eslint-config/README.md` | Claimed the Storybook plugin was part of the react config while it was not loaded | True now, plus the ordering constraint |
-| `.claude/skills/local-development/SKILL.md` | `only-warn` downgrades everything; suite has one pre-existing failure; wrong Calendar diagnosis; stale 27/311 figure | All corrected; added the `pnpm prettier` trap below |
-| `docs/README.md` | `15` listed as outstanding | Moved to Shipped |
+| File                                        | Was                                                                                                                  | Now                                                                                                              |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `packages/eslint-config/react.js`           | A `NOTE:` saying to re-add "once … on a version without the require(esm) cycle"                                      | Comment deleted with the plugin's re-enablement; replaced by the ordering constraint and the real Node condition |
+| `packages/eslint-config/README.md`          | Claimed the Storybook plugin was part of the react config while it was not loaded                                    | True now, plus the ordering constraint                                                                           |
+| `.claude/skills/local-development/SKILL.md` | `only-warn` downgrades everything; suite has one pre-existing failure; wrong Calendar diagnosis; stale 27/311 figure | All corrected; added the `pnpm prettier` trap below                                                              |
+| `docs/README.md`                            | `15` listed as outstanding                                                                                           | Moved to Shipped                                                                                                 |
 
 Left alone on purpose: `docs/06-repo-health/plan.md`, `docs/07-test-harness/plan.md` and
 `docs/11-correctness-bugs/plan.md` are as-built records that were accurate when written, and
@@ -236,12 +236,12 @@ Left alone on purpose: `docs/06-repo-health/plan.md`, `docs/07-test-harness/plan
 
 ## Found, not adopted
 
-- **The CI Prettier job cannot fail.** `.github/workflows/linting-action.yml` runs `pnpm prettier`,
-  which is `turbo run prettier` → `prettier --write ./src`. Formatting on write is the intent and is
-  fine; the consequence is that the CI step rewrites its own checkout and exits 0 unconditionally, so
-  it reports "formatted" rather than checking anything. **22 files in the repo are currently not
-  prettier-clean** (`npx prettier --check`). Either run `--write` and commit the result, or switch
-  the CI step to `--check` — today it does neither.
+- **The CI Prettier job still cannot fail.** `.github/workflows/linting-action.yml` runs
+  `pnpm prettier`, which writes rather than checks, so the step rewrites its own checkout and exits 0
+  unconditionally. Switching it to `--check` is the obvious fix and is **not** done — it is a CI
+  policy call, not this deliverable's. The formatting backlog it was hiding has been cleared (see
+  below), so the tree is clean today and drift would now show up as a real diff rather than as
+  nothing.
 - **The interaction suite is deliberately out of CI**, not overlooked: running Playwright/Chromium on
   every push costs money, and the components are not stable enough yet to be worth it. Revisit when
   they are. Until then the suite is trustworthy but locally-run, which is a decision rather than a
@@ -249,7 +249,33 @@ Left alone on purpose: `docs/06-repo-health/plan.md`, `docs/07-test-harness/plan
 - **`storybook/await-interactions` is inert here** (see above).
 - **`apps/the-open-movie-database`'s 35 stories are linted but never interaction-tested** —
   `main.ts` globs `packages/*/src` only, and the app has no `@storybook/addon-vitest`.
-- **`packages/eslint-config/react.js:10-11`** still imports `projectStructureParser`,
+- **`packages/eslint-config/react.js`** still imports `projectStructureParser`,
   `projectStructurePlugin` and `folderStructureConfig` for the disabled folder-structure block. That
   block is [`13-exports-conventions`](../13-exports-conventions/spec.md)'s work, and this
   deliverable's precedent for requirement 2 — left untouched.
+
+## Addendum: the formatting backlog, cleared
+
+Ran as a follow-on once the linting work was done, on the reasoning that a formatter which has been
+passing over a backlog is the same problem as a linter that was switched off.
+
+`npx prettier --check .` now reports **"All matched files use Prettier code style"** across the whole
+repo. Getting there needed three things, because `pnpm prettier` was never covering the tree it
+appeared to:
+
+- **`apps/storybook` had no `prettier` script at all**, so `.storybook/*.ts` — including the
+  `vitest.setup.ts` this deliverable edited — was never formatted by any gate.
+- **Every other package's script was `prettier --write ./src`**, so package roots, configs and
+  anything outside `src/` were invisible to it. All are now `prettier --write .`, and the three
+  config packages that stubbed it out with `echo` now format for real.
+- **`.prettierignore` did not exclude `pnpm-lock.yaml`.** With the scripts widened it would have
+  started reformatting the lockfile. `pnpm-lock.yaml` and `*.tsbuildinfo` are now ignored.
+
+Documents under `docs/` and root-level config are still outside every package script, so they were
+formatted directly. They will drift again unless CI moves to `--check`.
+
+63 files changed. Only the `package.json` scripts and `.prettierignore` are semantic; the rest is
+formatting. Verified against the same gates as the rest of this deliverable — lint 0 errors and the
+same 18 + 20 warnings, `check-types` 19/19, a forced rebuild, and the full interaction suite. The
+`pnpm-workspace.yaml` reformat is quote-style only, and `pnpm install --frozen-lockfile` still
+resolves the catalog.

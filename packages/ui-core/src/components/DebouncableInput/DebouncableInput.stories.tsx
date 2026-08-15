@@ -100,11 +100,14 @@ export const InteractiveDebounceTest: Story = {
 			expect(args.onValueChange).not.toHaveBeenCalled();
 		});
 
-		await step('Wait for debounce to settle and verify exactly one call with final value', async () => {
-			await waitFor(() => {
-				expect(args.onValueChange).toHaveBeenCalledTimes(1);
-			});
-			expect(args.onValueChange).toHaveBeenCalledWith('Hello');
-		});
+		await step(
+			'Wait for debounce to settle and verify exactly one call with final value',
+			async () => {
+				await waitFor(() => {
+					expect(args.onValueChange).toHaveBeenCalledTimes(1);
+				});
+				expect(args.onValueChange).toHaveBeenCalledWith('Hello');
+			}
+		);
 	}
 };

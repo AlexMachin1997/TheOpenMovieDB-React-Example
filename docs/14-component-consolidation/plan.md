@@ -74,7 +74,7 @@ constant instead of being repeated four times.
 ### D7 — the uncontrolled `onOpenChange` branch was also broken
 
 Fixing the Sheet root's spread order exposed a second defect underneath it. The old code chose
-*either* internal state *or* the caller's callback, and the trailing `{...props}` then reinstated the
+_either_ internal state _or_ the caller's callback, and the trailing `{...props}` then reinstated the
 caller's — so an uncontrolled Sheet given an `onOpenChange` prop updated nothing and could not open.
 It now does both: moves the state the render reads, and notifies the caller.
 
@@ -100,16 +100,16 @@ It now does both: moves the state the render reads, and notifies the caller.
 Run from a fully rebuilt tree; Turbo's cache is shared across worktrees, so `--force` is not
 optional here.
 
-| Claim | Evidence |
-| --- | --- |
-| `Select`'s public API unchanged | All 27 `@repo/ui-forms` runtime exports byte-identical to the pre-change list. Every declaration-tree delta is a deleted wrapper or the alias replacing it. |
-| Overlay public API unchanged | All 44 `@repo/ui-overlays` runtime exports byte-identical. Only `showCloseButton` / `icon` added to `ISheetContent`. |
-| No byte-identical file pairs | Every Dialog file diffed against its Sheet counterpart; none match. |
-| Output unchanged | `overlaySurfaceVariants` compared programmatically against the previous literals: Dialog's surface, all four Sheet sides and the backdrop produce identical class sets. Sheet's close button is the one deliberate exception (D5). |
-| Dead types gone | `IBaseSelectProviderProps` and `ISheetRef` return zero references outside `docs/`. |
-| The `11` ref fix cannot regress | `RefWithControlled` (controlled) and `RefBased` (uncontrolled) both assert on `data-state`, not on presence. |
-| Missing accessible name fails | Captured below. |
-| No regressions | 384 passed, 27 skipped. Lint 18 + 20 warnings, 0 errors. `check-types` green across 19 tasks. |
+| Claim                           | Evidence                                                                                                                                                                                                                           |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Select`'s public API unchanged | All 27 `@repo/ui-forms` runtime exports byte-identical to the pre-change list. Every declaration-tree delta is a deleted wrapper or the alias replacing it.                                                                        |
+| Overlay public API unchanged    | All 44 `@repo/ui-overlays` runtime exports byte-identical. Only `showCloseButton` / `icon` added to `ISheetContent`.                                                                                                               |
+| No byte-identical file pairs    | Every Dialog file diffed against its Sheet counterpart; none match.                                                                                                                                                                |
+| Output unchanged                | `overlaySurfaceVariants` compared programmatically against the previous literals: Dialog's surface, all four Sheet sides and the backdrop produce identical class sets. Sheet's close button is the one deliberate exception (D5). |
+| Dead types gone                 | `IBaseSelectProviderProps` and `ISheetRef` return zero references outside `docs/`.                                                                                                                                                 |
+| The `11` ref fix cannot regress | `RefWithControlled` (controlled) and `RefBased` (uncontrolled) both assert on `data-state`, not on presence.                                                                                                                       |
+| Missing accessible name fails   | Captured below.                                                                                                                                                                                                                    |
+| No regressions                  | 384 passed, 27 skipped. Lint 18 + 20 warnings, 0 errors. `check-types` green across 19 tasks.                                                                                                                                      |
 
 ### The captured failure
 

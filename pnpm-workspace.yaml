@@ -1,11 +1,11 @@
 packages:
-  - "apps/*"
-  - "packages/*"
+  - 'apps/*'
+  - 'packages/*'
 
 # Single source of truth for shared dev-tool versions (referenced as "catalog:").
 # A tool used by more than one package belongs here, so it is stated once and changed once.
 catalog:
-  "@vitest/coverage-v8": ^4.0.18
+  '@vitest/coverage-v8': ^4.0.18
   eslint: ^9.39.1
   tsup: ^8.3.5
   typescript: ^5.8.2

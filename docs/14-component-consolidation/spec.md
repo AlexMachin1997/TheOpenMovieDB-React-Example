@@ -70,7 +70,7 @@ context memoization, and the `SheetProvider` controlled-mode imperative-ref fix.
   `DropdownMenu`, `HoverCard` and `Popover`. The nested `CommandList` (`17`) and the overlay content
   API (`18`). The duplicate barrels, which [`13-exports-conventions`](../13-exports-conventions/spec.md)
   removes repo-wide.
-- **Ordering**: `13` is *not* a prerequisite. Barrel edits here are confined to the five entries in
+- **Ordering**: `13` is _not_ a prerequisite. Barrel edits here are confined to the five entries in
   `Selects/components/index.ts`; the eight byte-identical duplicate barrels — including
   `Dialog/index.ts` and `Sheet/index.ts` — are left untouched for `13`.
 
@@ -94,7 +94,7 @@ context memoization, and the `SheetProvider` controlled-mode imperative-ref fix.
 **Sheet's close button changes appearance.** The drift between the two close buttons was not only
 structural: Dialog's icon is 24px (`Icon` `size='xl'`) against Sheet's 16px (`Icon`'s `md` default),
 and their open-state backgrounds differ (`bg-accent` + `text-muted-foreground` against
-`bg-secondary`). Unifying only the *API* would have satisfied the criterion above while leaving the
+`bg-secondary`). Unifying only the _API_ would have satisfied the criterion above while leaving the
 drift the Problem section calls unintended. The call was made to unify fully, so Sheet's close button
 adopts Dialog's: a 24px icon, the accent open state, `cursor-pointer`, a `data-slot`, and the three
 `[&_svg…]` rules it previously lacked. This is a visible change on every Sheet story and is
@@ -102,7 +102,7 @@ intentional. Everything else — Dialog's surface, all four Sheet surfaces, the 
 unchanged, proven by comparing composed class sets rather than by eye.
 
 **The a11y guard only reaches overlays a test actually opens.** `a11y: { test: 'error' }` runs axe
-against the *rendered* story. An overlay that is never opened contributes no dialog to the DOM, so
+against the _rendered_ story. An overlay that is never opened contributes no dialog to the DOM, so
 `aria-dialog-name` has nothing to judge — a story whose `Title` is missing entirely still passes,
 confirmed by removing one and watching the suite stay green. The guard is real, and demonstrated:
 with the overlay open, axe fails with `aria-dialog-name`. But its reach today is the two Sheet
@@ -154,7 +154,7 @@ than being fixed piecemeal.
 ## Decisions
 
 **Keep `CommandProvider` and `SelectProvider` layered.** An earlier draft left this open. It is
-closed: the split is deliberate. `Command` is a standalone component that merely *happens* to be what
+closed: the split is deliberate. `Command` is a standalone component that merely _happens_ to be what
 `Select` is built from, and must keep working on its own — as a search dialog, for instance. Merging
 the contexts would couple the two. The code agrees: `ISelectContext` carries three fields,
 `ICommandContext` eleven, they are strictly disjoint, and `CommandProvider` additionally owns the

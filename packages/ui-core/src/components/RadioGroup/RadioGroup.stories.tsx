@@ -36,11 +36,7 @@ type RadioGroupTemplateProps = Omit<
 	initialValue?: string;
 };
 
-const RadioGroupTemplate = ({
-	options,
-	initialValue = '',
-	...props
-}: RadioGroupTemplateProps) => {
+const RadioGroupTemplate = ({ options, initialValue = '', ...props }: RadioGroupTemplateProps) => {
 	const [currentValue, setCurrentValue] = React.useState(initialValue);
 
 	return (
@@ -91,7 +87,11 @@ export const CustomNoOptionsMessage: StoryObj<typeof RadioGroup> = {
 
 export const HorizontalLayout: StoryObj<typeof RadioGroup> = {
 	render: () => (
-		<RadioGroupTemplate options={sampleOptions} name='plan' className='grid-flow-col auto-cols-max' />
+		<RadioGroupTemplate
+			options={sampleOptions}
+			name='plan'
+			className='grid-flow-col auto-cols-max'
+		/>
 	)
 };
 

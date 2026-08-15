@@ -57,8 +57,4 @@ export {
 } from '~/components/DropdownMenu/DropdownMenu';
 
 // HoverCard
-export {
-	HoverCard,
-	HoverCardTrigger,
-	HoverCardContent
-} from '~/components/HoverCard/HoverCard';
+export { HoverCard, HoverCardTrigger, HoverCardContent } from '~/components/HoverCard/HoverCard';

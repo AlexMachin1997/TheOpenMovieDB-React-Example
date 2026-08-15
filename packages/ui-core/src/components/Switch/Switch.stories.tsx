@@ -209,9 +209,7 @@ const SwitchWithField = () => {
 				id='marketing'
 				description='You can turn this off at any time.'
 			>
-				{(control) => (
-					<Switch {...control} checked={enabled} onCheckedChange={setEnabled} />
-				)}
+				{(control) => <Switch {...control} checked={enabled} onCheckedChange={setEnabled} />}
 			</Field>
 		</div>
 	);

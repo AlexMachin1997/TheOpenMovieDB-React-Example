@@ -71,7 +71,7 @@ export const config = [
 			'react/display-name': 'off',
 			'@typescript-eslint/no-unused-vars': 'off'
 		}
-	},
+	}
 
 	// DISABLED: this block set `languageOptions.parser = projectStructureParser` on every
 	// source file. In flat config the last matching `parser` wins, so it overrode the

@@ -28,7 +28,7 @@ import { Label } from '@repo/ui-core';
 - A built-in required indicator that satisfies WCAG 1.4.1 — symbol plus text, never colour alone.
 - Exports `labelVariants` for consumers extending the styling.
 
-<Canvas sourceState="none" of={LabelStories.Default} />
+<Canvas sourceState='none' of={LabelStories.Default} />
 
 ## Properties
 
@@ -50,7 +50,7 @@ to focus the control, and what a screen reader reads when focus lands there.
 
 ### Required fields
 
-<Canvas sourceState="none" of={LabelStories.Required} />
+<Canvas sourceState='none' of={LabelStories.Required} />
 
 ```tsx
 <Label htmlFor='full-name' required>Full name</Label>
@@ -64,15 +64,15 @@ to focus the control, and what a screen reader reads when focus lands there.
 
 ### Weights
 
-<Canvas sourceState="none" of={LabelStories.Weights} />
+<Canvas sourceState='none' of={LabelStories.Weights} />
 
-`emphasis` defaults to `true`. Pass `emphasis={false}` for a label that sits *beside* its control
+`emphasis` defaults to `true`. Pass `emphasis={false}` for a label that sits _beside_ its control
 rather than above a whole field — which is exactly what `CheckboxLabel` and `RadioLabel` do
 internally, so you rarely need to set it yourself.
 
 ### Non-native mode
 
-<Canvas sourceState="none" of={LabelStories.NonNative} />
+<Canvas sourceState='none' of={LabelStories.NonNative} />
 
 ```tsx
 <Label nativeLabel={false}>Section heading</Label>
@@ -90,7 +90,7 @@ Used as a plain styled heading outside either case, it needs no association wiri
 
 ### Labelling a group
 
-<Canvas sourceState="none" of={LabelStories.AsAGroupHeading} />
+<Canvas sourceState='none' of={LabelStories.AsAGroupHeading} />
 
 ```tsx
 import { Checkbox, CheckboxLabel, Label } from '@repo/ui-core';
@@ -122,12 +122,12 @@ around a `CheckboxGroup` or `RadioGroup`. Write it by hand only if you are not u
 
 ## Accessibility
 
-| Concern | Behaviour |
-| ------- | --------- |
-| Click target | Clicking a native `Label` focuses the control named by `htmlFor`. A non-native `Label` has no such behaviour. |
-| Required indicator | The `*` is `aria-hidden`; a visually-hidden `(required)` carries the meaning. Conveyed by symbol and text, never colour alone (WCAG 1.4.1). |
-| Group naming | Non-native mode carries no implicit association. The group container must supply `aria-labelledby` and a grouping role. |
-| Disabled controls | The base styling responds to `peer-disabled:*` and `group-data-[disabled=true]:*`, so a label dims alongside the control it names — provided the control precedes it in the DOM and carries the `peer` class. |
+| Concern            | Behaviour                                                                                                                                                                                                     |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Click target       | Clicking a native `Label` focuses the control named by `htmlFor`. A non-native `Label` has no such behaviour.                                                                                                 |
+| Required indicator | The `*` is `aria-hidden`; a visually-hidden `(required)` carries the meaning. Conveyed by symbol and text, never colour alone (WCAG 1.4.1).                                                                   |
+| Group naming       | Non-native mode carries no implicit association. The group container must supply `aria-labelledby` and a grouping role.                                                                                       |
+| Disabled controls  | The base styling responds to `peer-disabled:*` and `group-data-[disabled=true]:*`, so a label dims alongside the control it names — provided the control precedes it in the DOM and carries the `peer` class. |
 
 **The caller's obligation:** a `Label` that names nothing is worse than no label, because it looks
 correct in a review. In native mode, check the `htmlFor` matches a real `id`. In non-native mode,

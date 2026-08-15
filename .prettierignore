@@ -2,6 +2,10 @@
 node_modules/
 .pnpm-store/
 
+# Generated — reformatting these produces churn and can corrupt them
+pnpm-lock.yaml
+*.tsbuildinfo
+
 # Build outputs
 dist/
 build/
