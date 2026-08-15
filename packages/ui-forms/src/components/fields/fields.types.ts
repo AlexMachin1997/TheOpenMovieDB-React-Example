@@ -69,8 +69,8 @@ export interface ITextareaField extends IBoundField {
 	rows?: number;
 }
 
-// Aliases rather than empty `interface … extends`: neither adds a member, so the interface form
-// buys nothing and costs a `no-empty-object-type` warning apiece.
+// Aliases rather than empty `interface … extends`: neither adds a member, so there is nothing for
+// the interface form to carry. Both spellings lint clean — see docs/16-type-hygiene/plan.md.
 
 /** Properties for CheckboxField — a single boolean. */
 export type ICheckboxField = IBoundField;
