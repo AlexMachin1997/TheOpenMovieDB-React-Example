@@ -41,30 +41,55 @@ report a build time or a "clean build is green" without it.
 | Gate            | Command                                             | Notes                                                                                                                    |
 | --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Build           | `pnpm build`                                        | `pnpm turbo run build --force` when baselining                                                                           |
-| Lint            | `pnpm lint`                                         | Warnings only, never errors — `eslint-plugin-only-warn` downgrades everything. Healthy today: 18 + 20 warnings, 0 errors |
+| Lint            | `pnpm lint`                                         | Errors DO fail it. Healthy today: 18 + 20 warnings, 0 errors                                                             |
+| Prettier        | `pnpm prettier`                                     | ⚠️ **`--write`, not `--check`. It cannot fail and it rewrites your tree** — see below                                     |
 | Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                       |
-| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~135s. **One pre-existing failure** — see below                    |
+| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 385 passed, 27 skipped                            |
 | Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                           |
 
-### The suite is not green — one failure is pre-existing
+### `eslint-plugin-only-warn` is NOT wired up — lint errors are real
 
-Baselined 2026-08-15 on an untouched tree: **1 failed | 40 passed | 27 skipped (68 files)**,
-**1 failed | 384 passed (385 tests)**, ~134s.
+It is declared in `packages/eslint-config/package.json` and imported by **no config**; in flat
+config a plugin only patches severity if it is loaded. Grep it before believing otherwise. What
+actually produces a warnings-only tree is narrow and deliberate: `base.js` downgrades exactly two
+rules (`no-empty-object-type`, `no-explicit-any`). Everything else is `error`, and `pnpm lint` gates
+both `.husky/pre-commit` and the CI `ESLint` job. "0 errors" is a fact about the code, not about the
+config — a new error will block your commit.
 
-The failure is `packages/ui-core/src/components/Calendar/Calendar.stories.tsx > Basic`, at
-`Calendar.stories.tsx:233`:
+Verified 2026-08-15 by introducing a conditional `useState` into a story file: reported as an
+`error`, exit 1.
 
-```
-expect(element).not.toHaveAttribute("data-selected-single", "true")
-Received: data-selected-single="true"
-```
+### 🚨 `pnpm prettier` rewrites your working tree and always passes
 
-The story clicks a selected day expecting it to deselect, and it stays selected. Nobody has adopted
-it; it is not owned by any in-flight deliverable.
+The root script is `turbo run prettier`, and each package's is `prettier --write ./src`. Running it
+mid-task silently reformats files you never touched — **22 files in this repo are not
+prettier-clean**, so it produces a ~2,200-line diff that is trivially easy to sweep into a commit
+with `git add -A`. Use `npx prettier --check` when you want to *know*, and never run `pnpm prettier`
+as a verification step.
 
-**So "the suite passes" here means one failure, and that one only.** Do not read this failure as your
-own regression, and do not fix it as a side quest — it belongs to whoever picks up `Calendar`.
-Compare failure *lists* against a baseline you captured yourself, never a bare pass/fail.
+The same fact means the CI **Prettier** job (`.github/workflows/linting-action.yml`, `run: pnpm
+prettier`) rewrites its own checkout and exits 0 unconditionally. That gate has never been able to
+fail. Not adopted by any deliverable.
+
+### The suite is green — 385 passed, 27 skipped
+
+Re-baselined 2026-08-15 after `15`: **41 passed | 27 skipped (68 files)**, **385 passed (385
+tests)**, ~62s warm / ~120s cold. The 27 skipped are the `.mdx` docs pages, which carry no tests.
+
+The one failure that used to sit here was **date-dependent, not a `Calendar` bug**: `Basic` seeds
+`useState(new Date())` so today is selected on mount, while its `play()` asserted the 15th was *not*
+selected. It failed on the 15th of every month and passed the other ~29 days. `15` fixed it by
+freezing the clock for the whole suite in `apps/storybook/.storybook/vitest.setup.ts`
+(`vi.useFakeTimers({ toFake: ['Date'] })` — `Date` only, because blanket fake timers stall
+`userEvent`).
+
+Two traps that cost real time here, worth keeping:
+
+- **A stack-trace line number is not a source line number.** That failure reported
+  `Calendar.stories.tsx:233` in a 229-line file — the trace points into Storybook's instrumented
+  copy. Open the source and find the assertion by text, not by line.
+- **Compare failure _lists_ against a baseline you captured yourself**, never a bare pass/fail. A
+  suite that is green on the 14th and red on the 15th looks like "someone broke it today".
 
 `turbo.json` gives `check-types` `dependsOn: ["^build"]`, not `^check-types`. That is load-bearing:
 packages resolve each other through built `dist/*.d.ts`, and `tsc --noEmit` emits nothing, so
@@ -128,7 +153,9 @@ matches `packages/ui-forms/node_modules/@repo/ui-core/src/...`, plus nested hops
 Storybook's own indexer ignores those; `@storybook/addon-vitest` does not. With `**` the suite
 collected **166 story files for ~30 components**, 97 of them unservable duplicates that each failed
 to import and left a Vite error overlay in the shared page — which then failed `Button`'s a11y gate
-on the _overlay's_ markup. With `*`: 27 files, 311 tests, 0 failures, 155s → 61s.
+on the _overlay's_ markup. With `*`: 27 files, 311 tests, 0 failures, 155s → 61s. (Those are the
+figures as measured when the glob was fixed; the suite has grown to 68 files / 385 tests since. The
+point is the ratio, not the absolute numbers.)
 
 `test.exclude: ['**/node_modules/**']` in `apps/storybook/vite.config.ts` does **not** fix this;
 `storybookTest` builds its `include` from Storybook's file matcher as explicit paths, so there is no

@@ -29,8 +29,14 @@ A comprehensive React configuration that extends the base config and includes:
 - React Refresh plugin
 - JSX A11y accessibility rules
 - Import plugin
-- Storybook plugin
+- Storybook plugin (`flat/recommended`, scoped by the plugin itself to `*.stories.*` and
+  `.storybook/main.*`)
 - React 17+ JSX transform optimizations
+
+The Storybook spread is placed **above** this config's own rules block on purpose.
+`flat/recommended` disables `react-hooks/rules-of-hooks` on story files, and the rules block below
+it matches every file, so last-match-wins restores `error`. Moving the spread down would silently
+turn that rule off across every story file.
 
 ## Usage
 

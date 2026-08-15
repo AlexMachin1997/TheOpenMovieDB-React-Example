@@ -17,7 +17,6 @@ Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 | --- | ----------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------------- |
 | 03  | Focus indicators        | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)               |
 | 13  | Exports & conventions   | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)         |
-| 15  | Storybook lint + tests  | tooling       | 🟢 ready | — (12 ✅)  | [15-storybook-lint-tests](15-storybook-lint-tests/spec.md)       |
 | 16  | Type-hygiene cleanup    | tooling       | 🟢 ready | —          | [16-type-hygiene](16-type-hygiene/spec.md)                       |
 | 17  | One list per Command    | component     | 🟢 ready | —          | [17-command-list-nesting](17-command-list-nesting/spec.md)       |
 | 18  | A common overlay API    | component     | 🟢 ready | — (14 ✅)  | [18-overlay-api](18-overlay-api/spec.md)                         |
@@ -34,7 +33,9 @@ merged or renumbered, as `12`–`16` were when the first cut of them was split t
 
 ### Suggested order
 
-`12` has shipped, so `15` is unblocked and can go next. `16` is independent and small.
+`16` is independent and small, and now has a head start: `15` established that `pnpm lint` really
+does fail on errors — `eslint-plugin-only-warn` is declared but wired to nothing — so restoring
+`no-empty-object-type` and `no-explicit-any` to `error` will bite immediately rather than silently.
 
 `14` **no longer depends on `13`.** The dependency existed to avoid touching the same barrels twice,
 but `14`'s barrel edits turned out to be confined to five entries in one file, and `13`'s own open
@@ -176,3 +177,4 @@ Kept for reference; each links to its as-built record. These rows do not change.
 | 11  | Correctness bug fixes         | [11-correctness-bugs](11-correctness-bugs/plan.md)                         |
 | 12  | Build & dependency tooling    | [12-build-dependency-tooling](12-build-dependency-tooling/plan.md)         |
 | 14  | Component consolidation       | [14-component-consolidation](14-component-consolidation/plan.md)           |
+| 15  | Storybook lint + tests        | [15-storybook-lint-tests](15-storybook-lint-tests/plan.md)                 |
