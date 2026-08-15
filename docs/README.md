@@ -32,13 +32,14 @@ merged or renumbered, as `12`–`16` were when the first cut of them was split t
 
 ### Suggested order
 
-`13` inherits an open question from `16`: a component's prop interface is `I`-prefixed so it can be
-named after the component without colliding with it, and an empty `interface IFoo extends Bar {}` is
-the sanctioned pass-through idiom, enforced by
-`no-empty-object-type`'s `allowInterfaces: 'with-single-extends'`. That satisfies `13`'s criterion 4
-for this convention once written into `CONVENTIONS.md`. `16` also left the tree mixed — `ITextarea`
-is an interface while `ICheckboxField` and `ISwitchField` are `type` aliases — which `13` should
-settle. See [`16-type-hygiene/plan.md`](16-type-hygiene/plan.md#found-not-adopted).
+**`13` grew during `16` and is now the guardrails deliverable, not just the barrels one.** Four gaps
+were folded into it rather than taking specs of their own: `--max-warnings 0` (a stale
+`eslint-disable` currently warns and exits 0 — the same hole `16` closed, via a different door), CI
+Prettier as `--check` rather than `--write`, `naming-convention` to enforce the `I` prefix, and
+`react/display-name`. Its `CONVENTIONS.md` requirement was **dropped**: a rule cannot drift and binds
+everyone, so prose is the fallback and lives in the owning package's README.
+
+The first two are independent of the barrel decision and can land first.
 
 `14` **no longer depends on `13`.** The dependency existed to avoid touching the same barrels twice,
 but `14`'s barrel edits turned out to be confined to five entries in one file, and `13`'s own open
