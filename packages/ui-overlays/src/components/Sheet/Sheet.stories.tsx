@@ -902,7 +902,9 @@ const WithConfirmationDialogSheet = () => {
 					<SheetHeader>
 						<SheetTitle>Unsaved Changes</SheetTitle>
 						<SheetDescription>
-							You have unsaved changes. Use the close button to test the confirmation dialog.
+							You have unsaved changes. Use <strong>Close Sheet</strong> below to test the
+							confirmation dialog — the ✕ closes immediately, because Radix&apos;s onOpenChange
+							reports a close and cannot veto one.
 						</SheetDescription>
 					</SheetHeader>
 					<SheetInnerContent className='grid gap-4 p-6'>
