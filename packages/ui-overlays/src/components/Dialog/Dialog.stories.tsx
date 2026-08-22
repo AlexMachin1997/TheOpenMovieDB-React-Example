@@ -11,7 +11,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 	DialogClose
-} from '~/components/Dialog/Dialog';
+} from '~/components/Dialog';
 
 const meta: Meta<typeof Dialog> = {
 	title: 'UI Overlays/Dialog',

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent } from 'storybook/test';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
-import { Calendar } from '~/components/Calendar/Calendar';
+import { Calendar } from '~/components/Calendar';
 
 const meta: Meta<typeof Calendar> = {
 	title: 'UI Core/Calendar',

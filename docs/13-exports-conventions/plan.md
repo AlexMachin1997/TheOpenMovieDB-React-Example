@@ -58,7 +58,7 @@ Recorded here rather than by editing `spec.md`, which describes the world as it 
 - [x] **1 — The gates that don't gate.** `--max-warnings 0`, CI Prettier as `--check`,
       `react/display-name`, husky made durable.
 - [ ] **2 — Export parity baseline.** Capture every exported symbol before touching a barrel.
-- [ ] **3 — One barrel strategy, applied.** Delete the duplicate halves, write the missing barrels,
+- [x] **3 — One barrel strategy, applied.** Delete the duplicate halves, write the missing barrels,
       route every package root through them.
 - [ ] **4 — `RangeDatePicker` / `DateRangePicker`.** Fix the folder, file and interface; keep the
       export.
@@ -152,3 +152,76 @@ naive `.d.ts` scan undercounted `ui-command` at 19 and `ui-forms` at 22.
 | `ui-overlays` | 44                    | 45                                |
 | `ui-command`  | 18                    | 35                                |
 | `ui-forms`    | 27                    | 52                                |
+
+### Phase 3 — one barrel strategy, applied
+
+The rule now holds: **every direct child of `src/components/` has an `index.ts`, and the package root
+imports only through those barrels.**
+
+- **The eight byte-identical duplicates are gone**, plus `Calendar/Calendar.tsx`, a one-line
+  re-export shim that was a ninth in everything but name. In each case the `index.ts` survived and its
+  twin was deleted. `Command/Command.tsx` was unreachable from anywhere, as was
+  `Command/index.ts` — both halves of that pair were dead.
+- **`Checkbox` was a triple.** Deleting `Checkbox.tsx` still left `Checkbox/index.ts` byte-identical to
+  `Checkbox/components/index.ts`, so the parent now delegates to the sub-barrel, which is what
+  `Accordion`, `Slider`, `Dialog`, `Popover` and `Sheet` already did.
+- **Four missing barrels written**: `Search`, `Calendar`, `Overlay` and `Radio/components`. `Search`
+  and `Calendar` were publicly exported with no barrel at all; `Radio/components` was the only
+  `components/` folder in `ui-core` without one, which is why `Radio/index.ts` reached past it.
+- **Two dead barrels deleted**: `Command/utils/index.ts` held one comment and zero exports while the
+  root still `export *`d from it, and `Selects/types/index.ts` did `export * from '@repo/ui-command'`
+  with no importers — a loaded gun rather than a convenience.
+- Barrels were generated mechanically from each component's own exports rather than hand-written, so
+  a barrel cannot drift from the files beside it.
+
+Afterwards, **no two files in the four packages are byte-identical.**
+
+#### The parity check gave a false pass, and that is the real finding
+
+The first parity comparison reported "IDENTICAL". It was wrong. A `sed` intended only to rewrite
+module specifiers had silently deleted a four-line `export { … } from` block, dropping
+`searchWrapperVariants` and `searchClearButtonVariants` from `ui-core`'s public surface — and the
+check waved it through.
+
+The cause was staleness, not logic: the capture ran against a `dist/` written **64 seconds before**
+the source edit it was supposed to describe. A parity check reading stale build output is not a weaker
+check, it is a rubber stamp, and it fails in exactly the direction that matters — silently, and green.
+
+The script now refuses to run when any package's newest `dist/` file is older than its newest `src/`
+file. Verified by pointing it at a stale tree: it throws `dist is OLDER than src` instead of
+reporting a pass.
+
+One anomaly is recorded rather than explained: `Search/index.ts` was written correctly by the
+generator (its log proves the content) and was found truncated afterwards, with an mtime 3.5 minutes
+later than every other generated barrel. The cause was not identified. It was caught by re-running
+the generator in dry mode and diffing against disk — which found `Search` and nothing else — and it
+is the same class of failure the freshness guard now catches.
+
+### `cva` is never exported — an accepted deviation from the spec
+
+Requirement 2 says every symbol exported before the change is still exported after it, and Non-Goals
+lists "Reducing the public export surface". **Both are deliberately overridden here**, on the
+instruction that variant files are internal implementation detail and should never be exported.
+
+Seven symbols were removed from `@repo/ui-core`'s public API — `alertVariants`, `badgeVariants`,
+`buttonVariants`, `iconVariants`, `labelVariants`, `searchClearButtonVariants`,
+`searchWrapperVariants` — along with the comment that had justified them ("for consumers who need to
+extend"). No component barrel re-exports a `*.variants.ts` file, and the barrel generator excludes
+them by construction.
+
+Nothing in the repo depended on them: no app imports a variant symbol. Internal cross-component uses
+(`Calendar` → `buttonVariants`, `Dialog`/`Sheet` → `overlay*Variants`) import the file directly and
+are unaffected. `Icon.constants.ts` is not a `cva` file and continues to be exported.
+
+The parity diff after this change is exactly those seven removals, nothing else, and nothing added.
+
+#### Gates
+
+| Gate            | Result                                           |
+| --------------- | ------------------------------------------------ |
+| Build           | 11/11 successful, 0 cached, forced               |
+| Lint            | 11/11, 0 errors, 0 warnings                      |
+| Types           | 19/19 successful                                 |
+| Prettier        | clean                                            |
+| Component tests | 41 passed, 27 skipped (68 files), **385 passed** |
+| Export parity   | 7 deliberate removals, 0 accidental, 0 added     |

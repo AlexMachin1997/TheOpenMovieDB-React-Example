@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import * as React from 'react';
-import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/Slider/Slider';
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/Slider';
 import {
 	Tooltip,
 	TooltipContent,

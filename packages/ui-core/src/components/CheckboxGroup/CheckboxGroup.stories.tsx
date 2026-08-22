@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { CheckboxGroup } from './CheckboxGroup';
 import type { Option } from '@repo/core';
-import { Checkbox } from '../Checkbox/Checkbox';
+import { Checkbox } from '~/components/Checkbox';
 import { Field } from '../Field/Field';
 
 const meta: Meta<typeof CheckboxGroup> = {

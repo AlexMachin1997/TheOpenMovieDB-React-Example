@@ -14,7 +14,7 @@ import {
 	SheetTrigger,
 	type SheetRef,
 	SheetClose
-} from '~/components/Sheet/Sheet';
+} from '~/components/Sheet';
 
 import {
 	Dialog,
@@ -23,7 +23,7 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle
-} from '~/components/Dialog/Dialog';
+} from '~/components/Dialog';
 
 const meta: Meta<typeof Sheet> = {
 	title: 'UI Overlays/Sheet',

@@ -1,2 +1,2 @@
 export { Field } from '~/components/Field/Field';
-export type { IField, IFieldControlProps } from '~/components/Field/Field.types';
+export type { IFieldControlProps, IField } from '~/components/Field/Field.types';

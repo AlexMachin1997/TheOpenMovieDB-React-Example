@@ -3,7 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Label } from '~/components/Label/Label';
 import type { ILabel } from '~/components/Label/Label.types';
 import { Input } from '~/components/Input/Input';
-import { Checkbox, CheckboxLabel } from '~/components/Checkbox/Checkbox';
+import { Checkbox, CheckboxLabel } from '~/components/Checkbox';
 
 const meta: Meta<ILabel> = {
 	title: 'UI Core/Label',

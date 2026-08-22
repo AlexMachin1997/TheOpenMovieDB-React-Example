@@ -16,8 +16,8 @@ export type { IFormError } from '~/components/FormError';
 // `FormField` binds `@repo/ui-core`'s `Field` to a field of the surrounding `Form`, by name.
 // `toFieldProps` is the translation underneath, exported separately for anyone driving `form.Field`
 // or `useField` directly. See docs/05-ui-forms-field-pattern/spec.md.
-export { FormField } from '~/components/FormField/FormField';
-export type { IFormField, IFormFieldControlProps } from '~/components/FormField/FormField.types';
+export { FormField } from '~/components/FormField';
+export type { IFormField, IFormFieldControlProps } from '~/components/FormField';
 
 // Bound field components. Each composes `FormField` with one control, so the per-control value and
 // change wiring lives here once rather than being copy-pasted at every call site. `FormField`

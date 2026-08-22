@@ -4,8 +4,8 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Field } from '~/components/Field/Field';
 import { Input } from '~/components/Input/Input';
 import { Textarea } from '~/components/Textarea/Textarea';
-import { Checkbox } from '~/components/Checkbox/Checkbox';
-import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/Slider/Slider';
+import { Checkbox } from '~/components/Checkbox';
+import { SliderRoot, SliderTrack, SliderRange, SliderThumb } from '~/components/Slider';
 
 const meta: Meta<typeof Field> = {
 	title: 'UI Core/Field',

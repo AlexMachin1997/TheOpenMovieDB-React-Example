@@ -5,7 +5,7 @@ import {
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger
-} from '~/components/Accordion/Accordion';
+} from '~/components/Accordion';
 
 const meta: Meta<typeof Accordion> = {
 	title: 'UI Core/Accordion',

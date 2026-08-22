@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cn } from '@repo/tailwind-config';
-import { Checkbox, CheckboxLabel } from '~/components/Checkbox/Checkbox';
+import { Checkbox, CheckboxLabel } from '~/components/Checkbox';
 import { useRovingTabIndex } from '~/hooks/useRovingTabIndex';
 import type {
 	ICheckboxGroup,

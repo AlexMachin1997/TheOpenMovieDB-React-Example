@@ -5,8 +5,8 @@ export {
 	TooltipProvider
 } from '~/components/Tooltip/Tooltip';
 export type {
+	ITooltipProvider,
 	ITooltip,
 	ITooltipTrigger,
-	ITooltipContent,
-	ITooltipProvider
+	ITooltipContent
 } from '~/components/Tooltip/Tooltip.types';

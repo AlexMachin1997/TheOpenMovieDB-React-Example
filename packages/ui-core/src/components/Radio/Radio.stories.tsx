@@ -10,7 +10,7 @@ import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import { Radio, RadioLabel } from '~/components/Radio/Radio';
+import { Radio, RadioLabel } from '~/components/Radio';
 // Aliased: this file already exports a story named `RadioGroup` (a hand-composed group of bare
 // Radio leaves), which would otherwise collide with the component import.
 import { RadioGroup as RadioGroupComponent } from '~/components/RadioGroup/RadioGroup';

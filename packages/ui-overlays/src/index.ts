@@ -11,7 +11,7 @@ export {
 	DialogPortal,
 	DialogTitle,
 	Dialog
-} from '~/components/Dialog/Dialog';
+} from '~/components/Dialog';
 
 // Sheet
 export {
@@ -26,16 +26,11 @@ export {
 	SheetFooter,
 	SheetTitle,
 	SheetDescription
-} from '~/components/Sheet/Sheet';
-export type { SheetRef } from '~/components/Sheet/types/sheet-ref';
+} from '~/components/Sheet';
+export type { SheetRef } from '~/components/Sheet';
 
 // Popover
-export {
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-	PopoverAnchor
-} from '~/components/Popover/Popover';
+export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from '~/components/Popover';
 
 // DropdownMenu
 export {
@@ -54,7 +49,7 @@ export {
 	DropdownMenuSub,
 	DropdownMenuSubTrigger,
 	DropdownMenuSubContent
-} from '~/components/DropdownMenu/DropdownMenu';
+} from '~/components/DropdownMenu';
 
 // HoverCard
-export { HoverCard, HoverCardTrigger, HoverCardContent } from '~/components/HoverCard/HoverCard';
+export { HoverCard, HoverCardTrigger, HoverCardContent } from '~/components/HoverCard';
