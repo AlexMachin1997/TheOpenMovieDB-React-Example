@@ -68,7 +68,7 @@ export const config = [
 			'react/jsx-filename-extension': 'off',
 			'react/require-default-props': 'off',
 			'react/prop-types': 'off',
-			'react/display-name': 'off',
+			'react/display-name': 'error',
 			'@typescript-eslint/no-unused-vars': 'off'
 		}
 	}

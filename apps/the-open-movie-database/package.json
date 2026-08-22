@@ -8,7 +8,6 @@
 		"build": "pnpm run check-types && vite build",
 		"check-types": "tsc --noEmit --incremental",
 		"lint": "eslint --cache",
-		"prettier": "prettier --write .",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
 		"test": "vitest run",

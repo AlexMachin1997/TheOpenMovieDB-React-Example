@@ -23,8 +23,7 @@
 		"build": "pnpm run check-types && vite build",
 		"build-lib": "vite build",
 		"check-types": "tsc --noEmit --incremental",
-		"lint": "eslint --cache",
-		"prettier": "prettier --write .",
+		"lint": "eslint --cache --max-warnings 0",
 		"validate": "echo 'Validation dependencies handled by Turbo'",
 		"test": "vitest run",
 		"test:watch": "vitest"

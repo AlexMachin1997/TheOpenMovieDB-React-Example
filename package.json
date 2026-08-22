@@ -4,16 +4,19 @@
 	"scripts": {
 		"build": "turbo run build",
 		"lint": "turbo run lint",
-		"prettier": "turbo run prettier",
+		"prettier": "prettier --write .",
+		"prettier:check": "prettier --check .",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"check-types": "turbo run check-types",
 		"test": "turbo run test",
 		"test:watch": "turbo run test:watch",
 		"validate": "turbo run validate --filter=!the-open-movie-database",
-		"type-check": "turbo run check-types"
+		"type-check": "turbo run check-types",
+		"prepare": "husky"
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
+		"husky": "^9.1.7",
 		"tsx": "^4.21.0",
 		"turbo": "^2.8.14"
 	},

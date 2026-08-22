@@ -13,9 +13,6 @@
 			"dependsOn": ["^lint"],
 			"outputs": [".eslintcache"]
 		},
-		"prettier": {
-			"dependsOn": ["^prettier"]
-		},
 		"check-types": {
 			"dependsOn": ["^build"],
 			"outputs": ["*.tsbuildinfo", "tsconfig.tsbuildinfo"]

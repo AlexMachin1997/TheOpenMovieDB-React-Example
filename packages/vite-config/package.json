@@ -19,7 +19,6 @@
 	},
 	"scripts": {
 		"lint": "echo 'No linting needed for config package'",
-		"prettier": "prettier --write .",
 		"check-types": "echo 'No type checking needed for config package'",
 		"validate": "echo 'No validation needed for config package'",
 		"test": "echo 'No tests for config package'",
