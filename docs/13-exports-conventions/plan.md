@@ -60,7 +60,7 @@ Recorded here rather than by editing `spec.md`, which describes the world as it 
 - [ ] **2 — Export parity baseline.** Capture every exported symbol before touching a barrel.
 - [x] **3 — One barrel strategy, applied.** Delete the duplicate halves, write the missing barrels,
       route every package root through them.
-- [ ] **4 — `RangeDatePicker` / `DateRangePicker`.** Fix the folder, file and interface; keep the
+- [x] **4 — `RangeDatePicker` / `DateRangePicker`.** Fix the folder, file and interface; keep the
       export.
 - [ ] **5 — The `I` prefix, enforced.** New `@repo/eslint-config/ui`, 5 renames, 8 alias conversions.
 - [ ] **6 — Folder structure, running and isolated.** Extend the schema, enable the rule, prove the
@@ -225,3 +225,26 @@ The parity diff after this change is exactly those seven removals, nothing else,
 | Prettier        | clean                                            |
 | Component tests | 41 passed, 27 skipped (68 files), **385 passed** |
 | Export parity   | 7 deliberate removals, 0 accidental, 0 added     |
+
+### Phase 4 — `RangeDatePicker` / `DateRangePicker`
+
+Four names described one component and three of them disagreed with the public one:
+
+|            | Before                         | After                             |
+| ---------- | ------------------------------ | --------------------------------- |
+| Folder     | `DatePickers/RangeDatePicker/` | `DatePickers/DateRangePicker/`    |
+| File       | `RangeDatePicker.tsx`          | `DateRangePicker.tsx`             |
+| Stories    | `RangeDatePicker.stories.tsx`  | `DateRangePicker.stories.tsx`     |
+| Interface  | `IRangeDatePicker`             | `IDateRangePicker`                |
+| **Export** | **`DateRangePicker`**          | **`DateRangePicker`** (unchanged) |
+
+The export was kept and the other three moved to it. `DateRangePicker` reads correctly — it is a
+date-range picker, not a range date-picker — and it is the only one of the four that is public;
+renaming it instead would have touched ~30 story call sites and two `.mdx` files to arrive at a worse
+name. `SingleDatePicker` already agreed on all four, so this brings the pair into line with each other.
+
+The stories file also moved off the only relative import in the folder
+(`from './RangeDatePicker'`) onto the `~/` alias its sibling already used.
+
+Export surface unchanged by the rename, confirmed by the parity check. Gates: build 11/11, lint
+11/11 (0 warnings), types 19/19, prettier clean, 385 tests passed / 27 skipped.

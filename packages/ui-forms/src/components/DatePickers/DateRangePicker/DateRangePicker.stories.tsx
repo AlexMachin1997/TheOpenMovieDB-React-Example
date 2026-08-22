@@ -3,7 +3,7 @@ import { useState, useReducer } from 'react';
 import type { DateRange } from 'react-day-picker';
 import type { Locale } from 'date-fns';
 import { fr, es, de } from 'date-fns/locale';
-import { DateRangePicker } from './RangeDatePicker';
+import { DateRangePicker } from '~/components/DatePickers/DateRangePicker/DateRangePicker';
 import { Field } from '@repo/ui-core';
 import { expect, within } from 'storybook/test';
 import { type DateFormatKey } from '@repo/core';

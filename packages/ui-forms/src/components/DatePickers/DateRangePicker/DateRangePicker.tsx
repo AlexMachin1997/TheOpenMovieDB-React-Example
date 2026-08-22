@@ -6,7 +6,7 @@ import { Button, Calendar, Icon } from '@repo/ui-core';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui-overlays';
 import { IDatePicker } from '~/components/DatePickers/types';
 
-interface IRangeDatePicker extends IDatePicker {
+interface IDateRangePicker extends IDatePicker {
 	dateRange?: DateRange;
 	onDateRangeChange: (dateRange: DateRange | undefined) => void;
 }
@@ -27,7 +27,7 @@ export const DateRangePicker = ({
 	'aria-describedby': ariaDescribedBy,
 	'aria-invalid': ariaInvalid,
 	'aria-required': ariaRequired
-}: IRangeDatePicker) => {
+}: IDateRangePicker) => {
 	const startMonth = new Date(fromYear, 0);
 	const endMonth = new Date(toYear, 11);
 
