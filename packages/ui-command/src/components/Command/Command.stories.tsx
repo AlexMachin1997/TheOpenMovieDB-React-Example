@@ -74,6 +74,41 @@ type Story = StoryObj<typeof meta>;
 // ---------------------------------------------------------------------------
 
 /**
+ * Asserts the list's `aria-activedescendant` names an element that exists, and still names the
+ * same one after scrolling.
+ *
+ * cmdk recomputes that attribute only when the selected value changes, so a virtualizer evicting
+ * the active option's node leaves it dangling — or cmdk's recovery path fires and silently moves
+ * the selection to the first item. Both are wrong, and this catches either.
+ */
+const expectActiveOptionSurvivesScrolling = async (root: HTMLElement) => {
+	const list = root.querySelector<HTMLElement>('[data-slot="command-list"]')!;
+
+	const activeId = list.getAttribute('aria-activedescendant');
+	expect(activeId).toBeTruthy();
+	expect(document.getElementById(activeId!)).not.toBeNull();
+
+	const activeIndex = document
+		.getElementById(activeId!)!
+		.closest('[data-index]')!
+		.getAttribute('data-index');
+
+	list.scrollTop = list.scrollHeight;
+
+	// Wait for the virtualizer's window to move far away — otherwise the assertions below pass on
+	// the pre-scroll DOM, before React has re-rendered anything.
+	await waitFor(() => {
+		const rendered = Array.from(list.querySelectorAll('[data-index]')).map((el) =>
+			Number(el.getAttribute('data-index'))
+		);
+		expect(Math.max(...rendered)).toBeGreaterThan(Number(activeIndex) + 100);
+	});
+
+	expect(list.getAttribute('aria-activedescendant')).toBe(activeId);
+	expect(document.getElementById(activeId!)).not.toBeNull();
+};
+
+/**
  * Arrows down through the list and asserts the active option is scrolled into view.
  *
  * cmdk scrolls the active option against whichever ancestor scrolls, so this fails if the
@@ -87,7 +122,7 @@ const expectKeyboardScrollsActiveOptionIntoView = async (root: HTMLElement, pres
 	await waitFor(() => {
 		expect(list.scrollTop).toBeGreaterThan(0);
 
-		const active = list.querySelector<HTMLElement>('[data-selected="true"]')!;
+		const active = list.querySelector<HTMLElement>('[role="option"][aria-selected="true"]')!;
 		expect(active).not.toBeNull();
 
 		const listBox = list.getBoundingClientRect();
@@ -866,6 +901,9 @@ export const VirtualizedList: StoryObj<CommandVirtualizedStorybookTypes> = {
 		// The virtualizer measures the list CommandInterface owns, so arrowing scrolls it
 		await userEvent.click(searchInput);
 		await expectKeyboardScrollsActiveOptionIntoView(canvasElement);
+
+		// Scrolling away from the active option must not evict its node, or strand the attribute
+		await expectActiveOptionSurvivesScrolling(canvasElement);
 
 		// Regression: a search issued while scrolled must show its results from the top.
 		// The list stays scrolled wherever it was, so if the new result set is still taller than

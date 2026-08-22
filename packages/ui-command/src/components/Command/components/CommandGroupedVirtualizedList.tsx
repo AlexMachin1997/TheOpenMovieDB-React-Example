@@ -5,6 +5,7 @@ import { ICommandGroupedVirtualizedList } from '~/components/Command/types';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { useCommandScrollElement } from '~/components/Command/hooks/useCommandScrollElement';
 import { useResetScrollOnSearch } from '~/components/Command/hooks/useResetScrollOnSearch';
+import { useKeepActiveOptionRendered } from '~/components/Command/hooks/useKeepActiveOptionRendered';
 import { CommandGroupedListItem } from './CommandGroupedListItem';
 
 export const CommandGroupedVirtualizedList = React.memo(
@@ -31,10 +32,12 @@ export const CommandGroupedVirtualizedList = React.memo(
 
 		// Must be declared before useVirtualizer — see the hook's JSDoc
 		const getScrollElement = useCommandScrollElement(sizerRef);
+		const rangeExtractor = useKeepActiveOptionRendered(sizerRef);
 
 		const virtualizer = useVirtualizer({
 			count: virtualizedItems.length,
 			getScrollElement,
+			rangeExtractor,
 			estimateSize: React.useCallback(
 				(index: number) => getEstimatedItemHeight(virtualizedItems[index], estimateSize),
 				[virtualizedItems, estimateSize]

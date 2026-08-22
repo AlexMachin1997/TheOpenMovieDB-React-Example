@@ -147,13 +147,6 @@ a documented rule exception on both story metas.
 
 ## Found, not fixed
 
-- **`aria-activedescendant` can point at an unrendered node.** cmdk sets it to the active option's
-  id, but a virtualized list only renders a window — so when the active option falls outside it, the
-  id dangles and axe fails `aria-valid-attr-value`. Reproduced by arrowing deep and then searching,
-  with the attribute still dangling after the sequence had settled, so it is not a sub-frame
-  transient. A real gap: a screen reader cannot announce an element that is not in the DOM. Fixing
-  it means always rendering the active option, or dropping the attribute while its target is absent
-  — neither is a change to make in passing, and it is a different defect from list nesting.
 - **`Select.stories.tsx`'s `Empty State` picked the wrong dialog.** It chose the "visible" popover by
   `pointerEvents !== 'none'`, which can match a closed one mid-exit-animation. Changed to
   `data-state === 'open'`. Not a refactor regression: with the gate off, that file was 20/20 green
@@ -190,6 +183,34 @@ check, scrolling the element directly rather than arrowing so that it tests scro
 
 This also retired a workaround — that story's AC8 assertion had been moved onto the unfiltered list
 _because_ of this bug.
+
+### `aria-activedescendant` pointing at an unrendered node
+
+cmdk points `aria-activedescendant` at the active option's id and recomputes it **only** when the
+selected value changes:
+
+```js
+if (e === "value") { … v(7, () => { n.current.selectedItemId = M()?.id; E.emit() }) }
+```
+
+So when a virtualizer evicts the active option's node on scroll, the attribute is left naming an
+element that no longer exists — axe fails `aria-valid-attr-value`. cmdk's own recovery, on item
+unregistration, fires only if the removed node happened to be the selected one _and_ was still
+attached at unmount; and when it does fire it calls `selectFirstItem`, so the user's selection moves
+because they scrolled. Both outcomes are wrong, and the attribute cannot be overridden — cmdk sets
+it after the prop spread, alongside `role` and `id`.
+
+`useKeepActiveOptionRendered` adds the active index to the virtualizer's `rangeExtractor`, so its
+node is never evicted. Not sticky positioning: the row keeps its own offset, far outside the
+viewport, and is simply not garbage-collected. At most one extra row, none while the active option
+is on screen. The index is read back from the `data-index` the rows already carry — an option has to
+be rendered once to become selectable, which is exactly when its index becomes knowable.
+
+Proven before fixing, and the proof was checked in both directions: the first version of the
+assertion passed against the broken code, because `waitFor` succeeds on its first attempt and was
+therefore reading the pre-scroll DOM. Retargeted to wait for the virtualizer's window to move, it
+failed with `expected null not to be null`; with the fix disabled again afterwards it failed the same
+way, and only then was it trusted.
 
 ## Verification
 

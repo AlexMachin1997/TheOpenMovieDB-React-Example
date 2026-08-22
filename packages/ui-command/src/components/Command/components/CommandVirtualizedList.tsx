@@ -3,6 +3,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { useCommandScrollElement } from '~/components/Command/hooks/useCommandScrollElement';
 import { useResetScrollOnSearch } from '~/components/Command/hooks/useResetScrollOnSearch';
+import { useKeepActiveOptionRendered } from '~/components/Command/hooks/useKeepActiveOptionRendered';
 import { ICommandVirtualizedList } from '~/components/Command/types';
 
 export const CommandVirtualizedList = React.memo(
@@ -12,10 +13,12 @@ export const CommandVirtualizedList = React.memo(
 
 		// Must be declared before useVirtualizer — see the hook's JSDoc
 		const getScrollElement = useCommandScrollElement(sizerRef);
+		const rangeExtractor = useKeepActiveOptionRendered(sizerRef);
 
 		const virtualizer = useVirtualizer({
 			count: filteredOptions.length,
 			getScrollElement,
+			rangeExtractor,
 			estimateSize: React.useCallback(() => estimateSize, [estimateSize]),
 			overscan
 		});
