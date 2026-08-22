@@ -760,8 +760,8 @@ verification rather than about the code:
   two baselines were worthless. `pnpm install` + `turbo run build --force` before trusting any
   number, with `--force` because Turbo's cache is shared across worktrees. See
   [Baseline](#first-this-worktree-was-never-installed).
-- **Stale Storybook cache masking the move**, producing a false green *and* a false red. The rebuild
-  + clear command above, before every verification.
+- **Stale Storybook cache masking the move**, producing a false green _and_ a false red. Run the
+  rebuild-and-clear command above before every verification.
 
 The rest did not: Tailwind scanning was already covered (both `src` trees are `@source`d), the
 `@repo/core` edge introduced no cycle (it depends only on `date-fns`), and `Search` showed no visual
