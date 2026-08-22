@@ -54,9 +54,9 @@ export type { ISliderRoot, ISliderTrack, ISliderRange, ISliderThumb } from '~/co
 export { useKeyboardActivation } from '~/hooks';
 export type {
 	NativeKeyboardActivation,
-	KeyboardActivationProps,
-	UseKeyboardActivationOptions,
-	UseKeyboardActivationResult
+	IKeyboardActivationProps,
+	IUseKeyboardActivationOptions,
+	IUseKeyboardActivationResult
 } from '~/hooks';
 
 // Icon dictionary (the set of names `Icon` accepts)

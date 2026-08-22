@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { act, renderHook } from '@testing-library/react';
 import { useRovingTabIndex } from './useRovingTabIndex';
-import type { UseRovingTabIndexOptions } from './useRovingTabIndex.types';
+import type { IUseRovingTabIndex } from './useRovingTabIndex.types';
 
 /**
  * Real focusable elements, wired to the hook's refs.
@@ -10,14 +10,14 @@ import type { UseRovingTabIndexOptions } from './useRovingTabIndex.types';
  * go through real DOM elements to prove anything. `document.activeElement` is the assertion, not a
  * spy — that is what a keyboard user actually experiences.
  */
-const setup = (options: UseRovingTabIndexOptions) => {
+const setup = (options: IUseRovingTabIndex) => {
 	const elements = Array.from({ length: options.itemCount }, () => {
 		const element = document.createElement('button');
 		document.body.appendChild(element);
 		return element;
 	});
 
-	const rendered = renderHook((props: UseRovingTabIndexOptions) => useRovingTabIndex(props), {
+	const rendered = renderHook((props: IUseRovingTabIndex) => useRovingTabIndex(props), {
 		initialProps: options
 	});
 

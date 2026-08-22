@@ -62,7 +62,7 @@ Recorded here rather than by editing `spec.md`, which describes the world as it 
       route every package root through them.
 - [x] **4 — `RangeDatePicker` / `DateRangePicker`.** Fix the folder, file and interface; keep the
       export.
-- [ ] **5 — The `I` prefix, enforced.** New `@repo/eslint-config/ui`, 5 renames, 8 alias conversions.
+- [x] **5 — The `I` prefix, enforced.** New `@repo/eslint-config/ui`, 5 renames, 8 alias conversions.
 - [ ] **6 — Folder structure, running and isolated.** Extend the schema, enable the rule, prove the
       parser is untouched.
 - [ ] **7 — Write the conventions down.** Package READMEs, golden rules, roadmap, this file.
@@ -248,3 +248,82 @@ The stories file also moved off the only relative import in the folder
 
 Export surface unchanged by the rename, confirmed by the parity check. Gates: build 11/11, lint
 11/11 (0 warnings), types 19/19, prettier clean, 385 tests passed / 27 skipped.
+
+### Phase 5 — the `I` prefix, enforced
+
+The spec asked whether this convention could be enforced at all, and allowed "recorded as
+unenforceable" as a valid answer. **It is enforceable**, and the rule is now `error`:
+
+```js
+'@typescript-eslint/naming-convention': [
+	'error',
+	{ selector: 'interface', format: ['PascalCase'], prefix: ['I'] }
+]
+```
+
+`selector: 'interface'` is what makes it work. It never inspects a type alias, so the legitimate
+second family — `ShowErrorsWhen`, `IconName`, `SelectProps`, `RenderFunction`, `VirtualizedItem`,
+`FieldValidatorsLike` — is out of scope by construction rather than by exemption list.
+
+The rule lives in `react.js`'s own rules block. An earlier draft put it in a separate `ui.js` entry
+point to keep it away from `apps/the-open-movie-database`, which names prop types `*Props` and
+reports 25 violations. That was rejected in review: a one-off file is not the answer when the rule
+fits beside the existing config. The app disables the rule locally instead, with a comment saying it
+is suspended until that app is reworked, sitting alongside the `react/display-name` disable already
+there.
+
+Proven to fire rather than assumed: an unprefixed interface under `src/components` reports and exits
+
+1. A green run alone would not distinguish "on and clean" from "silently inert" — the same trap
+   `16` documented for `no-empty-object-type`.
+
+#### 16 renames
+
+11 in `ui-core/src/hooks` (`UseDebouncedValueOptions`, `UseKeyboardActivationResult`,
+`FindNextEnabledIndexOptions`, …) and 5 in `ui-forms`' `Selects/components`
+(`SelectListItemProps`, `SelectTriggerProps`, and three `*ProviderProps`). The `Selects` ones were
+genuine drift — `ISelectListItemsProps` already sat in that same folder one letter away from
+`SelectListItemProps`, which is how it went unseen.
+
+Five are public. The parity check confirms exactly those five renames and no other movement.
+
+#### Interface or alias: 6 convert, 3 cannot
+
+Of the 9 `I*` type aliases, **6** became `interface … extends`: `ISheet`, `IFormError`,
+`ISubmitButton`, `ICheckboxField`, `ISwitchField`, `ISelectItemClear`.
+
+**Three cannot, and this is a TypeScript limitation rather than a style choice.** `IAccordion`,
+`ICalendar` and `ILabel` are discriminated unions, and TS2312 states that _an interface can only
+extend an object type or intersection of object types with statically known members_. Verified by
+probe, including the `(A | B) & { … }` shape Radix uses — both forms error.
+
+The union is load-bearing, not incidental: `Accordion.Root` is
+`AccordionSingleProps | AccordionMultipleProps` and `collapsible` exists only on the single variant,
+so flattening it to an interface silently removes a real check. `DayPickerProps` discriminates seven
+ways on `mode`.
+
+The workaround, as far as the language allows, is to make every _member_ of the union an interface
+and let the exported name be a one-line join. `ILabel` already did this. `IAccordion` now does too
+(`IAccordionSingle | IAccordionMultiple`). `ICalendar` deliberately does not: it is local to one
+file, never exported, and mirroring react-day-picker's seven variants would couple our types to that
+library's internal union shape for no reader benefit. Each of the three carries the reason in-file.
+
+#### One documented exemption
+
+`SheetRef` keeps its name behind an inline `eslint-disable-next-line` with a stated reason: it is an
+imperative handle (`open`/`close`/`toggle`/`isOpen`), not a prop interface, and the `I` prefix exists
+to stop a prop type colliding with the component it describes — which does not apply. The disable is
+self-policing, because `reportUnusedDisableDirectives` plus `--max-warnings 0` fails lint the moment
+it stops being needed.
+
+#### Corrections to earlier claims in this document
+
+- The plan said **8 of 9** aliases would convert cleanly. The real number is **6**; the claim was made
+  from the shape of the right-hand side without checking whether the supertypes were unions.
+- The rule flags **5** interfaces, not the 6 first reported. `SelectProviderProps` is a type alias, so
+  the rule never saw it; it was renamed anyway, since it unions two now-`I` interfaces.
+
+#### Gates
+
+Build 11/11 (forced), lint 11/11 with 0 warnings, types 19/19, prettier clean, 385 tests passed /
+27 skipped. Parity: the 5 approved renames, nothing else.

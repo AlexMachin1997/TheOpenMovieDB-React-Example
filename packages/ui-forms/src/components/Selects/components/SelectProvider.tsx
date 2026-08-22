@@ -20,7 +20,7 @@ interface ISelectProviderCommonOptions {
 /**
  * Props for single-select mode
  */
-interface SingleSelectProviderProps extends ISelectProviderCommonOptions {
+interface ISingleSelectProviderProps extends ISelectProviderCommonOptions {
 	mode: 'single';
 	onValuesChange: (values: string) => void;
 }
@@ -28,14 +28,14 @@ interface SingleSelectProviderProps extends ISelectProviderCommonOptions {
 /**
  * Props for multi-select mode
  */
-interface MultiSelectProviderProps extends ISelectProviderCommonOptions {
+interface IMultiSelectProviderProps extends ISelectProviderCommonOptions {
 	mode: 'multiple';
 	onValuesChange: (values: string[]) => void;
 }
 
-type SelectProviderProps = SingleSelectProviderProps | MultiSelectProviderProps;
+type ISelectProviderProps = ISingleSelectProviderProps | IMultiSelectProviderProps;
 
-const SelectProviderInner = (props: SelectProviderProps) => {
+const SelectProviderInner = (props: ISelectProviderProps) => {
 	const toggleValue = React.useCallback(
 		(value: string) => {
 			const currentValues = new Set(props.values ?? []);
@@ -75,7 +75,7 @@ const SelectProviderInner = (props: SelectProviderProps) => {
 	return <SelectContext.Provider value={contextValue}>{props.children}</SelectContext.Provider>;
 };
 
-export const SelectProvider = (props: SelectProviderProps) => {
+export const SelectProvider = (props: ISelectProviderProps) => {
 	const [open, setOpen] = React.useState(false);
 
 	return (

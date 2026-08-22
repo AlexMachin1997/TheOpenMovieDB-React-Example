@@ -5,6 +5,8 @@ export {
 	AccordionContent
 } from '~/components/Accordion/components';
 export type {
+	IAccordionSingle,
+	IAccordionMultiple,
 	IAccordion,
 	IAccordionItem,
 	IAccordionTrigger,

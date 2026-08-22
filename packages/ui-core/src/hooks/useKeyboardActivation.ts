@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type {
-	UseKeyboardActivationOptions,
-	UseKeyboardActivationResult
+	IUseKeyboardActivationOptions,
+	IUseKeyboardActivationResult
 } from '~/hooks/useKeyboardActivation.types';
 
 /** The two keys that activate a button, per the WAI-ARIA button pattern. */
@@ -34,7 +34,7 @@ const SPACE = ' ';
 export const useKeyboardActivation = ({
 	nativeActivation,
 	disabled = false
-}: UseKeyboardActivationOptions): UseKeyboardActivationResult => {
+}: IUseKeyboardActivationOptions): IUseKeyboardActivationResult => {
 	const [pressed, setPressed] = React.useState(false);
 
 	// Adjusting state during render, rather than in an effect. The element may become disabled

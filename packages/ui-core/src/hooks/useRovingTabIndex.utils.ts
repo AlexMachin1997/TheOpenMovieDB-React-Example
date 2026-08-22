@@ -14,7 +14,7 @@ export const NO_INDEX = -1;
 /** Whether the item at `index` cannot be focused. */
 type IsDisabled = (index: number) => boolean;
 
-interface FindNextEnabledIndexOptions {
+interface IFindNextEnabledIndexOptions {
 	/** Where to start from. Not itself considered a candidate. */
 	from: number;
 	/** `1` to walk forwards, `-1` to walk backwards. */
@@ -38,7 +38,7 @@ export const findNextEnabledIndex = ({
 	count,
 	isDisabled,
 	loop
-}: FindNextEnabledIndexOptions): number => {
+}: IFindNextEnabledIndexOptions): number => {
 	if (count <= 0) return NO_INDEX;
 
 	// At most one full lap. Without this bound, a group of entirely disabled items would spin
@@ -60,7 +60,7 @@ export const findNextEnabledIndex = ({
 	return NO_INDEX;
 };
 
-interface FindEdgeEnabledIndexOptions {
+interface IFindEdgeEnabledIndexOptions {
 	/** Which end of the group to reach for. */
 	edge: 'first' | 'last';
 	count: number;
@@ -77,7 +77,7 @@ export const findEdgeEnabledIndex = ({
 	edge,
 	count,
 	isDisabled
-}: FindEdgeEnabledIndexOptions): number => {
+}: IFindEdgeEnabledIndexOptions): number => {
 	if (count <= 0) return NO_INDEX;
 
 	if (edge === 'first') {
@@ -95,7 +95,7 @@ export const findEdgeEnabledIndex = ({
 	return NO_INDEX;
 };
 
-interface ResolveInitialTabStopOptions {
+interface IResolveInitialTabStopOptions {
 	count: number;
 	isDisabled: IsDisabled;
 	/** Whether the item at `index` is currently selected. */
@@ -114,7 +114,7 @@ export const resolveInitialTabStop = ({
 	count,
 	isDisabled,
 	isChecked
-}: ResolveInitialTabStopOptions): number => {
+}: IResolveInitialTabStopOptions): number => {
 	if (count <= 0) return NO_INDEX;
 
 	for (let index = 0; index < count; index++) {

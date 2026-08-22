@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export interface UseDebouncedValueOptions {
+export interface IUseDebouncedValueOptions {
 	/** Controlled value. `undefined` means uncontrolled. */
 	value?: string;
 	/** Initial value when uncontrolled and no `value` is supplied. */
@@ -16,7 +16,7 @@ export interface UseDebouncedValueOptions {
 	onValueChange: (value: string) => void;
 }
 
-export interface UseDebouncedValueResult {
+export interface IUseDebouncedValueResult {
 	/** Current live value — updates immediately on every `setValue` call, never itself debounced. */
 	value: string;
 	/** Update the live value. Emits (debounced or synchronous) via `onValueChange` when it settles. */
@@ -28,7 +28,7 @@ export const useDebouncedValue = ({
 	defaultValue,
 	debounceMs = 300,
 	onValueChange
-}: UseDebouncedValueOptions): UseDebouncedValueResult => {
+}: IUseDebouncedValueOptions): IUseDebouncedValueResult => {
 	const initialValue = controlledValue !== undefined ? controlledValue : (defaultValue ?? '');
 
 	const [internalValue, setInternalValue] = React.useState<string>(initialValue);

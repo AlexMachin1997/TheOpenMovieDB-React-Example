@@ -6,9 +6,9 @@ import {
 	resolveInitialTabStop
 } from '~/hooks/useRovingTabIndex.utils';
 import type {
-	RovingTabIndexItemProps,
-	UseRovingTabIndexOptions,
-	UseRovingTabIndexResult
+	IRovingTabIndexItem,
+	IUseRovingTabIndex,
+	IUseRovingTabIndexResult
 } from '~/hooks/useRovingTabIndex.types';
 
 /** Where each key should move focus to. Mirrors Radix's `MAP_KEY_TO_FOCUS_INTENT`. */
@@ -63,7 +63,7 @@ export const useRovingTabIndex = ({
 	isItemChecked,
 	loop = true,
 	disabled = false
-}: UseRovingTabIndexOptions): UseRovingTabIndexResult => {
+}: IUseRovingTabIndex): IUseRovingTabIndexResult => {
 	const itemsRef = React.useRef<(HTMLElement | null)[]>([]);
 
 	// One stable ref callback per index, created once and reused.
@@ -119,7 +119,7 @@ export const useRovingTabIndex = ({
 	}, []);
 
 	const getItemProps = React.useCallback(
-		(index: number): RovingTabIndexItemProps => ({
+		(index: number): IRovingTabIndexItem => ({
 			tabIndex: index === tabStopIndex ? 0 : -1,
 
 			ref: getItemRef(index),

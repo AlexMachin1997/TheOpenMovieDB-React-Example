@@ -2,7 +2,11 @@ import * as React from 'react';
 import { cn } from '@repo/tailwind-config';
 import { Button, Icon } from '@repo/ui-core';
 
-export type ISelectItemClear = {
+export interface ISelectItemClear
+	extends Omit<
+		React.ComponentProps<typeof Button>,
+		'onClick' | 'children' | 'type' | 'variant' | 'size' | 'ref'
+	> {
 	value: string;
 	valueLabel?: string;
 	onClear: (value: string) => void;
@@ -11,10 +15,7 @@ export type ISelectItemClear = {
 	ariaLabel?: string;
 	onRefChange?: (el: HTMLElement | null) => void;
 	ref?: React.Ref<HTMLElement>;
-} & Omit<
-	React.ComponentProps<typeof Button>,
-	'onClick' | 'children' | 'type' | 'variant' | 'size' | 'ref'
->;
+}
 
 export const SelectItemClear = ({
 	value,

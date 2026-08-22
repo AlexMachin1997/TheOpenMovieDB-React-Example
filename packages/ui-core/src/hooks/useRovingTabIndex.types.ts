@@ -1,6 +1,6 @@
 import type * as React from 'react';
 
-export interface UseRovingTabIndexOptions {
+export interface IUseRovingTabIndex {
 	/** How many items the group contains. */
 	itemCount: number;
 
@@ -28,7 +28,7 @@ export interface UseRovingTabIndexOptions {
 }
 
 /** The props to spread onto each item in the group. */
-export interface RovingTabIndexItemProps {
+export interface IRovingTabIndexItem {
 	/** `0` for the single item that owns the group's tab stop, `-1` for every other. */
 	tabIndex: 0 | -1;
 	onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => void;
@@ -36,10 +36,10 @@ export interface RovingTabIndexItemProps {
 	ref: (node: HTMLElement | null) => void;
 }
 
-export interface UseRovingTabIndexResult {
+export interface IUseRovingTabIndexResult {
 	/** The index that currently owns the tab stop, or `-1` when every item is disabled. */
 	tabStopIndex: number;
 
 	/** Props for the item at `index`. */
-	getItemProps: (index: number) => RovingTabIndexItemProps;
+	getItemProps: (index: number) => IRovingTabIndexItem;
 }

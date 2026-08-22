@@ -74,5 +74,11 @@ export interface ILabelNonNative extends React.ComponentProps<'span'>, ILabelCom
 	htmlFor?: never;
 }
 
-/** Properties for the Label component. */
+/**
+ * Properties for the Label component.
+ *
+ * A type alias rather than an interface, unlike every other `I`-prefixed prop type: this is a
+ * discriminated union, and an interface cannot express one. `naming-convention` only inspects
+ * interfaces, so nothing enforces the prefix here.
+ */
 export type ILabel = ILabelNative | ILabelNonNative;

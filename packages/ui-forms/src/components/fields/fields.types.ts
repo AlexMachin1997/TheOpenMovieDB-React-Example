@@ -69,14 +69,11 @@ export interface ITextareaField extends IBoundField {
 	rows?: number;
 }
 
-// Aliases rather than empty `interface … extends`: neither adds a member, so there is nothing for
-// the interface form to carry. Both spellings lint clean — see docs/16-type-hygiene/plan.md.
-
 /** Properties for CheckboxField — a single boolean. */
-export type ICheckboxField = IBoundField;
+export interface ICheckboxField extends IBoundField {}
 
 /** Properties for SwitchField — a single boolean, presented as a toggle. */
-export type ISwitchField = IBoundField;
+export interface ISwitchField extends IBoundField {}
 
 /** Properties for SelectField. */
 export interface ISelectField extends IBoundField {

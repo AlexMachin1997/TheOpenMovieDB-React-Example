@@ -19,7 +19,7 @@ export type NativeKeyboardActivation = 'both' | 'enter-only' | 'none';
 /**
  * Options for {@link useKeyboardActivation}.
  */
-export interface UseKeyboardActivationOptions {
+export interface IUseKeyboardActivationOptions {
 	/**
 	 * What the element the handlers are spread onto already does natively.
 	 *
@@ -28,7 +28,7 @@ export interface UseKeyboardActivationOptions {
 	nativeActivation: NativeKeyboardActivation;
 
 	/**
-	 * When `true`, every handler no-ops and {@link UseKeyboardActivationResult.pressed} is forced
+	 * When `true`, every handler no-ops and {@link IUseKeyboardActivationResult.pressed} is forced
 	 * back to `false` in the same render — a disabled element stops receiving `keyup`, so a
 	 * pressed state that only cleared on release would stay visually stuck.
 	 *
@@ -43,7 +43,7 @@ export interface UseKeyboardActivationOptions {
  * Spread these onto the *same* element that receives focus. If the consumer also supplies handlers
  * of their own, compose both — replacing these silently disables keyboard activation.
  */
-export interface KeyboardActivationProps {
+export interface IKeyboardActivationProps {
 	/** Marks the element pressed, and activates it on Enter where Enter isn't handled natively. */
 	onKeyDown: React.KeyboardEventHandler<HTMLElement>;
 
@@ -57,7 +57,7 @@ export interface KeyboardActivationProps {
 /**
  * The return value of {@link useKeyboardActivation}.
  */
-export interface UseKeyboardActivationResult {
+export interface IUseKeyboardActivationResult {
 	/**
 	 * Whether Enter or Space is currently held down on the element.
 	 *
@@ -68,5 +68,5 @@ export interface UseKeyboardActivationResult {
 	pressed: boolean;
 
 	/** Handlers to spread onto the focusable element. */
-	keyboardProps: KeyboardActivationProps;
+	keyboardProps: IKeyboardActivationProps;
 }

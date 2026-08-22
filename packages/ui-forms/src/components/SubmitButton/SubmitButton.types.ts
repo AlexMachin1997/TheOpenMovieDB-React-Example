@@ -29,4 +29,4 @@ type ButtonProps = React.ComponentProps<typeof Button>;
  * <SubmitButton>Create account</SubmitButton>
  * ```
  */
-export type ISubmitButton = Omit<ButtonProps, 'type' | 'loading' | 'asChild'>;
+export interface ISubmitButton extends Omit<ButtonProps, 'type' | 'loading' | 'asChild'> {}

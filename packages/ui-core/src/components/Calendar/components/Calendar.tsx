@@ -6,6 +6,8 @@ import { Button } from '~/components/Button/Button';
 import { buttonVariants } from '~/components/Button/variants';
 import { CalendarDayButton } from '~/components/Calendar/components/CalendarDayButton';
 
+// A type alias rather than an interface: `DayPickerProps` is a discriminated union on `mode`
+// ('single' | 'multiple' | 'range'), and an interface cannot extend a union.
 type ICalendar = {
 	buttonVariant?: React.ComponentProps<typeof Button>['variant'];
 } & DayPickerProps;

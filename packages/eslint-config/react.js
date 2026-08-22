@@ -69,6 +69,10 @@ export const config = [
 			'react/require-default-props': 'off',
 			'react/prop-types': 'off',
 			'react/display-name': 'error',
+			'@typescript-eslint/naming-convention': [
+				'error',
+				{ selector: 'interface', format: ['PascalCase'], prefix: ['I'] }
+			],
 			'@typescript-eslint/no-unused-vars': 'off'
 		}
 	}

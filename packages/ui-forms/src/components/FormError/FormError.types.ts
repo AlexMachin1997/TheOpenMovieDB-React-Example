@@ -16,4 +16,4 @@ import type * as React from 'react';
  * </Form>
  * ```
  */
-export type IFormError = React.ComponentProps<'div'>;
+export interface IFormError extends React.ComponentProps<'div'> {}

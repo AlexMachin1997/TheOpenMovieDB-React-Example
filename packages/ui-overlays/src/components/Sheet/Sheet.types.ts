@@ -2,10 +2,10 @@ import * as SheetPrimitive from '@radix-ui/react-dialog';
 import type { SheetRef } from '~/components/Sheet/types/sheet-ref';
 
 /** Properties for the Sheet root component. */
-export type ISheet = React.ComponentProps<typeof SheetPrimitive.Root> & {
+export interface ISheet extends React.ComponentProps<typeof SheetPrimitive.Root> {
 	className?: string;
 	ref?: React.RefObject<SheetRef | undefined>;
-};
+}
 
 /** Properties for SheetTrigger. */
 export interface ISheetTrigger extends React.ComponentProps<typeof SheetPrimitive.Trigger> {

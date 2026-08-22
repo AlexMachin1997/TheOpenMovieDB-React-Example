@@ -4,12 +4,12 @@ import { cn } from '@repo/tailwind-config';
 import { CommandItem, useCommandContext } from '@repo/ui-command';
 import { useSelectContext } from '~/components/Selects/hooks/useSelectContext';
 
-export interface SelectListItemProps
+export interface ISelectListItemProps
 	extends Omit<React.ComponentPropsWithoutRef<typeof CommandItem>, 'value'> {
 	value: string;
 }
 
-export const SelectListItem = ({ value, children, ...props }: SelectListItemProps) => {
+export const SelectListItem = ({ value, children, ...props }: ISelectListItemProps) => {
 	const { toggleValue, selectedValues } = useSelectContext();
 	const { optionsMap } = useCommandContext();
 

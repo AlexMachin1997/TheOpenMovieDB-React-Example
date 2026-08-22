@@ -44,6 +44,11 @@ export default createConfig(import.meta.dirname, reactConfig, [
 			// react/display-name was taking 115ms (10.4% of lint time)
 			'react/display-name': 'off',
 
+			// Suspended until this app is reworked. The library names component prop interfaces
+			// `IFoo`; this app names them `FooProps` throughout, so the shared rule reports 25
+			// violations here. Re-enable by renaming them, not by weakening the shared config.
+			'@typescript-eslint/naming-convention': 'off',
+
 			// Disable slow import rules that TypeScript already checks (per typescript-eslint docs)
 			'import/named': 'off',
 			'import/namespace': 'off',

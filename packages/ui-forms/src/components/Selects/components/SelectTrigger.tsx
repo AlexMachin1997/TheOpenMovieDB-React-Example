@@ -6,7 +6,7 @@ import { useCommandContext } from '@repo/ui-command';
 /**
  * Props for the SelectTrigger component
  */
-export interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeof Button> {
+export interface ISelectTriggerProps extends React.ComponentPropsWithoutRef<typeof Button> {
 	className?: string;
 	children?: React.ReactNode;
 }
@@ -21,7 +21,7 @@ export const SelectTrigger = ({
 	'aria-labelledby': ariaLabelledBy,
 	id,
 	...props
-}: SelectTriggerProps) => {
+}: ISelectTriggerProps) => {
 	const { open } = useCommandContext();
 
 	// `aria-label='Select Trigger'` used to be hardcoded *after* the props spread, so it always won
