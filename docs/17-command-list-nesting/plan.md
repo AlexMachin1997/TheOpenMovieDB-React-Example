@@ -24,7 +24,8 @@ reintroduce the defect, because there is nothing for its author to opt into or f
 - [x] `a11y: { test: 'error' }` on the `Command` and `Select` story metas, with two documented rule
       exceptions (below).
 - [x] New `Manual Composition` story covering AC5 and AC6.
-- [x] Keyboard scroll-into-view assertions (AC8) on the two virtualized variants and the manual
+- [x] Keyboard scroll-into-view assertions (AC8) on all four variants — `CommandVirtualizedList`,
+      `CommandGroupedVirtualizedList`, `CommandGroupedList`, and `CommandListItems` via the manual
       composition story.
 
 ## How the virtualizers find their scroll element
@@ -155,7 +156,11 @@ a documented rule exception on both story metas.
   `data-state === 'open'`. Not a refactor regression: with the gate off, that file was 20/20 green
   against these source changes.
 - **`Command.stories.tsx` has two `play()` blocks whose comments contradict their assertions** —
-  "should close after selection", then `toBeInTheDocument()`. Left alone.
+  "should close after selection", then `toBeInTheDocument()` on an element that was never going to
+  disappear. Left alone: `VirtualizedList` and `GroupedVirtualizedList` render inline rather than in
+  a popover, so "closes" is the wrong expectation and correcting it means deciding what those stories
+  should actually prove. The new `Manual Composition` story does not repeat the pattern — it asserts
+  the `onSelect` handler fired, via rendered state.
 - **`docs/04-ui-forms-primitive-migration/plan.md` is not prettier-clean in `HEAD`.** Untouched here;
   fixing it belongs in its own commit.
 

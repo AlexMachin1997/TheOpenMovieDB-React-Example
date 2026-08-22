@@ -101,8 +101,10 @@ This is why the defect has gone unnoticed. The two containers mask each other.
 
 - **AC1** — Exactly one `CommandList` wraps a list. `CommandInterface` renders it for you; no list
   variant renders one at all.
-- **AC2** — An open `Command` and an open `Select` each expose exactly one `role="listbox"`, asserted
-  in the interaction suite.
+- **AC2** — An open `Command` and an open `Select` each expose exactly one `role="listbox"`, enforced
+  by the axe gate rather than a bespoke assertion: a `listbox` inside a `listbox` fails
+  `aria-required-children`, which runs on every story in both files rather than the handful a
+  hand-written count would cover.
 - **AC3** — `a11y: { test: 'error' }` is enabled on the `Command` and `Select` story metas and the
   suite is green, with any unrelated violations found along the way either fixed or recorded.
 - **AC4** — Both virtualizers scroll and measure against the owning list; the 5 000-item stories

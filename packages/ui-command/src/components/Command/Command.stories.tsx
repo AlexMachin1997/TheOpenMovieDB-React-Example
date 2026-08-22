@@ -1006,6 +1006,11 @@ export const GroupedList: StoryObj<CommandGroupedStorybookTypes> = {
 			expect(postgresOption).toBeInTheDocument();
 		});
 
+		// Arrowing scrolls the active option into view against the one scrolling element —
+		// group headings and separators sit between options, so this variant needs its own check
+		await userEvent.click(searchInput);
+		await expectKeyboardScrollsActiveOptionIntoView(canvasElement);
+
 		// Test that ungrouped items appear at bottom
 		await waitFor(() => {
 			const vscodeOption = canvas.getByText('VS Code');
@@ -1495,6 +1500,7 @@ export const RealWorldScenarios: Story = {
 
 const ManualCompositionTemplate = () => {
 	const [open, setOpen] = React.useState(false);
+	const [selected, setSelected] = React.useState<string | null>(null);
 
 	const options: Option[] = React.useMemo(
 		() =>
@@ -1515,7 +1521,11 @@ const ManualCompositionTemplate = () => {
 					<CommandList className='max-h-[160px]'>
 						<CommandListItems>
 							{({ item }) => (
-								<CommandItem key={item.id} value={item.value}>
+								<CommandItem
+									key={item.id}
+									value={item.value}
+									onSelect={() => setSelected(item.label)}
+								>
 									{item.label}
 								</CommandItem>
 							)}
@@ -1524,6 +1534,7 @@ const ManualCompositionTemplate = () => {
 					<CommandEmpty />
 				</Command>
 			</CommandProvider>
+			<p data-testid='manual-selection'>Selected: {selected ?? 'nothing'}</p>
 		</div>
 	);
 };
@@ -1553,8 +1564,11 @@ export const ManualComposition: Story = {
 		await userEvent.click(searchInput);
 		await expectKeyboardScrollsActiveOptionIntoView(canvasElement);
 
-		// Selection still works
+		// Selection still works — assert the handler fired, not that the label is still rendered
+		expect(canvas.getByTestId('manual-selection')).toHaveTextContent('Selected: nothing');
 		await userEvent.click(canvas.getByText('Manual option 2'));
-		expect(canvas.getByText('Manual option 2')).toBeInTheDocument();
+		await waitFor(() => {
+			expect(canvas.getByTestId('manual-selection')).toHaveTextContent('Selected: Manual option 2');
+		});
 	}
 };
