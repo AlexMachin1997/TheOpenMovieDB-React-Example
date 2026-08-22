@@ -1,7 +1,5 @@
 import * as React from 'react';
-
-const useIsomorphicLayoutEffect =
-	typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect;
+import { useIsomorphicLayoutEffect } from '~/components/Command/hooks/useIsomorphicLayoutEffect';
 
 /**
  * Resolves the scroll container a virtualized list measures against.

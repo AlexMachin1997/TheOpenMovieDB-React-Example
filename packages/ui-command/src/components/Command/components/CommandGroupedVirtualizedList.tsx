@@ -4,6 +4,7 @@ import { getVirtualizedItems, getEstimatedItemHeight } from '~/components/Comman
 import { ICommandGroupedVirtualizedList } from '~/components/Command/types';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { useCommandScrollElement } from '~/components/Command/hooks/useCommandScrollElement';
+import { useResetScrollOnSearch } from '~/components/Command/hooks/useResetScrollOnSearch';
 import { CommandGroupedListItem } from './CommandGroupedListItem';
 
 export const CommandGroupedVirtualizedList = React.memo(
@@ -15,7 +16,7 @@ export const CommandGroupedVirtualizedList = React.memo(
 		groupOrder,
 		ungroupedPosition = 'top'
 	}: ICommandGroupedVirtualizedList) => {
-		const { filteredOptions } = useCommandContext();
+		const { filteredOptions, searchValue } = useCommandContext();
 		const sizerRef = React.useRef<HTMLDivElement>(null);
 
 		const virtualizedItems = React.useMemo(
@@ -40,6 +41,8 @@ export const CommandGroupedVirtualizedList = React.memo(
 			),
 			overscan
 		});
+
+		useResetScrollOnSearch(virtualizer, searchValue);
 
 		return (
 			<div

@@ -147,10 +147,13 @@ a documented rule exception on both story metas.
 
 ## Found, not fixed
 
-- **Filtering does not reset a virtualized list's scroll position.** Arrow far down a long list, then
-  search: the virtualizer is still scrolled past the end of the shorter result set and renders blank.
-  Pre-existing and independent of which element scrolls — the spec puts `Command`'s filtering out of
-  scope. Surfaced by an AC8 assertion, which now runs against the unfiltered list for that reason.
+- **`aria-activedescendant` can point at an unrendered node.** cmdk sets it to the active option's
+  id, but a virtualized list only renders a window — so when the active option falls outside it, the
+  id dangles and axe fails `aria-valid-attr-value`. Reproduced by arrowing deep and then searching,
+  with the attribute still dangling after the sequence had settled, so it is not a sub-frame
+  transient. A real gap: a screen reader cannot announce an element that is not in the DOM. Fixing
+  it means always rendering the active option, or dropping the attribute while its target is absent
+  — neither is a change to make in passing, and it is a different defect from list nesting.
 - **`Select.stories.tsx`'s `Empty State` picked the wrong dialog.** It chose the "visible" popover by
   `pointerEvents !== 'none'`, which can match a closed one mid-exit-animation. Changed to
   `data-state === 'open'`. Not a refactor regression: with the gate off, that file was 20/20 green
@@ -163,6 +166,30 @@ a documented rule exception on both story metas.
   the `onSelect` handler fired, via rendered state.
 - **`docs/04-ui-forms-primitive-migration/plan.md` is not prettier-clean in `HEAD`.** Untouched here;
   fixing it belongs in its own commit.
+
+## Follow-on, fixed in the same session
+
+Not part of the deliverable — the spec puts `Command`'s filtering out of scope — but found here,
+small, and authorised in-session rather than deferred.
+
+**Filtering did not reset a virtualized list's scroll position.** A search issued while the list was
+scrolled left it wherever it was. If the new result set was still taller than the viewport the
+browser had no reason to clamp the offset to zero, so the top matches sat above the window and,
+being virtualized, were never rendered at all — cmdk selected the first match but could not scroll
+it into view, because the node did not exist. It looked intermittent only because a filtered set
+shorter than the viewport does clamp, and so appeared to recover.
+
+Fixed by `useResetScrollOnSearch`: a layout effect keyed on `searchValue` that scrolls the
+virtualizer back to zero. Layout rather than passive, so the correction lands before paint. Only the
+search term resets the position — a caller replacing `options` keeps its place, which is what an
+append-a-page case wants.
+
+Proven before fixing: a failing assertion in the `Virtualized List` story (search `1` while
+scrolled, expect `Option 1`) reproduced it, then passed. `Grouped Virtualized List` carries its own
+check, scrolling the element directly rather than arrowing so that it tests scroll position alone.
+
+This also retired a workaround — that story's AC8 assertion had been moved onto the unfiltered list
+_because_ of this bug.
 
 ## Verification
 

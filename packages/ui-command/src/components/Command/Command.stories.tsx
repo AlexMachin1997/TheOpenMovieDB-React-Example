@@ -867,8 +867,17 @@ export const VirtualizedList: StoryObj<CommandVirtualizedStorybookTypes> = {
 		await userEvent.click(searchInput);
 		await expectKeyboardScrollsActiveOptionIntoView(canvasElement);
 
-		// Test search functionality with large dataset
+		// Regression: a search issued while scrolled must show its results from the top.
+		// The list stays scrolled wherever it was, so if the new result set is still taller than
+		// the viewport the first matches sit above the window and are never rendered.
 		const searchInputForLarge = canvas.getByPlaceholderText('Search through 1000 options...');
+		await userEvent.type(searchInputForLarge, '1');
+		await waitFor(() => {
+			expect(canvas.getByText('Option 1')).toBeInTheDocument();
+		});
+		await userEvent.clear(searchInputForLarge);
+
+		// Test search functionality with large dataset
 		await userEvent.type(searchInputForLarge, '100');
 
 		await waitFor(() => {
@@ -1310,15 +1319,28 @@ export const GroupedVirtualizedList: StoryObj<CommandGroupedVirtualizedStorybook
 			expect(closedSearchInput).toBeInTheDocument();
 		});
 
-		// The virtualizer measures the list CommandInterface owns, so arrowing scrolls it.
-		// Run against the full list — filtering does not reset scrollTop, so arrowing deep
-		// first would leave the virtualizer past the end of a shorter result set.
+		// The virtualizer measures the list CommandInterface owns, so arrowing scrolls it
 		await userEvent.clear(searchInputForGroupedVirtual);
 		await waitFor(() => {
 			expect(canvas.getByText('Frontend Frameworks Item 1')).toBeInTheDocument();
 		});
 		await userEvent.click(searchInputForGroupedVirtual);
 		await expectKeyboardScrollsActiveOptionIntoView(canvasElement);
+
+		// Regression: searching while scrolled must show its results from the top. Group headings
+		// and separators make the offsets uneven, so this variant needs its own check. Scroll the
+		// element directly rather than arrowing — this is about scroll position, and moving the
+		// selection as well would test two things at once.
+		const groupedList = canvasElement.querySelector<HTMLElement>('[data-slot="command-list"]')!;
+		groupedList.scrollTop = 400;
+		await waitFor(() => {
+			expect(groupedList.scrollTop).toBe(400);
+		});
+
+		await userEvent.type(searchInputForGroupedVirtual, 'Frontend');
+		await waitFor(() => {
+			expect(canvas.getByText('Frontend Frameworks Item 1')).toBeInTheDocument();
+		});
 	}
 };
 
