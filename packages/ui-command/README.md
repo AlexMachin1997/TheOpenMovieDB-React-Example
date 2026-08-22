@@ -52,6 +52,15 @@ A filterable, optionally virtualised command palette, built on `cmdk`.
 - **A `CommandList` is a `listbox`, so only `option` and `group` may live inside it.** Whatever you
   pass to `CommandInterface` lands there. Content that is not list content — a footer, a banner —
   has to sit outside it, which means composing by hand.
+- **`@tanstack/react-virtual` is pinned to patch releases (`~3.13.12`), on purpose.** The
+  virtualised variants do not render the element they scroll against — `CommandList` belongs to
+  whoever composes the palette — so `useCommandScrollElement` finds it in the DOM and leans on
+  `useVirtualizer` re-polling `getScrollElement()` after every render. That re-poll is `_willUpdate`,
+  an internal. The failure mode is loud rather than silent (the list renders empty, and the 1 000-
+  and 5 000-item stories fail on it), but a minor bump should be a deliberate act: widen the range,
+  then run `cd apps/storybook && npx vitest run Command.stories` and the `Select` virtualised
+  stories before committing it. The same range is declared in `ui-forms` and the app; keep the three
+  in step or pnpm will resolve two copies.
 - **Virtualisation is opt-in.** Use the plain list unless the option count is large enough to matter;
   the virtualised variants exist for that case and carry the `@tanstack/react-virtual` cost.
 - **Why it is a separate package: dependency weight, not code size.** Folding it into `ui-core` would

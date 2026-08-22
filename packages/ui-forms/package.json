@@ -30,7 +30,7 @@
 		"@repo/ui-core": "workspace:*",
 		"@repo/ui-overlays": "workspace:*",
 		"@tanstack/react-form": "^1.23.8",
-		"@tanstack/react-virtual": "^3.0.0-beta.54",
+		"@tanstack/react-virtual": "~3.13.12",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"date-fns": "^4.1.0",
