@@ -36,7 +36,7 @@ A filterable, optionally virtualised command palette, built on `cmdk`.
   put `cmdk`, `@tanstack/react-virtual` and `@radix-ui/react-dialog` behind every `ui-core` install,
   including consumers who only wanted a `Button`. Tree-shaking drops unused _code_, not a package
   from the dependency tree. Whether that still earns itself is an open question in
-  [`docs/README.md`](../../docs/README.md#planned).
+  [`docs/planned.md`](../../docs/planned.md#the-four-package-split).
 
 ## Dependency direction
 

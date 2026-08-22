@@ -412,92 +412,44 @@ same `~/*` alias, so moved files resolve unchanged.
 
 ---
 
-## Tasks
+## Phases
 
-### Phase 0 — Baseline (done)
+All shipped, across the commits listed above. Detail for each task lives in the approved plan; this
+records what actually happened.
 
-- [x] 0.1 `pnpm install` + `pnpm turbo run build --force` + cache clear.
-- [x] 0.2 Fixed the `stories` glob in `apps/storybook/.storybook/main.ts` (`**` → `*`) so it stops
-      matching through `node_modules` symlinks. Suite goes from 25 failures to 0. Not part of 04 —
-      commit separately.
-- [x] 0.3 Baseline recorded above: build ✅, lint ✅ (1 known warning), tests 311/311 ✅.
+- [x] **0 — Baseline.** `pnpm install` + `turbo run build --force` + cache clear, then build 11/11,
+      lint 0 errors (1 known warning), tests 311/311. Also fixed the `stories` glob in
+      `apps/storybook/.storybook/main.ts` (`**` → `*`), which was matching through `node_modules`
+      symlinks — a prerequisite, committed separately.
+- [x] **1 — The move.** Seven component folders `git mv`'d into `ui-core`, cross-package imports
+      rewritten to `~/components/…`, story titles `UI Forms/*` → `UI Core/*`, the two D5 renames,
+      `DatePickers` repointed at `@repo/ui-core` for `Calendar`.
+- [x] **2 — Barrels and dependencies.** Both package roots rewritten with no transitional
+      re-exports; dependencies moved between the two `package.json`s per the table above.
+- [x] **3 — `DebouncableInput` composes `Input`.** `DebouncableInput.variants.ts` and its barrel
+      exports deleted; `h-10 text-sm` added to `searchDebouncableInputVariants` so `Search` shows no
+      visual change (D4), confirmed against pre-change screenshots.
+- [x] **4 — `RadioGroup` and roving focus.** `useRovingTabIndex` built utils-first — the pure index
+      arithmetic was the part most likely to be wrong and the cheapest to test — then wired into
+      `CheckboxGroup`, with identical `play()` scripts in both story files so divergence fails a test.
+- [x] **5 — Verification.** Gates re-run against the Phase 0 figures; every acceptance criterion
+      walked individually. Both greps had to be re-run before their output meant anything — see
+      [Outcome](#outcome).
+- [x] **6 — MDX pass.** Scope extended mid-flight from the four documents the migration made wrong
+      to all ten touched components; the table-of-contents work turned out not to be scopable at all.
+      Both below.
+- [x] **7 — Ship.** Roadmap row 04 → ✅ done, and this file rewritten as the as-built record.
 
-### Phase 1 — The move (mechanical; no behaviour change)
+### Phase 6, in detail — the scope extension and the ToC constraint
 
-- [ ] 1.1 `git mv` the seven component folders `ui-forms/src/components/*` → `ui-core/src/components/*`.
-      Use `git mv` so history follows. (Depends on: —)
-- [ ] 1.2 Rewrite cross-package imports in the moved sources: `@repo/ui-core` → `~/components/…`
-      for `Icon`, `Label`, `Button`, `buttonVariants`, `IconName`. (1.1)
-- [ ] 1.3 Rewrite the moved stories: same import fix, plus `title:` `UI Forms/*` → `UI Core/*`, plus
-      `@repo/ui-forms` → `@repo/ui-core` in `Input.mdx` and `Input.stories.tsx`'s
-      `docs.source.code` snippets. (1.1)
-- [ ] 1.4 The two renames from D5. (1.1)
-- [ ] 1.5 Repoint `DatePickers` at `@repo/ui-core` for `Calendar`. (1.1)
+The pass was a read-through of the `.mdx` for every component this deliverable changed, against
+`storybook-standards` §9 (page structure) and §10 (Canvas blocks and callouts), deliberately run
+after verification so it documented what was actually built.
 
-Estimated: 0.5 day.
-
-### Phase 2 — Barrels and dependencies
-
-- [ ] 2.1 Rewrite `packages/ui-core/src/index.ts` — add the moved components and their types.
-      (Depends on: 1.2)
-- [ ] 2.2 Rewrite `packages/ui-forms/src/index.ts` — `useForm`, `Selects`, `DatePickers` only. No
-      transitional re-exports (spec Decision). (1.5)
-- [ ] 2.3 Move the dependencies between the two `package.json`s per the table above; `pnpm install`. (2.1)
-- [ ] 2.4 First real build: `pnpm build`. This is where the move either compiles or doesn't. (2.3)
-
-Estimated: 0.5 day.
-
-### Phase 3 — `DebouncableInput` composition
-
-- [ ] 3.1 Refactor `DebouncableInput` to render `Input`; delete `DebouncableInput.variants.ts` and
-      its barrel exports. (Depends on: 2.1)
-- [ ] 3.2 Add `h-10 text-sm` to `searchDebouncableInputVariants` to hold `Search` steady. (3.1)
-- [ ] 3.3 Visual check of `Search` and `DebouncableInput` in Storybook against pre-change
-      screenshots. (3.2)
-
-Estimated: 0.5 day.
-
-### Phase 4 — `RadioGroup` and CheckboxGroup keyboard navigation
-
-- [ ] 4.1 Build `RadioGroup` per D3, plus `RadioGroup.stories.tsx` with `play()` coverage:
-      click selection, controlled round-trip, arrow navigation, disabled option skipped, group-level
-      `disabled`, empty-options message. (Depends on: 2.1)
-- [ ] 4.2 Build `useRovingTabIndex.utils.ts` (pure index arithmetic) + `.spec.ts` **first** — it is
-      the part most likely to be wrong and the cheapest to test. (2.1)
-- [ ] 4.3 Build `useRovingTabIndex` (+ types + `.spec.ts`) on top of those helpers, and wire it into
-      `CheckboxGroup`. (4.2)
-- [ ] 4.4 Extend `CheckboxGroup.stories.tsx` with the parity `play()` suite. (4.3)
-
-Estimated: 2 days.
-
-### Phase 5 — Verification
-
-- [ ] 5.1 `pnpm build`, `pnpm lint`, rebuild `@repo/ui-core`, clear the Storybook cache, run the
-      Storybook suite; compare against the Phase 0 figures. (Depends on: 4.4, 3.3)
-- [ ] 5.2 Walk the spec's Success Criteria and Acceptance Criteria one by one, including the greps
-      ("no moved primitive name under `packages/ui-forms/src`", "no old import path anywhere"). (5.1)
-
-Estimated: 0.5 day.
-
-### Phase 6 — MDX sanity pass
-
-A read-through of the `.mdx` for every component this deliverable changed, against
-`storybook-standards` §9 (page structure) and §10 (Canvas blocks and callouts). Deliberately after
-verification, so it documents what was actually built rather than what was planned.
-
-In scope — the docs this deliverable makes _wrong_ if left alone:
-
-- [ ] 6.1 `Input.mdx` — moves to `ui-core`; its `import { Input } from '@repo/ui-forms'` becomes
-      `@repo/ui-core`. At 37 lines it is also the thinnest doc in the repo, with no `Properties` or
-      `Accessibility` section unlike `Button.mdx`/`Icon.mdx`. Fix the import; record the structural
-      gap for `05` rather than rewriting it here. (Depends on: 5.2)
-- [ ] 6.2 `DebouncableInput.mdx` — Phase 3 changes what this component _is_. Its Features list
-      ("Natively intercepts `onChange`…") no longer tells the whole story once it composes `Input`,
-      and nothing should contradict the removal of `debouncableInputVariants`. (5.2)
-- [ ] 6.3 `Search.mdx` — check nothing describes the input's chrome in a way D4 invalidates. (5.2)
-- [ ] 6.4 `RadioGroup` — new exported component, currently no `.mdx` at all. Write a minimal one on
-      the `Button.mdx` shape: intro, Features, Properties, Usage, Accessibility, `<Controls />`.
-      Full standalone/composition/pattern treatment stays `05`'s job per the spec's non-goals. (5.2)
+Four documents were in scope because the migration made them wrong: `Input.mdx` (import path, and at
+37 lines the thinnest doc in the repo — structural gap recorded for `05` rather than fixed here),
+`DebouncableInput.mdx` (Phase 3 changed what the component _is_), `Search.mdx` (checked against D4),
+and `RadioGroup`, which had no `.mdx` at all.
 
 **Tables of contents — use the built-in, not hand-written anchor lists.**
 `@storybook/addon-docs@10.2.16` supports `parameters.docs.toc`
@@ -551,15 +503,6 @@ the moment a heading is renamed, and nothing catches it.
 > `Selects/Select.mdx` (360 lines, 7 `##` sections) and `Button.mdx` (219 lines) — neither is
 > touched by 04. Same question for whether `toc` should just be switched on globally in
 > `preview.ts` rather than per file. Both are one-line changes; flagged, not taken.
-
-Estimated: 0.5 day.
-
-### Phase 7 — Ship
-
-- [ ] 7.1 Update `docs/README.md` (row 04 → `✅ done`) and rewrite this file as an as-built record.
-      (Depends on: 6.5)
-
-Estimated: 0.5 day.
 
 ---
 
@@ -773,7 +716,7 @@ satisfies "depends on nothing above `ui-core`" while being one of the heaviest t
 Two mitigations: `preserveModules` means `Button.js` carries no reference to it, so an app that
 never imports `Calendar` bundles none of it; and `ui-core` already bundled `framer-motion` at 405K,
 so it was never lightweight. Feeds the pinned package-split question in
-[`docs/README.md`](../README.md#planned) rather than being reversed here.
+[`docs/planned.md`](../planned.md#the-four-package-split) rather than being reversed here.
 
 **Recorded — test gap.** "The tab stop starts on the checked item" is unit-tested only. Every
 browser test starts from an empty selection, so the case a user meets most often — tabbing into a
@@ -808,37 +751,25 @@ roving-focus widget needs the key held.
 `expect()`, rejected by `userEvent.click()`. Run the build, not just the specs, before believing a
 change is clean.
 
-## Risks
+## Risks that fired
 
-| Risk                                                          | Impact                                                              | Likelihood                                  | Mitigation                                                                                                                                   |
-| ------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Verification runs against a not-fully-set-up worktree         | Gate results are meaningless; wasted hours chasing phantom failures | Certain if skipped (observed)               | Task 0.1 — `pnpm install` + `turbo run build --force` before trusting any number; `--force` because Turbo's cache is shared across worktrees |
-| Stale Storybook cache masks the move                          | False green **and** false red                                       | High                                        | The rebuild + clear command above, run before every verification                                                                             |
-| `DebouncableInput` adopting `Input`'s chrome changes `Search` | Visual regression in a shipped component                            | High if unhandled                           | D4's compensating `h-10 text-sm`; before/after screenshots                                                                                   |
-| CheckboxGroup's single Tab stop surprises someone             | Behaviour regression                                                | Low — nothing outside Storybook consumes it | D2 records it; `play()` test pins it; called out in the ship note                                                                            |
-| Hand-rolled roving focus drifts from Radix's                  | The two groups stop matching                                        | Medium — accepted with D1                   | Identical `play()` scripts in both story files, so divergence fails a test; `useRovingTabIndex.spec.ts` pins each behaviour individually     |
-| Moved Tailwind classes stop being scanned                     | Missing styles                                                      | None                                        | Verified: both `src` trees are already `@source`d                                                                                            |
-| `@repo/core` edge introduces a cycle                          | Build break                                                         | None                                        | Verified: `@repo/core` depends only on `date-fns`                                                                                            |
-| Phase 1 is one large mechanical commit that is hard to review | Review fatigue                                                      | Medium                                      | `git mv` keeps rename detection; behaviour changes land in Phases 3–4 as separate commits                                                    |
+Two of the eight risks identified while planning actually materialised, and both were about
+verification rather than about the code:
 
----
+- **Verification against a not-fully-set-up worktree.** Certain if skipped, and it was — the first
+  two baselines were worthless. `pnpm install` + `turbo run build --force` before trusting any
+  number, with `--force` because Turbo's cache is shared across worktrees. See
+  [Baseline](#first-this-worktree-was-never-installed).
+- **Stale Storybook cache masking the move**, producing a false green *and* a false red. The rebuild
+  + clear command above, before every verification.
 
-## Rollout
+The rest did not: Tailwind scanning was already covered (both `src` trees are `@source`d), the
+`@repo/core` edge introduced no cycle (it depends only on `date-fns`), and `Search` showed no visual
+change thanks to D4's compensating classes.
 
-Single branch off `claude/ui-forms-primitive-migration-c21ce8`, merged onto the integration branch
-rather than `main`. No feature flag and no staged rollout: nothing outside `apps/storybook` consumes
-either package, so the blast radius is the Storybook build. Rollback is `git revert` of the merge.
-
-Commit sequence follows the phases, so each is independently reviewable:
-
-1. `refactor(ui-core,ui-forms): move leaf primitives to ui-core` (Phases 1–2)
-2. `refactor(ui-core): compose DebouncableInput from Input` (Phase 3)
-3. `feat(ui-core): add RadioGroup and roving focus to CheckboxGroup` (Phase 4)
-4. `docs(ui-core): mdx pass for the migrated components` (Phase 6)
-5. `docs: as-built plan for 04` (Phase 7)
-
-Plus, separately and first, the `main.ts` stories-glob fix from task 0.2 — it is a prerequisite, not
-part of this deliverable.
+Shipped from a single branch onto the integration branch rather than `main`. Nothing outside
+`apps/storybook` consumes either package, so the blast radius was the Storybook build; rollback would
+have been `git revert` of the merge.
 
 ---
 
@@ -897,7 +828,7 @@ every package that uses it**, so an app importing two of them ships two copies �
 scopes for anything stateful. In effect it merges the packages while keeping the appearance of a
 split: the coupling of a merge, without the clarity.
 
-Full weighing of the options is in [`docs/README.md`](../README.md#planned). Nothing here is broken;
+Full weighing of the options is in [`docs/planned.md`](../planned.md#the-four-package-split). Nothing here is broken;
 the cost is ergonomic, and the decision is explicitly open.
 
 ### RTL / reading direction — needs its own discovery and spec
@@ -919,14 +850,12 @@ Surfaced while deciding D1, and deliberately left alone here. The current state,
 That is a design-system-wide question — where direction comes from, which layer owns the provider,
 what the component contract is — and it wants a `problem-discovery` pass before any spec. It sits
 naturally alongside the design-system audit already noted as planned in
-[`docs/README.md`](../README.md#planned).
+[`docs/planned.md`](../planned.md#design-system-audit).
 
-## Open questions
+## Open questions — both settled
 
-1. ~~**D1: `RovingFocusGroup` or a hand-rolled hook?**~~ **Resolved** — hand-rolled
-   `useRovingTabIndex`, no new dependency. See [D1](#d1--checkboxgroup-gets-a-hand-rolled-userovingtabindex-resolves-spec-open-question-1).
+1. **D1: `RovingFocusGroup` or a hand-rolled hook?** Hand-rolled `useRovingTabIndex`, no new
+   dependency. See [D1](#d1--checkboxgroup-gets-a-hand-rolled-userovingtabindex-resolves-spec-open-question-1).
 2. **Does deleting the `debouncableInputVariants` public export need calling out anywhere beyond
-   this plan?** Assumed no — nothing consumes it, and the spec already sanctions clean breaks.
-   Proceeding on that assumption; say so if it should be flagged elsewhere.
-
-Nothing is blocking. Awaiting the go-ahead to start Phase 1.
+   this plan?** No. Nothing consumed it, the spec sanctions clean breaks, and it shipped without a
+   separate note.

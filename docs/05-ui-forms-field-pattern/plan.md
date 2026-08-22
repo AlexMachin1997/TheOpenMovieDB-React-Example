@@ -851,7 +851,7 @@ _and_ something followed" assertion needs the key **held** (`{ArrowDown>}` … `
   supported path.
 - **`Alert`'s `warning` and `success` pass AA only just** (4.85 and 4.72 against 4.5). Fine today,
   but there is no headroom, and `destructive` was left alone entirely. Belongs with the design-system
-  audit already planned in [`docs/README.md`](../README.md#planned).
+  audit already planned in [`docs/planned.md`](../planned.md#design-system-audit).
 - **The other 18 `Slider` stories have non-native labels that name nothing.** They no longer _lie_
   (the dangling `htmlFor` is gone), but only `Basic` is wired to its thumb. They demonstrate styling
   rather than labelling, so this was left rather than restructured.

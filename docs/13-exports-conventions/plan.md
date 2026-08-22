@@ -57,7 +57,9 @@ Recorded here rather than by editing `spec.md`, which describes the world as it 
 
 - [x] **1 — The gates that don't gate.** `--max-warnings 0`, CI Prettier as `--check`,
       `react/display-name`, husky made durable.
-- [ ] **2 — Export parity baseline.** Capture every exported symbol before touching a barrel.
+- [x] **2 — Export parity baseline.** Captured before any barrel changed. The first comparison
+      reported IDENTICAL and was wrong — see [below](#the-parity-check-gave-a-false-pass-and-that-is-the-real-finding);
+      that false pass is the part worth keeping.
 - [x] **3 — One barrel strategy, applied.** Delete the duplicate halves, write the missing barrels,
       route every package root through them.
 - [x] **4 — `RangeDatePicker` / `DateRangePicker`.** Fix the folder, file and interface; keep the
