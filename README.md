@@ -113,6 +113,10 @@ TheOpenMovieDB-React-Example/
 
 ### Shared Packages
 
+- **[@repo/ui-core](./packages/ui-core/)** - Base components, form primitives and the library's conventions
+- **[@repo/ui-overlays](./packages/ui-overlays/)** - Dialog, Sheet, Popover, DropdownMenu, HoverCard
+- **[@repo/ui-command](./packages/ui-command/)** - Command palette
+- **[@repo/ui-forms](./packages/ui-forms/)** - Form layer, Select and date pickers
 - **[@repo/eslint-config](./packages/eslint-config/)** - Shared ESLint configurations
 - **[@repo/typescript-config](./packages/typescript-config/)** - Shared TypeScript configurations
 
@@ -204,6 +208,7 @@ Navigate to `http://localhost:6006` to view the component library.
 
 ### Package Documentation
 
+- **[UI Core](./packages/ui-core/README.md)** - The library's conventions, documented once
 - **[ESLint Config](./packages/eslint-config/README.md)** - Shared ESLint configurations
 - **[TypeScript Config](./packages/typescript-config/README.md)** - Shared TypeScript configurations
 

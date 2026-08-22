@@ -13,12 +13,11 @@ is just the roadmap.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable           | Area          | Status   | Depends on | Docs                                                       |
-| --- | --------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------- |
-| 03  | Focus indicators      | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)         |
-| 13  | Exports & conventions | architecture  | 🟢 ready | —          | [13-exports-conventions](13-exports-conventions/spec.md)   |
-| 17  | One list per Command  | component     | 🟢 ready | —          | [17-command-list-nesting](17-command-list-nesting/spec.md) |
-| 18  | A common overlay API  | component     | 🟢 ready | — (14 ✅)  | [18-overlay-api](18-overlay-api/spec.md)                   |
+| ID  | Deliverable          | Area          | Status   | Depends on | Docs                                                       |
+| --- | -------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------- |
+| 03  | Focus indicators     | design system | 📝 draft | TBD        | [03-focus-indicators](03-focus-indicators/spec.md)         |
+| 17  | One list per Command | component     | 🟢 ready | —          | [17-command-list-nesting](17-command-list-nesting/spec.md) |
+| 18  | A common overlay API | component     | 🟢 ready | — (14 ✅)  | [18-overlay-api](18-overlay-api/spec.md)                   |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -32,14 +31,11 @@ merged or renumbered, as `12`–`16` were when the first cut of them was split t
 
 ### Suggested order
 
-**`13` grew during `16` and is now the guardrails deliverable, not just the barrels one.** Four gaps
-were folded into it rather than taking specs of their own: `--max-warnings 0` (a stale
-`eslint-disable` currently warns and exits 0 — the same hole `16` closed, via a different door), CI
-Prettier as `--check` rather than `--write`, `naming-convention` to enforce the `I` prefix, and
-`react/display-name`. Its `CONVENTIONS.md` requirement was **dropped**: a rule cannot drift and binds
-everyone, so prose is the fallback and lives in the owning package's README.
-
-The first two are independent of the barrel decision and can land first.
+`13` has shipped. It ended up larger than the barrels deliverable it started as: three gates that
+reported success without checking anything (`--max-warnings 0`, CI Prettier as `--check`, and a
+`husky` that was never installed), plus two rules that were switched off. Its `CONVENTIONS.md`
+requirement was **dropped** — a rule cannot drift and binds everyone, so prose is the fallback and
+lives in the owning package's README.
 
 `14` **no longer depends on `13`.** The dependency existed to avoid touching the same barrels twice,
 but `14`'s barrel edits turned out to be confined to five entries in one file, and `13`'s own open
@@ -180,6 +176,7 @@ Kept for reference; each links to its as-built record. These rows do not change.
 | 10  | Extract `useDebouncedValue`   | [10-debounce-hook](10-debounce-hook/plan.md)                               |
 | 11  | Correctness bug fixes         | [11-correctness-bugs](11-correctness-bugs/plan.md)                         |
 | 12  | Build & dependency tooling    | [12-build-dependency-tooling](12-build-dependency-tooling/plan.md)         |
+| 13  | Exports & conventions         | [13-exports-conventions](13-exports-conventions/plan.md)                   |
 | 14  | Component consolidation       | [14-component-consolidation](14-component-consolidation/plan.md)           |
 | 15  | Storybook lint + tests        | [15-storybook-lint-tests](15-storybook-lint-tests/plan.md)                 |
 | 16  | Type-hygiene cleanup          | [16-type-hygiene](16-type-hygiene/plan.md)                                 |

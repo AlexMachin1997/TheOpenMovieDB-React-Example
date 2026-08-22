@@ -1,6 +1,6 @@
 # 13 — Exports & conventions
 
-Implementation plan for [`spec.md`](spec.md). Ticked as each phase lands.
+Status: **shipped.** As-built record for [`spec.md`](spec.md).
 
 ## Decisions taken before implementation
 
@@ -65,7 +65,7 @@ Recorded here rather than by editing `spec.md`, which describes the world as it 
 - [x] **5 — The `I` prefix, enforced.** New `@repo/eslint-config/ui`, 5 renames, 8 alias conversions.
 - [x] **6 — Folder structure, running and isolated.** Extend the schema, enable the rule, prove the
       parser is untouched.
-- [ ] **7 — Write the conventions down.** Package READMEs, golden rules, roadmap, this file.
+- [x] **7 — Write the conventions down.** Package READMEs, golden rules, roadmap, this file.
 
 Detail for each phase lives in the approved plan; this file records what actually happened as it
 happens.
@@ -403,3 +403,72 @@ Result: **0 violations across all four packages**, with the rule at `error`.
 
 Build 11/11 (forced), lint 11/11 with 0 warnings, types 19/19, prettier clean, 385 tests passed /
 27 skipped, export parity unchanged.
+
+### Phase 7 — writing the conventions down
+
+Most of what the spec asked to be documented ended up **enforced** instead, which is what it wanted:
+file layout, barrels, variants naming and the `I` prefix are all rules now, and their rationale lives
+in [`packages/eslint-config/README.md`](../../packages/eslint-config/README.md) — including the three
+ways the folder-structure rule can look like it works while checking nothing, and how to verify each.
+
+The four UI packages had **no README at all**. They have one now:
+
+- **`ui-core`** carries the shared conventions, since every other UI package depends on it — layout
+  and barrels, variants, the `I` prefix, what `displayName` actually requires, and the control-value
+  contract.
+- **`ui-overlays`, `ui-command`, `ui-forms`** are short: what the package is, what is specific to it,
+  and a link back. Stating the same rules four times is the drift this deliverable exists to remove.
+
+`.agent/golden-rules.md` was **right and the code was wrong**: it already required
+`Button/Button.variants.ts` and an `index.ts` per component folder. Both entries now name the rule
+that enforces them rather than asking the reader to take it on trust.
+
+No `CONVENTIONS.md` was created, per the spec's Non-Goals.
+
+## Follow-ups
+
+Raised and deliberately not fixed here.
+
+- **A generic mechanism for per-package custom rules.** `folderStructure(import.meta.dirname)` is the
+  first config that has to be parameterised by the consuming package. A second one would want the
+  same shape, and at that point the factory pattern is worth naming and standardising rather than
+  repeating.
+- **Four folders deviate from the component layout** and are named individually in the rule's schema:
+  `Selects/`, `DatePickers/`, `fields/` and `Overlay/`. Flattening them into ordinary component
+  folders is a restructure, explicitly out of scope here.
+- **`displayName` coverage is ~45%**, not the 100% the spec assumed. `DropdownMenu` has fifteen
+  components with none. `react/display-name` does not require it where React can infer a name, so
+  this is a convention gap rather than a lint failure.
+- **`import/*` rules are configured but no `import` plugin is registered** in any flat config
+  (`base.js:41` plus ten more in the app config). Those settings are inert.
+- **`@typescript-eslint/no-unused-vars` is `'off'` globally** in `react.js`. It is why the two dead
+  `folderStructure` imports sat there unnoticed until this deliverable removed them.
+- **`apps/storybook` has no `check-types` script**, so CI's TypeCheck job silently skips it.
+- **`apps/the-open-movie-database` is outside three gates** by decision — `--max-warnings 0`,
+  `naming-convention` and `folder-structure` — until it is reworked.
+- **`searchDebouncableInputVariants` and the three `overlay*Variants` were never exported.** Moot now
+  that `cva` files are internal, but the asymmetry is what first drew attention to them.
+- **Neither `IDatePicker` sub-interface is exported**, so a caller cannot type a `DateRangePicker`
+  prop object. `onDateChange` is optional while `onDateRangeChange` is required.
+- **Narrowing component props to what we actually support** — rather than re-exporting a third-party
+  union like `DayPickerProps` — would remove the interface-vs-alias problem at its root. It changes
+  what callers may pass, so it is a public API decision, fenced off by the spec.
+
+## Acceptance criteria
+
+- [x] One barrel strategy applied across all four UI packages.
+- [x] The eight byte-identical duplicate barrels are gone — nine files, once `Calendar.tsx` was
+      recognised as the same thing.
+- [x] The `RangeDatePicker` folder and `DateRangePicker` export agree.
+- [x] Every symbol exported before the change is still exported — **demonstrated**, and the check was
+      hardened after it produced a false pass. One deliberate exception: the seven `cva` symbols.
+- [x] Each settled convention is enforced by a named rule or documented in the owning package's
+      README.
+- [x] The `I` prefix is enforced, and the interface-vs-alias split is resolved.
+- [x] `react/display-name` is `error`, 0 violations, and confirmed able to fire.
+- [x] `pnpm lint` exits non-zero on a warning, proven with a deliberate one.
+- [x] The CI Prettier job fails on unformatted input, proven the same way.
+- [x] The folder-structure rule is enabled and running — and, unlike before, actually checking.
+- [x] A deliberate TypeScript lint error is still caught with the rule enabled; the code-lint finding
+      count did not fall.
+- [x] Build, lint, check-types and the Storybook suite are no worse than before.

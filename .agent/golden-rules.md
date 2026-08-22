@@ -73,14 +73,22 @@ These apply at all times:
 ### TypeScript
 
 - Always explicitly set `"rootDir": "./src"` in `tsconfig.json` to avoid the ambiguous root error.
-- Prefix React component prop interfaces with `I` (e.g., `IButton`, `IInput`).
+- Prefix React component prop interfaces with `I` (e.g., `IButton`, `IInput`). **Enforced** by
+  `@typescript-eslint/naming-convention` on interfaces. Hook options/results and discriminated
+  unions are deliberately outside it — see
+  [`@repo/eslint-config`](../packages/eslint-config/README.md).
 - Always add JSDoc blocks to exported interfaces — Storybook and IDE IntelliSense both consume them.
 - Packages must inherit from `@repo/typescript-config` (not define raw `compilerOptions` from scratch).
 
 ### React / UI Components
 
 - **Every prop a component declares gets an explicit default in the destructure** — `loading = false`, `disabled = false`, `asChild = false` — not an implicit `undefined`. An implicit default is invisible at the call site and at the destructure, so the component's behaviour with the prop omitted has to be inferred from the body. Document it with `@default` in the JSDoc too; Storybook's controls table reads it.
-- One component per folder: `Button/Button.tsx`, `Button/Button.types.ts`, `Button/Button.variants.ts`, `Button/index.ts`.
+- One component per folder: `Button/Button.tsx`, `Button/Button.types.ts`,
+  `Button/Button.variants.ts`, `Button/index.ts`. **Enforced** by
+  `project-structure/folder-structure`. Every direct child of `src/components/` has an
+  `index.ts`, and `src/index.ts` imports only through those barrels rather than reaching past
+  one to an implementation file. A `cva` file is never exported. See
+  [`@repo/ui-core`](../packages/ui-core/README.md#conventions).
 - Types for compound components (e.g., `Dialog`, `Sheet`) always live in the root `{ComponentName}.types.ts`, never scattered across sub-component files.
 - Do **not** import React just to use JSX (React 17+ transform is active). Only import React for hooks, `forwardRef`, or types.
 

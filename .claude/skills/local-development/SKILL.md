@@ -41,8 +41,8 @@ report a build time or a "clean build is green" without it.
 | Gate            | Command                                             | Notes                                                                                                                                 |
 | --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | Build           | `pnpm build`                                        | `pnpm turbo run build --force` when baselining                                                                                        |
-| Lint            | `pnpm lint`                                         | Errors DO fail it. Healthy today: **0 errors, 0 warnings** — any output is a regression                                               |
-| Prettier        | `pnpm prettier`                                     | ⚠️ **`--write`, not `--check`. It cannot fail and it rewrites your tree** — see below                                                 |
+| Lint            | `pnpm lint`                                         | Errors AND warnings fail it (`--max-warnings 0`). Healthy today: **0 errors, 0 warnings**                                             |
+| Prettier        | `pnpm prettier:check`                               | The gate. `pnpm prettier` still rewrites — see below                                                                                  |
 | Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                                    |
 | Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 385 passed, 27 skipped. **Local only, on purpose** — see below |
 | Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                                        |
@@ -57,6 +57,16 @@ sit in `base.js` (`no-empty-object-type`, `no-explicit-any`) are gone. `pnpm lin
 `.husky/pre-commit` and the CI `ESLint` job, so any output at all is now a regression rather than
 background noise.
 
+**Since `13`, a warning also fails.** Seven lint scripts carry `--max-warnings 0`; before that a
+stale `eslint-disable` reported as a warning and exited **0**. `apps/the-open-movie-database` is
+deliberately excluded until it is reworked, so a warning there still passes.
+
+`13` also added two rules scoped to the UI packages: `@typescript-eslint/naming-convention` (the `I`
+prefix on interfaces) and `project-structure/folder-structure`. The latter is wired per package via
+`folderStructure(import.meta.dirname)` and **sets no parser** — read
+[`packages/eslint-config/README.md`](../../../packages/eslint-config/README.md) before touching it,
+because it has three separate ways of looking like it works while checking nothing.
+
 Verified 2026-08-15 by introducing a conditional `useState` into a story file: reported as an
 `error`, exit 1.
 
@@ -66,11 +76,20 @@ any setting. **Do not "fix" one of those into a type alias.** Why, and what stil
 [`packages/eslint-config/README.md`](../../../packages/eslint-config/README.md) — that is the home
 for rule rationale, not this file and not a comment in `base.js`.
 
-### `pnpm prettier` writes — it is not a check
+### `pnpm prettier` writes; `pnpm prettier:check` is the gate
 
-The root script is `turbo run prettier`, and each package's is `prettier --write`. Writing is the
-intent. What it is _not_ is a verification step: it always exits 0, so it can never tell you whether
-something was already formatted.
+Both are **root-level** as of `13`: `prettier --write .` and `prettier --check .`. The per-package
+`prettier` scripts and the turbo `prettier` task were removed.
+
+The reason is a trap worth knowing: **Prettier searches upward for `.prettierrc` but not for
+`.prettierignore`.** `--ignore-path` resolves against the current working directory and never walks
+up, so a workspace-local `prettier --check .` cannot see the root ignore list and checks that
+package's own `dist/` — 116 files in `ui-core`. Delegating per package therefore needs an
+`--ignore-path` on every script; running once from the root needs no arguments at all and also covers
+`docs/`, `README.md`, `turbo.json` and `.github/`, which belong to no workspace.
+
+That trap had been live: the old per-package `prettier --write .` was silently reformatting each
+package's build output on every run.
 
 **The tree is fully prettier-clean as of 2026-08-15** (`npx prettier --check .` → "All matched files
 use Prettier code style"), so a stray `pnpm prettier` should now be a no-op. Before that it rewrote
@@ -88,9 +107,12 @@ Two coverage facts that keep it from drifting, worth not undoing:
 - `.prettierignore` excludes `pnpm-lock.yaml` and `*.tsbuildinfo`. Do not remove those — a
   reformatted lockfile is churn at best.
 
-Still open: the CI **Prettier** job (`.github/workflows/linting-action.yml`, `run: pnpm prettier`)
-rewrites its own checkout and passes unconditionally, so it reports success without checking
-anything. Switching it to `--check` is the obvious fix and has not been decided.
+Closed in `13`: the CI **Prettier** job now runs `pnpm prettier:check`. It previously ran
+`pnpm prettier`, rewriting its own checkout and passing unconditionally.
+
+Also closed in `13`: **`husky` is now a real dependency** with a `prepare` script. It was absent
+from the lockfile entirely, so `.husky/pre-commit` only ever ran on a machine where `core.hooksPath`
+happened to already be set — on a fresh clone the hook did not exist.
 
 ### The suite is green — 385 passed, 27 skipped
 
