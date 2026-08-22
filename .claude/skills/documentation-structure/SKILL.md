@@ -18,10 +18,19 @@ job, so the two can't drift apart.
 ```
 docs/
 ├── README.md                 the roadmap: every deliverable, status, dependencies
+├── planned.md                the reasoning behind everything on the roadmap's Planned list
 ├── 01-icon/                  discovery.md, spec.md, plan.md — only what's needed
 ├── 02-button-enhancements/
 └── NN-<slug>/…               see the roadmap for the current list
 ```
+
+**`planned.md` exists because the roadmap stopped being scannable.** Open questions attract
+reasoning — options weighed, why something is pinned, what would force the decision — and that
+reasoning is worth keeping, which is how two-thirds of `README.md` became essay. The roadmap now
+carries one line per planned item plus a link; the argument lives in `planned.md`. Anything on the
+Planned list needing more than about three lines goes there, not inline. Deep links use the section
+anchor (`planned.md#the-four-package-split`), and several `plan.md` files and
+`packages/ui-command/README.md` already point at them — check before renaming a heading there.
 
 **One layout, one roadmap.** There is no second track. `docs/refactor/` used to hold a parallel set
 of deliverables with its own status table and its own IDs (`P0`, `D0`–`D10`, `F1`–`F6`); it was
@@ -49,6 +58,17 @@ reaching for those is out of date.
   as-built record — and tracks its own steps as checkboxes. A `spec.md` carries no status at all,
   except the documented second-pass delimiter below. The legacy track duplicated deliverable state
   into each spec's header, the two drifted, and a shipped deliverable sat marked `todo` for weeks.
+- **Checkboxes belong in `plan.md` only.** Specs here still carry `- [ ]` under Success and
+  Acceptance Criteria — 70 of 73 have never been ticked and never will be, because the plan
+  reproduces them with evidence instead. New specs use numbered `AC1`/`AC2` items; the existing
+  boxes are being left alone rather than bulk-converted, so expect both shapes.
+- **A shipped `plan.md` carries no unticked box without a reason on the same line, and no
+  future-tense sentence about work already done.** `04`'s plan sat shipped for weeks with 23 open
+  task boxes and a closing line reading "awaiting the go-ahead to start Phase 1"; it has since been
+  collapsed to one ticked line per phase. `13`'s plan is the shape to copy. Both greps —
+  `grep -n '^\s*- \[ \]'` and a scan for estimates or "awaiting" — take seconds at ship time. The
+  legitimately-open boxes in `06`, `07` and `09` show the other half of the rule: each one states
+  why it is open, so a reader can tell a deliberate gap from drift.
 - **`D<n>` is an overloaded prefix — read the context.** Deliverables `04` and `05` both use
   `D1`, `D2`, `D3`… as _internal decision IDs_ within their own `plan.md`, with anchor links like
   `#d1--…`. Source comments referencing `plan.md, D3` mean those, not a deliverable. The retired

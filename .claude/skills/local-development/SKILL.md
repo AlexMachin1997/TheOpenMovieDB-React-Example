@@ -47,6 +47,19 @@ report a build time or a "clean build is green" without it.
 | Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 385 passed, 27 skipped. **Local only, on purpose** — see below |
 | Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                                        |
 
+### Neither test gate type-checks — a green suite can sit on a type error
+
+`vitest run` transpiles and discards types; only `pnpm build` (which runs `check-types`) sees them.
+So the two test rows above prove behaviour and nothing else.
+
+Observed under `04`: `useRovingTabIndex.spec.ts` passed **17/17 while containing a type error** —
+`elements.indexOf(document.activeElement as HTMLElement)` against an `HTMLButtonElement[]`. Only the
+build caught it.
+
+`noUncheckedIndexedAccess` makes this more likely than it sounds in story and spec files, because
+`getAllByRole(...)[n]` is `HTMLElement | undefined`: fine inside `expect()`, rejected by
+`userEvent.click()`. Run the build before believing a test-only change is clean.
+
 ### `eslint-plugin-only-warn` is NOT wired up — lint errors are real
 
 It is declared in `packages/eslint-config/package.json` and imported by **no config**; in flat
