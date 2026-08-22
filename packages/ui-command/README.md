@@ -52,7 +52,7 @@ A filterable, optionally virtualised command palette, built on `cmdk`.
 - **A `CommandList` is a `listbox`, so only `option` and `group` may live inside it.** Whatever you
   pass to `CommandInterface` lands there. Content that is not list content — a footer, a banner —
   has to sit outside it, which means composing by hand.
-- **`@tanstack/react-virtual` is pinned to patch releases (`~3.13.12`), on purpose.** The
+- **`@tanstack/react-virtual` is pinned to patch releases (`~3.14.10`), on purpose.** The
   virtualised variants do not render the element they scroll against — `CommandList` belongs to
   whoever composes the palette — so `useCommandScrollElement` finds it in the DOM and leans on
   `useVirtualizer` re-polling `getScrollElement()` after every render. That re-poll is `_willUpdate`,
