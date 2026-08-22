@@ -91,19 +91,20 @@ This is why the defect has gone unnoticed. The two containers mask each other.
 
 ## Acceptance Criteria
 
-- [ ] `CommandInterface` renders exactly one `CommandList`, and no list variant renders a second
-      inside it.
-- [ ] An open `Command` and an open `Select` each expose exactly one `role="listbox"`, asserted in
-      the interaction suite.
-- [ ] `a11y: { test: 'error' }` is enabled on the `Command` and `Select` story metas and the suite is
-      green, with any unrelated violations found along the way either fixed or recorded.
-- [ ] Both virtualizers scroll and measure against the owning list; the 5 000-item stories still
-      select an item near the end of the list.
-- [ ] `CommandVirtualizedList`'s `maxHeight` prop still changes the height of the scrolling element.
-- [ ] A list variant composed directly under `Command`, without `CommandInterface`, still renders its
-      own scroll container and behaves as before — covered by a story.
-- [ ] `@repo/ui-command`'s built `dist/index.d.ts` is unchanged.
-- [ ] Keyboard navigation scrolls the active option into view in every variant.
+- **AC1** — `CommandInterface` renders exactly one `CommandList`, and no list variant renders a
+  second inside it.
+- **AC2** — An open `Command` and an open `Select` each expose exactly one `role="listbox"`, asserted
+  in the interaction suite.
+- **AC3** — `a11y: { test: 'error' }` is enabled on the `Command` and `Select` story metas and the
+  suite is green, with any unrelated violations found along the way either fixed or recorded.
+- **AC4** — Both virtualizers scroll and measure against the owning list; the 5 000-item stories
+  still select an item near the end of the list.
+- **AC5** — `CommandVirtualizedList`'s `maxHeight` prop still changes the height of the scrolling
+  element.
+- **AC6** — A list variant composed directly under `Command`, without `CommandInterface`, still
+  renders its own scroll container and behaves as before — covered by a story.
+- **AC7** — `@repo/ui-command`'s built `dist/index.d.ts` is unchanged.
+- **AC8** — Keyboard navigation scrolls the active option into view in every variant.
 
 ## Open Questions
 

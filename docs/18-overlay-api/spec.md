@@ -121,21 +121,21 @@ hidden header afterwards, the API has not solved the problem.
 
 ## Acceptance Criteria
 
-- [ ] `Dialog`, `Sheet` and `Popover` content components accept `title`, `description` and `footer`,
-      and produce the same structure the compound parts produce today.
-- [ ] An overlay given only a `title` is labelled by it, verified against the accessibility tree
-      rather than the markup.
-- [ ] An overlay given a `description` is described by it; one given none emits no
-      `aria-describedby`.
-- [ ] A caller-supplied `aria-label` / `aria-labelledby` / `aria-describedby` overrides the generated
-      value, covered by a test.
-- [ ] All three overlays expose the same imperative ref API, each covered in controlled and
-      uncontrolled modes.
-- [ ] The compound sub-components are still exported and still work, demonstrated by at least one
-      story per overlay that keeps using them.
-- [ ] The existing Dialog, Sheet and Popover stories are migrated to the new props, and the
-      interaction suite is green with `a11y: { test: 'error' }` enabled on all three.
-- [ ] Animation and rendered appearance are unchanged, including every Sheet side.
+- **AC1** — `Dialog`, `Sheet` and `Popover` content components accept `title`, `description` and
+  `footer`, and produce the same structure the compound parts produce today.
+- **AC2** — An overlay given only a `title` is labelled by it, verified against the accessibility
+  tree rather than the markup.
+- **AC3** — An overlay given a `description` is described by it; one given none emits no
+  `aria-describedby`.
+- **AC4** — A caller-supplied `aria-label` / `aria-labelledby` / `aria-describedby` overrides the
+  generated value, covered by a test.
+- **AC5** — All three overlays expose the same imperative ref API, each covered in controlled and
+  uncontrolled modes.
+- **AC6** — The compound sub-components are still exported and still work, demonstrated by at least
+  one story per overlay that keeps using them.
+- **AC7** — The existing Dialog, Sheet and Popover stories are migrated to the new props, and the
+  interaction suite is green with `a11y: { test: 'error' }` enabled on all three.
+- **AC8** — Animation and rendered appearance are unchanged, including every Sheet side.
 
 ## Open Questions
 

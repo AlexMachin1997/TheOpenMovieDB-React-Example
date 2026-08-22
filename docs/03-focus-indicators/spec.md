@@ -113,54 +113,56 @@ they are specified together.
 
 ## Success Criteria
 
-- [ ] All Acceptance Criteria below pass.
-- [ ] No focus-related visual regression in existing stories beyond the intended change.
-- [ ] `pnpm build` / `pnpm lint` / `pnpm test` stay green.
-- [ ] A grep for focus utilities across `packages/*/src` returns one ring idiom and the menu-item
-      idiom, and nothing else.
+- **SC1** — Every Acceptance Criterion below passes.
+- **SC2** — No focus-related visual regression in existing stories beyond the intended change.
+- **SC3** — `pnpm build` / `pnpm lint` / `pnpm test` stay green.
+- **SC4** — A grep for focus utilities across `packages/*/src` returns one ring idiom and the
+  menu-item idiom, and nothing else.
 
 ## Acceptance Criteria
 
 **Configurability**
 
-- Given a control with default focus styling, when it receives keyboard focus, then its indicator
-  uses the library default colour.
-- Given an ancestor element that sets the focus-colour property, when a descendant control receives
-  keyboard focus, then its indicator uses the ancestor's value.
-- Given a control that sets the property on itself inside a subtree that also sets it, when it
-  receives keyboard focus, then its own value wins.
-- Given a consumer application, when it overrides the property in its own stylesheet, then no
-  library file needs changing and no component needs a new prop.
+- **AC1** — Given a control with default focus styling, when it receives keyboard focus, then its
+  indicator uses the library default colour.
+- **AC2** — Given an ancestor element that sets the focus-colour property, when a descendant control
+  receives keyboard focus, then its indicator uses the ancestor's value.
+- **AC3** — Given a control that sets the property on itself inside a subtree that also sets it,
+  when it receives keyboard focus, then its own value wins.
+- **AC4** — Given a consumer application, when it overrides the property in its own stylesheet, then
+  no library file needs changing and no component needs a new prop.
 
 **Trigger**
 
-- Given any ring-indicated control, when it is clicked with a pointer, then no focus ring appears.
-- Given the same control, when it is reached with the keyboard, then a focus ring appears.
+- **AC5** — Given any ring-indicated control, when it is clicked with a pointer, then no focus ring
+  appears.
+- **AC6** — Given the same control, when it is reached with the keyboard, then a focus ring appears.
 
 **Contrast**
 
-- Given every shipped default focus colour, when its contrast against each adjacent surface is
-  computed in both light and dark themes, then every value is at least 3:1.
-- Given the focus indicator on any control, when its rendered area is measured, then it is at least
-  equivalent to a 2 CSS px perimeter of that control.
+- **AC7** — Given every shipped default focus colour, when its contrast against each adjacent
+  surface is computed in both light and dark themes, then every value is at least 3:1.
+- **AC8** — Given the focus indicator on any control, when its rendered area is measured, then it is
+  at least equivalent to a 2 CSS px perimeter of that control.
 
 **Consistency**
 
-- Given any focusable control that indicates with a ring, when its focus styling is inspected, then
-  it resolves through the shared treatment rather than a component-local one.
-- Given `SliderThumb`, when it receives keyboard focus, then its indicator is theme-derived and
-  adapts to dark mode.
-- Given the `Dialog` and `Sheet` close buttons, when clicked with a pointer, then no ring appears.
+- **AC9** — Given any focusable control that indicates with a ring, when its focus styling is
+  inspected, then it resolves through the shared treatment rather than a component-local one.
+- **AC10** — Given `SliderThumb`, when it receives keyboard focus, then its indicator is
+  theme-derived and adapts to dark mode.
+- **AC11** — Given the `Dialog` and `Sheet` close buttons, when clicked with a pointer, then no ring
+  appears.
 
 **Opt-out**
 
-- Given a composite whose container indicates focus on its behalf, when the inner control receives
-  focus, then only one indicator is visible.
+- **AC12** — Given a composite whose container indicates focus on its behalf, when the inner control
+  receives focus, then only one indicator is visible.
 
 **Regression**
 
-- Given `DropdownMenu` items, when navigated with the keyboard, then they continue to indicate with
-  a background change and gain no ring.
+- **AC13** — Given `DropdownMenu` items, when navigated with the keyboard, then they continue to
+  indicate with a background change and gain no ring.
 
 ## Decisions
 
