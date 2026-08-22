@@ -41,8 +41,7 @@ Note the rule **never** reports an interface with two or more supertypes, at any
 reconciling a violation count that will not add up — it is why `@repo/ui-command` reported zero
 warnings while holding five empty interfaces.
 
-The `I`-prefix convention itself is not currently enforced by any rule, so nothing stops a new type
-being written without it. See `docs/13-exports-conventions/spec.md`.
+The `I`-prefix convention is enforced — see below.
 
 #### `no-explicit-any` is `error`, with one sanctioned exception
 
@@ -89,6 +88,36 @@ must resolve to `2`, and no rule should disappear or drop severity relative to b
 `flat/recommended` also disables `import-x/no-anonymous-default-export`. That plugin is not installed
 here, which is harmless — ESLint skips plugin resolution entirely for a rule set to `off`.
 
+#### `naming-convention` enforces the `I` prefix on interfaces
+
+```js
+'@typescript-eslint/naming-convention': [
+	'error',
+	{ selector: 'interface', format: ['PascalCase'], prefix: ['I'] }
+]
+```
+
+`selector: 'interface'` is the whole design. The rule never inspects a type alias, so the second,
+equally deliberate naming family stays out of scope by construction rather than by an exemption list
+that would need maintaining: a hook's options and result (`IUseDebouncedValueOptions` is prefixed,
+but `ShowErrorsWhen`, `IconName`, `SelectProps`, `RenderFunction` and `FieldValidatorsLike` are
+unions or derived aliases and are not).
+
+**The gap this leaves, stated plainly:** a `type` alias named `IFoo` is invisible to the rule, and so
+is a prop type written as a `type` when it could have been an `interface`. No `naming-convention`
+selector can close that without flagging every legitimate union alias in the repo.
+
+Three `I*` names are type aliases because **a discriminated union cannot be an interface** (TS2312:
+_an interface can only extend an object type or intersection of object types with statically known
+members_). `IAccordion`, `ICalendar` and `ILabel` each carry the reason in-file. Where the union
+members can themselves be interfaces they are — `IAccordion` is `IAccordionSingle | IAccordionMultiple`
+— which is as close as the language allows. Do not "fix" one of these by flattening it: the
+discrimination is load-bearing, and `collapsible` exists only on Accordion's single variant.
+
+`apps/the-open-movie-database` sets this rule to `off`. It names prop types `*Props` throughout and
+reports 25 violations; that is suspended until the app is reworked, and the fix there is renaming,
+not weakening this config.
+
 #### It requires Node 24, not just a Storybook version
 
 The plugin was removed from this config for a while because it crashed ESLint at config load with
@@ -106,6 +135,74 @@ One known gap: `storybook/await-interactions` cannot fire in this repo. It gates
 and recognises only `@storybook/testing-library`, `@storybook/test` and `@storybook/jest`, while
 every story here imports from `storybook/test`. The rule is enabled and structurally unable to report
 anything.
+
+### Folder Structure Config (`@repo/eslint-config/folder-structure`)
+
+`project-structure/folder-structure` enforces the UI packages' component layout. Unlike the other
+configs it is a **factory**, because the rule needs to know which package it is validating:
+
+```js
+import { config } from '@repo/eslint-config/react';
+import { folderStructure } from '@repo/eslint-config/folder-structure';
+import { createConfig } from '@repo/eslint-config/utils';
+
+export default createConfig(import.meta.dirname, config, folderStructure(import.meta.dirname));
+```
+
+Only the four UI packages opt in. Apps do not: their layout is not this one, and because the rule
+ships as a separate config rather than inside `react`, they need no opt-out.
+
+#### Why a factory rather than a shared static config
+
+The plugin resolves `projectRoot` against the **repository** root, not against ESLint's working
+directory, so a single static object cannot say "validate whichever package is being linted".
+`folderStructure()` takes `import.meta.dirname` and walks up to `pnpm-workspace.yaml` to derive the
+repo-relative path itself. Passing a literal string would work too and was rejected: a path that
+drifts from reality points the rule at a tree that does not exist, and a rule with nothing to check
+reports nothing — which is indistinguishable from success.
+
+#### It deliberately sets no parser
+
+The rule only inspects a file's path, so it needs no parser of its own. This matters because the
+previous attempt at enabling it set `languageOptions.parser = projectStructureParser` on
+`**/*.{ts,tsx,js,jsx}`. In flat config the last matching `parser` wins, so that replaced the
+TypeScript parser for every source file and every code rule — `react-hooks/rules-of-hooks`,
+`no-debugger`, `exhaustive-deps` — silently passed against an empty AST. Setting no parser at all
+makes that failure unreachable rather than merely avoided, and removes any dependence on config
+ordering.
+
+#### Three ways this rule can look like it works while doing nothing
+
+All three were live in the version that shipped commented-out, and all three are worth re-checking
+after any edit:
+
+1. **A catch-all entry.** `{ name: '*', children: [] }` matches the first folder it meets and leaves
+   every descendant unchecked. The old schema had two — one matched `packages/`, the other matched
+   `components/` via `{ name: '{camelCase}' }`.
+2. **A wrong root.** The old schema began at `src`, but `projectRoot` defaulted to the repo root, so
+   `src` was being matched against `packages/`, `apps/` and `docs/`.
+3. **A misspelled placeholder.** It is `{FolderName}`, not `{folderName}`. The lowercase form matches
+   nothing. Note `{FolderName}` PascalCases the folder name, so a lowercase folder such as `fields/`
+   needs its files spelled literally.
+
+#### Verifying it
+
+A green lint run proves nothing on its own here. Check all three:
+
+```bash
+# 1. it fires — both should report
+mkdir -p packages/ui-core/src/components/badlynamed && echo 'export const x=1;' > packages/ui-core/src/components/badlynamed/wrong.ts
+cd packages/ui-core && npx eslint --no-cache
+```
+
+```bash
+# 2. the parser is untouched — must print typescript-eslint/parser, not projectStructureParser
+cd packages/ui-core && npx eslint --print-config src/index.ts
+```
+
+```bash
+# 3. code linting still works — a conditional hook must still report rules-of-hooks
+```
 
 ## Usage
 

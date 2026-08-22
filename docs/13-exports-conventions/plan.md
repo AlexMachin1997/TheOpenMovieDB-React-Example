@@ -63,7 +63,7 @@ Recorded here rather than by editing `spec.md`, which describes the world as it 
 - [x] **4 — `RangeDatePicker` / `DateRangePicker`.** Fix the folder, file and interface; keep the
       export.
 - [x] **5 — The `I` prefix, enforced.** New `@repo/eslint-config/ui`, 5 renames, 8 alias conversions.
-- [ ] **6 — Folder structure, running and isolated.** Extend the schema, enable the rule, prove the
+- [x] **6 — Folder structure, running and isolated.** Extend the schema, enable the rule, prove the
       parser is untouched.
 - [ ] **7 — Write the conventions down.** Package READMEs, golden rules, roadmap, this file.
 
@@ -327,3 +327,79 @@ it stops being needed.
 
 Build 11/11 (forced), lint 11/11 with 0 warnings, types 19/19, prettier clean, 385 tests passed /
 27 skipped. Parity: the 5 approved renames, nothing else.
+
+### Phase 6 — folder structure, running and isolated
+
+The spec framed this as "re-enable a rule that was commented out". That framing was wrong.
+**Re-enabled exactly as written, the rule would have gated nothing**, for three independent reasons —
+each of which makes a lint run green while checking nothing:
+
+1. **The wrong root.** `projectRoot` resolves against the repository root, not ESLint's working
+   directory. The schema began at `src`, so `src` was being matched against `packages/`, `apps/` and
+   `docs/`, and never descended to a component folder.
+2. **Two catch-alls.** `{ name: '*', children: [] }` matched `packages/` and left every descendant
+   unchecked. `{ name: '{camelCase}', children: [] }` did the same for `components/`, which is itself
+   camelCase.
+3. **A misspelled placeholder.** The plugin's placeholder is `{FolderName}`; the schema used
+   `{folderName}`, which matches nothing. Masked by (1) and (2), so it never surfaced.
+
+Demonstrated rather than argued: with the rule wired and the schema as it was, creating
+`src/components/badlynamed/totally-wrong-name.ts` **and** a stray `Button/StrayFile.ts` produced
+**exit 0**.
+
+#### Per package, with the root derived
+
+`projectRoot` has to name the package being validated, and a static shared config cannot know which
+one that is. `folderStructure.mjs` therefore exports a factory, and each UI package passes
+`import.meta.dirname`; the factory walks up to `pnpm-workspace.yaml` and computes the repo-relative
+path itself.
+
+A literal string per package (`folderStructure('packages/ui-core')`) was considered and rejected: a
+path that drifts points the rule at a tree that does not exist, and a rule with nothing to check
+reports nothing — the same silent-success failure this deliverable exists to remove.
+
+Because it ships as its own config rather than inside `react`, apps simply never opt in, and need no
+opt-out.
+
+#### It sets no parser at all
+
+This is what actually satisfies Requirement 5. The rule only inspects a file's path, so it needs no
+parser — and the previous attempt failed precisely because it installed `projectStructureParser` for
+every source file, leaving every code rule to run against an empty AST. Setting no parser makes that
+class of failure **unreachable** rather than avoided by careful ordering.
+
+Three proofs, because a green run proves nothing here:
+
+| Check                                            | Result                                               |
+| ------------------------------------------------ | ---------------------------------------------------- |
+| Rule fires on a stray file and a misnamed folder | both report, exit 1                                  |
+| Parser for a `.ts` file                          | `typescript-eslint/parser@8.40.0` — not the plugin's |
+| A conditional `useState`                         | still reported by `react-hooks/rules-of-hooks`       |
+
+`eslint --print-config` also confirms `folder-structure`, `react-hooks/rules-of-hooks` and
+`naming-convention` all resolve to severity 2 on the same file.
+
+#### The schema now describes the tree
+
+Covers the whole of `src`, not just `components/`: `index.ts`, the non-component folders (`hooks`,
+`utils`, `adapters`, `types`) named explicitly but with contents unconstrained, and `components/`
+strict — a `{PascalCase}` folder holding `index.ts`, `{FolderName}.*` files, a `components/`
+sub-folder for compound components, and the `contexts`/`hooks`/`types`/`utils`/`__fixtures__`
+folders that actually exist.
+
+Three **grouping folders** are named individually rather than matched by a pattern, because a generic
+"any folder may hold any component" rule would readmit the drift this is meant to catch:
+`Selects/`, `DatePickers/` and `fields/`. `Overlay/` holds `OverlaySurface` and `OverlayCloseButton`
+rather than an `Overlay.tsx`, so a component folder may also contain files prefixed with its own
+name. Whether those four should be flattened into ordinary component folders is a restructure, and
+out of scope — recorded as a follow-up.
+
+One rename was in scope and done: **`Button/variants.ts` → `Button.variants.ts`**, the only one of
+seven variant files missing the `<Component>.` prefix. Three importers updated.
+
+Result: **0 violations across all four packages**, with the rule at `error`.
+
+#### Gates
+
+Build 11/11 (forced), lint 11/11 with 0 warnings, types 19/19, prettier clean, 385 tests passed /
+27 skipped, export parity unchanged.

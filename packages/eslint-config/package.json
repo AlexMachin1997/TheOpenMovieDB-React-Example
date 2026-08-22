@@ -12,6 +12,7 @@
 	},
 	"exports": {
 		"./base": "./base.js",
+		"./folder-structure": "./folderStructure.mjs",
 		"./react": "./react.js",
 		"./utils": "./utils.js"
 	},

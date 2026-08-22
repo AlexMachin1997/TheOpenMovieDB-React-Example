@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { type VariantProps } from 'class-variance-authority';
-import { buttonVariants } from '~/components/Button/variants';
+import { buttonVariants } from '~/components/Button/Button.variants';
 import type { IconName } from '~/components/Icon/Icon.constants';
 
 type ButtonVariants = VariantProps<typeof buttonVariants>;

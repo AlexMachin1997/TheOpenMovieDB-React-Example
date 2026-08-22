@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { cn } from '@repo/tailwind-config';
-import { buttonVariants } from '~/components/Button/variants';
+import { buttonVariants } from '~/components/Button/Button.variants';
 import { Icon } from '~/components/Icon/Icon';
 import { useKeyboardActivation } from '~/hooks/useKeyboardActivation';
 import type { NativeKeyboardActivation } from '~/hooks/useKeyboardActivation.types';

@@ -3,7 +3,7 @@ import { cn } from '@repo/tailwind-config';
 import { Icon } from '~/components/Icon/Icon';
 import type { IconName } from '~/components/Icon/Icon.constants';
 import { Button } from '~/components/Button/Button';
-import { buttonVariants } from '~/components/Button/variants';
+import { buttonVariants } from '~/components/Button/Button.variants';
 import { CalendarDayButton } from '~/components/Calendar/components/CalendarDayButton';
 
 // A type alias rather than an interface: `DayPickerProps` is a discriminated union on `mode`
