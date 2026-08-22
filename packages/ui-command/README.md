@@ -30,6 +30,28 @@ A filterable, optionally virtualised command palette, built on `cmdk`.
   rather than naming each symbol, because the package _is_ one component. The other three UI packages
   list their exports explicitly.
 - **`CommandInput` is `CommandSearch` renamed at the barrel.** The alias is the public name.
+- **One `CommandList` per palette, and the composer owns it.** The list variants —
+  `CommandListItems`, `CommandGroupedList` and both virtualised ones — contribute items only.
+  `CommandInterface` renders the `CommandList` around them for you; compose by hand and you write it
+  yourself:
+
+  ```tsx
+  <Command>
+  	<CommandInput />
+  	<CommandList className='max-h-[160px]'>
+  		<CommandListItems>{({ item }) => <CommandItem value={item.value} />}</CommandListItems>
+  	</CommandList>
+  	<CommandEmpty />
+  </Command>
+  ```
+
+  That `className` is how you size the list — there is no `maxHeight` prop. Two nested lists means
+  two `role="listbox"` elements sharing one id, two scroll containers, and a virtualiser measuring
+  the wrong one.
+
+- **A `CommandList` is a `listbox`, so only `option` and `group` may live inside it.** Whatever you
+  pass to `CommandInterface` lands there. Content that is not list content — a footer, a banner —
+  has to sit outside it, which means composing by hand.
 - **Virtualisation is opt-in.** Use the plain list unless the option count is large enough to matter;
   the virtualised variants exist for that case and carry the `@tanstack/react-virtual` cost.
 - **Why it is a separate package: dependency weight, not code size.** Folding it into `ui-core` would

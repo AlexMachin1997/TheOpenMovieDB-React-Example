@@ -8,6 +8,7 @@ export const CommandSeparator = ({ className, ...props }: ICommandSeparator) => 
 		<CommandPrimitive.Separator
 			data-slot='command-separator'
 			className={cn('bg-border -mx-1 h-px', className)}
+			aria-hidden='true'
 			{...props}
 		/>
 	);

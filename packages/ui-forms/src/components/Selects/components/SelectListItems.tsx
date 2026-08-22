@@ -1,25 +1,15 @@
-import * as React from 'react';
-import {
-	CommandList,
-	useCommandContext,
-	ICommonCommandProps,
-	IRenderProps
-} from '@repo/ui-command';
+import { CommandListItems, IRenderProps } from '@repo/ui-command';
 
-export interface ISelectListItemsProps extends ICommonCommandProps, IRenderProps {
-	className?: string;
-}
+export interface ISelectListItemsProps extends IRenderProps {}
 
-export const SelectListItems = ({ className, children, ...props }: ISelectListItemsProps) => {
-	const { filteredOptions } = useCommandContext();
-
-	return (
-		<CommandList className={className} {...props}>
-			{filteredOptions.map((item) => (
-				<React.Fragment key={item.id}>{children({ item })}</React.Fragment>
-			))}
-		</CommandList>
-	);
+/**
+ * Renders the filtered options as select items.
+ *
+ * A named alias for `CommandListItems` — `SelectInterface` renders the surrounding `CommandList`,
+ * so this contributes items only.
+ */
+export const SelectListItems = ({ children }: ISelectListItemsProps) => {
+	return <CommandListItems>{children}</CommandListItems>;
 };
 
 SelectListItems.displayName = 'SelectListItems';

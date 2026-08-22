@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { CommandList } from '~/components/Command/components/CommandList';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
-import { ICommonCommandProps, IRenderProps } from '~/components/Command/types';
+import { IRenderProps } from '~/components/Command/types';
 
-export interface ICommandListItems extends ICommonCommandProps, IRenderProps {}
+export interface ICommandListItems extends IRenderProps {}
 
-export const CommandListItems = ({ children, className }: ICommandListItems) => {
+/**
+ * Renders the filtered options as list items.
+ *
+ * Items only — the surrounding `CommandList` belongs to whoever composes the palette, which is
+ * `CommandInterface` unless you are composing by hand.
+ */
+export const CommandListItems = ({ children }: ICommandListItems) => {
 	const { filteredOptions } = useCommandContext();
 
-	return (
-		<CommandList className={className}>
-			{filteredOptions.map((item) => (
-				<React.Fragment key={item.id}>{children({ item })}</React.Fragment>
-			))}
-		</CommandList>
-	);
+	return filteredOptions.map((item) => (
+		<React.Fragment key={item.id}>{children({ item })}</React.Fragment>
+	));
 };

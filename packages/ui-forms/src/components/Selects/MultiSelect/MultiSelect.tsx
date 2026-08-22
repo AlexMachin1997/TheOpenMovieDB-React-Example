@@ -17,7 +17,7 @@ export const MultiSelectValue = ({
 	const { open, optionsMap } = useCommandContext();
 	const [overflowAmount, setOverflowAmount] = React.useState(0);
 	const valueRef = React.useRef<HTMLUListElement>(null);
-	const overflowRef = React.useRef<HTMLUListElement>(null);
+	const overflowRef = React.useRef<HTMLLIElement>(null);
 	const observerRef = React.useRef<ResizeObserver | null>(null);
 	const buttonRefs = React.useRef<Map<string, HTMLElement>>(new Map());
 	const [prevCount, setPrevCount] = React.useState(selectedValues.size);
@@ -123,17 +123,16 @@ export const MultiSelectValue = ({
 				</li>
 			))}
 
-			<Badge
+			<li
 				style={{
 					display: overflowAmount > 0 && !shouldWrap ? 'flex' : 'none',
 					alignItems: 'center',
 					justifyContent: 'center'
 				}}
-				variant='outline'
 				ref={overflowRef}
 			>
-				+{overflowAmount}
-			</Badge>
+				<Badge variant='outline'>+{overflowAmount}</Badge>
+			</li>
 		</ul>
 	);
 };

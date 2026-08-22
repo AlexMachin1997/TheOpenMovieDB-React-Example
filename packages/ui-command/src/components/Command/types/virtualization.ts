@@ -52,7 +52,7 @@ export interface ICommandGroupedVirtualizedList
  *
  * @interface ICommandGroupedList
  */
-export interface ICommandGroupedList extends ICommonCommandProps, IGrouping, IRenderProps {}
+export interface ICommandGroupedList extends IGrouping, IRenderProps {}
 
 /**
  * Props for command virtualized list components

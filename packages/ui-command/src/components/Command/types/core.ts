@@ -26,8 +26,6 @@ export interface IVirtualizationProps {
 	estimateSize?: number;
 	/** Number of items to render outside the visible area for smooth scrolling */
 	overscan?: number;
-	/** Maximum height of the virtualized list container */
-	maxHeight?: string;
 }
 
 /**

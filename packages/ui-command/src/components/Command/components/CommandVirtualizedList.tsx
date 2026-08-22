@@ -1,69 +1,61 @@
 import * as React from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { CommandList } from '~/components/Command/components/CommandList';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
+import { useCommandScrollElement } from '~/components/Command/hooks/useCommandScrollElement';
 import { ICommandVirtualizedList } from '~/components/Command/types';
-import { cn } from '@repo/tailwind-config';
 
 export const CommandVirtualizedList = React.memo(
-	({
-		className,
-		children,
-		estimateSize = 36,
-		overscan = 5,
-		maxHeight = '300px'
-	}: ICommandVirtualizedList) => {
+	({ className, children, estimateSize = 36, overscan = 5 }: ICommandVirtualizedList) => {
 		const { filteredOptions } = useCommandContext();
-		const parentRef = React.useRef<HTMLDivElement>(null);
+		const sizerRef = React.useRef<HTMLDivElement>(null);
+
+		// Must be declared before useVirtualizer — see the hook's JSDoc
+		const getScrollElement = useCommandScrollElement(sizerRef);
 
 		const virtualizer = useVirtualizer({
 			count: filteredOptions.length,
-			getScrollElement: () => parentRef.current,
+			getScrollElement,
 			estimateSize: React.useCallback(() => estimateSize, [estimateSize]),
 			overscan
 		});
 
 		return (
-			<CommandList
-				className={cn(className, 'overflow-y-auto')}
-				ref={parentRef}
-				style={{ maxHeight }}
+			<div
+				ref={sizerRef}
+				className={className}
+				style={{
+					height: `${virtualizer.getTotalSize()}px`,
+					width: '100%',
+					position: 'relative'
+				}}
 			>
-				<div
-					style={{
-						height: `${virtualizer.getTotalSize()}px`,
-						width: '100%',
-						position: 'relative'
-					}}
-				>
-					{virtualizer.getVirtualItems().map((virtualRow) => {
-						const item = filteredOptions[virtualRow.index];
+				{virtualizer.getVirtualItems().map((virtualRow) => {
+					const item = filteredOptions[virtualRow.index];
 
-						if (!item) return null;
+					if (!item) return null;
 
-						return (
-							<div
-								key={virtualRow.key}
-								ref={virtualizer.measureElement}
-								data-index={virtualRow.index}
-								style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									width: '100%',
-									minWidth: 0,
-									transform: `translateY(${virtualRow.start}px)`
-								}}
-							>
-								{children({
-									item,
-									index: virtualRow.index
-								})}
-							</div>
-						);
-					})}
-				</div>
-			</CommandList>
+					return (
+						<div
+							key={virtualRow.key}
+							ref={virtualizer.measureElement}
+							data-index={virtualRow.index}
+							style={{
+								position: 'absolute',
+								top: 0,
+								left: 0,
+								width: '100%',
+								minWidth: 0,
+								transform: `translateY(${virtualRow.start}px)`
+							}}
+						>
+							{children({
+								item,
+								index: virtualRow.index
+							})}
+						</div>
+					);
+				})}
+			</div>
 		);
 	}
 );

@@ -12,7 +12,10 @@ import {
 	CommandGroupedVirtualizedList,
 	CommandItem,
 	CommandShortcut,
-	CommandInterface
+	CommandInterface,
+	CommandInput,
+	CommandList,
+	CommandEmpty
 } from '~/components/Command/components';
 import type { Option } from '@repo/core';
 
@@ -44,12 +47,56 @@ const meta: Meta<typeof Command> = {
 	title: 'UI Command/Command',
 	component: Command,
 	parameters: {
-		layout: 'centered'
+		layout: 'centered',
+		// Blocking axe gate, per docs/17-command-list-nesting/spec.md. The global default is 'todo'.
+		a11y: {
+			test: 'error',
+			config: {
+				rules: [
+					// Radix's PopoverContent is role="dialog" with no accessible name. That is
+					// ui-overlays' surface, and docs/README.md assigns it to deliverable 18.
+					{ id: 'aria-dialog-name', enabled: false },
+					// The listbox is tabindex="-1" by design: aria-activedescendant requires focus to
+					// stay on the combobox input, so arrow keys are what traverse and scroll the list.
+					// axe cannot see scrolling driven from another element.
+					{ id: 'scrollable-region-focusable', enabled: false }
+				]
+			}
+		}
 	}
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+// ---------------------------------------------------------------------------
+// Shared assertions (docs/17-command-list-nesting)
+// ---------------------------------------------------------------------------
+
+/**
+ * Arrows down through the list and asserts the active option is scrolled into view.
+ *
+ * cmdk scrolls the active option against whichever ancestor scrolls, so this fails if the
+ * virtualizer or the scroll container is wired to the wrong element.
+ */
+const expectKeyboardScrollsActiveOptionIntoView = async (root: HTMLElement, presses = 25) => {
+	const list = root.querySelector<HTMLElement>('[data-slot="command-list"]')!;
+
+	await userEvent.keyboard(`{ArrowDown>${presses}/}`);
+
+	await waitFor(() => {
+		expect(list.scrollTop).toBeGreaterThan(0);
+
+		const active = list.querySelector<HTMLElement>('[data-selected="true"]')!;
+		expect(active).not.toBeNull();
+
+		const listBox = list.getBoundingClientRect();
+		const activeBox = active.getBoundingClientRect();
+
+		expect(activeBox.top).toBeGreaterThanOrEqual(listBox.top - 1);
+		expect(activeBox.bottom).toBeLessThanOrEqual(listBox.bottom + 1);
+	});
+};
 
 // Basic Command Component Template
 const BasicCommandTemplate = (args: CommandBasicStorybookTypes) => {
@@ -656,7 +703,7 @@ const CustomStylingTemplate = (args: React.ComponentProps<typeof Command>) => {
 					className='border border-border rounded-lg shadow-lg'
 					searchConfig={{ searchPlaceholder: 'Search for anything...' }}
 				>
-					<CommandListItems className='max-h-[300px]'>
+					<CommandListItems>
 						{({ item }) => (
 							<CommandItem
 								key={item.id}
@@ -815,6 +862,10 @@ export const VirtualizedList: StoryObj<CommandVirtualizedStorybookTypes> = {
 			expect(option1).toBeInTheDocument();
 			expect(option2).toBeInTheDocument();
 		});
+
+		// The virtualizer measures the list CommandInterface owns, so arrowing scrolls it
+		await userEvent.click(searchInput);
+		await expectKeyboardScrollsActiveOptionIntoView(canvasElement);
 
 		// Test search functionality with large dataset
 		const searchInputForLarge = canvas.getByPlaceholderText('Search through 1000 options...');
@@ -1253,6 +1304,16 @@ export const GroupedVirtualizedList: StoryObj<CommandGroupedVirtualizedStorybook
 			);
 			expect(closedSearchInput).toBeInTheDocument();
 		});
+
+		// The virtualizer measures the list CommandInterface owns, so arrowing scrolls it.
+		// Run against the full list — filtering does not reset scrollTop, so arrowing deep
+		// first would leave the virtualizer past the end of a shorter result set.
+		await userEvent.clear(searchInputForGroupedVirtual);
+		await waitFor(() => {
+			expect(canvas.getByText('Frontend Frameworks Item 1')).toBeInTheDocument();
+		});
+		await userEvent.click(searchInputForGroupedVirtual);
+		await expectKeyboardScrollsActiveOptionIntoView(canvasElement);
 	}
 };
 
@@ -1425,5 +1486,75 @@ export const RealWorldScenarios: Story = {
 		await waitFor(() => {
 			expect(canvas.queryByPlaceholderText('Search commands...')).toBeInTheDocument();
 		});
+	}
+};
+
+// ---------------------------------------------------------------------------
+// Manual Composition Template (no CommandInterface)
+// ---------------------------------------------------------------------------
+
+const ManualCompositionTemplate = () => {
+	const [open, setOpen] = React.useState(false);
+
+	const options: Option[] = React.useMemo(
+		() =>
+			Array.from({ length: 40 }, (_, i) => ({
+				id: `manual-${i}`,
+				label: `Manual option ${i + 1}`,
+				value: `manual-${i}`,
+				order: i
+			})),
+		[]
+	);
+
+	return (
+		<div className='w-[400px]'>
+			<CommandProvider open={open} setOpen={setOpen} options={options}>
+				<Command className='border-border rounded-lg border'>
+					<CommandInput searchPlaceholder='Search manually composed options...' />
+					<CommandList className='max-h-[160px]'>
+						<CommandListItems>
+							{({ item }) => (
+								<CommandItem key={item.id} value={item.value}>
+									{item.label}
+								</CommandItem>
+							)}
+						</CommandListItems>
+					</CommandList>
+					<CommandEmpty />
+				</Command>
+			</CommandProvider>
+		</div>
+	);
+};
+
+/**
+ * A list variant composed directly under `Command`, without `CommandInterface`.
+ *
+ * List variants contribute items only, so the caller writes the `CommandList` — and owns its
+ * height through `className`, which is what sizes the single scrolling element.
+ */
+export const ManualComposition: Story = {
+	render: () => <ManualCompositionTemplate />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		await waitFor(() => {
+			expect(canvas.getByText('Manual option 1')).toBeInTheDocument();
+		});
+
+		// The caller's className sizes the one scrolling element, and it really does scroll
+		const list = canvasElement.querySelector<HTMLElement>('[data-slot="command-list"]')!;
+		expect(list.clientHeight).toBeLessThanOrEqual(160);
+		expect(list.scrollHeight).toBeGreaterThan(list.clientHeight);
+
+		// Keyboard navigation scrolls the active option into view against that same element
+		const searchInput = canvas.getByPlaceholderText('Search manually composed options...');
+		await userEvent.click(searchInput);
+		await expectKeyboardScrollsActiveOptionIntoView(canvasElement);
+
+		// Selection still works
+		await userEvent.click(canvas.getByText('Manual option 2'));
+		expect(canvas.getByText('Manual option 2')).toBeInTheDocument();
 	}
 };

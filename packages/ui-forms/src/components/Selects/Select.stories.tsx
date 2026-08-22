@@ -33,7 +33,24 @@ import { within, userEvent, expect } from 'storybook/test';
 
 const meta: Meta<SelectProps> = {
 	title: 'UI Forms/Select',
-	component: Select
+	component: Select,
+	parameters: {
+		// Blocking axe gate, per docs/17-command-list-nesting/spec.md. The global default is 'todo'.
+		a11y: {
+			test: 'error',
+			config: {
+				rules: [
+					// Radix's PopoverContent is role="dialog" with no accessible name. That is
+					// ui-overlays' surface, and docs/README.md assigns it to deliverable 18.
+					{ id: 'aria-dialog-name', enabled: false },
+					// The listbox is tabindex="-1" by design: aria-activedescendant requires focus to
+					// stay on the combobox input, so arrow keys are what traverse and scroll the list.
+					// axe cannot see scrolling driven from another element.
+					{ id: 'scrollable-region-focusable', enabled: false }
+				]
+			}
+		}
+	}
 };
 
 export default meta;
@@ -631,8 +648,7 @@ export const EmptyState: StoryObj<SelectProps> = {
 		await userEvent.click(defaultSelect);
 		// Get all dialogs and find the visible one
 		const dialogs = within(document.body).getAllByRole('dialog');
-		const defaultDialog =
-			dialogs.find((d) => window.getComputedStyle(d).pointerEvents !== 'none') || dialogs[0]!;
+		const defaultDialog = dialogs.find((d) => d.dataset.state === 'open') ?? dialogs[0]!;
 		await expect(
 			within(defaultDialog).getByText('No options currently available')
 		).toBeInTheDocument();
@@ -646,7 +662,7 @@ export const EmptyState: StoryObj<SelectProps> = {
 		await userEvent.click(customSelect);
 		const currentDialogs = within(document.body).getAllByRole('dialog');
 		const customDialog =
-			currentDialogs.find((d) => window.getComputedStyle(d).pointerEvents !== 'none') ||
+			currentDialogs.find((d) => d.dataset.state === 'open') ??
 			currentDialogs[currentDialogs.length - 1]!;
 		await expect(
 			within(customDialog).getByText('No items available at the moment')

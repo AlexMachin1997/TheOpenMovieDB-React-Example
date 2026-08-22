@@ -1,14 +1,18 @@
 import * as React from 'react';
-import { CommandList } from '~/components/Command/components/CommandList';
 import { CommandSeparator } from '~/components/Command/components/CommandSeparator';
 import { CommandGroup } from '~/components/Command/components/CommandGroup';
 import { useCommandContext } from '~/components/Command/hooks/useCommandContext';
 import { useCommandGroupedOptions } from '~/components/Command/hooks/useCommandGroupedOptions';
 import { ICommandGroupedList } from '~/components/Command/types';
 
+/**
+ * Renders the filtered options grouped under headings.
+ *
+ * Items only — the surrounding `CommandList` belongs to whoever composes the palette, which is
+ * `CommandInterface` unless you are composing by hand.
+ */
 export const CommandGroupedList = React.memo(function CommandGroupedList({
 	children,
-	className,
 	groupOrder,
 	ungroupedPosition = 'top'
 }: ICommandGroupedList) {
@@ -21,7 +25,7 @@ export const CommandGroupedList = React.memo(function CommandGroupedList({
 	});
 
 	return (
-		<CommandList className={className}>
+		<>
 			{sortedGroups.map((groupName, index) => {
 				const groupItems = groups.get(groupName) || [];
 
@@ -51,7 +55,7 @@ export const CommandGroupedList = React.memo(function CommandGroupedList({
 					</React.Fragment>
 				);
 			})}
-		</CommandList>
+		</>
 	);
 });
 
