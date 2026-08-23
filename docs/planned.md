@@ -30,31 +30,76 @@ by component. See
 
 ## The native `<dialog>` element
 
-Whether `Dialog` and `Sheet` should drop `@radix-ui/react-dialog` for the platform primitive. Raised
-while reviewing `14` and **not yet decided**.
+**Moved.** The discovery pass this section asked for was run on 2026-08-23 and became
+[`18`'s `discovery.md`](18-overlay-api/discovery.md). It supersedes what stood here, including two
+claims that had gone stale: our `CommandDialog` no longer uses `@radix-ui/react-dialog` (it composes
+`@repo/ui-overlays` since `14`), and the animation cost is accepted rather than avoided.
 
-What native buys is real: `showModal()` gives a focus trap, an inert background, top-layer stacking
-that fixes nesting for free, and Esc-to-close, with no library involved. What it does **not** buy is
-worth stating precisely, because it is where the idea is usually oversold:
+It is not a separate deliverable. Three of `18`'s API decisions cannot be built on Radix, so the
+swap and the API are [one piece of work](18-overlay-api/discovery.md#why-this-is-one-deliverable).
 
-- **It does not give an accessible name.** You still supply `aria-label` or `aria-labelledby`
-  yourself. That is the problem `14` and `18` exist to solve, and native does not touch it.
-- **It does not lock body scroll.** A native modal makes the background inert to interaction, but the
-  page behind it still scrolls. Radix handles this today.
-- **It does not remove the dependency.** `@radix-ui/react-dialog` is also a direct dependency of
-  `@repo/ui-command` — `cmdk`'s own `Command.Dialog` and our `CommandDialog` both use it — so it
-  stays in the tree regardless.
+## Popover semantics
 
-The cost is concentrated in two places. Native `<dialog>` has no `data-state` attribute, so the whole
-animation layer — `data-[state=open]:animate-in`, all four Sheet slide directions, Dialog's zoom and
-fade — has to be rebuilt on `@starting-style`, `transition-behavior: allow-discrete` and `overlay`
-transitions. And its open state is imperative (`showModal()` / `close()`) rather than declarative, so
-the controlled `open` prop and Sheet's imperative ref both need rewiring through effects — a
-well-known source of desync bugs.
+`Popover` renders `role="dialog"` with no accessible name. That is a real, currently-shipping axe
+`aria-dialog-name` failure — nine of them, suppressed by
+[`17`](17-command-list-nesting/plan.md#the-a11y-gate-and-what-it-surfaced) with a pointer at `18`.
+Verified in `@radix-ui/react-popover@1.1.15`: `Popover.Content` sets the role unconditionally, modal
+or not.
 
-That is a primitive swap with an animation and state-management rewrite attached, not a dependency
-removal. It needs its own `problem-discovery` pass rather than being folded into an overlay
-deliverable.
+**It was briefly in `18`'s scope and was deliberately moved out on 2026-08-24.** A modal content
+surface and an anchored non-modal one are different concepts, and `18` became the native-`<dialog>`
+swap — which `Popover` cannot follow, since `<dialog>` is neither anchored nor non-modal. Keeping it
+in would have meant one deliverable spanning two primitives and two ideas.
+
+### The direction is chosen; the timing is not
+
+**Intent, stated 2026-08-24: move `Popover` off Radix onto the HTML Popover API**, for the same
+reason `Dialog` and `Sheet` moved to `<dialog>` — prefer the platform. This is a decision waiting on
+a date, not a question waiting on an opinion.
+
+**What blocks it is our own floor, not the browsers.** The `popover` attribute itself is widely
+supported. Anchoring a popover to its trigger needs CSS anchor positioning — Chrome 125, Firefox
+147, Safari 26 — and all three have shipped it, so it *is* Baseline Newly Available. But the
+[support floor](../README.md#-browser-support) is pinned at Chrome 117 / Firefox 129 / Safari 17.5,
+set by `@starting-style`. Adopting anchor positioning therefore means **raising the floor and
+dropping Safari 17.5–25**, which is a product call nobody has made.
+
+So the trigger for this work is a decision about which browsers the library supports, and it can be
+revisited any time that changes.
+
+Two things it still has to decide, which the primitive does not settle:
+
+- **Is `role="dialog"` right for a popover at all, or is it over-semantic?** The `popover` attribute
+  grants top layer and light dismiss but **no role**, so going native does not answer this — it just
+  moves the choice to us. Removing the role makes the nine axe failures disappear; keeping it means
+  every popover needs a name.
+- **If the role stays, how is the name supplied?** `title` / `description` props were drafted for
+  this in `18` and pulled back out. Radix Popover ships no `Title` / `Description` primitives, so
+  either way it is hand-wired.
+
+**Do not build the labelling twice.** This deliverable's own lesson from `18`: if the primitive is
+going to change, wiring a full props API onto Radix Popover first means discarding it. If the nine
+suppressed failures need clearing before the floor rises, the cheap interim fix is an `aria-label`
+on the affected call sites — not a new API.
+
+One thing it does **not** own: where a popover portals to inside a modal. That change belongs to
+`18`, which forces it — see
+[DD-6](18-overlay-api/discovery.md#dd-6--anchored-overlays-portal-into-the-dialog-element).
+
+## Alert dialog
+
+A confirmation dialog — `role="alertdialog"`, a mandatory description, an explicit choice before it
+can be dismissed. **There is no such component today.** The `AlertDialog` story at
+`Dialog.stories.tsx:242` is a plain `Dialog` wearing a warning icon: `role="dialog"`, dismissible by
+Escape, outside click and the `X`. It looks the part and carries none of the semantics.
+
+Agreed as its own deliverable, sequenced **after** [`18`](18-overlay-api/spec.md). Structurally it is
+`Dialog` minus the close button with two footer buttons, so under `18`'s props it is a thin preset;
+built before them, it is another seven-element hand assembly. Its one genuine conflict with `18` is
+that a description is *mandatory* here, where `18`'s
+[ADR-3](18-overlay-api/CONTEXT.md) makes it optional. Its "cannot be dismissed without choosing" rule
+rides on `18`'s [ADR-8](18-overlay-api/CONTEXT.md) veto, which only the native element makes
+possible.
 
 ## The four-package split
 

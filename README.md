@@ -120,6 +120,27 @@ TheOpenMovieDB-React-Example/
 - **[@repo/eslint-config](./packages/eslint-config/)** - Shared ESLint configurations
 - **[@repo/typescript-config](./packages/typescript-config/)** - Shared TypeScript configurations
 
+## 🌐 Browser Support
+
+**Chrome/Edge 117 · Firefox 129 · Safari 17.5** — roughly 90.7% of global usage.
+
+This is [Baseline Newly Available](https://web.dev/baseline): a feature may be used once it has
+shipped in all three engines, without waiting out the further 30 months that Baseline *Widely
+Available* requires. The floor is set by `@starting-style` and `transition-behavior: allow-discrete`,
+the newest features the packages depend on.
+
+Two rules follow from it:
+
+- **A feature missing from any one engine is progressive enhancement, not a dependency.** The CSS
+  `overlay` property is the current example — Chromium-only, and used to hold a closing dialog in
+  the top layer through its exit transition. It is applied anyway; Chromium gets the better exit and
+  the others degrade.
+- **CSS anchor positioning is below the floor** (Chrome 125, Firefox 147, Safari 26) and must not be
+  relied on.
+
+Established while planning [`18-overlay-api`](./docs/18-overlay-api/discovery.md), which records the
+measurements behind it.
+
 ## 🚀 Getting Started
 
 ### Prerequisites

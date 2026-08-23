@@ -37,12 +37,24 @@ target (the library committed to 2.1 AA under `02`), how far "all interactive el
 whether `--ring`'s own values change. The design-system audit under **Planned** is downstream of
 `03`, not a blocker for it.
 
-`18` is unblocked now `14` has shipped, and inherits two things `14` deliberately left it: giving
-every overlay story a `play()` so the a11y guard reaches more than the two stories it currently
-does, and removing the caller's ability to forget an accessible name at all. `17` has since made the
-second of those concrete — turning axe to `error` on the `Command` and `Select` suites surfaced nine
-`aria-dialog-name` failures on Radix's `PopoverContent`, which `17` disabled with a pointer here
-rather than fix. See [`17`'s plan](17-command-list-nesting/plan.md#the-a11y-gate-and-what-it-surfaced).
+`18` grew during grilling and is now two phases in one deliverable: `Dialog` and `Sheet` move to the
+native `<dialog>` element, then gain the `title` / `description` / `footer` props. It absorbed the
+native-`<dialog>` question that sat under **Planned**, briefly as its own deliverable, because three
+of its API decisions turn out to be unbuildable on Radix — see
+[why](18-overlay-api/discovery.md#why-this-is-one-deliverable). Its design is settled: eight ADRs in
+[CONTEXT.md](18-overlay-api/CONTEXT.md), eight discovery decisions in
+[discovery.md](18-overlay-api/discovery.md), and no open API questions.
+
+`18` still inherits two things `14` deliberately left it: giving every overlay story a `play()` so
+the a11y guard reaches more than the two stories it currently does, and removing the caller's
+ability to forget an accessible name at all. `17` has since made the second of those concrete —
+turning axe to `error` on the `Command` and `Select` suites surfaced nine `aria-dialog-name` failures
+on Radix's `PopoverContent`, which `17` disabled with a pointer here rather than fix. See
+[`17`'s plan](17-command-list-nesting/plan.md#the-a11y-gate-and-what-it-surfaced). **Those failures
+are real** — `PopoverContent` does render `role="dialog"`, verified — but `Popover` was moved out of
+`18` and they are now [Popover semantics](planned.md#popover-semantics)' to fix, not `18`'s.
+
+An **alert dialog** follows `18` — see [`planned.md`](planned.md#alert-dialog).
 
 ## Planned
 
