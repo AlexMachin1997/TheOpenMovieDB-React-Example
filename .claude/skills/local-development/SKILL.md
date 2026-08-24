@@ -234,6 +234,30 @@ point is the ratio, not the absolute numbers.)
 `storybookTest` builds its `include` from Storybook's file matcher as explicit paths, so there is no
 glob left to filter. The stories glob is the only lever.
 
+## Nothing here tests appearance, and that is a decision
+
+`play()` asserts state. It cannot see a flash, a jump, a wrong colour or an animation that ends in
+the wrong place — the tool for that is visual regression, and **this repo deliberately does not have
+it** (confirmed 2026-08-24). Do not propose adding it as the fix for a visual bug; say the bug needs
+a human to look at it.
+
+`18` is the worked example. Closing a dialog flashed back to full opacity for about 60ms, because
+`tw-animate-css` defaults `animation-fill-mode` to `none` and the overlay is deliberately held open
+through its exit animation. The open state was correct, the closed state was correct, the suite was
+green at 397, and the defect lived entirely between the two.
+
+After changing how a component _appears_ — animation, transition, z-order, opacity, transform — a
+green suite is not evidence. Ask for eyes on it.
+
+## A closed `<dialog>` is invisible to axe
+
+Since `18` the overlays are native `<dialog>` elements, which are `display: none` until opened. axe
+skips what it cannot see, so **a story that never opens its overlay hands the a11y gate an empty
+page and passes for that reason.** Both overlay files had run at `error` since `14` while 25 of
+their 27 stories did exactly that; opening them surfaced two real violations immediately.
+
+Any new overlay story needs a `play()` that opens it, or its `a11y` gate is decorative.
+
 ## Accessibility gates are opt-in, per file
 
 `preview.ts` sets `a11y: { test: 'todo' }` globally — reports only, never fails. Individual files
