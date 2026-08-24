@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
+import { expect, fireEvent, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Button, Alert, AlertDescription, AlertTitle } from '@repo/ui-core';
 import {
 	Dialog,
@@ -13,6 +13,7 @@ import {
 	DialogTrigger,
 	DialogClose
 } from '~/components/Dialog';
+import type { DialogRef } from '~/components/Dialog';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -653,6 +654,194 @@ export const GuardedClose: Story = {
 
 			await waitFor(async () => {
 				await expect(dialog).toHaveAttribute('data-state', 'closed');
+			});
+		});
+	}
+};
+
+const RefDrivenDialog = ({ controlled }: { controlled: boolean }) => {
+	const dialogRef = React.useRef<DialogRef>(undefined);
+	const [open, setOpen] = React.useState(false);
+
+	// Two modes from one component: the uncontrolled branch leaves `open` to the Dialog, the
+	// controlled one hands it back. The handle must work in both, which is the whole point —
+	// driving internal state directly would make it a no-op the moment a caller controls the
+	// overlay.
+	const controlledProps = controlled ? { open, onOpenChange: setOpen } : {};
+
+	return (
+		<div className='flex flex-col gap-4'>
+			<div className='flex gap-2'>
+				<Button variant='outline' onClick={() => dialogRef.current?.open()}>
+					Open via Ref
+				</Button>
+				<Button variant='outline' onClick={() => dialogRef.current?.toggle()}>
+					Toggle via Ref
+				</Button>
+			</div>
+			{controlled && <p>Dialog is currently: {open ? 'Open' : 'Closed'}</p>}
+			<Dialog ref={dialogRef} {...controlledProps}>
+				<DialogContent
+					title='Ref-Driven Dialog'
+					description='Driven entirely from the imperative handle.'
+					footer={
+						<Button variant='outline' onClick={() => dialogRef.current?.close()}>
+							Close via Ref
+						</Button>
+					}
+				>
+					<p>The same handle Sheet exposes, now on Dialog.</p>
+				</DialogContent>
+			</Dialog>
+		</div>
+	);
+};
+
+export const RefBased: Story = {
+	render: () => <RefDrivenDialog controlled={false} />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		await step('toggle() reads the current state rather than a stale one', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: /toggle via ref/i }));
+			await waitFor(async () => {
+				await expect(documentScope.getByRole('dialog')).toHaveAttribute('data-state', 'open');
+			});
+		});
+
+		const dialog = await documentScope.findByRole('dialog');
+
+		await step('close() closes it', async () => {
+			await userEvent.click(within(dialog).getByRole('button', { name: /close via ref/i }));
+			await waitFor(async () => {
+				await expect(dialog).toHaveAttribute('data-state', 'closed');
+			});
+		});
+
+		await step('open() still works after a full cycle', async () => {
+			await waitFor(async () => {
+				await expect(documentScope.queryByRole('dialog')).not.toBeInTheDocument();
+			});
+
+			await userEvent.click(canvas.getByRole('button', { name: /open via ref/i }));
+			await waitFor(async () => {
+				await expect(documentScope.getByRole('dialog')).toHaveAttribute('data-state', 'open');
+			});
+		});
+	}
+};
+
+export const RefWithControlled: Story = {
+	render: () => <RefDrivenDialog controlled />,
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		// The regression guard. A handle that wrote to internal state would leave the controlled
+		// render — and this readout — untouched while the dialog appeared to open.
+		await expect(canvas.getByText(/currently: Closed/i)).toBeInTheDocument();
+
+		await userEvent.click(canvas.getByRole('button', { name: /open via ref/i }));
+		await waitFor(async () => {
+			await expect(documentScope.getByRole('dialog')).toHaveAttribute('data-state', 'open');
+		});
+		await expect(canvas.getByText(/currently: Open/i)).toBeInTheDocument();
+
+		const dialog = await documentScope.findByRole('dialog');
+		await userEvent.click(within(dialog).getByRole('button', { name: /close via ref/i }));
+		await waitFor(async () => {
+			await expect(canvas.getByText(/currently: Closed/i)).toBeInTheDocument();
+		});
+	}
+};
+
+export const CallerSuppliedAria: Story = {
+	render: () => (
+		<Dialog defaultOpen>
+			<DialogContent
+				title='The prop heading'
+				aria-labelledby='external-heading'
+				aria-describedby='external-copy'
+			>
+				<h2 id='external-heading'>Named from outside</h2>
+				<p id='external-copy'>Described from outside</p>
+			</DialogContent>
+		</Dialog>
+	),
+	play: async ({ step }) => {
+		const dialog = await within(document.body).findByRole('dialog');
+
+		await step('a caller-supplied aria-labelledby beats the title prop', async () => {
+			await expect(dialog).toHaveAttribute('aria-labelledby', 'external-heading');
+			await expect(dialog).toHaveAccessibleName('Named from outside');
+		});
+
+		await step('and a caller-supplied aria-describedby wins too', async () => {
+			await expect(dialog).toHaveAttribute('aria-describedby', 'external-copy');
+		});
+	}
+};
+
+export const NoDescription: Story = {
+	render: () => (
+		<Dialog defaultOpen>
+			<DialogContent title='Named, but not described'>
+				<p>Nothing here describes the dialog.</p>
+			</DialogContent>
+		</Dialog>
+	),
+	play: async () => {
+		const dialog = await within(document.body).findByRole('dialog');
+
+		await expect(dialog).toHaveAccessibleName('Named, but not described');
+		// Absent, not pointing at nothing. A dangling `aria-describedby` is worse than no attribute,
+		// and axe grades it only as needs-review, so nothing else here would catch it.
+		await expect(dialog).not.toHaveAttribute('aria-describedby');
+	}
+};
+
+const unnamedWarnSpy = fn();
+
+/**
+ * Swaps `console.warn` for a spy for the lifetime of a story. The diagnostic fires as the overlay
+ * opens, which is before `play()` runs, so the spy has to be installed in `beforeEach`.
+ */
+const captureConsoleWarn = (spy: ReturnType<typeof fn>) => () => {
+	const original = console.warn;
+	spy.mockClear();
+	console.warn = spy;
+
+	return () => {
+		console.warn = original;
+	};
+};
+
+export const WithoutAnAccessibleName: Story = {
+	render: () => (
+		<Dialog defaultOpen>
+			<DialogContent>
+				<p>Nothing names this dialog.</p>
+			</DialogContent>
+		</Dialog>
+	),
+	beforeEach: captureConsoleWarn(unnamedWarnSpy),
+	parameters: {
+		// This story exists to prove the diagnostic fires; the dialog it renders is, by design, the
+		// broken case axe is right to reject.
+		a11y: { test: 'off' }
+	},
+	play: async ({ step }) => {
+		const dialog = await within(document.body).findByRole('dialog');
+
+		await step('the dialog still renders — the diagnostic never throws', async () => {
+			await expect(dialog).toBeInTheDocument();
+		});
+
+		await step('and a warning names the omission', async () => {
+			await waitFor(async () => {
+				const messages = unnamedWarnSpy.mock.calls.map((call) => String(call[0]));
+				await expect(messages.some((m) => m.includes('no accessible name'))).toBe(true);
 			});
 		});
 	}

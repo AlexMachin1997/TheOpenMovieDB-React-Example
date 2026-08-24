@@ -1,8 +1,8 @@
 # A common overlay API — plan
 
-Status: **Phase 1 shipped; Phase 2 in progress.** The native `<dialog>` primitive is built,
-verified against all seven of discovery's success criteria, and merged. Phase 2 — the
-`title` / `description` / `footer` props — began on 2026-08-24.
+Status: **both phases built and verified.** The native `<dialog>` primitive and the
+`title` / `description` / `footer` props are in, against all seven of discovery's success criteria
+and all ten of the spec's acceptance criteria. Two follow-ons remain, listed at the end.
 
 The design is settled elsewhere and is not repeated here: [`spec.md`](spec.md) for requirements and
 AC1–AC10, [`discovery.md`](discovery.md) for DD-1–DD-8, [`CONTEXT.md`](CONTEXT.md) for ADR-1–ADR-8.
@@ -84,15 +84,66 @@ right; whether the result feels right is a human judgement and stays one.
 
 ## Phase 2 — the API
 
-Not started; it begins on a separate go-ahead. `title` / `description` / `footer` props, the ARIA
-precedence rules, the two warnings, `onRequestClose` exposed publicly, `CommandDialog` collapsing to
-`aria-label`, and the stories migrated onto the props.
+- [x] **Labelling.** `useOverlayLabelling` owns the precedence and the two warnings.
+- [x] **The props.** `title` / `description` / `footer` on both content components.
+- [x] **The veto.** `onRequestClose` public, covered on all three routes.
+- [x] **`CommandDialog`.** Collapsed to `aria-label`; `description` removed from its props.
+- [x] **Stories migrated**, keeping one compound story per overlay.
 
-Two things deliberately held back for it, because it changes the API they would describe:
+### `children` changes meaning with the props
 
-- **Consumer-facing `.mdx`.** `ui-overlays` has none for any component, which predates this work.
-- **Further example stories.** The 27 that exist all open their overlay now; more of them are worth
-  adding once the props are the documented path.
+The one design call the spec did not name. Pass any of `title` / `description` / `footer` and
+`children` is the body, wrapped in the scrolling container. Pass none and `children` is the whole
+assembly, rendered untouched — which is how every existing compound call site keeps working without
+being edited.
+
+There is no third reading available. Inferring which one was meant from the shape of `children`
+would mean walking the tree, and [ADR-6](CONTEXT.md) already rejected tree-walking for the narrower
+question of suppressing a duplicate title.
+
+### The warnings run in an effect, not in render
+
+[ADR-5](CONTEXT.md) and [ADR-6](CONTEXT.md) both say "same shape as `Button.tsx`", and `Button`
+warns inline during render. These cannot. A compound title registers its id from its own mount
+effect, which lands a commit _after_ the parent renders, so a render-phase check would report every
+correctly-labelled overlay as unnamed on its first paint. The message format and the non-throwing
+behaviour match `Button`; only the timing differs, and it has to.
+
+## Against the spec's acceptance criteria
+
+| #    | Criterion                                                                        | Evidence                                                                                                                                                                                                            |
+| ---- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AC1  | `title` / `description` / `footer`, same structure as the compound parts         | The composed path renders the real `DialogHeader` / `DialogContentArea` / `DialogFooter`, so this is true by construction rather than by having been kept in sync                                                   |
+| AC2  | An overlay given only a `title` is labelled by it, checked against the a11y tree | Every migrated story asserts `toHaveAccessibleName` after opening — the accessibility tree, not the markup                                                                                                          |
+| AC3  | A `description` describes it; none emits no attribute                            | `NoDescription` asserts `not.toHaveAttribute('aria-describedby')`. Absence, not a dangling reference — axe grades a dangling one only as needs-review, so nothing else would catch it                               |
+| AC4  | Caller ARIA overrides the generated value                                        | `CallerSuppliedAria`                                                                                                                                                                                                |
+| AC5  | The same ref API on both, controlled and uncontrolled                            | `Dialog`'s and `Sheet`'s `RefBased` and `RefWithControlled`. Dialog had no ref story at all until walking these criteria found it                                                                                   |
+| AC6  | Compound parts still exported and working, one story each                        | `CustomStyledDialog` and `WithSheetClose`, deliberately left un-migrated                                                                                                                                            |
+| AC7  | Stories migrated, suite green with `a11y: { test: 'error' }`                     | 15 migrated; **397 passed, 41 files, 27 skipped**                                                                                                                                                                   |
+| AC8  | `CommandDialog` names itself, no `sr-only`                                       | `<DialogContent aria-label={title}>`. Asserted explicitly in `Command`'s Dialog play, because that suite disables `aria-dialog-name` for Radix's `PopoverContent` and axe cannot police it there                    |
+| AC9  | No accessible name warns and still renders                                       | `WithoutAnAccessibleName`, using `Button`'s `captureConsoleWarn` pattern and `a11y: { test: 'off' }` — the dialog it renders is by design the case axe is right to reject                                           |
+| AC10 | A vetoed close covered per route                                                 | `GuardedClose` refuses Escape, the close button and the backdrop, asserting `dialog.open === true` rather than only `data-state`: visually open but internally closed is the failure that assertion exists to catch |
+
+Gates: `pnpm build --force` 0, `pnpm lint` 0, `npx vitest run` **397 passed, 41 files, 27 skipped**.
+
+## Still outstanding
+
+Neither blocks the acceptance criteria; both were deferred deliberately because Phase 2 changed the
+API they describe.
+
+- [ ] **Consumer-facing `.mdx`** — not done. `ui-overlays` has none for any component, which
+      predates this deliverable. Now that the props are settled it is worth writing.
+- [ ] **Further example stories** — not done. The 33 that exist all open their overlay and cover the
+      criteria; more would be for demonstration rather than coverage.
+
+Two corrections this work surfaced and did **not** make, both recorded in
+[CONTEXT.md](CONTEXT.md#follow-ups-this-grilling-surfaced):
+
+- `Dialog.stories.tsx`'s `AlertDialog` story is not an alert dialog — `role="dialog"`, freely
+  dismissible. Left for the [alert dialog deliverable](../planned.md#alert-dialog), which may
+  replace it outright.
+- `SheetInnerContent` still sets no `data-slot`, unlike every sibling. A one-line fix, unrelated to
+  this deliverable.
 
 ## The browser-support floor is now looser than it needs to be
 
