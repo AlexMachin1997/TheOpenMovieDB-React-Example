@@ -13,10 +13,10 @@ is just the roadmap.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable          | Area          | Status   | Depends on | Docs                                               |
-| --- | -------------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
-| 03  | Focus indicators     | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
-| 18  | A common overlay API | component     | 🟢 ready | — (14 ✅)  | [18-overlay-api](18-overlay-api/spec.md)           |
+| ID  | Deliverable          | Area          | Status         | Depends on | Docs                                               |
+| --- | -------------------- | ------------- | -------------- | ---------- | -------------------------------------------------- |
+| 03  | Focus indicators     | design system | 📝 draft       | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
+| 18  | A common overlay API | component     | 🔵 in progress | — (14 ✅)  | [18-overlay-api](18-overlay-api/plan.md)           |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.

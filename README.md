@@ -125,16 +125,19 @@ TheOpenMovieDB-React-Example/
 **Chrome/Edge 117 · Firefox 129 · Safari 17.5** — roughly 90.7% of global usage.
 
 This is [Baseline Newly Available](https://web.dev/baseline): a feature may be used once it has
-shipped in all three engines, without waiting out the further 30 months that Baseline *Widely
-Available* requires. The floor is set by `@starting-style` and `transition-behavior: allow-discrete`,
-the newest features the packages depend on.
+shipped in all three engines, without waiting out the further 30 months that Baseline _Widely
+Available_ requires.
+
+The floor was set by `@starting-style` and `transition-behavior: allow-discrete` when it was
+written. **Nothing uses either any more.** The overlays were expected to need them for exit
+animations and turned out not to: they keep the element open until the animation finishes instead,
+so the CSS `overlay` property is not used either. The floor is therefore currently more conservative
+than the code requires — worth revisiting deliberately rather than drifting down by accident.
 
 Two rules follow from it:
 
-- **A feature missing from any one engine is progressive enhancement, not a dependency.** The CSS
-  `overlay` property is the current example — Chromium-only, and used to hold a closing dialog in
-  the top layer through its exit transition. It is applied anyway; Chromium gets the better exit and
-  the others degrade.
+- **A feature missing from any one engine is progressive enhancement, not a dependency.** There is
+  no example in the tree today.
 - **CSS anchor positioning is below the floor** (Chrome 125, Firefox 147, Safari 26) and must not be
   relied on.
 

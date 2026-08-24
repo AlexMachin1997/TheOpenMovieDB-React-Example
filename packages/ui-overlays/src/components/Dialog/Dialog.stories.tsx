@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
 import { Button, Alert, AlertDescription, AlertTitle } from '@repo/ui-core';
 import {
 	Dialog,
@@ -96,8 +96,30 @@ export const Default: Story = {
 			</DialogContent>
 		</Dialog>
 	),
-	play: async ({ canvasElement }) => {
-		await openDialog(canvasElement, /open dialog/i, /default dialog/i);
+	play: async ({ canvasElement, step }) => {
+		const dialog = await openDialog(canvasElement, /open dialog/i, /default dialog/i);
+
+		await step('the page behind the dialog is locked, and does not shift', async () => {
+			await expect(document.body).toHaveStyle({ overflow: 'hidden' });
+		});
+
+		await step('a backdrop click dismisses', async () => {
+			// Dispatched on the element rather than driven through `userEvent`, because that is the
+			// distinction being tested: the panel is a child, so a click that lands on the `<dialog>`
+			// itself is by definition a click outside the panel. `userEvent.click` aims at the centre
+			// of the element, which is where the panel is.
+			fireEvent.click(dialog);
+
+			await waitFor(async () => {
+				await expect(dialog).toHaveAttribute('data-state', 'closed');
+			});
+		});
+
+		await step('and the page is released once it has finished closing', async () => {
+			await waitFor(async () => {
+				await expect(document.body).not.toHaveStyle({ overflow: 'hidden' });
+			});
+		});
 	}
 };
 

@@ -44,14 +44,14 @@ Verified against `@radix-ui/react-dialog@1.1.15` as installed, not from memory.
 a name, a description and a genuinely inert background. Moving to `<dialog>` + `showModal()`
 produces substantially the same tree. The real differences are platform behaviours:
 
-| Gained from native | Not gained |
-| --- | --- |
-| Top-layer stacking (nesting and z-index fixed structurally) | An accessible name — still hand-wired. That is this deliverable's other half |
-| `::backdrop` | Body scroll lock — native leaves the page behind scrollable |
-| Browser-enforced inertness | Removal of the dependency — `cmdk` keeps `@radix-ui/react-dialog` in the tree |
-| Esc-to-close without a library | Backdrop dismissal — see Constraints |
-| A **cancelable** `cancel` event, which makes a guarded close possible | |
-| `<form method="dialog">` integration | |
+| Gained from native                                                    | Not gained                                                                    |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Top-layer stacking (nesting and z-index fixed structurally)           | An accessible name — still hand-wired. That is this deliverable's other half  |
+| `::backdrop`                                                          | Body scroll lock — native leaves the page behind scrollable                   |
+| Browser-enforced inertness                                            | Removal of the dependency — `cmdk` keeps `@radix-ui/react-dialog` in the tree |
+| Esc-to-close without a library                                        | Backdrop dismissal — see Constraints                                          |
+| A **cancelable** `cancel` event, which makes a guarded close possible |                                                                               |
+| `<form method="dialog">` integration                                  |                                                                               |
 
 ## Decisions taken during discovery
 
@@ -61,7 +61,7 @@ Native `<dialog>` has no `data-state` attribute, so the entire animation layer �
 `data-[state=open]:animate-in`, all four Sheet slide directions, Dialog's zoom and fade — moves to
 `@starting-style`, `transition-behavior: allow-discrete` and `overlay` transitions.
 
-**Decided**: an exact visual match is *not* required. Hand-rolled CSS is expected and accepted. The
+**Decided**: an exact visual match is _not_ required. Hand-rolled CSS is expected and accepted. The
 target is "as close as possible" — a fade in and out at minimum — not pixel and timing parity.
 
 **Consequence**: the spec's original AC8, "appearance and animation unchanged including every Sheet
@@ -82,11 +82,11 @@ deferral is right rather than merely convenient:
   anchoring it needs CSS anchor positioning — Chrome 125, Firefox 147, Safari 26, below the support
   floor.
 - Radix's `PopoverContent` renders `role="dialog"` unconditionally, verified in
-  `@radix-ui/react-popover@1.1.15` — arguably *over*-semantic for a popover, and the source of the
+  `@radix-ui/react-popover@1.1.15` — arguably _over_-semantic for a popover, and the source of the
   nine `aria-dialog-name` failures
   [`17`](../17-command-list-nesting/plan.md#the-a11y-gate-and-what-it-surfaced) suppressed.
 
-**DD-6 below is not an exception to this.** It changes where a popover *portals to* when it happens
+**DD-6 below is not an exception to this.** It changes where a popover _portals to_ when it happens
 to be inside a modal. That is a consequence of the dialog swap, not a change to Popover's API or
 semantics, and without it the modal overlays ship broken.
 
@@ -137,7 +137,7 @@ get wrong.
 
 The top layer is not a high `z-index`; it is a separate painting layer above all normal content.
 Once `Dialog` and `Sheet` open via `showModal()`, anything portaled to `document.body` renders
-*behind* them, and no `z-index` can fix it.
+_behind_ them, and no `z-index` can fix it.
 
 That is not hypothetical, because four form controls sit on `Popover`, which portals to the body:
 
@@ -153,7 +153,7 @@ is a native `<select>` at
 [`Sheet.stories.tsx:481`](../../packages/ui-overlays/src/components/Sheet/Sheet.stories.tsx#L481). It
 is a forward risk introduced by the swap, not an existing defect.
 
-**It is worse than occlusion.** `showModal()` makes everything outside the dialog *inert*, so a
+**It is worse than occlusion.** `showModal()` makes everything outside the dialog _inert_, so a
 popover portaled to `document.body` while a native modal is open is not merely painted behind it —
 it is unclickable and unreachable by keyboard. Anchored controls would not work inside a modal at
 all, not just look wrong.
@@ -185,6 +185,26 @@ mode; a sheet always sits above the page content with a backdrop, on all four si
 **Consequence**: `Sheet` gets the full benefit of the top layer — stacking, inertness, Escape — and
 never needs the `show()` path, which would provide none of them.
 
+### DD-9 — animations stay on `data-state`; the close is delayed instead (2026-08-24, during build)
+
+**Decided while implementing**, and it reverses the mechanism DD-1 assumed rather than its decision.
+
+DD-1 expected the whole animation layer to move to `@starting-style`,
+`transition-behavior: allow-discrete` and `overlay`. It does not need to. Because the library owns
+the element it keeps emitting `data-state="open"` and `data-state="closed"` itself, so every class
+in `Overlay.variants.ts` survives unchanged. On close it sets `data-state="closed"`, waits for the
+animation to finish, and only then calls `dialog.close()`.
+
+**Consequence — the `overlay` question below is moot.** The element is genuinely still open for the
+whole exit, so it never leaves the top layer, and Firefox and Safari get the same exit as Chrome.
+Nothing in the tree uses `@starting-style`, `allow-discrete` or `overlay`.
+
+**Sharp edge found by building it.** A hidden or throttled page freezes CSS animations at
+`currentTime: 0`, so `animation.finished` never resolves and a fixed fallback becomes the _normal_
+close path rather than the exceptional one. Measured in a background tab: two exit animations of
+150ms and 200ms, both still `running` at 800ms. The wait is therefore bounded by the animations'
+own `endTime` plus 50ms, not by a flat number.
+
 ## Browser support
 
 No support floor existed when this pass started, which was itself a finding — several decisions here
@@ -193,17 +213,17 @@ could not be made without one. **Settled during this discovery and recorded in t
 Baseline Newly Available. It lives there rather than here because it governs every package, not this
 deliverable.
 
-Baseline *Widely* Available was rejected: `@starting-style` does not reach that tier until early
+Baseline _Widely_ Available was rejected: `@starting-style` does not reach that tier until early
 2027, so it would block this deliverable for no practical gain.
 
 Measured against caniuse, 2026-08-23:
 
-| Feature | Chrome / Edge | Firefox | Safari | Global |
-| --- | --- | --- | --- | --- |
-| `@starting-style` | 117 | 129 | 17.5 | 90.7% |
-| `transition-behavior: allow-discrete` | 117 | 129 | 17.4 | 90.7% |
-| **`overlay`** | 117 | **not supported (as of 157)** | **not supported (as of 27)** | **73.5%** |
-| CSS anchor positioning | 125 | 147 | 26.0 | 84.1% |
+| Feature                               | Chrome / Edge | Firefox                       | Safari                       | Global    |
+| ------------------------------------- | ------------- | ----------------------------- | ---------------------------- | --------- |
+| `@starting-style`                     | 117           | 129                           | 17.5                         | 90.7%     |
+| `transition-behavior: allow-discrete` | 117           | 129                           | 17.4                         | 90.7%     |
+| **`overlay`**                         | 117           | **not supported (as of 157)** | **not supported (as of 27)** | **73.5%** |
+| CSS anchor positioning                | 125           | 147                           | 26.0                         | 84.1%     |
 
 **`overlay` is the outlier.** It is the property that keeps a closing dialog in the top layer for the
 duration of its exit transition, and it appears in every published `<dialog>` exit-animation recipe.
@@ -225,7 +245,7 @@ prove a fade looks right. Confirming the animation is a human check, once.
 ## `alertdialog` — a gap this discovery surfaced
 
 **There is no `AlertDialog` component.** `ui-overlays` exports none, and
-`@radix-ui/react-alert-dialog` is not a dependency. What exists is a *story* named `AlertDialog` —
+`@radix-ui/react-alert-dialog` is not a dependency. What exists is a _story_ named `AlertDialog` —
 [`Dialog.stories.tsx:242`](../../packages/ui-overlays/src/components/Dialog/Dialog.stories.tsx#L242)
 — which is a plain `Dialog` carrying a warning icon and a destructive button. It renders
 `role="dialog"`, not `role="alertdialog"`, and is dismissible by Escape, outside click and the `X`.
@@ -234,7 +254,7 @@ It is an alert dialog in appearance only, and the name overstates what it is.
 An alert dialog is a dialog with a different role and stricter obligations:
 
 - `role="alertdialog"` must be set explicitly; neither `<dialog>` nor Radix supplies it.
-- The APG expects a description — the message *is* the content. This interacts with
+- The APG expects a description — the message _is_ the content. This interacts with
   [ADR-3](CONTEXT.md), which makes descriptions optional.
 - It should not be dismissible without the user making a choice.
 
@@ -265,8 +285,8 @@ Merged on 2026-08-24, reversing an earlier decision to sequence the primitive sw
 change as two deliverables.
 
 The original argument for splitting was that the API survives either primitive, so building it on
-Radix first would only cost rework. That was true of the *props* and stopped being true of the
-*behaviour* once the grilling in [CONTEXT.md](CONTEXT.md) finished. Three decisions there cannot be
+Radix first would only cost rework. That was true of the _props_ and stopped being true of the
+_behaviour_ once the grilling in [CONTEXT.md](CONTEXT.md) finished. Three decisions there cannot be
 built on Radix at all:
 
 - **ADR-8** — vetoing a close requires native's cancelable `cancel` event. Radix's `onOpenChange`
@@ -289,14 +309,21 @@ Resolved during this pass: `CommandDialog`'s fate (DD-3), Sheet modality (DD-7),
 ownership (DD-5), the escape from top-layer occlusion (DD-6), the browser-support floor, and the
 sequencing question above.
 
+Closed by building it:
+
+- **Does `overlay` being Chromium-only visibly break exit animations?** Moot. [DD-9](#dd-9--animations-stay-on-data-state-the-close-is-delayed-instead-2026-08-24-during-build)
+  does not use `overlay`, so every engine gets the same exit.
+- **Clipping under DD-6.** It does not happen. The `<dialog>` element is the backdrop and the panel
+  is its child, so a caller's `overflow-hidden` — `CommandDialog`'s, for instance — lands on the
+  panel while anchored content parents to the dialog _around_ it.
+
 Still open:
 
-- **Does `overlay` being Chromium-only visibly break exit animations in Firefox and Safari?**
-  Deliberately not spiked (DD-8) — to be observed once the components exist. If it degrades badly,
-  the exit-animation approach needs revisiting, not the deliverable.
-- **`closedby` attribute support** — relevant to light-dismiss control, unverified.
-- **Clipping**: which overlay surfaces set `overflow-hidden`, and what that does to a popover
-  portaled inside them under DD-6. `CommandDialog` sets it today.
+- **`closedby` attribute support** — relevant to light-dismiss control, unverified. Not needed by
+  anything built so far.
+- **Touch scrolling on iOS Safari.** The scroll lock is hand-written rather than taken from
+  `react-remove-scroll`, and `overflow: hidden` on `body` has historically not been enough there.
+  Nothing in the test suite can tell us; it needs a phone.
 
 ## Success Criteria
 

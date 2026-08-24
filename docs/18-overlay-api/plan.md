@@ -34,11 +34,47 @@ may live in one and not the other.
       imported it once both were rewritten, so holding the dependency back would have been fiction.
 - [x] **9. A `play()` on every overlay story.** All 27 open their overlay and assert its accessible
       name, so the axe gate inspects an open dialog rather than a `display: none` one.
-- [ ] **10. Documentation.** This file as an as-built record, DD-9, closed open questions.
+- [x] **10. Documentation.** DD-9 written into `discovery.md`, the `overlay` and clipping questions
+      closed, `ui-overlays/README.md` corrected, the roadmap row moved to in progress, and the root
+      README's browser-support claims fixed. Consumer-facing `.mdx` waits for Phase 2, which changes
+      the API it would document.
+
+## Phase 1 against discovery's success criteria
+
+[`discovery.md`](discovery.md#success-criteria) numbers these 1 to 7. The spec's AC1–AC10 cover the
+API and belong to Phase 2.
+
+| #   | Criterion                                                                                      | Evidence                                                                                                                                                                                                  |
+| --- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | A real `<dialog>` via `showModal()`, no Radix dialog left                                      | `grep -rn "@radix-ui/react-dialog" packages --include=*.ts --include=*.tsx --include=package.json` returns nothing outside `dist/`. Present transitively via `cmdk`, as expected                          |
+| 2   | The `open` prop and the ref both drive it, controlled and uncontrolled, no `InvalidStateError` | `Sheet`'s `RefBased`, `RefWithControlled` and `Controlled`; `Dialog`'s `ControlledDialog`. The guard is `if (!dialogNode.open)` on a live DOM property                                                    |
+| 3   | Two stacked modals order correctly with no `z-index`; Escape closes the topmost only           | `Dialog`'s `NestedDialogs` play, closing the inner one by button and by Escape and asserting the parent survives both                                                                                     |
+| 4   | `Select`, `MultiSelect`, `SingleDatePicker` and `DateRangePicker` work inside a modal          | Four stories, each asserting the anchored content is a DOM descendant of the `<dialog>` and then using it. `DropdownMenu`'s `Basic` is the no-modal control                                               |
+| 5   | The page behind a modal does not scroll or shift sideways                                      | `Dialog`'s `Default` play asserts `body` is `overflow: hidden` while open and released once closed. The sideways half is the scrollbar-width padding in `scrollLock.ts`, which is not separately asserted |
+| 6   | Backdrop click dismisses, through the same path as Escape and the `X`                          | `Dialog`'s `Default` play dispatches a click on the `<dialog>` itself. The shared path is structural — all four routes call `requestClose` — and Phase 2's AC10 tests the veto on each                    |
+| 7   | Animations present and close to today's                                                        | **Not verified.** `play()` cannot assert appearance; this needs a human at `localhost:6006`, on Dialog and all four Sheet sides                                                                           |
+
+Gates, on the final run: `pnpm build --force` 0, `pnpm lint` 0, `npx vitest run` **391 passed, 41
+files, 27 skipped**.
 
 ## Phase 2 — the API
 
-Not started. See the approved plan for the breakdown.
+Not started; it begins on a separate go-ahead. `title` / `description` / `footer` props, the ARIA
+precedence rules, the two warnings, `onRequestClose` exposed publicly, `CommandDialog` collapsing to
+`aria-label`, and the stories migrated onto the props.
+
+Two things deliberately held back for it, because it changes the API they would describe:
+
+- **Consumer-facing `.mdx`.** `ui-overlays` has none for any component, which predates this work.
+- **Further example stories.** The 27 that exist all open their overlay now; more of them are worth
+  adding once the props are the documented path.
+
+## The browser-support floor is now looser than it needs to be
+
+`@starting-style` and `transition-behavior: allow-discrete` set the floor in the
+[root README](../../README.md#-browser-support), and DD-9 means nothing uses either. Neither does
+anything use `overlay`. The floor is unchanged here — it governs every package, not this one — but
+the justification recorded for it no longer holds, and the README now says so.
 
 ## Decisions
 
