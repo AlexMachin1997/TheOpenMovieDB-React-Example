@@ -101,6 +101,27 @@ that a description is *mandatory* here, where `18`'s
 rides on `18`'s [ADR-8](18-overlay-api/CONTEXT.md) veto, which only the native element makes
 possible.
 
+### Evidence from `18` that the veto is too low-level on its own
+
+`18` shipped the veto as `onRequestClose`, a callback carrying an `event.source` of
+`'escape' | 'close-button' | 'backdrop' | 'close-part'`. `Sheet`'s `Confirmation` story is the first
+real use, and getting it right takes four pieces of state, a reset-on-open, a source filter and a
+route-to-label map — for a rule that is the same every time: refuse the routes a user fires by
+accident, never refuse the ones with a visible control behind them.
+
+A preset absorbs that only for the alert-dialog shape. The rule itself is wanted more widely — a form
+sheet or a payment step has the same "not while this is unfinished" requirement — so the preset
+should probably sit on top of a smaller prop rather than own the logic:
+
+```tsx
+<SheetContent dismissible={confirmed} … />
+```
+
+Worth settling when this deliverable is specced, because the preset's shape depends on it. The open
+question is naming and scope: a bare `dismissible` boolean hides _which_ routes it governs, and
+someone will want the `X` covered too. Either it means ambient dismissal specifically and is named to
+say so, or it takes per-route values. `onRequestClose` stays underneath for anything finer.
+
 ## The four-package split
 
 Whether `ui-core` / `ui-overlays` / `ui-command` / `ui-forms` still earn their boundaries. Raised

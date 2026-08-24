@@ -55,8 +55,9 @@ API and belong to Phase 2.
 | 6   | Backdrop click dismisses, through the same path as Escape and the `X`                          | `Dialog`'s `Default` play dispatches a click on the `<dialog>` itself. The shared path is structural — all four routes call `requestClose` — and Phase 2's AC10 tests the veto on each                    |
 | 7   | Animations present and close to today's                                                        | **Not verified.** `play()` cannot assert appearance; this needs a human at `localhost:6006`, on Dialog and all four Sheet sides                                                                           |
 
-Gates, on the final run: `pnpm build --force` 0, `pnpm lint` 0, `npx vitest run` **391 passed, 41
-files, 27 skipped**.
+Gates, on the run that closed Phase 1: `pnpm build --force` 0, `pnpm lint` 0, `npx vitest run` **391
+passed, 41 files, 27 skipped**. The review pass below moved that figure; recapture it rather than
+trusting this one.
 
 ### Criterion 7, measured
 
@@ -77,10 +78,19 @@ which is what DD-9 set out to preserve. Also confirmed on the same pass: the dim
 `oklab(0 0 0 / 0.5)` on the `<dialog>` element and the user-agent `::backdrop` to
 `rgba(0, 0, 0, 0)`, so stacked modals do not compound Chromium's default 10% backdrop.
 
-**What this does not prove.** These are the animations the browser _applied_, not a recording of
-them playing — an automation pane reports `visibilityState: hidden`, which freezes playback at
-`currentTime: 0` (the same behaviour that forced the exit-deadline change above). The numbers are
-right; whether the result feels right is a human judgement and stays one.
+**What this does not prove, and how it misled.** These are the animations the browser _applied_, not
+a recording of them playing. That gap was not academic: every value in the table above was correct
+while a right or bottom Sheet was visibly arriving in two stages, because the defect was in which
+box the panel resolved against, not in the animation applied to it. See the review pass below.
+
+The reasoning that produced this paragraph was also wrong on its own terms. It assumed the
+automation pane reports `visibilityState: hidden` and freezes playback, so only static values could
+be read. Re-checked on 2026-08-24: it reports `visible`, `setTimeout` is unthrottled at ~30ms, and
+sampling an animation as it actually runs works — which is what found the bug. Stepping
+`animation.currentTime` by hand, which is what was done here, only ever redraws the ideal curve and
+cannot show a stall. `storybook-suite.md` carries the corrected method.
+
+Whether the result feels right is still a human judgement and stays one.
 
 ## Phase 2 — the API
 
@@ -128,22 +138,85 @@ Gates: `pnpm build --force` 0, `pnpm lint` 0, `npx vitest run` **397 passed, 41 
 
 ## Still outstanding
 
-Neither blocks the acceptance criteria; both were deferred deliberately because Phase 2 changed the
-API they describe.
+- [ ] **Consumer-facing `.mdx`** — out of scope here, by decision. `ui-overlays` has none for any
+      component, but neither does anything else in the library, so writing it per-deliverable would
+      set the pattern from the narrowest possible case. It moves to a dedicated library-wide
+      session.
+- [ ] **Further example stories** — not done, and not obviously wanted. The stories that exist all
+      open their overlay and cover the criteria; more would be for demonstration rather than
+      coverage.
 
-- [ ] **Consumer-facing `.mdx`** — not done. `ui-overlays` has none for any component, which
-      predates this deliverable. Now that the props are settled it is worth writing.
-- [ ] **Further example stories** — not done. The 33 that exist all open their overlay and cover the
-      criteria; more would be for demonstration rather than coverage.
+## Review pass after Phase 2
 
-Two corrections this work surfaced and did **not** make, both recorded in
-[CONTEXT.md](CONTEXT.md#follow-ups-this-grilling-surfaced):
+A walk through the finished components turned up eight things. Three were defects in the components
+themselves, none of which the suite could see, because `play()` asserts state and every one of these
+lived in how the overlay looked while moving.
 
-- `Dialog.stories.tsx`'s `AlertDialog` story is not an alert dialog — `role="dialog"`, freely
-  dismissible. Left for the [alert dialog deliverable](../planned.md#alert-dialog), which may
-  replace it outright.
-- `SheetInnerContent` still sets no `data-slot`, unlike every sibling. A one-line fix, unrelated to
-  this deliverable.
+- [x] **A right or bottom Sheet arrived in two stages.** `tw-animate-css` builds every `animate-in` /
+      `animate-out` on one pair of keyframes that always animate `translate3d(…)`, so the `<dialog>`
+      carried a transform for the 150ms its backdrop faded — and a transformed ancestor is the
+      containing block for `position: fixed` descendants. The panel resolved against the dialog for
+      the first 150ms of a 500ms slide and against the viewport thereafter. `left` and `top` hid it
+      because both boxes agree at the near edge. The backdrop now fades by `transition-opacity` with
+      `starting:opacity-0`, so the dialog never takes a transform at all. This is risk R6, which the
+      plan predicted and then looked for in the wrong place: the stray transform came from a utility
+      class, not from anything written here.
+- [x] **The panel must stay `position: fixed`.** Anchoring it to the `<dialog>` with `absolute` was
+      tried as belt-and-braces against R6 and reverted: the resting rectangle is identical, but a
+      `right` or `bottom` panel then arrives with no visible slide. Both invariants are now asserted
+      in `openDialog` and `openSheet`, so every story in both files checks them.
+- [x] **The body of every overlay was a tab stop and took focus on open.** A `tabIndex` added for
+      `scrollable-region-focusable` was unconditional, and the body precedes the footer, so it also
+      took the initial focus. Now conditional on the content genuinely overflowing, measured by
+      `useScrollableRegion`.
+- [x] **The two footers had drifted.** `DialogFooter` went to a row at the `sm` **viewport**
+      breakpoint and `SheetFooter` never went to a row at all. Both now share
+      `overlayFooterVariants`, keyed on the panel's own width through `@container`: a Sheet is 24rem
+      wide on a phone and on a desktop alike, so a viewport breakpoint was the wrong question to ask.
+      `@md` puts a Dialog's 32rem panel in a row and leaves a Sheet's 24rem one stacked, including
+      the Dialog on a phone, where it is narrower than its own breakpoint. Verified against risk R9:
+      `container-type: inline-size` carries `contain: layout`, which would make the panel a
+      containing block for a fixed descendant — measured on all four sides, the panel keeps
+      `offsetParent: null` and a continuous slide.
+
+The remaining four were story-level.
+
+- [x] **`Sheet`'s `Confirmation` was a facade,** and is now the worked example for gating. It asked
+      the user to type `delete`, but the input was uncontrolled and neither footer button did
+      anything, so the gate it appeared to describe did not exist. It now demonstrates the two gates
+      a destructive flow actually wants, both driven by the one `confirmed` boolean:
+
+      - the **footer action**, which is ordinary React — `confirmed` drives `disabled`, and the
+        overlay is not involved;
+      - **ambient dismissal**, which is `onRequestClose` calling `preventDefault()`, so the sheet is
+        never closed-and-reopened, it simply never closes.
+
+      `event.source` is what keeps the second from becoming a trap: Escape and the backdrop are
+      refused because they are easy to fire by accident, while every route with a visible control
+      behind it — Cancel and the X — passes through untouched. Refusing all four is what made the
+      first attempt at `GuardedClose` read as broken. Completing the phrase releases both gates at
+      once, and the action then runs and closes the sheet. `Dialog`'s `ConfirmationDialog` is the
+      deliberate contrast: the same shape with nothing gated.
+
+- [x] **`GuardedClose` started locked and swallowed every close silently**, which read as a broken
+      component rather than a demonstration. Rebuilt as an unsaved-changes flow: it closes normally
+      until the name is edited, then refuses each route out and names the one it refused, and Save or
+      Discard releases it.
+- [x] **`WithoutAnAccessibleName` had no content**, so it demonstrated the warning against a dialog
+      nobody would ship. It now renders a real shortcuts panel whose heading is a styled `<p>` — the
+      omission the diagnostic actually exists to catch.
+- [x] **`SuccessDialog` and `LoadingDialog` removed.** Both demonstrated application state rather
+      than anything about the overlay. Deleting `LoadingDialog` also removes the only `animate-spin`
+      inside an overlay, so nothing now exercises R2 (an `iterations: Infinity` animation must not
+      wedge `waitForExit`); the guard for that stays a comment on `waitForExit` itself.
+
+One correction this work surfaced and did **not** make, recorded in
+[CONTEXT.md](CONTEXT.md#follow-ups-this-grilling-surfaced): `Dialog.stories.tsx`'s `AlertDialog`
+story is not an alert dialog — `role="dialog"`, freely dismissible. Left for the
+[alert dialog deliverable](../planned.md#alert-dialog), which may replace it outright.
+
+The other, `SheetInnerContent` setting no `data-slot` unlike every sibling, was fixed during the
+review pass.
 
 ## The browser-support floor is now looser than it needs to be
 
