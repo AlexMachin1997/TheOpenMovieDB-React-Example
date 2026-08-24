@@ -197,6 +197,22 @@ Four things follow, and all of them are the reason for the choice:
   the `<dialog>`, and `CommandDialog`'s `overflow-hidden` sits on the panel inside it. So a popover
   portaled into the dialog is not clipped. That closes discovery's clipping question.
 
+### The exit animation has to hold its end state, or the close flashes
+
+Reported after the components were otherwise done: closing a dialog pulsed.
+
+`tw-animate-css` defaults `--tw-animation-fill-mode` to `none`. So a finished exit animation drops
+the element straight back to its base styles — fully opaque, untranslated — and it stays there for
+the grace period and the React commit before `dialog.close()` actually runs. The overlay faded out
+and then flashed back to full visibility for perhaps 60ms.
+
+Radix never showed this because it unmounted the node on `animationend`. DD-9 deliberately does the
+opposite and holds the element open through its exit, so the end state has to stick:
+`data-[state=closed]:fill-mode-forwards` on both the backdrop and the panel.
+
+Worth knowing that the fill mode is scoped to the closed state rather than applied globally. On
+entry `none` is correct — the element should release to its own styles once it has arrived.
+
 ### The exit deadline comes from the animations, not a flat number
 
 DD-9 holds the dialog open until its exit animation finishes, which means something has to decide

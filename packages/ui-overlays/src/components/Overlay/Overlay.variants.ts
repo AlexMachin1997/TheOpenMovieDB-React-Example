@@ -9,9 +9,18 @@ import { cva } from 'class-variance-authority';
  * previously existed twice and had already drifted apart.
  */
 
-/** The dimmed, fading backdrop behind an open overlay. */
+/**
+ * The dimmed, fading backdrop behind an open overlay.
+ *
+ * `fill-mode-forwards` on the exit is load-bearing. `tw-animate-css` defaults `animation-fill-mode`
+ * to `none`, so a finished exit animation drops the element straight back to its base styles — fully
+ * opaque — and it stays that way until the element is actually closed a frame or two later. The
+ * result is a fade-out followed by a flash back to full visibility. Radix never showed this because
+ * it unmounted on `animationend`; we deliberately hold the element open through its exit, so the end
+ * state has to stick.
+ */
 export const overlayBackdropVariants = cva(
-	'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50'
+	'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:fill-mode-forwards fixed inset-0 z-50 bg-black/50'
 );
 
 /**
@@ -55,7 +64,10 @@ const SHEET_MOTION =
  * parallel implementation of it.
  */
 export const overlaySurfaceVariants = cva(
-	'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col shadow-lg',
+	// `fill-mode-forwards` on the exit for the same reason as the backdrop above: without it the
+	// panel finishes sliding or fading out and then snaps back to full opacity for the frame before
+	// the dialog closes.
+	'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fill-mode-forwards fixed z-50 flex flex-col shadow-lg',
 	{
 		variants: {
 			side: {
