@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { defaultRangeExtractor, type Range } from '@tanstack/react-virtual';
-import { useIsomorphicLayoutEffect } from '~/components/Command/hooks/useIsomorphicLayoutEffect';
+import { useIsomorphicLayoutEffect } from '@repo/ui-core';
 
 /**
  * Keeps the active option inside a virtualizer's rendered range.

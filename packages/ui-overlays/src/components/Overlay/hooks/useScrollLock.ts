@@ -1,5 +1,5 @@
 import { lockScroll, unlockScroll } from '~/components/Overlay/utils/scrollLock';
-import { useIsomorphicLayoutEffect } from '~/components/Overlay/hooks/useIsomorphicLayoutEffect';
+import { useIsomorphicLayoutEffect } from '@repo/ui-core';
 
 /**
  * Hold the scroll lock for as long as `enabled` is true.

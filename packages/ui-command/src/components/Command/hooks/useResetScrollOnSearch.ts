@@ -1,4 +1,4 @@
-import { useIsomorphicLayoutEffect } from '~/components/Command/hooks/useIsomorphicLayoutEffect';
+import { useIsomorphicLayoutEffect } from '@repo/ui-core';
 
 /**
  * Scrolls a virtualized list back to the top when the search term changes.

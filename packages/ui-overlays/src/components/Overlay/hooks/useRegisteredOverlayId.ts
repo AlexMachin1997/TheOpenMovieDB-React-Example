@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useIsomorphicLayoutEffect } from '~/components/Overlay/hooks/useIsomorphicLayoutEffect';
+import { useIsomorphicLayoutEffect } from '@repo/ui-core';
 import { useOverlayContentContext } from '~/components/Overlay/hooks/useOverlayContentContext';
 
 /**

@@ -15,14 +15,15 @@ export const overlayBackdropVariants = cva(
 );
 
 /**
- * The floating close affordance in the top-right corner of an overlay surface.
+ * Position and icon sizing for the floating close affordance. Everything else — the hover and
+ * pressed treatment, the focus ring, disabled handling — comes from `Button`, so the overlay's X
+ * behaves like every other button in the library rather than like a one-off.
  *
- * The three `[&_svg…]` rules size and neutralise a caller-supplied icon. They pair with the
- * explicit `size='xl'` on the default icon — see `OverlayCloseButton` for why that is load-bearing
- * rather than decorative.
+ * The `[&_svg…]` rule pairs with the explicit `size='xl'` on the default icon. See
+ * `OverlayCloseButton` for why that is load-bearing rather than decorative.
  */
 export const overlayCloseButtonVariants = cva(
-	"cursor-pointer ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6"
+	"absolute top-4 right-4 [&_svg:not([class*='size-'])]:size-6"
 );
 
 /**

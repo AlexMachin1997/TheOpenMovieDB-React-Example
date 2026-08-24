@@ -100,6 +100,42 @@ The deadline is now derived from the animations' own `endTime` plus 50ms, capped
 200ms fade waits 250ms. Where animations do run, `finished` still settles it first and the deadline
 is never reached.
 
+### React fires `onClose` on every ancestor, and that closed nested dialogs' parents
+
+The reported symptom: closing a nested dialog also closed the one it opened from.
+
+`close` and `cancel` do not bubble. React does not care — it collects handlers from every ancestor
+fiber carrying the prop and calls them all. A nested `<dialog>` is a DOM descendant of the dialog it
+opens from, so the inner one closing ran the outer one's `onClose`, which is the handler whose whole
+job is to push `open: false` back into React state.
+
+Both handlers now bail on `event.target !== event.currentTarget`, the same guard the backdrop click
+already used. `NestedDialogs` has a `play()` covering close-by-button and close-by-Escape, because
+this is not a failure any existing assertion would have caught.
+
+### The close button is a `Button`, and looks slightly different for it
+
+`OverlayCloseButton` renders `@repo/ui-core`'s `Button` (`variant='ghost'`, `size='icon'`) rather
+than a bare `<button>`, so the overlay's X gets the same hover, pressed, focus-ring and disabled
+treatment as every other button in the library. `overlayCloseButtonVariants` is down to positioning
+and icon sizing.
+
+Two visible consequences. The hover treatment moved from `opacity-70` to `hover:bg-accent`, and the
+focus ring from `ring-2 ring-offset-2` to Button's `ring-[3px]` — the second deliberate change to
+this button after [`14`](../14-component-consolidation/plan.md)'s D5. And its `data-slot` moved from
+`dialog-close` to `dialog-close-button`, which it had been sharing with `DialogClose`; nothing in
+the repo targeted either.
+
+`DialogTrigger` and `DialogClose` stay unstyled elements. They exist to be composed with `asChild`,
+and every call site already writes `<DialogTrigger asChild><Button>` — styling them would style
+those twice.
+
+### `useIsomorphicLayoutEffect` lives in `ui-core`
+
+It existed in `ui-command` already and was written a second time here. `ui-overlays` cannot import
+from `ui-command` — the dependency runs the other way — so the shared home is `@repo/ui-core`, which
+both depend on. Both copies deleted, six importers repointed.
+
 ### Initial focus is ours to place, not the browser's
 
 `showModal()` focuses the first _focusable_ descendant. Radix focused the first _tabbable_ one. The

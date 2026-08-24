@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useIsomorphicLayoutEffect } from '~/components/Overlay/hooks/useIsomorphicLayoutEffect';
+import { useIsomorphicLayoutEffect } from '@repo/ui-core';
 import { focusInitialElement } from '~/components/Overlay/utils/focusInitialElement';
 import { waitForExit } from '~/components/Overlay/utils/waitForExit';
 
@@ -110,6 +110,11 @@ export const useDialogElement = ({ open, setOpen, onRequestClose }: IUseDialogEl
 	);
 
 	const onCancel = (event: React.SyntheticEvent<HTMLDialogElement, Event>) => {
+		// `cancel` and `close` do not bubble, but React collects handlers from every ancestor with
+		// the prop and calls them all. Nested dialogs are DOM descendants of the dialog they open
+		// from, so without this an inner dialog closing also closed its parent.
+		if (event.target !== event.currentTarget) return;
+
 		// Always refuse the browser's own close, then decide separately. Letting it through would
 		// skip both the veto and the exit animation.
 		event.preventDefault();
@@ -134,7 +139,11 @@ export const useDialogElement = ({ open, setOpen, onRequestClose }: IUseDialogEl
 		requestClose('backdrop', event.nativeEvent);
 	};
 
-	const onClose = () => {
+	const onClose = (event: React.SyntheticEvent<HTMLDialogElement, Event>) => {
+		// See `onCancel`. This one is the more dangerous of the two, because it is the handler that
+		// pushes `open: false` back into React state.
+		if (event.target !== event.currentTarget) return;
+
 		// Anything can close a native dialog without asking React: a `<form method='dialog'>`
 		// submit, devtools, a future `closedby`. Pushing it back into state here is what makes the
 		// DOM and React unable to disagree about whether the overlay is open.

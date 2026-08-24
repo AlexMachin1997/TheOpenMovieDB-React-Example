@@ -17,3 +17,5 @@ export type {
 	IUseKeyboardActivationOptions,
 	IUseKeyboardActivationResult
 } from './useKeyboardActivation.types';
+
+export { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';

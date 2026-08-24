@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Button, Alert, AlertDescription, AlertTitle } from '@repo/ui-core';
 import {
 	Dialog,
@@ -407,7 +408,45 @@ export const NestedDialogs: Story = {
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-	)
+	),
+	play: async ({ step }) => {
+		const documentScope = within(document.body);
+
+		const openDialog = async (name: RegExp, expected: number) => {
+			await userEvent.click(await documentScope.findByRole('button', { name }));
+			await waitFor(async () => {
+				await expect(documentScope.getAllByRole('dialog')).toHaveLength(expected);
+			});
+		};
+
+		await step('both dialogs open, and stack', async () => {
+			await openDialog(/open parent dialog/i, 1);
+			await openDialog(/open nested dialog/i, 2);
+		});
+
+		await step('closing the nested dialog leaves the parent open', async () => {
+			const [, nested] = documentScope.getAllByRole('dialog');
+			// Scoped to the footer on purpose: the floating X is also named "Close", so an unscoped
+			// query matches both.
+			const footer = nested!.querySelector<HTMLElement>('[data-slot="dialog-footer"]');
+			await userEvent.click(within(footer!).getByRole('button', { name: /^close$/i }));
+
+			await waitFor(async () => {
+				await expect(documentScope.getAllByRole('dialog')).toHaveLength(1);
+			});
+			await expect(documentScope.getByRole('heading', { name: /parent dialog/i })).toBeVisible();
+		});
+
+		await step('Escape closes only the topmost', async () => {
+			await openDialog(/open nested dialog/i, 2);
+			await userEvent.keyboard('{Escape}');
+
+			await waitFor(async () => {
+				await expect(documentScope.getAllByRole('dialog')).toHaveLength(1);
+			});
+			await expect(documentScope.getByRole('heading', { name: /parent dialog/i })).toBeVisible();
+		});
+	}
 };
 
 const ControlledDialogComponent = () => {

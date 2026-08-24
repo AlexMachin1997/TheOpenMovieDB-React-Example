@@ -52,6 +52,9 @@ export type { ISliderRoot, ISliderTrack, ISliderRange, ISliderThumb } from '~/co
 // on `@repo/ui-core`, so adopting it later needs no new plumbing. `useDebouncedValue` stays
 // internal until something outside this package actually needs it.
 export { useKeyboardActivation } from '~/hooks';
+// Public for the same reason: `ui-overlays` and `ui-command` both need it, and both already
+// depend on this package. It lived in each of them as a copy until they were reconciled here.
+export { useIsomorphicLayoutEffect } from '~/hooks';
 export type {
 	NativeKeyboardActivation,
 	IKeyboardActivationProps,

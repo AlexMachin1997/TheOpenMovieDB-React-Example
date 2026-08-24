@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useIsomorphicLayoutEffect } from '~/components/Command/hooks/useIsomorphicLayoutEffect';
+import { useIsomorphicLayoutEffect } from '@repo/ui-core';
 
 /**
  * Resolves the scroll container a virtualized list measures against.
