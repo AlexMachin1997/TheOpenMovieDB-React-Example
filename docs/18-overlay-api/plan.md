@@ -28,8 +28,8 @@ may live in one and not the other.
       `overlayDialogVariants` added.
 - [x] **5. Dialog** rebuilt on it.
 - [x] **6. Sheet** rebuilt on it.
-- [ ] **7. DD-6.** `Popover`, `DropdownMenu` and `HoverCard` portal into the dialog — wired; the
-      tests are outstanding.
+- [x] **7. DD-6.** `Popover`, `DropdownMenu` and `HoverCard` portal into the dialog, with six
+      containment tests and one control.
 - [x] **8. Radix out** of `ui-overlays`. Done alongside 5 and 6 rather than after them: nothing
       imported it once both were rewritten, so holding the dependency back would have been fiction.
 - [ ] **9. A `play()` on every overlay story.**
@@ -173,6 +173,30 @@ What that gives up: `react-remove-scroll` also blocks touch scrolling on iOS Saf
 `overflow: hidden` on `body` has historically not been enough. If it matters the fix is
 `position: fixed` plus a saved scroll offset in the same two functions. Nothing in the test suite can
 tell us either way; it needs a phone.
+
+### The DD-6 tests assert containment, which is a DOM detail on purpose
+
+Six stories open an anchored surface inside a modal and assert it is a DOM descendant of the
+`<dialog>`: a menu and a hover card in `Dialog.stories.tsx`, `Select` and `MultiSelect` in
+`Select.stories.tsx`, and one in each date picker's stories. `DropdownMenu`'s `Basic` is the control
+— with no modal above it, the menu must still land on the body.
+
+Asserting the tree position rather than the behaviour is deliberate. The failure this guards against
+renders correctly and reads correctly; the content is simply painted behind the backdrop and inert,
+so every behavioural assertion still passes while the control is unusable. Only its position gives
+it away.
+
+### Flagged, not chased: the suite has load-sensitive flakes
+
+Three full runs while finishing DD-6 produced two failures, in different files each time —
+`Form.stories.tsx` (two 15s timeouts) and `Accordion.stories.tsx` (a `waitFor` on a collapse
+animation). Both files pass in isolation, Accordion three times in a row, and the third full run was
+green at 391.
+
+They are `waitFor` assertions on animation end, and they expire when the machine is busy. The first
+run was competing with a Storybook dev server left over from debugging. Pre-existing and unrelated
+to the overlays; recorded here so the next person reading a red run does not go looking for a
+regression that is not there.
 
 ### DD-6 extends to `DropdownMenu` and `HoverCard`
 

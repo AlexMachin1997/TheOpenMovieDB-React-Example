@@ -4,8 +4,16 @@ import type { Locale } from 'date-fns';
 import { fr, es, de, ja } from 'date-fns/locale';
 
 import { SingleDatePicker } from '~/components/DatePickers/SingleDatePicker/SingleDatePicker';
-import { Field } from '@repo/ui-core';
-import { expect, within } from 'storybook/test';
+import { Button, Field } from '@repo/ui-core';
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetInnerContent,
+	SheetTitle,
+	SheetTrigger
+} from '@repo/ui-overlays';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { getDateFormatExamples, type DateFormatKey } from '@repo/core';
 
 type SingleDatePickerStorybookTypes = {
@@ -405,5 +413,66 @@ import { SingleDatePicker } from '@repo/ui-forms';
 		await expect(trigger).toHaveAttribute('id', 'departure');
 		await expect(trigger).toHaveAttribute('aria-describedby', 'departure-message');
 		await expect(trigger).toHaveAttribute('aria-required', 'true');
+	}
+};
+
+const DatePickerInsideSheet = () => {
+	const [date, setDate] = useState<Date | undefined>();
+
+	return (
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button variant='outline'>Open Sheet</Button>
+			</SheetTrigger>
+			<SheetContent>
+				<SheetHeader>
+					<SheetTitle>Book a trip</SheetTitle>
+				</SheetHeader>
+				<SheetInnerContent>
+					<SingleDatePicker date={date} onDateChange={setDate} placeholder='Departure date' />
+				</SheetInnerContent>
+			</SheetContent>
+		</Sheet>
+	);
+};
+
+/**
+ * A modal `<dialog>` paints in the top layer and makes everything outside it inert, so a calendar
+ * portalled to `document.body` while one is open would be both invisible and unclickable. Picking a
+ * date inside a sheet is the canonical case, which makes this an acceptance test rather than a
+ * curiosity.
+ *
+ * The containment assertion is an implementation detail deliberately: the failure it guards against
+ * renders perfectly well and only its position in the tree gives it away.
+ */
+export const InsideASheet: StoryObj = {
+	render: () => <DatePickerInsideSheet />,
+	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+		const canvas = within(canvasElement);
+
+		await userEvent.click(canvas.getByRole('button', { name: /open sheet/i }));
+		const sheet = await within(document.body).findByRole('dialog');
+
+		const trigger = within(sheet).getByRole('button', { name: /departure date/i });
+		await userEvent.click(trigger);
+
+		// Days are matched on `data-day` and their text, not on an accessible name: `CalendarDayButton`
+		// expresses selection through `data-selected-single` rather than `aria-selected`, and the
+		// day's accessible name carries the full date rather than the number.
+		const day = await waitFor(() => {
+			const found = Array.from(
+				document.querySelectorAll<HTMLButtonElement>('button[data-day]')
+			).find((button) => button.textContent?.trim() === '15');
+
+			expect(found).toBeDefined();
+			return found!;
+		});
+
+		await expect(sheet.contains(day)).toBe(true);
+
+		await userEvent.click(day);
+		await waitFor(async () => {
+			await expect(trigger).toHaveTextContent('15');
+		});
 	}
 };

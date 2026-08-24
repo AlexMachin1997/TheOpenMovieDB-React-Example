@@ -4,8 +4,16 @@ import type { DateRange } from 'react-day-picker';
 import type { Locale } from 'date-fns';
 import { fr, es, de } from 'date-fns/locale';
 import { DateRangePicker } from '~/components/DatePickers/DateRangePicker/DateRangePicker';
-import { Field } from '@repo/ui-core';
-import { expect, within } from 'storybook/test';
+import { Button, Field } from '@repo/ui-core';
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetInnerContent,
+	SheetTitle,
+	SheetTrigger
+} from '@repo/ui-overlays';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { type DateFormatKey } from '@repo/core';
 
 type DateRangePickerStorybookTypes = {
@@ -370,5 +378,66 @@ import { DateRangePicker } from '@repo/ui-forms';
 		const trigger = canvas.getByRole('button', { name: /Stay dates/ });
 		await expect(trigger).toHaveAttribute('id', 'stay');
 		await expect(trigger).toHaveAttribute('aria-describedby', 'stay-message');
+	}
+};
+
+const RangePickerInsideSheet = () => {
+	const [range, setRange] = useState<DateRange | undefined>();
+
+	return (
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button variant='outline'>Open Sheet</Button>
+			</SheetTrigger>
+			<SheetContent>
+				<SheetHeader>
+					<SheetTitle>Book a stay</SheetTitle>
+				</SheetHeader>
+				<SheetInnerContent>
+					<DateRangePicker
+						dateRange={range}
+						onDateRangeChange={setRange}
+						placeholder='Select dates'
+					/>
+				</SheetInnerContent>
+			</SheetContent>
+		</Sheet>
+	);
+};
+
+/**
+ * The `DateRangePicker` half of the same acceptance test as `SingleDatePicker`'s `InsideASheet`. A
+ * modal `<dialog>` paints in the top layer and makes everything outside it inert, so a calendar
+ * portalled to `document.body` would be invisible and unclickable rather than merely misplaced.
+ */
+export const InsideASheet: StoryObj = {
+	render: () => <RangePickerInsideSheet />,
+	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+		const canvas = within(canvasElement);
+
+		await userEvent.click(canvas.getByRole('button', { name: /open sheet/i }));
+		const sheet = await within(document.body).findByRole('dialog');
+
+		const trigger = within(sheet).getByRole('button', { name: /select dates/i });
+		await userEvent.click(trigger);
+
+		// Days are matched on `data-day` and their text: `CalendarDayButton` expresses selection
+		// through `data-selected-single` rather than `aria-selected`, and a day's accessible name
+		// carries the full date rather than the number.
+		const day = await waitFor(() => {
+			const found = Array.from(
+				document.querySelectorAll<HTMLButtonElement>('button[data-day]')
+			).find((button) => button.textContent?.trim() === '15');
+
+			expect(found).toBeDefined();
+			return found!;
+		});
+
+		await expect(sheet.contains(day)).toBe(true);
+
+		await userEvent.click(day);
+		await waitFor(async () => {
+			await expect(trigger).toHaveTextContent('15');
+		});
 	}
 };

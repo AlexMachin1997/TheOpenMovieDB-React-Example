@@ -9,7 +9,15 @@ import {
 	SelectGroupedItemsVirtualized,
 	SelectGroupedListItems
 } from '~/components/Selects/components';
-import { Field, Label } from '@repo/ui-core';
+import { Button, Field, Label } from '@repo/ui-core';
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetInnerContent,
+	SheetTitle,
+	SheetTrigger
+} from '@repo/ui-overlays';
 import {
 	frameworks,
 	programmingLanguages,
@@ -730,5 +738,90 @@ import { Select } from '@repo/ui-forms';
 		await expect(trigger).toHaveAttribute('id', 'country');
 		await expect(trigger).toHaveAttribute('aria-describedby', 'country-message');
 		await expect(trigger).not.toHaveAttribute('aria-label');
+	}
+};
+
+// ---------------------------------------------------------------------------
+// Inside a modal — the DD-6 acceptance tests
+// ---------------------------------------------------------------------------
+
+const SelectInsideSheet = ({ type }: { type: 'single' | 'multiple' }) => {
+	const [single, setSingle] = React.useState<string>('');
+	const [multiple, setMultiple] = React.useState<string[]>([]);
+
+	return (
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button variant='outline'>Open Sheet</Button>
+			</SheetTrigger>
+			<SheetContent>
+				<SheetHeader>
+					<SheetTitle>Edit profile</SheetTitle>
+				</SheetHeader>
+				<SheetInnerContent>
+					{type === 'single' ? (
+						<Select
+							type='single'
+							value={single}
+							onValueChange={setSingle}
+							options={frameworks}
+							placeholder='Select a framework...'
+							searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search frameworks...' }}
+						/>
+					) : (
+						<Select
+							type='multiple'
+							value={multiple}
+							onValueChange={setMultiple}
+							options={frameworks}
+							placeholder='Select frameworks...'
+							searchConfig={{ enabledSearch: true, searchPlaceholder: 'Search frameworks...' }}
+						/>
+					)}
+				</SheetInnerContent>
+			</SheetContent>
+		</Sheet>
+	);
+};
+
+/**
+ * A modal `<dialog>` paints in the top layer and makes everything outside it inert. A popover
+ * portalled to `document.body` while one is open is therefore not merely painted behind it — it is
+ * unclickable and unreachable by keyboard. Since `Select` is a popover and a form is the canonical
+ * contents of a Sheet, these two are the acceptance test for that.
+ *
+ * The containment assertion is an implementation detail on purpose. The failure it guards against
+ * renders correctly and reads correctly; only its position in the tree gives it away.
+ */
+const expectSelectWorksInside = async (canvasElement: HTMLElement, optionName: string) => {
+	const canvas = within(canvasElement);
+
+	await userEvent.click(canvas.getByRole('button', { name: /open sheet/i }));
+	const sheet = await within(document.body).findByRole('dialog');
+
+	const trigger = within(sheet).getByRole('combobox');
+	await userEvent.click(trigger);
+	await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+	const listbox = await within(sheet).findByRole('listbox');
+	await expect(sheet.contains(listbox)).toBe(true);
+
+	await userEvent.click(await within(listbox).findByRole('option', { name: optionName }));
+	await expect(trigger).toHaveTextContent(optionName);
+};
+
+export const SingleInsideASheet: StoryObj<SelectProps> = {
+	name: 'Single / Inside a Sheet',
+	render: () => <SelectInsideSheet type='single' />,
+	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+		await expectSelectWorksInside(canvasElement, 'React');
+	}
+};
+
+export const MultiInsideASheet: StoryObj<SelectProps> = {
+	name: 'Multi / Inside a Sheet',
+	render: () => <SelectInsideSheet type='multiple' />,
+	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+		await expectSelectWorksInside(canvasElement, 'React');
 	}
 };

@@ -17,6 +17,7 @@ import {
 	DropdownMenuGroup
 } from '~/components/DropdownMenu/DropdownMenu';
 import { Button, Icon } from '@repo/ui-core';
+import { expect, userEvent, within } from 'storybook/test';
 
 const meta: Meta<typeof DropdownMenu> = {
 	title: 'UI Overlays/Dropdown menu',
@@ -47,7 +48,18 @@ export const Basic: Story = {
 				<DropdownMenuItem>Subscription</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		await userEvent.click(canvas.getByRole('button', { name: /open menu/i }));
+		const menu = await within(document.body).findByRole('menu');
+
+		// The control for `Dialog`'s `AnchoredContentInsideADialog`. With no modal above it the menu
+		// must still portal to the body — the dialog container is opt-in, read from context, and a
+		// menu that started parenting itself elsewhere would break positioning everywhere else.
+		await expect(menu.closest('dialog')).toBeNull();
+	}
 };
 
 export const WithIconsAndShortcuts: Story = {

@@ -13,6 +13,13 @@ import {
 	DialogTrigger,
 	DialogClose
 } from '~/components/Dialog';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from '~/components/DropdownMenu';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '~/components/HoverCard';
 
 const meta: Meta<typeof Dialog> = {
 	title: 'UI Overlays/Dialog',
@@ -445,6 +452,83 @@ export const NestedDialogs: Story = {
 				await expect(documentScope.getAllByRole('dialog')).toHaveLength(1);
 			});
 			await expect(documentScope.getByRole('heading', { name: /parent dialog/i })).toBeVisible();
+		});
+	}
+};
+
+const AnchoredContentDialog = () => (
+	<Dialog>
+		<DialogTrigger asChild>
+			<Button variant='outline'>Open Dialog</Button>
+		</DialogTrigger>
+		<DialogContent>
+			<DialogHeader>
+				<DialogTitle>Anchored surfaces inside a modal</DialogTitle>
+				<DialogDescription>
+					A menu and a hover card, both opened from inside the dialog.
+				</DialogDescription>
+			</DialogHeader>
+			<DialogContentArea>
+				<div className='flex gap-2 py-4'>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant='outline'>Open Menu</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuItem>Rename</DropdownMenuItem>
+							<DropdownMenuItem>Duplicate</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+					<HoverCard openDelay={0} closeDelay={0}>
+						<HoverCardTrigger asChild>
+							<Button variant='outline'>Hover Target</Button>
+						</HoverCardTrigger>
+						<HoverCardContent>Preview content</HoverCardContent>
+					</HoverCard>
+				</div>
+			</DialogContentArea>
+		</DialogContent>
+	</Dialog>
+);
+
+export const AnchoredContentInsideADialog: Story = {
+	render: () => <AnchoredContentDialog />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		await userEvent.click(canvas.getByRole('button', { name: /open dialog/i }));
+		const dialog = await documentScope.findByRole('dialog');
+
+		// These assert *where* the content landed, which is a DOM detail and deliberately so. A
+		// modal dialog paints in the top layer and makes everything outside it inert, so anchored
+		// content portalled to `document.body` still renders and still looks right in a screenshot
+		// while sitting behind the backdrop and refusing every click. No behavioural assertion
+		// catches that; containment does.
+		await step('a menu opened inside the dialog is portalled into it', async () => {
+			await userEvent.click(within(dialog).getByRole('button', { name: /open menu/i }));
+
+			const menu = await documentScope.findByRole('menu');
+			await expect(dialog.contains(menu)).toBe(true);
+
+			await userEvent.keyboard('{Escape}');
+			await waitFor(async () => {
+				await expect(documentScope.queryByRole('menu')).not.toBeInTheDocument();
+			});
+		});
+
+		await step('and so is a hover card', async () => {
+			await userEvent.hover(within(dialog).getByRole('button', { name: /hover target/i }));
+
+			await waitFor(async () => {
+				const card = document.querySelector('[data-slot="hover-card-content"]');
+				await expect(card).not.toBeNull();
+				await expect(dialog.contains(card)).toBe(true);
+			});
+		});
+
+		await step('the dialog is still the only thing open', async () => {
+			await expect(documentScope.getAllByRole('dialog')).toHaveLength(1);
 		});
 	}
 };
