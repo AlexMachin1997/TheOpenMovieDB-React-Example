@@ -56,6 +56,17 @@ const openSheet = async (canvasElement: HTMLElement, trigger: RegExp, name: RegE
 	const sheet = await within(document.body).findByRole('dialog');
 	await expect(sheet).toHaveAccessibleName(name);
 
+	// The pair of invariants behind a right or bottom sheet sliding in cleanly, neither of which any
+	// assertion about state can see. The panel positions against the viewport, and the dialog runs no
+	// keyframe animation — so nothing can hand the panel a different containing block partway through
+	// its entrance, which is what made it arrive in two stages. `Overlay.variants.ts` has the why.
+	const panel = sheet.querySelector<HTMLElement>('[data-slot="sheet-content"]');
+	const panelPosition = panel ? window.getComputedStyle(panel).position : null;
+
+	await expect(panel).not.toBeNull();
+	await expect(panelPosition).toBe('fixed');
+	await expect(window.getComputedStyle(sheet).animationName).toBe('none');
+
 	return sheet;
 };
 

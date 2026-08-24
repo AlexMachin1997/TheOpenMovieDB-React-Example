@@ -25,5 +25,8 @@ export const focusInitialElement = (dialog: HTMLDialogElement, panel: HTMLElemen
 			element.getClientRects().length > 0
 	);
 
-	(requested ?? firstTabbable ?? dialog).focus();
+	// `preventScroll` matters: at this point the panel is mid-entry-animation and may be translated
+	// off-screen, and the browser's default scroll-into-view fights the animation — the overlay
+	// appears to start, stall, then finish arriving.
+	(requested ?? firstTabbable ?? dialog).focus({ preventScroll: true });
 };

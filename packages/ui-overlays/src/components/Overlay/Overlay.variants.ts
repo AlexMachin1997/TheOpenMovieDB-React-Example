@@ -9,19 +9,8 @@ import { cva } from 'class-variance-authority';
  * previously existed twice and had already drifted apart.
  */
 
-/**
- * The dimmed, fading backdrop behind an open overlay.
- *
- * `fill-mode-forwards` on the exit is load-bearing. `tw-animate-css` defaults `animation-fill-mode`
- * to `none`, so a finished exit animation drops the element straight back to its base styles — fully
- * opaque — and it stays that way until the element is actually closed a frame or two later. The
- * result is a fade-out followed by a flash back to full visibility. Radix never showed this because
- * it unmounted on `animationend`; we deliberately hold the element open through its exit, so the end
- * state has to stick.
- */
-export const overlayBackdropVariants = cva(
-	'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:fill-mode-forwards fixed inset-0 z-50 bg-black/50'
-);
+/** The dim itself, with no motion of its own. `overlayDialogVariants` adds the fade. */
+export const overlayBackdropVariants = cva('fixed inset-0 z-50 bg-black/50');
 
 /**
  * Position and icon sizing for the floating close affordance. Everything else — the hover and
@@ -38,23 +27,41 @@ export const overlayCloseButtonVariants = cva(
 /**
  * The `<dialog>` element itself, which is both the top-layer host and the dim behind the panel.
  *
- * Making the dialog the dim rather than a sibling is what keeps the fade classes above working:
- * they are ordinary utilities and cannot reach `::backdrop`. It also makes a backdrop click
- * detectable as "the event landed on the dialog element", since the panel is a child.
+ * Making the dialog the dim rather than a sibling is what keeps the fade below working: it is an
+ * ordinary utility and cannot reach `::backdrop`. It also makes a backdrop click detectable as "the
+ * event landed on the dialog element", since the panel is a child.
  *
- * Everything after the backdrop classes undoes the user-agent stylesheet, which gives `dialog` a
- * border, `1em` of padding, `margin: auto`, `width: fit-content` and `background: canvas` — and
- * paints `::backdrop` at `rgba(0, 0, 0, 0.1)`, which would darken every overlay and compound on
- * stacked ones. None of these are decorative.
+ * **The fade is a transition, and must never become a keyframe animation.** `tw-animate-css` builds
+ * every `animate-in` / `animate-out` on one pair of keyframes that always animate `translate3d(…)`,
+ * so a dialog asked only to fade still carries a transform for the length of that fade — and a
+ * transformed ancestor is the containing block for `position: fixed` descendants. The panel would
+ * resolve against the dialog while the fade ran and against the viewport once it finished, changing
+ * containing block partway through its own slide. `starting:` supplies the entry value a transition
+ * has no other way to get, since a closed `<dialog>` is `display: none` and so has no previous
+ * style to leave.
+ *
+ * Everything after the dim undoes the user-agent stylesheet, which gives `dialog` a border, `1em`
+ * of padding, `margin: auto`, `width: fit-content` and `background: canvas` — and paints
+ * `::backdrop` at `rgba(0, 0, 0, 0.1)`, which would darken every overlay and compound on stacked
+ * ones. None of these are decorative.
  */
 export const overlayDialogVariants = cva(
-	`${overlayBackdropVariants()} m-0 h-full max-h-none w-full max-w-none border-0 p-0 text-inherit [&::backdrop]:bg-transparent`
+	`${overlayBackdropVariants()} transition-opacity duration-150 ease-out starting:opacity-0 data-[state=closed]:opacity-0 m-0 h-full max-h-none w-full max-w-none border-0 p-0 text-inherit [&::backdrop]:bg-transparent`
 );
 
 // Every edge-anchored side shares its motion. Held here rather than repeated across the four so a
 // change to how a Sheet arrives is made once; the `center` surface animates differently, by design.
+//
+// `animation-duration-*` rather than `duration-*`, and no bare `transition` utility. Both matter:
+// `transition` sets `transition-property` to a list that includes `transform`, and `duration-*` sets
+// `transition-duration` — and with `transition-property` left at its initial `all`, dropping only
+// the `transition` utility still leaves `transition: all 500ms` armed on the panel.
+//
+// A transition and a keyframe animation on the same property is what made a Sheet appear to open
+// partway, stall, then finish arriving. `animation-duration-*` is tw-animate-css's own utility and
+// touches nothing but the animation.
 const SHEET_MOTION =
-	'gap-4 transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500';
+	'gap-4 ease-in-out data-[state=closed]:animation-duration-300 data-[state=open]:animation-duration-500';
 
 /**
  * The overlay surface itself — the only part that genuinely differs between Dialog and Sheet.
@@ -62,17 +69,25 @@ const SHEET_MOTION =
  * `center` is Dialog: a panel pinned to the middle of the viewport, arriving by fade and zoom. The
  * four edge values are Sheet, which is therefore literally a variant of the same base rather than a
  * parallel implementation of it.
+ *
+ * **`fixed`, and it has to stay `fixed`.** Anchoring the panel to its parent `<dialog>` with
+ * `absolute` looks equivalent — the dialog is `fixed inset-0` at the size of the viewport, and at
+ * rest the two resolve to an identical rectangle — but a `right` or `bottom` panel then arrives
+ * with no visible slide at all. The panel must position against the viewport, which in turn is why
+ * `overlayDialogVariants` may never let the dialog take a transform: a transformed ancestor would
+ * capture a `fixed` child and hand it a different containing block partway through its entrance.
  */
 export const overlaySurfaceVariants = cva(
-	// `fill-mode-forwards` on the exit for the same reason as the backdrop above: without it the
-	// panel finishes sliding or fading out and then snaps back to full opacity for the frame before
-	// the dialog closes.
+	// `fill-mode-forwards` on the exit: without it the panel finishes sliding or fading out and then
+	// snaps back to full opacity for the frame before the dialog closes, because `tw-animate-css`
+	// defaults `animation-fill-mode` to `none` and we deliberately hold the element open through its
+	// exit rather than unmounting on `animationend` the way Radix did.
 	'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fill-mode-forwards fixed z-50 flex flex-col shadow-lg',
 	{
 		variants: {
 			side: {
 				center:
-					'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 top-[50%] left-[50%] w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] rounded-lg border duration-200 sm:max-w-lg max-h-[90vh]',
+					'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 top-[50%] left-[50%] w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] rounded-lg border animation-duration-200 sm:max-w-lg max-h-[90vh]',
 				top: `${SHEET_MOTION} data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b`,
 				right: `${SHEET_MOTION} data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm`,
 				bottom: `${SHEET_MOTION} data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t`,

@@ -61,6 +61,67 @@ green, and the defect lived entirely between the two.
 After changing how a component _appears_ — animation, transition, z-order, opacity, transform — a
 green suite is not evidence. Ask for eyes on it.
 
+### But do not guess either — most of it is measurable
+
+"The suite cannot see it" is not a licence to ship a plausible theory. Static properties answer some
+questions on their own — a transition and a keyframe animation on the same property is a stutter
+waiting to happen, so read `animationName`, `animationDuration`, `animationFillMode`,
+`transitionProperty` and `transitionDuration` before theorising.
+
+For anything that unfolds over time, **sample in real time.** Arm a `MutationObserver` for the
+element appearing, then walk it with `setTimeout`, recording both what the style says and where the
+box actually is:
+
+```js
+const tick = () => {
+	const cs = getComputedStyle(panel);
+	const r = panel.getBoundingClientRect();
+	samples.push([
+		Math.round(performance.now() - t0),
+		cs.transform,
+		r.left,
+		r.height,
+		panel.offsetParent?.tagName
+	]);
+	if (performance.now() - t0 < 700) setTimeout(tick, 16);
+};
+```
+
+Three traps, each of which cost a wasted round trip on `18`:
+
+- **Stepping `animation.currentTime` by hand only ever draws the ideal curve.** It interpolates the
+  keyframes on demand, so it is perfectly smooth even when the real thing stutters, and a "monotonic,
+  no stall" reading from it proves nothing. It answers "what should this look like", never "what does
+  it look like". Use it to inspect keyframe values; never to clear an animation of a reported bug.
+- **`getBoundingClientRect()` does not include a transform that is animating on the compositor.**
+  It will sit at the untransformed position while `getComputedStyle().transform` reports movement.
+  So the two disagreeing tells you the animation is composited — it is not evidence the element is
+  failing to move. Confirm the element responds at all by setting `style.transform` by hand and
+  re-reading the rect. A discontinuity in `offsetParent` or in the box's _size_, though, is a real
+  layout change and can be trusted.
+- **Check `visibilityState` rather than assuming.** A hidden pane freezes playback and
+  `requestAnimationFrame`, which makes real-time sampling impossible and leaves manual stepping as
+  the only option. Observed reporting `visible` with `setTimeout` unthrottled at ~30ms, so the good
+  method was available all along.
+
+Two more, about the CSS itself:
+
+- **`duration-*` sets `transition-duration`, not just the animation's.** With `transition-property`
+  at its initial `all`, that arms a transition on everything. Use tw-animate-css's
+  `animation-duration-*` for a keyframe animation, and never the bare `transition` utility beside
+  one.
+- **A keyframe `animate-in` / `animate-out` always animates `transform`,** whatever it is asked to
+  do. `tw-animate-css` builds both on one pair of keyframes containing `translate3d(…)`, so an
+  element told only to fade still carries a transform for the length of that fade — and a
+  transformed ancestor becomes the containing block for `position: fixed` descendants. On `18` this
+  moved a Sheet's panel to a different containing block 150ms into a 500ms slide, which showed on
+  `right` and `bottom` and hid on `left` and `top`. Fade a container with `transition-opacity` plus
+  `starting:opacity-0`; keep `animate-in` for the things that genuinely move.
+
+Finally: **do not report a visual fix as confirmed without one of these probes**, and not on a probe
+alone if a person can just look. Say it is a hypothesis and ask for eyes, or measure it. Claiming a
+shared root cause because two bugs appeared together is how the same bug gets "fixed" twice.
+
 ## Accessibility gates are opt-in, per file
 
 `preview.ts` sets `a11y: { test: 'todo' }` globally — reports only, never fails. Individual files

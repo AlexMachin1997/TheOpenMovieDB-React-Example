@@ -63,6 +63,18 @@ const openDialog = async (canvasElement: HTMLElement, trigger: RegExp, name: Reg
 	const dialog = await within(document.body).findByRole('dialog');
 	await expect(dialog).toHaveAccessibleName(name);
 
+	// The pair of invariants behind an overlay arriving in one movement, neither of which any
+	// assertion about state can see. The panel positions against the viewport, and the dialog runs no
+	// keyframe animation — so nothing can hand the panel a different containing block partway through
+	// its entrance. Sheet is where this was visible, but both share the surface, so both assert it.
+	// `Overlay.variants.ts` has the why.
+	const panel = dialog.querySelector<HTMLElement>('[data-slot="dialog-content"]');
+	const panelPosition = panel ? window.getComputedStyle(panel).position : null;
+
+	await expect(panel).not.toBeNull();
+	await expect(panelPosition).toBe('fixed');
+	await expect(window.getComputedStyle(dialog).animationName).toBe('none');
+
 	return dialog;
 };
 
