@@ -1,7 +1,8 @@
 # A common overlay API — plan
 
-Status: **in progress.** Phase 1 (the native `<dialog>` primitive) is being built now. Phase 2 (the
-`title` / `description` / `footer` props) starts on a separate go-ahead.
+Status: **Phase 1 shipped; Phase 2 in progress.** The native `<dialog>` primitive is built,
+verified against all seven of discovery's success criteria, and merged. Phase 2 — the
+`title` / `description` / `footer` props — began on 2026-08-24.
 
 The design is settled elsewhere and is not repeated here: [`spec.md`](spec.md) for requirements and
 AC1–AC10, [`discovery.md`](discovery.md) for DD-1–DD-8, [`CONTEXT.md`](CONTEXT.md) for ADR-1–ADR-8.
@@ -56,6 +57,30 @@ API and belong to Phase 2.
 
 Gates, on the final run: `pnpm build --force` 0, `pnpm lint` 0, `npx vitest run` **391 passed, 41
 files, 27 skipped**.
+
+### Criterion 7, measured
+
+`play()` cannot assert appearance, but it can read `getAnimations()`. Taken from the running
+Storybook on 2026-08-24, opening each overlay and closing it via the X:
+
+| Surface        | Entry                                    | Exit              |
+| -------------- | ---------------------------------------- | ----------------- |
+| Backdrop, both | fade 0 → 1, 150ms                        | fade 1 → 0, 150ms |
+| Dialog panel   | fade + `scale3d(0.95)` → none, 200ms     | reverse, 200ms    |
+| Sheet `right`  | `translate3d(100%, 0, 0)` → none, 500ms  | reverse, 300ms    |
+| Sheet `left`   | `translate3d(-100%, 0, 0)` → none, 500ms | reverse, 300ms    |
+| Sheet `top`    | `translate3d(0, -100%, 0)` → none, 500ms | reverse, 300ms    |
+| Sheet `bottom` | `translate3d(0, 100%, 0)` → none, 500ms  | reverse, 300ms    |
+
+These are the pre-swap values exactly, including Sheet's asymmetric 500/300 and Dialog's flat 200,
+which is what DD-9 set out to preserve. Also confirmed on the same pass: the dim computes to
+`oklab(0 0 0 / 0.5)` on the `<dialog>` element and the user-agent `::backdrop` to
+`rgba(0, 0, 0, 0)`, so stacked modals do not compound Chromium's default 10% backdrop.
+
+**What this does not prove.** These are the animations the browser _applied_, not a recording of
+them playing — an automation pane reports `visibilityState: hidden`, which freezes playback at
+`currentTime: 0` (the same behaviour that forced the exit-deadline change above). The numbers are
+right; whether the result feels right is a human judgement and stays one.
 
 ## Phase 2 — the API
 
