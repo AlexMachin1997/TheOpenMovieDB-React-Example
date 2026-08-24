@@ -585,6 +585,11 @@ export const Dialog: Story = {
 			expect(documentScope.getByPlaceholderText('Search')).toBeInTheDocument();
 		});
 
+		// The palette names itself with `aria-label` rather than a hidden heading, and this suite
+		// disables `aria-dialog-name` because of Radix's PopoverContent — so axe cannot police it
+		// here and the assertion has to be explicit.
+		expect(documentScope.getByRole('dialog')).toHaveAccessibleName('Command Palette');
+
 		// Test 2: User sees all available options in the dialog
 		await waitFor(() => {
 			expect(documentScope.getByText('Calendar')).toBeInTheDocument();

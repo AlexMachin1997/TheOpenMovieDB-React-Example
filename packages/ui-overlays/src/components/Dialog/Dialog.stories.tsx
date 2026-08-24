@@ -26,10 +26,10 @@ const meta: Meta<typeof Dialog> = {
 	component: Dialog,
 	parameters: {
 		layout: 'centered',
-		// Promoted from the global `todo` deliberately. Radix requires every dialog to have an
-		// accessible name, and nothing in the component enforces it — so axe is what enforces it.
-		// A Title rendered outside the content, or omitted, fails `aria-dialog-name` here rather
-		// than shipping silently.
+		// Promoted from the global `todo` deliberately. A native `<dialog>` carries `role="dialog"`
+		// from the moment it exists, so one with no accessible name fails `aria-dialog-name` here
+		// rather than shipping silently. Every story below opens its overlay: a closed `<dialog>` is
+		// `display: none`, and axe reports nothing about what it cannot see.
 		a11y: { test: 'error' }
 	},
 	argTypes: {
@@ -71,28 +71,25 @@ export const Default: Story = {
 			<DialogTrigger asChild>
 				<Button variant='outline'>Open Dialog</Button>
 			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Default Dialog</DialogTitle>
-					<DialogDescription>
-						This dialog now has fixed header/footer with scrollable content by default.
-					</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					<div className='space-y-4'>
-						<p>This is the main content area that will scroll if needed.</p>
-						<p>
-							You can add any content here and it will be scrollable while keeping the header and
-							footer fixed.
-						</p>
-					</div>
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant='outline'>Cancel</Button>
-					</DialogClose>
-					<Button>Continue</Button>
-				</DialogFooter>
+			<DialogContent
+				title='Default Dialog'
+				description='This dialog now has fixed header/footer with scrollable content by default.'
+				footer={
+					<>
+						<DialogClose asChild>
+							<Button variant='outline'>Cancel</Button>
+						</DialogClose>
+						<Button>Continue</Button>
+					</>
+				}
+			>
+				<div className='space-y-4'>
+					<p>This is the main content area that will scroll if needed.</p>
+					<p>
+						You can add any content here and it will be scrollable while keeping the header and
+						footer fixed.
+					</p>
+				</div>
 			</DialogContent>
 		</Dialog>
 	),
@@ -129,28 +126,24 @@ export const ConfirmationDialog: Story = {
 			<DialogTrigger asChild>
 				<Button variant='destructive'>Delete Account</Button>
 			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Are you absolutely sure?</DialogTitle>
-					<DialogDescription>
-						This action cannot be undone. This will permanently delete your account and remove your
-						data from our servers.
-					</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					<Alert variant='destructive'>
-						<AlertTitle>This action cannot be undone.</AlertTitle>
-						<AlertDescription>
-							This will permanently delete your account and remove your data from our servers.
-						</AlertDescription>
-					</Alert>
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant='outline'>Cancel</Button>
-					</DialogClose>
-					<Button variant='destructive'>Delete Account</Button>
-				</DialogFooter>
+			<DialogContent
+				title='Are you absolutely sure?'
+				description='This action cannot be undone. This will permanently delete your account and remove your data from our servers.'
+				footer={
+					<>
+						<DialogClose asChild>
+							<Button variant='outline'>Cancel</Button>
+						</DialogClose>
+						<Button variant='destructive'>Delete Account</Button>
+					</>
+				}
+			>
+				<Alert variant='destructive'>
+					<AlertTitle>This action cannot be undone.</AlertTitle>
+					<AlertDescription>
+						This will permanently delete your account and remove your data from our servers.
+					</AlertDescription>
+				</Alert>
 			</DialogContent>
 		</Dialog>
 	),
@@ -165,69 +158,69 @@ export const LongContentDialog: Story = {
 			<DialogTrigger asChild>
 				<Button variant='outline'>View Long Content</Button>
 			</DialogTrigger>
-			<DialogContent className='sm:max-w-[600px]'>
-				<DialogHeader>
-					<DialogTitle>Terms and Conditions</DialogTitle>
-					<DialogDescription>Please read our terms and conditions carefully.</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					<div className='space-y-4'>
-						<section>
-							<h3 className='font-semibold mb-2'>1. Acceptance of Terms</h3>
-							<p className='text-sm text-muted-foreground'>
-								By accessing and using this website, you accept and agree to be bound by the terms
-								and provision of this agreement.
-							</p>
-						</section>
-						<section>
-							<h3 className='font-semibold mb-2'>2. Use License</h3>
-							<p className='text-sm text-muted-foreground'>
-								Permission is granted to temporarily download one copy of the materials (information
-								or software) on this website for personal, non-commercial transitory viewing only.
-							</p>
-						</section>
-						<section>
-							<h3 className='font-semibold mb-2'>3. Disclaimer</h3>
-							<p className='text-sm text-muted-foreground'>
-								The materials on this website are provided on an &apos;as is&apos; basis. We make no
-								warranties, expressed or implied, and hereby disclaim and negate all other
-								warranties including without limitation, implied warranties or conditions of
-								merchantability, fitness for a particular purpose, or non-infringement of
-								intellectual property or other violation of rights.
-							</p>
-						</section>
-						<section>
-							<h3 className='font-semibold mb-2'>4. Limitations</h3>
-							<p className='text-sm text-muted-foreground'>
-								In no event shall we or our suppliers be liable for any damages (including, without
-								limitation, damages for loss of data or profit, or due to business interruption)
-								arising out of the use or inability to use the materials on this website.
-							</p>
-						</section>
-						<section>
-							<h3 className='font-semibold mb-2'>5. Revisions and Errata</h3>
-							<p className='text-sm text-muted-foreground'>
-								The materials appearing on this website could include technical, typographical, or
-								photographic errors. We do not warrant that any of the materials on this website are
-								accurate, complete or current.
-							</p>
-						</section>
-						<section>
-							<h3 className='font-semibold mb-2'>6. Links</h3>
-							<p className='text-sm text-muted-foreground'>
-								We have not reviewed all of the sites linked to this website and are not responsible
-								for the contents of any such linked site. The inclusion of any link does not imply
-								endorsement by us of the site.
-							</p>
-						</section>
-					</div>
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant='outline'>Decline</Button>
-					</DialogClose>
-					<Button>Accept Terms</Button>
-				</DialogFooter>
+			<DialogContent
+				className='sm:max-w-[600px]'
+				title='Terms and Conditions'
+				description='Please read our terms and conditions carefully.'
+				footer={
+					<>
+						<DialogClose asChild>
+							<Button variant='outline'>Decline</Button>
+						</DialogClose>
+						<Button>Accept Terms</Button>
+					</>
+				}
+			>
+				<div className='space-y-4'>
+					<section>
+						<h3 className='font-semibold mb-2'>1. Acceptance of Terms</h3>
+						<p className='text-sm text-muted-foreground'>
+							By accessing and using this website, you accept and agree to be bound by the terms and
+							provision of this agreement.
+						</p>
+					</section>
+					<section>
+						<h3 className='font-semibold mb-2'>2. Use License</h3>
+						<p className='text-sm text-muted-foreground'>
+							Permission is granted to temporarily download one copy of the materials (information
+							or software) on this website for personal, non-commercial transitory viewing only.
+						</p>
+					</section>
+					<section>
+						<h3 className='font-semibold mb-2'>3. Disclaimer</h3>
+						<p className='text-sm text-muted-foreground'>
+							The materials on this website are provided on an &apos;as is&apos; basis. We make no
+							warranties, expressed or implied, and hereby disclaim and negate all other warranties
+							including without limitation, implied warranties or conditions of merchantability,
+							fitness for a particular purpose, or non-infringement of intellectual property or
+							other violation of rights.
+						</p>
+					</section>
+					<section>
+						<h3 className='font-semibold mb-2'>4. Limitations</h3>
+						<p className='text-sm text-muted-foreground'>
+							In no event shall we or our suppliers be liable for any damages (including, without
+							limitation, damages for loss of data or profit, or due to business interruption)
+							arising out of the use or inability to use the materials on this website.
+						</p>
+					</section>
+					<section>
+						<h3 className='font-semibold mb-2'>5. Revisions and Errata</h3>
+						<p className='text-sm text-muted-foreground'>
+							The materials appearing on this website could include technical, typographical, or
+							photographic errors. We do not warrant that any of the materials on this website are
+							accurate, complete or current.
+						</p>
+					</section>
+					<section>
+						<h3 className='font-semibold mb-2'>6. Links</h3>
+						<p className='text-sm text-muted-foreground'>
+							We have not reviewed all of the sites linked to this website and are not responsible
+							for the contents of any such linked site. The inclusion of any link does not imply
+							endorsement by us of the site.
+						</p>
+					</section>
+				</div>
 			</DialogContent>
 		</Dialog>
 	),
@@ -242,19 +235,19 @@ export const WithoutCloseButton: Story = {
 			<DialogTrigger asChild>
 				<Button variant='outline'>Show Important Message</Button>
 			</DialogTrigger>
-			<DialogContent showCloseButton={false}>
-				<DialogHeader>
-					<DialogTitle>Important Notice</DialogTitle>
-					<DialogDescription>This dialog requires explicit user action to close.</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					<p>This is an important message that requires user acknowledgment.</p>
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button>I Understand</Button>
-					</DialogClose>
-				</DialogFooter>
+			<DialogContent
+				showCloseButton={false}
+				title='Important Notice'
+				description='This dialog requires explicit user action to close.'
+				footer={
+					<>
+						<DialogClose asChild>
+							<Button>I Understand</Button>
+						</DialogClose>
+					</>
+				}
+			>
+				<p>This is an important message that requires user acknowledgment.</p>
 			</DialogContent>
 		</Dialog>
 	),
@@ -392,31 +385,30 @@ const LoadingDialogComponent = () => {
 			<DialogTrigger asChild>
 				<Button variant='outline'>Process Data</Button>
 			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Processing Data</DialogTitle>
-					<DialogDescription>Please wait while we process your request.</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					{isLoading ? (
-						<div className='space-y-4'>
-							<div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto'></div>
-							<p className='text-sm text-muted-foreground'>Processing...</p>
-						</div>
-					) : (
-						<p>Ready to process your data.</p>
-					)}
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant='outline' disabled={isLoading}>
-							Cancel
+			<DialogContent
+				title='Processing Data'
+				description='Please wait while we process your request.'
+				footer={
+					<>
+						<DialogClose asChild>
+							<Button variant='outline' disabled={isLoading}>
+								Cancel
+							</Button>
+						</DialogClose>
+						<Button onClick={handleSubmit} disabled={isLoading}>
+							{isLoading ? 'Processing...' : 'Start Processing'}
 						</Button>
-					</DialogClose>
-					<Button onClick={handleSubmit} disabled={isLoading}>
-						{isLoading ? 'Processing...' : 'Start Processing'}
-					</Button>
-				</DialogFooter>
+					</>
+				}
+			>
+				{isLoading ? (
+					<div className='space-y-4'>
+						<div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto'></div>
+						<p className='text-sm text-muted-foreground'>Processing...</p>
+					</div>
+				) : (
+					<p>Ready to process your data.</p>
+				)}
 			</DialogContent>
 		</Dialog>
 	);
@@ -435,48 +427,47 @@ export const NestedDialogs: Story = {
 			<DialogTrigger asChild>
 				<Button variant='outline'>Open Parent Dialog</Button>
 			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Parent Dialog</DialogTitle>
-					<DialogDescription>This dialog contains another dialog inside it.</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					<div className='py-4'>
-						<p>This is the parent dialog content.</p>
-						<div className='mt-4'>
-							<Dialog>
-								<DialogTrigger asChild>
-									<Button variant='outline' size='sm'>
-										Open Nested Dialog
-									</Button>
-								</DialogTrigger>
-								<DialogContent>
-									<DialogHeader>
-										<DialogTitle>Nested Dialog</DialogTitle>
-										<DialogDescription>
-											This is a dialog nested inside another dialog.
-										</DialogDescription>
-									</DialogHeader>
-									<DialogContentArea>
-										<div className='py-4'>
-											<p>Nested dialog content goes here.</p>
-										</div>
-									</DialogContentArea>
-									<DialogFooter>
-										<DialogClose asChild>
-											<Button variant='outline'>Close</Button>
-										</DialogClose>
-									</DialogFooter>
-								</DialogContent>
-							</Dialog>
-						</div>
+			<DialogContent
+				title='Parent Dialog'
+				description='This dialog contains another dialog inside it.'
+				footer={
+					<>
+						<DialogClose asChild>
+							<Button variant='outline'>Close Parent</Button>
+						</DialogClose>
+					</>
+				}
+			>
+				<div className='py-4'>
+					<p>This is the parent dialog content.</p>
+					<div className='mt-4'>
+						<Dialog>
+							<DialogTrigger asChild>
+								<Button variant='outline' size='sm'>
+									Open Nested Dialog
+								</Button>
+							</DialogTrigger>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle>Nested Dialog</DialogTitle>
+									<DialogDescription>
+										This is a dialog nested inside another dialog.
+									</DialogDescription>
+								</DialogHeader>
+								<DialogContentArea>
+									<div className='py-4'>
+										<p>Nested dialog content goes here.</p>
+									</div>
+								</DialogContentArea>
+								<DialogFooter>
+									<DialogClose asChild>
+										<Button variant='outline'>Close</Button>
+									</DialogClose>
+								</DialogFooter>
+							</DialogContent>
+						</Dialog>
 					</div>
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant='outline'>Close Parent</Button>
-					</DialogClose>
-				</DialogFooter>
+				</div>
 			</DialogContent>
 		</Dialog>
 	),
@@ -680,23 +671,20 @@ const ControlledDialogComponent = () => {
 			</div>
 
 			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>Manually Controlled Dialog</DialogTitle>
-						<DialogDescription>
-							This dialog is controlled by React state. You can open and close it programmatically.
-						</DialogDescription>
-					</DialogHeader>
-					<DialogContentArea>
-						<p>Current state: {open ? 'Open' : 'Closed'}</p>
-						<p>You can control this dialog from outside without using DialogTrigger.</p>
-					</DialogContentArea>
-					<DialogFooter>
-						<Button variant='outline' onClick={() => setOpen(false)}>
-							Close
-						</Button>
-						<Button onClick={() => setOpen(false)}>Confirm</Button>
-					</DialogFooter>
+				<DialogContent
+					title='Manually Controlled Dialog'
+					description='This dialog is controlled by React state. You can open and close it programmatically.'
+					footer={
+						<>
+							<Button variant='outline' onClick={() => setOpen(false)}>
+								Close
+							</Button>
+							<Button onClick={() => setOpen(false)}>Confirm</Button>
+						</>
+					}
+				>
+					<p>Current state: {open ? 'Open' : 'Closed'}</p>
+					<p>You can control this dialog from outside without using DialogTrigger.</p>
 				</DialogContent>
 			</Dialog>
 		</div>

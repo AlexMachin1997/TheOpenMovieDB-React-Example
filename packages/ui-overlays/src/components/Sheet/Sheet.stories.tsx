@@ -30,10 +30,10 @@ const meta: Meta<typeof Sheet> = {
 	component: Sheet,
 	parameters: {
 		layout: 'centered',
-		// Promoted from the global `todo` deliberately. Radix requires every sheet to have an
-		// accessible name, and nothing in the component enforces it — so axe is what enforces it.
-		// A Title rendered outside the content, or omitted, fails `aria-dialog-name` here rather
-		// than shipping silently.
+		// Promoted from the global `todo` deliberately. A native `<dialog>` carries `role="dialog"`
+		// from the moment it exists, so one with no accessible name fails `aria-dialog-name` here
+		// rather than shipping silently. Every story below opens its overlay: a closed `<dialog>` is
+		// `display: none`, and axe reports nothing about what it cannot see.
 		a11y: { test: 'error' }
 	}
 };
@@ -65,38 +65,35 @@ export const Basic: Story = {
 			<SheetTrigger asChild>
 				<Button variant='outline'>Open Sheet</Button>
 			</SheetTrigger>
-			<SheetContent>
-				<SheetHeader>
-					<SheetTitle>Edit profile</SheetTitle>
-					<SheetDescription>
-						Make changes to your profile here. Click save when you&apos;re done.
-					</SheetDescription>
-				</SheetHeader>
-				<SheetInnerContent className='grid gap-4 p-6'>
-					<div className='grid grid-cols-4 items-center gap-4'>
-						<label htmlFor='name' className='text-right'>
-							Name
-						</label>
-						<input
-							id='name'
-							defaultValue='Pedro Duarte'
-							className='col-span-3 rounCded-md border px-3 py-2'
-						/>
-					</div>
-					<div className='grid grid-cols-4 items-center gap-4'>
-						<label htmlFor='username' className='text-right'>
-							Username
-						</label>
-						<input
-							id='username'
-							defaultValue='@peduarte'
-							className='col-span-3 rounded-md border px-3 py-2'
-						/>
-					</div>
-				</SheetInnerContent>
-				<SheetFooter>
-					<Button type='submit'>Save changes</Button>
-				</SheetFooter>
+			<SheetContent
+				title='Edit profile'
+				description="Make changes to your profile here. Click save when you're done."
+				footer={
+					<>
+						<Button type='submit'>Save changes</Button>
+					</>
+				}
+			>
+				<div className='grid grid-cols-4 items-center gap-4'>
+					<label htmlFor='name' className='text-right'>
+						Name
+					</label>
+					<input
+						id='name'
+						defaultValue='Pedro Duarte'
+						className='col-span-3 rounCded-md border px-3 py-2'
+					/>
+				</div>
+				<div className='grid grid-cols-4 items-center gap-4'>
+					<label htmlFor='username' className='text-right'>
+						Username
+					</label>
+					<input
+						id='username'
+						defaultValue='@peduarte'
+						className='col-span-3 rounded-md border px-3 py-2'
+					/>
+				</div>
 			</SheetContent>
 		</Sheet>
 	),
@@ -125,36 +122,32 @@ const ControlledSheet = () => {
 				Sheet is currently: <span className='font-medium'>{open ? 'Open' : 'Closed'}</span>
 			</div>
 			<Sheet open={open} onOpenChange={setOpen}>
-				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>Controlled Sheet</SheetTitle>
-						<SheetDescription>
-							This sheet is controlled externally. You can open, close, or toggle it using the
-							buttons above.
-						</SheetDescription>
-					</SheetHeader>
-					<SheetInnerContent className='grid gap-4 p-6'>
-						<div className='space-y-2'>
-							<h3 className='font-medium'>Current State</h3>
-							<p className='text-sm text-muted-foreground'>
-								The sheet is currently {open ? 'open' : 'closed'}. You can control this state from
-								outside the component.
-							</p>
-						</div>
-						<div className='space-y-2'>
-							<h3 className='font-medium'>Usage</h3>
-							<p className='text-sm text-muted-foreground'>
-								This pattern is useful when you need to control the sheet state from a parent
-								component or based on external events.
-							</p>
-						</div>
-					</SheetInnerContent>
-					<SheetFooter>
-						<Button variant='outline' onClick={() => setOpen(false)}>
-							Close
-						</Button>
-						<Button onClick={() => setOpen(false)}>Save & Close</Button>
-					</SheetFooter>
+				<SheetContent
+					title='Controlled Sheet'
+					description='This sheet is controlled externally. You can open, close, or toggle it using the buttons above.'
+					footer={
+						<>
+							<Button variant='outline' onClick={() => setOpen(false)}>
+								Close
+							</Button>
+							<Button onClick={() => setOpen(false)}>Save & Close</Button>
+						</>
+					}
+				>
+					<div className='space-y-2'>
+						<h3 className='font-medium'>Current State</h3>
+						<p className='text-sm text-muted-foreground'>
+							The sheet is currently {open ? 'open' : 'closed'}. You can control this state from
+							outside the component.
+						</p>
+					</div>
+					<div className='space-y-2'>
+						<h3 className='font-medium'>Usage</h3>
+						<p className='text-sm text-muted-foreground'>
+							This pattern is useful when you need to control the sheet state from a parent
+							component or based on external events.
+						</p>
+					</div>
 				</SheetContent>
 			</Sheet>
 		</div>
@@ -186,34 +179,31 @@ const RefBasedSheet = () => {
 			</div>
 
 			<Sheet ref={sheetRef}>
-				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>Ref-Based Sheet</SheetTitle>
-						<SheetDescription>
-							This sheet is controlled via ref. The SheetClose component still works perfectly!
-						</SheetDescription>
-					</SheetHeader>
-					<SheetInnerContent className='grid gap-4 p-6'>
-						<div className='space-y-2'>
-							<h3 className='font-medium'>Imperative API</h3>
-							<p className='text-sm text-muted-foreground'>
-								Use the ref to programmatically control the sheet:{' '}
-								<code>sheetRef.current?.open()</code>
-							</p>
-						</div>
-						<div className='space-y-2'>
-							<h3 className='font-medium'>SheetClose Compatibility</h3>
-							<p className='text-sm text-muted-foreground'>
-								The existing SheetClose component works seamlessly with the new ref-based approach.
-							</p>
-						</div>
-					</SheetInnerContent>
-					<SheetFooter>
-						<Button variant='outline' onClick={() => sheetRef.current?.close()}>
-							Close via Ref
-						</Button>
-						<Button onClick={() => sheetRef.current?.close()}>Save & Close</Button>
-					</SheetFooter>
+				<SheetContent
+					title='Ref-Based Sheet'
+					description='This sheet is controlled via ref. The SheetClose component still works perfectly!'
+					footer={
+						<>
+							<Button variant='outline' onClick={() => sheetRef.current?.close()}>
+								Close via Ref
+							</Button>
+							<Button onClick={() => sheetRef.current?.close()}>Save & Close</Button>
+						</>
+					}
+				>
+					<div className='space-y-2'>
+						<h3 className='font-medium'>Imperative API</h3>
+						<p className='text-sm text-muted-foreground'>
+							Use the ref to programmatically control the sheet:{' '}
+							<code>sheetRef.current?.open()</code>
+						</p>
+					</div>
+					<div className='space-y-2'>
+						<h3 className='font-medium'>SheetClose Compatibility</h3>
+						<p className='text-sm text-muted-foreground'>
+							The existing SheetClose component works seamlessly with the new ref-based approach.
+						</p>
+					</div>
 				</SheetContent>
 			</Sheet>
 		</div>
@@ -243,8 +233,8 @@ export const RefBased: Story = {
 		const dialog = await documentScope.findByRole('dialog');
 
 		await step('close() closes it, asserted on state rather than on absence', async () => {
-			// While the sheet is open Radix marks the background `aria-hidden`, so the trigger row is
-			// out of the accessibility tree. Close from the sheet's own footer, which is in it.
+			// While the sheet is open the browser marks everything outside it `inert`, so the trigger
+			// row cannot be interacted with. Close from the sheet's own footer, which can.
 			await userEvent.click(await within(dialog).findByRole('button', { name: /close via ref/i }));
 			await waitFor(async () => {
 				await expect(dialog).toHaveAttribute('data-state', 'closed');
@@ -252,9 +242,9 @@ export const RefBased: Story = {
 		});
 
 		await step('open() still works after a full open/close cycle', async () => {
-			// `data-state="closed"` is not the end of it: the background stays `aria-hidden` until the
-			// exit animation finishes and the content unmounts, so the trigger row is still outside
-			// the accessibility tree here. Wait for the unmount before reaching for it.
+			// `data-state="closed"` is not the end of it: the element stays open, and the background
+			// stays inert, until the exit animation finishes and the content unmounts. Wait for that
+			// before reaching for the trigger row.
 			await waitFor(async () => {
 				await expect(documentScope.queryByRole('dialog')).not.toBeInTheDocument();
 			});
@@ -292,8 +282,8 @@ const RefWithControlledSheet = () => {
 						</SheetDescription>
 					</SheetHeader>
 					<SheetFooter>
-						{/* The modal Sheet disables pointer events on the rest of the page while open, so
-						the close trigger lives inside the content — same as the RefBased story above. */}
+						{/* The browser makes everything outside an open modal inert, so the close trigger
+						lives inside the content — same as the RefBased story above. */}
 						<Button onClick={() => sheetRef.current?.close()} variant='outline'>
 							Close via Ref
 						</Button>
@@ -322,8 +312,8 @@ export const RefWithControlled: Story = {
 		});
 		expect(canvas.getByText('Open')).toBeInTheDocument();
 
-		// The close trigger only exists once the sheet content is mounted, and it's part of the
-		// dialog's own accessible tree (unlike the now aria-hidden background), so query it here.
+		// The close trigger only exists once the sheet content is mounted, and it sits inside the
+		// dialog rather than in the inert background, so query it here.
 		const closeButton = await documentScope.findByRole('button', { name: /close via ref/i });
 		await userEvent.click(closeButton);
 
@@ -482,50 +472,49 @@ export const WithForm: Story = {
 			<SheetTrigger asChild>
 				<Button variant='outline'>Create New Item</Button>
 			</SheetTrigger>
-			<SheetContent>
-				<SheetHeader>
-					<SheetTitle>Create New Project</SheetTitle>
-					<SheetDescription>Fill in the details below to create a new project.</SheetDescription>
-				</SheetHeader>
-				<SheetInnerContent className='grid gap-4 p-6'>
-					<div className='grid gap-2'>
-						<label htmlFor='project-name' className='text-sm font-medium'>
-							Project Name
-						</label>
-						<input
-							id='project-name'
-							placeholder='Enter project name'
-							className='rounded-md border px-3 py-2'
-						/>
-					</div>
-					<div className='grid gap-2'>
-						<label htmlFor='description' className='text-sm font-medium'>
-							Description
-						</label>
-						<textarea
-							id='description'
-							placeholder='Enter project description'
-							rows={3}
-							className='rounded-md border px-3 py-2'
-						/>
-					</div>
-					<div className='grid gap-2'>
-						<label htmlFor='category' className='text-sm font-medium'>
-							Category
-						</label>
-						<select id='category' className='rounded-md border px-3 py-2'>
-							<option value=''>Select a category</option>
-							<option value='web'>Web Development</option>
-							<option value='mobile'>Mobile App</option>
-							<option value='design'>Design</option>
-							<option value='other'>Other</option>
-						</select>
-					</div>
-				</SheetInnerContent>
-				<SheetFooter>
-					<Button variant='outline'>Cancel</Button>
-					<Button>Create Project</Button>
-				</SheetFooter>
+			<SheetContent
+				title='Create New Project'
+				description='Fill in the details below to create a new project.'
+				footer={
+					<>
+						<Button variant='outline'>Cancel</Button>
+						<Button>Create Project</Button>
+					</>
+				}
+			>
+				<div className='grid gap-2'>
+					<label htmlFor='project-name' className='text-sm font-medium'>
+						Project Name
+					</label>
+					<input
+						id='project-name'
+						placeholder='Enter project name'
+						className='rounded-md border px-3 py-2'
+					/>
+				</div>
+				<div className='grid gap-2'>
+					<label htmlFor='description' className='text-sm font-medium'>
+						Description
+					</label>
+					<textarea
+						id='description'
+						placeholder='Enter project description'
+						rows={3}
+						className='rounded-md border px-3 py-2'
+					/>
+				</div>
+				<div className='grid gap-2'>
+					<label htmlFor='category' className='text-sm font-medium'>
+						Category
+					</label>
+					<select id='category' className='rounded-md border px-3 py-2'>
+						<option value=''>Select a category</option>
+						<option value='web'>Web Development</option>
+						<option value='mobile'>Mobile App</option>
+						<option value='design'>Design</option>
+						<option value='other'>Other</option>
+					</select>
+				</div>
 			</SheetContent>
 		</Sheet>
 	),
@@ -540,27 +529,23 @@ export const Confirmation: Story = {
 			<SheetTrigger asChild>
 				<Button variant='destructive'>Delete Account</Button>
 			</SheetTrigger>
-			<SheetContent>
-				<SheetHeader>
-					<SheetTitle>Are you absolutely sure?</SheetTitle>
-					<SheetDescription>
-						This action cannot be undone. This will permanently delete your account and remove your
-						data from our servers.
-					</SheetDescription>
-				</SheetHeader>
-				<SheetInnerContent>
-					<p className='text-sm text-muted-foreground'>
-						Please type &quot;delete&quot; to confirm this action.
-					</p>
-					<input
-						placeholder="Type 'delete' to confirm"
-						className='mt-2 w-full rounded-md border px-3 py-2'
-					/>
-				</SheetInnerContent>
-				<SheetFooter>
-					<Button variant='outline'>Cancel</Button>
-					<Button variant='destructive'>Delete Account</Button>
-				</SheetFooter>
+			<SheetContent
+				title='Are you absolutely sure?'
+				description='This action cannot be undone. This will permanently delete your account and remove your data from our servers.'
+				footer={
+					<>
+						<Button variant='outline'>Cancel</Button>
+						<Button variant='destructive'>Delete Account</Button>
+					</>
+				}
+			>
+				<p className='text-sm text-muted-foreground'>
+					Please type &quot;delete&quot; to confirm this action.
+				</p>
+				<input
+					placeholder="Type 'delete' to confirm"
+					className='mt-2 w-full rounded-md border px-3 py-2'
+				/>
 			</SheetContent>
 		</Sheet>
 	),
@@ -575,120 +560,119 @@ export const LongContent: Story = {
 			<SheetTrigger asChild>
 				<Button variant='outline'>Open Long Content Sheet</Button>
 			</SheetTrigger>
-			<SheetContent>
-				<SheetHeader>
-					<SheetTitle>Terms of Service</SheetTitle>
-					<SheetDescription>Please read our complete terms of service agreement.</SheetDescription>
-				</SheetHeader>
-				<SheetInnerContent className='space-y-4'>
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>1. Acceptance of Terms</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							By accessing and using this website, you accept and agree to be bound by the terms and
-							provision of this agreement. In addition, when using this website&apos;s particular
-							services, you shall be subject to any posted guidelines or rules applicable to such
-							services. Any participation in this service will constitute acceptance of this
-							agreement.
-						</p>
-					</section>
+			<SheetContent
+				title='Terms of Service'
+				description='Please read our complete terms of service agreement.'
+				footer={
+					<>
+						<Button variant='outline'>Decline</Button>
+						<Button>Accept Terms</Button>
+					</>
+				}
+			>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>1. Acceptance of Terms</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						By accessing and using this website, you accept and agree to be bound by the terms and
+						provision of this agreement. In addition, when using this website&apos;s particular
+						services, you shall be subject to any posted guidelines or rules applicable to such
+						services. Any participation in this service will constitute acceptance of this
+						agreement.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>2. Use License</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							Permission is granted to temporarily download one copy of the materials (information
-							or software) on this website for personal, non-commercial transitory viewing only.
-							This is the grant of a license, not a transfer of title, and under this license you
-							may not: modify or copy the materials; use the materials for any commercial purpose or
-							for any public display (commercial or non-commercial); attempt to decompile or reverse
-							engineer any software contained on this website; remove any copyright or other
-							proprietary notations from the materials; or transfer the materials to another person
-							or &quot;mirror&quot; the materials on any other server.
-						</p>
-					</section>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>2. Use License</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						Permission is granted to temporarily download one copy of the materials (information or
+						software) on this website for personal, non-commercial transitory viewing only. This is
+						the grant of a license, not a transfer of title, and under this license you may not:
+						modify or copy the materials; use the materials for any commercial purpose or for any
+						public display (commercial or non-commercial); attempt to decompile or reverse engineer
+						any software contained on this website; remove any copyright or other proprietary
+						notations from the materials; or transfer the materials to another person or
+						&quot;mirror&quot; the materials on any other server.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>3. Disclaimer</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							The materials on this website are provided on an &apos;as is&apos; basis. This website
-							makes no warranties, expressed or implied, and hereby disclaims and negates all other
-							warranties including without limitation, implied warranties or conditions of
-							merchantability, fitness for a particular purpose, or non-infringement of intellectual
-							property or other violation of rights.
-						</p>
-					</section>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>3. Disclaimer</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						The materials on this website are provided on an &apos;as is&apos; basis. This website
+						makes no warranties, expressed or implied, and hereby disclaims and negates all other
+						warranties including without limitation, implied warranties or conditions of
+						merchantability, fitness for a particular purpose, or non-infringement of intellectual
+						property or other violation of rights.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>4. Limitations</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							In no event shall this website or its suppliers be liable for any damages (including,
-							without limitation, damages for loss of data or profit, or due to business
-							interruption) arising out of the use or inability to use the materials on this
-							website, even if this website or a this website authorized representative has been
-							notified orally or in writing of the possibility of such damage.
-						</p>
-					</section>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>4. Limitations</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						In no event shall this website or its suppliers be liable for any damages (including,
+						without limitation, damages for loss of data or profit, or due to business interruption)
+						arising out of the use or inability to use the materials on this website, even if this
+						website or a this website authorized representative has been notified orally or in
+						writing of the possibility of such damage.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>5. Accuracy of Materials</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							The materials appearing on this website could include technical, typographical, or
-							photographic errors. This website does not warrant that any of the materials on its
-							website are accurate, complete or current. This website may make changes to the
-							materials contained on its website at any time without notice.
-						</p>
-					</section>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>5. Accuracy of Materials</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						The materials appearing on this website could include technical, typographical, or
+						photographic errors. This website does not warrant that any of the materials on its
+						website are accurate, complete or current. This website may make changes to the
+						materials contained on its website at any time without notice.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>6. Links</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							This website has not reviewed all of the sites linked to its website and is not
-							responsible for the contents of any such linked site. The inclusion of any link does
-							not imply endorsement by this website of the site. Use of any such linked website is
-							at the user&apos;s own risk.
-						</p>
-					</section>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>6. Links</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						This website has not reviewed all of the sites linked to its website and is not
+						responsible for the contents of any such linked site. The inclusion of any link does not
+						imply endorsement by this website of the site. Use of any such linked website is at the
+						user&apos;s own risk.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>7. Modifications</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							This website may revise these terms of service for its website at any time without
-							notice. By using this website you are agreeing to be bound by the then current version
-							of these Terms and Conditions of Use.
-						</p>
-					</section>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>7. Modifications</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						This website may revise these terms of service for its website at any time without
+						notice. By using this website you are agreeing to be bound by the then current version
+						of these Terms and Conditions of Use.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>8. Governing Law</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							These terms and conditions are governed by and construed in accordance with the laws
-							and you irrevocably submit to the exclusive jurisdiction of the courts in that State
-							or location.
-						</p>
-					</section>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>8. Governing Law</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						These terms and conditions are governed by and construed in accordance with the laws and
+						you irrevocably submit to the exclusive jurisdiction of the courts in that State or
+						location.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>9. Privacy Policy</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							Your privacy is important to us. It is this website&apos;s policy to respect your
-							privacy regarding any information we may collect while operating our website.
-							Accordingly, we have developed this privacy policy in order for you to understand how
-							we collect, use, communicate, disclose and otherwise make use of personal information.
-						</p>
-					</section>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>9. Privacy Policy</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						Your privacy is important to us. It is this website&apos;s policy to respect your
+						privacy regarding any information we may collect while operating our website.
+						Accordingly, we have developed this privacy policy in order for you to understand how we
+						collect, use, communicate, disclose and otherwise make use of personal information.
+					</p>
+				</section>
 
-					<section>
-						<h3 className='font-semibold text-lg mb-2'>10. Contact Information</h3>
-						<p className='text-sm text-muted-foreground leading-relaxed'>
-							If you have any questions about these Terms of Service, please contact us at
-							legal@example.com. We will be happy to clarify any terms or conditions that may be
-							unclear.
-						</p>
-					</section>
-				</SheetInnerContent>
-				<SheetFooter>
-					<Button variant='outline'>Decline</Button>
-					<Button>Accept Terms</Button>
-				</SheetFooter>
+				<section>
+					<h3 className='font-semibold text-lg mb-2'>10. Contact Information</h3>
+					<p className='text-sm text-muted-foreground leading-relaxed'>
+						If you have any questions about these Terms of Service, please contact us at
+						legal@example.com. We will be happy to clarify any terms or conditions that may be
+						unclear.
+					</p>
+				</section>
 			</SheetContent>
 		</Sheet>
 	),
@@ -703,74 +687,71 @@ const ScrollableContentSheet = () => {
 			<SheetTrigger asChild>
 				<Button variant='outline'>Open Scrollable Sheet</Button>
 			</SheetTrigger>
-			<SheetContent>
-				<SheetHeader>
-					<SheetTitle>Scrollable Content</SheetTitle>
-					<SheetDescription>
-						This sheet uses SheetInnerContent for scrollable content with default padding.
-					</SheetDescription>
-				</SheetHeader>
-				<SheetInnerContent>
-					<div className='space-y-6'>
-						<section>
-							<h3 className='text-lg font-semibold mb-4'>Section 1</h3>
-							<p className='text-muted-foreground mb-4'>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-								incididunt ut labore et dolore magna aliqua.
-							</p>
-							<div className='grid gap-4'>
-								{[1, 2, 3, 4, 5].map((num) => (
-									<div key={num} className='p-4 border rounded-lg'>
-										<h4 className='font-medium'>Item {num}</h4>
-										<p className='text-sm text-muted-foreground'>
-											This is item {num} with some content to demonstrate scrolling.
-										</p>
-									</div>
-								))}
-							</div>
-						</section>
+			<SheetContent
+				title='Scrollable Content'
+				description='This sheet uses SheetInnerContent for scrollable content with default padding.'
+				footer={
+					<>
+						<Button variant='outline'>Cancel</Button>
+						<Button>Save Changes</Button>
+					</>
+				}
+			>
+				<div className='space-y-6'>
+					<section>
+						<h3 className='text-lg font-semibold mb-4'>Section 1</h3>
+						<p className='text-muted-foreground mb-4'>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+							incididunt ut labore et dolore magna aliqua.
+						</p>
+						<div className='grid gap-4'>
+							{[1, 2, 3, 4, 5].map((num) => (
+								<div key={num} className='p-4 border rounded-lg'>
+									<h4 className='font-medium'>Item {num}</h4>
+									<p className='text-sm text-muted-foreground'>
+										This is item {num} with some content to demonstrate scrolling.
+									</p>
+								</div>
+							))}
+						</div>
+					</section>
 
-						<section>
-							<h3 className='text-lg font-semibold mb-4'>Section 2</h3>
-							<p className='text-muted-foreground mb-4'>
-								Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-								ex ea commodo consequat.
-							</p>
-							<div className='grid gap-4'>
-								{[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-									<div key={num} className='p-4 border rounded-lg'>
-										<h4 className='font-medium'>Another Item {num}</h4>
-										<p className='text-sm text-muted-foreground'>
-											More content to ensure the sheet becomes scrollable.
-										</p>
-									</div>
-								))}
-							</div>
-						</section>
+					<section>
+						<h3 className='text-lg font-semibold mb-4'>Section 2</h3>
+						<p className='text-muted-foreground mb-4'>
+							Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+							ea commodo consequat.
+						</p>
+						<div className='grid gap-4'>
+							{[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+								<div key={num} className='p-4 border rounded-lg'>
+									<h4 className='font-medium'>Another Item {num}</h4>
+									<p className='text-sm text-muted-foreground'>
+										More content to ensure the sheet becomes scrollable.
+									</p>
+								</div>
+							))}
+						</div>
+					</section>
 
-						<section>
-							<h3 className='text-lg font-semibold mb-4'>Section 3</h3>
-							<p className='text-muted-foreground mb-4'>
-								Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-								fugiat nulla pariatur.
-							</p>
-							<div className='grid gap-4'>
-								{[1, 2, 3, 4, 5, 6].map((num) => (
-									<div key={num} className='p-4 border rounded-lg'>
-										<h4 className='font-medium'>Final Item {num}</h4>
-										<p className='text-sm text-muted-foreground'>
-											Final section to demonstrate the full scrolling capability.
-										</p>
-									</div>
-								))}
-							</div>
-						</section>
-					</div>
-				</SheetInnerContent>
-				<SheetFooter>
-					<Button variant='outline'>Cancel</Button>
-					<Button>Save Changes</Button>
-				</SheetFooter>
+					<section>
+						<h3 className='text-lg font-semibold mb-4'>Section 3</h3>
+						<p className='text-muted-foreground mb-4'>
+							Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+							nulla pariatur.
+						</p>
+						<div className='grid gap-4'>
+							{[1, 2, 3, 4, 5, 6].map((num) => (
+								<div key={num} className='p-4 border rounded-lg'>
+									<h4 className='font-medium'>Final Item {num}</h4>
+									<p className='text-sm text-muted-foreground'>
+										Final section to demonstrate the full scrolling capability.
+									</p>
+								</div>
+							))}
+						</div>
+					</section>
+				</div>
 			</SheetContent>
 		</Sheet>
 	);
@@ -789,34 +770,33 @@ const CustomStyledSheet = () => {
 			<SheetTrigger asChild>
 				<Button variant='outline'>Open Custom Styled Sheet</Button>
 			</SheetTrigger>
-			<SheetContent>
-				<SheetHeader>
-					<SheetTitle>Custom Styled Content</SheetTitle>
-					<SheetDescription>This sheet uses custom styling on SheetInnerContent.</SheetDescription>
-				</SheetHeader>
-				<SheetInnerContent className='p-8 bg-gradient-to-br from-blue-50 to-indigo-100'>
-					<div className='space-y-4'>
-						<h3 className='text-xl font-bold text-blue-900'>Custom Styling</h3>
-						<p className='text-blue-700'>
-							This SheetInnerContent has custom padding (p-8) and a gradient background. The default
-							p-6 padding has been overridden.
-						</p>
-						<div className='grid gap-3'>
-							{[1, 2, 3, 4].map((num) => (
-								<div key={num} className='p-4 bg-white rounded-lg shadow-sm'>
-									<h4 className='font-medium text-blue-900'>Custom Item {num}</h4>
-									<p className='text-sm text-blue-600'>
-										This demonstrates how you can override the default styling.
-									</p>
-								</div>
-							))}
-						</div>
+			<SheetContent
+				title='Custom Styled Content'
+				description='This sheet uses custom styling on SheetInnerContent.'
+				footer={
+					<>
+						<Button variant='outline'>Cancel</Button>
+						<Button>Save Changes</Button>
+					</>
+				}
+			>
+				<div className='space-y-4'>
+					<h3 className='text-xl font-bold text-blue-900'>Custom Styling</h3>
+					<p className='text-blue-700'>
+						This SheetInnerContent has custom padding (p-8) and a gradient background. The default
+						p-6 padding has been overridden.
+					</p>
+					<div className='grid gap-3'>
+						{[1, 2, 3, 4].map((num) => (
+							<div key={num} className='p-4 bg-white rounded-lg shadow-sm'>
+								<h4 className='font-medium text-blue-900'>Custom Item {num}</h4>
+								<p className='text-sm text-blue-600'>
+									This demonstrates how you can override the default styling.
+								</p>
+							</div>
+						))}
 					</div>
-				</SheetInnerContent>
-				<SheetFooter>
-					<Button variant='outline'>Cancel</Button>
-					<Button>Save Changes</Button>
-				</SheetFooter>
+				</div>
 			</SheetContent>
 		</Sheet>
 	);
@@ -932,12 +912,17 @@ const WithConfirmationDialogSheet = () => {
 	const [showConfirmation, setShowConfirmation] = React.useState(false);
 	const sheetRef = React.useRef<SheetRef>(undefined);
 
+	// Set once the user has confirmed, so the next close request is allowed through rather than
+	// bounced back into the dialog again.
+	const confirmed = React.useRef(false);
+
 	const handleCloseAttempt = () => {
 		setShowConfirmation(true);
 	};
 
 	const handleConfirmClose = () => {
 		setShowConfirmation(false);
+		confirmed.current = true;
 		sheetRef.current?.close();
 	};
 
@@ -952,36 +937,40 @@ const WithConfirmationDialogSheet = () => {
 				<SheetTrigger asChild>
 					<Button variant='outline'>Open Sheet with Confirmation</Button>
 				</SheetTrigger>
-				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>Unsaved Changes</SheetTitle>
-						<SheetDescription>
-							You have unsaved changes. Use <strong>Close Sheet</strong> below to test the
-							confirmation dialog — the ✕ closes immediately, because Radix&apos;s onOpenChange
-							reports a close and cannot veto one.
-						</SheetDescription>
-					</SheetHeader>
-					<SheetInnerContent className='grid gap-4 p-6'>
-						<div className='space-y-4'>
-							<p className='text-sm text-muted-foreground'>
-								This sheet has unsaved changes. When you try to close it, a confirmation dialog will
-								appear.
+				<SheetContent
+					title='Unsaved Changes'
+					description='You have unsaved changes. Every way out — the ✕, Escape, a backdrop click and the button below — is refused until you confirm.'
+					onRequestClose={(event) => {
+						if (confirmed.current) return;
+
+						// Refusing here leaves the sheet genuinely open, not closed-and-reopened. Every
+						// route converges on this one handler, which is why the ✕ and Escape are guarded
+						// without either being wired up separately.
+						event.preventDefault();
+						handleCloseAttempt();
+					}}
+					footer={
+						<>
+							<Button variant='outline' onClick={handleCloseAttempt}>
+								Close Sheet
+							</Button>
+							<SheetClose asChild>
+								<Button>Save Changes</Button>
+							</SheetClose>
+						</>
+					}
+				>
+					<div className='space-y-4'>
+						<p className='text-sm text-muted-foreground'>
+							This sheet has unsaved changes. When you try to close it, a confirmation dialog will
+							appear.
+						</p>
+						<div className='p-4 bg-yellow-50 border border-yellow-200 rounded-md'>
+							<p className='text-sm text-yellow-800'>
+								⚠️ You have unsaved changes that will be lost if you close without saving.
 							</p>
-							<div className='p-4 bg-yellow-50 border border-yellow-200 rounded-md'>
-								<p className='text-sm text-yellow-800'>
-									⚠️ You have unsaved changes that will be lost if you close without saving.
-								</p>
-							</div>
 						</div>
-					</SheetInnerContent>
-					<SheetFooter>
-						<Button variant='outline' onClick={handleCloseAttempt}>
-							Close Sheet
-						</Button>
-						<SheetClose asChild>
-							<Button>Save Changes</Button>
-						</SheetClose>
-					</SheetFooter>
+					</div>
 				</SheetContent>
 			</Sheet>
 
@@ -1039,34 +1028,31 @@ const WithConfirmationDialogRefSheet = () => {
 				<SheetTrigger asChild>
 					<Button variant='outline'>Open Sheet with Ref Confirmation</Button>
 				</SheetTrigger>
-				<SheetContent>
-					<SheetHeader>
-						<SheetTitle>Unsaved Changes (Ref Approach)</SheetTitle>
-						<SheetDescription>
-							This version uses the sheet ref approach for confirmation before closing.
-						</SheetDescription>
-					</SheetHeader>
-					<SheetInnerContent className='grid gap-4 p-6'>
-						<div className='space-y-4'>
-							<p className='text-sm text-muted-foreground'>
-								This sheet uses the SheetRef API. When you try to close it, a confirmation dialog
-								will appear.
+				<SheetContent
+					title='Unsaved Changes (Ref Approach)'
+					description='This version uses the sheet ref approach for confirmation before closing.'
+					footer={
+						<>
+							<Button variant='outline' onClick={handleCloseAttempt}>
+								Close Sheet
+							</Button>
+							<SheetClose asChild>
+								<Button>Save Changes</Button>
+							</SheetClose>
+						</>
+					}
+				>
+					<div className='space-y-4'>
+						<p className='text-sm text-muted-foreground'>
+							This sheet uses the SheetRef API. When you try to close it, a confirmation dialog will
+							appear.
+						</p>
+						<div className='p-4 bg-blue-50 border border-blue-200 rounded-md'>
+							<p className='text-sm text-blue-800'>
+								ℹ️ Using sheetRef.current?.close() to programmatically close the sheet.
 							</p>
-							<div className='p-4 bg-blue-50 border border-blue-200 rounded-md'>
-								<p className='text-sm text-blue-800'>
-									ℹ️ Using sheetRef.current?.close() to programmatically close the sheet.
-								</p>
-							</div>
 						</div>
-					</SheetInnerContent>
-					<SheetFooter>
-						<Button variant='outline' onClick={handleCloseAttempt}>
-							Close Sheet
-						</Button>
-						<SheetClose asChild>
-							<Button>Save Changes</Button>
-						</SheetClose>
-					</SheetFooter>
+					</div>
 				</SheetContent>
 			</Sheet>
 
