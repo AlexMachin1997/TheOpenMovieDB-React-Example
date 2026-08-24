@@ -44,7 +44,7 @@ report a build time or a "clean build is green" without it.
 | Lint            | `pnpm lint`                                         | Errors AND warnings fail it (`--max-warnings 0`). Healthy today: **0 errors, 0 warnings**                                             |
 | Prettier        | `pnpm prettier:check`                               | The gate. `pnpm prettier` still rewrites — see below                                                                                  |
 | Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                                    |
-| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 386 passed, 27 skipped. **Local only, on purpose** — see below |
+| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 391 passed, 27 skipped. **Local only, on purpose** — see below |
 | Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                                        |
 
 ### Neither test gate type-checks — a green suite can sit on a type error
@@ -127,11 +127,21 @@ Also closed in `13`: **`husky` is now a real dependency** with a `prepare` scrip
 from the lockfile entirely, so `.husky/pre-commit` only ever ran on a machine where `core.hooksPath`
 happened to already be set — on a fresh clone the hook did not exist.
 
-### The suite is green — 386 passed, 27 skipped
+### The suite is green — 391 passed, 27 skipped
 
-Re-baselined 2026-08-22 after `17`: **41 passed | 27 skipped (68 files)**, **386 passed (386
-tests)**, ~65s warm / ~140s cold. The 27 skipped are the `.mdx` docs pages, which carry no tests.
-(`15` had left it at 385; `17` added one story.)
+Re-baselined 2026-08-24 after `18`'s Phase 1: **41 passed | 27 skipped (68 files)**, **391 passed
+(391 tests)**, ~80s warm. The 27 skipped are the `.mdx` docs pages, which carry no tests. (`15` left
+it at 385, `17` at 386; `18` added five overlay-nesting stories.)
+
+**Story count is not test count.** Every story is a test whether or not it has a `play()`, so adding
+a `play()` to an existing story moves nothing. `18` added 23 of them and the total rose only by the
+five genuinely new stories.
+
+**The suite has load-sensitive flakes.** Several `play()` functions `waitFor` an animation to finish
+— Radix's Accordion collapse, `Form`'s submissions — and the default 1000ms expires when the machine
+is busy. Observed across three consecutive full runs on 2026-08-24: two failures, in different files
+each time, both green in isolation, third run green at 391. A dev server left running on port 6006
+was enough to cause it. Before chasing a red run, re-run the failing file alone.
 
 The one failure that used to sit here was **date-dependent, not a `Calendar` bug**: `Basic` seeds
 `useState(new Date())` so today is selected on mount, while its `play()` asserted the 15th was _not_
