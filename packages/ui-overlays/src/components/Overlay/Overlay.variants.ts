@@ -49,6 +49,21 @@ export const overlayDialogVariants = cva(
 	`${overlayBackdropVariants()} transition-opacity duration-150 ease-out starting:opacity-0 data-[state=closed]:opacity-0 m-0 h-full max-h-none w-full max-w-none border-0 p-0 text-inherit [&::backdrop]:bg-transparent`
 );
 
+/**
+ * Layout shared by both overlay footers, which is all of it bar padding and borders.
+ *
+ * Keyed on the panel's own width through `@container` rather than the viewport's, because a Sheet
+ * is narrow on every screen: `w-3/4 sm:max-w-sm` is 384px on a phone and 384px on a desktop. A
+ * viewport breakpoint would put its buttons in a row inside a panel with no room for one, which is
+ * exactly the bug `sm:flex-row` used to have here.
+ *
+ * `@md` is 28rem, so a Sheet's 24rem panel stacks and a Dialog's 32rem one does not — including on
+ * a phone, where the Dialog is narrower than its own breakpoint and stacks too.
+ */
+export const overlayFooterVariants = cva(
+	'flex flex-col-reverse gap-2 @md:flex-row @md:justify-end'
+);
+
 // Every edge-anchored side shares its motion. Held here rather than repeated across the four so a
 // change to how a Sheet arrives is made once; the `center` surface animates differently, by design.
 //
@@ -82,7 +97,13 @@ export const overlaySurfaceVariants = cva(
 	// snaps back to full opacity for the frame before the dialog closes, because `tw-animate-css`
 	// defaults `animation-fill-mode` to `none` and we deliberately hold the element open through its
 	// exit rather than unmounting on `animationend` the way Radix did.
-	'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fill-mode-forwards fixed z-50 flex flex-col shadow-lg',
+	// `@container` so the footer can lay itself out against the panel's width rather than the
+	// viewport's. It carries `contain: layout inline-size`, which would make the panel a containing
+	// block for any `position: fixed` descendant — nothing inside is fixed today, and the anchored
+	// content DD-6 portals into an overlay lands on the `<dialog>`, a sibling of this box, not
+	// inside it. No side's width comes from its contents either, so inline-size containment changes
+	// no measurement.
+	'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fill-mode-forwards @container fixed z-50 flex flex-col shadow-lg',
 	{
 		variants: {
 			side: {
