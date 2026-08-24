@@ -14,9 +14,9 @@ export interface ICommandDialog extends Omit<React.ComponentProps<typeof Dialog>
 	className?: string;
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;
+	/** Names the palette. Applied as `aria-label`, since the search input is the visible affordance. */
 	title?: string;
 	children?: React.ReactNode;
-	description?: string;
 	showCloseButton?: boolean;
 }
 

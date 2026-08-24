@@ -592,6 +592,81 @@ export const AnchoredContentInsideADialog: Story = {
 	}
 };
 
+const GuardedDialog = () => {
+	const [refused, setRefused] = React.useState<string[]>([]);
+	const [locked, setLocked] = React.useState(true);
+
+	return (
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button variant='outline'>Open Guarded Dialog</Button>
+			</DialogTrigger>
+			<DialogContent
+				title='Unsaved changes'
+				description='Every route out is refused while this is locked.'
+				onRequestClose={(event) => {
+					setRefused((seen) => [...seen, event.source]);
+					if (locked) event.preventDefault();
+				}}
+				footer={<Button onClick={() => setLocked(false)}>Allow closing</Button>}
+			>
+				<p>
+					Refused so far: <span>{refused.join(', ') || 'nothing yet'}</span>
+				</p>
+			</DialogContent>
+		</Dialog>
+	);
+};
+
+export const GuardedClose: Story = {
+	render: () => <GuardedDialog />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		await userEvent.click(canvas.getByRole('button', { name: /open guarded dialog/i }));
+		const dialog = (await documentScope.findByRole('dialog')) as HTMLDialogElement;
+
+		// Asserted on the element's own `open` property, not just on `data-state`. A veto has to
+		// leave the dialog *genuinely* open — visually open but internally closed is the failure
+		// this is guarding against, and only the DOM property tells the two apart.
+		const stillOpen = async () => {
+			await expect(dialog).toHaveAttribute('data-state', 'open');
+			await expect(dialog.open).toBe(true);
+		};
+
+		await step('Escape is refused', async () => {
+			await userEvent.keyboard('{Escape}');
+			await stillOpen();
+		});
+
+		await step('the close button is refused', async () => {
+			await userEvent.click(within(dialog).getByRole('button', { name: /close/i }));
+			await stillOpen();
+		});
+
+		await step('backdrop dismissal is refused', async () => {
+			fireEvent.click(dialog);
+			await stillOpen();
+		});
+
+		await step('all three routes reached the one handler', async () => {
+			await expect(dialog).toHaveTextContent('escape');
+			await expect(dialog).toHaveTextContent('close-button');
+			await expect(dialog).toHaveTextContent('backdrop');
+		});
+
+		await step('and the same routes close it once the guard lifts', async () => {
+			await userEvent.click(within(dialog).getByRole('button', { name: /allow closing/i }));
+			await userEvent.keyboard('{Escape}');
+
+			await waitFor(async () => {
+				await expect(dialog).toHaveAttribute('data-state', 'closed');
+			});
+		});
+	}
+};
+
 const ControlledDialogComponent = () => {
 	const [open, setOpen] = React.useState(false);
 

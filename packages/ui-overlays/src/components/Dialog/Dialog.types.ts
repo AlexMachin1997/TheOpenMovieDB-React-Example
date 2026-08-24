@@ -60,6 +60,18 @@ export interface IDialogContent
 	// `title`, `open`, `onCancel` and `onClose` are `<dialog>` attributes that collide with props
 	// this component owns, so they are removed rather than shadowed.
 	extends Omit<React.ComponentProps<'dialog'>, 'title' | 'open' | 'onCancel' | 'onClose'> {
+	/**
+	 * The heading. Supplying it builds the header for you and names the overlay, with no ARIA at
+	 * the call site.
+	 */
+	title?: React.ReactNode;
+
+	/** Supporting text under the heading. Supplying it describes the overlay. */
+	description?: React.ReactNode;
+
+	/** The footer's contents. The footer itself is built for you. */
+	footer?: React.ReactNode;
+
 	/** Whether to show the close (X) button. Defaults to `true`. */
 	showCloseButton?: boolean;
 

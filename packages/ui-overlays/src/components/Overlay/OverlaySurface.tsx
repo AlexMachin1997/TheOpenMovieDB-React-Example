@@ -6,6 +6,7 @@ import { OverlayContainerContext } from '~/components/Overlay/contexts/overlay-c
 import { OverlayContentContext } from '~/components/Overlay/contexts/overlay-content-context';
 import { overlayDialogVariants } from '~/components/Overlay/Overlay.variants';
 import { useDialogElement } from '~/components/Overlay/hooks/useDialogElement';
+import { useOverlayLabelling } from '~/components/Overlay/hooks/useOverlayLabelling';
 import { useOverlayRootContext } from '~/components/Overlay/hooks/useOverlayRootContext';
 import { useScrollLock } from '~/components/Overlay/hooks/useScrollLock';
 
@@ -30,6 +31,12 @@ export interface IOverlaySurface
 	 * the overlay stays genuinely open.
 	 */
 	onRequestClose?: (event: IOverlayCloseEvent) => void;
+
+	/** Id of the heading the content component rendered from its `title` prop, if it did. */
+	titleId?: string;
+
+	/** Id of the paragraph the content component rendered from its `description` prop, if it did. */
+	descriptionId?: string;
 }
 
 /**
@@ -46,6 +53,8 @@ export const OverlaySurface = ({
 	showCloseButton = true,
 	icon,
 	onRequestClose,
+	titleId,
+	descriptionId,
 	'aria-label': ariaLabel,
 	'aria-labelledby': ariaLabelledBy,
 	'aria-describedby': ariaDescribedBy,
@@ -60,34 +69,20 @@ export const OverlaySurface = ({
 	// brings the scrollbar back mid-exit and shifts everything sideways.
 	useScrollLock(present);
 
-	// Titles and descriptions lend the overlay their ids rather than the overlay hunting for them in
-	// the DOM. Owning the primitive is what makes that possible, and it is also what will let the
-	// component answer "did anything name this?" when the props land.
-	const [titleIds, setTitleIds] = React.useState<string[]>([]);
-	const [descriptionIds, setDescriptionIds] = React.useState<string[]>([]);
-
-	const registerTitle = React.useCallback((id: string) => {
-		setTitleIds((ids) => (ids.includes(id) ? ids : [...ids, id]));
-		return () => setTitleIds((ids) => ids.filter((existing) => existing !== id));
-	}, []);
-
-	const registerDescription = React.useCallback((id: string) => {
-		setDescriptionIds((ids) => (ids.includes(id) ? ids : [...ids, id]));
-		return () => setDescriptionIds((ids) => ids.filter((existing) => existing !== id));
-	}, []);
+	const { registerTitle, registerDescription, labelledBy, describedBy } = useOverlayLabelling({
+		slot,
+		open,
+		ariaLabel,
+		ariaLabelledBy,
+		ariaDescribedBy,
+		titleId,
+		descriptionId
+	});
 
 	const contentContext = React.useMemo(
 		() => ({ slot, requestClose, registerTitle, registerDescription }),
 		[slot, requestClose, registerTitle, registerDescription]
 	);
-
-	// A caller-supplied value always wins, and an `aria-label` suppresses the generated
-	// `aria-labelledby` so the two cannot fight over the name.
-	const labelledBy = ariaLabelledBy ?? (ariaLabel ? undefined : titleIds.join(' ') || undefined);
-
-	// Nothing described it means no attribute at all. An `aria-describedby` pointing at an id that
-	// does not exist is worse than its absence.
-	const describedBy = ariaDescribedBy ?? (descriptionIds.join(' ') || undefined);
 
 	return (
 		<OverlayContentContext.Provider value={contentContext}>
