@@ -14,6 +14,7 @@ import {
 	DialogClose
 } from '~/components/Dialog';
 import type { DialogRef } from '~/components/Dialog';
+import type { OverlayCloseSource } from '~/components/Overlay/types/overlay-ref';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -133,6 +134,13 @@ export const Default: Story = {
 	}
 };
 
+/**
+ * The plain case: a question, two answers, and no gate on anything.
+ *
+ * Escape, the backdrop, the X and both footer buttons all close it. Sheet's `Confirmation` is the
+ * deliberate contrast — same shape, but with the footer action and ambient dismissal both held shut
+ * until a condition is met. Reach for this one unless the flow is destructive enough to warrant that.
+ */
 export const ConfirmationDialog: Story = {
 	render: () => (
 		<Dialog>
@@ -147,7 +155,11 @@ export const ConfirmationDialog: Story = {
 						<DialogClose asChild>
 							<Button variant='outline'>Cancel</Button>
 						</DialogClose>
-						<Button variant='destructive'>Delete Account</Button>
+						{/* A real caller does the deleting in `onClick`; wrapping in `DialogClose` is what
+						    dismisses the dialog afterwards. */}
+						<DialogClose asChild>
+							<Button variant='destructive'>Delete Account</Button>
+						</DialogClose>
 					</>
 				}
 			>
@@ -160,8 +172,16 @@ export const ConfirmationDialog: Story = {
 			</DialogContent>
 		</Dialog>
 	),
-	play: async ({ canvasElement }) => {
-		await openDialog(canvasElement, /delete account/i, /are you absolutely sure/i);
+	play: async ({ canvasElement, step }) => {
+		const dialog = await openDialog(canvasElement, /delete account/i, /are you absolutely sure/i);
+
+		await step('Cancel closes it', async () => {
+			await userEvent.click(within(dialog).getByRole('button', { name: /cancel/i }));
+
+			await waitFor(async () => {
+				await expect(dialog).toHaveAttribute('data-state', 'closed');
+			});
+		});
 	}
 };
 
@@ -346,94 +366,6 @@ export const AlertDialog: Story = {
 	}
 };
 
-export const SuccessDialog: Story = {
-	render: () => (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant='outline'>Show Success</Button>
-			</DialogTrigger>
-			<DialogContent className='sm:max-w-[400px]'>
-				<DialogHeader>
-					<DialogTitle className='flex items-center gap-2'>
-						<span className='text-green-500'>✅</span>
-						Success!
-					</DialogTitle>
-					<DialogDescription>Your action has been completed successfully.</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					<div className='py-4 text-center'>
-						<div className='w-12 h-12 bg-green-100 rounded-full mx-auto mb-3 flex items-center justify-center'>
-							<span className='text-green-600 text-xl'>✓</span>
-						</div>
-						<p className='text-green-800'>
-							Your profile has been updated successfully. All changes have been saved.
-						</p>
-					</div>
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button className='bg-green-700 hover:bg-green-800'>Continue</Button>
-					</DialogClose>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
-	),
-	play: async ({ canvasElement }) => {
-		await openDialog(canvasElement, /show success/i, /success/i);
-	}
-};
-
-const LoadingDialogComponent = () => {
-	const [isLoading, setIsLoading] = React.useState(false);
-
-	const handleSubmit = async () => {
-		setIsLoading(true);
-		// Simulate API call
-		await new Promise((resolve) => setTimeout(resolve, 2000));
-		setIsLoading(false);
-	};
-
-	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant='outline'>Process Data</Button>
-			</DialogTrigger>
-			<DialogContent
-				title='Processing Data'
-				description='Please wait while we process your request.'
-				footer={
-					<>
-						<DialogClose asChild>
-							<Button variant='outline' disabled={isLoading}>
-								Cancel
-							</Button>
-						</DialogClose>
-						<Button onClick={handleSubmit} disabled={isLoading}>
-							{isLoading ? 'Processing...' : 'Start Processing'}
-						</Button>
-					</>
-				}
-			>
-				{isLoading ? (
-					<div className='space-y-4'>
-						<div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto'></div>
-						<p className='text-sm text-muted-foreground'>Processing...</p>
-					</div>
-				) : (
-					<p>Ready to process your data.</p>
-				)}
-			</DialogContent>
-		</Dialog>
-	);
-};
-
-export const LoadingDialog: Story = {
-	render: () => <LoadingDialogComponent />,
-	play: async ({ canvasElement }) => {
-		await openDialog(canvasElement, /process data/i, /processing data/i);
-	}
-};
-
 export const NestedDialogs: Story = {
 	render: () => (
 		<Dialog>
@@ -596,27 +528,93 @@ export const AnchoredContentInsideADialog: Story = {
 	}
 };
 
+/** What to call each close route when telling someone their change is still unsaved. */
+const CLOSE_ROUTE_LABELS: Record<OverlayCloseSource, string> = {
+	escape: 'Escape',
+	'close-button': 'the close button',
+	backdrop: 'clicking outside',
+	'close-part': 'that button'
+};
+
+const INITIAL_PROJECT_NAME = 'Quarterly report';
+
 const GuardedDialog = () => {
-	const [refused, setRefused] = React.useState<string[]>([]);
-	const [locked, setLocked] = React.useState(true);
+	const [open, setOpen] = React.useState(false);
+	const [name, setName] = React.useState(INITIAL_PROJECT_NAME);
+	const [saved, setSaved] = React.useState(INITIAL_PROJECT_NAME);
+	const [refusedRoute, setRefusedRoute] = React.useState<OverlayCloseSource | null>(null);
+
+	const dirty = name !== saved;
 
 	return (
-		<Dialog>
+		<Dialog
+			open={open}
+			onOpenChange={(next) => {
+				setOpen(next);
+				if (next) setRefusedRoute(null);
+			}}
+		>
 			<DialogTrigger asChild>
-				<Button variant='outline'>Open Guarded Dialog</Button>
+				<Button variant='outline'>Edit project</Button>
 			</DialogTrigger>
 			<DialogContent
-				title='Unsaved changes'
-				description='Every route out is refused while this is locked.'
+				title='Edit project'
+				description='Edit the name, then try to leave without saving.'
 				onRequestClose={(event) => {
-					setRefused((seen) => [...seen, event.source]);
-					if (locked) event.preventDefault();
+					// Nothing to protect, so every route out behaves like any other dialog's.
+					if (!dirty) return;
+
+					// One handler covers Escape, the close button and the backdrop alike. Refusing here
+					// leaves the dialog genuinely open rather than visually open and internally closed.
+					event.preventDefault();
+					setRefusedRoute(event.source);
 				}}
-				footer={<Button onClick={() => setLocked(false)}>Allow closing</Button>}
+				footer={
+					<>
+						<Button
+							variant='outline'
+							onClick={() => {
+								setName(saved);
+								setOpen(false);
+							}}
+						>
+							Discard
+						</Button>
+						<Button
+							disabled={!dirty}
+							onClick={() => {
+								setSaved(name);
+								setOpen(false);
+							}}
+						>
+							Save
+						</Button>
+					</>
+				}
 			>
-				<p>
-					Refused so far: <span>{refused.join(', ') || 'nothing yet'}</span>
-				</p>
+				<div className='grid gap-2'>
+					<label htmlFor='guarded-project-name' className='text-sm font-medium'>
+						Project name
+					</label>
+					<input
+						id='guarded-project-name'
+						value={name}
+						onChange={(event) => setName(event.target.value)}
+						className='rounded-md border px-3 py-2'
+					/>
+				</div>
+				{refusedRoute === null ? (
+					<p className='text-sm text-muted-foreground'>
+						{dirty ? 'Unsaved changes.' : 'No unsaved changes — this closes normally.'}
+					</p>
+				) : (
+					<Alert variant='destructive'>
+						<AlertTitle>You have unsaved changes</AlertTitle>
+						<AlertDescription>
+							Leaving via {CLOSE_ROUTE_LABELS[refusedRoute]} was refused. Save or discard first.
+						</AlertDescription>
+					</Alert>
+				)}
 			</DialogContent>
 		</Dialog>
 	);
@@ -627,9 +625,11 @@ export const GuardedClose: Story = {
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 		const documentScope = within(document.body);
+		const trigger = canvas.getByRole('button', { name: /edit project/i });
 
-		await userEvent.click(canvas.getByRole('button', { name: /open guarded dialog/i }));
+		await userEvent.click(trigger);
 		const dialog = (await documentScope.findByRole('dialog')) as HTMLDialogElement;
+		const scope = within(dialog);
 
 		// Asserted on the element's own `open` property, not just on `data-state`. A veto has to
 		// leave the dialog *genuinely* open — visually open but internally closed is the failure
@@ -639,30 +639,46 @@ export const GuardedClose: Story = {
 			await expect(dialog.open).toBe(true);
 		};
 
-		await step('Escape is refused', async () => {
+		await step('with nothing to protect, Escape closes it like any other dialog', async () => {
 			await userEvent.keyboard('{Escape}');
-			await stillOpen();
+
+			await waitFor(async () => {
+				await expect(dialog).toHaveAttribute('data-state', 'closed');
+			});
 		});
 
-		await step('the close button is refused', async () => {
-			await userEvent.click(within(dialog).getByRole('button', { name: /close/i }));
-			await stillOpen();
+		await step('reopen, and change the name', async () => {
+			await userEvent.click(trigger);
+			await waitFor(async () => {
+				await expect(dialog).toHaveAttribute('data-state', 'open');
+			});
+
+			await userEvent.type(scope.getByLabelText(/project name/i), ' v2');
 		});
 
-		await step('backdrop dismissal is refused', async () => {
+		await step('now Escape is refused, and the dialog says why', async () => {
+			await userEvent.keyboard('{Escape}');
+
+			await stillOpen();
+			await expect(await scope.findByText(/leaving via escape was refused/i)).toBeVisible();
+		});
+
+		await step('so is the close button', async () => {
+			await userEvent.click(scope.getByRole('button', { name: /close/i }));
+
+			await stillOpen();
+			await expect(scope.getByText(/leaving via the close button was refused/i)).toBeVisible();
+		});
+
+		await step('and so is the backdrop', async () => {
 			fireEvent.click(dialog);
+
 			await stillOpen();
+			await expect(scope.getByText(/leaving via clicking outside was refused/i)).toBeVisible();
 		});
 
-		await step('all three routes reached the one handler', async () => {
-			await expect(dialog).toHaveTextContent('escape');
-			await expect(dialog).toHaveTextContent('close-button');
-			await expect(dialog).toHaveTextContent('backdrop');
-		});
-
-		await step('and the same routes close it once the guard lifts', async () => {
-			await userEvent.click(within(dialog).getByRole('button', { name: /allow closing/i }));
-			await userEvent.keyboard('{Escape}');
+		await step('discarding the change lets it close', async () => {
+			await userEvent.click(scope.getByRole('button', { name: /discard/i }));
 
 			await waitFor(async () => {
 				await expect(dialog).toHaveAttribute('data-state', 'closed');
@@ -830,10 +846,28 @@ const captureConsoleWarn = (spy: ReturnType<typeof fn>) => () => {
 };
 
 export const WithoutAnAccessibleName: Story = {
+	// Deliberately realistic rather than a stub. The omission this warns about is not someone
+	// shipping an empty dialog — it is a real one whose heading was styled by hand and never given a
+	// `title`, so nothing in the markup names it. Read the content and the bug is invisible; that is
+	// the whole reason the diagnostic has to exist.
 	render: () => (
 		<Dialog defaultOpen>
-			<DialogContent>
-				<p>Nothing names this dialog.</p>
+			<DialogContent
+				footer={
+					<DialogClose asChild>
+						<Button>Got it</Button>
+					</DialogClose>
+				}
+			>
+				<p className='text-lg font-semibold'>Keyboard shortcuts</p>
+				<dl className='grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-3 text-sm'>
+					<dt className='font-mono text-muted-foreground'>⌘K</dt>
+					<dd>Open the command palette</dd>
+					<dt className='font-mono text-muted-foreground'>⌘/</dt>
+					<dd>Show this panel</dd>
+					<dt className='font-mono text-muted-foreground'>Esc</dt>
+					<dd>Close whatever is on top</dd>
+				</dl>
 			</DialogContent>
 		</Dialog>
 	),

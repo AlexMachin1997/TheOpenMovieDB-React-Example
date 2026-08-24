@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as React from 'react';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { Button } from '@repo/ui-core';
+import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test';
+import { Alert, AlertDescription, AlertTitle, Button } from '@repo/ui-core';
 
 import {
 	Sheet,
@@ -24,6 +24,8 @@ import {
 	DialogHeader,
 	DialogTitle
 } from '~/components/Dialog';
+
+import type { OverlayCloseSource } from '~/components/Overlay/types/overlay-ref';
 
 const meta: Meta<typeof Sheet> = {
 	title: 'UI Overlays/Sheet',
@@ -534,34 +536,170 @@ export const WithForm: Story = {
 	}
 };
 
-export const Confirmation: Story = {
-	render: () => (
-		<Sheet>
-			<SheetTrigger asChild>
-				<Button variant='destructive'>Delete Account</Button>
-			</SheetTrigger>
-			<SheetContent
-				title='Are you absolutely sure?'
-				description='This action cannot be undone. This will permanently delete your account and remove your data from our servers.'
-				footer={
-					<>
-						<Button variant='outline'>Cancel</Button>
-						<Button variant='destructive'>Delete Account</Button>
-					</>
-				}
+/** What the user has to type before the sheet unlocks. */
+const CONFIRMATION_PHRASE = 'delete';
+
+/** How to name each refused route back to the user. */
+const AMBIENT_ROUTE_LABELS: Record<string, string> = {
+	escape: 'Escape',
+	backdrop: 'Clicking outside'
+};
+
+/**
+ * Two gates driven by one condition, which is the pattern to copy for anything destructive.
+ *
+ * The footer gate is ordinary React: `confirmed` drives `disabled`, and nothing about the overlay is
+ * involved. The dismissal gate is `onRequestClose`, which runs before every close and cancels it if
+ * you call `preventDefault()` — so the sheet is never closed-then-reopened, it simply never closes.
+ *
+ * `event.source` is what keeps that from becoming a trap. Escape and a backdrop click are ambient:
+ * easy to fire by accident, and losing a half-finished destructive flow to a stray click is the
+ * thing worth preventing. Every route with a visible control behind it — Cancel, and the X — is let
+ * through untouched, so there is always an obvious way out. Refusing *every* route is what makes a
+ * guarded overlay feel broken.
+ */
+const ConfirmationSheet = () => {
+	const [open, setOpen] = React.useState(false);
+	const [confirmation, setConfirmation] = React.useState('');
+	const [refusedRoute, setRefusedRoute] = React.useState<OverlayCloseSource | null>(null);
+	const [deleted, setDeleted] = React.useState(false);
+
+	const confirmed = confirmation.trim().toLowerCase() === CONFIRMATION_PHRASE;
+
+	return (
+		<div className='flex flex-col items-start gap-4'>
+			<Sheet
+				open={open}
+				onOpenChange={(next) => {
+					setOpen(next);
+
+					// Opening starts the flow over. Without this the sheet reopens already confirmed.
+					if (next) {
+						setConfirmation('');
+						setRefusedRoute(null);
+					}
+				}}
 			>
-				<p className='text-sm text-muted-foreground'>
-					Please type &quot;delete&quot; to confirm this action.
-				</p>
-				<input
-					placeholder="Type 'delete' to confirm"
-					className='mt-2 w-full rounded-md border px-3 py-2'
-				/>
-			</SheetContent>
-		</Sheet>
-	),
-	play: async ({ canvasElement }) => {
-		await openSheet(canvasElement, /delete account/i, /are you absolutely sure/i);
+				<SheetTrigger asChild>
+					<Button variant='destructive'>Delete Account</Button>
+				</SheetTrigger>
+				<SheetContent
+					title='Are you absolutely sure?'
+					description='This action cannot be undone. This will permanently delete your account and remove your data from our servers.'
+					onRequestClose={(event) => {
+						// Cancel and the X are deliberate, so they always work.
+						if (event.source !== 'escape' && event.source !== 'backdrop') return;
+
+						// Once the phrase matches there is nothing left to protect.
+						if (confirmed) return;
+
+						event.preventDefault();
+						setRefusedRoute(event.source);
+					}}
+					footer={
+						<>
+							<SheetClose asChild>
+								<Button variant='outline'>Cancel</Button>
+							</SheetClose>
+							<Button
+								variant='destructive'
+								disabled={!confirmed}
+								onClick={() => {
+									setDeleted(true);
+									setOpen(false);
+								}}
+							>
+								Delete Account
+							</Button>
+						</>
+					}
+				>
+					<div className='grid gap-2'>
+						<label htmlFor='delete-confirmation' className='text-sm text-muted-foreground'>
+							Type <span className='font-mono font-medium'>{CONFIRMATION_PHRASE}</span> to confirm.
+						</label>
+						<input
+							id='delete-confirmation'
+							value={confirmation}
+							onChange={(event) => setConfirmation(event.target.value)}
+							className='w-full rounded-md border px-3 py-2'
+						/>
+					</div>
+					{refusedRoute !== null && !confirmed && (
+						<Alert variant='destructive'>
+							<AlertTitle>{AMBIENT_ROUTE_LABELS[refusedRoute]} was refused</AlertTitle>
+							<AlertDescription>
+								Finish typing the phrase, or use Cancel to back out.
+							</AlertDescription>
+						</Alert>
+					)}
+				</SheetContent>
+			</Sheet>
+			<p aria-live='polite' className='text-sm text-muted-foreground'>
+				{deleted ? 'Account deleted.' : 'Account active.'}
+			</p>
+		</div>
+	);
+};
+
+export const Confirmation: Story = {
+	render: () => <ConfirmationSheet />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const sheet = await openSheet(canvasElement, /^delete account$/i, /are you absolutely sure/i);
+		const scope = within(sheet);
+		const phrase = () => scope.getByLabelText(/type .* to confirm/i);
+
+		// A refusal has to leave the sheet *genuinely* open. Visually open but internally closed is
+		// the failure mode, and only the element's own `open` property tells the two apart.
+		const stillOpen = async () => {
+			await expect(sheet).toHaveAttribute('data-state', 'open');
+			await expect((sheet as HTMLDialogElement).open).toBe(true);
+		};
+
+		await step('the footer action starts disabled', async () => {
+			await expect(scope.getByRole('button', { name: /^delete account$/i })).toBeDisabled();
+		});
+
+		await step('Escape is refused, and the sheet says so', async () => {
+			await userEvent.keyboard('{Escape}');
+
+			await stillOpen();
+			await expect(await scope.findByText(/escape was refused/i)).toBeVisible();
+		});
+
+		await step('so is a backdrop click', async () => {
+			fireEvent.click(sheet);
+
+			await stillOpen();
+			await expect(await scope.findByText(/clicking outside was refused/i)).toBeVisible();
+		});
+
+		await step('a partial phrase unlocks nothing', async () => {
+			await userEvent.type(phrase(), 'delet');
+
+			await expect(scope.getByRole('button', { name: /^delete account$/i })).toBeDisabled();
+			await userEvent.keyboard('{Escape}');
+			await stillOpen();
+		});
+
+		await step('completing it releases both gates at once', async () => {
+			await userEvent.type(phrase(), 'e');
+
+			await waitFor(async () => {
+				await expect(scope.getByRole('button', { name: /^delete account$/i })).toBeEnabled();
+			});
+			await expect(scope.queryByText(/was refused/i)).not.toBeInTheDocument();
+		});
+
+		await step('and the action now runs and closes the sheet', async () => {
+			await userEvent.click(scope.getByRole('button', { name: /^delete account$/i }));
+
+			await waitFor(async () => {
+				await expect(sheet).toHaveAttribute('data-state', 'closed');
+			});
+			await expect(canvas.getByText('Account deleted.')).toBeInTheDocument();
+		});
 	}
 };
 
