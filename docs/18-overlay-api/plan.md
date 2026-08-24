@@ -32,7 +32,8 @@ may live in one and not the other.
       containment tests and one control.
 - [x] **8. Radix out** of `ui-overlays`. Done alongside 5 and 6 rather than after them: nothing
       imported it once both were rewritten, so holding the dependency back would have been fiction.
-- [ ] **9. A `play()` on every overlay story.**
+- [x] **9. A `play()` on every overlay story.** All 27 open their overlay and assert its accessible
+      name, so the axe gate inspects an open dialog rather than a `display: none` one.
 - [ ] **10. Documentation.** This file as an as-built record, DD-9, closed open questions.
 
 ## Phase 2 — the API
@@ -185,6 +186,27 @@ Asserting the tree position rather than the behaviour is deliberate. The failure
 renders correctly and reads correctly; the content is simply painted behind the backdrop and inert,
 so every behavioural assertion still passes while the control is unusable. Only its position gives
 it away.
+
+### What the a11y gate found once it could see an open dialog
+
+`a11y: { test: 'error' }` has been set on both overlay files since `14`, and it was passing on a
+page with no dialog on it. A closed `<dialog>` is `display: none` and axe skips what it cannot see,
+so 25 of the 27 stories were giving the gate nothing to inspect. Adding a `play()` to each is what
+[`docs/README.md`](../README.md) assigned to this deliverable, and it immediately surfaced two real
+things:
+
+- **A long dialog or sheet body could not be scrolled by keyboard** (`scrollable-region-focusable`,
+  three stories). `DialogContentArea` and `SheetInnerContent` are `overflow-y-auto` containers with
+  nothing focusable in them, and arrow keys scroll the focused element's container. Both now carry
+  `tabIndex={0}`. The cost is a tab stop on every dialog with a scrolling body, which is the trade
+  the rule asks for. Note this is _not_ the same situation as the suppression in `Command` and
+  `Select`, where the listbox is deliberately `tabindex="-1"` because `aria-activedescendant` needs
+  focus to stay on the input.
+- **`SuccessDialog`'s Continue button failed contrast** at 3.07:1 — `bg-green-600` under white text.
+  Story styling rather than a component defect; darkened to `bg-green-700`.
+
+Both predate this deliverable. Neither could have been caught before, which is the argument for the
+task rather than an aside to it.
 
 ### Flagged, not chased: the suite has load-sensitive flakes
 

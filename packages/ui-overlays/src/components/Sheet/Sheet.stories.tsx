@@ -41,6 +41,24 @@ const meta: Meta<typeof Sheet> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Open a story's sheet and confirm the accessible name reached the rendered element.
+ *
+ * The `a11y: { test: 'error' }` gate above only inspects what is rendered, and a closed `<dialog>`
+ * is `display: none` — so a story with no `play()` gives the gate a page with no sheet on it and
+ * passes for that reason rather than on merit.
+ */
+const openSheet = async (canvasElement: HTMLElement, trigger: RegExp, name: RegExp) => {
+	const canvas = within(canvasElement);
+
+	await userEvent.click(canvas.getByRole('button', { name: trigger }));
+
+	const sheet = await within(document.body).findByRole('dialog');
+	await expect(sheet).toHaveAccessibleName(name);
+
+	return sheet;
+};
+
 export const Basic: Story = {
 	render: () => (
 		<Sheet>
@@ -81,7 +99,10 @@ export const Basic: Story = {
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open sheet/i, /edit profile/i);
+	}
 };
 
 const ControlledSheet = () => {
@@ -141,7 +162,10 @@ const ControlledSheet = () => {
 };
 
 export const Controlled: Story = {
-	render: () => <ControlledSheet />
+	render: () => <ControlledSheet />,
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /^open sheet$/i, /controlled sheet/i);
+	}
 };
 
 const RefBasedSheet = () => {
@@ -337,7 +361,10 @@ export const LeftSide: Story = {
 				</div>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open left sheet/i, /navigation menu/i);
+	}
 };
 
 export const TopSide: Story = {
@@ -359,7 +386,10 @@ export const TopSide: Story = {
 				</div>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open top sheet/i, /quick actions/i);
+	}
 };
 
 export const BottomSide: Story = {
@@ -389,7 +419,10 @@ export const BottomSide: Story = {
 				</div>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open bottom sheet/i, /share options/i);
+	}
 };
 
 export const CustomWidth: Story = {
@@ -437,7 +470,10 @@ export const CustomWidth: Story = {
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open wide sheet/i, /advanced settings/i);
+	}
 };
 
 export const WithForm: Story = {
@@ -492,7 +528,10 @@ export const WithForm: Story = {
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /create new item/i, /create new project/i);
+	}
 };
 
 export const Confirmation: Story = {
@@ -524,7 +563,10 @@ export const Confirmation: Story = {
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /delete account/i, /are you absolutely sure/i);
+	}
 };
 
 export const LongContent: Story = {
@@ -649,7 +691,10 @@ export const LongContent: Story = {
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open long content sheet/i, /terms of service/i);
+	}
 };
 
 const ScrollableContentSheet = () => {
@@ -732,7 +777,10 @@ const ScrollableContentSheet = () => {
 };
 
 export const ScrollableContent: Story = {
-	render: () => <ScrollableContentSheet />
+	render: () => <ScrollableContentSheet />,
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open scrollable sheet/i, /scrollable content/i);
+	}
 };
 
 const CustomStyledSheet = () => {
@@ -775,7 +823,10 @@ const CustomStyledSheet = () => {
 };
 
 export const CustomStyled: Story = {
-	render: () => <CustomStyledSheet />
+	render: () => <CustomStyledSheet />,
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open custom styled sheet/i, /custom styled content/i);
+	}
 };
 
 export const WithSheetClose: Story = {
@@ -871,7 +922,10 @@ export const WithSheetClose: Story = {
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open sheet with close api/i, /sheet with close api/i);
+	}
 };
 
 const WithConfirmationDialogSheet = () => {
@@ -955,7 +1009,10 @@ const WithConfirmationDialogSheet = () => {
 };
 
 export const WithConfirmationDialog: Story = {
-	render: () => <WithConfirmationDialogSheet />
+	render: () => <WithConfirmationDialogSheet />,
+	play: async ({ canvasElement }) => {
+		await openSheet(canvasElement, /open sheet with confirmation/i, /unsaved changes/i);
+	}
 };
 
 const WithConfirmationDialogRefSheet = () => {
@@ -1037,5 +1094,12 @@ const WithConfirmationDialogRefSheet = () => {
 };
 
 export const WithConfirmationDialogRef: Story = {
-	render: () => <WithConfirmationDialogRefSheet />
+	render: () => <WithConfirmationDialogRefSheet />,
+	play: async ({ canvasElement }) => {
+		await openSheet(
+			canvasElement,
+			/open sheet with ref confirmation/i,
+			/unsaved changes \(ref approach\)/i
+		);
+	}
 };

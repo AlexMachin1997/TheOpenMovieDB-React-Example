@@ -47,6 +47,24 @@ const meta: Meta<typeof Dialog> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Open a story's dialog and confirm the accessible name reached the rendered element.
+ *
+ * Every Dialog story calls this. The `a11y: { test: 'error' }` gate above only inspects what is
+ * rendered, and a closed `<dialog>` is `display: none` — so before these existed the gate was
+ * running against a page with no dialog on it at all and passing for that reason.
+ */
+const openDialog = async (canvasElement: HTMLElement, trigger: RegExp, name: RegExp) => {
+	const canvas = within(canvasElement);
+
+	await userEvent.click(canvas.getByRole('button', { name: trigger }));
+
+	const dialog = await within(document.body).findByRole('dialog');
+	await expect(dialog).toHaveAccessibleName(name);
+
+	return dialog;
+};
+
 export const Default: Story = {
 	render: () => (
 		<Dialog>
@@ -77,7 +95,10 @@ export const Default: Story = {
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /open dialog/i, /default dialog/i);
+	}
 };
 
 export const ConfirmationDialog: Story = {
@@ -110,7 +131,10 @@ export const ConfirmationDialog: Story = {
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /delete account/i, /are you absolutely sure/i);
+	}
 };
 
 export const LongContentDialog: Story = {
@@ -184,7 +208,10 @@ export const LongContentDialog: Story = {
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /view long content/i, /terms and conditions/i);
+	}
 };
 
 export const WithoutCloseButton: Story = {
@@ -208,7 +235,10 @@ export const WithoutCloseButton: Story = {
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /show important message/i, /important notice/i);
+	}
 };
 
 export const CustomStyledDialog: Story = {
@@ -244,7 +274,10 @@ export const CustomStyledDialog: Story = {
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /custom styled dialog/i, /welcome to our platform/i);
+	}
 };
 
 export const AlertDialog: Story = {
@@ -279,7 +312,10 @@ export const AlertDialog: Story = {
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /show alert/i, /warning/i);
+	}
 };
 
 export const SuccessDialog: Story = {
@@ -308,12 +344,15 @@ export const SuccessDialog: Story = {
 				</DialogContentArea>
 				<DialogFooter>
 					<DialogClose asChild>
-						<Button className='bg-green-600 hover:bg-green-700'>Continue</Button>
+						<Button className='bg-green-700 hover:bg-green-800'>Continue</Button>
 					</DialogClose>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-	)
+	),
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /show success/i, /success/i);
+	}
 };
 
 const LoadingDialogComponent = () => {
@@ -362,7 +401,10 @@ const LoadingDialogComponent = () => {
 };
 
 export const LoadingDialog: Story = {
-	render: () => <LoadingDialogComponent />
+	render: () => <LoadingDialogComponent />,
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /process data/i, /processing data/i);
+	}
 };
 
 export const NestedDialogs: Story = {
@@ -505,19 +547,11 @@ export const AnchoredContentInsideADialog: Story = {
 		// content portalled to `document.body` still renders and still looks right in a screenshot
 		// while sitting behind the backdrop and refusing every click. No behavioural assertion
 		// catches that; containment does.
-		await step('a menu opened inside the dialog is portalled into it', async () => {
-			await userEvent.click(within(dialog).getByRole('button', { name: /open menu/i }));
-
-			const menu = await documentScope.findByRole('menu');
-			await expect(dialog.contains(menu)).toBe(true);
-
-			await userEvent.keyboard('{Escape}');
-			await waitFor(async () => {
-				await expect(documentScope.queryByRole('menu')).not.toBeInTheDocument();
-			});
-		});
-
-		await step('and so is a hover card', async () => {
+		// The hover card goes first and the menu last, so neither needs dismissing. A Radix menu is
+		// modal and disables pointer events outside itself, so hovering anything while one is open
+		// does nothing — and closing it with Escape closes the dialog too once the menu has already
+		// gone, which is a race rather than a behaviour worth asserting.
+		await step('a hover card opened inside the dialog is portalled into it', async () => {
 			await userEvent.hover(within(dialog).getByRole('button', { name: /hover target/i }));
 
 			await waitFor(async () => {
@@ -527,8 +561,11 @@ export const AnchoredContentInsideADialog: Story = {
 			});
 		});
 
-		await step('the dialog is still the only thing open', async () => {
-			await expect(documentScope.getAllByRole('dialog')).toHaveLength(1);
+		await step('and so is a menu', async () => {
+			await userEvent.click(within(dialog).getByRole('button', { name: /open menu/i }));
+
+			const menu = await documentScope.findByRole('menu');
+			await expect(dialog.contains(menu)).toBe(true);
 		});
 	}
 };
@@ -570,5 +607,8 @@ const ControlledDialogComponent = () => {
 };
 
 export const ControlledDialog: Story = {
-	render: () => <ControlledDialogComponent />
+	render: () => <ControlledDialogComponent />,
+	play: async ({ canvasElement }) => {
+		await openDialog(canvasElement, /^open dialog$/i, /manually controlled dialog/i);
+	}
 };
