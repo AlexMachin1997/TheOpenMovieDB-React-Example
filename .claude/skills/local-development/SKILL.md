@@ -1,12 +1,19 @@
 ---
 name: local-development
-description: How to set up a checkout of THIS repo and run its gates truthfully — install/build order, the Storybook interaction suite, and the traps that make build and test results lie. ALWAYS read before running pnpm build/lint/test or the Storybook suite here, and before concluding that anything is "already broken".
+description: How to set up a checkout of THIS repo and run its gates truthfully — install/build order, the gates and what each one does not cover, and the traps that make build and test results lie. ALWAYS read before running pnpm build/lint/test or the Storybook suite here, and before concluding that anything is "already broken".
 ---
 
 # Local development (this repo)
 
 General planning discipline lives in the `implementation-planning` skill; general Storybook rules
 live in `storybook-standards`. This file is only what is true of **this** repo.
+
+Two companion files, read on demand rather than up front:
+
+| Read                                                 | When                                                                                                                                           |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`storybook-suite.md`](storybook-suite.md)           | The interaction suite is red, you are adding a story, the a11y gate is involved, or headless and the dev server disagree                       |
+| [`build-and-resolution.md`](build-and-resolution.md) | A change in one package is not visible in another, something unexpected is in `dist/`, or you are about to touch `turbo.json` or `vite-config` |
 
 ## 🚨 Set the checkout up before you trust any gate
 
@@ -22,35 +29,40 @@ Both halves matter, and skipping either produces convincing nonsense:
 
 - **`pnpm install`** — a fresh worktree here was missing 13 packages. The symptom was the entire
   Storybook suite failing with `Failed to fetch dynamically imported module`, which looks exactly
-  like the stale-cache trap below and is not.
+  like a stale cache and is not.
 - **`--force`** — Turbo's cache is shared across worktrees and keyed on inputs, not location. An
   untouched worktree reports `11/11 successful, FULL TURBO` in ~2s having compiled nothing; the
   replayed logs give it away by printing a _different_ worktree's path (e.g.
-  `.claude/worktrees/button-enhancements-556c34`). A real build here takes ~1m36s–2m40s.
+  `.claude/worktrees/button-enhancements-556c34`). A real build here takes minutes.
 
 The tell for "not set up": a suspiciously fast green `pnpm build` next to a catastrophically red
 test suite.
 
-**Deleting things does not defeat the cache.** The cache lives outside the worktree, so wiping
+**Deleting things does not defeat the cache.** It lives outside the worktree, so wiping
 `node_modules`, every `dist/`, every `.turbo/` and every `*.tsbuildinfo`, then reinstalling from
-scratch, still replayed `11/11 successful, FULL TURBO` in 995ms. `--force` is the only lever. Never
-report a build time or a "clean build is green" without it.
+scratch, still replayed `11/11 successful, FULL TURBO` in under a second. `--force` is the only
+lever. Never report a build time, or that a clean build is green, without it.
 
 ## The gates
 
-| Gate            | Command                                             | Notes                                                                                                                                 |
-| --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Build           | `pnpm build`                                        | `pnpm turbo run build --force` when baselining                                                                                        |
-| Lint            | `pnpm lint`                                         | Errors AND warnings fail it (`--max-warnings 0`). Healthy today: **0 errors, 0 warnings**                                             |
-| Prettier        | `pnpm prettier:check`                               | The gate. `pnpm prettier` still rewrites — see below                                                                                  |
-| Types           | `pnpm check-types` (or `pnpm type-check`, an alias) | Builds dependencies first: 19 tasks, green from a fully clean tree                                                                    |
-| Component tests | `cd apps/storybook && npx vitest run`               | Storybook `play()` interactions, Playwright/Chromium. ~60–120s. Green: 391 passed, 27 skipped. **Local only, on purpose** — see below |
-| Hook/util tests | `pnpm test` in the owning package                   | `.spec.ts` only — pure logic, never components                                                                                        |
+| Gate            | Command                                      | Notes                                                                                                                             |
+| --------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Build           | `pnpm build`                                 | `pnpm turbo run build --force` when baselining                                                                                    |
+| Lint            | `pnpm lint`                                  | Errors **and** warnings fail it (`--max-warnings 0`)                                                                              |
+| Prettier        | `pnpm prettier:check`                        | The gate. `pnpm prettier` rewrites — see below                                                                                    |
+| Types           | `pnpm check-types` (alias `pnpm type-check`) | Builds dependencies first                                                                                                         |
+| Component tests | `cd apps/storybook && npx vitest run`        | Storybook `play()` in Playwright/Chromium, ~60–120s. **Local only, deliberately.** See [`storybook-suite.md`](storybook-suite.md) |
+| Hook/util tests | `pnpm test` in the owning package            | `.spec.ts` only — pure logic, never components                                                                                    |
+
+**Do not write current pass counts, entry counts or version numbers into these files.** They rot,
+and a stale figure is worse than none: it gets trusted. Every one of them has a command above or in
+the companion files that recomputes it in seconds. Capture your own baseline at the start of a
+change and compare against that.
 
 ### Neither test gate type-checks — a green suite can sit on a type error
 
 `vitest run` transpiles and discards types; only `pnpm build` (which runs `check-types`) sees them.
-So the two test rows above prove behaviour and nothing else.
+So both test rows above prove behaviour and nothing else.
 
 Observed under `04`: `useRovingTabIndex.spec.ts` passed **17/17 while containing a type error** —
 `elements.indexOf(document.activeElement as HTMLElement)` against an `HTMLButtonElement[]`. Only the
@@ -60,251 +72,32 @@ build caught it.
 `getAllByRole(...)[n]` is `HTMLElement | undefined`: fine inside `expect()`, rejected by
 `userEvent.click()`. Run the build before believing a test-only change is clean.
 
-### `eslint-plugin-only-warn` is NOT wired up — lint errors are real
+### Lint errors are real — `eslint-plugin-only-warn` is NOT wired up
 
-It is declared in `packages/eslint-config/package.json` and imported by **no config**; in flat
-config a plugin only patches severity if it is loaded. Grep it before believing otherwise.
+It is declared in `packages/eslint-config/package.json` and imported by **no config**; in flat config
+a plugin only patches severity if it is loaded. Grep it before believing otherwise.
 
-**Every rule is `error`, and the tree is warning-free as of `16`.** The two downgrades that used to
-sit in `base.js` (`no-empty-object-type`, `no-explicit-any`) are gone. `pnpm lint` gates both
-`.husky/pre-commit` and the CI `ESLint` job, so any output at all is now a regression rather than
-background noise.
-
-**Since `13`, a warning also fails.** Seven lint scripts carry `--max-warnings 0`; before that a
-stale `eslint-disable` reported as a warning and exited **0**. `apps/the-open-movie-database` is
+Every rule is `error`, and a warning fails too — seven lint scripts carry `--max-warnings 0`. Any
+output at all is a regression rather than background noise. `apps/the-open-movie-database` is
 deliberately excluded until it is reworked, so a warning there still passes.
 
-`13` also added two rules scoped to the UI packages: `@typescript-eslint/naming-convention` (the `I`
-prefix on interfaces) and `project-structure/folder-structure`. The latter is wired per package via
-`folderStructure(import.meta.dirname)` and **sets no parser** — read
-[`packages/eslint-config/README.md`](../../../packages/eslint-config/README.md) before touching it,
-because it has three separate ways of looking like it works while checking nothing.
-
-Verified 2026-08-15 by introducing a conditional `useState` into a story file: reported as an
-`error`, exit 1.
-
-One trap worth knowing before you reconcile a violation count: `no-empty-object-type` is configured
-to allow `interface IFoo extends Bar {}`, and **never** reports an interface with 2+ supertypes at
-any setting. **Do not "fix" one of those into a type alias.** Why, and what still errors, is in
-[`packages/eslint-config/README.md`](../../../packages/eslint-config/README.md) — that is the home
-for rule rationale, not this file and not a comment in `base.js`.
+**Rule rationale is not documented here.** [`packages/eslint-config/README.md`](../../../packages/eslint-config/README.md)
+is its home — read it before touching `folderStructure`, which has three separate ways of looking
+like it works while checking nothing, and before "fixing" an `interface IFoo extends Bar {}`, which
+`no-empty-object-type` allows deliberately.
 
 ### `pnpm prettier` writes; `pnpm prettier:check` is the gate
 
-Both are **root-level** as of `13`: `prettier --write .` and `prettier --check .`. The per-package
-`prettier` scripts and the turbo `prettier` task were removed.
+Both are **root-level** as of `13`. The per-package `prettier` scripts and the turbo `prettier` task
+were removed, because **Prettier searches upward for `.prettierrc` but not for `.prettierignore`**:
+`--ignore-path` resolves against the working directory and never walks up, so a workspace-local
+`prettier --check .` cannot see the root ignore list and checks that package's own `dist/`. Running
+once from the root needs no arguments and also covers `docs/`, `README.md`, `turbo.json` and
+`.github/`, which belong to no workspace.
 
-The reason is a trap worth knowing: **Prettier searches upward for `.prettierrc` but not for
-`.prettierignore`.** `--ignore-path` resolves against the current working directory and never walks
-up, so a workspace-local `prettier --check .` cannot see the root ignore list and checks that
-package's own `dist/` — 116 files in `ui-core`. Delegating per package therefore needs an
-`--ignore-path` on every script; running once from the root needs no arguments at all and also covers
-`docs/`, `README.md`, `turbo.json` and `.github/`, which belong to no workspace.
+`.prettierignore` excludes `pnpm-lock.yaml` and `*.tsbuildinfo`. Do not remove those — a reformatted
+lockfile is churn at best.
 
-That trap had been live: the old per-package `prettier --write .` was silently reformatting each
-package's build output on every run.
-
-**The tree is fully prettier-clean as of 2026-08-15** (`npx prettier --check .` → "All matched files
-use Prettier code style"), so a stray `pnpm prettier` should now be a no-op. Before that it rewrote
-22 files it had no business touching, which is trivially easy to sweep into an unrelated commit with
-`git add -A`. If you ever see it produce a large diff again, the tree has drifted — commit that
-separately, never folded into feature work.
-
-Use `npx prettier --check` when you want to _know_.
-
-Two coverage facts that keep it from drifting, worth not undoing:
-
-- Every package's script is now `prettier --write` with no `./src` argument, so files outside `src/`
-  are covered too. `apps/storybook` had **no prettier script at all** until `15`, which is why
-  `.storybook/*.ts` sat unformatted.
-- `.prettierignore` excludes `pnpm-lock.yaml` and `*.tsbuildinfo`. Do not remove those — a
-  reformatted lockfile is churn at best.
-
-Closed in `13`: the CI **Prettier** job now runs `pnpm prettier:check`. It previously ran
-`pnpm prettier`, rewriting its own checkout and passing unconditionally.
-
-Also closed in `13`: **`husky` is now a real dependency** with a `prepare` script. It was absent
-from the lockfile entirely, so `.husky/pre-commit` only ever ran on a machine where `core.hooksPath`
-happened to already be set — on a fresh clone the hook did not exist.
-
-### The suite is green — 391 passed, 27 skipped
-
-Re-baselined 2026-08-24 after `18`'s Phase 1: **41 passed | 27 skipped (68 files)**, **391 passed
-(391 tests)**, ~80s warm. The 27 skipped are the `.mdx` docs pages, which carry no tests. (`15` left
-it at 385, `17` at 386; `18` added five overlay-nesting stories.)
-
-**Story count is not test count.** Every story is a test whether or not it has a `play()`, so adding
-a `play()` to an existing story moves nothing. `18` added 23 of them and the total rose only by the
-five genuinely new stories.
-
-**The suite has load-sensitive flakes.** Several `play()` functions `waitFor` an animation to finish
-— Radix's Accordion collapse, `Form`'s submissions — and the default 1000ms expires when the machine
-is busy. Observed across three consecutive full runs on 2026-08-24: two failures, in different files
-each time, both green in isolation, third run green at 391. A dev server left running on port 6006
-was enough to cause it. Before chasing a red run, re-run the failing file alone.
-
-The one failure that used to sit here was **date-dependent, not a `Calendar` bug**: `Basic` seeds
-`useState(new Date())` so today is selected on mount, while its `play()` asserted the 15th was _not_
-selected. It failed on the 15th of every month and passed the other ~29 days. `15` fixed it by
-freezing the clock for the whole suite in `apps/storybook/.storybook/vitest.setup.ts`
-(`vi.useFakeTimers({ toFake: ['Date'] })` — `Date` only, because blanket fake timers stall
-`userEvent`).
-
-**CI runs no tests, deliberately.** `.github/workflows/linting-action.yml` has three jobs — ESLint,
-Prettier, TypeCheck — and no test job. Running Playwright/Chromium on every push costs money, and the
-components are not stable enough yet to justify it. Do not "fix" this by adding a CI test job; it is
-a decision, to be revisited when the component library settles. It does mean the suite is only ever
-as green as the last person who ran it locally.
-
-Two traps that cost real time here, worth keeping:
-
-- **A stack-trace line number is not a source line number.** That failure reported
-  `Calendar.stories.tsx:233` in a 229-line file — the trace points into Storybook's instrumented
-  copy. Open the source and find the assertion by text, not by line.
-- **Compare failure _lists_ against a baseline you captured yourself**, never a bare pass/fail. A
-  suite that is green on the 14th and red on the 15th looks like "someone broke it today".
-
-`turbo.json` gives `check-types` `dependsOn: ["^build"]`, not `^check-types`. That is load-bearing:
-packages resolve each other through built `dist/*.d.ts`, and `tsc --noEmit` emits nothing, so
-`^check-types` left every `@repo/*` import unresolvable from a clean tree (~100 `TS2307`s). Do not
-"optimise" it back.
-
-Component tests are Storybook `play()` functions, never `.spec.tsx`. Pure logic (hooks, utils) uses
-`.spec.ts`. See `storybook-standards`.
-
-## Packages resolve through `dist/`, not source
-
-`ui-core` → `ui-overlays` → `ui-command` → `ui-forms` import each other by `@repo/*` specifier,
-which resolves to **built output**. The `~/` alias resolves to source, but only within a package's
-own tsconfig.
-
-So after editing a package that another package consumes, changes are invisible until:
-
-```bash
-pnpm turbo run build --filter=@repo/<pkg>
-rm -rf apps/storybook/node_modules/.cache apps/storybook/node_modules/.vite
-```
-
-Skipping this gives both false greens and false reds.
-
-## Dependencies are external, and `package.json` is what decides
-
-`packages/vite-config/shared.ts` reads the building package's own `dependencies` +
-`peerDependencies` and externalizes every one, on top of React and `@repo/*`. A package's `dist/`
-therefore contains that package's source and nothing else — no `dist/node_modules/` tree.
-
-Two consequences:
-
-- **Declaring a dependency is how you externalize it.** There is no allow-list to update. A package
-  that imports something it does not declare will have it silently inlined instead, so a sudden
-  `dist/node_modules/` directory means a missing `package.json` entry.
-- **The two presets take `bundle: []` for the rare dependency that must be inlined.** It cannot
-  override React or `@repo/*` — those are external for correctness (two React copies in one tree
-  crash with `Cannot read properties of null (reading 'useState')`), not for output size.
-
-Build plugins (`@vitejs/plugin-react-swc`, `@tailwindcss/vite`, `vite-plugin-dts`) are declared by
-`vite-config` alone. Do not re-add them to a UI package; nothing there imports them.
-
-**Two React versions are installed** (verified 2026-08-14): both apps resolve `react@19.1.1`, all
-four UI packages resolve `react@19.2.4`. The root `pnpm.overrides` entry is a _range_
-(`"react": "^19.1.1"`), and 19.2.4 satisfies it, so the override does not collapse the tree to one
-copy — note the same block pins `@types/react` exactly, so the range looks unintentional. Nothing
-breaks today: the packages externalize React and Storybook's Vite config dedupes it at the consuming
-end. But the protection is bundler config, not declaration. If a `useState`-of-null crash ever
-reappears, check `ls node_modules/.pnpm | grep '^react@'` before assuming the build config
-regressed.
-
-## The stories glob must use `packages/*/src`, never `packages/**/src`
-
-`apps/storybook/.storybook/main.ts` globs `../../../packages/*/src/**/*.stories.*`. The single `*`
-is load-bearing and has a comment on it — do not "tidy" it into `**`.
-
-pnpm symlinks every workspace package into its dependents' `node_modules/@repo/`, so `**` also
-matches `packages/ui-forms/node_modules/@repo/ui-core/src/...`, plus nested hops like
-`ui-forms/node_modules/@repo/ui-command/node_modules/@repo/ui-overlays/node_modules/@repo/ui-core/...`.
-
-Storybook's own indexer ignores those; `@storybook/addon-vitest` does not. With `**` the suite
-collected **166 story files for ~30 components**, 97 of them unservable duplicates that each failed
-to import and left a Vite error overlay in the shared page — which then failed `Button`'s a11y gate
-on the _overlay's_ markup. With `*`: 27 files, 311 tests, 0 failures, 155s → 61s. (Those are the
-figures as measured when the glob was fixed; the suite has grown to 68 files / 385 tests since. The
-point is the ratio, not the absolute numbers.)
-
-`test.exclude: ['**/node_modules/**']` in `apps/storybook/vite.config.ts` does **not** fix this;
-`storybookTest` builds its `include` from Storybook's file matcher as explicit paths, so there is no
-glob left to filter. The stories glob is the only lever.
-
-## Nothing here tests appearance, and that is a decision
-
-`play()` asserts state. It cannot see a flash, a jump, a wrong colour or an animation that ends in
-the wrong place — the tool for that is visual regression, and **this repo deliberately does not have
-it** (confirmed 2026-08-24). Do not propose adding it as the fix for a visual bug; say the bug needs
-a human to look at it.
-
-`18` is the worked example. Closing a dialog flashed back to full opacity for about 60ms, because
-`tw-animate-css` defaults `animation-fill-mode` to `none` and the overlay is deliberately held open
-through its exit animation. The open state was correct, the closed state was correct, the suite was
-green at 397, and the defect lived entirely between the two.
-
-After changing how a component _appears_ — animation, transition, z-order, opacity, transform — a
-green suite is not evidence. Ask for eyes on it.
-
-## A closed `<dialog>` is invisible to axe
-
-Since `18` the overlays are native `<dialog>` elements, which are `display: none` until opened. axe
-skips what it cannot see, so **a story that never opens its overlay hands the a11y gate an empty
-page and passes for that reason.** Both overlay files had run at `error` since `14` while 25 of
-their 27 stories did exactly that; opening them surfaced two real violations immediately.
-
-Any new overlay story needs a `play()` that opens it, or its `a11y` gate is decorative.
-
-## Accessibility gates are opt-in, per file
-
-`preview.ts` sets `a11y: { test: 'todo' }` globally — reports only, never fails. Individual files
-opt into `a11y: { test: 'error' }` on their own `meta`, deliberately, because the rest of the library
-has pre-existing violations. As of `17` that is `Button`, `Field`, `Dialog`, `Sheet`, `Command` and
-`Select`.
-
-**Two of those metas also disable a rule, and both exceptions are load-bearing.** `Command` and
-`Select` switch off `scrollable-region-focusable` (the listbox is `tabindex="-1"` because
-`aria-activedescendant` needs focus to stay on the input — axe cannot see arrow-key scrolling) and
-`aria-dialog-name` (Radix's `PopoverContent`, which belongs to deliverable `18`). Each carries a
-comment saying why. Do not delete them to "clean up" a red suite; the reasoning is in
-`docs/17-command-list-nesting/plan.md`.
-
-Story/meta-level `a11y.test` **overrides** the global, so setting `'off'` in `preview.ts` will not
-silence `Button`. If exactly one file fails a11y assertions, that is why.
-
-A failure whose selector is `$('vite-error-overlay,...)` is not an accessibility problem — axe is
-scanning Vite's error overlay. Find the import that failed.
-
-## Diagnosing "headless fails, dev server is fine"
-
-There is no separate test config: `apps/storybook/vite.config.ts` points
-`storybookTest({ configDir })` at the same `.storybook` directory. Same `main.ts`, same
-`preview.ts`.
-
-Fastest check — start the dev server, then in the browser console:
-
-```js
-fetch('/index.json')
-	.then((r) => r.json())
-	.then((j) => {
-		const paths = [...new Set(Object.values(j.entries).map((e) => e.importPath))];
-		console.log({ entries: Object.keys(j.entries).length, files: paths.length });
-	});
-```
-
-Healthy today: **412 entries across 68 import paths, none under `node_modules`**, matching a suite
-of 68 files and 385 tests. Compare with
-`cd apps/storybook && npx vitest list --filesOnly`. If Vitest's count is higher, it is collecting
-files Storybook never indexed, and that difference is the bug.
-
-The dev server runs on port 6006 via `.claude/launch.json` (`preview_start` with name `storybook`).
-
-## Vitest 4 CLI
-
-`--reporter=basic` was removed and fails with `Failed to load custom Reporter from basic`, which
-reads like a config error rather than a removed flag. Use the default reporter, and capture output
-with `> file 2>&1` rather than piping through `tail` — otherwise the summary survives and the
-failure list you needed does not.
+**If `pnpm prettier` produces a large diff, the tree has drifted.** Commit that separately, never
+folded into feature work — `git add -A` sweeps it up silently otherwise. Use
+`npx prettier --check .` when you want to _know_ whether it is clean.
