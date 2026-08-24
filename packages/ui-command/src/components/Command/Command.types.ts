@@ -7,7 +7,10 @@ export interface ICommand extends React.ComponentProps<typeof CommandPrimitive> 
 	className?: string;
 }
 
-export interface ICommandDialog extends React.ComponentProps<typeof Dialog> {
+// `ref` is dropped rather than forwarded: `Dialog` now exposes an imperative handle, and
+// `CommandDialog` owns its own open state through `useCommandContext`, so a caller holding that
+// handle could drive the two out of step.
+export interface ICommandDialog extends Omit<React.ComponentProps<typeof Dialog>, 'ref'> {
 	className?: string;
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;

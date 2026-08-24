@@ -1,6 +1,8 @@
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
 import { cn } from '@repo/tailwind-config';
 
+import { useOverlayContainer } from '~/components/Overlay/hooks/useOverlayContainer';
+
 import type {
 	IHoverCard,
 	IHoverCardTrigger,
@@ -21,8 +23,13 @@ const HoverCardContent = ({
 	sideOffset = 4,
 	...props
 }: IHoverCardContent) => {
+	// Inside a modal, `document.body` is behind the top layer and inert, so a hover card portalled
+	// there is both invisible and unreachable. Outside one the container is undefined and Radix
+	// falls back to the body, unchanged.
+	const container = useOverlayContainer();
+
 	return (
-		<HoverCardPrimitive.Portal data-slot='hover-card-portal'>
+		<HoverCardPrimitive.Portal data-slot='hover-card-portal' container={container}>
 			<HoverCardPrimitive.Content
 				data-slot='hover-card-content'
 				align={align}

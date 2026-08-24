@@ -1,56 +1,29 @@
 import * as React from 'react';
-import * as SheetPrimitive from '@radix-ui/react-dialog';
+
+import { OverlayRootContext } from '~/components/Overlay/contexts/overlay-root-context';
+import { useControllableOpen } from '~/components/Overlay/hooks/useControllableOpen';
 
 import type { ISheet } from '~/components/Sheet/Sheet.types';
 
-export const Sheet = ({
-	ref,
-	open: openProp,
-	onOpenChange: onOpenChangeProp,
-	...props
-}: ISheet) => {
-	const [isOpen, setIsOpen] = React.useState(false);
+export const Sheet = ({ ref, open: openProp, defaultOpen, onOpenChange, children }: ISheet) => {
+	const { open, setOpen } = useControllableOpen({ open: openProp, defaultOpen, onOpenChange });
 
-	const isControlled = openProp !== undefined;
-	const open = isControlled ? openProp : isOpen;
-
-	// Uncontrolled has to do both: move the internal state the render actually reads, *and* notify
-	// the caller. Branching to one or the other drops whichever the caller did not expect —
-	// previously `{...props}` was spread after `onOpenChange`, which reinstated the caller's handler
-	// and left `setIsOpen` unreachable, so an uncontrolled Sheet with an `onOpenChange` prop never
-	// opened at all.
-	const onOpenChange = React.useCallback(
-		(next: boolean) => {
-			if (!isControlled) {
-				setIsOpen(next);
-			}
-
-			onOpenChangeProp?.(next);
-		},
-		[isControlled, onOpenChangeProp]
-	);
-
-	// The ref API must go through `onOpenChange` (not raw `setIsOpen`) so it still works when
-	// the Sheet is controlled — otherwise open()/close()/toggle() would update dead internal
-	// state that the controlled render never reads.
+	// The handle goes through `setOpen`, never raw state. Driving internal state directly would make
+	// open() and close() no-ops on a controlled Sheet, whose render never reads it.
 	React.useImperativeHandle(
 		ref,
 		() => ({
-			open: () => onOpenChange(true),
-			close: () => onOpenChange(false),
-			toggle: () => onOpenChange(!open),
-			get isOpen() {
-				return open ?? false;
-			}
+			open: () => setOpen(true),
+			close: () => setOpen(false),
+			toggle: () => setOpen(!open),
+			isOpen: open
 		}),
-		[open, onOpenChange]
+		[open, setOpen]
 	);
 
-	// `open` and `onOpenChange` go after the spread deliberately: they are the computed values, and
-	// the raw props they derive from must not overwrite them.
-	return (
-		<SheetPrimitive.Root data-slot='sheet' {...props} open={open} onOpenChange={onOpenChange} />
-	);
+	const context = React.useMemo(() => ({ open, setOpen, slot: 'sheet' }), [open, setOpen]);
+
+	return <OverlayRootContext.Provider value={context}>{children}</OverlayRootContext.Provider>;
 };
 
 Sheet.displayName = 'Sheet';

@@ -1,6 +1,8 @@
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { cn } from '@repo/tailwind-config';
 
+import { useOverlayContainer } from '~/components/Overlay/hooks/useOverlayContainer';
+
 import type { IPopoverContent } from '~/components/Popover/Popover.types';
 
 export const PopoverContent = ({
@@ -9,8 +11,13 @@ export const PopoverContent = ({
 	sideOffset = 4,
 	...props
 }: IPopoverContent) => {
+	// Inside a modal, `document.body` is behind the top layer and inert, so a popover portalled
+	// there is both invisible and unclickable. This puts it inside the dialog instead. Outside a
+	// modal the container is undefined and Radix falls back to the body, unchanged.
+	const container = useOverlayContainer();
+
 	return (
-		<PopoverPrimitive.Portal>
+		<PopoverPrimitive.Portal container={container}>
 			<PopoverPrimitive.Content
 				data-slot='popover-content'
 				align={align}

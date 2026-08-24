@@ -1,13 +1,20 @@
-import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cn } from '@repo/tailwind-config';
+
+import { useRegisteredOverlayId } from '~/components/Overlay/hooks/useRegisteredOverlayId';
+
 import type { IDialogDescription } from '~/components/Dialog/Dialog.types';
 
-export const DialogDescription = ({ className, ...props }: IDialogDescription) => {
+export const DialogDescription = ({ className, id, ...props }: IDialogDescription) => {
+	const descriptionId = useRegisteredOverlayId(id, 'description');
+
 	return (
-		<DialogPrimitive.Description
+		<p
+			id={descriptionId}
 			data-slot='dialog-description'
 			className={cn('text-muted-foreground text-sm', className)}
 			{...props}
 		/>
 	);
 };
+
+DialogDescription.displayName = 'DialogDescription';

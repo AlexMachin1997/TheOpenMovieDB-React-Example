@@ -24,3 +24,4 @@ export type {
 	IDialogFooter,
 	IDialogContentArea
 } from '~/components/Dialog/Dialog.types';
+export type { DialogRef } from '~/components/Dialog/types/dialog-ref';

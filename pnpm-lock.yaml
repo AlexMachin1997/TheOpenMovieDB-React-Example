@@ -430,9 +430,6 @@ importers:
 
   packages/ui-command:
     dependencies:
-      '@radix-ui/react-dialog':
-        specifier: ^1.1.14
-        version: 1.1.15(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@repo/core':
         specifier: workspace:*
         version: link:../core
@@ -730,6 +727,9 @@ importers:
       '@radix-ui/react-popover':
         specifier: ^1.1.14
         version: 1.1.15(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@radix-ui/react-slot':
+        specifier: ^1.2.3
+        version: 1.2.3(@types/react@19.1.11)(react@19.2.4)
       '@repo/ui-core':
         specifier: workspace:*
         version: link:../ui-core

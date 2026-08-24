@@ -12,6 +12,7 @@ export {
 	DialogTitle,
 	Dialog
 } from '~/components/Dialog';
+export type { DialogRef } from '~/components/Dialog';
 
 // Sheet
 export {

@@ -1,7 +1,12 @@
-import * as SheetPrimitive from '@radix-ui/react-dialog';
-
 import type { ISheetPortal } from '~/components/Sheet/Sheet.types';
 
-export const SheetPortal = ({ ...props }: ISheetPortal) => {
-	return <SheetPrimitive.Portal data-slot='sheet-portal' {...props} />;
+/**
+ * @deprecated There is nothing left to portal. A native dialog element opened with showModal()
+ * renders in the top layer, above every other element regardless of where it sits in the tree. Kept
+ * as a pass-through so existing call sites keep working.
+ */
+export const SheetPortal = ({ children }: ISheetPortal) => {
+	return <>{children}</>;
 };
+
+SheetPortal.displayName = 'SheetPortal';

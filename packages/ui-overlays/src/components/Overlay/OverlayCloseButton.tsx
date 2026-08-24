@@ -1,9 +1,9 @@
 import * as React from 'react';
-import * as OverlayPrimitive from '@radix-ui/react-dialog';
 import { cn } from '@repo/tailwind-config';
 import { Icon } from '@repo/ui-core';
 
 import { overlayCloseButtonVariants } from '~/components/Overlay/Overlay.variants';
+import { useOverlayContentContext } from '~/components/Overlay/hooks/useOverlayContentContext';
 
 export interface IOverlayCloseButton {
 	/** The owning overlay's slot prefix, e.g. `'dialog'` or `'sheet'`. */
@@ -22,10 +22,16 @@ export interface IOverlayCloseButton {
  * `icon` props, or compose their own with the public `DialogClose` / `SheetClose`.
  */
 export const OverlayCloseButton = ({ slot, icon, className }: IOverlayCloseButton) => {
+	const content = useOverlayContentContext();
+
 	return (
-		<OverlayPrimitive.Close
+		<button
+			type='button'
 			data-slot={`${slot}-close`}
 			className={cn(overlayCloseButtonVariants(), className)}
+			// Through the same handler as Escape and the backdrop, so one `onRequestClose` covers
+			// every way out rather than two of the three.
+			onClick={(event) => content?.requestClose('close-button', event.nativeEvent)}
 		>
 			{/*
 			 * `size='xl'` (24px) is load-bearing, not a style choice. A consumer-supplied `icon` with
@@ -35,7 +41,7 @@ export const OverlayCloseButton = ({ slot, icon, className }: IOverlayCloseButto
 			 */}
 			{icon ?? <Icon name='x' size='xl' />}
 			<span className='sr-only'>Close</span>
-		</OverlayPrimitive.Close>
+		</button>
 	);
 };
 

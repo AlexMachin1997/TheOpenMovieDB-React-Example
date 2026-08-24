@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 /**
- * Variants shared by every modal overlay built on `@radix-ui/react-dialog`.
+ * Variants shared by every modal overlay, all of which are a native `<dialog>` element.
  *
  * Dialog and Sheet are the same component wearing different clothes: the same primitive, the same
  * backdrop, the same close affordance, differing only in where the surface sits and how it arrives.
@@ -23,6 +23,22 @@ export const overlayBackdropVariants = cva(
  */
 export const overlayCloseButtonVariants = cva(
 	"cursor-pointer ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6"
+);
+
+/**
+ * The `<dialog>` element itself, which is both the top-layer host and the dim behind the panel.
+ *
+ * Making the dialog the dim rather than a sibling is what keeps the fade classes above working:
+ * they are ordinary utilities and cannot reach `::backdrop`. It also makes a backdrop click
+ * detectable as "the event landed on the dialog element", since the panel is a child.
+ *
+ * Everything after the backdrop classes undoes the user-agent stylesheet, which gives `dialog` a
+ * border, `1em` of padding, `margin: auto`, `width: fit-content` and `background: canvas` — and
+ * paints `::backdrop` at `rgba(0, 0, 0, 0.1)`, which would darken every overlay and compound on
+ * stacked ones. None of these are decorative.
+ */
+export const overlayDialogVariants = cva(
+	`${overlayBackdropVariants()} m-0 h-full max-h-none w-full max-w-none border-0 p-0 text-inherit [&::backdrop]:bg-transparent`
 );
 
 // Every edge-anchored side shares its motion. Held here rather than repeated across the four so a

@@ -25,7 +25,6 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
-		"@radix-ui/react-dialog": "^1.1.14",
 		"@repo/core": "workspace:*",
 		"@repo/ui-core": "workspace:*",
 		"@repo/ui-overlays": "workspace:*",
