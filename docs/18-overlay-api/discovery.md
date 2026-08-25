@@ -1,11 +1,10 @@
 # Discovery: the native `<dialog>` element
 
-The primitive half of [`18`](spec.md). Promoted from
-[`planned.md`](../planned.md#the-native-dialog-element), which parked the question as "not yet
-decided" and asked for exactly this pass, then run on 2026-08-23 while grilling this deliverable's
-spec.
+The primitive half of [`18`](spec.md). Promoted from `planned.md`, which parked the question as "not
+yet decided" and asked for exactly this pass, then run on 2026-08-23 while grilling this
+deliverable's spec.
 
-**It was briefly a separate deliverable (`19`) and was merged back in on 2026-08-24.** The reason is
+**It was briefly a separate deliverable and was merged back in on 2026-08-24.** The reason is
 recorded under [Why this is one deliverable](#why-this-is-one-deliverable): three of the API
 decisions in [CONTEXT.md](CONTEXT.md) turn out to be unbuildable on Radix, so the two halves are not
 independent.
@@ -258,7 +257,7 @@ An alert dialog is a dialog with a different role and stricter obligations:
   [ADR-3](CONTEXT.md), which makes descriptions optional.
 - It should not be dismissible without the user making a choice.
 
-It is [Planned](../planned.md#alert-dialog) as its own deliverable, sequenced after this one:
+It became [`19`](../19-alert-dialog/spec.md), sequenced after this one:
 structurally it is `Dialog` minus the close button with two footer buttons, so under this
 deliverable's props it is a thin preset, and built before them it is another seven-element hand
 assembly.
@@ -349,5 +348,5 @@ These cover the primitive half. The API half's criteria are the acceptance crite
 ## Related
 
 - [`spec.md`](spec.md) — the API half, and [`CONTEXT.md`](CONTEXT.md) — the eight ADRs behind it.
-- [Alert dialog](../planned.md#alert-dialog) — follows this deliverable.
+- [Alert dialog](../19-alert-dialog/spec.md) — follows this deliverable.
 - [Popover semantics](../planned.md#popover-semantics) — deferred out of this deliverable.

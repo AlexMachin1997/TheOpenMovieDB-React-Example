@@ -16,6 +16,7 @@ Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 | ID  | Deliverable      | Area          | Status   | Depends on | Docs                                               |
 | --- | ---------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
 | 03  | Focus indicators | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
+| 19  | Alert dialog     | components    | 📝 draft | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)         |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -36,14 +37,16 @@ target (the library committed to 2.1 AA under `02`), how far "all interactive el
 whether `--ring`'s own values change. The design-system audit under **Planned** is downstream of
 `03`, not a blocker for it.
 
-`18` has shipped, and both things `14` left it are done: every overlay story now has a `play()` that
-opens its overlay, and an overlay with no accessible name warns rather than shipping silently.
+`19` is the alert dialog `18` was the gate on. It grew past the thin preset it was scoped as: the
+`role="alertdialog"` component is only half of it, and the other half is a declared dismissal policy
+and an awaitable action on the shared overlay, both of which `Dialog` and `Sheet` inherit. Its
+[open questions](19-alert-dialog/spec.md#open-questions) are what keep it `draft`, and one of them —
+whether an awaitable close reaches `onRequestClose` — has to be answered before the shared half can
+be planned.
 
-Two overlay follow-ons remain, both in [`planned.md`](planned.md). An **alert dialog** was always
-sequenced after `18`, and building it now means a thin preset over `18`'s props rather than another
-hand assembly. **Popover semantics** owns the nine `aria-dialog-name` failures on Radix's
-`PopoverContent` that `17` disabled with a pointer rather than fix — they are real, and `Popover` was
-moved out of `18`, so they were never `18`'s to fix. See
+**Popover semantics** remains in [`planned.md`](planned.md). It owns the nine `aria-dialog-name`
+failures on Radix's `PopoverContent` that `17` disabled with a pointer rather than fix — they are
+real, and `Popover` was moved out of `18`, so they were never `18`'s to fix. See
 [`17`'s plan](17-command-list-nesting/plan.md#the-a11y-gate-and-what-it-surfaced).
 
 ## Planned

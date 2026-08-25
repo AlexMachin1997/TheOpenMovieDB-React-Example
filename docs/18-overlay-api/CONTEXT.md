@@ -251,5 +251,5 @@ Neither is part of this deliverable; both are corrections owed to the codebase.
   triggers its confirmation; the `X` closes immediately. Requirement 10 makes the claim true, but the
   wording needs fixing regardless.
 - **`Dialog.stories.tsx:242`'s `AlertDialog` story is not an alert dialog** — `role="dialog"`,
-  freely dismissible. Rename it, or let the [alert dialog deliverable](../planned.md#alert-dialog)
+  freely dismissible. Rename it, or let the [alert dialog deliverable](../19-alert-dialog/spec.md)
   replace it.

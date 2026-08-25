@@ -72,8 +72,7 @@ decisions behind it cannot be built on Radix at all, the primitive swap undernea
 
 ## Non-Goals
 
-- An `AlertDialog`. It is [Planned](../planned.md#alert-dialog) as its own deliverable, sequenced
-  after this one.
+- An `AlertDialog`. It became [`19`](../19-alert-dialog/spec.md), sequenced after this one.
 - Reworking `Popover`'s semantics or API — [Planned](../planned.md#popover-semantics) separately.
 - Pixel-identical animations. [DD-1](discovery.md) accepts that they will differ.
 - A schema- or config-driven overlay.

@@ -28,16 +28,6 @@ overlay placement, so it needs its own `problem-discovery` pass rather than bein
 by component. See
 [`04-ui-forms-primitive-migration/plan.md`](04-ui-forms-primitive-migration/plan.md#follow-ups).
 
-## The native `<dialog>` element
-
-**Moved.** The discovery pass this section asked for was run on 2026-08-23 and became
-[`18`'s `discovery.md`](18-overlay-api/discovery.md). It supersedes what stood here, including two
-claims that had gone stale: our `CommandDialog` no longer uses `@radix-ui/react-dialog` (it composes
-`@repo/ui-overlays` since `14`), and the animation cost is accepted rather than avoided.
-
-It is not a separate deliverable. Three of `18`'s API decisions cannot be built on Radix, so the
-swap and the API are [one piece of work](18-overlay-api/discovery.md#why-this-is-one-deliverable).
-
 ## Popover semantics
 
 `Popover` renders `role="dialog"` with no accessible name. That is a real, currently-shipping axe
@@ -59,7 +49,7 @@ a date, not a question waiting on an opinion.
 
 **What blocks it is our own floor, not the browsers.** The `popover` attribute itself is widely
 supported. Anchoring a popover to its trigger needs CSS anchor positioning — Chrome 125, Firefox
-147, Safari 26 — and all three have shipped it, so it *is* Baseline Newly Available. But the
+147, Safari 26 — and all three have shipped it, so it _is_ Baseline Newly Available. But the
 [support floor](../README.md#-browser-support) is pinned at Chrome 117 / Firefox 129 / Safari 17.5,
 set by `@starting-style`. Adopting anchor positioning therefore means **raising the floor and
 dropping Safari 17.5–25**, which is a product call nobody has made.
@@ -85,42 +75,6 @@ on the affected call sites — not a new API.
 One thing it does **not** own: where a popover portals to inside a modal. That change belongs to
 `18`, which forces it — see
 [DD-6](18-overlay-api/discovery.md#dd-6--anchored-overlays-portal-into-the-dialog-element).
-
-## Alert dialog
-
-A confirmation dialog — `role="alertdialog"`, a mandatory description, an explicit choice before it
-can be dismissed. **There is no such component today.** The `AlertDialog` story at
-`Dialog.stories.tsx:242` is a plain `Dialog` wearing a warning icon: `role="dialog"`, dismissible by
-Escape, outside click and the `X`. It looks the part and carries none of the semantics.
-
-Agreed as its own deliverable, sequenced **after** [`18`](18-overlay-api/spec.md). Structurally it is
-`Dialog` minus the close button with two footer buttons, so under `18`'s props it is a thin preset;
-built before them, it is another seven-element hand assembly. Its one genuine conflict with `18` is
-that a description is *mandatory* here, where `18`'s
-[ADR-3](18-overlay-api/CONTEXT.md) makes it optional. Its "cannot be dismissed without choosing" rule
-rides on `18`'s [ADR-8](18-overlay-api/CONTEXT.md) veto, which only the native element makes
-possible.
-
-### Evidence from `18` that the veto is too low-level on its own
-
-`18` shipped the veto as `onRequestClose`, a callback carrying an `event.source` of
-`'escape' | 'close-button' | 'backdrop' | 'close-part'`. `Sheet`'s `Confirmation` story is the first
-real use, and getting it right takes four pieces of state, a reset-on-open, a source filter and a
-route-to-label map — for a rule that is the same every time: refuse the routes a user fires by
-accident, never refuse the ones with a visible control behind them.
-
-A preset absorbs that only for the alert-dialog shape. The rule itself is wanted more widely — a form
-sheet or a payment step has the same "not while this is unfinished" requirement — so the preset
-should probably sit on top of a smaller prop rather than own the logic:
-
-```tsx
-<SheetContent dismissible={confirmed} … />
-```
-
-Worth settling when this deliverable is specced, because the preset's shape depends on it. The open
-question is naming and scope: a bare `dismissible` boolean hides _which_ routes it governs, and
-someone will want the `X` covered too. Either it means ambient dismissal specifically and is named to
-say so, or it takes per-route values. `onRequestClose` stays underneath for anything finer.
 
 ## The four-package split
 

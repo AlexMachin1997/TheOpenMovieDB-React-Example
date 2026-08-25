@@ -213,7 +213,7 @@ The remaining four were story-level.
 One correction this work surfaced and did **not** make, recorded in
 [CONTEXT.md](CONTEXT.md#follow-ups-this-grilling-surfaced): `Dialog.stories.tsx`'s `AlertDialog`
 story is not an alert dialog — `role="dialog"`, freely dismissible. Left for the
-[alert dialog deliverable](../planned.md#alert-dialog), which may replace it outright.
+[alert dialog deliverable](../19-alert-dialog/spec.md), which may replace it outright.
 
 The other, `SheetInnerContent` setting no `data-slot` unlike every sibling, was fixed during the
 review pass.
