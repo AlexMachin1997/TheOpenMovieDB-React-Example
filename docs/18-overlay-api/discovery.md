@@ -70,7 +70,7 @@ side", cannot survive and is replaced by success criterion 7 below.
 
 **Decided**: `Popover` neither moves to a native primitive nor gains the new props. Both were
 considered and both are now deferred to a separate piece of work, listed under
-[Planned](../planned.md#popover-semantics). Mixing them in confuses two genuinely different
+[`20`](../20-popover-semantics/spec.md). Mixing them in confuses two genuinely different
 concepts: a modal content surface and an anchored non-modal one.
 
 **Two corrections to reasoning offered along the way**, kept because they are the reasons the
@@ -349,4 +349,4 @@ These cover the primitive half. The API half's criteria are the acceptance crite
 
 - [`spec.md`](spec.md) — the API half, and [`CONTEXT.md`](CONTEXT.md) — the eight ADRs behind it.
 - [Alert dialog](../19-alert-dialog/spec.md) — follows this deliverable.
-- [Popover semantics](../planned.md#popover-semantics) — deferred out of this deliverable.
+- [Popover semantics](../20-popover-semantics/spec.md) — deferred out of this deliverable.

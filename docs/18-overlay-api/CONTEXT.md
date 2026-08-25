@@ -50,7 +50,7 @@ target and should be reworded to name three. AC1 is unaffected.
 modal"; reversed when the deliverable merged with the primitive swap.
 
 **Decision**: `Popover` gets neither the props nor the ref API here, and stays on Radix. The work is
-deferred to [Planned](../planned.md#popover-semantics). The single exception is where it *portals
+deferred to [`20`](../20-popover-semantics/spec.md). The single exception is where it *portals
 to* inside a modal, which the swap forces —
 [DD-6](discovery.md#dd-6--anchored-overlays-portal-into-the-dialog-element) — and which changes no
 public API.

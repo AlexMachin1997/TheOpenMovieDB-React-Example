@@ -13,10 +13,11 @@ is just the roadmap.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable      | Area          | Status   | Depends on | Docs                                               |
-| --- | ---------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
-| 03  | Focus indicators | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
-| 19  | Alert dialog     | components    | 📝 draft | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)         |
+| ID  | Deliverable       | Area          | Status   | Depends on | Docs                                                 |
+| --- | ----------------- | ------------- | -------- | ---------- | ---------------------------------------------------- |
+| 03  | Focus indicators  | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)   |
+| 19  | Alert dialog      | components    | 📝 draft | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)           |
+| 20  | Popover semantics | components    | 🟢 ready | 18 ✅      | [20-popover-semantics](20-popover-semantics/spec.md) |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -44,10 +45,12 @@ and an awaitable action on the shared overlay, both of which `Dialog` and `Sheet
 whether an awaitable close reaches `onRequestClose` — has to be answered before the shared half can
 be planned.
 
-**Popover semantics** remains in [`planned.md`](planned.md). It owns the nine `aria-dialog-name`
-failures on Radix's `PopoverContent` that `17` disabled with a pointer rather than fix — they are
-real, and `Popover` was moved out of `18`, so they were never `18`'s to fix. See
-[`17`'s plan](17-command-list-nesting/plan.md#the-a11y-gate-and-what-it-surfaced).
+`20` is `ready` rather than `draft` because the three questions that kept it in `planned.md` have
+been answered: the support floor rises to reach CSS anchor positioning, `role="dialog"` goes, and the
+role fix turned out not to need the primitive swap at all — Radix sets the role as a default a caller
+can override, not as a fixture. It owns the nine `aria-dialog-name` failures that `17` disabled with
+a pointer rather than fix; they were never `18`'s, since `Popover` was moved out of it. Its two
+phases are independent, and only the second waits on the floor.
 
 ## Planned
 

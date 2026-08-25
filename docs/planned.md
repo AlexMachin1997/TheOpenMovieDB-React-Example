@@ -28,54 +28,6 @@ overlay placement, so it needs its own `problem-discovery` pass rather than bein
 by component. See
 [`04-ui-forms-primitive-migration/plan.md`](04-ui-forms-primitive-migration/plan.md#follow-ups).
 
-## Popover semantics
-
-`Popover` renders `role="dialog"` with no accessible name. That is a real, currently-shipping axe
-`aria-dialog-name` failure — nine of them, suppressed by
-[`17`](17-command-list-nesting/plan.md#the-a11y-gate-and-what-it-surfaced) with a pointer at `18`.
-Verified in `@radix-ui/react-popover@1.1.15`: `Popover.Content` sets the role unconditionally, modal
-or not.
-
-**It was briefly in `18`'s scope and was deliberately moved out on 2026-08-24.** A modal content
-surface and an anchored non-modal one are different concepts, and `18` became the native-`<dialog>`
-swap — which `Popover` cannot follow, since `<dialog>` is neither anchored nor non-modal. Keeping it
-in would have meant one deliverable spanning two primitives and two ideas.
-
-### The direction is chosen; the timing is not
-
-**Intent, stated 2026-08-24: move `Popover` off Radix onto the HTML Popover API**, for the same
-reason `Dialog` and `Sheet` moved to `<dialog>` — prefer the platform. This is a decision waiting on
-a date, not a question waiting on an opinion.
-
-**What blocks it is our own floor, not the browsers.** The `popover` attribute itself is widely
-supported. Anchoring a popover to its trigger needs CSS anchor positioning — Chrome 125, Firefox
-147, Safari 26 — and all three have shipped it, so it _is_ Baseline Newly Available. But the
-[support floor](../README.md#-browser-support) is pinned at Chrome 117 / Firefox 129 / Safari 17.5,
-set by `@starting-style`. Adopting anchor positioning therefore means **raising the floor and
-dropping Safari 17.5–25**, which is a product call nobody has made.
-
-So the trigger for this work is a decision about which browsers the library supports, and it can be
-revisited any time that changes.
-
-Two things it still has to decide, which the primitive does not settle:
-
-- **Is `role="dialog"` right for a popover at all, or is it over-semantic?** The `popover` attribute
-  grants top layer and light dismiss but **no role**, so going native does not answer this — it just
-  moves the choice to us. Removing the role makes the nine axe failures disappear; keeping it means
-  every popover needs a name.
-- **If the role stays, how is the name supplied?** `title` / `description` props were drafted for
-  this in `18` and pulled back out. Radix Popover ships no `Title` / `Description` primitives, so
-  either way it is hand-wired.
-
-**Do not build the labelling twice.** This deliverable's own lesson from `18`: if the primitive is
-going to change, wiring a full props API onto Radix Popover first means discarding it. If the nine
-suppressed failures need clearing before the floor rises, the cheap interim fix is an `aria-label`
-on the affected call sites — not a new API.
-
-One thing it does **not** own: where a popover portals to inside a modal. That change belongs to
-`18`, which forces it — see
-[DD-6](18-overlay-api/discovery.md#dd-6--anchored-overlays-portal-into-the-dialog-element).
-
 ## The four-package split
 
 Whether `ui-core` / `ui-overlays` / `ui-command` / `ui-forms` still earn their boundaries. Raised
