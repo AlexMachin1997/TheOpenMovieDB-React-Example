@@ -19,11 +19,11 @@ deliverable numbers here.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable       | Area          | Status   | Depends on | Docs                                                 |
-| --- | ----------------- | ------------- | -------- | ---------- | ---------------------------------------------------- |
-| 03  | Focus indicators  | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)   |
-| 19  | Alert dialog      | components    | 📝 draft | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)           |
-| 20  | Popover semantics | components    | 🟢 ready | 18 ✅      | [20-popover-semantics](20-popover-semantics/spec.md) |
+| ID  | Deliverable       | Area          | Status         | Depends on | Docs                                                 |
+| --- | ----------------- | ------------- | -------------- | ---------- | ---------------------------------------------------- |
+| 03  | Focus indicators  | design system | 📝 draft       | —          | [03-focus-indicators](03-focus-indicators/spec.md)   |
+| 19  | Alert dialog      | components    | 📝 draft       | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)           |
+| 20  | Popover semantics | components    | 🔵 in progress | 18 ✅      | [20-popover-semantics](20-popover-semantics/plan.md) |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -51,7 +51,8 @@ and an awaitable action on the shared overlay, both of which `Dialog` and `Sheet
 whether an awaitable close reaches `onRequestClose` — has to be answered before the shared half can
 be planned.
 
-`20` is `ready`: grilling closed every open question, recorded in
+`20` is in progress; [`plan.md`](20-popover-semantics/plan.md) records the mechanisms chosen and
+what has been built. Grilling closed every open question, recorded in
 [`CONTEXT.md`](20-popover-semantics/CONTEXT.md). It owns the nine `aria-dialog-name` failures that
 `17` disabled with a pointer rather than fix. Phase 1 is semantics and naming on Radix — popovers stop
 claiming to be dialogs — and ships nothing visible. Phase 2 replaces Radix with the native popover and

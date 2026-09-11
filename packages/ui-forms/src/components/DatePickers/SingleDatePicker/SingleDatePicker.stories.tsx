@@ -51,6 +51,21 @@ export const Default: Story = {
 	render: (args) => <BasicSingleDatePickerTemplate {...args} />,
 	args: {
 		placeholder: 'Pick a date'
+	},
+	play: async ({ canvasElement, step }) => {
+		const trigger = within(canvasElement).getByRole('button', { name: /pick a date/i });
+
+		await step('The trigger does not announce a dialog', async () => {
+			await expect(trigger).not.toHaveAttribute('aria-haspopup');
+		});
+
+		// A calendar popover lets Tab out, so it is not a dialog. It needs no name of its own either:
+		// each month grid is already labelled by the calendar.
+		await step('Nor is the calendar it opens one', async () => {
+			await userEvent.click(trigger);
+			await expect(await within(document.body).findByRole('grid')).toBeInTheDocument();
+			await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+		});
 	}
 };
 

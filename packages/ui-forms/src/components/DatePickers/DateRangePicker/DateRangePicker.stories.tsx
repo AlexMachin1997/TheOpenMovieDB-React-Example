@@ -77,6 +77,21 @@ export const CustomPlaceholder: Story = {
 	render: (args) => <BasicDateRangePickerTemplate {...args} />,
 	args: {
 		placeholder: 'Select check-in and check-out dates'
+	},
+	play: async ({ canvasElement, step }) => {
+		const trigger = within(canvasElement).getByRole('button', {
+			name: /select check-in and check-out dates/i
+		});
+
+		await step('The trigger does not announce a dialog', async () => {
+			await expect(trigger).not.toHaveAttribute('aria-haspopup');
+		});
+
+		await step('Nor is the calendar it opens one', async () => {
+			await userEvent.click(trigger);
+			await expect(await within(document.body).findAllByRole('grid')).toHaveLength(2);
+			await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+		});
 	}
 };
 

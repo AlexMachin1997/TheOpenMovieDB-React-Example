@@ -126,14 +126,15 @@ shared root cause because two bugs appeared together is how the same bug gets "f
 
 `preview.ts` sets `a11y: { test: 'todo' }` globally — reports only, never fails. Individual files
 opt into `a11y: { test: 'error' }` on their own `meta`, deliberately, because the rest of the
-library has pre-existing violations. As of `17` that is `Button`, `Field`, `Dialog`, `Sheet`,
-`Command` and `Select`.
+library has pre-existing violations. As of `20` that is `Button`, `Field`, `Dialog`, `Sheet`,
+`Popover`, `Command` and `Select`.
 
-**Two of those metas also disable a rule, and both exceptions are load-bearing.** `Command` and
+**Two of those metas also disable a rule, and the exception is load-bearing.** `Command` and
 `Select` switch off `scrollable-region-focusable` (the listbox is `tabindex="-1"` because
-`aria-activedescendant` needs focus to stay on the input, and axe cannot see arrow-key scrolling)
-and `aria-dialog-name` (Radix's `PopoverContent`). Each carries a comment saying why. Do not delete
-them to "clean up" a red suite; the reasoning is in `docs/17-command-list-nesting/plan.md`.
+`aria-activedescendant` needs focus to stay on the input, and axe cannot see arrow-key scrolling).
+It carries a comment saying why. Do not delete it to "clean up" a red suite; the reasoning is in
+`docs/17-command-list-nesting/plan.md`. The `aria-dialog-name` suppression that sat beside it was
+removed by `20`: no popover claims to be a dialog any more, so there is nothing for it to hide.
 
 Story or meta level `a11y.test` **overrides** the global, so setting `'off'` in `preview.ts` will
 not silence `Button`. If exactly one file fails a11y assertions, that is why.

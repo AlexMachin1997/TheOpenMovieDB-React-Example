@@ -96,6 +96,14 @@ export interface ICommandContext {
 	filteredOptions: Option[];
 	/** Configuration for empty state messages */
 	emptyState?: IEmptyStateConfig;
+	/**
+	 * Id of the listbox `CommandList` renders, while one is mounted. `cmdk` generates it and
+	 * overwrites any id passed in, so a trigger outside `Command` has no other way to point
+	 * `aria-controls` at the listbox.
+	 */
+	listboxId?: string;
+	/** Called by `CommandList` with its listbox id on mount, and with `undefined` on unmount */
+	setListboxId: (id: string | undefined) => void;
 }
 
 /**

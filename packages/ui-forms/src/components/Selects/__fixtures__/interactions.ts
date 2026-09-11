@@ -1,4 +1,4 @@
-import { within, userEvent, expect } from 'storybook/test';
+import { within, userEvent, expect, waitFor } from 'storybook/test';
 
 // ---------------------------------------------------------------------------
 // Query helpers
@@ -12,26 +12,33 @@ export const getTrigger = (canvasElement: HTMLElement) => {
 };
 
 /**
- * Returns the popover dialog element (rendered in a portal on `document.body`).
+ * Returns the open select's listbox (rendered in a portal on `document.body`).
+ *
+ * The popover around it has no role — it has no name, so it claims nothing — which makes the
+ * listbox the thing to query. `openSelect` separately proves the trigger's `aria-controls` leads
+ * here.
  */
-export const getDialog = () => {
-	return within(document.body).getByRole('dialog');
+export const getListbox = () => {
+	return within(document.body).getByRole('listbox');
 };
 
 /**
- * Returns a specific option inside the open dialog by its accessible name.
+ * Returns a specific option inside the open listbox by its accessible name.
  * Auto-retries — the option may not exist yet if the search debounce (or, for large
  * virtualized lists, the subsequent re-render) hasn't settled.
  */
 export const getOption = (name: string) => {
-	return within(getDialog()).findByRole('option', { name });
+	return within(getListbox()).findByRole('option', { name });
 };
 
 /**
- * Returns the search input inside the open dialog.
+ * Returns the search input of the open select.
+ *
+ * Queried from the document, not the listbox: the input is the listbox's sibling inside the popover,
+ * and only one select is open at a time.
  */
 export const getSearchInput = () => {
-	return within(getDialog()).getByRole('textbox');
+	return within(document.body).getByRole('textbox');
 };
 
 // ---------------------------------------------------------------------------
@@ -40,12 +47,18 @@ export const getSearchInput = () => {
 
 /**
  * Opens the select dropdown by clicking the trigger.
- * Asserts the trigger transitions to `aria-expanded="true"`.
+ * Asserts the trigger transitions to `aria-expanded="true"`, and that its `aria-controls`
+ * resolves to the listbox its `aria-haspopup` promises.
  */
 export const openSelect = async (canvasElement: HTMLElement) => {
 	const trigger = getTrigger(canvasElement);
 	await userEvent.click(trigger);
 	await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+	// Waits for the transition, not the outcome: the attribute is absent until the listbox mounts
+	// and reports its id.
+	await waitFor(() => expect(trigger).toHaveAttribute('aria-controls', getListbox().id));
+
 	return trigger;
 };
 
@@ -60,7 +73,7 @@ export const closeSelect = async (canvasElement: HTMLElement) => {
 };
 
 /**
- * Types a search term into the search input inside the open dialog.
+ * Types a search term into the search input of the open select.
  */
 export const searchFor = async (term: string) => {
 	const input = getSearchInput();
@@ -71,7 +84,7 @@ export const searchFor = async (term: string) => {
 };
 
 /**
- * Selects an option by its accessible name inside the open dialog.
+ * Selects an option by its accessible name inside the open listbox.
  */
 export const selectOption = async (name: string) => {
 	const option = await getOption(name);
@@ -101,7 +114,7 @@ export const expectTriggerText = async (canvasElement: HTMLElement, text: string
 };
 
 /**
- * Asserts a given option is visible inside the open dialog.
+ * Asserts a given option is visible inside the open listbox.
  */
 export const expectOptionVisible = async (name: string) => {
 	const option = await getOption(name);
@@ -109,10 +122,9 @@ export const expectOptionVisible = async (name: string) => {
 };
 
 /**
- * Asserts that no option with the given name exists inside the open dialog.
+ * Asserts that no option with the given name exists inside the open listbox.
  */
 export const expectNoOption = async (name: string) => {
-	const dialog = getDialog();
-	const option = within(dialog).queryByRole('option', { name });
+	const option = within(getListbox()).queryByRole('option', { name });
 	await expect(option).not.toBeInTheDocument();
 };

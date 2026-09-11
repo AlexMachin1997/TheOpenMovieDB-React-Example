@@ -20,6 +20,7 @@ export const CommandProvider = ({
 	emptyState
 }: ICommandProvider) => {
 	const [searchValue, setSearchValue] = React.useState(defaultSearchValue);
+	const [listboxId, setListboxId] = React.useState<string>();
 
 	const handleSearchChange = React.useCallback((value: string) => {
 		setSearchValue(value);
@@ -54,7 +55,9 @@ export const CommandProvider = ({
 			options,
 			optionsMap,
 			filteredOptions,
-			emptyState
+			emptyState,
+			listboxId,
+			setListboxId
 		}),
 		[
 			open,
@@ -67,7 +70,8 @@ export const CommandProvider = ({
 			options,
 			optionsMap,
 			filteredOptions,
-			emptyState
+			emptyState,
+			listboxId
 		]
 	);
 

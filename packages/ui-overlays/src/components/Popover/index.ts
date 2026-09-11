@@ -1,12 +1,6 @@
-export {
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-	PopoverAnchor
-} from '~/components/Popover/components';
+export { Popover, PopoverTrigger, PopoverContent } from '~/components/Popover/components';
 export type {
 	IPopover,
 	IPopoverTrigger,
-	IPopoverContent,
-	IPopoverAnchor
+	IPopoverContent
 } from '~/components/Popover/Popover.types';

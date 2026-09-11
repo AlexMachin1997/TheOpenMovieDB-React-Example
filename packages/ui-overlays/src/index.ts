@@ -31,7 +31,7 @@ export {
 export type { SheetRef } from '~/components/Sheet';
 
 // Popover
-export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from '~/components/Popover';
+export { Popover, PopoverTrigger, PopoverContent } from '~/components/Popover';
 
 // DropdownMenu
 export {

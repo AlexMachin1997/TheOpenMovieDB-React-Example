@@ -34,10 +34,10 @@ import {
 	expectTriggerText,
 	expectOptionVisible,
 	expectNoOption,
-	getDialog,
+	getListbox,
 	getTrigger
 } from '~/components/Selects/__fixtures__/interactions';
-import { within, userEvent, expect } from 'storybook/test';
+import { within, userEvent, expect, waitFor } from 'storybook/test';
 
 const meta: Meta<SelectProps> = {
 	title: 'UI Forms/Select',
@@ -48,9 +48,6 @@ const meta: Meta<SelectProps> = {
 			test: 'error',
 			config: {
 				rules: [
-					// Radix's PopoverContent is role="dialog" with no accessible name. That is
-					// ui-overlays' surface, and docs/README.md assigns it to deliverable 18.
-					{ id: 'aria-dialog-name', enabled: false },
 					// The listbox is tabindex="-1" by design: aria-activedescendant requires focus to
 					// stay on the combobox input, so arrow keys are what traverse and scroll the list.
 					// axe cannot see scrolling driven from another element.
@@ -154,10 +151,8 @@ export const SingleWithoutSearch: StoryObj<SelectProps> = {
 		await expectClosed(canvasElement, 'Select a framework...');
 		await openSelect(canvasElement);
 
-		// Wait for dialog to open
-		const dialog = getDialog();
-		const searchInput = within(dialog).queryByRole('combobox');
-		await expect(searchInput).not.toBeInTheDocument();
+		// The search input is a textbox; the only combobox on the page is the trigger.
+		await expect(within(document.body).queryByRole('textbox')).not.toBeInTheDocument();
 
 		await selectOption('Next.js');
 		await expectTriggerText(canvasElement, 'Next.js');
@@ -251,8 +246,7 @@ export const SingleVirtualized: StoryObj<SelectProps> = {
 		// Search for an item deep in the list to prove it handles large datasets
 		await searchFor('Item 5000');
 
-		const dialog = getDialog();
-		const option = within(dialog).getByRole('option', { name: 'Item 5000' });
+		const option = within(getListbox()).getByRole('option', { name: 'Item 5000' });
 		await expect(option).toBeInTheDocument();
 
 		await userEvent.click(option);
@@ -653,37 +647,33 @@ export const EmptyState: StoryObj<SelectProps> = {
 		const triggers = within(canvasElement).getAllByRole('combobox');
 		const defaultSelect = triggers[0]!;
 
+		const documentScope = within(document.body);
+
 		await userEvent.click(defaultSelect);
-		// Get all dialogs and find the visible one
-		const dialogs = within(document.body).getAllByRole('dialog');
-		const defaultDialog = dialogs.find((d) => d.dataset.state === 'open') ?? dialogs[0]!;
 		await expect(
-			within(defaultDialog).getByText('No options currently available')
+			await documentScope.findByText('No options currently available')
 		).toBeInTheDocument();
 		await userEvent.keyboard('{Escape}');
 
-		// Wait for closing animation
-		await new Promise((r) => setTimeout(r, 200));
+		// Waits for the first popover to finish closing, so the second select's search input is the
+		// only textbox left on the page.
+		await waitFor(() =>
+			expect(documentScope.queryByText('No options currently available')).not.toBeInTheDocument()
+		);
 
 		// Second select has custom empty state
 		const customSelect = triggers[1]!;
 		await userEvent.click(customSelect);
-		const currentDialogs = within(document.body).getAllByRole('dialog');
-		const customDialog =
-			currentDialogs.find((d) => d.dataset.state === 'open') ??
-			currentDialogs[currentDialogs.length - 1]!;
 		await expect(
-			within(customDialog).getByText('No items available at the moment')
+			await documentScope.findByText('No items available at the moment')
 		).toBeInTheDocument();
 
 		// Search triggers the other custom empty state
-		const searchInput = within(customDialog).getByRole('textbox');
+		const searchInput = documentScope.getByRole('textbox');
 		await userEvent.type(searchInput, 'test');
 		// Wait for debounce
 		await new Promise((resolve) => setTimeout(resolve, 350));
-		await expect(
-			within(customDialog).getByText('No items found matching "test"')
-		).toBeInTheDocument();
+		await expect(documentScope.getByText('No items found matching "test"')).toBeInTheDocument();
 	}
 };
 

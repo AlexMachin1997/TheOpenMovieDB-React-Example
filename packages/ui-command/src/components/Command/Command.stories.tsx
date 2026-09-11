@@ -53,9 +53,6 @@ const meta: Meta<typeof Command> = {
 			test: 'error',
 			config: {
 				rules: [
-					// Radix's PopoverContent is role="dialog" with no accessible name. That is
-					// ui-overlays' surface, and docs/README.md assigns it to deliverable 18.
-					{ id: 'aria-dialog-name', enabled: false },
 					// The listbox is tabindex="-1" by design: aria-activedescendant requires focus to
 					// stay on the combobox input, so arrow keys are what traverse and scroll the list.
 					// axe cannot see scrolling driven from another element.
@@ -585,9 +582,8 @@ export const Dialog: Story = {
 			expect(documentScope.getByPlaceholderText('Search')).toBeInTheDocument();
 		});
 
-		// The palette names itself with `aria-label` rather than a hidden heading, and this suite
-		// disables `aria-dialog-name` because of Radix's PopoverContent — so axe cannot police it
-		// here and the assertion has to be explicit.
+		// The palette names itself with `aria-label` rather than a hidden heading. axe's
+		// `aria-dialog-name` proves it has a name; this proves it is the right one.
 		expect(documentScope.getByRole('dialog')).toHaveAccessibleName('Command Palette');
 
 		// Test 2: User sees all available options in the dialog
