@@ -69,22 +69,23 @@ The Prettier failures predate this work: `docs/18-overlay-api/CONTEXT.md`,
 - [ ] **A look at it** — not done; `play()` cannot assert appearance. Title and description layout,
       the X's position in a popover, the fade, the flipped calendar, and a `Select` as wide as its
       trigger want a human at `localhost:6006`.
-- [ ] **`Popover.mdx`** — not done, by ADR-10. Recorded in
-      [`planned.md`](../planned.md#storybook-docs-pages-for-ui-overlays).
+- [ ] **`Popover.mdx`** — not done. ADR-10 deferred it; the `styles.css` import is now a caller
+      obligation that needs a home, and it is split out as its own task.
 - [ ] **A minimum size before a popover gives up on its own side** — not decided; Alex is coming back
       to it. Today a popover with no room either side fills its own side however little space that
       is. Measured with a 12rem minimum, a 64px space was skipped for the 600px one opposite.
+- [ ] **Split out as separate tasks, from the third review round** — string-only `title` /
+      `description` across Popover, Dialog and Sheet; the suite in Firefox and WebKit; Radix menus and
+      hover cards inside a popover (suspected to close it, unproven); a test that a popover follows
+      scrolling; an imperative ref like Dialog's. And one for Alex: Select's combobox trigger with
+      `popovertarget`, under a screen reader.
 
 Flagged, not chased:
 
-- **`ui-command` and `ui-forms` still have the old `src/styles.css`**, importing all of Tailwind and
-  imported by nothing. `ui-overlays`' was repurposed as its shipped stylesheet.
 - **`Sheet` › `Confirmation` is flaky.** It failed 2 runs in 4 at the Phase 1 commit, with no Phase
   2 code present, on `toBeVisible()` for the refusal alert while the sheet is still arriving.
 - **`Dialog` probably drops a React `autoFocus`**, for the reason given below. Read from the code,
   not measured.
-- **`CONTEXT.md`'s vocabulary predates its own ADRs.** It still describes a caller-supplied `role`,
-  `PopoverAnchor`, light dismiss as a close source and a veto. Fact 13 is wrong about `source`.
 - **Nothing needs Chrome 137 any more.** The floor stays there by decision.
 
 ## Phases
@@ -96,7 +97,48 @@ Flagged, not chased:
 - [x] **2 — The primitive.** `popover="auto"` with anchor positioning replaces Radix; focus, closing,
       fade and flipping as below; the root README's browser-support section rewritten. `ed29083`.
 - [x] **Review follow-up.** Stories for every `side` and for flipping, and a last resort for a popover
-      with no room on either side. Detail below.
+      with no room on either side. Detail below. `78e92e8`.
+- [x] **Third review round.** A fixed header, story helpers in a fixture, a non-scrolling `Sides`
+      canvas, focus-return assertions, a warning for a non-button trigger, `popoverPosition.spec.ts`,
+      dependency linting for `useIsomorphicLayoutEffect`, and the CSS convention documented. Detail
+      below.
+
+## Third review round
+
+Alex raised eight points; the small ones were done here and the rest split into their own tasks
+(listed under Still open).
+
+- **The header no longer scrolls.** When a shrunk popover has a `title` or `description`, only a body
+  wrapper (`data-slot="popover-body"`) scrolls, as `Dialog`'s content area does. A popover without a
+  header — every `Select` and date picker — renders exactly as before, with no wrapper. The body's
+  `-m-1 p-1` gives a focus ring on its edge room before the scroll container clips it.
+  `NoRoomOnEitherSide` scrolls the body to its end and asserts the title has not moved.
+- **`Sides` fills the canvas and never scrolls.** Measured before: in a 445×508 pane its grid was
+  796px wide and the canvas scrolled sideways, so narrowing the panel moved the triggers instead of
+  flipping the popovers. The middle track is now `minmax(0, …)`, so it shrinks with the panel.
+- **Story helpers moved to `Popover/__fixtures__/interactions.ts`**, following
+  `Selects/__fixtures__/interactions.ts` — which, like it, departs from the storybook-standards
+  skill's "data only" rule for `__fixtures__/`.
+- **Focus return is asserted** after Escape and after the close button, in `CloseRoutes`. Measured
+  first in the dev server: both returned focus to the trigger.
+- **`PopoverTrigger` warns when its element is not a `<button>`**, since `popovertarget` only works on
+  one and the failure otherwise looks like a popover bug.
+- **`popoverPosition.spec.ts`** covers every side and alignment's area, the gap's edge, and the
+  fallback order. Hook tests were not written: the installed `jsdom@26.1.0` implements neither the
+  Popover API nor anchor positioning, so they would test mocks of the platform.
+- **`exhaustive-deps` now checks `useIsomorphicLayoutEffect`** through `additionalHooks`. Measured
+  before enabling: one violation across the four UI packages, `useKeepActiveOptionRendered.ts`, whose
+  effect has no dependency list on purpose. It carries a disable with the reason. Proved on a
+  throwaway hook linted through stdin, with a `useIsomorphicLayoutEffect` and a `useEffect` each
+  missing a dependency: the old rule flagged only the `useEffect`, the new one flagged both, and with
+  the dependency added neither was flagged. A severity-only `--rule` override keeps the configured
+  options, so the old rule had to be reproduced with its options set to `{}`.
+- **Gates for this round:** `pnpm turbo run build --force` 11/11, `pnpm lint` 11/11,
+  `ui-overlays` unit tests 2 files / 27 passed, Storybook suite 42 files / 407 passed.
+- **The per-package CSS convention is in `ui-core`'s README**, under Conventions. The unused
+  `src/styles.css` in `ui-command` and `ui-forms`, which imported all of Tailwind, were removed.
+- **`CONTEXT.md`'s vocabulary, ADR-16 and fact 13 are corrected** in place, with notes rather than
+  rewrites.
 
 ## Review follow-up
 

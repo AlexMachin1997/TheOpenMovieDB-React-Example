@@ -71,6 +71,20 @@ Enforced by `project-structure/folder-structure`.
 - A component elsewhere that needs one imports the file directly, as `Calendar` does with
   `buttonVariants`.
 
+### CSS a utility can't express
+
+- CSS that Tailwind utilities and a `.variants.ts` can't express — an at-rule such as
+  `@position-try` or `@keyframes` — lives in `<Component>.css`, beside the component.
+- **A package that has any ships one stylesheet, `src/styles.css`**, which `@import`s those files and
+  nothing else. It is exported from source (`"./styles.css": "./src/styles.css"`), the way
+  `@repo/tailwind-config` exports `globals.css`, so no build step copies it.
+- **An app imports it once per package**, after `@repo/tailwind-config/globals.css`. Storybook does
+  in `apps/storybook/.storybook/tailwind.css`.
+- Nothing enforces the import or the file names — the folder-structure rule only reads JavaScript and
+  TypeScript — and a missing import fails silently. The component's docs say what breaks without it.
+- Only `@repo/ui-overlays` has one today: `Popover.css`, the positions a popover falls back to when no
+  side of its trigger has room.
+
 ### Prop types carry an `I` prefix
 
 - `IButton`, `IInput`, `ITabs` — so a prop type can be named after its component without colliding

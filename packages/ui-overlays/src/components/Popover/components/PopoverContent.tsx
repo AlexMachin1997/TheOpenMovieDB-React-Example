@@ -73,17 +73,20 @@ export const PopoverContent = ({
 			className={cn(
 				// `inset-auto m-0` undo the user-agent stylesheet, which centres a popover in the viewport
 				// with `inset: 0; margin: auto` — positioning that would beat `position-area` outright.
-				// `overflow-auto` for the last-resort positions in `Popover.css`, which size the popover to
-				// the space beside its trigger and leave the rest to scroll.
-				'bg-popover text-popover-foreground inset-auto m-0 w-72 overflow-auto rounded-md border p-4 shadow-md outline-hidden',
+				'bg-popover text-popover-foreground inset-auto m-0 w-72 rounded-md border p-4 shadow-md outline-hidden',
+				// The last-resort positions in `Popover.css` size the popover to the space beside its
+				// trigger, so something has to scroll. With a header only the body does, and the title
+				// stays in view as a `Dialog`'s does. Without one the popover scrolls as a whole, which
+				// leaves a `Select` or a calendar with no extra wrapper around it.
+				//
+				// `open:flex` rather than a bare `flex`, which would beat the user-agent rule hiding a
+				// closed popover and leave an empty box on the page.
+				hasHeader ? 'open:flex flex-col gap-4 overflow-hidden' : 'overflow-auto',
 				// An opacity fade in both directions. `allow-discrete` on `display` and `overlay` keeps
 				// the element showing, and in the top layer, until the fade has finished — including when
 				// the browser closed it. `starting:` supplies the value it fades in from, since a hidden
 				// popover has no previous style to leave.
 				'opacity-0 transition-[opacity,display,overlay] transition-discrete duration-150 ease-out open:opacity-100 starting:open:opacity-0',
-				// `open:` rather than a bare `flex`, which would beat the user-agent rule hiding a closed
-				// popover and leave an empty box on the page.
-				hasHeader && 'open:flex flex-col gap-4',
 				className
 			)}
 			onKeyDown={(event) => {
@@ -96,7 +99,7 @@ export const PopoverContent = ({
 					{hasHeader && (
 						<div
 							data-slot='popover-header'
-							className={cn('flex flex-col gap-1', showCloseButton && 'pr-8')}
+							className={cn('flex shrink-0 flex-col gap-1', showCloseButton && 'pr-8')}
 						>
 							{hasTitle && (
 								<div id={titleId} data-slot='popover-title' className='leading-none font-medium'>
@@ -114,7 +117,15 @@ export const PopoverContent = ({
 							)}
 						</div>
 					)}
-					{children}
+					{hasHeader ? (
+						// `-m-1 p-1` cancel out, and give a focus ring on the body's edge somewhere to draw
+						// before the scroll container clips it.
+						<div data-slot='popover-body' className='-m-1 min-h-0 flex-1 overflow-auto p-1'>
+							{children}
+						</div>
+					) : (
+						children
+					)}
 					{showCloseButton ? (
 						<OverlayCloseButton slot='popover' className='top-2 right-2' onClose={dismiss} />
 					) : null}

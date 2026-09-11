@@ -24,6 +24,9 @@ import { useIsomorphicLayoutEffect } from '@repo/ui-core';
 export const useKeepActiveOptionRendered = (sizerRef: React.RefObject<HTMLElement | null>) => {
 	const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
+	// No dependency list, on purpose: the active option can change on any render, and re-reading it
+	// after every one is the job. It cannot loop — the index only moves when the DOM says it did.
+	// eslint-disable-next-line react-hooks/exhaustive-deps -- see above
 	useIsomorphicLayoutEffect(() => {
 		// role/aria-selected rather than cmdk's own `cmdk-item` marker: that is ARIA, which any
 		// listbox implementation has to emit, not a detail of the library underneath.

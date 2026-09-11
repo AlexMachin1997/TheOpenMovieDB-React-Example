@@ -13,17 +13,18 @@ the words mean.
 **Phase 1 / Phase 2** — Phase 1 is semantics and structure, still on Radix. Phase 2 swaps the
 primitive for `popover="auto"` plus CSS anchor positioning, behind the raised support floor.
 
-**The role follows the name** — DD-2's rule. A named popover is `role="group"`; an unnamed one has no
-role; a caller-supplied `role` beats both.
+**The role follows the name** — DD-2's rule, narrowed by ADR-7. A named popover is `role="group"`;
+an unnamed one has no role. Callers cannot set it.
 
-**Anchor name** — the `<dashed-ident>` set as `anchor-name` on the trigger (or `PopoverAnchor`) and
-`position-anchor` on the content. Caller-supplied or generated from `React.useId()` (DD-8).
+**Anchor name** — the `<dashed-ident>` set as `anchor-name` on the trigger and `position-anchor` on
+the content. Always generated from `React.useId()` (ADR-2, ADR-8).
 
-**Light dismiss** — closing because the user clicked outside the popover. A close source in its own
-right (`'light-dismiss'`), distinct from `Dialog`'s `'backdrop'`.
+**Light dismiss** — closing because the user clicked outside the popover. The browser's own
+behaviour, and it cannot be refused (ADR-17); popovers have no close sources.
 
 **Veto** — as in [`18`](../18-overlay-api/CONTEXT.md): `onRequestClose(event)` plus
-`event.preventDefault()` refuses a close, and the overlay stays genuinely open.
+`event.preventDefault()` refuses a close. `Dialog` and `Sheet` have one; `Popover` does not
+(ADR-17).
 
 ## Architecture Decisions
 
@@ -340,6 +341,11 @@ they appear.
 **Alternative considered**: keep Chrome 125 and ignore a light dismiss that starts on the trigger, by
 hand. Rejected as a workaround for something the platform already solves.
 
+**Revised in implementation**: the rationale does not hold. `showPopover({ source })` does not exempt
+the trigger from light dismiss; only `popovertarget` does (fact 13, corrected). The trigger carries
+`popovertarget` with its click cancelled, which needs no particular Chrome version, and the floor
+stayed at 137 by decision. See [`plan.md`](plan.md).
+
 **Consequence**: DD-5's usage figures (90.7% → 84.1%) were measured for Chrome 125 and need
 rechecking when Phase 2 rewrites the root README's browser-support section. Registering the trigger
 also creates an implicit anchor, which may make ADR-8's generated anchor names unnecessary —
@@ -461,6 +467,10 @@ Not part of this deliverable.
     holds. The `source` option is Chrome 137 / Firefox 144 / Safari 26
     ([browser-compat-data](https://github.com/mdn/browser-compat-data/blob/main/api/HTMLElement.json)),
     above DD-5's Chrome 125 floor.
+
+    **Corrected in implementation: `source` does not exempt the trigger.** Measured in Chrome 148 with
+    real clicks, a popover shown with `showPopover({ source })` still closed when its trigger was
+    clicked; one whose trigger carried `popovertarget` stayed open. See [`plan.md`](plan.md).
 14. **A native `popover="auto"` close cannot be refused, and synthetic input does not close it.**
     Measured 2026-09-11 in Chromium 148 (the desktop app's browser), on a bare `popover="auto"`
     opened with `showPopover({ source })`:

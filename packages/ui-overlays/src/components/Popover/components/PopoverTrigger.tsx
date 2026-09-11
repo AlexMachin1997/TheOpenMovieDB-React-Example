@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
 import { usePopoverRootContext } from '~/components/Popover/hooks/usePopoverRootContext';
@@ -14,8 +15,19 @@ export const PopoverTrigger = ({
 	onPointerLeave,
 	...props
 }: IPopoverTrigger) => {
-	const { open, setOpen, contentId, anchorName, setTriggerNode, setPressingTrigger } =
+	const { open, setOpen, contentId, anchorName, triggerNode, setTriggerNode, setPressingTrigger } =
 		usePopoverRootContext();
+
+	// `popovertarget` below only works on a `<button>`. On anything else the trigger loses its
+	// exemption from light dismiss, and clicking it while the popover is open closes the popover and
+	// reopens it — which looks like a popover bug, so it is said out loud.
+	React.useEffect(() => {
+		if (!triggerNode || triggerNode instanceof HTMLButtonElement) return;
+
+		console.warn(
+			`[ui-overlays] PopoverTrigger: the trigger is a <${triggerNode.tagName.toLowerCase()}>, not a <button>. Clicking it while its popover is open will close the popover and reopen it. Render a button, or pass one through \`asChild\`.`
+		);
+	}, [triggerNode]);
 
 	const Comp = asChild ? Slot : 'button';
 

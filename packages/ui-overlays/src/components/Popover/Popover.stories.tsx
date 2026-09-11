@@ -5,6 +5,14 @@ import { Button, Input, Label } from '@repo/ui-core';
 
 import { Dialog, DialogContent, DialogTrigger } from '~/components/Dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/Popover';
+import {
+	OPPOSITE,
+	SIDES,
+	expectClosed,
+	expectPlacedOn,
+	openPopover,
+	type Side
+} from '~/components/Popover/__fixtures__/interactions';
 
 const meta = {
 	title: 'UI Overlays/Popover',
@@ -19,29 +27,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-/**
- * Open a story's popover and return its content element.
- *
- * Resolved through the trigger's `aria-controls` rather than by role, because an unnamed popover has
- * no role to query by — which is one of the things these stories exist to show.
- */
-const openPopover = async (canvasElement: HTMLElement, trigger: RegExp) => {
-	const button = within(canvasElement).getByRole('button', { name: trigger });
-
-	await userEvent.click(button);
-	await expect(button).toHaveAttribute('aria-expanded', 'true');
-
-	return waitFor(() => {
-		const content = document.getElementById(button.getAttribute('aria-controls') ?? '');
-		if (!content?.matches(':popover-open')) throw new Error('The trigger opened no popover');
-		return content;
-	});
-};
-
-/** Wait until a trigger reports its popover closed. */
-const expectClosed = (trigger: HTMLElement) =>
-	waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
 
 /** The contents of a typical content popover: a small form whose fields label themselves. */
 const DimensionsForm = () => {
@@ -327,10 +312,11 @@ export const CloseRoutes: Story = {
 			await expect(onFiltersOpenChange).toHaveBeenCalledWith(false);
 		};
 
-		await step('Escape closes it', async () => {
+		await step('Escape closes it, and focus goes back to the trigger', async () => {
 			await reopen();
 			await userEvent.keyboard('{Escape}');
 			await expectClosedOnce();
+			await expect(trigger).toHaveFocus();
 		});
 
 		// Text rather than a control, so the press moves focus nowhere and only the click route acts.
@@ -347,10 +333,11 @@ export const CloseRoutes: Story = {
 			await expectClosedOnce();
 		});
 
-		await step('The close button closes it', async () => {
+		await step('The close button closes it, and focus goes back to the trigger', async () => {
 			const content = await reopen();
 			await userEvent.click(within(content).getByRole('button', { name: 'Close' }));
 			await expectClosedOnce();
+			await expect(trigger).toHaveFocus();
 		});
 
 		await step(
@@ -481,40 +468,6 @@ export const InsideADialog: Story = {
  * Positioning
  * ---------------------------------------------------------------------------------------------- */
 
-type Side = NonNullable<React.ComponentProps<typeof PopoverContent>['side']>;
-
-const SIDES: Side[] = ['top', 'right', 'bottom', 'left'];
-
-const OPPOSITE: Record<Side, Side> = { top: 'bottom', right: 'left', bottom: 'top', left: 'right' };
-
-/**
- * Asserts the popover sits on `side` of its trigger, clear of it and entirely on screen.
- *
- * Measured rather than read from styles: the browser picks among the fallback positions itself, and
- * nothing exposes which one it chose. Throws rather than resolving, so it can sit inside `waitFor` —
- * the choice is made at the next layout, not when the popover opens.
- */
-const expectPlacedOn = (surface: HTMLElement, trigger: HTMLElement, side: Side) => {
-	const box = surface.getBoundingClientRect();
-	const anchor = trigger.getBoundingClientRect();
-
-	const gap = {
-		top: anchor.top - box.bottom,
-		right: box.left - anchor.right,
-		bottom: box.top - anchor.bottom,
-		left: anchor.left - box.right
-	}[side];
-
-	// A negative gap is a popover covering its own trigger.
-	expect(Math.round(gap)).toBeGreaterThanOrEqual(0);
-	expect(Math.round(gap)).toBeLessThanOrEqual(8);
-
-	expect(Math.round(box.left)).toBeGreaterThanOrEqual(0);
-	expect(Math.round(box.top)).toBeGreaterThanOrEqual(0);
-	expect(Math.round(box.right)).toBeLessThanOrEqual(window.innerWidth);
-	expect(Math.round(box.bottom)).toBeLessThanOrEqual(window.innerHeight);
-};
-
 /** Where each trigger in `Sides` goes, so its popover opens into the space in the middle. */
 const SIDES_CELL: Record<Side, string> = {
 	top: 'col-start-2 row-start-3 self-start',
@@ -526,25 +479,31 @@ const SIDES_CELL: Record<Side, string> = {
 /**
  * `side` chooses which side of the trigger a popover opens on. Every popover sits the same distance
  * from its trigger.
+ *
+ * The canvas fills the viewport and never scrolls, and the space in the middle shrinks with it, so
+ * narrowing or shortening the panel is a way to watch each popover flip, then shrink.
  */
 export const Sides: Story = {
 	render: () => (
-		<div className='grid grid-cols-[auto_20rem_auto] grid-rows-[auto_12rem_auto] place-items-center'>
-			{SIDES.map((side) => (
-				<Popover key={side}>
-					<PopoverTrigger asChild>
-						<Button variant='outline' className={SIDES_CELL[side]}>
-							Open on the {side}
-						</Button>
-					</PopoverTrigger>
-					<PopoverContent side={side} title={`Opened on the ${side}`}>
-						<p className='text-sm'>The trigger is on the other side.</p>
-					</PopoverContent>
-				</Popover>
-			))}
+		<div className='grid h-dvh w-full place-items-center overflow-hidden'>
+			<div className='grid grid-cols-[auto_minmax(0,20rem)_auto] grid-rows-[auto_minmax(0,12rem)_auto] place-items-center'>
+				{SIDES.map((side) => (
+					<Popover key={side}>
+						<PopoverTrigger asChild>
+							<Button variant='outline' className={SIDES_CELL[side]}>
+								Open on the {side}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent side={side} title={`Opened on the ${side}`}>
+							<p className='text-sm'>The trigger is on the other side.</p>
+						</PopoverContent>
+					</Popover>
+				))}
+			</div>
 		</div>
 	),
 	parameters: {
+		layout: 'fullscreen',
 		docs: {
 			source: {
 				language: 'tsx',
@@ -678,27 +637,48 @@ export const NoRoomOnEitherSide: Story = {
 	play: async ({ canvasElement, step }) => {
 		const canvas = within(canvasElement);
 
-		await step('Too tall: it stays below, shrinks to fit, and scrolls', async () => {
+		/** The part of a titled popover that scrolls, found by its published `data-slot`. */
+		const bodyOf = (content: HTMLElement) =>
+			waitFor(() => {
+				const body = content.querySelector<HTMLElement>('[data-slot="popover-body"]');
+				if (!body) throw new Error('The popover rendered no body');
+				return body;
+			});
+
+		await step('Too tall: it stays below, shrinks to fit, and only the body scrolls', async () => {
 			const trigger = canvas.getByRole('button', { name: /too tall/i });
 			const content = await openPopover(canvasElement, /too tall/i);
+			const body = await bodyOf(content);
 
 			await waitFor(() => {
 				expectPlacedOn(content, trigger, 'bottom');
-				expect(content.scrollHeight).toBeGreaterThan(content.clientHeight);
+				expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
 			});
+
+			// Scrolled to the end, the title has not moved: the header stays put while the body scrolls.
+			const title = within(content).getByText('Layers');
+			const titleTop = title.getBoundingClientRect().top;
+
+			body.scrollTop = body.scrollHeight;
+			await waitFor(() => expect(body.scrollTop).toBeGreaterThan(0));
+			await expect(title.getBoundingClientRect().top).toBe(titleTop);
 
 			await userEvent.keyboard('{Escape}');
 			await expectClosed(trigger);
 		});
 
-		await step('Too wide: it stays on the left, shrinks to fit, and scrolls', async () => {
-			const trigger = canvas.getByRole('button', { name: /too wide/i });
-			const content = await openPopover(canvasElement, /too wide/i);
+		await step(
+			'Too wide: it stays on the left, shrinks to fit, and only the body scrolls',
+			async () => {
+				const trigger = canvas.getByRole('button', { name: /too wide/i });
+				const content = await openPopover(canvasElement, /too wide/i);
+				const body = await bodyOf(content);
 
-			await waitFor(() => {
-				expectPlacedOn(content, trigger, 'left');
-				expect(content.scrollWidth).toBeGreaterThan(content.clientWidth);
-			});
-		});
+				await waitFor(() => {
+					expectPlacedOn(content, trigger, 'left');
+					expect(body.scrollWidth).toBeGreaterThan(body.clientWidth);
+				});
+			}
+		);
 	}
 };
