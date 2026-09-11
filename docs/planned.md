@@ -91,3 +91,21 @@ A declarative field-definition helper was raised while specifying the form-layer
 **explicitly kept out of it**, because either shape it could take — a typed component factory, or a
 declarative field list — reverses a decision taken elsewhere. That call belongs here, not as a rider
 on another deliverable.
+
+## Storybook docs pages for `ui-overlays`
+
+`ui-core` and `ui-forms` have a consumer-facing `.mdx` per component; `ui-overlays` has none. `18`
+deferred them for `Dialog` and `Sheet`
+([`18-overlay-api/plan.md`](18-overlay-api/plan.md#still-outstanding)) so one narrow case would not
+set the page layout, and `20` deferred `Popover`'s for the same reason
+([`20-popover-semantics/CONTEXT.md`](20-popover-semantics/CONTEXT.md), ADR-10). Write them together.
+
+What each page has to tell a caller, recorded so it is not rediscovered:
+
+- **`Popover`** — pass a `title` or `aria-label` to a content popover so it is announced ("Filters,
+  group"); leave a popover that only wraps an already-named control, like `Select`'s listbox,
+  unnamed. There is no `role` prop, `title` is not a heading, and there are no compound title or
+  close parts. Once Phase 2 ships: `onRequestClose` and its close sources, and that a popover near a
+  viewport edge flips rather than slides.
+- **`Dialog` / `Sheet`** — `title` / `description` / `footer` versus the compound parts, naming with
+  `aria-label` when there is no visible heading, and vetoing a close with `onRequestClose`.

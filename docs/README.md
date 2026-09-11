@@ -51,12 +51,12 @@ and an awaitable action on the shared overlay, both of which `Dialog` and `Sheet
 whether an awaitable close reaches `onRequestClose` — has to be answered before the shared half can
 be planned.
 
-`20` is `ready` rather than `draft` because the three questions that kept it in `planned.md` have
-been answered: the support floor rises to reach CSS anchor positioning, `role="dialog"` goes, and the
-role fix turned out not to need the primitive swap at all — Radix sets the role as a default a caller
-can override, not as a fixture. It owns the nine `aria-dialog-name` failures that `17` disabled with
-a pointer rather than fix; they were never `18`'s, since `Popover` was moved out of it. Its two
-phases are independent, and only the second waits on the floor.
+`20` is `ready`: grilling closed every open question, recorded in
+[`CONTEXT.md`](20-popover-semantics/CONTEXT.md). It owns the nine `aria-dialog-name` failures that
+`17` disabled with a pointer rather than fix. Phase 1 is semantics and naming on Radix — popovers stop
+claiming to be dialogs — and ships nothing visible. Phase 2 replaces Radix with the native popover and
+CSS anchor positioning, and raises the floor to Chrome 137 / Firefox 147 / Safari 26. Phase 1 goes
+first so the accessibility fixes do not wait on Phase 2's unknowns.
 
 ## Planned
 

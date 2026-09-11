@@ -1,5 +1,11 @@
 # Discovery: Popover semantics
 
+> **Read with [`CONTEXT.md`](CONTEXT.md).** This document records the world as found before
+> grilling. Several claims were corrected there: Radix popovers loop Tab today (fact 4), a native
+> popover close is not cancellable (fact 14), `Form.stories.tsx:431` no longer queries a dialog
+> (fact 11), and DD-5's Chrome floor rose to 137 (ADR-16). Where the two disagree, `CONTEXT.md` and
+> [`spec.md`](spec.md) win.
+
 ## Problem Statement
 
 **`Popover` advertises a keyboard contract it does not honour.** Radix's `PopoverContent` renders
