@@ -9,6 +9,12 @@ isn't enough — is a convention rather than a fact about this project, so it li
 the `deliverable-documentation` skill it points to. Read those before adding a document. This file
 is just the roadmap.
 
+[`component-inventory.md`](component-inventory.md) is a separate survey of what the clone still
+needs — 41 candidate components, each with a decision already taken on whether it belongs in the
+library, in the app, or nowhere. Nothing in it is scheduled; items become deliverables, with their
+own folder and a row below, only when they're picked up. Its `C<n>` IDs are unrelated to the
+deliverable numbers here.
+
 ## Roadmap
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
