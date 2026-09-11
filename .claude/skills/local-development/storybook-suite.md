@@ -30,6 +30,17 @@ pages, which carry no tests.
   the machine is busy. Observed 2026-08-24 across three consecutive full runs: two failures, in
   different files each time, both green in isolation, third run green. A dev server left running on
   port 6006 was enough to cause it. **Re-run the failing file alone before chasing a red run.**
+  `Sheet` › `Confirmation` is a standing one: observed failing 2 runs in 4 on `20`'s Phase 1 commit,
+  in isolation, on `toBeVisible()` for an alert inside a sheet that is still arriving.
+- **A native popover ignores everything `play()` can send it.** Synthetic input reaches neither the
+  browser's Escape handling nor its light dismiss, so a green story proves only the component's own
+  listeners. Under `20` the trigger story passed while a real click closed and reopened the popover.
+  Check real input in the dev server with the Browser tools: their **clicks are trusted, their key
+  presses are not**, so a real Escape cannot be tested that way either.
+- **The dev server keeps serving the old `dist/` after a rebuild.** Observed under `20`: disk had the
+  change, the served module did not, until the server was stopped, `node_modules/.vite` cleared and
+  the server started again. Rebuilding underneath a running server also leaves pages showing "No
+  Preview" until they reload.
 - **A stack-trace line number is not a source line number.** A failure reported
   `Calendar.stories.tsx:233` in a 229-line file — the trace points into Storybook's instrumented
   copy. Find the assertion by text, not by line.

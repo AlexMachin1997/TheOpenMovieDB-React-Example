@@ -122,27 +122,35 @@ TheOpenMovieDB-React-Example/
 
 ## 🌐 Browser Support
 
-**Chrome/Edge 117 · Firefox 129 · Safari 17.5** — roughly 90.7% of global usage.
+**Chrome/Edge 137 · Firefox 147 · Safari 26** — roughly 81.6% of global usage.
 
 This is [Baseline Newly Available](https://web.dev/baseline): a feature may be used once it has
 shipped in all three engines, without waiting out the further 30 months that Baseline _Widely
 Available_ requires.
 
-The floor was set by `@starting-style` and `transition-behavior: allow-discrete` when it was
-written. **Nothing uses either any more.** The overlays were expected to need them for exit
-animations and turned out not to: they keep the element open until the animation finishes instead,
-so the CSS `overlay` property is not used either. The floor is therefore currently more conservative
-than the code requires — worth revisiting deliberately rather than drifting down by accident.
+The floor is set by `Popover`, which is a native `popover="auto"` element placed with CSS anchor
+positioning:
 
-Two rules follow from it:
+| Feature                                                     | Chrome / Edge | Firefox | Safari |
+| ----------------------------------------------------------- | ------------- | ------- | ------ |
+| CSS anchor positioning                                      | 125           | 147     | 26     |
+| `showPopover({ source })`                                   | 137           | 144     | 26     |
+| `@starting-style` and `transition-behavior: allow-discrete` | 117           | 129     | 17.5   |
 
-- **A feature missing from any one engine is progressive enhancement, not a dependency.** There is
-  no example in the tree today.
-- **CSS anchor positioning is below the floor** (Chrome 125, Firefox 147, Safari 26) and must not be
-  relied on.
+Before [`20-popover-semantics`](./docs/20-popover-semantics/plan.md) the floor was Chrome 117 /
+Firefox 129 / Safari 17.5. Measured the same way on 2026-09-11 — [browsersl.ist](https://browsersl.ist),
+caniuse-lite 1.0.30001810, desktop and mobile Chrome, Edge, Firefox and Safari — the old floor
+covers 88.0% of global usage and the new one 81.6%. The 90.7% this section used to quote was
+caniuse's figure for a single feature, and is not comparable with either.
 
-Established while planning [`18-overlay-api`](./docs/18-overlay-api/discovery.md), which records the
-measurements behind it.
+One rule follows from it: **a feature missing from any one engine is progressive enhancement, not a
+dependency.** The popover's exit fade is the example. The CSS `overlay` property keeps a closing
+popover in the top layer until the fade ends, and only Chrome and Edge support it; Firefox and
+Safari still fade the popover, but it leaves the top layer as the fade begins.
+
+The measurements behind the earlier floor are in
+[`18-overlay-api`](./docs/18-overlay-api/discovery.md); the decision to raise it is in
+[`20-popover-semantics`](./docs/20-popover-semantics/CONTEXT.md).
 
 ## 🚀 Getting Started
 

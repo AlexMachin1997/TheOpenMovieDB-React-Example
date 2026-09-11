@@ -6,7 +6,7 @@ Layered surfaces — anything that floats above the page.
 
 ## At a glance
 
-- **6 component folders**, 45 runtime exports, 8 direct dependencies (four of them Radix).
+- **6 component folders**, 43 runtime exports, 7 direct dependencies (three of them Radix).
 - **Depends on `@repo/ui-core` for exactly one component: `Icon`**, used by Dialog's close button,
   DropdownMenu's chevron and Sheet's close button.
 - Single entry point: `import { Dialog } from '@repo/ui-overlays'`.
@@ -34,10 +34,14 @@ Layered surfaces — anything that floats above the page.
 - **They are a real `<dialog>` element**, opened with `showModal()`, not a `div` wearing ARIA. The
   element itself is the dim backdrop and the panel is its child, which is what keeps the existing
   fade classes working and makes a backdrop click detectable as "the event landed on the dialog".
-- **Anchored surfaces portal into an open modal.** A modal `<dialog>` paints in the top layer and
-  makes everything outside it inert, so `Popover`, `DropdownMenu` and `HoverCard` read a context and
-  parent themselves to the dialog when there is one. Without it a `Select` or date picker inside a
-  Sheet would render behind the backdrop and refuse every click.
+- **`Popover` is a native `popover="auto"` element**, placed with CSS anchor positioning. It
+  renders where it is written and shows itself in the top layer, so it needs no portal, flips
+  without measuring in script, and works inside a modal with no help. The browser closes it on
+  Escape and a click outside, and those closes cannot be refused; `onOpenChange` reports every one.
+- **The Radix surfaces portal into an open modal.** A modal `<dialog>` paints in the top layer and
+  makes everything outside it inert, so `DropdownMenu` and `HoverCard` read a context and parent
+  themselves to the dialog when there is one. Without it they would render behind the backdrop and
+  refuse every click.
 - **`Overlay/` is a shared internal, not a component.** It holds `OverlaySurface`,
   `OverlayCloseButton` and the hooks behind them — what `Dialog` and `Sheet` are both built on —
   rather than an `Overlay.tsx`. It is named individually in the folder-structure rule's schema for
@@ -48,8 +52,8 @@ Layered surfaces — anything that floats above the page.
   `DialogRef` is the same handle under a second name.
 - **Both can be driven imperatively** via that ref, as well as with a controlled `open` prop. The
   ref writes through the same path the prop does, so it still works when the overlay is controlled.
-- **`Popover`, `DropdownMenu` and `HoverCard` wrap Radix primitives**, so their props extend the
-  Radix ones. `Dialog` and `Sheet` no longer do — their props are hand-written, and `DialogPortal`,
+- **`DropdownMenu` and `HoverCard` wrap Radix primitives**, so their props extend the Radix ones.
+  `Dialog`, `Sheet` and `Popover` no longer do — their props are hand-written, and `DialogPortal`,
   `SheetPortal`, `DialogOverlay` and `SheetOverlay` are deprecated shims kept for source
   compatibility: a native dialog needs no portal and is its own backdrop.
 

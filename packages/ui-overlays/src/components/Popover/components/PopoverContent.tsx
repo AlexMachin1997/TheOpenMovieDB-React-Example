@@ -1,27 +1,42 @@
 import * as React from 'react';
-import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { cn } from '@repo/tailwind-config';
 
-import { useOverlayContainer } from '~/components/Overlay/hooks/useOverlayContainer';
+import { OverlayCloseButton } from '~/components/Overlay/OverlayCloseButton';
+import { usePopoverElement } from '~/components/Popover/hooks/usePopoverElement';
+import { usePopoverRootContext } from '~/components/Popover/hooks/usePopoverRootContext';
+import { getPopoverPosition } from '~/components/Popover/utils/popoverPosition';
 
 import type { IPopoverContent } from '~/components/Popover/Popover.types';
 
 export const PopoverContent = ({
 	className,
+	style,
+	side = 'bottom',
 	align = 'center',
-	sideOffset = 4,
 	title,
 	description,
+	showCloseButton = false,
 	children,
+	onKeyDown,
 	'aria-label': ariaLabel,
 	'aria-labelledby': ariaLabelledBy,
 	'aria-describedby': ariaDescribedBy,
 	...props
 }: IPopoverContent) => {
-	// Inside a modal, `document.body` is behind the top layer and inert, so a popover portalled
-	// there is both invisible and unclickable. This puts it inside the dialog instead. Outside a
-	// modal the container is undefined and Radix falls back to the body, unchanged.
-	const container = useOverlayContainer();
+	const { open, setOpen, contentId, anchorName, triggerNode, isPressingTrigger } =
+		usePopoverRootContext();
+
+	const {
+		popoverRef,
+		present,
+		dismiss,
+		onKeyDown: onPopoverKeyDown
+	} = usePopoverElement({
+		open,
+		setOpen,
+		triggerNode,
+		isPressingTrigger
+	});
 
 	const titleId = React.useId();
 	const descriptionId = React.useId();
@@ -41,44 +56,70 @@ export const PopoverContent = ({
 	const isNamed = Boolean(labelledBy || ariaLabel);
 
 	return (
-		<PopoverPrimitive.Portal container={container}>
-			<PopoverPrimitive.Content
-				data-slot='popover-content'
-				align={align}
-				sideOffset={sideOffset}
-				className={cn(
-					'bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border p-4 shadow-md outline-hidden',
-					hasHeader && 'flex flex-col gap-4',
-					className
-				)}
-				{...props}
-				// Present even when undefined: Radix defaults `role` to "dialog", and only a key that
-				// exists overrides it.
-				role={isNamed ? 'group' : undefined}
-				aria-label={ariaLabel}
-				aria-labelledby={labelledBy}
-				aria-describedby={describedBy}
-			>
-				{hasHeader && (
-					<div data-slot='popover-header' className='flex flex-col gap-1'>
-						{hasTitle && (
-							<div id={titleId} data-slot='popover-title' className='leading-none font-medium'>
-								{title}
-							</div>
-						)}
-						{hasDescription && (
-							<p
-								id={descriptionId}
-								data-slot='popover-description'
-								className='text-muted-foreground text-sm'
-							>
-								{description}
-							</p>
-						)}
-					</div>
-				)}
-				{children}
-			</PopoverPrimitive.Content>
-		</PopoverPrimitive.Portal>
+		<div
+			{...props}
+			ref={popoverRef}
+			id={contentId}
+			popover='auto'
+			// Focusable but never tabbable, so a popover with nothing focusable inside still takes
+			// focus on open rather than leaving it on the trigger.
+			tabIndex={-1}
+			data-slot='popover-content'
+			role={isNamed ? 'group' : undefined}
+			aria-label={ariaLabel}
+			aria-labelledby={labelledBy}
+			aria-describedby={describedBy}
+			style={{ ...getPopoverPosition(anchorName, side, align), ...style }}
+			className={cn(
+				// `inset-auto m-0` undo the user-agent stylesheet, which centres a popover in the viewport
+				// with `inset: 0; margin: auto` — positioning that would beat `position-area` outright.
+				'bg-popover text-popover-foreground inset-auto m-0 w-72 overflow-visible rounded-md border p-4 shadow-md outline-hidden',
+				// An opacity fade in both directions. `allow-discrete` on `display` and `overlay` keeps
+				// the element showing, and in the top layer, until the fade has finished — including when
+				// the browser closed it. `starting:` supplies the value it fades in from, since a hidden
+				// popover has no previous style to leave.
+				'opacity-0 transition-[opacity,display,overlay] transition-discrete duration-150 ease-out open:opacity-100 starting:open:opacity-0',
+				// `open:` rather than a bare `flex`, which would beat the user-agent rule hiding a closed
+				// popover and leave an empty box on the page.
+				hasHeader && 'open:flex flex-col gap-4',
+				className
+			)}
+			onKeyDown={(event) => {
+				onKeyDown?.(event);
+				onPopoverKeyDown(event);
+			}}
+		>
+			{present ? (
+				<>
+					{hasHeader && (
+						<div
+							data-slot='popover-header'
+							className={cn('flex flex-col gap-1', showCloseButton && 'pr-8')}
+						>
+							{hasTitle && (
+								<div id={titleId} data-slot='popover-title' className='leading-none font-medium'>
+									{title}
+								</div>
+							)}
+							{hasDescription && (
+								<p
+									id={descriptionId}
+									data-slot='popover-description'
+									className='text-muted-foreground text-sm'
+								>
+									{description}
+								</p>
+							)}
+						</div>
+					)}
+					{children}
+					{showCloseButton ? (
+						<OverlayCloseButton slot='popover' className='top-2 right-2' onClose={dismiss} />
+					) : null}
+				</>
+			) : null}
+		</div>
 	);
 };
+
+PopoverContent.displayName = 'PopoverContent';

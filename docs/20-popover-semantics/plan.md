@@ -1,10 +1,95 @@
 # 20 — Popover semantics — plan
 
-Status: **in progress.** Phase 1 is being verified; Phase 2 has not started.
+Status: **shipped.** As-built record for [`spec.md`](spec.md). Requirements and AC1–AC18 are there;
+ADR-1–ADR-17 and facts 1–14 are in [`CONTEXT.md`](CONTEXT.md).
 
-The design is settled elsewhere and is not repeated here: [`spec.md`](spec.md) for requirements and
-AC1–AC18, [`CONTEXT.md`](CONTEXT.md) for ADR-1–ADR-17 and facts 1–14. This file records the
-mechanisms the spec left to the plan, and what building them cost.
+## Outcome
+
+No popover claims to be a dialog any more. A named popover is a `group`, an unnamed one has no role,
+and `title` / `description` name and describe it. `Popover` is now a native `popover="auto"` element
+placed with CSS anchor positioning: `@radix-ui/react-popover` is gone, it flips instead of
+overflowing, fades in and out, and closes on Escape, a click outside, focus moving away, its trigger
+and an optional X — each reported once through `onOpenChange`.
+
+## Gates
+
+| Gate                                   | Baseline (`c8cba19`) | After Phase 1         | After Phase 2         |
+| -------------------------------------- | -------------------- | --------------------- | --------------------- |
+| `pnpm turbo run build --force`         | 11/11                | 11/11, 0 cached       | 11/11, 0 cached       |
+| `pnpm lint`                            | —                    | 11/11                 | 11/11                 |
+| `cd packages/ui-overlays && pnpm test` | no spec files        | no spec files         | 1 file, 6 passed      |
+| `cd apps/storybook && npx vitest run`  | 41 files, 395 passed | 42 files, 398 passed  | 42 files, 404 passed  |
+| `pnpm prettier:check`                  | —                    | 4 failures, none ours | 4 failures, none ours |
+
+The Prettier failures predate this work: `docs/18-overlay-api/CONTEXT.md`,
+`docs/20-popover-semantics/CONTEXT.md` and `spec.md` are unformatted at `c8cba19`, and
+`.claude/settings.local.json` is untracked.
+
+## Acceptance criteria
+
+- [x] **AC1** — `Popover`'s `WithoutAName` asserts no `role`, `aria-label` or `aria-labelledby`.
+- [x] **AC2** — `Default`: `role="group"`, accessible name "Dimensions", no heading inside.
+- AC3 — removed by ADR-7.
+- [x] **AC4** — both `aria-dialog-name` suppressions deleted; `Command` and `Select` pass at
+      `a11y: { test: 'error' }` in the 404.
+- [x] **AC5** — `openSelect` waits for the trigger's `aria-controls` to equal the listbox's id, in
+      every `Select` story that opens one.
+- [x] **AC6** — `SingleDatePicker` `Default` and `DateRangePicker` `CustomPlaceholder`: no
+      `aria-haspopup` on the trigger, no `dialog` in the document once the calendar is open.
+- [x] **AC7** — `NamingPrecedence`: `aria-label` beats `title` (which still renders), and
+      `aria-labelledby` beats both.
+- [x] **AC8** — `FocusOnOpen`: the first field takes focus; an `autoFocus` field wins over it.
+- [x] **AC9** — `CloseRoutes` closes by Escape, text click outside, programmatic focus outside and
+      the X, asserting `onOpenChange` once with `false` each time. A real click outside, in the dev
+      server, logged one `beforetoggle: closed`. A real Escape could not be tried: the browser tool's
+      key presses are untrusted.
+- [x] **AC10** — `Popover.stories.tsx` covers AC1, AC2, AC7, AC8, AC9 and AC18, plus AC16 and AC17.
+- [x] **AC11** — `toAnchorName.spec.ts`, 6 tests. Met one level down from the spec's wording; see
+      below.
+- [x] **AC12** — the four `InsideASheet` stories keep their containment assertion and add two: the
+      surface sits within 8px of its trigger, and `elementFromPoint` at the option or day's centre
+      returns it.
+- [x] **AC13** — `NearTheBottomEdge` in both date pickers: surface bottom ≤ trigger top, top ≥ 0.
+      Checked that it can fail: with `position-try-fallbacks: none` the calendar's bottom was 593
+      against a trigger top of 541.
+- [x] **AC14** — `Select` `SingleDefault`: surface width ≥ trigger width. Without `anchor-size()` the
+      popover falls back to its own `w-72`, 288px.
+- [x] **AC15** — `grep -rn "@radix-ui/react-popover" packages` outside `dist/` and
+      `node_modules/`: nothing.
+- [x] **AC16** — `InsideADialog`: Escape, then a click inside the dialog, each close the popover
+      with the dialog still `open`; the popover's field is the hit target at its own centre.
+- [x] **AC17** — `CloseRoutes`' last step, plus real clicks in the dev server on both a `Popover` and
+      a `Select` trigger: `open, closed`, and still closed afterwards. The `play()` alone was not
+      enough — see the first section below.
+- [x] **AC18** — `TabMovesOut`: Tab from the last field focuses the next button and closes the
+      popover; Shift+Tab from the first focuses the trigger and closes it.
+
+## Still open
+
+- [ ] **A look at it** — not done; `play()` cannot assert appearance. Title and description layout,
+      the X's position in a popover, the fade, the flipped calendar, and a `Select` as wide as its
+      trigger want a human at `localhost:6006`.
+- [ ] **`Popover.mdx`** — not done, by ADR-10. Recorded in
+      [`planned.md`](../planned.md#storybook-docs-pages-for-ui-overlays).
+
+Flagged, not chased:
+
+- **`Sheet` › `Confirmation` is flaky.** It failed 2 runs in 4 at the Phase 1 commit, with no Phase
+  2 code present, on `toBeVisible()` for the refusal alert while the sheet is still arriving.
+- **`Dialog` probably drops a React `autoFocus`**, for the reason given below. Read from the code,
+  not measured.
+- **`CONTEXT.md`'s vocabulary predates its own ADRs.** It still describes a caller-supplied `role`,
+  `PopoverAnchor`, light dismiss as a close source and a veto. Fact 13 is wrong about `source`.
+- **Nothing needs Chrome 137 any more.** The floor stays there by decision.
+
+## Phases
+
+- [x] **1 — Semantics and naming, on Radix.** The role follows the name, `title` / `description`,
+      `PopoverAnchor` removed, triggers stop claiming a dialog, `SelectTrigger`'s `aria-controls`
+      resolves to the listbox, both suppressions removed, the `Select` helpers rewritten around the
+      listbox, and `Popover` stories. `23db444`.
+- [x] **2 — The primitive.** `popover="auto"` with anchor positioning replaces Radix; focus, closing,
+      fade and flipping as below; the root README's browser-support section rewritten.
 
 ## Decisions taken before implementation
 
@@ -27,48 +112,95 @@ The spec deferred four mechanisms to this plan. Each was put to Alex as a choice
 
 `useDialogElement` keeps the element open while the exit animation runs and closes it afterwards.
 That works for `<dialog>` because nothing native closes it on a click: the backdrop click is our own
-`onClick`. A `popover="auto"` has native light dismiss, and it acts inside the click itself.
+`onClick`. A `popover="auto"` has native light dismiss, and it acts inside the click itself. On a
+bare popover with a real click outside, Chrome 148 logged `pointerdown` at 12305ms and both
+`beforetoggle: closed` and `pointerup` at 12306ms. `Dialog`'s pattern would start a 150ms fade on
+`pointerdown` and have the browser hide the element partway through it — on every real click outside,
+and invisibly to `play()`.
 
-Measured 2026-09-11 in the desktop app's Chromium, a bare `popover="auto"` opened with
-`showPopover({ source })` and a real click outside it:
+The fade as built, measured closing a popover: 150ms transitions on `display`, `opacity` and
+`overlay`, opacity 0.03 and `display: block` at 120ms, `display: none` with children unmounted
+afterwards, `transform: none` throughout.
 
-| Event                 | ms after the page's clock started |
-| --------------------- | --------------------------------- |
-| `pointerdown`         | 12305                             |
-| `beforetoggle closed` | 12306                             |
-| `pointerup`           | 12306                             |
+## How it fits together
 
-The browser closes the popover within the click, and fact 14 established it cannot be refused. So
-`Dialog`'s pattern would start a 150ms fade on `pointerdown` and have the browser hide the element
-partway through it — on every real click outside, and invisibly to `play()`.
+`Popover` holds open state (`useControllableOpen`, shared with `Dialog`), one `useId` and the trigger
+node. `PopoverTrigger` publishes `anchor-name`, carries `popovertarget`, and toggles. `PopoverContent`
+is always rendered as a `popover="auto"` element; `usePopoverElement` shows it with the trigger as
+`source`, mounts children a commit later, places focus, and lets the CSS fade it out.
 
-Not established: whether a `keydown` handler can stop a real Escape closing the popover natively.
-The browser tool's Escape did not close even an unguarded popover, so its key presses are not
-trusted input — the same dead end fact 14 recorded.
+Every close ends the same way: the element is hidden, and one native `beforetoggle` listener calls
+`setOpen(false)`. Escape (a `keydown` handler), a press outside (a document `pointerdown` listener),
+focus arriving outside (a document `focusin` listener) and the X all just call `hidePopover()`. The
+browser's own Escape and light dismiss land on the same listener. Hiding a hidden popover dispatches
+nothing, so `onOpenChange(false)` fires once whichever route got there first. A close React started —
+the trigger, a controlled `open={false}`, `Select` choosing an option — sets a flag around its own
+`hidePopover()` so the listener does not report it back.
 
-## Phases
+Positioning is inline CSS from `popoverPosition.ts`: `position-area` per side and alignment, a 0.25rem
+margin facing the trigger, and `position-try-fallbacks` that try the opposite side first. Nothing in
+`Popover/` measures layout in script.
 
-- [x] **1 — Semantics and naming, on Radix.** The role follows the name, `title` / `description` on
-      `PopoverContent`, `PopoverAnchor` removed, triggers stop claiming a dialog, `SelectTrigger`'s
-      `aria-controls` resolves to the listbox, both `aria-dialog-name` suppressions removed, the
-      `Select` helpers rewritten around the listbox, and `Popover` stories.
-- [ ] **2 — The primitive.**
+## What building it hit
 
-### Phase 1 gates
+### `source` does not exempt the trigger from light dismiss — `popovertarget` does
 
-| Gate                              | Baseline             | After Phase 1         |
-| --------------------------------- | -------------------- | --------------------- |
-| `pnpm turbo run build --force`    | 11/11                | 11/11, 0 cached       |
-| `pnpm lint`                       | —                    | 0                     |
-| `cd apps/storybook && vitest run` | 41 files, 395 passed | 42 files, 398 passed  |
-| `pnpm prettier:check`             | —                    | 4 failures, none ours |
+ADR-16 raised the Chrome floor to 137 so the popover could be shown with `showPopover({ source })`,
+on fact 13's reading that this exempts a press on the trigger from light dismiss. It does not. The
+`play()` for AC17 passed, because synthetic clicks never reach light dismiss; a real click in the dev
+server closed the popover at `pointerup` and the click reopened it (`beforetoggle` logged
+`open, closed, open`). Measured in Chrome 148 on a bare page, with real clicks:
 
-The Prettier failures predate this work: `docs/18-overlay-api/CONTEXT.md`,
-`docs/20-popover-semantics/CONTEXT.md` and `spec.md` are unformatted at `c8cba19`, and
-`.claude/settings.local.json` is untracked. Left alone.
+| Trigger, and a real click on it while its popover is open                       | Popover afterwards |
+| ------------------------------------------------------------------------------- | ------------------ |
+| Registered with `showPopover({ source })`                                       | closed             |
+| `popovertarget`                                                                 | open               |
+| `popovertarget`, `click` `preventDefault()`ed, popover shown by `showPopover()` | open               |
+| `popovertarget`, `click` `preventDefault()`ed, popover closed                   | stays closed       |
 
-### Found while rewriting the `Select` helpers
+Alex chose `popovertarget` with the click cancelled, over tracking by hand whether the popover was
+open when the trigger was pressed. The attribute buys the exemption; cancelling the click stops it
+toggling the element, so React state still decides. Two costs, both accepted: only a `<button>`
+trigger is exempt, so an `asChild` child of another element brings the reopen back; and Chromium now
+also exposes the popover relationship on the trigger itself, unmeasured on `Select`'s combobox.
+`source` stays, for nesting.
 
-`SingleWithoutSearch` asserted the popover contained no `combobox` to prove the search input was
-absent. The search input is a `textbox`, so the assertion could never fail. It now queries for the
-textbox.
+### A `display` utility on the popover beats the browser's hiding
+
+`[popover]:not(:popover-open) { display: none }` is a user-agent rule, and any author `display`
+beats it. A titled popover laid out its header with `flex`, so once closed it still painted as an
+empty box under its trigger — measured at `display: flex`, `:popover-open` false, 33px tall. It is
+`open:flex` now. A caller passing a display utility in `className` would bring the bug back.
+
+### React's `autoFocus` never reaches `[autofocus]`
+
+React does not render the attribute. It calls `focus()` as the element mounts
+(`react-dom-client.development.js`: `case "autoFocus": break;`), and an element inside a hidden
+popover cannot take focus. So children mount in the commit _after_ `showPopover()` — both commits in
+layout effects, before paint — and focus placement leaves focus alone when a child already took it.
+
+`useDialogElement` mounts children in the same commit as `showModal()`, so `Dialog` very likely drops
+a React `autoFocus` the same way.
+
+### AC11 is tested one level down
+
+`toAnchorName.spec.ts` proves the sanitiser turns every React id format into a valid
+`<dashed-ident>`, deterministically. Stability across re-renders is `useId`'s guarantee; testing it at
+the hook would need jsdom and Testing Library, which `ui-overlays` does not have. The geometric
+stories prove anchoring end to end.
+
+### Smaller things
+
+- **`showPopover({ source })` is not in TypeScript's DOM lib.** Declared by global augmentation in
+  `usePopoverElement.ts`, with a `naming-convention` disable: `HTMLElement` is not ours to prefix.
+- **The close-route stories isolate each route.** A click on text moves focus nowhere, so only the
+  pointer route acts; programmatic `focus()` involves no pointer, so only the focus route acts.
+- **A dev server serves stale `dist/` modules after a rebuild.** The Storybook dev server kept
+  returning the pre-change `PopoverTrigger.js` until it was restarted with `node_modules/.vite`
+  cleared.
+- **The browser-support figure changed method.** The old 90.7% was caniuse's figure for one feature.
+  Measured the same way on 2026-09-11 with browsersl.ist (caniuse-lite 1.0.30001810), the old floor
+  covers 88.0% and the new one 81.6%.
+- **`SingleWithoutSearch` could never fail.** It asserted no `combobox` inside the popover to prove
+  the search input was absent; the input is a `textbox`. Found in Phase 1 and fixed while rewriting
+  the helpers.

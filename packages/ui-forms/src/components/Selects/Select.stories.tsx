@@ -34,6 +34,9 @@ import {
 	expectTriggerText,
 	expectOptionVisible,
 	expectNoOption,
+	expectAnchoredTo,
+	expectHitTarget,
+	getPopoverSurface,
 	getListbox,
 	getTrigger
 } from '~/components/Selects/__fixtures__/interactions';
@@ -84,7 +87,16 @@ export const SingleDefault: StoryObj<SelectProps> = {
 	),
 	play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		await expectClosed(canvasElement, 'Select a framework...');
-		await openSelect(canvasElement);
+		const trigger = await openSelect(canvasElement);
+
+		// `anchor-size(width)` holds the popup to at least the trigger's width, with no measuring in
+		// script. Without it the popover's own `w-72` is narrower than this trigger.
+		await waitFor(() =>
+			expect(getPopoverSurface().getBoundingClientRect().width).toBeGreaterThanOrEqual(
+				trigger.getBoundingClientRect().width
+			)
+		);
+
 		await expectOptionVisible('React');
 		await selectOption('React');
 		await expectTriggerText(canvasElement, 'React');
@@ -796,7 +808,15 @@ const expectSelectWorksInside = async (canvasElement: HTMLElement, optionName: s
 	const listbox = await within(sheet).findByRole('listbox');
 	await expect(sheet.contains(listbox)).toBe(true);
 
-	await userEvent.click(await within(listbox).findByRole('option', { name: optionName }));
+	const option = await within(listbox).findByRole('option', { name: optionName });
+
+	// Retried because the sheet may still be sliding in, which moves the trigger under the popover.
+	await waitFor(() => {
+		expectAnchoredTo(getPopoverSurface(), trigger);
+		expectHitTarget(option);
+	});
+
+	await userEvent.click(option);
 	await expect(trigger).toHaveTextContent(optionName);
 };
 

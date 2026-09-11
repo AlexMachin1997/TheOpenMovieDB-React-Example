@@ -13,15 +13,22 @@ export interface IOverlayCloseButton {
 	icon?: React.ReactNode;
 
 	className?: string;
+
+	/**
+	 * Closes the owner directly instead of asking the nearest overlay content context. `Popover`
+	 * passes one: its close cannot be refused, and inside a `Dialog` the nearest context is the
+	 * dialog's, so the X would close the wrong thing.
+	 */
+	onClose?: () => void;
 }
 
 /**
- * Internal. The close affordance shared by Dialog and Sheet.
+ * Internal. The close affordance shared by Dialog, Sheet and Popover.
  *
  * Not exported from the package — callers reach it through an overlay's `showCloseButton` and
  * `icon` props, or compose their own with the public `DialogClose` / `SheetClose`.
  */
-export const OverlayCloseButton = ({ slot, icon, className }: IOverlayCloseButton) => {
+export const OverlayCloseButton = ({ slot, icon, className, onClose }: IOverlayCloseButton) => {
 	const content = useOverlayContentContext();
 
 	return (
@@ -36,7 +43,9 @@ export const OverlayCloseButton = ({ slot, icon, className }: IOverlayCloseButto
 			className={cn(overlayCloseButtonVariants(), className)}
 			// Through the same handler as Escape and the backdrop, so one `onRequestClose` covers
 			// every way out rather than two of the three.
-			onClick={(event) => content?.requestClose('close-button', event.nativeEvent)}
+			onClick={(event) =>
+				onClose ? onClose() : content?.requestClose('close-button', event.nativeEvent)
+			}
 		>
 			{/*
 			 * `size='xl'` (24px) is load-bearing, not a style choice. A consumer-supplied `icon` with

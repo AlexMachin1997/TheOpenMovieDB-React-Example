@@ -70,14 +70,8 @@ export const DateRangePicker = ({
 						)}
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent
-					className='w-auto p-0'
-					align='start'
-					side='bottom'
-					sideOffset={8}
-					collisionPadding={50}
-					avoidCollisions={false}
-				>
+				{/* `start`, because the two-month calendar is far wider than its trigger. */}
+				<PopoverContent className='w-auto p-0' align='start'>
 					<Calendar
 						mode='range'
 						selected={dateRange}

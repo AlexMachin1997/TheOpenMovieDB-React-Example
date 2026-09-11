@@ -4,6 +4,11 @@ import type { Locale } from 'date-fns';
 import { fr, es, de, ja } from 'date-fns/locale';
 
 import { SingleDatePicker } from '~/components/DatePickers/SingleDatePicker/SingleDatePicker';
+import {
+	expectAnchoredTo,
+	expectHitTarget,
+	getPopoverSurface
+} from '~/components/DatePickers/__fixtures__/popover';
 import { Button, Field } from '@repo/ui-core';
 import {
 	Sheet,
@@ -485,9 +490,44 @@ export const InsideASheet: StoryObj = {
 
 		await expect(sheet.contains(day)).toBe(true);
 
+		// Retried because the sheet may still be sliding in, which moves the trigger under the popover.
+		await waitFor(() => {
+			expectAnchoredTo(getPopoverSurface(), trigger);
+			expectHitTarget(day);
+		});
+
 		await userEvent.click(day);
 		await waitFor(async () => {
 			await expect(trigger).toHaveTextContent('15');
+		});
+	}
+};
+
+/**
+ * With no room below its trigger, the calendar opens above it rather than running off the screen.
+ */
+export const NearTheBottomEdge: Story = {
+	render: (args) => (
+		<div className='fixed bottom-4 left-4'>
+			<BasicSingleDatePickerTemplate {...args} />
+		</div>
+	),
+	args: {
+		placeholder: 'Pick a date'
+	},
+	play: async ({ canvasElement, step }) => {
+		const trigger = within(canvasElement).getByRole('button', { name: /pick a date/i });
+
+		await userEvent.click(trigger);
+		await within(document.body).findByRole('grid');
+
+		await step('The calendar flips above its trigger and stays on screen', async () => {
+			await waitFor(() => {
+				const surface = getPopoverSurface().getBoundingClientRect();
+
+				expect(surface.bottom).toBeLessThanOrEqual(trigger.getBoundingClientRect().top);
+				expect(surface.top).toBeGreaterThanOrEqual(0);
+			});
 		});
 	}
 };
