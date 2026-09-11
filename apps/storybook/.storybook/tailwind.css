@@ -1,4 +1,5 @@
 @import '@repo/tailwind-config/globals.css';
+@import '@repo/ui-overlays/styles.css';
 
 @source "../../../packages/ui-core/src";
 @source "../../../packages/ui-command/src";

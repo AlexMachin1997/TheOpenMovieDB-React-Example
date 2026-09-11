@@ -2,7 +2,7 @@ import type * as React from 'react';
 
 import type { PopoverAlign, PopoverSide } from '~/components/Popover/Popover.types';
 
-/** The one distance between every popover and its trigger. */
+/** The one distance between every popover and its trigger. `Popover.css` repeats it. */
 const GAP = '0.25rem';
 
 /**
@@ -21,23 +21,31 @@ const POSITION_AREA: Record<PopoverSide, Record<PopoverAlign, string>> = {
  * The gap sits on the side facing the trigger, and the first fallback is the opposite side. The
  * `flip-*` tactics mirror margins along with the area, so a flipped popover keeps its gap. Flipping
  * across the other axis swaps `start` for `end`, which is what stands in for sliding along the edge.
+ *
+ * The last two are the shrinking positions in `Popover.css`: this side first, then the opposite. A
+ * name with no matching `@position-try` rule is skipped, so without the stylesheet the list is simply
+ * the flips.
  */
 const SIDE_STYLE: Record<PopoverSide, React.CSSProperties> = {
 	top: {
 		marginBottom: GAP,
-		positionTryFallbacks: 'flip-block, flip-inline, flip-block flip-inline'
+		positionTryFallbacks:
+			'flip-block, flip-inline, flip-block flip-inline, --popover-shrink-top, --popover-shrink-bottom'
 	},
 	bottom: {
 		marginTop: GAP,
-		positionTryFallbacks: 'flip-block, flip-inline, flip-block flip-inline'
+		positionTryFallbacks:
+			'flip-block, flip-inline, flip-block flip-inline, --popover-shrink-bottom, --popover-shrink-top'
 	},
 	left: {
 		marginRight: GAP,
-		positionTryFallbacks: 'flip-inline, flip-block, flip-block flip-inline'
+		positionTryFallbacks:
+			'flip-inline, flip-block, flip-block flip-inline, --popover-shrink-left, --popover-shrink-right'
 	},
 	right: {
 		marginLeft: GAP,
-		positionTryFallbacks: 'flip-inline, flip-block, flip-block flip-inline'
+		positionTryFallbacks:
+			'flip-inline, flip-block, flip-block flip-inline, --popover-shrink-right, --popover-shrink-left'
 	}
 };
 

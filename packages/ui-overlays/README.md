@@ -38,6 +38,10 @@ Layered surfaces — anything that floats above the page.
   renders where it is written and shows itself in the top layer, so it needs no portal, flips
   without measuring in script, and works inside a modal with no help. The browser closes it on
   Escape and a click outside, and those closes cannot be refused; `onOpenChange` reports every one.
+- **Import `@repo/ui-overlays/styles.css` once in the app.** It is the package's one stylesheet, and
+  today holds the `@position-try` rules a popover falls back to when neither side of its trigger has
+  room — fill the space there and scroll — which cannot be written inline. Without it a popover still flips, but when nothing fits it slides
+  back on screen over its own trigger. Storybook imports it in `.storybook/tailwind.css`.
 - **The Radix surfaces portal into an open modal.** A modal `<dialog>` paints in the top layer and
   makes everything outside it inert, so `DropdownMenu` and `HoverCard` read a context and parent
   themselves to the dialog when there is one. Without it they would render behind the backdrop and

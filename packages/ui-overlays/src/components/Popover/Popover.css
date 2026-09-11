@@ -1,0 +1,37 @@
+/*
+ * Last-resort positions for `Popover`, tried only once its own side and the opposite side have both
+ * failed to fit. Each keeps the popover on one side of its trigger, centred along it, and sizes it to
+ * the space there, so it scrolls rather than running off the screen. Without them the browser falls
+ * back to the first position and slides it back on screen — over the trigger.
+ *
+ * A fixed `height` or `width` rather than a `max-` one: measured in Chrome 148, an option that only
+ * caps the size is never chosen for a popover whose own size is `auto`. Filling the space is the same
+ * thing here, because these only apply to a popover already too big for it.
+ *
+ * A stylesheet because `@position-try` rules cannot be written inline. Without it a popover still
+ * flips; it only loses these. The gap matches `GAP` in `utils/popoverPosition.ts`.
+ */
+
+@position-try --popover-shrink-top {
+	position-area: top;
+	margin: 0 0 0.25rem;
+	height: calc(100% - 0.25rem);
+}
+
+@position-try --popover-shrink-bottom {
+	position-area: bottom;
+	margin: 0.25rem 0 0;
+	height: calc(100% - 0.25rem);
+}
+
+@position-try --popover-shrink-left {
+	position-area: left;
+	margin: 0 0.25rem 0 0;
+	width: calc(100% - 0.25rem);
+}
+
+@position-try --popover-shrink-right {
+	position-area: right;
+	margin: 0 0 0 0.25rem;
+	width: calc(100% - 0.25rem);
+}

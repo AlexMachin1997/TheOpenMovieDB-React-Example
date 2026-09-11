@@ -52,6 +52,10 @@ export interface IPopoverContent
 	/**
 	 * Which side of the trigger to open on. The popover flips to the opposite side when there is no
 	 * room, and every popover sits the same distance from its trigger.
+	 *
+	 * When neither side has room, it stays on this side and shrinks to the space there, scrolling
+	 * inside. That fallback needs `@repo/ui-overlays/styles.css` imported once by the app; without
+	 * it the popover still flips, but slides over its trigger when nothing fits.
 	 * @default 'bottom'
 	 */
 	side?: PopoverSide;

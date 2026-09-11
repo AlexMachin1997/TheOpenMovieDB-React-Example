@@ -13,13 +13,13 @@ and an optional X — each reported once through `onOpenChange`.
 
 ## Gates
 
-| Gate                                   | Baseline (`c8cba19`) | After Phase 1         | After Phase 2         |
-| -------------------------------------- | -------------------- | --------------------- | --------------------- |
-| `pnpm turbo run build --force`         | 11/11                | 11/11, 0 cached       | 11/11, 0 cached       |
-| `pnpm lint`                            | —                    | 11/11                 | 11/11                 |
-| `cd packages/ui-overlays && pnpm test` | no spec files        | no spec files         | 1 file, 6 passed      |
-| `cd apps/storybook && npx vitest run`  | 41 files, 395 passed | 42 files, 398 passed  | 42 files, 404 passed  |
-| `pnpm prettier:check`                  | —                    | 4 failures, none ours | 4 failures, none ours |
+| Gate                                   | Baseline (`c8cba19`) | After Phase 1         | After Phase 2         | After review follow-up |
+| -------------------------------------- | -------------------- | --------------------- | --------------------- | ---------------------- |
+| `pnpm turbo run build --force`         | 11/11                | 11/11, 0 cached       | 11/11, 0 cached       | 11/11, 0 cached        |
+| `pnpm lint`                            | —                    | 11/11                 | 11/11                 | 11/11                  |
+| `cd packages/ui-overlays && pnpm test` | no spec files        | no spec files         | 1 file, 6 passed      | 1 file, 6 passed       |
+| `cd apps/storybook && npx vitest run`  | 41 files, 395 passed | 42 files, 398 passed  | 42 files, 404 passed  | 42 files, 407 passed   |
+| `pnpm prettier:check`                  | —                    | 4 failures, none ours | 4 failures, none ours | 4 failures, none ours  |
 
 The Prettier failures predate this work: `docs/18-overlay-api/CONTEXT.md`,
 `docs/20-popover-semantics/CONTEXT.md` and `spec.md` are unformatted at `c8cba19`, and
@@ -71,9 +71,14 @@ The Prettier failures predate this work: `docs/18-overlay-api/CONTEXT.md`,
       trigger want a human at `localhost:6006`.
 - [ ] **`Popover.mdx`** — not done, by ADR-10. Recorded in
       [`planned.md`](../planned.md#storybook-docs-pages-for-ui-overlays).
+- [ ] **A minimum size before a popover gives up on its own side** — not decided; Alex is coming back
+      to it. Today a popover with no room either side fills its own side however little space that
+      is. Measured with a 12rem minimum, a 64px space was skipped for the 600px one opposite.
 
 Flagged, not chased:
 
+- **`ui-command` and `ui-forms` still have the old `src/styles.css`**, importing all of Tailwind and
+  imported by nothing. `ui-overlays`' was repurposed as its shipped stylesheet.
 - **`Sheet` › `Confirmation` is flaky.** It failed 2 runs in 4 at the Phase 1 commit, with no Phase
   2 code present, on `toBeVisible()` for the refusal alert while the sheet is still arriving.
 - **`Dialog` probably drops a React `autoFocus`**, for the reason given below. Read from the code,
@@ -89,7 +94,55 @@ Flagged, not chased:
       resolves to the listbox, both suppressions removed, the `Select` helpers rewritten around the
       listbox, and `Popover` stories. `23db444`.
 - [x] **2 — The primitive.** `popover="auto"` with anchor positioning replaces Radix; focus, closing,
-      fade and flipping as below; the root README's browser-support section rewritten.
+      fade and flipping as below; the root README's browser-support section rewritten. `ed29083`.
+- [x] **Review follow-up.** Stories for every `side` and for flipping, and a last resort for a popover
+      with no room on either side. Detail below.
+
+## Review follow-up
+
+Alex's review found three things: no story showed `left`, `right`, `top` or `bottom`; flipping looked
+absent; and a popover could cover its own trigger.
+
+**Flipping worked, where there was room.** Copying the component's positioning onto a pinned
+trigger, all four sides flipped to the opposite side when theirs had none. The new
+`FlipsWhenThereIsNoRoom` story proves it for each. What looked like no flipping was the case where
+the opposite side had no room either — a centred trigger in a narrow canvas.
+
+**Covering the trigger was CSS doing what it is specified to do.** When no fallback fits, the
+browser uses the first position (CSS Anchor Positioning §6.5), then slides a box that overflows its
+area back inside the viewport "even if that violates its normal alignment" (§4.1) — over the anchor.
+Radix never did this: `@radix-ui/react-popper` shifts along the edge only (`crossAxis: false`) and
+lets `flip()` pick the side that overflows least, so its popovers ran off screen instead. The new
+`NoRoomOnEitherSide` story failed against the Phase 2 code with the popover 473px over its trigger.
+
+**Alex wanted neither: never off screen, and never over the trigger.** Measured options, in Chrome
+148:
+
+| Approach                                          | Result when neither side fits                               |
+| ------------------------------------------------- | ----------------------------------------------------------- |
+| As shipped in Phase 2                             | covers the trigger                                          |
+| `unsafe` alignment toward the trigger             | stays on its side, runs off screen; unreachable if too tall |
+| `position-try-order: most-height` / `most-width`  | no change, and it discards the requested side when it fits  |
+| Fallback rules that size the popover to the space | stays on its side, fits, scrolls — **chosen**               |
+
+The chosen fallbacks are four `@position-try` rules, one per side, tried after both flips. Each
+centres the popover on that side and sizes it to the space there. Alex chose one rule per side over
+one per side and alignment: a start-aligned rule can still overflow sideways, and then nothing fits
+and the trigger is covered again.
+
+**`max-height` does not work there; a fixed `height` does.** An option that only caps the size was
+never chosen for a popover whose own height is `auto` — `max-height`, `max-block-size`, and
+`max-height` with `height: fit-content` all left it covering the trigger, and `fit-content()` was
+dropped as invalid. `height: calc(100% - 0.25rem)` was chosen and fitted. It is equivalent here,
+because the rules only apply to a popover already too big for the space.
+
+**The rules ship as `@repo/ui-overlays/styles.css`.** `@position-try` cannot be written inline, so
+they need a stylesheet. Alex chose one import per package over one per component, over
+`tailwind-config/globals.css`, and over a `<style>` rendered by the component. The package's unused
+`src/styles.css`, which only imported Tailwind, now imports `Popover.css` and nothing else. It is
+exported from source, as `tailwind-config` exports `globals.css`, so no build step copies it. Storybook
+imports it in `.storybook/tailwind.css`; an app without it still flips, but covers the trigger when
+nothing fits. Every popover is now `overflow-auto`, which the fallback needs in order to scroll.
 
 ## Decisions taken before implementation
 

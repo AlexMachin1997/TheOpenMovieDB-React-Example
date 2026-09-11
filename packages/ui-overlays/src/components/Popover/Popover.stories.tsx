@@ -476,3 +476,229 @@ export const InsideADialog: Story = {
 		});
 	}
 };
+
+/* -------------------------------------------------------------------------------------------------
+ * Positioning
+ * ---------------------------------------------------------------------------------------------- */
+
+type Side = NonNullable<React.ComponentProps<typeof PopoverContent>['side']>;
+
+const SIDES: Side[] = ['top', 'right', 'bottom', 'left'];
+
+const OPPOSITE: Record<Side, Side> = { top: 'bottom', right: 'left', bottom: 'top', left: 'right' };
+
+/**
+ * Asserts the popover sits on `side` of its trigger, clear of it and entirely on screen.
+ *
+ * Measured rather than read from styles: the browser picks among the fallback positions itself, and
+ * nothing exposes which one it chose. Throws rather than resolving, so it can sit inside `waitFor` —
+ * the choice is made at the next layout, not when the popover opens.
+ */
+const expectPlacedOn = (surface: HTMLElement, trigger: HTMLElement, side: Side) => {
+	const box = surface.getBoundingClientRect();
+	const anchor = trigger.getBoundingClientRect();
+
+	const gap = {
+		top: anchor.top - box.bottom,
+		right: box.left - anchor.right,
+		bottom: box.top - anchor.bottom,
+		left: anchor.left - box.right
+	}[side];
+
+	// A negative gap is a popover covering its own trigger.
+	expect(Math.round(gap)).toBeGreaterThanOrEqual(0);
+	expect(Math.round(gap)).toBeLessThanOrEqual(8);
+
+	expect(Math.round(box.left)).toBeGreaterThanOrEqual(0);
+	expect(Math.round(box.top)).toBeGreaterThanOrEqual(0);
+	expect(Math.round(box.right)).toBeLessThanOrEqual(window.innerWidth);
+	expect(Math.round(box.bottom)).toBeLessThanOrEqual(window.innerHeight);
+};
+
+/** Where each trigger in `Sides` goes, so its popover opens into the space in the middle. */
+const SIDES_CELL: Record<Side, string> = {
+	top: 'col-start-2 row-start-3 self-start',
+	right: 'col-start-1 row-start-2 justify-self-end',
+	bottom: 'col-start-2 row-start-1 self-end',
+	left: 'col-start-3 row-start-2 justify-self-start'
+};
+
+/**
+ * `side` chooses which side of the trigger a popover opens on. Every popover sits the same distance
+ * from its trigger.
+ */
+export const Sides: Story = {
+	render: () => (
+		<div className='grid grid-cols-[auto_20rem_auto] grid-rows-[auto_12rem_auto] place-items-center'>
+			{SIDES.map((side) => (
+				<Popover key={side}>
+					<PopoverTrigger asChild>
+						<Button variant='outline' className={SIDES_CELL[side]}>
+							Open on the {side}
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent side={side} title={`Opened on the ${side}`}>
+						<p className='text-sm'>The trigger is on the other side.</p>
+					</PopoverContent>
+				</Popover>
+			))}
+		</div>
+	),
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `<PopoverContent side='top'>…</PopoverContent>
+<PopoverContent side='right'>…</PopoverContent>
+<PopoverContent side='bottom'>…</PopoverContent>
+<PopoverContent side='left'>…</PopoverContent>`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }) => {
+		for (const side of SIDES) {
+			await step(`\`side='${side}'\` opens on the ${side}`, async () => {
+				const name = new RegExp(`open on the ${side}`, 'i');
+				const trigger = within(canvasElement).getByRole('button', { name });
+				const content = await openPopover(canvasElement, name);
+
+				await waitFor(() => expectPlacedOn(content, trigger, side));
+
+				await userEvent.keyboard('{Escape}');
+				await expectClosed(trigger);
+			});
+		}
+	}
+};
+
+/**
+ * Pinned to each edge of the viewport without transforms. Anchor positioning measures the
+ * untransformed box, so a `translate` would move the trigger without moving the popover with it.
+ */
+const EDGE_POSITION: Record<Side, string> = {
+	top: 'fixed inset-x-0 top-4 mx-auto w-fit',
+	right: 'fixed inset-y-0 right-4 my-auto h-fit',
+	bottom: 'fixed inset-x-0 bottom-4 mx-auto w-fit',
+	left: 'fixed inset-y-0 left-4 my-auto h-fit'
+};
+
+/**
+ * A popover with no room on its own side opens on the opposite one: each of these asks for the side
+ * facing the edge its trigger is pinned to.
+ */
+export const FlipsWhenThereIsNoRoom: Story = {
+	parameters: { layout: 'fullscreen' },
+	render: () => (
+		<>
+			{SIDES.map((side) => (
+				<Popover key={side}>
+					<PopoverTrigger asChild>
+						<Button variant='outline' className={EDGE_POSITION[side]}>
+							Asks for the {side}
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent side={side} title={`Asked for the ${side}`}>
+						<p className='text-sm'>There was no room there.</p>
+					</PopoverContent>
+				</Popover>
+			))}
+		</>
+	),
+	play: async ({ canvasElement, step }) => {
+		for (const side of SIDES) {
+			await step(
+				`\`side='${side}'\` at the ${side} edge opens on the ${OPPOSITE[side]}`,
+				async () => {
+					const name = new RegExp(`asks for the ${side}`, 'i');
+					const trigger = within(canvasElement).getByRole('button', { name });
+					const content = await openPopover(canvasElement, name);
+
+					await waitFor(() => expectPlacedOn(content, trigger, OPPOSITE[side]));
+
+					await userEvent.keyboard('{Escape}');
+					await expectClosed(trigger);
+				}
+			);
+		}
+	}
+};
+
+/** Thirty layers: far taller than the space either side of a trigger in the middle of the screen. */
+const LayerList = () => (
+	<div className='grid gap-1'>
+		{Array.from({ length: 30 }, (_, index) => (
+			<Button key={index} variant='ghost' size='sm' className='justify-start'>
+				Layer {index + 1}
+			</Button>
+		))}
+	</div>
+);
+
+/** A row of swatches far wider than the space either side of a trigger in the middle of the screen. */
+const SwatchRow = () => (
+	<div className='flex w-max gap-2'>
+		{Array.from({ length: 24 }, (_, index) => (
+			<Button key={index} variant='outline' size='sm'>
+				Swatch {index + 1}
+			</Button>
+		))}
+	</div>
+);
+
+/**
+ * When neither side has room, a popover stays on the side it asked for and shrinks to the space
+ * there, scrolling inside. It never runs off the screen and never covers its trigger.
+ */
+export const NoRoomOnEitherSide: Story = {
+	parameters: { layout: 'fullscreen' },
+	render: () => (
+		<>
+			<Popover>
+				<PopoverTrigger asChild>
+					<Button variant='outline' className='fixed inset-0 m-auto size-fit'>
+						Too tall for either side
+					</Button>
+				</PopoverTrigger>
+				<PopoverContent side='bottom' title='Layers'>
+					<LayerList />
+				</PopoverContent>
+			</Popover>
+			<Popover>
+				<PopoverTrigger asChild>
+					<Button variant='outline' className='fixed inset-x-0 top-16 mx-auto w-fit'>
+						Too wide for either side
+					</Button>
+				</PopoverTrigger>
+				<PopoverContent side='left' title='Swatches' className='w-auto'>
+					<SwatchRow />
+				</PopoverContent>
+			</Popover>
+		</>
+	),
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+
+		await step('Too tall: it stays below, shrinks to fit, and scrolls', async () => {
+			const trigger = canvas.getByRole('button', { name: /too tall/i });
+			const content = await openPopover(canvasElement, /too tall/i);
+
+			await waitFor(() => {
+				expectPlacedOn(content, trigger, 'bottom');
+				expect(content.scrollHeight).toBeGreaterThan(content.clientHeight);
+			});
+
+			await userEvent.keyboard('{Escape}');
+			await expectClosed(trigger);
+		});
+
+		await step('Too wide: it stays on the left, shrinks to fit, and scrolls', async () => {
+			const trigger = canvas.getByRole('button', { name: /too wide/i });
+			const content = await openPopover(canvasElement, /too wide/i);
+
+			await waitFor(() => {
+				expectPlacedOn(content, trigger, 'left');
+				expect(content.scrollWidth).toBeGreaterThan(content.clientWidth);
+			});
+		});
+	}
+};

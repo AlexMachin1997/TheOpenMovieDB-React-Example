@@ -1,2 +1,1 @@
-@import '@repo/tailwind-config/globals.css';
-@import 'tailwindcss';
+@import './components/Popover/Popover.css';

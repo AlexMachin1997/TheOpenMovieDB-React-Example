@@ -20,6 +20,13 @@ rm -rf apps/storybook/node_modules/.cache apps/storybook/node_modules/.vite
 Skipping this gives both false greens and false reds. It is the most common reason a fix "does not
 work" when it plainly should.
 
+**CSS is the exception: it is exported from source.** `@repo/tailwind-config/globals.css` and
+`@repo/ui-overlays/styles.css` map to `src/` in their `package.json` `exports`, so a change to them
+needs no build — but nothing imports them for a consumer either. Storybook pulls both in from
+`apps/storybook/.storybook/tailwind.css`; an app has to do the same. `ui-overlays/styles.css` holds
+`@position-try` rules, which cannot be inline, and a missing import fails silently: popovers still
+flip, but cover their trigger when no side has room.
+
 ## `check-types` depends on `^build`, and that is load-bearing
 
 `turbo.json` gives `check-types` `dependsOn: ["^build"]`, not `^check-types`. Packages resolve each

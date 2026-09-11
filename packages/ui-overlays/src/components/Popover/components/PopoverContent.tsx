@@ -73,7 +73,9 @@ export const PopoverContent = ({
 			className={cn(
 				// `inset-auto m-0` undo the user-agent stylesheet, which centres a popover in the viewport
 				// with `inset: 0; margin: auto` — positioning that would beat `position-area` outright.
-				'bg-popover text-popover-foreground inset-auto m-0 w-72 overflow-visible rounded-md border p-4 shadow-md outline-hidden',
+				// `overflow-auto` for the last-resort positions in `Popover.css`, which size the popover to
+				// the space beside its trigger and leave the rest to scroll.
+				'bg-popover text-popover-foreground inset-auto m-0 w-72 overflow-auto rounded-md border p-4 shadow-md outline-hidden',
 				// An opacity fade in both directions. `allow-discrete` on `display` and `overlay` keeps
 				// the element showing, and in the top layer, until the fade has finished — including when
 				// the browser closed it. `starting:` supplies the value it fades in from, since a hidden
