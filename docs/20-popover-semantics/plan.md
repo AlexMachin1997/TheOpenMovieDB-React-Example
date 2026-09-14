@@ -66,19 +66,22 @@ The Prettier failures predate this work: `docs/18-overlay-api/CONTEXT.md`,
 
 ## Still open
 
-- [ ] **A look at it** — not done; `play()` cannot assert appearance. Title and description layout,
-      the X's position in a popover, the fade, the flipped calendar, and a `Select` as wide as its
-      trigger want a human at `localhost:6006`.
+- [ ] **A look at it** — the measurable half is split out as its own task: stray scrollbars in
+      `Select` and the date pickers, the header's layout against the close button, and the fade's
+      `getAnimations()` values. Whether it _looks_ right still needs Alex at `localhost:6006`.
+      `play()` cannot assert appearance and this repo has no visual regression by decision;
+      `@chromatic-com/storybook` is installed with no project token or CI behind it.
 - [ ] **`Popover.mdx`** — not done. ADR-10 deferred it; the `styles.css` import is now a caller
       obligation that needs a home, and it is split out as its own task.
-- [ ] **A minimum size before a popover gives up on its own side** — not decided; Alex is coming back
-      to it. Today a popover with no room either side fills its own side however little space that
-      is. Measured with a 12rem minimum, a 64px space was skipped for the 600px one opposite.
+- [ ] **A minimum size before a popover gives up on its own side** — left as it is, 2026-09-14. A
+      popover with no room either side fills its own side however little space that is. Measured with
+      a 12rem minimum, a 64px space was skipped for the 600px one opposite.
 - [ ] **Split out as separate tasks, from the third review round** — string-only `title` /
       `description` across Popover, Dialog and Sheet; the suite in Firefox and WebKit; Radix menus and
       hover cards inside a popover (suspected to close it, unproven); a test that a popover follows
-      scrolling; an imperative ref like Dialog's. And one for Alex: Select's combobox trigger with
-      `popovertarget`, under a screen reader.
+      scrolling; an imperative ref like Dialog's; the measurable appearance assertions above. And one
+      for Alex: Select's combobox trigger with `popovertarget`, under a screen reader — axe is a
+      static scan and has no rule for what Chromium adds there.
 
 Flagged, not chased:
 
@@ -133,6 +136,12 @@ Alex raised eight points; the small ones were done here and the rest split into 
   missing a dependency: the old rule flagged only the `useEffect`, the new one flagged both, and with
   the dependency added neither was flagged. A severity-only `--rule` override keeps the configured
   options, so the old rule had to be reproduced with its options set to `{}`.
+
+  **An effect with no dependency array is still allowed**, for both hooks alike: the rule only
+  objects when such an effect sets state, which is the "infinite chain of updates" message. A
+  `no-restricted-syntax` rule to forbid the missing array outright was offered and declined,
+  2026-09-14.
+
 - **Gates for this round:** `pnpm turbo run build --force` 11/11, `pnpm lint` 11/11,
   `ui-overlays` unit tests 2 files / 27 passed, Storybook suite 42 files / 407 passed.
 - **The per-package CSS convention is in `ui-core`'s README**, under Conventions. The unused
