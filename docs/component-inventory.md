@@ -5,10 +5,11 @@ A survey of what the clone still needs, taken from two directions: components al
 [themoviedb.org](https://www.themoviedb.org/?language=en-GB) uses that nothing in the repo can build
 yet.
 
-**This is a reference document, not a roadmap entry.** Nothing here is scheduled. It records a set of
-decisions so they don't get re-argued, and so the deliverables that come out of it start from an
-agreed scope. Items that become work get a numbered folder and a row in [`README.md`](README.md) at
-that point.
+**This is a reference document, not a roadmap entry.** It records a set of decisions so they don't
+get re-argued, and so the deliverables that come out of it start from an agreed scope. Items that
+become work get a numbered folder and a row in [`README.md`](README.md) at that point, and keep their
+row here with a pointer to it. **C02 is the only one scheduled so far** — everything else is
+unscheduled.
 
 **`C<n>` IDs are inventory IDs and have nothing to do with deliverable numbers.** `C01` is the card
 wrapper; `01` is the shipped Icon deliverable. The prefix exists purely so the two can never be
@@ -35,8 +36,8 @@ Thirteen components, in the order they unblock each other.
 
 | ID  | Component                   | Notes                                                                                                                                                                                                                                                           |
 | --- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| C01 | `Card`                      | Light assembly wrapper only — `Card`/`CardHeader`/`CardContent`/`CardFooter`. No image, height or link props; the poster is a child the caller passes. Most of this list sits on top of it.                                                                     |
-| C02 | `Image`                     | Error fallback, loading state, `ratio` prop, and one accessible name. See [Image scope](#image-scope).                                                                                                                                                          |
+| C01 | `Card`                      | Small composable parts in `ui-core`, assembled by hand at the call site — not a props-driven wrapper, and no `CardImage`. See [Card is parts, not a wrapper](#card-is-parts-not-a-wrapper).                                                                     |
+| C02 | `Image`                     | **Scheduled as [`21-image`](README.md).** Error fallback, `ratio` prop, and one accessible name. See [Image scope](#image-scope).                                                                                                                               |
 | C10 | Horizontal rail             | The left/right scrolling card container. The app hand-rolls this **16 times** today, none of them keyboard reachable.                                                                                                                                           |
 | C03 | Rating ring                 | Port of `Percentage.tsx`. Hardcodes raw hex and a four-step colour ladder — worth sequencing behind the design-system audit in [`planned.md`](planned.md). Also needs a single name; it currently has three. See [C03](#c03-has-three-names-for-one-component). |
 | C04 | `Spinner` + loading surface | Split in two. The current `Loader.tsx` is a spinner and a full-screen overlay sharing one `isFixed` flag, which stops the spinner being usable inside a button or a rail.                                                                                       |
@@ -133,6 +134,12 @@ category set, but it can never persist, so it is a design exercise rather than a
 
 ### Image scope
 
+**Superseded by [`21-image/spec.md`](21-image/spec.md).** The observations below still hold; two of
+the decisions in them do not. A `ratio` prop does **not** replace the `width`/`height` pair — integer
+attributes are the native mechanism and stay, with `ratio` covering the case where only the slot's
+shape is known, and the two are mutually exclusive. The loading state was dropped. The spec is
+authoritative.
+
 The browser now handles `loading="lazy"`, `decoding="async"`, `srcset`/`sizes`, `fetchpriority`, and
 space reservation — it derives `aspect-ratio` from the `width`/`height` attributes on its own. What
 it still can't do declaratively is swap a broken image for a fallback; `onerror` remains the only
@@ -151,6 +158,54 @@ to add capability on top of it:
   one accessible name, `alt=""` for decorative, and keep describing the _content_ when the image
   fails rather than announcing the failure.
 - **Error fallback.** Local, not `via.placeholder.com`.
+
+### Card is parts, not a wrapper
+
+Revisited 14 September 2026. The original entry said "light assembly wrapper only", which left two
+things unsettled that have now been answered: what shape the parts take, and whether they belong in
+the library at all.
+
+**It nearly got dropped.** The argument against: the parts carry no behaviour, and the duplication
+they were meant to remove is really token divergence — the three cards that ignore the app's current
+wrapper each hand-roll a different surface _(measured 2026-09-14)_:
+
+```
+Poster / Person      rounded-2xl  border    border-gray-200
+Review               rounded-lg   border    border-gray-300  shadow-2xl
+MostRecentEpisode    rounded-2xl  border-2  border-[#D3D3D3]
+```
+
+Three radii, two border widths, a raw hex, and `bg-white` hardcoded so none of it survives dark mode.
+A surface token fixes that everywhere, including the places a `Card` component would never reach —
+`Keywords.tsx` gives a chip the same treatment.
+
+**What kept it** is that the abstraction is real: the app's `Card` has four consumers (`Poster`,
+`Person`, `KnownFor`, `TopBilledCastMember`) _(measured 2026-09-14)_, and the shared shape — bordered
+surface, image on top, content below — is genuinely repeated. What's wrong is the *interface*, not
+the idea. Three of those four override its classes to escape it:
+
+```tsx
+// TopBilledCastMember.tsx
+containerClassName='min-w-[138px] max-w-[138px] mt-[0.625rem] rounded-2xl mb-[0.625rem] ml-[0.625rem] mr-[0.25rem] border border-solid border-gray-200'
+contentClassName='p-0 border border-solid border-gray-200 rounded-b-2xl pb-2 flex flex-1'
+```
+
+Decisions taken:
+
+- **Composable parts, not props.** No `renderLink`, no `imageHeight`, no `containerClassName` /
+  `contentClassName` / `imageClassName`. The caller assembles. Want a link? Wrap the title in one.
+  This is what removes the `React.cloneElement` call and the five escape hatches in one go.
+- **`ui-core`, not the app.** The app's `shared/` stays available for anything genuinely
+  TMDB-specific that turns up later.
+- **No `CardImage`.** `Image` (C02) is dropped in as a child directly, which is how shadcn's own
+  card-with-image example does it. A `CardImage` would only earn its place by carrying
+  card-specific styling, and the top-corner radius it would carry is a token, not a component.
+- **The surface tokens are still the design-system audit's job.** The parts consume them; they do
+  not define them. Building `Card` before those exist means hardcoding the thing that was wrong in
+  the first place — see [`planned.md`](planned.md#design-system-audit).
+
+Not scheduled. It follows C02, since the parts are worth designing against an `Image` that already
+reserves its space.
 
 ### The `Icon` collection change
 

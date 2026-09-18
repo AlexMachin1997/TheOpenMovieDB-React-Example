@@ -23,6 +23,7 @@ Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 | --- | ---------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
 | 03  | Focus indicators | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
 | 19  | Alert dialog     | components    | 📝 draft | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)         |
+| 21  | `Image`          | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                       |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -42,6 +43,11 @@ start, and all three are calls to make rather than work to do: whether WCAG 2.2 
 target (the library committed to 2.1 AA under `02`), how far "all interactive elements" reaches, and
 whether `--ring`'s own values change. The design-system audit under **Planned** is downstream of
 `03`, not a blocker for it.
+
+`21` is the first item lifted out of [`component-inventory.md`](component-inventory.md) (C02), and
+the only one of the three that is `ready`. Its open questions were closed in a grilling pass on
+18 September 2026; the API shape, the fallback mechanism and the failure semantics are all settled in
+[Decisions](21-image/spec.md#decisions). It has no dependencies, so it can be planned now.
 
 `19` is the alert dialog `18` was the gate on. It grew past the thin preset it was scoped as: the
 `role="alertdialog"` component is only half of it, and the other half is a declared dismissal policy
