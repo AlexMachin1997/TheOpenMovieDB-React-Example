@@ -1,3 +1,11 @@
+// AlertDialog
+export {
+	AlertDialog,
+	AlertDialogClose,
+	AlertDialogContent,
+	AlertDialogTrigger
+} from '~/components/AlertDialog';
+
 // Dialog
 export {
 	DialogTrigger,
