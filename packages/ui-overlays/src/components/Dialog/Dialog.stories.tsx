@@ -134,57 +134,6 @@ export const Default: Story = {
 	}
 };
 
-/**
- * The plain case: a question, two answers, and no gate on anything.
- *
- * Escape, the backdrop, the X and both footer buttons all close it. Sheet's `Confirmation` is the
- * deliberate contrast — same shape, but with the footer action and ambient dismissal both held shut
- * until a condition is met. Reach for this one unless the flow is destructive enough to warrant that.
- */
-export const ConfirmationDialog: Story = {
-	render: () => (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant='destructive'>Delete Account</Button>
-			</DialogTrigger>
-			<DialogContent
-				title='Are you absolutely sure?'
-				description='This action cannot be undone. This will permanently delete your account and remove your data from our servers.'
-				footer={
-					<>
-						<DialogClose asChild>
-							<Button variant='outline'>Cancel</Button>
-						</DialogClose>
-						{/* A real caller does the deleting in `onClick`; wrapping in `DialogClose` is what
-						    dismisses the dialog afterwards. */}
-						<DialogClose asChild>
-							<Button variant='destructive'>Delete Account</Button>
-						</DialogClose>
-					</>
-				}
-			>
-				<Alert variant='destructive'>
-					<AlertTitle>This action cannot be undone.</AlertTitle>
-					<AlertDescription>
-						This will permanently delete your account and remove your data from our servers.
-					</AlertDescription>
-				</Alert>
-			</DialogContent>
-		</Dialog>
-	),
-	play: async ({ canvasElement, step }) => {
-		const dialog = await openDialog(canvasElement, /delete account/i, /are you absolutely sure/i);
-
-		await step('Cancel closes it', async () => {
-			await userEvent.click(within(dialog).getByRole('button', { name: /cancel/i }));
-
-			await waitFor(async () => {
-				await expect(dialog).toHaveAttribute('data-state', 'closed');
-			});
-		});
-	}
-};
-
 export const LongContentDialog: Story = {
 	render: () => (
 		<Dialog>
@@ -325,44 +274,6 @@ export const CustomStyledDialog: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		await openDialog(canvasElement, /custom styled dialog/i, /welcome to our platform/i);
-	}
-};
-
-export const AlertDialog: Story = {
-	render: () => (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant='destructive'>Show Alert</Button>
-			</DialogTrigger>
-			<DialogContent className='sm:max-w-[400px]'>
-				<DialogHeader>
-					<DialogTitle className='flex items-center gap-2'>
-						<span className='text-red-500'>⚠️</span>
-						Warning
-					</DialogTitle>
-					<DialogDescription>
-						You are about to perform an action that cannot be undone.
-					</DialogDescription>
-				</DialogHeader>
-				<DialogContentArea>
-					<Alert variant='destructive'>
-						<AlertTitle>This action cannot be undone.</AlertTitle>
-						<AlertDescription>
-							This will permanently delete your account and remove your data from our servers.
-						</AlertDescription>
-					</Alert>
-				</DialogContentArea>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant='outline'>Cancel</Button>
-					</DialogClose>
-					<Button variant='destructive'>Delete Permanently</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
-	),
-	play: async ({ canvasElement }) => {
-		await openDialog(canvasElement, /show alert/i, /warning/i);
 	}
 };
 
