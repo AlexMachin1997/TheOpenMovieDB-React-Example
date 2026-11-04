@@ -19,12 +19,11 @@ deliverable numbers here.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable            | Area          | Status   | Depends on | Docs                                                           |
-| --- | ---------------------- | ------------- | -------- | ---------- | -------------------------------------------------------------- |
-| 03  | Focus indicators       | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)             |
-| 19  | Alert dialog           | components    | 🟢 ready | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)                     |
-| 21  | `Image`                | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                                   |
-| 22  | Overlay export cleanup | components    | 📝 draft | —          | [22-overlay-export-cleanup](22-overlay-export-cleanup/spec.md) |
+| ID  | Deliverable      | Area          | Status   | Depends on | Docs                                               |
+| --- | ---------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
+| 03  | Focus indicators | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
+| 19  | Alert dialog     | components    | 🟢 ready | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)         |
+| 21  | `Image`          | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                       |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -66,8 +65,9 @@ ordinary React with a contract that needed its own edge cases, so both were drop
 under **Planned** rather than discarded.
 
 What is left is two independent deliverables, neither blocking the other. `19` is the component — four
-required props, no close button, nothing for slow work — and is `ready`. `22` is the removal of four
-dead exports, `draft` only because whether that needs a deprecation cycle is unanswered.
+required props, no close button, nothing for slow work — and is `ready`. `22` was the removal of four
+dead exports and has shipped: its one open question, whether that needed a deprecation cycle, was
+answered no, because nothing imported them.
 
 ## Planned
 
@@ -98,3 +98,4 @@ Kept for reference; each links to its as-built record. These rows do not change.
 | 17  | One list per Command          | [17-command-list-nesting](17-command-list-nesting/plan.md)                 |
 | 18  | A common overlay API          | [18-overlay-api](18-overlay-api/plan.md)                                   |
 | 20  | Popover semantics             | [20-popover-semantics](20-popover-semantics/plan.md)                       |
+| 22  | Overlay export cleanup        | [22-overlay-export-cleanup](22-overlay-export-cleanup/plan.md)             |
