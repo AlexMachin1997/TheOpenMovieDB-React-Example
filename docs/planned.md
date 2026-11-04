@@ -92,6 +92,42 @@ A declarative field-definition helper was raised while specifying the form-layer
 declarative field list — reverses a decision taken elsewhere. That call belongs here, not as a rider
 on another deliverable.
 
+## A declared dismissal policy for `Dialog` and `Sheet`
+
+A prop taking `closedby`'s three values — `any` (backdrop and Escape), `closerequest` (Escape only),
+`none` (neither) — so a caller declares how an overlay may be dismissed instead of filtering close
+sources by hand. Specified as part of `19`, then **dropped from it on 4 November 2026** rather than
+rejected.
+
+What it would replace is two lines:
+
+```tsx
+onRequestClose={(event) => {
+  if (event.source === 'backdrop') event.preventDefault();
+}}
+```
+
+`19` needs exactly that one rule and hardcodes it, so the policy had no first consumer. For `Dialog`
+and `Sheet` it is pure convenience over something [`18`](18-overlay-api/plan.md) already shipped, and
+the convenience has a cost: a third way to govern closing, next to the veto and the close parts, with
+`none` able to trap a user in an overlay that has no visible control.
+
+Two things to know if it is picked up. It would land in
+[`useDialogElement`](../packages/ui-overlays/src/components/Overlay/hooks/useDialogElement.ts) and so
+would **not** reach `Popover`, which has its own hook from `20` and cannot veto a close at all under
+[ADR-8](18-overlay-api/CONTEXT.md). And the real `closedby` attribute is below the
+[support floor](../README.md#-browser-support) — Chrome and Edge 134, Firefox 141, not yet stable in
+Safari — so this would borrow the vocabulary and keep the veto underneath until that changes.
+
+Dropped alongside it, for the same reason: a typed two-action footer on `DialogContent` and
+`SheetContent`. `footer` is already a plain node that takes two buttons, and
+[ADR-7](18-overlay-api/CONTEXT.md) chose that deliberately.
+
+**Status: not pinned, just unmotivated.** Revisit when a second call site wants the same rule, or if
+`Dialog` and `Sheet` are ever moved to the platform default of `closerequest` — recorded in
+[`19`](19-alert-dialog/spec.md) research as a question worth asking, since it would change behaviour
+at every existing call site.
+
 ## Storybook docs pages for `ui-overlays`
 
 `ui-core` and `ui-forms` have a consumer-facing `.mdx` per component; `ui-overlays` has none. `18`

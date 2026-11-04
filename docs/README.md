@@ -19,12 +19,12 @@ deliverable numbers here.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable                 | Area          | Status   | Depends on | Docs                                                                         |
-| --- | --------------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------------------------- |
-| 03  | Focus indicators            | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)                           |
-| 19  | Alert dialog                | components    | 🟢 ready | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)                                   |
-| 21  | `Image`                     | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                                                 |
-| 22  | Overlay dismissal & actions | components    | 📝 draft | 19         | [22-overlay-dismissal-and-actions](22-overlay-dismissal-and-actions/spec.md) |
+| ID  | Deliverable            | Area          | Status   | Depends on | Docs                                                           |
+| --- | ---------------------- | ------------- | -------- | ---------- | -------------------------------------------------------------- |
+| 03  | Focus indicators       | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)             |
+| 19  | Alert dialog           | components    | 🟢 ready | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)                     |
+| 21  | `Image`                | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                                   |
+| 22  | Overlay export cleanup | components    | 📝 draft | —          | [22-overlay-export-cleanup](22-overlay-export-cleanup/spec.md) |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -55,18 +55,19 @@ the first of the two that are `ready`. Its open questions were closed in a grill
 policy and an awaitable action on the shared overlay — and then stalled, because all three of its
 blocking open questions belonged to that second half and none belonged to the component.
 
-Splitting it also reversed the dependency. An audit of
+Splitting it dissolved most of it. An audit of
 [`OverlaySurface`](../packages/ui-overlays/src/components/Overlay/OverlaySurface.tsx) and
 [`useDialogElement`](../packages/ui-overlays/src/components/Overlay/hooks/useDialogElement.ts) found
 the component needs no shared change at all: `role="alertdialog"`, the required description, the
 missing close button, focus on cancel and the refused backdrop click are each expressible against the
-API `18` already shipped. `AlertDialog` is the only component that _requires_ the two-action footer,
-so `19` builds one for itself and `22` generalises it to `Dialog` and `Sheet`, which merely gain it.
-`19`'s one remaining question — what a rejected action promise does — was answered on
-4 November 2026: the overlay stays open and the component stays silent, because where a failure is
-reported is an application decision rather than the component's.
-[Decisions](19-alert-dialog/spec.md#decisions) records it, and `19` is now `ready`. `22` still
-carries the other two questions.
+API `18` already shipped. Both shared behaviours then turned out to replace a couple of lines of
+ordinary React with a contract that needed its own edge cases, so both were dropped —
+[`19`'s Decisions](19-alert-dialog/spec.md#decisions) records why, and the dismissal policy is kept
+under **Planned** rather than discarded.
+
+What is left is two independent deliverables, neither blocking the other. `19` is the component — four
+required props, no close button, nothing for slow work — and is `ready`. `22` is the removal of four
+dead exports, `draft` only because whether that needs a deprecation cycle is unanswered.
 
 ## Planned
 

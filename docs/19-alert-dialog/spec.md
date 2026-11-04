@@ -13,10 +13,12 @@ confirmation and behaves like a notice. `role="alertdialog"` is set nowhere in t
 ([`:144`](../../packages/ui-overlays/src/components/Dialog/Dialog.stories.tsx#L144)) and `AlertDialog`
 (`:331`); `Sheet`'s `Confirmation`
 ([`Sheet.stories.tsx:645`](../../packages/ui-overlays/src/components/Sheet/Sheet.stories.tsx#L645)),
-`WithConfirmationDialog` ([`:1149`](../../packages/ui-overlays/src/components/Sheet/Sheet.stories.tsx#L1149))
-and `WithConfirmationDialogRef` ([`:1231`](../../packages/ui-overlays/src/components/Sheet/Sheet.stories.tsx#L1231)).
-The last two open a second, nested `Dialog` as the confirmation, each with three handlers and a
-latch. A browser modal is still in there too —
+`WithConfirmationDialog`
+([`:1149`](../../packages/ui-overlays/src/components/Sheet/Sheet.stories.tsx#L1149)) and
+`WithConfirmationDialogRef`
+([`:1231`](../../packages/ui-overlays/src/components/Sheet/Sheet.stories.tsx#L1231)). The last two
+open a second, nested `Dialog` as the confirmation, each with three handlers and a latch. A browser
+modal is still in there too —
 [`Sheet.stories.tsx:1035`](../../packages/ui-overlays/src/components/Sheet/Sheet.stories.tsx#L1035)
 calls `confirm()` inside a `SheetClose` handler.
 
@@ -27,17 +29,16 @@ renders "Delete Project" at
 
 ## Scope
 
-**This deliverable is the component, and nothing shared.** It was originally specified with two
-halves — the component, plus a declared dismissal policy and an awaitable action lifted into the
-shared overlay surface that `Dialog` and `Sheet` both use. The shared half is now
-[`22`](../22-overlay-dismissal-and-actions/spec.md), and it depends on this one rather than the
-other way round.
+**The component, and nothing shared.** It was originally specified with two halves — the component,
+plus a declared dismissal policy and an awaitable action lifted into the shared overlay surface.
+Neither shared behaviour survived review; see [Decisions](#decisions). What is left of the shared half
+is [`22`](../22-overlay-export-cleanup/spec.md), which no longer blocks or is blocked by this.
 
-That direction is deliberate. An audit of
+**Nothing in the shared code changes.** An audit of
 [`OverlaySurface`](../../packages/ui-overlays/src/components/Overlay/OverlaySurface.tsx) and
 [`useDialogElement`](../../packages/ui-overlays/src/components/Overlay/hooks/useDialogElement.ts)
-found that every semantic requirement below is already expressible against the API
-[`18`](../18-overlay-api/plan.md) shipped, with no change to shared code:
+found every requirement below already expressible against the API
+[`18`](../18-overlay-api/plan.md) shipped:
 
 | Requirement                      | Existing mechanism                                                                                                   |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -45,21 +46,44 @@ found that every semantic requirement below is already expressible against the A
 | Required title and description   | `titleId` / `descriptionId` and `useOverlayLabelling` already do the wiring                                          |
 | No close button                  | `showCloseButton?: boolean` already exists on `OverlaySurface`                                                       |
 | Focus on cancel                  | `focusInitialElement` honours `[autofocus]` before first-tabbable                                                    |
-| Backdrop refused, Escape allowed | `OverlayCloseSource` already discriminates `'backdrop'` from `'escape'`, and ADR-8's veto already refuses a route    |
+| Backdrop refused, Escape allowed | `OverlayCloseSource` already discriminates `'backdrop'` from `'escape'`, and ADR-8's veto refuses one route          |
 
 [`18`'s discovery](../18-overlay-api/discovery.md) reached the same conclusion: "structurally it is
 `Dialog` minus the close button with two footer buttons, so under this deliverable's props it is a
 thin preset."
 
-**Included** — `AlertDialog`, `AlertDialogTrigger` and `AlertDialogContent` in `ui-overlays`,
-following [ADR-1](../18-overlay-api/CONTEXT.md)'s three-element shape, with a two-action footer of
-their own. Storybook stories and consumer documentation, as every other overlay has.
+**Included** — `AlertDialog`, `AlertDialogTrigger`, `AlertDialogContent` and `AlertDialogClose` in
+`ui-overlays`, following [ADR-1](../18-overlay-api/CONTEXT.md)'s shape. Storybook stories and
+consumer documentation, as every other overlay has.
 
 **Independently deliverable** — yes.
 
-## What the platform and the guidelines already settle
+## The shape
 
-Two requirements below rest on this rather than on preference, so it is recorded here.
+`AlertDialogContent` is `DialogContent` with four required props and no close button. A caller passes
+real `Button`s, so variants, `disabled` and a spinner are things they already know how to do.
+
+```tsx
+<AlertDialog>
+	<AlertDialogTrigger asChild>
+		<Button variant='destructive'>Delete project</Button>
+	</AlertDialogTrigger>
+	<AlertDialogContent
+		title='Delete this project?'
+		description='Everything in it goes too. This cannot be undone.'
+		cancel={<Button variant='outline'>Keep it</Button>}
+		confirm={
+			<Button variant='destructive' onClick={() => deleteProject(id)}>
+				Delete
+			</Button>
+		}
+	/>
+</AlertDialog>
+```
+
+That is the whole API. Prop names are illustrative; the implementation plan settles them.
+
+## What the platform and the guidelines already settle
 
 - The [APG alertdialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) requires
   `aria-describedby` referring to the element holding the message. The message _is_ the content.
@@ -69,22 +93,16 @@ Two requirements below rest on this rather than on preference, so it is recorded
   `18` added backdrop dismissal by hand
   ([`useDialogElement.ts:139`](../../packages/ui-overlays/src/components/Overlay/hooks/useDialogElement.ts#L139)),
   so the library opted into light dismiss on top of a platform that omits it deliberately. This
-  component opts back out. The vocabulary for saying so declaratively is `22`'s job; here the
-  behaviour is fixed and needs no prop.
+  component opts back out, for one route, with no prop to configure it.
 
 ## Non-Goals
 
 - **A `Sheet` equivalent.** A confirmation is centred and small; a sheet is neither.
-- **A dismissal policy prop.** This component has one behaviour and does not accept an alternative.
-  Giving `Dialog` and `Sheet` the choice is [`22`](../22-overlay-dismissal-and-actions/spec.md).
-- **A two-action footer on `DialogContent` or `SheetContent`.** Also `22`. The footer built here is
-  the one `22` generalises, which is why it ships first.
-- **Wiring confirmations onto the three destructive `DropdownMenu` stories.** They are evidence that
-  the component is wanted, not call sites this deliverable owns.
+- **Anything for slow work** — see requirement 7 and [Decisions](#decisions).
 - **Changing what `Dialog` or `Sheet` do today.** Nothing here touches either.
 - **Reworking `onRequestClose`.** It stays as shipped, and is the mechanism this component uses.
-- **Adopting the real `closedby` attribute**, which is below the
-  [support floor](../../README.md#-browser-support).
+- **Wiring confirmations onto the three destructive `DropdownMenu` stories.** They are evidence the
+  component is wanted, not call sites this deliverable owns.
 
 ## Requirements
 
@@ -94,18 +112,17 @@ Two requirements below rest on this rather than on preference, so it is recorded
    [ADR-3](../18-overlay-api/CONTEXT.md), which makes a description optional — correct for
    `role="dialog"`, wrong for `role="alertdialog"`, which the APG pattern requires be described.
 3. An alert dialog has no close button, and no prop adds one.
-4. A backdrop click does not close an alert dialog. Escape does, and has the same effect as pressing
+4. A cancelling action and a confirming action are both required, each supplied by the caller as a
+   node rather than described by an object. There is no `footer` prop and no third action slot.
+5. The component knows which action is which, and two things follow from that without the caller
+   arranging them: focus lands on the cancelling action when the dialog opens, so a reflexive Enter
+   cancels rather than destroys; and the cancelling action dismisses the dialog without being wrapped
+   in `AlertDialogClose`.
+6. A backdrop click does not close an alert dialog. Escape does, and has the same effect as pressing
    cancel.
-5. An alert dialog has exactly two actions. A caller controls their labels, the confirming action's
-   visual variant, whether it is disabled, and whether it is pending. A caller does not supply
-   arbitrary footer markup — a third button means a `Dialog` was wanted.
-6. Either action may return a promise. While it is unsettled the overlay stays open, the acting
-   control reports itself busy, and neither action can be triggered again.
-7. Focus lands on the cancelling action when an alert dialog opens, so that a reflexive Enter
-   cancels rather than destroys.
-8. When an action's promise rejects, the overlay stays open and both actions become usable again.
-   The component renders nothing about the failure and has no error slot. Reporting it is the
-   caller's job, and the documentation shows how for the common cases.
+7. The component contributes nothing to an action that takes time. It has no prop that reports an
+   action busy, no promise contract, and no region for a failure. A caller holds the dialog open with
+   the `onRequestClose` veto `18` already ships, and disables their own `Button`.
 
 ## Departures from decisions already recorded
 
@@ -113,33 +130,51 @@ Two requirements below rest on this rather than on preference, so it is recorded
   explicit choice before it can be dismissed". Escape is deliberate, has a visible cancel behind it,
   and is the route the APG mandates. A backdrop click is the accidental one worth refusing.
 - **A required description**, against ADR-3, because the APG `alertdialog` pattern requires one.
-- **A typed two-action footer**, against [ADR-7](../18-overlay-api/CONTEXT.md), which made `footer` a
-  plain node and rejected an object form. ADR-7 governs `DialogContent` and `SheetContent`, which
-  this deliverable does not touch; a component whose defining constraint is "exactly two actions"
-  cannot express that through an opaque node.
+- **Two named action slots instead of `footer`**, against [ADR-7](../18-overlay-api/CONTEXT.md). ADR-7
+  made `footer` a plain `ReactNode` and rejected an object form; both slots here stay plain nodes, so
+  what changes is their number and their names, not their type. ADR-7 also governs `DialogContent`
+  and `SheetContent`, which this deliverable does not touch.
 
-One consequence worth naming: this deliverable leans on [ADR-8](../18-overlay-api/CONTEXT.md)'s veto
-more narrowly than the planned entry assumed. The veto governs one route — the backdrop — rather
-than all of them.
+This deliverable leans on [ADR-8](../18-overlay-api/CONTEXT.md)'s veto more narrowly than the planned
+entry assumed. The veto governs one route — the backdrop — rather than all of them.
 
 ## Edge Cases & Error Handling
 
 - **A required description can still be defeated.** `description={null}` or an empty string satisfies
   a required prop and produces an `aria-describedby` pointing at nothing, which ADR-3 argues is worse
   than absent.
+- **A slow confirming action.** The caller disables their own `Button` and refuses the close while
+  the request is in flight. Both halves are ordinary React:
+
+  ```tsx
+  <AlertDialogContent
+  	onRequestClose={(event) => {
+  		if (isDeleting) event.preventDefault();
+  	}}
+  	confirm={
+  		<Button disabled={isDeleting} onClick={handleDelete}>
+  			Delete
+  		</Button>
+  	}
+  />
+  ```
+
+  Documentation has to show this, because requirement 5 makes cancel dismiss automatically — a caller
+  who forgets the veto can cancel out from under their own request.
+
+- **`ref.close()` or `open={false}` during a slow action.** Both bypass `onRequestClose` entirely, so
+  the veto above does not protect against a caller closing their own overlay.
+- **Something other than a `Button` in `cancel` or `confirm`.** The type cannot stop a `<div>`. The
+  slots exist so the component can place and wire them, not to validate them; the documentation
+  states the obligation.
 - **An alert dialog opened from inside a Sheet.** The `WithConfirmationDialog` flows at
-  `Sheet.stories.tsx:1149` and `:1231` are the shape, and nested `<dialog>` elements already need
-  care — `18` found that React collects `onCancel` and `onClose` from every ancestor even though the
-  DOM events do not bubble. `useDialogElement` guards this with
-  `event.target !== event.currentTarget`; an alert dialog nested in a sheet must not close the sheet.
+  `Sheet.stories.tsx:1149` and `:1231` are the shape. `useDialogElement` guards nesting with
+  `event.target !== event.currentTarget`, because `18` found React collects `onCancel` and `onClose`
+  from every ancestor even though the DOM events do not bubble.
 - **A confirming action gated behind a type-to-confirm input.** `ConfirmationSheet` at
   [`Sheet.stories.tsx:561`](../../packages/ui-overlays/src/components/Sheet/Sheet.stories.tsx#L561)
-  is the existing shape. The action is disabled until the phrase matches, and the dialog must stay
-  usable throughout.
-- **A close request arriving while an action is pending.** Escape during an unsettled promise must
-  not close the overlay out from under the action, and must not queue a close for when it settles.
-- **A pending action when the overlay is closed programmatically.** `ref.close()` and setting
-  `open={false}` bypass `onRequestClose` entirely, so a caller can close an overlay mid-action.
+  is the existing shape. The action is disabled until the phrase matches, and the dialog stays usable
+  throughout.
 
 ## Acceptance Criteria
 
@@ -153,44 +188,65 @@ A Storybook `play()` verifies each one, which is how components are tested here.
   failure that assertion exists to catch.
 - **AC4** — Escape closes an alert dialog and has the same effect as pressing cancel.
 - **AC5** — Focus is on the cancelling action immediately after an alert dialog opens.
-- **AC6** — While a confirming action's promise is unsettled, the overlay stays open, the control
-  reports itself busy, and neither action can be triggered again. Covered for a resolving promise and
-  for one that settles after a close is attempted.
-- **AC7** — An alert dialog opened from inside a `Sheet` closes only itself.
-- **AC8** — A caller-supplied `onClick` or `onKeyDown` on `AlertDialogContent` reaches the element
+- **AC6** — The cancelling action dismisses the dialog without the caller wrapping it in
+  `AlertDialogClose`.
+- **AC7** — Omitting the title, the description, the cancelling action or the confirming action fails
+  to compile.
+- **AC8** — An alert dialog opened from inside a `Sheet` closes only itself.
+- **AC9** — A caller-supplied `onClick` or `onKeyDown` on `AlertDialogContent` reaches the element
   rather than being silently replaced. The backdrop refusal is implemented through `onRequestClose`,
   so it must not consume the element's own handlers.
-- **AC9** — The story at `Dialog.stories.tsx:331` is gone, and `ConfirmationDialog` (`:144`) and
+- **AC10** — The story at `Dialog.stories.tsx:331` is gone, and `ConfirmationDialog` (`:144`) and
   `Sheet`'s `Confirmation` (`:645`) have moved into the alert dialog's own stories. `Sheet`'s veto
   stays covered by `Dialog`'s `GuardedClose`, so the move leaves nothing untested.
-- **AC10** — Every new story runs under `a11y: { test: 'error' }` and opens its overlay inside
-  `play()`. A closed `<dialog>` is `display: none` and axe skips what it cannot see, which is how 25
-  of 27 overlay story gates came to be decorative before `18`.
-- **AC11** — When a confirming action's promise rejects, the overlay is still open, both actions are
-  usable again, and the component has rendered nothing about the failure. A story demonstrates a
-  caller reporting it.
+- **AC11** — Three stories cover the cases a caller actually hits: a slow confirming action that
+  holds the dialog open, a confirming action gated behind a type-to-confirm input, and a failed
+  action reported by the caller. These replace the component features this spec declines to build, so
+  they are acceptance criteria rather than documentation extras.
+- **AC12** — Every story runs under `a11y: { test: 'error' }` and opens its overlay inside `play()`. A
+  closed `<dialog>` is `display: none` and axe skips what it cannot see, which is how 25 of 27
+  overlay story gates came to be decorative before `18`.
 
 ## Decisions
 
-- **A rejected action leaves the overlay open and the component silent** _(2026-11-04)_. Three
-  options were weighed: close anyway, stay open and show the error in a region the component owns, or
-  stay open and show nothing.
+All three were settled on 4 November 2026, in one review pass that asked whether the deliverable was
+doing too much. They are recorded together because they share one answer: the component guarantees
+what a caller cannot get right by hand, and documents everything else.
 
-  Closing was rejected outright — the user confirmed a destructive action, it failed, and the dialog
-  vanishing reads as success.
+- **A rejected action leaves the overlay open and the component silent.** Closing was rejected
+  outright — the user confirmed a destructive action, it failed, and the dialog vanishing reads as
+  success. A built-in error region was rejected because where a failure gets reported is an
+  application decision: a toast, a banner and an inline message are all legitimate and none belongs
+  to a component whose job is to ask a question and carry two answers.
 
-  A built-in error region was rejected because the component's boundary matters more than the
-  convenience. An alert dialog asks a question and carries two answers; where a failure gets reported
-  is an application decision, and a toast, a banner or an inline message are all legitimate and none
-  of them belong to this component. Requirement 5 already refuses arbitrary footer markup for the
-  same reason, and a third content slot would reopen it.
+  Two notes for whoever writes the documentation: there is no `Toast` component in the library and no
+  toast dependency _(verified 2026-11-04)_, and swapping the dialog's description text is not a
+  working answer, because `aria-describedby` is resolved when focus arrives rather than on mutation —
+  a screen-reader user would never hear it. Expect to document a caller-owned live region, modelled
+  on [`FormError`](../../packages/ui-forms/src/components/FormError/FormError.tsx), whose docstring
+  covers exactly this class of failure and carries the trap that the region must be mounted before it
+  has anything to say.
 
-  What the component owes instead is **guidance, not machinery**: the documentation must show how to
-  report a failure for the cases that actually occur, so a caller is not left to invent it. Note for
-  whoever writes it — there is no `Toast` component in the library and no toast dependency
-  _(verified 2026-11-04)_, and swapping the dialog's description text is not a working answer because
-  `aria-describedby` is resolved when focus arrives rather than on mutation, so a screen-reader user
-  would never hear it. Expect to document a caller-owned live region.
+- **No promise contract and no `pending` prop.** The original requirement had either action return a
+  promise, with the overlay holding itself open and the control reporting itself busy. It was dropped
+  because the capability already exists: `onRequestClose` refuses a close synchronously, so
+  `if (isSaving) event.preventDefault()` holds the dialog open today, and a caller's own `Button`
+  already takes `disabled`. The component version would have replaced about three lines of ordinary
+  React with a contract that then needed its own answer for rejection, for a close arriving
+  mid-flight, and for a programmatic close. Requirement 7 states the absence so it is not
+  reintroduced as an obvious convenience.
+
+- **Two named action slots, not a `footer` node and not action objects.** Three shapes were weighed.
+  A plain required `footer` was rejected because it only guarantees that _something_ is there — three
+  buttons, zero buttons or a form all satisfy it — and an alert dialog always has exactly a cancel and
+  a confirm. Objects such as `confirm={{ label, variant, onAction }}` were rejected because they
+  re-describe `Button`'s API in new vocabulary that then has to keep up with it. Nodes keep `Button`
+  as the thing a caller already knows, while naming the two slots gives the component the one fact it
+  needs: which action is the cancel. Requirement 5 is what that fact buys.
+
+  `footer` stays optional on `DialogContent`, which has an `X` and dismisses on a backdrop click. It
+  is required here in spirit — as two slots — because an alert dialog has neither, so its actions are
+  the only visible way out.
 
 ## Open Questions
 
