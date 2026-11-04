@@ -19,11 +19,12 @@ deliverable numbers here.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable      | Area          | Status   | Depends on | Docs                                               |
-| --- | ---------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
-| 03  | Focus indicators | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
-| 19  | Alert dialog     | components    | 📝 draft | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)         |
-| 21  | `Image`          | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                       |
+| ID  | Deliverable                 | Area          | Status   | Depends on | Docs                                                                         |
+| --- | --------------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------------------------- |
+| 03  | Focus indicators            | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)                           |
+| 19  | Alert dialog                | components    | 📝 draft | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)                                   |
+| 21  | `Image`                     | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                                                 |
+| 22  | Overlay dismissal & actions | components    | 📝 draft | 19         | [22-overlay-dismissal-and-actions](22-overlay-dismissal-and-actions/spec.md) |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -45,16 +46,24 @@ whether `--ring`'s own values change. The design-system audit under **Planned** 
 `03`, not a blocker for it.
 
 `21` is the first item lifted out of [`component-inventory.md`](component-inventory.md) (C02), and
-the only one of the three that is `ready`. Its open questions were closed in a grilling pass on
+the only one of the four that is `ready`. Its open questions were closed in a grilling pass on
 18 September 2026; the API shape, the fallback mechanism and the failure semantics are all settled in
 [Decisions](21-image/spec.md#decisions). It has no dependencies, so it can be planned now.
 
-`19` is the alert dialog `18` was the gate on. It grew past the thin preset it was scoped as: the
-`role="alertdialog"` component is only half of it, and the other half is a declared dismissal policy
-and an awaitable action on the shared overlay, both of which `Dialog` and `Sheet` inherit. Its
-[open questions](19-alert-dialog/spec.md#open-questions) are what keep it `draft`, and one of them —
-whether an awaitable close reaches `onRequestClose` — has to be answered before the shared half can
-be planned.
+`19` and `22` were a single deliverable until 4 November 2026. It was scoped as the thin preset
+[`18`'s discovery](18-overlay-api/discovery.md) described, grew a second half — a declared dismissal
+policy and an awaitable action on the shared overlay — and then stalled, because all three of its
+blocking open questions belonged to that second half and none belonged to the component.
+
+Splitting it also reversed the dependency. An audit of
+[`OverlaySurface`](../packages/ui-overlays/src/components/Overlay/OverlaySurface.tsx) and
+[`useDialogElement`](../packages/ui-overlays/src/components/Overlay/hooks/useDialogElement.ts) found
+the component needs no shared change at all: `role="alertdialog"`, the required description, the
+missing close button, focus on cancel and the refused backdrop click are each expressible against the
+API `18` already shipped. `AlertDialog` is the only component that _requires_ the two-action footer,
+so `19` builds one for itself and `22` generalises it to `Dialog` and `Sheet`, which merely gain it.
+`19` carries the one open question that is genuinely its own — what a rejected action promise does —
+and `22` carries the other two.
 
 ## Planned
 
