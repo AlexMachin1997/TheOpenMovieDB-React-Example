@@ -6,7 +6,7 @@ Layered surfaces — anything that floats above the page.
 
 ## At a glance
 
-- **6 component folders**, 43 runtime exports, 7 direct dependencies (three of them Radix).
+- **7 component folders**, 47 runtime exports, 7 direct dependencies (three of them Radix).
 - **Depends on `@repo/ui-core` for exactly one component: `Icon`**, used by Dialog's close button,
   DropdownMenu's chevron and Sheet's close button.
 - Single entry point: `import { Dialog } from '@repo/ui-overlays'`.
@@ -18,6 +18,7 @@ Layered surfaces — anything that floats above the page.
 
 | Component      | Purpose                                                     |
 | -------------- | ----------------------------------------------------------- |
+| `AlertDialog`  | A `Dialog` that asks one question and carries two answers   |
 | `Dialog`       | Modal, centred, focus-trapped. A native `<dialog>`          |
 | `Sheet`        | The same component pinned to an edge instead of centred     |
 | `Popover`      | Non-modal surface anchored to a trigger                     |
@@ -34,6 +35,17 @@ Layered surfaces — anything that floats above the page.
 - **They are a real `<dialog>` element**, opened with `showModal()`, not a `div` wearing ARIA. The
   element itself is the dim backdrop and the panel is its child, which is what keeps the existing
   fade classes working and makes a backdrop click detectable as "the event landed on the dialog".
+- **`AlertDialog` is a preset, not a third surface.** It renders `DialogContent` with four things
+  pinned: `role="alertdialog"`, no close button, a backdrop click refused, and focus on the
+  cancelling action. None is a prop, and the prop type omits `role`, `showCloseButton`, `icon` and
+  `footer` so there is nothing to pass. It carries `Dialog`'s `data-slot` names, because it is
+  `Dialog`'s surface.
+- **The alert dialog contributes nothing to a slow or failed action, deliberately.** No `pending`
+  prop, no promise contract, no error region. Hold it open with the `onRequestClose` veto and
+  `disabled` on your own `Button`; report a failure through a live region you own, mounted before it
+  has anything to say — [`FormError`](../ui-forms/src/components/FormError/FormError.tsx) is the
+  shape. Its `SlowConfirmingAction`, `TypeToConfirm` and `FailedAction` stories are the three
+  patterns worked through.
 - **`Popover` is a native `popover="auto"` element**, placed with CSS anchor positioning. It
   renders where it is written and shows itself in the top layer, so it needs no portal, flips
   without measuring in script, and works inside a modal with no help. The browser closes it on
