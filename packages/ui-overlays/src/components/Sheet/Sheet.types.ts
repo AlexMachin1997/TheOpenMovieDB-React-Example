@@ -36,22 +36,6 @@ export interface ISheetClose extends React.ComponentProps<'button'> {
 }
 
 /**
- * Properties for SheetPortal.
- * @deprecated A native dialog element renders in the top layer, so there is nothing left to portal.
- */
-export interface ISheetPortal {
-	children?: React.ReactNode;
-}
-
-/**
- * Properties for SheetOverlay.
- * @deprecated The dialog element is its own backdrop.
- */
-export interface ISheetOverlay extends React.ComponentProps<'div'> {
-	className?: string;
-}
-
-/**
  * Properties for SheetContent.
  * @param {boolean} [showCloseButton=true] - Whether to render the close button
  * @param {React.ReactNode} [icon] - Custom icon for the close button

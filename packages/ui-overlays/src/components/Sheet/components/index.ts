@@ -1,8 +1,6 @@
 export { Sheet } from '~/components/Sheet/components/Sheet';
 export { SheetTrigger } from '~/components/Sheet/components/SheetTrigger';
 export { SheetClose } from '~/components/Sheet/components/SheetClose';
-export { SheetPortal } from '~/components/Sheet/components/SheetPortal';
-export { SheetOverlay } from '~/components/Sheet/components/SheetOverlay';
 export { SheetContent } from '~/components/Sheet/components/SheetContent';
 export { SheetInnerContent } from '~/components/Sheet/components/SheetInnerContent';
 export { SheetHeader } from '~/components/Sheet/components/SheetHeader';

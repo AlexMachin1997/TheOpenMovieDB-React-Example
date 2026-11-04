@@ -57,9 +57,8 @@ Layered surfaces — anything that floats above the page.
 - **Both can be driven imperatively** via that ref, as well as with a controlled `open` prop. The
   ref writes through the same path the prop does, so it still works when the overlay is controlled.
 - **`DropdownMenu` and `HoverCard` wrap Radix primitives**, so their props extend the Radix ones.
-  `Dialog`, `Sheet` and `Popover` no longer do — their props are hand-written, and `DialogPortal`,
-  `SheetPortal`, `DialogOverlay` and `SheetOverlay` are deprecated shims kept for source
-  compatibility: a native dialog needs no portal and is its own backdrop.
+  `Dialog`, `Sheet` and `Popover` no longer do — their props are hand-written. Neither has a portal
+  part or an overlay part: a native dialog paints in the top layer and is its own backdrop.
 
 ## Dependency direction
 
