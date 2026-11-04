@@ -22,7 +22,7 @@ Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 | ID  | Deliverable                 | Area          | Status   | Depends on | Docs                                                                         |
 | --- | --------------------------- | ------------- | -------- | ---------- | ---------------------------------------------------------------------------- |
 | 03  | Focus indicators            | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)                           |
-| 19  | Alert dialog                | components    | 📝 draft | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)                                   |
+| 19  | Alert dialog                | components    | 🟢 ready | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)                                   |
 | 21  | `Image`                     | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                                                 |
 | 22  | Overlay dismissal & actions | components    | 📝 draft | 19         | [22-overlay-dismissal-and-actions](22-overlay-dismissal-and-actions/spec.md) |
 
@@ -46,7 +46,7 @@ whether `--ring`'s own values change. The design-system audit under **Planned** 
 `03`, not a blocker for it.
 
 `21` is the first item lifted out of [`component-inventory.md`](component-inventory.md) (C02), and
-the only one of the four that is `ready`. Its open questions were closed in a grilling pass on
+the first of the two that are `ready`. Its open questions were closed in a grilling pass on
 18 September 2026; the API shape, the fallback mechanism and the failure semantics are all settled in
 [Decisions](21-image/spec.md#decisions). It has no dependencies, so it can be planned now.
 
@@ -62,8 +62,11 @@ the component needs no shared change at all: `role="alertdialog"`, the required 
 missing close button, focus on cancel and the refused backdrop click are each expressible against the
 API `18` already shipped. `AlertDialog` is the only component that _requires_ the two-action footer,
 so `19` builds one for itself and `22` generalises it to `Dialog` and `Sheet`, which merely gain it.
-`19` carries the one open question that is genuinely its own — what a rejected action promise does —
-and `22` carries the other two.
+`19`'s one remaining question — what a rejected action promise does — was answered on
+4 November 2026: the overlay stays open and the component stays silent, because where a failure is
+reported is an application decision rather than the component's.
+[Decisions](19-alert-dialog/spec.md#decisions) records it, and `19` is now `ready`. `22` still
+carries the other two questions.
 
 ## Planned
 

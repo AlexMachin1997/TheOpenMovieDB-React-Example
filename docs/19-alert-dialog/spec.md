@@ -103,6 +103,9 @@ Two requirements below rest on this rather than on preference, so it is recorded
    control reports itself busy, and neither action can be triggered again.
 7. Focus lands on the cancelling action when an alert dialog opens, so that a reflexive Enter
    cancels rather than destroys.
+8. When an action's promise rejects, the overlay stays open and both actions become usable again.
+   The component renders nothing about the failure and has no error slot. Reporting it is the
+   caller's job, and the documentation shows how for the common cases.
 
 ## Departures from decisions already recorded
 
@@ -163,11 +166,32 @@ A Storybook `play()` verifies each one, which is how components are tested here.
 - **AC10** — Every new story runs under `a11y: { test: 'error' }` and opens its overlay inside
   `play()`. A closed `<dialog>` is `display: none` and axe skips what it cannot see, which is how 25
   of 27 overlay story gates came to be decorative before `18`.
+- **AC11** — When a confirming action's promise rejects, the overlay is still open, both actions are
+  usable again, and the component has rendered nothing about the failure. A story demonstrates a
+  caller reporting it.
+
+## Decisions
+
+- **A rejected action leaves the overlay open and the component silent** _(2026-11-04)_. Three
+  options were weighed: close anyway, stay open and show the error in a region the component owns, or
+  stay open and show nothing.
+
+  Closing was rejected outright — the user confirmed a destructive action, it failed, and the dialog
+  vanishing reads as success.
+
+  A built-in error region was rejected because the component's boundary matters more than the
+  convenience. An alert dialog asks a question and carries two answers; where a failure gets reported
+  is an application decision, and a toast, a banner or an inline message are all legitimate and none
+  of them belong to this component. Requirement 5 already refuses arbitrary footer markup for the
+  same reason, and a third content slot would reopen it.
+
+  What the component owes instead is **guidance, not machinery**: the documentation must show how to
+  report a failure for the cases that actually occur, so a caller is not left to invent it. Note for
+  whoever writes it — there is no `Toast` component in the library and no toast dependency
+  _(verified 2026-11-04)_, and swapping the dialog's description text is not a working answer because
+  `aria-describedby` is resolved when focus arrives rather than on mutation, so a screen-reader user
+  would never hear it. Expect to document a caller-owned live region.
 
 ## Open Questions
 
-- **What a rejected action promise does.** Stay open and surface the error, or close and leave it to
-  the caller. Closing is the weakest option — the user confirmed a destructive action, it failed, and
-  dismissing the dialog reads as success. The live choice is whether the component gains a region for
-  the error or leaves it to the caller, and that decides whether requirement 5's "no arbitrary
-  footer markup" extends to a third content slot.
+None.
