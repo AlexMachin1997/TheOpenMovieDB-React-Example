@@ -35,13 +35,21 @@ Layered surfaces — anything that floats above the page.
 - **They are a real `<dialog>` element**, opened with `showModal()`, not a `div` wearing ARIA. The
   element itself is the dim backdrop and the panel is its child, which is what keeps the existing
   fade classes working and makes a backdrop click detectable as "the event landed on the dialog".
-- **The content components deliberately accept less than a `<dialog>` does.** `DialogContent`,
-  `SheetContent` and `AlertDialogContent` remove `onClick`, `onKeyDown`, `ref`, `popover`,
-  `aria-modal`, `slot`, `open`, `title`, `onCancel` and `onClose`: the shared surface writes its own
-  after your props and would have discarded the handlers, and the rest would break the overlay or
-  let it misreport itself. `role` is narrowed to `'dialog' | 'alertdialog'`. `className` lands on the
-  panel, the `aria-*` trio wins over what the component would have generated, and `id`, `style` and
-  `data-*` are yours. Each surface has a `.types.spec.ts` pinning this.
+- **The content components refuse seven props a `<dialog>` would take.** `onClick`, `onKeyDown` and
+  `ref` are gone because the shared surface writes its own _after_ your props and would have
+  discarded yours; `popover` would stop `showModal()` working and `aria-modal` would let the element
+  lie about its modality; `slot` is passed before the spread, so supplying it renamed every
+  `data-slot` in the tree; and `open` belongs to the `Dialog` or `Sheet` root, not to its content.
+  `role` is narrowed rather than removed, to `'dialog' | 'alertdialog'` — use `AlertDialogContent`
+  rather than the second value, which on a plain `Dialog` gets you an alert dialog that still has an
+  `X` and still closes on a backdrop click.
+- **Three more are not refused but redefined, and this is the easy one to misread.** `title` is not
+  the HTML tooltip attribute here: it is the heading, optional on `DialogContent` and `SheetContent`
+  and **required** on `AlertDialogContent`. `onCancel` and `onClose` are likewise absent because
+  `onRequestClose` supersedes them — one callback for every route out, which you can refuse. What
+  stays yours: `className` lands on the panel, the `aria-*` trio wins over what the component would
+  have generated, and `id`, `style` and `data-*` pass straight through. Each surface has a
+  `.types.spec.ts` pinning all of it.
 - **`AlertDialog` is a preset, not a third surface.** It renders `DialogContent` with four things
   pinned: `role="alertdialog"`, no close button, a backdrop click refused, and focus on the
   cancelling action. None is a prop, and the prop type omits `role`, `showCloseButton`, `icon` and
