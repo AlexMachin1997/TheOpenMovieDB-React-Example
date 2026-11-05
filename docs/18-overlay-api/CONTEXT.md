@@ -1,7 +1,7 @@
 # Context: A common overlay API (18)
 
 Vocabulary, decisions and open questions for [`18-overlay-api`](spec.md). Written during grilling;
-updated as answers land. The spec states *what* is built; this file records *why*, and what the
+updated as answers land. The spec states _what_ is built; this file records _why_, and what the
 words mean.
 
 ## Vocabulary
@@ -50,8 +50,8 @@ target and should be reworded to name three. AC1 is unaffected.
 modal"; reversed when the deliverable merged with the primitive swap.
 
 **Decision**: `Popover` gets neither the props nor the ref API here, and stays on Radix. The work is
-deferred to [`20`](../20-popover-semantics/spec.md). The single exception is where it *portals
-to* inside a modal, which the swap forces —
+deferred to [`20`](../20-popover-semantics/spec.md). The single exception is where it _portals
+to_ inside a modal, which the swap forces —
 [DD-6](discovery.md#dd-6--anchored-overlays-portal-into-the-dialog-element) — and which changes no
 public API.
 
@@ -79,14 +79,14 @@ hand and used nowhere else here.
 
 **Rationale**: A description is optional for `role="dialog"` under both ARIA and the
 [APG dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/dialog/) — only
-the accessible *name* is required. Radix's default is to emit `aria-describedby` pointing at an id
+the accessible _name_ is required. Radix's default is to emit `aria-describedby` pointing at an id
 that may not exist, which is a reference to nothing. The warning is a nag aimed at the hand-assembly
 this deliverable replaces; once the component owns the wiring it already knows whether a description
 was given.
 
 **Alternative considered**: keep the warning and accept the dangling attribute (the spec's original
 edge case). Rejected — but note the cost was overstated during grilling: axe-core 4.10.3 grades a
-dangling id reference as *needs review*, not a violation, so this was never a red build. The
+dangling id reference as _needs review_, not a violation, so this was never a red build. The
 argument is honesty of the a11y tree, not the gate.
 
 **Consequence**: The spec's edge-case bullet forbidding `aria-describedby={undefined}` contradicted
@@ -130,7 +130,7 @@ the same idiom for an overlay with no visible heading keeps one answer to "how d
 that shows no text", rather than two.
 
 **Rejected**: a `hideTitle` boolean, and making `title` nullable. The latter cannot work at all:
-`title` is already optional, so `null` and omitted already mean *no name*, and there is no value of
+`title` is already optional, so `null` and omitted already mean _no name_, and there is no value of
 `title` that distinguishes "unnamed" from "named but not painted".
 
 **Consequence — and it recovers something the primitive swap gives up.** `DialogContent` warns,
@@ -145,7 +145,7 @@ conditioned on nothing having registered.
 
 **Status**: Decided.
 
-**Decision**: if a caller passes `title` *and* puts a `DialogTitle` in `children`, both headings
+**Decision**: if a caller passes `title` _and_ puts a `DialogTitle` in `children`, both headings
 render, `aria-labelledby` points at the **prop's**, and a non-throwing `console.warn` reports the
 duplicate.
 
@@ -186,7 +186,7 @@ one, which is why this was an open question rather than a feature.
 `title` / `description` / `footer` and the ref API, and stops here.
 
 **Consequence — a cross-deliverable dependency.** The confirmation half of the flow wants the alert
-dialog, which is sequenced *after* this. Until it exists, `Sheet.stories.tsx`'s
+dialog, which is sequenced _after_ this. Until it exists, `Sheet.stories.tsx`'s
 `WithConfirmationDialog` demonstrates the veto with a nested `Dialog`. Its description must be
 corrected regardless: it currently claims the `X` triggers the confirmation, and today it does not.
 
@@ -213,7 +213,7 @@ because `Popover` still lives under them.
    Radix, and is why ADR-5's `aria-label` answer only became available once the primitive changed.
 3. **Radix Dialog's description warning fires only when `aria-describedby` is present and dangling**
    (`if (descriptionId && describedById)`). Content sets `aria-describedby` to the generated id by
-   default, so omitting a description gives you a dangling reference *and* a warning; the only way
+   default, so omitting a description gives you a dangling reference _and_ a warning; the only way
    to emit no attribute is to pass `aria-describedby={undefined}`.
 4. **axe-core 4.10.3 grades a dangling `aria-describedby` as "needs review", not a violation** — the
    `aria-valid-attr-value` message is _"ARIA attribute element ID does not exist on the page"_ under
@@ -228,16 +228,16 @@ because `Popover` still lives under them.
 **None on the API.** Grilling completed 2026-08-24; every question it raised is answered by ADR-1 to
 ADR-8 above:
 
-| Question | Answer |
-| --- | --- |
-| How much collapses — one element or three? | ADR-1 — three |
-| Does `Popover` take the props? | ADR-2 — no, deferred out |
-| Emit a dangling `aria-describedby` or lose Radix's warning? | ADR-3 — lose the warning |
-| Radix or native? Two deliverables or one? | ADR-4 — native, one |
-| How is an overlay named with no visible heading? | ADR-5 — `aria-label`, plus a warning |
-| `title` prop *and* a compound title — which wins? | ADR-6 — the prop, and warn |
-| Is `footer` a node or an object? | ADR-7 — a node |
-| Can a close be refused? | ADR-8 — yes, on `Dialog` and `Sheet` only |
+| Question                                                    | Answer                                    |
+| ----------------------------------------------------------- | ----------------------------------------- |
+| How much collapses — one element or three?                  | ADR-1 — three                             |
+| Does `Popover` take the props?                              | ADR-2 — no, deferred out                  |
+| Emit a dangling `aria-describedby` or lose Radix's warning? | ADR-3 — lose the warning                  |
+| Radix or native? Two deliverables or one?                   | ADR-4 — native, one                       |
+| How is an overlay named with no visible heading?            | ADR-5 — `aria-label`, plus a warning      |
+| `title` prop _and_ a compound title — which wins?           | ADR-6 — the prop, and warn                |
+| Is `footer` a node or an object?                            | ADR-7 — a node                            |
+| Can a close be refused?                                     | ADR-8 — yes, on `Dialog` and `Sheet` only |
 
 What remains open is behavioural and belongs to the primitive half — cross-browser exit animations,
 `closedby` support, clipping under DD-6. See

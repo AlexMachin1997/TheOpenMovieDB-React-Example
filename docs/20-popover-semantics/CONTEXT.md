@@ -293,6 +293,7 @@ something a dialog. Accessibility is about the announcement matching the behavio
 lets Tab out is consistent; a group that loops Tab is not.
 
 **Alternatives considered**:
+
 - _Loop Tab in every popover_, as Radix does today (fact 4). Accessible only as a named non-modal
   dialog, so it would reverse ADR-4 and ADR-5, and it leaves Tab stuck on `Select`'s search input.
 - _Split by kind_ — pickers let Tab out; content popovers with a title and close button become named
@@ -471,18 +472,19 @@ Not part of this deliverable.
     **Corrected in implementation: `source` does not exempt the trigger.** Measured in Chrome 148 with
     real clicks, a popover shown with `showPopover({ source })` still closed when its trigger was
     clicked; one whose trigger carried `popovertarget` stayed open. See [`plan.md`](plan.md).
+
 14. **A native `popover="auto"` close cannot be refused, and synthetic input does not close it.**
     Measured 2026-09-11 in Chromium 148 (the desktop app's browser), on a bare `popover="auto"`
     opened with `showPopover({ source })`:
 
-    | Probe | Popover afterwards |
-    | --- | --- |
-    | `beforetoggle` for closing | fires with `cancelable: false`; `preventDefault()` does nothing, `hidePopover()` still closes |
-    | Real click outside | closes |
-    | Real click outside, with `pointerdown` / `mousedown` / `pointerup` / `mouseup` all `preventDefault()`ed in capture | **still closes** |
-    | Synthetic `KeyboardEvent('keydown', { key: 'Escape' })` | stays open, no `beforetoggle` |
-    | Synthetic `pointerdown` / `pointerup` / `click` outside | stays open, no `beforetoggle` |
-    | Focus moved to an element outside | stays open |
+    | Probe                                                                                                              | Popover afterwards                                                                            |
+    | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+    | `beforetoggle` for closing                                                                                         | fires with `cancelable: false`; `preventDefault()` does nothing, `hidePopover()` still closes |
+    | Real click outside                                                                                                 | closes                                                                                        |
+    | Real click outside, with `pointerdown` / `mousedown` / `pointerup` / `mouseup` all `preventDefault()`ed in capture | **still closes**                                                                              |
+    | Synthetic `KeyboardEvent('keydown', { key: 'Escape' })`                                                            | stays open, no `beforetoggle`                                                                 |
+    | Synthetic `pointerdown` / `pointerup` / `click` outside                                                            | stays open, no `beforetoggle`                                                                 |
+    | Focus moved to an element outside                                                                                  | stays open                                                                                    |
 
     So discovery's "Cancellable close — `beforetoggle` + `preventDefault()`" row is wrong, and
     requirement 14's veto cannot be built for light dismiss on `popover="auto"`. Synthetic input —
@@ -495,21 +497,21 @@ Not part of this deliverable.
 
 The spec's four open questions:
 
-| Question | Answer |
-| --- | --- |
-| Which element hosts the `popover` attribute? | ADR-12 — always `PopoverContent`'s own wrapper |
+| Question                                       | Answer                                                                                                                                                   |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Which element hosts the `popover` attribute?   | ADR-12 — always `PopoverContent`'s own wrapper                                                                                                           |
 | Does `beforetoggle` fire for synthetic events? | No (fact 14). Escape needs its own keyboard path, as `18`'s `<dialog>` did (`useDialogElement.ts:124-133`), and so does any `play()` that clicks outside |
-| Does `collisionPadding` survive? | ADR-11 — no, and `avoidCollisions` goes with it |
-| Is `Popover.mdx` written here? | ADR-10 — no, it waits for the `ui-overlays` docs session |
+| Does `collisionPadding` survive?               | ADR-11 — no, and `avoidCollisions` goes with it                                                                                                          |
+| Is `Popover.mdx` written here?                 | ADR-10 — no, it waits for the `ui-overlays` docs session                                                                                                 |
 
 The pre-planning checks raised at the end of grilling, closed 2026-09-11:
 
-| Check | Resolution |
-| --- | --- |
-| Synthetic Escape in the test environment | Measured — does not close (fact 14) |
-| How `SelectTrigger` learns `cmdk`'s listbox id (fact 12) | Not blocking: the id is in the DOM once open. Which way to read it is the implementation plan's call |
+| Check                                                                   | Resolution                                                                                                                                 |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Synthetic Escape in the test environment                                | Measured — does not close (fact 14)                                                                                                        |
+| How `SelectTrigger` learns `cmdk`'s listbox id (fact 12)                | Not blocking: the id is in the DOM once open. Which way to read it is the implementation plan's call                                       |
 | Does the registered trigger (ADR-16) provide the anchor in all engines? | Not blocking: ADR-8's generated anchor names work regardless. Using the implicit anchor instead is an optional simplification for the plan |
-| Escape in a popover inside a modal `Dialog` | Not a question — required behaviour. Becomes an acceptance criterion: it closes the popover only |
+| Escape in a popover inside a modal `Dialog`                             | Not a question — required behaviour. Becomes an acceptance criterion: it closes the popover only                                           |
 
 Fact 14 raised one more: can a popover close be refused at all? **No** — ADR-17. Nothing on
 behaviour or API remains open.

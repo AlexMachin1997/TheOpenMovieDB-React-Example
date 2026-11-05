@@ -113,9 +113,9 @@ Numbers are stable IDs. A removed requirement keeps its number and says which de
     it, and its X button. Each calls `onOpenChange(false)` once.
 14. _Removed — ADR-17. A popover close cannot be refused._
 15. _Removed — ADR-17. There are no close sources for popovers._
-21. Tab past the last focusable element, or Shift+Tab past the first, moves focus out of the popover
+16. Tab past the last focusable element, or Shift+Tab past the first, moves focus out of the popover
     and closes it. Tab never loops inside a popover (ADR-14).
-22. Clicking the trigger of an open popover closes it, and it stays closed (ADR-16).
+17. Clicking the trigger of an open popover closes it, and it stays closed (ADR-16).
 
 ### Positioning (Phase 2)
 

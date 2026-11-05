@@ -208,7 +208,7 @@ though the migration is not.
   component fell into.
 - **Intrinsic size and ratio both exist, and are mutually exclusive.** They answer different
   questions: integers when the file's dimensions are known, `ratio` when only the slot's shape is.
-  The inventory framed `ratio` as replacing the pair — it replaces the *broken string* pair, not the
+  The inventory framed `ratio` as replacing the pair — it replaces the _broken string_ pair, not the
   native integer one.
 - **The contradiction is made unrepresentable rather than warned about**, wherever the type system
   can reach it — no shape at all, both shapes at once, a CSS length where an integer belongs. Where

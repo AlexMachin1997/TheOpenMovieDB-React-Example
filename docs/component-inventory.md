@@ -181,13 +181,14 @@ A surface token fixes that everywhere, including the places a `Card` component w
 
 **What kept it** is that the abstraction is real: the app's `Card` has four consumers (`Poster`,
 `Person`, `KnownFor`, `TopBilledCastMember`) _(measured 2026-09-14)_, and the shared shape — bordered
-surface, image on top, content below — is genuinely repeated. What's wrong is the *interface*, not
+surface, image on top, content below — is genuinely repeated. What's wrong is the _interface_, not
 the idea. Three of those four override its classes to escape it:
 
 ```tsx
 // TopBilledCastMember.tsx
-containerClassName='min-w-[138px] max-w-[138px] mt-[0.625rem] rounded-2xl mb-[0.625rem] ml-[0.625rem] mr-[0.25rem] border border-solid border-gray-200'
-contentClassName='p-0 border border-solid border-gray-200 rounded-b-2xl pb-2 flex flex-1'
+containerClassName =
+	'min-w-[138px] max-w-[138px] mt-[0.625rem] rounded-2xl mb-[0.625rem] ml-[0.625rem] mr-[0.25rem] border border-solid border-gray-200';
+contentClassName = 'p-0 border border-solid border-gray-200 rounded-b-2xl pb-2 flex flex-1';
 ```
 
 Decisions taken:
