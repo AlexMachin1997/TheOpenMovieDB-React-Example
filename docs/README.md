@@ -22,7 +22,6 @@ Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 | ID  | Deliverable            | Area          | Status   | Depends on | Docs                                                           |
 | --- | ---------------------- | ------------- | -------- | ---------- | -------------------------------------------------------------- |
 | 03  | Focus indicators       | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)             |
-| 19  | Alert dialog           | components    | 🟢 ready | 18 ✅      | [19-alert-dialog](19-alert-dialog/spec.md)                     |
 | 21  | `Image`                | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                                   |
 | 22  | Overlay export cleanup | components    | 📝 draft | —          | [22-overlay-export-cleanup](22-overlay-export-cleanup/spec.md) |
 
@@ -65,9 +64,17 @@ ordinary React with a contract that needed its own edge cases, so both were drop
 [`19`'s Decisions](19-alert-dialog/spec.md#decisions) records why, and the dismissal policy is kept
 under **Planned** rather than discarded.
 
-What is left is two independent deliverables, neither blocking the other. `19` is the component — four
-required props, no close button, nothing for slow work — and is `ready`. `22` is the removal of four
-dead exports, `draft` only because whether that needs a deprecation cycle is unanswered.
+That left two independent deliverables, neither blocking the other. `19` was the component — four
+required props, no close button, nothing for slow work — and [shipped](19-alert-dialog/plan.md) on
+5 November 2026, with `AC9` dropped along the way. `22` is the removal of four dead exports, `draft`
+only because whether that needs a deprecation cycle is unanswered.
+
+`19` also left one thing behind it: **what a content component should let a caller override at all**.
+`IDialogContent` accepts `onClick`, `onKeyDown`, `ref`, `slot`, `role`, `popover` and `aria-modal`,
+and the shared surface either discards them or would break on them. `19` cut all seven from its own
+prop type; doing the same on `IOverlaySurface`, so `Dialog`, `Sheet` and anything later inherit it,
+is a breaking narrowing and wants its own deliverable alongside `22`. See
+[`19`'s open question](19-alert-dialog/spec.md#open-questions).
 
 ## Planned
 
@@ -97,4 +104,5 @@ Kept for reference; each links to its as-built record. These rows do not change.
 | 16  | Type-hygiene cleanup          | [16-type-hygiene](16-type-hygiene/plan.md)                                 |
 | 17  | One list per Command          | [17-command-list-nesting](17-command-list-nesting/plan.md)                 |
 | 18  | A common overlay API          | [18-overlay-api](18-overlay-api/plan.md)                                   |
+| 19  | Alert dialog                  | [19-alert-dialog](19-alert-dialog/plan.md)                                 |
 | 20  | Popover semantics             | [20-popover-semantics](20-popover-semantics/plan.md)                       |
