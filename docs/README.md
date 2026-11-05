@@ -69,12 +69,13 @@ was the component — four required props, no close button, nothing for slow wor
 open question, whether that needed a deprecation cycle, was answered no, because nothing imported
 them.
 
-`19` left one thing behind it: **what a content component should let a caller override at all**.
-`IDialogContent` accepts `onClick`, `onKeyDown`, `ref`, `slot`, `role`, `popover` and `aria-modal`,
-and the shared surface either discards them or would break on them. `19` cut all seven from its own
-prop type; doing the same on `IOverlaySurface`, so `Dialog`, `Sheet` and anything later inherit it,
-is a breaking narrowing and wants its own deliverable. See
-[`19`'s open question](19-alert-dialog/spec.md#open-questions).
+`19` also settled **what a content component lets a caller override at all**, which it had raised as
+an open question and then answered rather than deferring. `IDialogContent` used to accept `onClick`,
+`onKeyDown`, `ref`, `slot`, `popover` and `aria-modal` — all either discarded by the shared surface
+or capable of breaking it — and `role` wide enough to strip the element's semantics. All three
+overlay surfaces now remove the first set, and `role` is narrowed to `'dialog' | 'alertdialog'`
+because a preset has to be able to pin it. No call site changed; see
+[`19`'s plan](19-alert-dialog/plan.md#the-restriction-reached-dialog-and-sheet-too).
 
 ## Planned
 

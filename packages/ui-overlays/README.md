@@ -35,6 +35,13 @@ Layered surfaces — anything that floats above the page.
 - **They are a real `<dialog>` element**, opened with `showModal()`, not a `div` wearing ARIA. The
   element itself is the dim backdrop and the panel is its child, which is what keeps the existing
   fade classes working and makes a backdrop click detectable as "the event landed on the dialog".
+- **The content components deliberately accept less than a `<dialog>` does.** `DialogContent`,
+  `SheetContent` and `AlertDialogContent` remove `onClick`, `onKeyDown`, `ref`, `popover`,
+  `aria-modal`, `slot`, `open`, `title`, `onCancel` and `onClose`: the shared surface writes its own
+  after your props and would have discarded the handlers, and the rest would break the overlay or
+  let it misreport itself. `role` is narrowed to `'dialog' | 'alertdialog'`. `className` lands on the
+  panel, the `aria-*` trio wins over what the component would have generated, and `id`, `style` and
+  `data-*` are yours. Each surface has a `.types.spec.ts` pinning this.
 - **`AlertDialog` is a preset, not a third surface.** It renders `DialogContent` with four things
   pinned: `role="alertdialog"`, no close button, a backdrop click refused, and focus on the
   cancelling action. None is a prop, and the prop type omits `role`, `showCloseButton`, `icon` and

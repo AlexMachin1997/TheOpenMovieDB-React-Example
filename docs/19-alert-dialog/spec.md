@@ -275,11 +275,16 @@ what a caller cannot get right by hand, and documents everything else.
 
 ## Open Questions
 
-**What a content component should let a caller override at all.** Raised 5 November 2026 off the
-back of AC9, and deliberately not answered here. The shape of the answer is three buckets — props
-the component owns and removes from the type, props it mediates and documents a precedence for
-(`className`, the `aria-*` trio), and props that are nobody's business but the caller's (`id`,
-`style`, `data-*`). The omission belongs on `IOverlaySurface` so all three overlays inherit it
-rather than each content type repeating the list. Needs its own deliverable — it is adjacent to
-[`22`](../22-overlay-export-cleanup/spec.md), which narrowed the same package's exports, but `22`
-has shipped and this is not part of it.
+**None.**
+
+**What a content component should let a caller override at all** was raised 5 November 2026 off the
+back of AC9, left open here, and then answered the same day rather than deferred to a deliverable of
+its own — see [`plan.md`](plan.md#the-restriction-reached-dialog-and-sheet-too). `IDialogContent`,
+`ISheetContent` and `IOverlaySurface` now remove the props the shared surface owns or would break
+on, and `role` is narrowed to `'dialog' | 'alertdialog'` rather than removed, because a preset has
+to be able to pin it.
+
+That change reaches `Dialog` and `Sheet`, which the [Non-Goals](#non-goals) above rule out. The
+non-goal stands as written for the component work: nothing about what either overlay _does_ changed,
+and no call site changed, because nothing passed any of the removed props. What changed is what
+their prop types advertise.

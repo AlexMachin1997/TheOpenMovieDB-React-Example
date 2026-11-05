@@ -99,8 +99,24 @@ observable would have changed. It was rejected for the opposite answer: `IAlertD
 `showCloseButton`, `icon` and `footer`. `slot` was the sharpest of them — `DialogContent` passes
 `slot='dialog'` _before_ `{...props}`, so a caller could rename every `data-slot` in the tree.
 
-Doing the same to `IDialogContent` and `IOverlaySurface` is a breaking narrowing across three
-overlays, and is [`spec.md`'s open question](spec.md#open-questions) rather than work done here.
+### The restriction reached `Dialog` and `Sheet` too
+
+Done the same day, after the above shipped, rather than left as a deliverable of its own.
+`IDialogContent`, `ISheetContent` and `IOverlaySurface` now remove `onClick`, `onKeyDown`, `ref`,
+`popover` and `aria-modal`; the two content types also remove `slot`, which `IOverlaySurface` keeps
+because there it is the component's own required prop rather than a pass-through.
+
+**`role` is narrowed, not removed** — to `'dialog' | 'alertdialog'`. Removing it outright breaks
+`AlertDialogContent`, which pins `role='alertdialog'` _through_ `DialogContent`, and that delegation
+is decision 2 above. Both values are legitimate on a `<dialog>`; `presentation` or `alert` would take
+the semantics off the element. So the value is restricted where the key cannot be.
+
+`Dialog.types.spec.ts` and `Sheet.types.spec.ts` pin it, matching this deliverable's own type spec.
+Nothing in `packages/` or `apps/` passed any removed prop, so no call site changed — the only thing
+that changed is what the types advertise. Gates after: build 11/11, lint 11/11, 411 tests passed.
+
+This is the one place the deliverable crossed its own non-goal, and
+[`spec.md`'s Open Questions](spec.md#open-questions) records why.
 
 ### What AC10 moved
 
