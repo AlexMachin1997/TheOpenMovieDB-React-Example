@@ -48,11 +48,23 @@ lever. Never report a build time, or that a clean build is green, without it.
 | Gate            | Command                                      | Notes                                                                                                                             |
 | --------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | Build           | `pnpm build`                                 | `pnpm turbo run build --force` when baselining                                                                                    |
-| Lint            | `pnpm lint`                                  | Errors **and** warnings fail it (`--max-warnings 0`)                                                                              |
+| Lint            | `pnpm lint`                                  | Errors **and** warnings fail it (`--max-warnings 0`). `--force` to verify someone else's commits — see below                      |
 | Prettier        | `pnpm prettier:check`                        | The gate. `pnpm prettier` rewrites — see below                                                                                    |
 | Types           | `pnpm check-types` (alias `pnpm type-check`) | Builds dependencies first                                                                                                         |
 | Component tests | `cd apps/storybook && npx vitest run`        | Storybook `play()` in Playwright/Chromium, ~60–120s. **Local only, deliberately.** See [`storybook-suite.md`](storybook-suite.md) |
 | Hook/util tests | `pnpm test` in the owning package            | `.spec.ts` only — pure logic, never components                                                                                    |
+
+### `lint` and `test` replay from cache too — `--force` is not a build-only concern
+
+The cache note above is written about `build`, but every turbo task behaves the same way. Verifying
+commits made elsewhere — another session's branch, a merge you did not watch — on 5 November 2026
+returned `11/11 successful, FULL TURBO` from `pnpm lint` in **131ms**, having linted nothing: the
+inputs were already in the shared cache from the branch those commits were authored on. A real lint
+run across the 11 packages takes ~50s.
+
+So `pnpm turbo run lint --force` and `pnpm turbo run test --force` whenever the point of running them
+is to confirm that code you did not write is actually green. A cached pass proves the inputs were
+seen somewhere, not that they pass here.
 
 **Do not write current pass counts, entry counts or version numbers into these files.** They rot,
 and a stale figure is worse than none: it gets trusted. Every one of them has a command above or in
