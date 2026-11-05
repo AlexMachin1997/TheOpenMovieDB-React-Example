@@ -280,5 +280,6 @@ back of AC9, and deliberately not answered here. The shape of the answer is thre
 the component owns and removes from the type, props it mediates and documents a precedence for
 (`className`, the `aria-*` trio), and props that are nobody's business but the caller's (`id`,
 `style`, `data-*`). The omission belongs on `IOverlaySurface` so all three overlays inherit it
-rather than each content type repeating the list. Needs its own deliverable, alongside
-[`22`](../22-overlay-export-cleanup/spec.md).
+rather than each content type repeating the list. Needs its own deliverable — it is adjacent to
+[`22`](../22-overlay-export-cleanup/spec.md), which narrowed the same package's exports, but `22`
+has shipped and this is not part of it.

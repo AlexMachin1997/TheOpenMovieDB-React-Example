@@ -19,11 +19,10 @@ deliverable numbers here.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable            | Area          | Status   | Depends on | Docs                                                           |
-| --- | ---------------------- | ------------- | -------- | ---------- | -------------------------------------------------------------- |
-| 03  | Focus indicators       | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md)             |
-| 21  | `Image`                | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                                   |
-| 22  | Overlay export cleanup | components    | 📝 draft | —          | [22-overlay-export-cleanup](22-overlay-export-cleanup/spec.md) |
+| ID  | Deliverable      | Area          | Status   | Depends on | Docs                                               |
+| --- | ---------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
+| 03  | Focus indicators | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
+| 21  | `Image`          | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                       |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -64,16 +63,17 @@ ordinary React with a contract that needed its own edge cases, so both were drop
 [`19`'s Decisions](19-alert-dialog/spec.md#decisions) records why, and the dismissal policy is kept
 under **Planned** rather than discarded.
 
-That left two independent deliverables, neither blocking the other. `19` was the component — four
-required props, no close button, nothing for slow work — and [shipped](19-alert-dialog/plan.md) on
-5 November 2026, with `AC9` dropped along the way. `22` is the removal of four dead exports, `draft`
-only because whether that needs a deprecation cycle is unanswered.
+That left two independent deliverables, neither blocking the other, and both have now shipped. `19`
+was the component — four required props, no close button, nothing for slow work — and landed on
+5 November 2026 with `AC9` dropped along the way. `22` was the removal of four dead exports: its one
+open question, whether that needed a deprecation cycle, was answered no, because nothing imported
+them.
 
-`19` also left one thing behind it: **what a content component should let a caller override at all**.
+`19` left one thing behind it: **what a content component should let a caller override at all**.
 `IDialogContent` accepts `onClick`, `onKeyDown`, `ref`, `slot`, `role`, `popover` and `aria-modal`,
 and the shared surface either discards them or would break on them. `19` cut all seven from its own
 prop type; doing the same on `IOverlaySurface`, so `Dialog`, `Sheet` and anything later inherit it,
-is a breaking narrowing and wants its own deliverable alongside `22`. See
+is a breaking narrowing and wants its own deliverable. See
 [`19`'s open question](19-alert-dialog/spec.md#open-questions).
 
 ## Planned
@@ -106,3 +106,4 @@ Kept for reference; each links to its as-built record. These rows do not change.
 | 18  | A common overlay API          | [18-overlay-api](18-overlay-api/plan.md)                                   |
 | 19  | Alert dialog                  | [19-alert-dialog](19-alert-dialog/plan.md)                                 |
 | 20  | Popover semantics             | [20-popover-semantics](20-popover-semantics/plan.md)                       |
+| 22  | Overlay export cleanup        | [22-overlay-export-cleanup](22-overlay-export-cleanup/plan.md)             |

@@ -19,22 +19,6 @@ export interface IDialog {
 	ref?: React.RefObject<OverlayRef | undefined>;
 }
 
-/**
- * Properties for DialogPortal.
- * @deprecated A native `<dialog>` renders in the top layer, so there is nothing left to portal.
- */
-export interface IDialogPortal {
-	children?: React.ReactNode;
-}
-
-/**
- * Properties for DialogOverlay.
- * @deprecated The `<dialog>` element is its own backdrop.
- */
-export interface IDialogOverlay extends React.ComponentProps<'div'> {
-	className?: string;
-}
-
 /** Properties for DialogTrigger. */
 export interface IDialogTrigger extends React.ComponentProps<'button'> {
 	className?: string;

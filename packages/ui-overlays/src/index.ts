@@ -15,8 +15,6 @@ export {
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogOverlay,
-	DialogPortal,
 	DialogTitle,
 	Dialog
 } from '~/components/Dialog';
@@ -27,8 +25,6 @@ export {
 	Sheet,
 	SheetTrigger,
 	SheetClose,
-	SheetPortal,
-	SheetOverlay,
 	SheetContent,
 	SheetInnerContent,
 	SheetHeader,
