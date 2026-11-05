@@ -12,11 +12,30 @@ import { useScrollLock } from '~/components/Overlay/hooks/useScrollLock';
 
 import type { IOverlayCloseEvent } from '~/components/Overlay/types/overlay-ref';
 
+/**
+ * Properties for the shared overlay surface.
+ *
+ * Everything removed below this component owns, and passing it would either be discarded or break
+ * the overlay. `onClick`, `onKeyDown`, `ref`, `data-slot` and `data-state` are all written after
+ * `{...props}` on the element, so they were accepted and silently overwritten. `popover` would stop
+ * `showModal()` working, and `aria-modal` would let the element lie about its own modality.
+ *
+ * `role` stays, because a preset built on this surface has to be able to pin it — the alert dialog
+ * does. The two content components narrow it to the values `<dialog>` may legitimately carry.
+ */
 export interface IOverlaySurface
-	// `title`, `open`, `onCancel` and `onClose` are all real `<dialog>` attributes, and all four
-	// collide with something this component owns. Removing them here is what stops `title` meaning
-	// two different things.
-	extends Omit<React.ComponentProps<'dialog'>, 'title' | 'open' | 'onCancel' | 'onClose'> {
+	extends Omit<
+		React.ComponentProps<'dialog'>,
+		| 'title'
+		| 'open'
+		| 'onCancel'
+		| 'onClose'
+		| 'onClick'
+		| 'onKeyDown'
+		| 'ref'
+		| 'popover'
+		| 'aria-modal'
+	> {
 	/** The owning overlay's slot prefix, e.g. `'dialog'` or `'sheet'`. */
 	slot: string;
 

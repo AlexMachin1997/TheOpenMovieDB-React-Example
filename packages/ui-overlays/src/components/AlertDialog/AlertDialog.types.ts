@@ -25,18 +25,7 @@ export interface IAlertDialogClose extends IDialogClose {}
 export interface IAlertDialogContent
 	extends Omit<
 		IDialogContent,
-		| 'title'
-		| 'description'
-		| 'footer'
-		| 'showCloseButton'
-		| 'icon'
-		| 'role'
-		| 'slot'
-		| 'popover'
-		| 'aria-modal'
-		| 'onClick'
-		| 'onKeyDown'
-		| 'ref'
+		'title' | 'description' | 'footer' | 'showCloseButton' | 'icon' | 'role'
 	> {
 	/** The question. Names the overlay. */
 	title: React.ReactNode;

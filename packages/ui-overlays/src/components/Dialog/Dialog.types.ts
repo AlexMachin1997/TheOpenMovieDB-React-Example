@@ -41,9 +41,27 @@ export interface IDialogClose extends React.ComponentProps<'button'> {
  * @param {React.ReactNode} [icon] - Custom icon for the close button
  */
 export interface IDialogContent
-	// `title`, `open`, `onCancel` and `onClose` are `<dialog>` attributes that collide with props
-	// this component owns, so they are removed rather than shadowed.
-	extends Omit<React.ComponentProps<'dialog'>, 'title' | 'open' | 'onCancel' | 'onClose'> {
+	extends Omit<
+		React.ComponentProps<'dialog'>,
+		| 'title'
+		| 'open'
+		| 'onCancel'
+		| 'onClose'
+		| 'onClick'
+		| 'onKeyDown'
+		| 'ref'
+		| 'popover'
+		| 'aria-modal'
+		| 'slot'
+		| 'role'
+	> {
+	/**
+	 * The overlay's role. Both values are allowed on a `<dialog>`, and `alertdialog` is what
+	 * `AlertDialogContent` pins. Anything else would take the semantics off the element.
+	 * @default 'dialog'
+	 */
+	role?: 'dialog' | 'alertdialog';
+
 	/**
 	 * The heading. Supplying it builds the header for you and names the overlay, with no ARIA at
 	 * the call site.

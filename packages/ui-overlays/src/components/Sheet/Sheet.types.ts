@@ -41,11 +41,29 @@ export interface ISheetClose extends React.ComponentProps<'button'> {
  * @param {React.ReactNode} [icon] - Custom icon for the close button
  */
 export interface ISheetContent
-	// `title`, `open`, `onCancel` and `onClose` are dialog attributes that collide with props this
-	// component owns, so they are removed rather than shadowed.
-	extends Omit<React.ComponentProps<'dialog'>, 'title' | 'open' | 'onCancel' | 'onClose'> {
+	extends Omit<
+		React.ComponentProps<'dialog'>,
+		| 'title'
+		| 'open'
+		| 'onCancel'
+		| 'onClose'
+		| 'onClick'
+		| 'onKeyDown'
+		| 'ref'
+		| 'popover'
+		| 'aria-modal'
+		| 'slot'
+		| 'role'
+	> {
 	/** The edge the sheet slides in from. Defaults to `'right'`. */
 	side?: 'top' | 'right' | 'bottom' | 'left';
+
+	/**
+	 * The overlay's role. Both values are allowed on a `<dialog>`. Anything else would take the
+	 * semantics off the element.
+	 * @default 'dialog'
+	 */
+	role?: 'dialog' | 'alertdialog';
 
 	/**
 	 * The heading. Supplying it builds the header for you and names the overlay, with no ARIA at
