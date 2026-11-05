@@ -101,6 +101,15 @@ reaching for those is out of date.
   pass — the form layer" section. Its `plan.md` stays the as-built record of what shipped and links
   forward at the top, so the two never blur. Split into a new numbered folder only when the follow-on
   is genuinely independent work rather than a continuation of the same deliverable.
+- **Comments in source: JSDoc yes, inline prose no.** The route for a component is JSDoc on the
+  exported thing — descriptions and `@example` blocks are wanted, not tolerated — and per-prop JSDoc
+  on the `.types.ts` interface, so hover carries it. Three rules on top: a comment spanning more than
+  one line uses `/* */` rather than stacked `//`; a note about one prop goes on the type, never
+  beside the prop at the call site; and mechanism that needs a paragraph goes in the deliverable's
+  spec, not above the line it explains. Stripping JSDoc to satisfy this is the opposite mistake, and
+  has been made — see `19`. Note that `packages/ui-overlays` (`Overlay.variants.ts`,
+  `useDialogElement.ts`) predates the rule and is full of long inline blocks; do not read that as
+  licence.
 - **Consumer-facing docs go to Storybook.** A component's `.mdx` is for people _using_ the library —
   which props exist, what obligations fall on the caller. Implementation reasoning, rejected
   alternatives and known limitations go in the deliverable's `plan.md`. Route by who needs to know,

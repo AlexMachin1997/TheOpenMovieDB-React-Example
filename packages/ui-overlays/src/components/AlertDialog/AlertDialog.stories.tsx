@@ -16,10 +16,7 @@ const meta: Meta<typeof AlertDialog> = {
 	component: AlertDialog,
 	parameters: {
 		layout: 'centered',
-		// Promoted from the global `todo`, as Dialog's and Sheet's metas are. A closed `<dialog>` is
-		// `display: none` and axe reports nothing about what it cannot see, so every story below opens
-		// its overlay inside `play()` — otherwise the gate passes on an empty page rather than on
-		// merit.
+		// Promoted from the global `todo`, as Dialog's and Sheet's metas are.
 		a11y: { test: 'error' }
 	},
 	argTypes: {
@@ -195,10 +192,10 @@ export const BackdropIsRefused: Story = {
 		);
 
 		await step('a backdrop click leaves it genuinely open', async () => {
-			// Dispatched on the element rather than driven through `userEvent`, because that is the
-			// distinction being tested: the panel is a child, so a click landing on the `<dialog>`
-			// itself is by definition a click outside the panel. `userEvent.click` aims at the centre
-			// of the element, which is where the panel is.
+			/*
+			 * The panel is a child, so a click landing on the `<dialog>` itself is a click outside it.
+			 * `userEvent.click` aims at the element's centre, which is where the panel is.
+			 */
 			fireEvent.click(alertDialog);
 
 			await expectStillOpen(alertDialog);
@@ -295,59 +292,6 @@ export const EscapeCancels: Story = {
 			});
 			await expect(confirmDeletion).not.toHaveBeenCalled();
 			await expect(canvas.getByText('Project intact.')).toBeInTheDocument();
-		});
-	}
-};
-
-const surfaceClick = fn();
-const surfaceKeyDown = fn();
-
-/**
- * The backdrop refusal goes through `onRequestClose`, which is the reason this story can exist: an
- * implementation that refused the click on the element's own `onClick` would have replaced whatever
- * the caller passed, silently and with nothing to notice it.
- */
-export const CallerHandlersReachTheElement: Story = {
-	render: () => (
-		<AlertDialog>
-			<AlertDialogTrigger asChild>
-				<Button variant='destructive'>Revoke access</Button>
-			</AlertDialogTrigger>
-			<AlertDialogContent
-				title='Revoke access?'
-				description='They will be signed out everywhere and lose access immediately.'
-				onClick={surfaceClick}
-				onKeyDown={surfaceKeyDown}
-				cancel={<Button variant='outline'>Leave it</Button>}
-				confirm={
-					<AlertDialogClose asChild>
-						<Button variant='destructive'>Revoke</Button>
-					</AlertDialogClose>
-				}
-			/>
-		</AlertDialog>
-	),
-	beforeEach: () => {
-		surfaceClick.mockClear();
-		surfaceKeyDown.mockClear();
-	},
-	play: async ({ canvasElement, step }) => {
-		const alertDialog = await openAlertDialog(canvasElement, /revoke access/i, /revoke access/i);
-
-		await step('a caller-supplied onClick still fires on the refused backdrop click', async () => {
-			fireEvent.click(alertDialog);
-
-			await expect(surfaceClick).toHaveBeenCalledTimes(1);
-			await expectStillOpen(alertDialog);
-		});
-
-		await step('and a caller-supplied onKeyDown still sees Escape', async () => {
-			await userEvent.keyboard('{Escape}');
-
-			await expect(surfaceKeyDown).toHaveBeenCalled();
-			await waitFor(async () => {
-				await expect(alertDialog).toHaveAttribute('data-state', 'closed');
-			});
 		});
 	}
 };
@@ -716,22 +660,19 @@ const FailingAlertDialog = () => {
 						</Button>
 					}
 				>
+					{/*
+					 * Mounted whether or not there is anything to say, so assistive technology has seen
+					 * the region before it becomes live. Only the spacing is conditional. `role` is
+					 * cleared below because `Alert` hardcodes `role='alert'`, itself an assertive live
+					 * region, and nesting one inside this one announces the message twice.
+					 */}
 					<div
-						// Mounted whether or not there is anything to say, which is the whole point. Spacing
-						// is conditional instead: an empty block-level div with no children and no margin
-						// contributes nothing to the layout.
 						aria-live='assertive'
 						aria-atomic='true'
 						className={error === undefined ? undefined : 'mb-1'}
 					>
 						{error !== undefined && (
-							<Alert
-								variant='error'
-								// Clearing `role` is not cosmetic. `Alert` hardcodes `role='alert'`, itself an
-								// assertive live region, and nesting one inside the region above makes the
-								// message announce twice.
-								role={undefined}
-							>
+							<Alert variant='error' role={undefined}>
 								<Icon name='x-circle' />
 								<AlertTitle>Could not archive the channel</AlertTitle>
 								<AlertDescription>{error}</AlertDescription>
@@ -770,9 +711,10 @@ export const FailedAction: Story = {
 
 			const message = await scope.findByText(/the server refused the request/i);
 
-			// Through `waitFor`, because the panel arrives on a 200ms fade and `toBeVisible` fails on
-			// an ancestor whose computed opacity is exactly 0 — which the first frame of that fade is.
-			// It is the transition being waited for, not the assertion, so this cannot pass vacuously.
+			/*
+			 * Through `waitFor`: the panel arrives on a 200ms fade, and `toBeVisible` fails while an
+			 * ancestor's computed opacity is exactly 0, which the first frame of that fade is.
+			 */
 			await waitFor(async () => {
 				await expect(message).toBeVisible();
 			});

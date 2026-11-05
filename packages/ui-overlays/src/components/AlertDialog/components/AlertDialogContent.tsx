@@ -13,16 +13,11 @@ import type { IAlertDialogContent } from '~/components/AlertDialog/AlertDialog.t
 const CancelAction = ({ children }: { children: React.ReactNode }) => {
 	const ref = React.useRef<HTMLButtonElement | null>(null);
 
+	/*
+	 * Not React's `autoFocus` prop, which never reaches the DOM — `focusInitialElement` looks for the
+	 * `[autofocus]` attribute. A layout effect so it lands before the surface calls `showModal()`.
+	 */
 	useIsomorphicLayoutEffect(() => {
-		// The real lowercase attribute, set by hand, because neither alternative works.
-		// `focusInitialElement` honours `[autofocus]` before falling back to the first tabbable
-		// element, and React's `autoFocus` prop never reaches the DOM: react-dom skips it while
-		// setting attributes and calls `.focus()` at mount instead — inside a `<dialog>` that is
-		// still `display: none`, so it focuses nothing. Writing `autofocus` in JSX would set the
-		// attribute and log an "Invalid DOM property" warning on every render.
-		//
-		// A layout effect so the attribute is in place before the surface's own layout effect calls
-		// `showModal()`: a child's effects flush before its parent's in the same commit.
 		ref.current?.setAttribute('autofocus', '');
 	}, []);
 
@@ -76,18 +71,9 @@ export const AlertDialogContent = ({
 			{...props}
 			title={title}
 			description={description}
-			// After the spread, so nothing a caller passes can reach either. The prop type omits
-			// `role`, `showCloseButton` and `icon` as well — this is the second lock, not the only one.
 			role='alertdialog'
 			showCloseButton={false}
 			onRequestClose={(event) => {
-				// One route refused, with no prop to configure it. A native `<dialog>` opened with
-				// `showModal()` does not dismiss on a backdrop click; the shared surface added that by
-				// hand, and an alert dialog opts back out. Escape is left alone: it is deliberate, has
-				// a visible cancel behind it, and the APG pattern mandates it.
-				//
-				// Refusing here rather than on the element's own `onClick` is what keeps a caller's
-				// `onClick` and `onKeyDown` theirs.
 				if (event.source === 'backdrop') event.preventDefault();
 
 				onRequestClose?.(event);

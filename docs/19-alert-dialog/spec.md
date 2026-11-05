@@ -193,9 +193,10 @@ A Storybook `play()` verifies each one, which is how components are tested here.
 - **AC7** — Omitting the title, the description, the cancelling action or the confirming action fails
   to compile.
 - **AC8** — An alert dialog opened from inside a `Sheet` closes only itself.
-- **AC9** — A caller-supplied `onClick` or `onKeyDown` on `AlertDialogContent` reaches the element
-  rather than being silently replaced. The backdrop refusal is implemented through `onRequestClose`,
-  so it must not consume the element's own handlers.
+- **AC9** — _Dropped 5 November 2026; see [Decisions](#decisions)._ The backdrop refusal is
+  implemented through `onRequestClose` and never touches the element's own handlers, which is the
+  half of this that constrained the implementation. The other half is unreachable, and the answer
+  turned out to be the opposite one: restrict the surface rather than widen it.
 - **AC10** — The story at `Dialog.stories.tsx:331` is gone, and `ConfirmationDialog` (`:144`) and
   `Sheet`'s `Confirmation` (`:645`) have moved into the alert dialog's own stories. `Sheet`'s veto
   stays covered by `Dialog`'s `GuardedClose`, so the move leaves nothing untested.
@@ -248,6 +249,36 @@ what a caller cannot get right by hand, and documents everything else.
   is required here in spirit — as two slots — because an alert dialog has neither, so its actions are
   the only visible way out.
 
+- **AC9 dropped, and the content surface restricted instead** _(5 November 2026)_. The Scope table
+  claims every requirement is expressible against the API `18` shipped. AC9 was never in that table
+  and is the one that is not.
+
+  [`OverlaySurface`](../../packages/ui-overlays/src/components/Overlay/OverlaySurface.tsx) renders
+  `<dialog {...props} … {...dialogHandlers}>`, and `dialogHandlers` —
+  `{ onCancel, onKeyDown, onClick, onClose }` — is spread **last**. So those four, plus `ref`,
+  `data-slot` and `data-state`, are overwritten with nothing to notice it. Measured during
+  implementation: a spy passed as `onClick` to `AlertDialogContent` received zero calls. That is
+  true of `Dialog` and `Sheet` as shipped and has nothing to do with the alert dialog, which reaches
+  for neither handler.
+
+  Composing them in `OverlaySurface` would have been four lines, and no call site passes any of them
+  (grepped across `packages/` and `apps/`), so nothing observable would have changed. It was
+  rejected because the better answer is the opposite one. `IDialogContent` already removes `title`,
+  `open`, `onCancel` and `onClose` precisely because the surface owns them — and leaves `onClick`,
+  `onKeyDown`, `ref`, `slot`, `role`, `popover` and `aria-modal` in, so the type advertises props
+  the component discards or that would break it. `slot` is the sharpest: `DialogContent` passes
+  `slot='dialog'` _before_ `{...props}`, so a caller renames every `data-slot` in the tree.
+
+  `IAlertDialogContent` therefore omits all seven, and `AlertDialog.types.spec.ts` pins it. Applying
+  the same cut to `IDialogContent` and `IOverlaySurface` is a breaking narrowing across three
+  overlays, so it is a deliverable of its own.
+
 ## Open Questions
 
-None.
+**What a content component should let a caller override at all.** Raised 5 November 2026 off the
+back of AC9, and deliberately not answered here. The shape of the answer is three buckets — props
+the component owns and removes from the type, props it mediates and documents a precedence for
+(`className`, the `aria-*` trio), and props that are nobody's business but the caller's (`id`,
+`style`, `data-*`). The omission belongs on `IOverlaySurface` so all three overlays inherit it
+rather than each content type repeating the list. Needs its own deliverable, alongside
+[`22`](../22-overlay-export-cleanup/spec.md).
