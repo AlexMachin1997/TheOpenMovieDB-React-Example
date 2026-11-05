@@ -9,6 +9,8 @@ import {
 	AlertDialogContent,
 	AlertDialogTrigger
 } from '~/components/AlertDialog';
+import type { AlertDialogRef } from '~/components/AlertDialog';
+import { Dialog, DialogContent, DialogTrigger } from '~/components/Dialog';
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from '~/components/Sheet';
 
 const meta: Meta<typeof AlertDialog> = {
@@ -136,6 +138,10 @@ import { Button } from '@repo/ui-core';
 			await expect(alertDialog).toHaveAccessibleDescription(/cannot be undone/i);
 		});
 
+		await step('the page behind it is locked, and does not shift', async () => {
+			await expect(document.body).toHaveStyle({ overflow: 'hidden' });
+		});
+
 		await step('there is no close button, and nothing else to press either', async () => {
 			await expect(scope.queryByRole('button', { name: /^close$/i })).not.toBeInTheDocument();
 			await expect(scope.getAllByRole('button')).toHaveLength(2);
@@ -150,6 +156,12 @@ import { Button } from '@repo/ui-core';
 
 			await waitFor(async () => {
 				await expect(alertDialog).toHaveAttribute('data-state', 'closed');
+			});
+		});
+
+		await step('the page is released once it has finished closing', async () => {
+			await waitFor(async () => {
+				await expect(document.body).not.toHaveStyle({ overflow: 'hidden' });
 			});
 		});
 	}
@@ -729,6 +741,472 @@ export const FailedAction: Story = {
 				await expect(alertDialog).toHaveAttribute('data-state', 'closed');
 			});
 			await expect(canvas.getByText('Channel archived.')).toBeInTheDocument();
+		});
+	}
+};
+
+/* -------------------------------------------------------------------------------------------------
+ * The same surface Dialog has
+ * ---------------------------------------------------------------------------------------------- */
+
+/**
+ * A body long enough to scroll, handled the way `DialogContent` handles it: fixed header and footer,
+ * content scrolling between them.
+ *
+ * The focus assertion is what earns this story. A scrollable content area becomes a tab stop and
+ * sits *before* the footer in the DOM, so the cancelling action is no longer the first tabbable
+ * element — and focus still lands on it, because the component marks that action rather than relying
+ * on document order.
+ */
+export const LongContent: Story = {
+	render: () => (
+		<AlertDialog>
+			<AlertDialogTrigger asChild>
+				<Button variant='destructive'>Delete 24 repositories</Button>
+			</AlertDialogTrigger>
+			<AlertDialogContent
+				title='Delete these repositories?'
+				description='All 24 go at once, with every branch, issue and release in them. This cannot be undone.'
+				cancel={<Button variant='outline'>Keep them</Button>}
+				confirm={
+					<AlertDialogClose asChild>
+						<Button variant='destructive'>Delete all 24</Button>
+					</AlertDialogClose>
+				}
+			>
+				{/* Long enough to overflow `max-h-[90vh]` on any viewport the suite runs at. */}
+				<ul className='list-disc space-y-3 pl-5 text-sm'>
+					{Array.from({ length: 24 }, (_, index) => (
+						<li key={index}>
+							acme/service-{String(index + 1).padStart(2, '0')} — {(index + 1) * 73} commits,{' '}
+							{index % 4} open issues, last pushed {index + 1} days ago
+						</li>
+					))}
+				</ul>
+			</AlertDialogContent>
+		</AlertDialog>
+	),
+	play: async ({ canvasElement, step }) => {
+		const alertDialog = await openAlertDialog(
+			canvasElement,
+			/delete 24 repositories/i,
+			/delete these repositories/i
+		);
+		const scope = within(alertDialog);
+
+		await step('the body is scrollable, so it is reachable by keyboard', async () => {
+			const area = alertDialog.querySelector<HTMLElement>('[data-slot="dialog-content-area"]');
+
+			await expect(area).not.toBeNull();
+			await waitFor(async () => {
+				await expect(area).toHaveAttribute('tabindex', '0');
+			});
+		});
+
+		await step('and focus is still on cancel, not on the scroll container', async () => {
+			await expect(scope.getByRole('button', { name: /keep them/i })).toHaveFocus();
+		});
+	}
+};
+
+/**
+ * `className` lands on the panel, as it does on `DialogContent`. The dialog element around it is
+ * identical for every overlay in the package, so there would be nothing to style there.
+ */
+export const CustomStyled: Story = {
+	render: () => (
+		<AlertDialog>
+			<AlertDialogTrigger asChild>
+				<Button variant='destructive'>Wipe all data</Button>
+			</AlertDialogTrigger>
+			<AlertDialogContent
+				className='border-destructive sm:max-w-[420px]'
+				title='Wipe everything?'
+				description='Every record in this workspace is removed. There is no backup and no undo.'
+				cancel={<Button variant='outline'>Back out</Button>}
+				confirm={
+					<AlertDialogClose asChild>
+						<Button variant='destructive'>Wipe it</Button>
+					</AlertDialogClose>
+				}
+			/>
+		</AlertDialog>
+	),
+	play: async ({ canvasElement, step }) => {
+		const alertDialog = await openAlertDialog(canvasElement, /wipe all data/i, /wipe everything/i);
+
+		await step('the class reaches the panel, not the dialog element', async () => {
+			const panel = alertDialog.querySelector('[data-slot="dialog-content"]');
+
+			await expect(panel).toHaveClass('border-destructive');
+			await expect(alertDialog).not.toHaveClass('border-destructive');
+		});
+	}
+};
+
+/* -------------------------------------------------------------------------------------------------
+ * Driving it from outside
+ * ---------------------------------------------------------------------------------------------- */
+
+const RefDrivenAlertDialog = ({ controlled }: { controlled: boolean }) => {
+	const alertDialogRef = React.useRef<AlertDialogRef>(undefined);
+	const [open, setOpen] = React.useState(false);
+
+	/*
+	 * Two modes from one component, as `Dialog`'s equivalent does. The handle has to work in both:
+	 * driving internal state directly would make it a no-op the moment a caller controls the overlay.
+	 */
+	const controlledProps = controlled ? { open, onOpenChange: setOpen } : {};
+
+	return (
+		<div className='flex flex-col items-start gap-4'>
+			<div className='flex gap-2'>
+				<Button variant='outline' onClick={() => alertDialogRef.current?.open()}>
+					Open via Ref
+				</Button>
+				<Button variant='outline' onClick={() => alertDialogRef.current?.toggle()}>
+					Toggle via Ref
+				</Button>
+			</div>
+			{controlled && <p>Alert dialog is currently: {open ? 'Open' : 'Closed'}</p>}
+			<AlertDialog ref={alertDialogRef} {...controlledProps}>
+				<AlertDialogContent
+					title='Revoke every session?'
+					description='Everyone signed in anywhere is signed out immediately.'
+					cancel={<Button variant='outline'>Leave them</Button>}
+					confirm={
+						<Button variant='destructive' onClick={() => alertDialogRef.current?.close()}>
+							Revoke all
+						</Button>
+					}
+				/>
+			</AlertDialog>
+		</div>
+	);
+};
+
+export const RefBased: Story = {
+	render: () => <RefDrivenAlertDialog controlled={false} />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		await step('toggle() reads the current state rather than a stale one', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: /toggle via ref/i }));
+			await waitFor(async () => {
+				await expect(documentScope.getByRole('alertdialog')).toHaveAttribute('data-state', 'open');
+			});
+		});
+
+		const alertDialog = await documentScope.findByRole<HTMLDialogElement>('alertdialog');
+
+		await step('the confirming action closes it through the handle', async () => {
+			await userEvent.click(within(alertDialog).getByRole('button', { name: /revoke all/i }));
+			await waitFor(async () => {
+				await expect(alertDialog).toHaveAttribute('data-state', 'closed');
+			});
+		});
+
+		await step('open() still works after a full cycle', async () => {
+			await waitFor(async () => {
+				await expect(documentScope.queryByRole('alertdialog')).not.toBeInTheDocument();
+			});
+
+			await userEvent.click(canvas.getByRole('button', { name: /open via ref/i }));
+			await waitFor(async () => {
+				await expect(documentScope.getByRole('alertdialog')).toHaveAttribute('data-state', 'open');
+			});
+		});
+	}
+};
+
+export const RefWithControlled: Story = {
+	render: () => <RefDrivenAlertDialog controlled />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		/*
+		 * The regression guard. A handle that wrote to internal state would leave the controlled
+		 * render — and this readout — untouched while the overlay appeared to open.
+		 */
+		await step('the handle writes through the controlled prop, not around it', async () => {
+			await expect(canvas.getByText(/currently: Closed/i)).toBeInTheDocument();
+
+			await userEvent.click(canvas.getByRole('button', { name: /open via ref/i }));
+			await waitFor(async () => {
+				await expect(canvas.getByText(/currently: Open/i)).toBeInTheDocument();
+			});
+		});
+
+		await step('and close() comes back through it too', async () => {
+			const alertDialog = await documentScope.findByRole('alertdialog');
+			await userEvent.click(within(alertDialog).getByRole('button', { name: /revoke all/i }));
+
+			await waitFor(async () => {
+				await expect(canvas.getByText(/currently: Closed/i)).toBeInTheDocument();
+			});
+		});
+	}
+};
+
+const ControlledAlertDialogComponent = () => {
+	const [open, setOpen] = React.useState(false);
+	const [removed, setRemoved] = React.useState(false);
+
+	return (
+		<div className='flex flex-col items-start gap-4'>
+			<div className='flex gap-2'>
+				<Button variant='destructive' onClick={() => setOpen(true)}>
+					Remove member
+				</Button>
+				<Button variant='outline' onClick={() => setOpen(false)}>
+					Close from outside
+				</Button>
+			</div>
+			<AlertDialog open={open} onOpenChange={setOpen}>
+				<AlertDialogContent
+					title='Remove this member?'
+					description='They lose access to every project in the workspace straight away.'
+					cancel={<Button variant='outline'>Keep them</Button>}
+					confirm={
+						<Button
+							variant='destructive'
+							onClick={() => {
+								setRemoved(true);
+								setOpen(false);
+							}}
+						>
+							Remove
+						</Button>
+					}
+				/>
+			</AlertDialog>
+			<p className='text-muted-foreground text-sm'>
+				{removed ? 'Member removed.' : 'Member active.'}
+			</p>
+		</div>
+	);
+};
+
+/** No trigger at all — driven from React state, as `Dialog`'s `ControlledDialog` is. */
+export const Controlled: Story = {
+	render: () => <ControlledAlertDialogComponent />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const alertDialog = await openAlertDialog(
+			canvasElement,
+			/^remove member$/i,
+			/remove this member/i
+		);
+
+		await step('a button outside the overlay closes it', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: /close from outside/i }));
+
+			await waitFor(async () => {
+				await expect(alertDialog).toHaveAttribute('data-state', 'closed');
+			});
+			await expect(canvas.getByText('Member active.')).toBeInTheDocument();
+		});
+	}
+};
+
+/* -------------------------------------------------------------------------------------------------
+ * Labelling
+ * ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Caller-supplied ARIA beats what the component would have generated, the precedence
+ * `DialogContent` applies. The required `title` and `description` still render — neither can be
+ * suppressed honestly — they simply stop being what names and describes the overlay.
+ */
+export const CallerSuppliedAria: Story = {
+	render: () => (
+		<AlertDialog defaultOpen>
+			<AlertDialogContent
+				title='The prop heading'
+				description='The prop copy'
+				aria-labelledby='external-alert-heading'
+				aria-describedby='external-alert-copy'
+				cancel={<Button variant='outline'>Cancel</Button>}
+				confirm={
+					<AlertDialogClose asChild>
+						<Button variant='destructive'>Confirm</Button>
+					</AlertDialogClose>
+				}
+			>
+				<h2 id='external-alert-heading'>Named from outside</h2>
+				<p id='external-alert-copy'>Described from outside</p>
+			</AlertDialogContent>
+		</AlertDialog>
+	),
+	play: async ({ step }) => {
+		const alertDialog = await within(document.body).findByRole('alertdialog');
+
+		await step('a caller-supplied aria-labelledby beats the title prop', async () => {
+			await expect(alertDialog).toHaveAttribute('aria-labelledby', 'external-alert-heading');
+			await expect(alertDialog).toHaveAccessibleName('Named from outside');
+		});
+
+		await step('and a caller-supplied aria-describedby wins too', async () => {
+			await expect(alertDialog).toHaveAttribute('aria-describedby', 'external-alert-copy');
+			await expect(alertDialog).toHaveAccessibleDescription('Described from outside');
+		});
+	}
+};
+
+/* -------------------------------------------------------------------------------------------------
+ * Guarding another overlay
+ * ---------------------------------------------------------------------------------------------- */
+
+/**
+ * The flow ADR-8's veto was built for, and the pairing `Dialog`'s `GuardedClose` had to demonstrate
+ * with a nested `Dialog` because this component did not exist yet.
+ *
+ * Note which overlay owns which job. The `Dialog` owns the veto and refuses its own close while the
+ * form is dirty; the alert dialog owns nothing but the question. Discarding is the caller closing
+ * their own overlay through state, which bypasses `onRequestClose` entirely — which is exactly why
+ * it works here.
+ */
+const GuardedByAlertDialog = () => {
+	const [dialogOpen, setDialogOpen] = React.useState(false);
+	const [confirmOpen, setConfirmOpen] = React.useState(false);
+	const [name, setName] = React.useState('Quarterly report');
+	const [saved, setSaved] = React.useState('Quarterly report');
+
+	const dirty = name !== saved;
+
+	return (
+		<>
+			<Dialog
+				open={dialogOpen}
+				onOpenChange={(next) => {
+					setDialogOpen(next);
+					if (next) setName(saved);
+				}}
+			>
+				<DialogTrigger asChild>
+					<Button variant='outline'>Edit project</Button>
+				</DialogTrigger>
+				<DialogContent
+					title='Edit project'
+					description='Change the name, then try to leave without saving.'
+					onRequestClose={(event) => {
+						if (!dirty) return;
+
+						event.preventDefault();
+						setConfirmOpen(true);
+					}}
+					footer={
+						<Button
+							disabled={!dirty}
+							onClick={() => {
+								setSaved(name);
+								setDialogOpen(false);
+							}}
+						>
+							Save
+						</Button>
+					}
+				>
+					<div className='grid gap-2'>
+						<label htmlFor='guarded-name' className='text-sm font-medium'>
+							Project name
+						</label>
+						<input
+							id='guarded-name'
+							value={name}
+							onChange={(event) => setName(event.target.value)}
+							className='rounded-md border px-3 py-2'
+						/>
+					</div>
+				</DialogContent>
+			</Dialog>
+
+			<AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+				<AlertDialogContent
+					title='Discard your changes?'
+					description='The edits you have made to this project will be thrown away.'
+					cancel={<Button variant='outline'>Keep editing</Button>}
+					confirm={
+						<Button
+							variant='destructive'
+							onClick={() => {
+								setConfirmOpen(false);
+								setDialogOpen(false);
+							}}
+						>
+							Discard
+						</Button>
+					}
+				/>
+			</AlertDialog>
+		</>
+	);
+};
+
+export const GuardingADialog: Story = {
+	render: () => <GuardedByAlertDialog />,
+	play: async ({ canvasElement, step }) => {
+		const canvas = within(canvasElement);
+		const documentScope = within(document.body);
+
+		await userEvent.click(canvas.getByRole('button', { name: /edit project/i }));
+		const dialog = await documentScope.findByRole<HTMLDialogElement>('dialog');
+
+		/*
+		 * `data-state` rather than absence from the document. A closing overlay stays mounted and
+		 * `open` for the length of its exit animation, so "no longer in the document" is a claim about
+		 * timing on top of the one actually being made.
+		 */
+		const expectDismissed = async (overlay: Element) => {
+			await waitFor(async () => {
+				await expect(overlay).toHaveAttribute('data-state', 'closed');
+			});
+		};
+
+		await step('a clean dialog closes on Escape like any other', async () => {
+			await userEvent.keyboard('{Escape}');
+
+			await expectDismissed(dialog);
+			await expect(documentScope.queryByRole('alertdialog')).not.toBeInTheDocument();
+		});
+
+		await step('reopen it and make it dirty', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: /edit project/i }));
+			await waitFor(async () => {
+				await expect(dialog).toHaveAttribute('data-state', 'open');
+			});
+
+			await userEvent.type(within(dialog).getByLabelText(/project name/i), ' v2');
+		});
+
+		await step('now Escape is refused, and asks instead', async () => {
+			await userEvent.keyboard('{Escape}');
+
+			const confirmation = await documentScope.findByRole('alertdialog');
+			await expectStillOpen(dialog);
+			await expect(confirmation).toHaveAccessibleName(/discard your changes/i);
+		});
+
+		await step('cancelling the question leaves the edit and the dialog alone', async () => {
+			const confirmation = documentScope.getByRole('alertdialog');
+			await userEvent.click(within(confirmation).getByRole('button', { name: /keep editing/i }));
+
+			await expectDismissed(confirmation);
+			await expectStillOpen(dialog);
+			await expect(within(dialog).getByLabelText(/project name/i)).toHaveValue(
+				'Quarterly report v2'
+			);
+		});
+
+		await step('confirming it closes both', async () => {
+			await userEvent.keyboard('{Escape}');
+			const confirmation = await documentScope.findByRole('alertdialog');
+			await userEvent.click(within(confirmation).getByRole('button', { name: /^discard$/i }));
+
+			await expectDismissed(confirmation);
+			await expectDismissed(dialog);
 		});
 	}
 };

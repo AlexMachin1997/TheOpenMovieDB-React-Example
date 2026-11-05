@@ -5,6 +5,7 @@ export {
 	AlertDialogContent,
 	AlertDialogTrigger
 } from '~/components/AlertDialog';
+export type { AlertDialogRef } from '~/components/AlertDialog';
 
 // Dialog
 export {

@@ -10,3 +10,4 @@ export type {
 	IAlertDialogContent,
 	IAlertDialogTrigger
 } from '~/components/AlertDialog/AlertDialog.types';
+export type { AlertDialogRef } from '~/components/AlertDialog/types/alert-dialog-ref';
