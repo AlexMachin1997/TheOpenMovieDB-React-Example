@@ -96,11 +96,12 @@ Each phase is verified and committed before the next starts.
 
 ### Phase 1: Types
 
-- [ ] `Image.types.ts` as in decision 1, with per-prop JSDoc.
-- [ ] `Image.types.spec.ts`: one `@ts-expect-error` line each for a CSS length (AC3), no shape (AC4),
-      both shapes (AC5), and `alt` with `decorative`. `vitest run` does not type-check, so
-      `pnpm check-types` is the gate. Prove it fires first by deleting one `@ts-expect-error` and
-      watching the build fail.
+- [x] `Image.types.ts` as in decision 1, with per-prop JSDoc. It also narrows `loading` to
+      `'lazy' | 'eager'` and declares `onError`/`onLoad` so their JSDoc carries the cascade rules.
+- [x] `Image.types.spec.ts`: 7 cases, covering a CSS length (AC3), no shape and half a shape (AC4),
+      both shapes and `unsized` + `ratio` (AC5), ratios outside the set, name vs `decorative`, and
+      `aria-label`/`title`. Proved: deleting the first directive for each of AC3, AC4 and AC5 in turn
+      failed `check-types` with `TS2322` on that line.
 
 ### Phase 2: Rendering
 
