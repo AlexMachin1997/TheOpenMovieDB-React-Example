@@ -77,9 +77,33 @@ const startedAt = (loaded: Record<string, unknown>) =>
 const toFallback = (img: HTMLElement) =>
 	waitFor(() => expect(img).toHaveAttribute('data-state', 'fallback'), { timeout: 3000 });
 
+/**
+ * Every story's `console.warn`, swapped for a spy.
+ *
+ * Image's diagnostics fire from effects and from the error handler, which can run before `play()`
+ * does — so the spy is installed in `beforeEach`, not in the test body. Installed for the whole
+ * file, so the stories that must stay silent can say so too.
+ */
+const warnSpy = fn();
+
+/** Image's own diagnostics, ignoring any unrelated warning that happened to land on the spy. */
+const imageWarnings = () =>
+	warnSpy.mock.calls
+		.map((call) => String(call[0]))
+		.filter((message) => message.startsWith('[ui-core] Image'));
+
 const meta: Meta<IImage> = {
 	title: 'UI Core/Image',
 	component: Image,
+	beforeEach: () => {
+		const original = console.warn;
+		warnSpy.mockClear();
+		console.warn = warnSpy;
+
+		return () => {
+			console.warn = original;
+		};
+	},
 	// Stamped before the story renders, so `imageRequestsSince` sees this story's requests only.
 	loaders: [async () => ({ startedAt: performance.now() })],
 	parameters: {
@@ -240,6 +264,8 @@ export const SizedByClassName: Story = {
 		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
 		await expect(img.getBoundingClientRect().width).toBe(130);
 		await expect(img.getBoundingClientRect().height).toBeCloseTo(195, 0);
+		// One dimension sized, the ratio sets the other: nothing to warn about.
+		await expect(imageWarnings()).toEqual([]);
 	}
 };
 
@@ -364,6 +390,10 @@ export const FailedToLoad: Story = {
 		await step('The caller’s onError ran once, after the component handled it', async () => {
 			await expect(args.onError).toHaveBeenCalledTimes(1);
 		});
+
+		await step('A failed primary is an expected state, so nothing warns', async () => {
+			await expect(imageWarnings()).toEqual([]);
+		});
 	}
 };
 
@@ -474,6 +504,43 @@ export const Decorative: Story = {
 			if (failed !== null) await toFallback(failed);
 			await expect(within(canvasElement).queryAllByRole('img')).toEqual([]);
 		});
+
+		await step('An empty name on purpose does not warn', async () => {
+			await expect(imageWarnings()).toEqual([]);
+		});
+	}
+};
+
+/** `alt=""` without `decorative` might be an accident, so it warns. */
+export const EmptyAlt: Story = {
+	args: {
+		src: fixtureUrl('empty-alt', { w: 300, h: 450 }),
+		ratio: '2/3',
+		alt: '',
+		className: 'w-[200px]'
+	},
+	play: async () => {
+		await waitFor(() => expect(imageWarnings()).toHaveLength(1));
+		await expect(imageWarnings()[0]).toContain('`alt` is empty');
+	}
+};
+
+/**
+ * Both dimensions fixed in `className`: the box is the caller's shape, not 2:3, so the ratio does
+ * nothing. `PersonSidebar` does exactly this today. The type system cannot see it, so it warns.
+ */
+export const RatioOverriddenByClassName: Story = {
+	args: {
+		src: fixtureUrl('ratio-overridden', { w: 300, h: 450 }),
+		ratio: '2/3',
+		alt: 'A profile photo of Zendaya',
+		className: 'h-[150px] w-[300px]'
+	},
+	play: async ({ canvasElement }: PlayContext) => {
+		const img = within(canvasElement).getByRole('img');
+		await expect(boxRatio(img)).toBe(2);
+		await waitFor(() => expect(imageWarnings()).toHaveLength(1));
+		await expect(imageWarnings()[0]).toContain('`ratio="2/3"` is not taking effect');
 	}
 };
 
@@ -566,6 +633,15 @@ export const CustomFallbackFails: Story = {
 		await step('onError ran exactly once', async () => {
 			await expect(args.onError).toHaveBeenCalledTimes(1);
 		});
+
+		await step(
+			'A warning names the fallback that failed, since the caller cannot see it',
+			async () => {
+				const warnings = imageWarnings();
+				await expect(warnings).toHaveLength(1);
+				await expect(warnings[0]).toContain(String(args.fallback));
+			}
+		);
 	}
 };
 

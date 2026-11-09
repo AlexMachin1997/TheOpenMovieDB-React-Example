@@ -132,12 +132,16 @@ Each phase is verified and committed before the next starts.
 
 ### Phase 4: Warnings
 
-- [ ] The failing caller `fallback`, named in the message (AC13). No warning when only the primary
+- [x] The failing caller `fallback`, named in the message (AC13). No warning when only the primary
       fails.
-- [ ] `alt=""` without `decorative` (AC17).
-- [ ] A ratio that is not taking effect (decision 9).
-- [ ] Stories that spy on `console.warn` for each, plus one asserting the primary-only failure stays
-      silent.
+- [x] `alt=""` (or whitespace) without `decorative` (AC17), from an effect so it fires once per
+      change rather than on every render.
+- [x] A ratio that is not taking effect (decision 9), measured in an effect through a ref merged
+      with the caller's own `ref`.
+- [x] A file-wide `console.warn` spy installed in the meta's `beforeEach`. Positive: `EmptyAlt`,
+      `RatioOverriddenByClassName`, `CustomFallbackFails`. Silent: `FailedToLoad`, `Decorative`,
+      `SizedByClassName`. 19/19; the positive stories prove the spy captures, so the silent ones are
+      not vacuous.
 
 ### Phase 5: Docs and export
 
