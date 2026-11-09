@@ -44,6 +44,7 @@ export const ICON_NAMES = [
 	'git-fork',
 	'heart',
 	'home',
+	'image-off',
 	'info',
 	'keyboard',
 	'loader-circle',
