@@ -105,9 +105,12 @@ Each phase is verified and committed before the next starts.
 
 ### Phase 2: Rendering
 
-- [ ] `Image.tsx`: one `<img>`, `loading='lazy'` default, shape → attributes or class, `alt` only,
+- [x] `Image.tsx`: one `<img>`, `loading='lazy'` default, shape → attributes or class, `alt` only,
       no `aria-label` and no `title`, native attributes passed through.
-- [ ] Stories with `play()` for AC1, AC2, AC6, AC8, AC18, AC19 and AC20.
+- [x] Stories with `play()` for AC1, AC2, AC6, AC8, AC18, AC19 and AC20, plus `RatioContained` and
+      `SlowConnection` (3s delay; asserts text below the image does not move). The fixture route
+      answers in headless runs: the two delayed stories take ~1.5s each. Proved: removing
+      `width={width}` failed `IntrinsicSize` with a box 0px wide before load.
 
 ### Phase 3: Fallback and callbacks
 
@@ -143,22 +146,21 @@ at the user's request to mock failures, offline and slow connections. It is a sm
 `apps/storybook/.storybook/`, with no new dependency. It serves a labelled SVG of any size at
 `/__image-fixture`, and query parameters choose the behaviour:
 
-| Query         | Behaves like                                                |
-| ------------- | ----------------------------------------------------------- |
-| `w=300&h=450` | A real image of that intrinsic size                         |
-| `delay=2000`  | A slow or mobile connection: the response starts after 2s   |
-| `hang`        | A request that never completes, for measuring "before load" |
-| `status=500`  | A server error                                              |
-| `abort`       | No connectivity: the socket is dropped with no response     |
+| Query         | Behaves like                                              |
+| ------------- | --------------------------------------------------------- |
+| `w=300&h=450` | A real image of that intrinsic size                       |
+| `delay=2000`  | A slow or mobile connection: the response starts after 2s |
+| `status=500`  | A server error                                            |
+| `abort`       | No connectivity: the socket is dropped with no response   |
 
 The techniques the ACs need:
 
-| Need                      | How                                                                                                                                                              |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A failing source          | `status=500` or `abort` on the fixture route. Both are real network failures, so the component's `error` path runs exactly as it would in the app.               |
-| "No request was issued"   | `performance.getEntriesByType('resource')` after the failure has nothing beyond the primary request: not for a fallback, not for the document URL (AC10, AC11).  |
-| "Before the source loads" | `hang` on the fixture route, so the box is measured while the request is still open (AC1, AC2).                                                                  |
-| Both colour schemes       | The same story twice, once inside `<div className='dark'>`. Compare the fallback's computed `background-color` with a `bg-muted` probe in the same scope (AC12). |
+| Need                      | How                                                                                                                                                                                                                                                                   |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A failing source          | `status=500` or `abort` on the fixture route. Both are real network failures, so the component's `error` path runs exactly as it would in the app.                                                                                                                    |
+| "No request was issued"   | `performance.getEntriesByType('resource')` after the failure has nothing beyond the primary request: not for a fallback, not for the document URL (AC10, AC11).                                                                                                       |
+| "Before the source loads" | `delay=1500`, measured while `img.complete` is still `false`, then measured again after load (AC1, AC2). A `hang` that never answers was dropped: the dev server is HTTP/1.1, so each open request holds one of Chromium's six connections and starves later stories. |
+| Both colour schemes       | The same story twice, once inside `<div className='dark'>`. Compare the fallback's computed `background-color` with a `bg-muted` probe in the same scope (AC12).                                                                                                      |
 
 AC15 and AC16 need `src` to change after a failure. A story `render` with a button that swaps `src`
 does that. It is a test fixture for the component's own reset behaviour, not app state.

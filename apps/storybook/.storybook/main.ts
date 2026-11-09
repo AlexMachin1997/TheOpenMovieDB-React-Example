@@ -3,6 +3,7 @@ import { mergeConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 import remarkGfm from 'remark-gfm';
+import { imageFixtures } from './imageFixtures';
 
 const config: StorybookConfig = {
 	// `packages/*/src`, not `packages/**/src`. pnpm symlinks every workspace package into its
@@ -48,7 +49,8 @@ const config: StorybookConfig = {
 						'../../packages/ui-forms/tsconfig.json'
 					]
 				}),
-				tailwindcss()
+				tailwindcss(),
+				imageFixtures()
 			]
 		});
 	}
