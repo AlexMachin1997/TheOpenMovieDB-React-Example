@@ -103,6 +103,34 @@ To show the whole file instead, letterboxed inside the box, add `object-contain`
 
 Reserves nothing. The layout moves when the image loads. It exists so that leaving the shape out is a decision someone wrote down, not something they forgot.
 
+If you know one dimension but not the other, fix that one in `className` and it is still reserved. See [Logos](#logos).
+
+### Logos
+
+A logo looks like the intrinsic-size case, but only if the integers are **the file's own proportions**. `width` and `height` set the box only until the file arrives; after that the file's shape wins. Passing the size of the slot instead (`width={140} height={140}` for a logo that is really 185×133) gives a box that changes shape the moment the logo loads.
+
+For an SVG, read the proportions from its `viewBox`, then size it on the page with `className`:
+
+```tsx
+// viewBox="0 0 185.04 133.4": 140 wide, 101 tall, before and after it loads
+<Image src={tmdbLogoUrl} width={185} height={133} alt='The Movie Database' className='w-[140px]' />
+```
+
+<Canvas of={ImageStories.Logo} />
+
+When only one dimension is known, as with a TV network's logo that TMDB serves 30px tall at whatever width it needs, use `unsized` and fix the known dimension. The height is reserved; the width arrives with the file.
+
+```tsx
+<Image
+	src={networkLogoUrl}
+	unsized
+	alt={`The network logo for ${network}`}
+	className='h-[30px] w-auto'
+/>
+```
+
+<Canvas of={ImageStories.LogoOfUnknownWidth} />
+
 ```tsx
 <Image src={bannerUrl} unsized alt='Festival banner' />
 ```

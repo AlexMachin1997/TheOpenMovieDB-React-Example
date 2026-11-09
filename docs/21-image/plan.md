@@ -70,13 +70,11 @@ Evidence is the story or spec case that settles each; every story runs in the su
 - [x] **SC1** — No shape does not compile (AC4); the opt-out is the explicit `unsized`.
 - [x] **SC2** — `alt` is the only naming prop, and is what `getByRole` resolves (AC7, AC8).
 - [x] **SC3** — AC10 and AC11.
-- [ ] **SC4** — not met; `EntertainmentSidebar`'s network logo has no working mapping. Every other
-      form has a story (2:3 at 300px and 130px, 16:9 at 320px, integer sizes, `object-contain` with a
-      ratio), none needing `!important`. The logo was mapped to `width={80} height={40}`
-      `object-contain`; a `LogoContained` story proved that wrong — a 120×30 file turned the 80×40
-      box into 80×20 once it loaded, because integer attributes give `aspect-ratio: auto 80 / 40`
-      and `auto` yields to the file's own ratio. Integers only hold when they are the file's real
-      size.
+- [x] **SC4** — Every mapping in the [migration notes](#migration-notes) has a story: 2:3 at 300px and
+      130px, 16:9 at 320px, `object-contain` with a ratio, a logo at its real proportions (`Logo`),
+      and a logo of unknown width (`LogoOfUnknownWidth`). None needs `!important`. Both logo
+      mappings were also checked against the real TMDB files in Chrome: 140×101 and 190×25, the
+      same before and after load.
 - [x] **SC5** — `Image.mdx`, "Choosing a shape": a table of which form fits what you know, and a
       default for when in doubt.
 - [x] **SC6** — [Migration notes](#migration-notes).
@@ -136,6 +134,12 @@ The spec settled behaviour. These are the shapes it left open.
   hand and the MDX uses `<ArgTypes />`. Checked in the dev server: the props table has all 12 rows.
 - **`Image.utils.ts` is not an allowed file name.** `folderStructure` permits `.constants.ts`, so the
   helpers live there.
+- **Integer sizes only hold when they are the file's own proportions.** With `width` and `height`,
+  the box's ratio is `aspect-ratio: auto w / h`, and `auto` yields to the file's ratio once it
+  loads. The first migration notes passed each logo's slot size, so every logo row was wrong:
+  measured on the real TMDB files, `Footer`'s 140×140 shrank to 140×101 on load and `Menu`'s
+  190×20 grew to 190×25. Logos now map to their `viewBox` proportions, and a logo of unknown width
+  to `unsized` with a fixed height.
 - **Exact pixel comparisons fail on a scaled display.** At a device pixel ratio of 1.65, a 300px box
   measures `299.99997`. Headless Chromium runs at 1, so the suite was green while every size check
   failed in the user's browser. Sizes are compared with `toBeCloseTo(n, 0)`.
@@ -181,22 +185,22 @@ meta's loader takes before render. Warnings go to a file-wide `console.warn` spy
 
 How each current call site maps onto the new API (SC6). For the migration change, not this one.
 
-| Call site              | Today                                                 | New                                                                                                                                               |
-| ---------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Card`                 | `width='100%' height={imageHeight}` + `aspect-square` | `ratio='2/3'`. The width comes from the card. `imageHeight` (175–265px across four callers) retires, so card heights change. Check them visually. |
-| `Recommendation`       | `250px` × `141px` + `aspect-square`                   | `ratio='16/9' className='w-[250px]'`                                                                                                              |
-| `Review`               | `4rem` round photo                                    | Not an `Image`. Use `Avatar` (spec non-goal).                                                                                                     |
-| `MostRecentEpisode`    | `130px` × `230px` + `aspect-square`                   | `ratio='2/3' className='w-[130px]'`. Height becomes 195px, not 230px.                                                                             |
-| `Video`                | `300px` × `169px` + `aspect-video`                    | `ratio='16/9' className='w-[300px]'`                                                                                                              |
-| `EntertainmentHeader`  | `300px` × `450px`, `loading='eager'`                  | `ratio='2/3' className='w-[300px]' loading='eager'`                                                                                               |
-| `Footer`               | `width={140} height={140}`                            | Unchanged.                                                                                                                                        |
-| `Menu`, square logo    | `75px` × `40px`                                       | `width={75} height={40}`                                                                                                                          |
-| `Menu`, wide logo      | `190px` × `20px`                                      | `width={190} height={20}`                                                                                                                         |
-| `EntertainmentSidebar` | `80px` × `40px` network logo                          | **Open.** Logos vary in shape, so integers do not hold the box (see SC4), and no `ratio` literal is 2:1. Needs a decision before migration.       |
-| `PersonSidebar`        | `unset` + `!h-[450px] !w-[300px]`, `title`            | `ratio='2/3' className='w-[300px]'`. Drop `title`.                                                                                                |
+| Call site              | Today                                                 | New                                                                                                                                                            |
+| ---------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Card`                 | `width='100%' height={imageHeight}` + `aspect-square` | `ratio='2/3'`. The width comes from the card. `imageHeight` (175–265px across four callers) retires, so card heights change. Check them visually.              |
+| `Recommendation`       | `250px` × `141px` + `aspect-square`                   | `ratio='16/9' className='w-[250px]'`                                                                                                                           |
+| `Review`               | `4rem` round photo                                    | Not an `Image`. Use `Avatar` (spec non-goal).                                                                                                                  |
+| `MostRecentEpisode`    | `130px` × `230px` + `aspect-square`                   | `ratio='2/3' className='w-[130px]'`. Height becomes 195px, not 230px.                                                                                          |
+| `Video`                | `300px` × `169px` + `aspect-video`                    | `ratio='16/9' className='w-[300px]'`                                                                                                                           |
+| `EntertainmentHeader`  | `300px` × `450px`, `loading='eager'`                  | `ratio='2/3' className='w-[300px]' loading='eager'`                                                                                                            |
+| `Footer`               | `width={140} height={140}`                            | `width={185} height={133} className='w-[140px]'`. The file's viewBox is 185.04×133.4, so the box becomes 140×101; today it starts 140×140 and shrinks on load. |
+| `Menu`, square logo    | `75px` × `40px`                                       | `width={185} height={133} className='h-10 w-auto'`. Same file as `Footer`; 40px tall gives 55×40, not 75×40.                                                   |
+| `Menu`, wide logo      | `190px` × `20px`                                      | `width={273} height={36} className='w-[190px]'`. viewBox 273.42×35.52, so 190×25; today it starts 190×20 and grows on load.                                    |
+| `EntertainmentSidebar` | `80px` × `40px` network logo                          | `unsized className='h-[30px] w-auto'`. TMDB's `h30` logos are 30px tall at any width, so only the height can be reserved.                                      |
+| `PersonSidebar`        | `unset` + `!h-[450px] !w-[300px]`, `title`            | `ratio='2/3' className='w-[300px]'`. Drop `title`.                                                                                                             |
 
 Every call site also drops `label` and keeps one `alt`. The current `label` strings are the better
 names (`` `Poster for ${title}` `` rather than `title`), so `alt` takes the `label` value.
 
-`Card` and `MostRecentEpisode` change visibly, because their current heights are not 2:3. That is
+The three TMDB logo rows change size slightly, because they now take the files' real proportions instead of distorting them into the old boxes. `Card` and `MostRecentEpisode` change visibly, because their current heights are not 2:3. That is
 the point — the old heights were the contradiction — but it wants eyes at migration.

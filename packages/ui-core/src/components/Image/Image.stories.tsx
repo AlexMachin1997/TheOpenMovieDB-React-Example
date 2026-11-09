@@ -270,6 +270,87 @@ export const IntrinsicSize: Story = {
 	}
 };
 
+/**
+ * A logo with known proportions: TMDB's square logo is a 185×133 viewBox. The integers are the
+ * file's own shape, and `className` sets the size on the page, so the box is the same before and
+ * after the file arrives.
+ */
+export const Logo: Story = {
+	args: {
+		src: fixtureUrl('logo', { w: 185, h: 133, delay: 1500 }),
+		width: 185,
+		height: 133,
+		alt: 'The Movie Database',
+		className: 'w-[140px]'
+	},
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Image } from '@repo/ui-core';
+
+<Image src={tmdbLogoUrl} width={185} height={133} alt='The Movie Database' className='w-[140px]' />`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }: PlayContext) => {
+		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
+		const before = img.getBoundingClientRect();
+
+		await step(
+			'Before the file arrives, the box is already 140 wide at the logo’s shape',
+			async () => {
+				await expect(img.complete).toBe(false);
+				await expect(before.width).toBeCloseTo(140, 0);
+				await expect(before.height).toBeCloseTo(140 * (133 / 185), 0);
+			}
+		);
+
+		await step('Once loaded, the box has not moved', async () => {
+			await expect(await settled(img)).toBe('load');
+			await expect(img.getBoundingClientRect().height).toBeCloseTo(before.height, 0);
+		});
+	}
+};
+
+/**
+ * A logo whose width is not known ahead of time. TMDB serves network logos at a fixed height (the
+ * `h30` size) and whatever width the logo needs. Only the height can be reserved, so the image is
+ * `unsized` and `className` fixes the height; the width arrives with the file.
+ */
+export const LogoOfUnknownWidth: Story = {
+	args: {
+		src: fixtureUrl('logo-unknown-width', { w: 120, h: 30, delay: 1500 }),
+		unsized: true,
+		alt: 'The network logo for HBO',
+		className: 'h-[30px] w-auto'
+	},
+	parameters: {
+		docs: {
+			source: {
+				language: 'tsx',
+				code: `import { Image } from '@repo/ui-core';
+
+<Image src={networkLogoUrl} unsized alt={\`The network logo for \${network}\`} className='h-[30px] w-auto' />`
+			}
+		}
+	},
+	play: async ({ canvasElement, step }: PlayContext) => {
+		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
+
+		await step('Before the file arrives, the height is already reserved', async () => {
+			await expect(img.complete).toBe(false);
+			await expect(img.getBoundingClientRect().height).toBeCloseTo(30, 0);
+		});
+
+		await step('Once loaded, the height holds and the width comes from the file', async () => {
+			await expect(await settled(img)).toBe('load');
+			await expect(img.getBoundingClientRect().height).toBeCloseTo(30, 0);
+			await expect(img.getBoundingClientRect().width).toBeCloseTo(120, 0);
+		});
+	}
+};
+
 export const Ratio: Story = {
 	args: {
 		src: fixtureUrl('ratio', { w: 300, h: 450, delay: 1500 }),
