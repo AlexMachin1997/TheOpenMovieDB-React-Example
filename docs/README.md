@@ -19,10 +19,10 @@ deliverable numbers here.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable      | Area          | Status   | Depends on | Docs                                               |
-| --- | ---------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
-| 03  | Focus indicators | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
-| 21  | `Image`          | components    | 🟢 ready | —          | [21-image](21-image/spec.md)                       |
+| ID  | Deliverable      | Area          | Status         | Depends on | Docs                                               |
+| --- | ---------------- | ------------- | -------------- | ---------- | -------------------------------------------------- |
+| 03  | Focus indicators | design system | 📝 draft       | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
+| 21  | `Image`          | components    | 🚧 in progress | —          | [21-image](21-image/spec.md)                       |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -46,7 +46,8 @@ whether `--ring`'s own values change. The design-system audit under **Planned** 
 `21` is the first item lifted out of [`component-inventory.md`](component-inventory.md) (C02), and
 the first of the two that are `ready`. Its open questions were closed in a grilling pass on
 18 September 2026; the API shape, the fallback mechanism and the failure semantics are all settled in
-[Decisions](21-image/spec.md#decisions). It has no dependencies, so it can be planned now.
+[Decisions](21-image/spec.md#decisions). It is being built against its
+[implementation plan](21-image/plan.md).
 
 `19` and `22` were a single deliverable until 4 November 2026. It was scoped as the thin preset
 [`18`'s discovery](18-overlay-api/discovery.md) described, grew a second half — a declared dismissal
