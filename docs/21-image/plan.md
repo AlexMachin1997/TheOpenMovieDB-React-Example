@@ -1,8 +1,8 @@
 # 21 — Image
 
-Status: **built, awaiting review.** As-built record for [`spec.md`](spec.md). One judgement is left
-open on purpose: whether `ratio`'s default crop (`object-cover`) is right for posters, to be decided
-by looking at it in Storybook.
+Status: **shipped.** As-built record for [`spec.md`](spec.md). Left open on purpose: whether
+`ratio`'s default crop (`object-cover`) is right for posters, a judgement for Storybook; and AC10 /
+SC3, partly met until `Icon` bundles its data (decision 5).
 
 ## Outcome
 
