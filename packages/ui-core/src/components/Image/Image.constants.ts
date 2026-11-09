@@ -8,10 +8,3 @@ export const RATIO_VALUES: Record<ImageRatio, number> = { '2/3': 2 / 3, '16/9': 
  * sub-pixel rounding; a box a caller has pinned to another shape misses by far more.
  */
 export const RATIO_TOLERANCE = 0.02;
-
-/** Every diagnostic carries the same prefix as the rest of the package's. */
-export const warn = (message: string) => console.warn(`[ui-core] Image: ${message}`);
-
-/** A source the browser can actually request. Empty and whitespace-only strings are not. */
-export const isUsableSrc = (src: string | null | undefined): src is string =>
-	typeof src === 'string' && src.trim() !== '';

@@ -143,8 +143,10 @@ The spec settled behaviour. These are the shapes it left open.
   that is what Storybook gives a loader.
 - **react-docgen reads nothing from a type-alias props type**, so the meta declares `argTypes` by
   hand and the MDX uses `<ArgTypes />`. Checked in the dev server: the props table has all 12 rows.
-- **`Image.utils.ts` is not an allowed file name.** `folderStructure` permits `.constants.ts`, so the
-  helpers live there.
+- **`Image.utils.ts` is not an allowed file name.** `folderStructure` keeps helpers in a `utils/`
+  folder, one file each, as `Overlay/utils/` and `Popover/utils/` do. They were first parked in
+  `Image.constants.ts` to get past the rule, which was wrong; `isUsableSrc` and `warn` are in
+  `Image/utils/` now, and `.constants.ts` holds only constants.
 - **Integer sizes only hold when they are the file's own proportions.** With `width` and `height`,
   the box's ratio is `aspect-ratio: auto w / h`, and `auto` yields to the file's ratio once it
   loads. The first migration notes passed each logo's slot size, so every logo row was wrong:
