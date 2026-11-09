@@ -38,8 +38,11 @@ The spec settles behaviour. These are the shapes it left open, each with what th
 3. **The opt-out is `unsized`.** It is the explicit form requirement 3 asks for.
 4. **`number` is as far as the type goes.** It rejects `'250px'` (AC3) but cannot reject `1.5`.
    TypeScript has no integer type.
-5. **The built-in fallback is a transparent 1×1 GIF data URI with `bg-muted` painted behind it.** It
-   is one `<img>` (requirement 1), makes no request (AC10), and the token flips under `.dark` (AC12).
+5. **The built-in fallback is a transparent SVG data URI with `bg-muted` painted behind it.** It is
+   one `<img>` (requirement 1), makes no request (AC10), and the token flips under `.dark` (AC12).
+   _Changed in Phase 3 from a 1×1 GIF:_ with integer attributes the box's ratio is
+   `aspect-ratio: auto w / h`, and `auto` lets the loaded image's own ratio win, so a square pixel
+   turned a 2:3 box square once it loaded. The SVG carries the caller's `width` × `height` instead.
    The `alt` stays the caller's. The fallback is a flat muted fill with no icon: an icon would need
    either a wrapper element or a fetched or sandboxed SVG, and all three are ruled out.
 6. **Default classes.** The ratio form gets `w-full object-cover` plus the ratio class. The intrinsic
@@ -114,11 +117,18 @@ Each phase is verified and committed before the next starts.
 
 ### Phase 3: Fallback and callbacks
 
-- [ ] The cascade from primary to caller `fallback` to built-in, held in state keyed on `src`, so a
+- [x] The cascade from primary to caller `fallback` to built-in, held in state keyed on `src`, so a
       new `src` resets during render with no effect (AC15) and the same `src` never retries (AC16).
-- [ ] An empty or missing `src` goes straight to the built-in fallback and never reaches the DOM
+      `srcSet` and `sizes` are dropped once off the primary, or the browser would keep loading a
+      candidate instead of the fallback. `data-state="fallback"` marks any non-primary stage.
+- [x] An empty or missing `src` goes straight to the built-in fallback and never reaches the DOM
       (AC11).
-- [ ] Stories with `play()` for AC7, AC9, AC10, AC11, AC12, AC14, AC15 and AC16.
+- [x] Stories with `play()` for AC7, AC9, AC10, AC11, AC12, AC14, AC15 and AC16: `FailedToLoad`
+      (500), `Offline` (socket dropped), `EmptySrc`, `MissingSrc`, `Decorative`,
+      `BothColourSchemes`, `CustomFallback`, `CustomFallbackFails` and `SrcChangesAfterFailure`.
+      17/17. Proved: disabling the reset-on-`src` block failed `SrcChangesAfterFailure`. The
+      "requested nothing" checks are not vacuous — the same buffer query counts the one 500
+      request in `SrcChangesAfterFailure`.
 
 ### Phase 4: Warnings
 

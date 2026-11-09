@@ -9,6 +9,12 @@ import * as React from 'react';
 export type ImageRatio = '2/3' | '16/9';
 
 /**
+ * Which source is showing. It only ever moves forward — `primary`, then the caller's `fallback`,
+ * then the built-in one — until `src` changes.
+ */
+export type ImageStage = 'primary' | 'fallback' | 'builtIn';
+
+/**
  * The image's shape is known from the file: its real width and height, in pixels.
  *
  * Both are written to the HTML attributes, so the browser reserves a box of that ratio before the

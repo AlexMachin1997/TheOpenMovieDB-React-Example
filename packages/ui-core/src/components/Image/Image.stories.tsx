@@ -1,6 +1,8 @@
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, waitFor, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
+import { cn } from '@repo/tailwind-config';
 import { Image } from '~/components/Image/Image';
 import type { IImage } from '~/components/Image/Image.types';
 
@@ -49,9 +51,37 @@ const boxRatio = (el: Element) => {
 	return Math.round((width / height) * 100) / 100;
 };
 
+/**
+ * Every image request the page has started since `since`, from the Resource Timing buffer.
+ *
+ * Filtered to `img` initiators so the module requests of other stories sharing the page do not
+ * count. A request for a fallback, or for the document URL that an empty `src` resolves to, would
+ * appear here.
+ */
+const imageRequestsSince = (since: number) =>
+	performance
+		.getEntriesByType('resource')
+		.filter(
+			(entry): entry is PerformanceResourceTiming =>
+				entry instanceof PerformanceResourceTiming &&
+				entry.initiatorType === 'img' &&
+				entry.startTime >= since
+		)
+		.map((entry) => new URL(entry.name).pathname + new URL(entry.name).search);
+
+/** When the meta's loader says this story started rendering. */
+const startedAt = (loaded: Record<string, unknown>) =>
+	typeof loaded.startedAt === 'number' ? loaded.startedAt : 0;
+
+/** Waits for the component to give up on its primary source. */
+const toFallback = (img: HTMLElement) =>
+	waitFor(() => expect(img).toHaveAttribute('data-state', 'fallback'), { timeout: 3000 });
+
 const meta: Meta<IImage> = {
 	title: 'UI Core/Image',
 	component: Image,
+	// Stamped before the story renders, so `imageRequestsSince` sees this story's requests only.
+	loaders: [async () => ({ startedAt: performance.now() })],
 	parameters: {
 		layout: 'centered',
 		a11y: {
@@ -70,6 +100,7 @@ type Story = StoryObj<IImage>;
 type PlayContext = {
 	args: IImage;
 	canvasElement: HTMLElement;
+	loaded: Record<string, unknown>;
 	step: (label: string, run: () => Promise<void>) => void | Promise<void>;
 };
 
@@ -291,5 +322,299 @@ export const SlowConnection: Story = {
 
 		await waitFor(() => expect(img.complete).toBe(true), { timeout: 5000 });
 		await expect(text.getBoundingClientRect().top).toBe(before);
+	}
+};
+
+/* -------------------------------------------------------------------------------------------------
+ * Failure
+ * ---------------------------------------------------------------------------------------------- */
+
+/** The server answers 500. The box stays, painted from `bg-muted`, and keeps the image's name. */
+export const FailedToLoad: Story = {
+	args: {
+		src: fixtureUrl('failed-to-load', { status: 500 }),
+		ratio: '2/3',
+		alt: 'Poster for Dune: Part Two',
+		className: 'w-[200px]',
+		onError: fn()
+	},
+	play: async ({ args, canvasElement, loaded, step }: PlayContext) => {
+		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
+		await toFallback(img);
+
+		await step('The fallback announces the name the caller gave, not the failure', async () => {
+			await expect(
+				within(canvasElement).getByRole('img', { name: 'Poster for Dune: Part Two' })
+			).toBe(img);
+		});
+
+		await step('It is inlined, so showing it requested nothing', async () => {
+			await expect(img.getAttribute('src')).toMatch(/^data:image\/svg\+xml,/);
+			await expect(await settled(img)).toBe('load');
+			await expect(
+				imageRequestsSince(startedAt(loaded)).filter((url) => !url.includes('failed-to-load'))
+			).toEqual([]);
+		});
+
+		await step('The reserved box is unchanged', async () => {
+			await expect(img.getBoundingClientRect().width).toBe(200);
+			await expect(img.getBoundingClientRect().height).toBe(300);
+		});
+
+		await step('The caller’s onError ran once, after the component handled it', async () => {
+			await expect(args.onError).toHaveBeenCalledTimes(1);
+		});
+	}
+};
+
+/**
+ * The connection drops with no response, as it would offline. A fetched fallback would fail in
+ * exactly this case, which is why the built-in one is painted rather than requested.
+ */
+export const Offline: Story = {
+	args: {
+		src: fixtureUrl('offline', { abort: true }),
+		width: 300,
+		height: 450,
+		alt: 'Poster for Dune: Part Two',
+		className: 'w-[200px]'
+	},
+	play: async ({ canvasElement, loaded, step }: PlayContext) => {
+		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
+		await toFallback(img);
+		await expect(await settled(img)).toBe('load');
+
+		await step('No request was issued because of the failure', async () => {
+			await expect(
+				imageRequestsSince(startedAt(loaded)).filter((url) => !url.includes('offline'))
+			).toEqual([]);
+		});
+
+		await step(
+			'An intrinsic-size box keeps its 2:3 ratio once the fallback has loaded',
+			async () => {
+				await expect(img.getBoundingClientRect().width).toBe(200);
+				await expect(img.getBoundingClientRect().height).toBe(300);
+			}
+		);
+	}
+};
+
+/** An empty `src` never reaches the DOM, where it would re-request the current page. */
+export const EmptySrc: Story = {
+	args: {
+		src: '',
+		ratio: '2/3',
+		alt: 'Poster for Dune: Part Two',
+		className: 'w-[200px]',
+		onError: fn()
+	},
+	play: async ({ args, canvasElement, loaded, step }: PlayContext) => {
+		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
+
+		await step('The fallback is shown straight away', async () => {
+			await expect(img).toHaveAttribute('data-state', 'fallback');
+			await expect(img.getAttribute('src')).toMatch(/^data:/);
+		});
+
+		await step('Nothing was requested — not the page URL, not anything', async () => {
+			await settled(img);
+			await expect(imageRequestsSince(startedAt(loaded))).toEqual([]);
+		});
+
+		await step('A missing image is not a failure, so onError does not run', async () => {
+			await expect(args.onError).not.toHaveBeenCalled();
+		});
+	}
+};
+
+/** No `src` at all renders the same thing as an empty one. */
+export const MissingSrc: Story = {
+	args: {
+		src: null,
+		ratio: '16/9',
+		alt: 'A thumbnail for Dune: Part Two',
+		className: 'w-[320px]'
+	},
+	play: async ({ canvasElement }: PlayContext) => {
+		const img = within(canvasElement).getByRole('img', { name: 'A thumbnail for Dune: Part Two' });
+		await expect(img).toHaveAttribute('data-state', 'fallback');
+	}
+};
+
+/** A decorative image exposes nothing to assistive technology, loaded or failed. */
+export const Decorative: Story = {
+	args: { decorative: true, ratio: '16/9' },
+	render: () => (
+		<div className='flex gap-4'>
+			<Image
+				decorative
+				ratio='16/9'
+				className='w-[160px]'
+				src={fixtureUrl('decorative-loaded', { w: 320, h: 180 })}
+			/>
+			<Image
+				decorative
+				ratio='16/9'
+				className='w-[160px]'
+				src={fixtureUrl('decorative-failed', { status: 500 })}
+			/>
+		</div>
+	),
+	play: async ({ canvasElement, step }: PlayContext) => {
+		const images = canvasElement.querySelectorAll('img');
+
+		await step('Both carry an empty alt', async () => {
+			for (const img of images) await expect(img).toHaveAttribute('alt', '');
+		});
+
+		await step('Neither is reachable as an image, before or after one of them fails', async () => {
+			await expect(within(canvasElement).queryAllByRole('img')).toEqual([]);
+			const failed = images.item(1);
+			if (failed !== null) await toFallback(failed);
+			await expect(within(canvasElement).queryAllByRole('img')).toEqual([]);
+		});
+	}
+};
+
+/**
+ * The built-in fallback follows the app's own `.dark` class, not the OS setting. Each panel holds a
+ * failed image beside a `bg-muted` swatch, and the two must match.
+ */
+export const BothColourSchemes: Story = {
+	args: { alt: 'Poster', ratio: '2/3' },
+	render: () => (
+		<div className='flex gap-4'>
+			{(['light', 'dark'] as const).map((scheme) => (
+				<div
+					key={scheme}
+					data-scheme={scheme}
+					className={cn(scheme, 'bg-background text-foreground flex items-start gap-2 p-4')}
+				>
+					<Image
+						src={fixtureUrl(`scheme-${scheme}`, { status: 500 })}
+						ratio='2/3'
+						alt={`A failed poster, ${scheme} scheme`}
+						className='w-[100px]'
+					/>
+					<div data-swatch className='bg-muted size-6' aria-hidden='true' />
+				</div>
+			))}
+		</div>
+	),
+	play: async ({ canvasElement }: PlayContext) => {
+		const colours: Record<string, string> = {};
+
+		for (const panel of canvasElement.querySelectorAll<HTMLElement>('[data-scheme]')) {
+			const img = within(panel).getByRole('img');
+			const swatch = panel.querySelector('[data-swatch]');
+			await toFallback(img);
+			if (swatch === null) throw new Error('missing swatch');
+
+			const colour = getComputedStyle(img).backgroundColor;
+			await expect(colour).toBe(getComputedStyle(swatch).backgroundColor);
+			colours[panel.dataset.scheme ?? ''] = colour;
+		}
+
+		await expect(colours.light).not.toBe(colours.dark);
+	}
+};
+
+/* -------------------------------------------------------------------------------------------------
+ * Caller fallback
+ * ---------------------------------------------------------------------------------------------- */
+
+/** A caller's `fallback` is shown when `src` fails. It is fetched like any other image. */
+export const CustomFallback: Story = {
+	args: {
+		src: fixtureUrl('custom-fallback-primary', { status: 404 }),
+		fallback: fixtureUrl('custom-fallback-image', { w: 300, h: 450 }),
+		ratio: '2/3',
+		alt: 'Poster for Dune: Part Two',
+		className: 'w-[200px]'
+	},
+	play: async ({ args, canvasElement }: PlayContext) => {
+		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
+		await toFallback(img);
+		await expect(img).toHaveAttribute('src', args.fallback);
+		await expect(await settled(img)).toBe('load');
+		await expect(img).not.toHaveClass('bg-muted');
+	}
+};
+
+/**
+ * Both fail. The component ends on its own fallback, and the caller's `onError` still ran once —
+ * for the source they asked for, not for the cascade behind it.
+ */
+export const CustomFallbackFails: Story = {
+	args: {
+		src: fixtureUrl('fallback-fails-primary', { status: 500 }),
+		fallback: fixtureUrl('fallback-fails-fallback', { status: 500 }),
+		ratio: '2/3',
+		alt: 'Poster for Dune: Part Two',
+		className: 'w-[200px]',
+		onError: fn()
+	},
+	play: async ({ args, canvasElement, step }: PlayContext) => {
+		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
+
+		await step('The built-in fallback is where it settles', async () => {
+			await waitFor(() => expect(img.getAttribute('src')).toMatch(/^data:/), { timeout: 3000 });
+			await expect(img).toHaveClass('bg-muted');
+		});
+
+		await step('onError ran exactly once', async () => {
+			await expect(args.onError).toHaveBeenCalledTimes(1);
+		});
+	}
+};
+
+/* -------------------------------------------------------------------------------------------------
+ * Changing src
+ * ---------------------------------------------------------------------------------------------- */
+
+/**
+ * Exists to prove the component's own reset: a node reused for a new `src` — a card recycled in a
+ * rail — must not keep the previous item's failure.
+ */
+const SrcSwitcher = () => {
+	const [src, setSrc] = React.useState(fixtureUrl('switch-broken', { status: 500 }));
+
+	return (
+		<div className='flex flex-col items-start gap-2'>
+			<Image src={src} ratio='2/3' alt='Poster' className='w-[200px]' />
+			<button
+				type='button'
+				className='rounded border px-2 py-1 text-sm'
+				onClick={() => setSrc(fixtureUrl('switch-working', { w: 300, h: 450 }))}
+			>
+				Load another poster
+			</button>
+		</div>
+	);
+};
+
+export const SrcChangesAfterFailure: Story = {
+	args: { ratio: '2/3', alt: 'Poster' },
+	render: () => <SrcSwitcher />,
+	play: async ({ canvasElement, loaded, step }: PlayContext) => {
+		const canvas = within(canvasElement);
+		const img = canvas.getByRole<HTMLImageElement>('img');
+		await toFallback(img);
+
+		await step('Left alone, a failed source is never retried', async () => {
+			await new Promise((resolve) => setTimeout(resolve, 500));
+			await expect(img).toHaveAttribute('data-state', 'fallback');
+			await expect(
+				imageRequestsSince(startedAt(loaded)).filter((url) => url.includes('switch-broken'))
+			).toHaveLength(1);
+		});
+
+		await step('A new src resets the failure and loads', async () => {
+			await userEvent.click(canvas.getByRole('button', { name: 'Load another poster' }));
+			await waitFor(() => expect(img).not.toHaveAttribute('data-state'));
+			await expect(img.getAttribute('src')).toContain('switch-working');
+			await expect(await settled(img)).toBe('load');
+		});
 	}
 };
