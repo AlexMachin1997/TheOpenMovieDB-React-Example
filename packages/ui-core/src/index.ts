@@ -10,6 +10,8 @@ export { Avatar, AvatarImage, AvatarFallback } from '~/components/Avatar';
 export { Badge } from '~/components/Badge';
 export { Button } from '~/components/Button';
 export { Icon } from '~/components/Icon';
+export { Image } from '~/components/Image';
+export type { IImage, ImageRatio } from '~/components/Image';
 export { Label } from '~/components/Label';
 export { Progress } from '~/components/Progress';
 export { Skeleton } from '~/components/Skeleton';

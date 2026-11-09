@@ -106,6 +106,81 @@ const meta: Meta<IImage> = {
 	},
 	// Stamped before the story renders, so `imageRequestsSince` sees this story's requests only.
 	loaders: [async () => ({ startedAt: performance.now() })],
+	/*
+	 * Declared by hand: react-docgen extracts nothing from a component whose props are a type alias,
+	 * so without these the docs page's props table is empty.
+	 */
+	argTypes: {
+		src: {
+			control: 'text',
+			description: 'The image to load. Empty or missing shows the fallback, with no request made.',
+			table: { type: { summary: 'string | null' } }
+		},
+		alt: {
+			control: 'text',
+			description:
+				'What the image shows. Its only accessible name, kept when it falls back. Required unless `decorative`.',
+			table: { type: { summary: 'string' } }
+		},
+		decorative: {
+			control: 'boolean',
+			description: 'The image conveys nothing; renders `alt=""`. Cannot be combined with `alt`.',
+			table: { type: { summary: 'true' } }
+		},
+		width: {
+			control: 'number',
+			description:
+				'The file’s real width in pixels. Pass with `height`; cannot be combined with `ratio` or `unsized`.',
+			table: { type: { summary: 'number' } }
+		},
+		height: {
+			control: 'number',
+			description:
+				'The file’s real height in pixels. Pass with `width`; cannot be combined with `ratio` or `unsized`.',
+			table: { type: { summary: 'number' } }
+		},
+		ratio: {
+			control: 'select',
+			options: ['2/3', '16/9'],
+			description:
+				'The slot’s shape, whatever the file’s size. The box fills its width and covers it with the source. Cannot be combined with `width`/`height` or `unsized`.',
+			table: { type: { summary: "'2/3' | '16/9'" } }
+		},
+		unsized: {
+			control: false,
+			description: 'Reserve no space, on purpose. The layout moves when the image loads.',
+			table: { type: { summary: 'true' } }
+		},
+		fallback: {
+			control: 'text',
+			description:
+				'Shown when `src` fails or is missing. If it fails too, the built-in fallback is shown and a warning names it.',
+			table: { type: { summary: 'string' } }
+		},
+		loading: {
+			control: 'inline-radio',
+			options: ['lazy', 'eager'],
+			description: 'When the browser fetches the image.',
+			table: { type: { summary: "'lazy' | 'eager'" }, defaultValue: { summary: "'lazy'" } }
+		},
+		onError: {
+			control: false,
+			description:
+				'Called once when `src` fails, after the fallback is already showing. Not called for a missing `src`, nor when `fallback` fails.',
+			table: { type: { summary: '(event) => void' } }
+		},
+		onLoad: {
+			control: false,
+			description: 'Called when whichever source is shown has loaded, the fallback included.',
+			table: { type: { summary: '(event) => void' } }
+		},
+		className: {
+			control: 'text',
+			description:
+				'Size and style the box. With `ratio`, size one dimension only. Merged over the defaults, so no `!important` is needed.',
+			table: { type: { summary: 'string' } }
+		}
+	},
 	parameters: {
 		layout: 'centered',
 		a11y: {
@@ -154,7 +229,7 @@ export const IntrinsicSize: Story = {
 
 		await step('Before the source arrives, the box already has the file’s ratio', async () => {
 			await expect(img.complete).toBe(false);
-			await expect(img.getBoundingClientRect().width).toBe(140);
+			await expect(img.getBoundingClientRect().width).toBeCloseTo(140, 0);
 			await expect(boxRatio(img)).toBe(1);
 		});
 
@@ -195,8 +270,8 @@ export const Ratio: Story = {
 			'Before the source arrives, the box is already 2:3 at the width it was given',
 			async () => {
 				await expect(img.complete).toBe(false);
-				await expect(img.getBoundingClientRect().width).toBe(300);
-				await expect(img.getBoundingClientRect().height).toBe(450);
+				await expect(img.getBoundingClientRect().width).toBeCloseTo(300, 0);
+				await expect(img.getBoundingClientRect().height).toBeCloseTo(450, 0);
 			}
 		);
 
@@ -207,7 +282,7 @@ export const Ratio: Story = {
 
 		await step('Once loaded, the box has not moved', async () => {
 			await expect(await settled(img)).toBe('load');
-			await expect(img.getBoundingClientRect().height).toBe(450);
+			await expect(img.getBoundingClientRect().height).toBeCloseTo(450, 0);
 		});
 	}
 };
@@ -262,7 +337,7 @@ export const SizedByClassName: Story = {
 	},
 	play: async ({ canvasElement }: PlayContext) => {
 		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
-		await expect(img.getBoundingClientRect().width).toBe(130);
+		await expect(img.getBoundingClientRect().width).toBeCloseTo(130, 0);
 		await expect(img.getBoundingClientRect().height).toBeCloseTo(195, 0);
 		// One dimension sized, the ratio sets the other: nothing to warn about.
 		await expect(imageWarnings()).toEqual([]);
@@ -383,8 +458,8 @@ export const FailedToLoad: Story = {
 		});
 
 		await step('The reserved box is unchanged', async () => {
-			await expect(img.getBoundingClientRect().width).toBe(200);
-			await expect(img.getBoundingClientRect().height).toBe(300);
+			await expect(img.getBoundingClientRect().width).toBeCloseTo(200, 0);
+			await expect(img.getBoundingClientRect().height).toBeCloseTo(300, 0);
 		});
 
 		await step('The caller’s onError ran once, after the component handled it', async () => {
@@ -423,8 +498,8 @@ export const Offline: Story = {
 		await step(
 			'An intrinsic-size box keeps its 2:3 ratio once the fallback has loaded',
 			async () => {
-				await expect(img.getBoundingClientRect().width).toBe(200);
-				await expect(img.getBoundingClientRect().height).toBe(300);
+				await expect(img.getBoundingClientRect().width).toBeCloseTo(200, 0);
+				await expect(img.getBoundingClientRect().height).toBeCloseTo(300, 0);
 			}
 		);
 	}
@@ -546,7 +621,7 @@ export const RatioOverriddenByClassName: Story = {
 
 /**
  * The built-in fallback follows the app's own `.dark` class, not the OS setting. Each panel holds a
- * failed image beside a `bg-muted` swatch, and the two must match.
+ * failed image beside a visually hidden `bg-muted` probe, and the two must match.
  */
 export const BothColourSchemes: Story = {
 	args: { alt: 'Poster', ratio: '2/3' },
@@ -564,7 +639,7 @@ export const BothColourSchemes: Story = {
 						alt={`A failed poster, ${scheme} scheme`}
 						className='w-[100px]'
 					/>
-					<div data-swatch className='bg-muted size-6' aria-hidden='true' />
+					<div data-swatch className='bg-muted sr-only' aria-hidden='true' />
 				</div>
 			))}
 		</div>

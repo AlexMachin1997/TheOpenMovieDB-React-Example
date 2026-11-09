@@ -1,0 +1,287 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as ImageStories from './Image.stories';
+
+<Meta of={ImageStories} />
+
+# Image
+
+An `<img>` that holds its place on the page before it loads, has exactly one accessible name, and shows something sensible when it fails. Use it for any content image: posters, stills, logos, thumbnails. For a person's round profile photo, use [`Avatar`](?path=/docs/ui-core-avatar--docs) instead.
+
+```tsx
+import { Image } from '@repo/ui-core';
+```
+
+## Features
+
+- **Space is reserved before the image arrives**, so nothing on the page jumps when it does. You cannot leave this out by accident: an image with no shape does not compile.
+- **One name, and it is the one screen readers read.** `alt` is the only naming prop. `aria-label` and `title` are not accepted, because either would override or duplicate it.
+- **A failed image stays in place.** It falls back to your own `fallback`, then to a muted box painted from the theme. It requests nothing, follows dark mode, and keeps the image's name.
+- **Still a plain `<img>`.** One element, no wrapper. `srcSet`, `sizes`, `decoding` and `fetchPriority` pass straight through. `loading` defaults to `lazy`.
+- **It tells you when it is covering for a mistake:** a fallback that also failed, an empty `alt`, or a `ratio` that your `className` has overridden.
+
+<Canvas of={ImageStories.Ratio} />
+
+---
+
+## Choosing a shape
+
+Every `Image` has to say what shape it is, so the browser can reserve the box before the file arrives. There are three ways, and you must pick exactly one. Passing none, or more than one, is a compile error.
+
+| You know…                                            | Use                  | Example                           |
+| ---------------------------------------------------- | -------------------- | --------------------------------- |
+| The file's real pixel size, and it never varies      | `width` and `height` | A logo, an icon-like graphic      |
+| The **slot's** shape, whatever size the file arrives | `ratio`              | Posters, stills, video thumbnails |
+| Neither, and a jump on load is acceptable            | `unsized`            | Rare. Content of unknown shape    |
+
+**When in doubt, use `ratio`.** If the API hands you files of different sizes that all have to fill the same box, as TMDB's posters do, the box's shape is the stable fact and the file's is not.
+
+### `width` and `height` — the file's real size
+
+|             |                                                     |
+| ----------- | --------------------------------------------------- |
+| **Type**    | `number` (pixels, integers only)                    |
+| **Default** | — (required as a pair, unless `ratio` or `unsized`) |
+
+These describe the **file**, not the layout. They are written to the HTML attributes, and the browser derives the box's ratio from them before anything has loaded. The box still scales down to fit its container, and you size it on the page with `className`.
+
+```tsx
+<Image src={logoUrl} width={140} height={140} alt='The Movie Database' />
+```
+
+A CSS length is not accepted. `width='250px'` is a compile error, because the HTML attribute only understands integers and would silently discard it.
+
+<Canvas of={ImageStories.IntrinsicSize} />
+
+### `ratio` — the slot's shape
+
+|             |                                                    |
+| ----------- | -------------------------------------------------- |
+| **Type**    | `'2/3' \| '16/9'`                                  |
+| **Default** | — (required, unless `width`/`height` or `unsized`) |
+
+The box fills the width it is given and takes its height from the ratio. Give it a width with `className` or with its container. `'2/3'` is a poster; `'16/9'` is a still or a video thumbnail.
+
+```tsx
+<Image src={posterUrl} ratio='2/3' alt={`Poster for ${title}`} className='w-[300px]' />
+```
+
+When the file is a different shape from the box, it is scaled to **cover** the box and the overflow is cropped. It is never stretched. A 2:3 poster in a 16:9 slot loses its top and bottom:
+
+<Canvas of={ImageStories.RatioWithAnotherShape} />
+
+To show the whole file instead, letterboxed inside the box, add `object-contain`. To keep the crop but choose which part survives it, add a position class such as `object-top`.
+
+```tsx
+<Image
+	src={posterUrl}
+	ratio='16/9'
+	alt={`Poster for ${title}`}
+	className='w-[320px] object-contain'
+/>
+```
+
+<Canvas of={ImageStories.RatioContained} />
+
+> **Size one dimension, never both.** CSS `aspect-ratio` can only set a box's height when its height is left automatic. Fix both in `className` and the box is your shape, not the ratio's. `Image` warns in the console when the rendered box does not match its `ratio`.
+
+```tsx
+// ✗ The box is 300×150, and ratio='2/3' does nothing
+<Image src={headshotUrl} ratio='2/3' alt={name} className='h-[150px] w-[300px]' />
+
+// ✓ Width from className, height from the ratio: 300×450
+<Image src={headshotUrl} ratio='2/3' alt={name} className='w-[300px]' />
+```
+
+<Canvas of={ImageStories.SizedByClassName} />
+
+### `unsized` — opting out
+
+|             |              |
+| ----------- | ------------ |
+| **Type**    | `true`       |
+| **Default** | — (optional) |
+
+Reserves nothing. The layout moves when the image loads. It exists so that leaving the shape out is a decision someone wrote down, not something they forgot.
+
+```tsx
+<Image src={bannerUrl} unsized alt='Festival banner' />
+```
+
+---
+
+## Naming the image
+
+### `alt`
+
+|             |                                   |
+| ----------- | --------------------------------- |
+| **Type**    | `string`                          |
+| **Default** | — (required, unless `decorative`) |
+
+What the image shows, read aloud by screen readers. It is the image's only name. It stays when the image fails, because the fallback stands in for the same image.
+
+Say what is in the image, not that it is one: `` `Poster for ${title}` ``, not `` `Image of poster` ``.
+
+<Canvas of={ImageStories.Named} />
+
+### `decorative`
+
+|             |              |
+| ----------- | ------------ |
+| **Type**    | `true`       |
+| **Default** | — (optional) |
+
+For an image that adds nothing a screen reader user would miss, such as a backdrop behind text that already says the same thing. It renders `alt=""`, so assistive technology skips the image entirely, loaded or failed.
+
+```tsx
+<Image src={backdropUrl} ratio='16/9' decorative className='w-full' />
+```
+
+`decorative` and `alt` cannot be passed together. An empty `alt=""` without `decorative` still works, but it warns: an empty name by accident looks the same as one on purpose, and `decorative` is how you say you meant it.
+
+<Canvas of={ImageStories.Decorative} />
+
+---
+
+## When an image fails
+
+A failed image, and an image with no `src` at all, behave the same way. You never need to branch on whether you have a URL.
+
+1. **`src` is tried first.** An empty or missing `src` is skipped, and is never written to the page. An empty `src` would make some browsers request the current page again.
+2. **Your `fallback` is tried next**, if you passed one. It is fetched like any other image.
+3. **The built-in fallback is last.** It is a box painted with the theme's `muted` colour. It makes no request, so it still works when you are offline, and it follows the app's light or dark mode.
+
+At every step the box keeps its size and the image keeps its `alt`. Nothing announces the failure.
+
+<Canvas of={ImageStories.FailedToLoad} />
+
+Losing the connection takes the same path. This is why the built-in fallback is painted rather than fetched: a fallback image on the network would fail in exactly this case.
+
+<Canvas of={ImageStories.Offline} />
+
+<Canvas of={ImageStories.BothColourSchemes} />
+
+### `fallback`
+
+|             |              |
+| ----------- | ------------ |
+| **Type**    | `string`     |
+| **Default** | — (optional) |
+
+An image to show instead of a failed or missing `src`, such as a generic poster.
+
+```tsx
+<Image
+	src={posterUrl}
+	fallback='/images/poster-placeholder.svg'
+	ratio='2/3'
+	alt={`Poster for ${title}`}
+/>
+```
+
+<Canvas of={ImageStories.CustomFallback} />
+
+If your fallback fails too, the built-in one is shown and the console warns, naming the URL that failed. A failed `src` does not warn, because a missing poster is normal and not a bug.
+
+<Canvas of={ImageStories.CustomFallbackFails} />
+
+> **Give the fallback the same shape as the slot.** With `ratio` it is cropped to fit like any other image. With `width` and `height`, a fallback of a different shape changes the box's ratio when it loads.
+
+### `onError`
+
+|             |                                                     |
+| ----------- | --------------------------------------------------- |
+| **Type**    | `(event: SyntheticEvent<HTMLImageElement>) => void` |
+| **Default** | — (optional)                                        |
+
+Called **once** when `src` fails, after `Image` has already switched to the fallback. You do not need to handle the failure yourself. Use it to log or report. It is not called again if your `fallback` also fails, and it is not called for a missing `src`, because that is not a failure.
+
+### Changing `src`
+
+A new `src` starts again from the top, even after a failure. This matters when a card is reused for a different film, as rows in a scrolling rail are: the new film never shows the old one's fallback. The same `src` is never retried on its own.
+
+<Canvas of={ImageStories.SrcChangesAfterFailure} />
+
+### Styling the fallback
+
+The `<img>` carries `data-state="fallback"` whenever it is not showing `src`, so you can target it:
+
+```tsx
+<Image
+	src={posterUrl}
+	ratio='2/3'
+	alt={`Poster for ${title}`}
+	className='data-[state=fallback]:opacity-60'
+/>
+```
+
+`Image` adds no radius, border or shadow of its own, in any state. Those belong to the surface it sits on.
+
+---
+
+## Loading
+
+`loading` defaults to `lazy`: the browser fetches the image when it gets close to the viewport. Pass `loading='eager'` for an image that is visible as soon as the page opens, such as the poster in a page header, and consider `fetchPriority='high'` for the most important one.
+
+```tsx
+<Image
+	src={posterUrl}
+	ratio='2/3'
+	alt={`Poster for ${title}`}
+	loading='eager'
+	fetchPriority='high'
+/>
+```
+
+On a slow connection, the reserved box is what the user sees until the file arrives. Nothing around it moves when it does:
+
+<Canvas of={ImageStories.SlowConnection} />
+
+### Showing a placeholder while it loads
+
+`Image` has no loading state of its own. Once the space is reserved, nothing jumps, so a placeholder is decoration. If you want one, put `Skeleton` behind the image and clear it from `onLoad`. `onLoad` fires however the image settles, including when it falls back, so the placeholder always goes away.
+
+```tsx
+import * as React from 'react';
+import { Image, Skeleton } from '@repo/ui-core';
+
+const Poster = ({ src, title }: { src: string; title: string }) => {
+	const [loaded, setLoaded] = React.useState(false);
+
+	return (
+		<div className='relative w-[200px]'>
+			{!loaded && <Skeleton className='absolute inset-0' />}
+			<Image src={src} ratio='2/3' alt={`Poster for ${title}`} onLoad={() => setLoaded(true)} />
+		</div>
+	);
+};
+```
+
+### Native attributes
+
+Everything the browser does on its own passes through unchanged: `srcSet`, `sizes`, `decoding`, `fetchPriority`, `crossOrigin`, `referrerPolicy`, and the rest. `srcSet` and `sizes` are dropped once the image is showing a fallback, or the browser would keep loading from the candidate list instead.
+
+<Canvas of={ImageStories.NativeAttributes} />
+
+---
+
+## Accessibility
+
+### What `Image` handles for you
+
+- **One name.** `alt` is the image's name, and nothing can override it.
+- **Decorative images are skipped**, loaded or failed, with no name and no role.
+- **Failures are silent.** The fallback carries the image's own name. It never announces "failed to load", which would describe the plumbing rather than the picture.
+- **No layout shift**, which matters most to people using screen magnifiers, for whom a jump can move the content they were reading off screen.
+
+### What's still yours
+
+- **Writing a good `alt`.** Describe what the image shows, in the context it is shown. A poster beside its film's title can be shorter than one standing alone.
+- **Choosing `decorative` honestly.** If removing the image would lose information, it is not decorative.
+- **Keeping one dimension automatic** when you use `ratio`, as above.
+
+---
+
+## Properties
+
+<ArgTypes />

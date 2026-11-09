@@ -1,196 +1,178 @@
 # 21 — Image
 
-Status: **in progress.** Implements [`spec.md`](spec.md). Approved 9 November 2026. Whether the
-ratio form looks right is left to review once it renders in Storybook.
+Status: **built, awaiting review.** As-built record for [`spec.md`](spec.md). One judgement is left
+open on purpose: whether `ratio`'s default crop (`object-cover`) is right for posters, to be decided
+by looking at it in Storybook.
 
-## Decisions for review
+## Outcome
 
-The spec settles behaviour. These are the shapes it left open, each with what this plan does.
+`@repo/ui-core` exports `Image`: a single `<img>` that reserves its box before it loads, takes its
+only name from `alt`, and falls back locally, first to a caller's `fallback` and then to a muted box
+painted from theme tokens. Its stories run against real network behaviour (slow, failing, offline)
+served by a fixture route on the Storybook dev server. The app's own `Core/Image` is untouched;
+migrating its 11 call sites is the separate change the spec names, mapped in
+[Migration notes](#migration-notes).
 
-1. **The public type is a union, not an interface.** Requirements 3–5 and 15 are mutual exclusions,
-   which an interface cannot express. This is the stated exception `13` allows for a genuine union.
+## Gates
 
-   ```ts
-   type ImageRatio = '2/3' | '16/9';
+| Gate                           | Baseline (`f424d7a`)                | After                               |
+| ------------------------------ | ----------------------------------- | ----------------------------------- |
+| `pnpm turbo run build --force` | ✅ 11/11, 0 cached                  | ✅ 11/11, 0 cached                  |
+| `pnpm turbo run lint --force`  | ✅ 0 errors, 0 warnings             | ✅ 0 errors, 0 warnings             |
+| `npx prettier --check .`       | —                                   | ✅ (feature files)                  |
+| Storybook suite                | ✅ 418 passed, 43 files, 27 skipped | ✅ 437 passed, 44 files, 28 skipped |
+| `ui-core` unit tests           | not run; 62 by subtraction          | ✅ 69 passed (+7 type cases)        |
 
-   type ImageShape =
-   	| { width: number; height: number; ratio?: never; unsized?: never }
-   	| { ratio: ImageRatio; width?: never; height?: never; unsized?: never }
-   	| { unsized: true; width?: never; height?: never; ratio?: never };
+## Acceptance criteria
 
-   type ImageName = { alt: string; decorative?: never } | { decorative: true; alt?: never };
+Evidence is the story or spec case that settles each; every story runs in the suite above.
 
-   export type IImage = Omit<
-   	React.ComponentProps<'img'>,
-   	'width' | 'height' | 'alt' | 'src' | 'aria-label' | 'title'
-   > &
-   	ImageShape &
-   	ImageName & {
-   		src?: string | null;
-   		fallback?: string;
-   	};
-   ```
+- [x] **AC1** — `IntrinsicSize`: a 140×140 box measured while `img.complete` is still `false` (1.5s
+      delayed response), unchanged after load. Proved: removing `width={width}` made the box 0px wide.
+- [x] **AC2** — `Ratio`: a 300×450 box before a 1.5s delayed response, no `width`/`height` attributes.
+- [x] **AC3** — `Image.types.spec.ts`, `'250px'` as `width` and as `height`. Proved by deleting the
+      directive: `TS2322`.
+- [x] **AC4** — `Image.types.spec.ts`, no shape and one dimension only. Proved the same way.
+- [x] **AC5** — `Image.types.spec.ts`, `ratio` with `width`/`height`, and `ratio` with `unsized`.
+      Proved the same way.
+- [x] **AC6** — `RatioWithAnotherShape`: a 2:3 source in a 16:9 box keeps the box at 1.78 with
+      `object-fit: cover`.
+- [x] **AC7** — `FailedToLoad`: after a 500, `getByRole('img', { name: 'Poster for Dune: Part Two' })`
+      is the same element. Nothing about the failure is in its name.
+- [x] **AC8** — `Named`: `alt` present, no `aria-label`, no `title`. Both are also removed from the
+      type.
+- [x] **AC9** — `Decorative`: `queryAllByRole('img')` is empty for a loaded and a failed decorative
+      image, before and after the failure.
+- [x] **AC10** — `FailedToLoad` and `Offline`: no image request in the Resource Timing buffer beyond
+      the primary. The check is not vacuous: the same query counts the one failed request in
+      `SrcChangesAfterFailure`.
+- [x] **AC11** — `EmptySrc`: fallback shown at once, a `data:` source, and no image request at all.
+- [x] **AC12** — `BothColourSchemes`: in a light and a `.dark` panel, the fallback's computed
+      background equals a `bg-muted` swatch in the same panel, and the two panels differ. The scheme
+      is the app's class, not the OS setting.
+- [x] **AC13** — `CustomFallbackFails`: ends on the built-in fallback, one warning containing the
+      fallback's URL. _Deviation:_ the warning is not limited to development; see decision 8.
+- [x] **AC14** — `FailedToLoad` (one call), and `CustomFallbackFails` (still one call when the
+      fallback fails too).
+- [x] **AC15** — `SrcChangesAfterFailure`: a new `src` clears `data-state` and loads. Proved:
+      disabling the reset made it fail.
+- [x] **AC16** — `SrcChangesAfterFailure`: 500ms after failing, still on the fallback, with exactly
+      one request for the broken URL.
+- [x] **AC17** — `EmptyAlt` warns; `Decorative` does not. _Deviation:_ not limited to development;
+      see decision 8.
+- [x] **AC18** — `NativeAttributes`: `loading`, `decoding`, `fetchpriority`, `sizes` and `srcset`
+      all on the `<img>` unchanged.
+- [x] **AC19** — `Named`: `loading="lazy"` with no `loading` passed.
+- [x] **AC20** — `SizedByClassName`: `w-[130px]` gives 130×195 with no `!important`.
 
-2. **`ratio` ships two literals, `'2/3'` and `'16/9'`.** Those are the only shapes the 11 call sites
-   need (see [Migration notes](#migration-notes)). The literal is the CSS `aspect-ratio` syntax.
-   Adding one later is one line in the union and one in the class map. `'1/1'` is left out because
-   its only candidate, `Review`, moves to `Avatar`.
-3. **The opt-out is `unsized`.** It is the explicit form requirement 3 asks for.
-4. **`number` is as far as the type goes.** It rejects `'250px'` (AC3) but cannot reject `1.5`.
-   TypeScript has no integer type.
-5. **The built-in fallback is a transparent SVG data URI with `bg-muted` painted behind it.** It is
-   one `<img>` (requirement 1), makes no request (AC10), and the token flips under `.dark` (AC12).
-   _Changed in Phase 3 from a 1×1 GIF:_ with integer attributes the box's ratio is
-   `aspect-ratio: auto w / h`, and `auto` lets the loaded image's own ratio win, so a square pixel
-   turned a 2:3 box square once it loaded. The SVG carries the caller's `width` × `height` instead.
-   The `alt` stays the caller's. The fallback is a flat muted fill with no icon: an icon would need
-   either a wrapper element or a fetched or sandboxed SVG, and all three are ruled out.
-6. **Default classes.** The ratio form gets `w-full object-cover` plus the ratio class. The intrinsic
-   form gets nothing, because Tailwind preflight already sets `img { max-width: 100%; height: auto }`,
-   which is what lets the browser derive the ratio from the attributes. The fallback adds `bg-muted`.
-   All of these go through `cn`, so a caller's `object-contain` or `w-[300px]` replaces the default
-   rather than fighting it (AC20, requirement 7).
-7. **`onLoad` is forwarded for whichever source settles, the built-in fallback included.** A caller
-   who hides a `Skeleton` on load therefore always clears it. `onError` fires once, for the primary
-   `src` only (requirement 12). An empty or missing `src` is not a failure, so it does not fire.
-8. **Warnings follow `Button`: ungated `console.warn` with an `[ui-core] Image:` prefix.** The spec
-   says "warn in development". `import.meta.env.DEV` cannot express that here, because Vite's library
-   build replaces it with `false` in `dist/`, so the app would never see a warning. Every existing
-   warning in `ui-core` and `ui-overlays` is ungated. If "development only" is a hard requirement,
-   the alternative is `process.env.NODE_ENV !== 'production'`, which needs proving in both the app
-   and Storybook builds before relying on it.
-9. **The `className`-sizing warning (spec edge case) is a measurement, not a class-name parse.** After
-   layout, if the rendered box's ratio is more than 2% away from `ratio`, warn. This catches the
-   failure itself (`PersonSidebar`'s fixed width and height) rather than guessing at Tailwind class
-   names. A box with zero width (`hidden md:block` on mobile) is skipped.
+## Success criteria
 
-## Baseline
+- [x] **SC1** — No shape does not compile (AC4); the opt-out is the explicit `unsized`.
+- [x] **SC2** — `alt` is the only naming prop, and is what `getByRole` resolves (AC7, AC8).
+- [x] **SC3** — AC10 and AC11.
+- [ ] **SC4** — not met; `EntertainmentSidebar`'s network logo has no working mapping. Every other
+      form has a story (2:3 at 300px and 130px, 16:9 at 320px, integer sizes, `object-contain` with a
+      ratio), none needing `!important`. The logo was mapped to `width={80} height={40}`
+      `object-contain`; a `LogoContained` story proved that wrong — a 120×30 file turned the 80×40
+      box into 80×20 once it loaded, because integer attributes give `aspect-ratio: auto 80 / 40`
+      and `auto` yields to the file's own ratio. Integers only hold when they are the file's real
+      size.
+- [x] **SC5** — `Image.mdx`, "Choosing a shape": a table of which form fits what you know, and a
+      default for when in doubt.
+- [x] **SC6** — [Migration notes](#migration-notes).
 
-Taken 9 November 2026 on `f424d7a`, after `pnpm install` and a forced build.
+## Follow-ups
 
-| Gate                           | Result                                     |
-| ------------------------------ | ------------------------------------------ |
-| `pnpm turbo run build --force` | ✅ 11/11, 0 cached, 1m05s                  |
-| `pnpm turbo run lint --force`  | ✅ 0 errors, 0 warnings, 54s               |
-| Storybook suite                | ✅ 418 passed, 43 files passed, 27 skipped |
+- **Migrate the app's 11 call sites** onto this component, using the table below. Not started; the
+  spec scopes it out.
+- **Review the `cover` default** against real posters. `RatioWithAnotherShape` and `RatioContained`
+  in Storybook show the two side by side.
 
-## Spec claims re-measured
+---
 
-| Claim                                     | Measured 9 Nov 2026                                                         |
-| ----------------------------------------- | --------------------------------------------------------------------------- |
-| 10 consumers                              | ✅ 10 files, 11 call sites (`Menu` has two)                                 |
-| Only the footer logo passes integers      | ✅                                                                          |
-| Four `aspect-*` classes, three contradict | ✅ `Card`, `Recommendation`, `MostRecentEpisode` contradict; `Video` agrees |
-| `PersonSidebar` fights with `!important`  | ✅ `width='unset' height='unset'` + `!h-[450px] !w-[300px]`                 |
-| Dark mode is class-based                  | ✅ `packages/tailwind-config/src/globals.css:4`                             |
+## Decisions
 
-## Files
+The spec settled behaviour. These are the shapes it left open.
 
-All new, in `packages/ui-core/src/components/Image/`: `Image.tsx`, `Image.types.ts`,
-`Image.variants.ts` (the ratio → class map), `Image.types.spec.ts`, `Image.stories.tsx`, `Image.mdx`
-and `index.ts`. Plus two export lines in `packages/ui-core/src/index.ts`, and the image fixture
-plugin in `apps/storybook/.storybook/` (see [Testing strategy](#testing-strategy)).
+1. **The public type is a union, not an interface.** The shape (intrinsic size, ratio, or
+   `unsized`) and the name (`alt` or `decorative`) are each exactly one choice, which an interface
+   cannot express. `IImage` follows `ILabel`'s documented exception for a genuine union.
+2. **`ratio` has two literals, `'2/3'` and `'16/9'`**, the only shapes the call sites need, in CSS
+   `aspect-ratio` syntax. Adding one is a line in `ImageRatio`, `imageVariants` and `RATIO_VALUES`.
+   `'1/1'` was left out because its only candidate, `Review`, moves to `Avatar`.
+3. **The opt-out is `unsized`**, the explicit form requirement 3 asks for.
+4. **`number` is as far as the type goes.** It rejects `'250px'` but cannot reject `1.5`.
+5. **The built-in fallback is a transparent SVG data URI at the caller's `width` × `height`, with
+   `bg-muted` behind it.** One element, no request, and the token follows `.dark`. It is a flat fill
+   with no icon: an icon needs a wrapper, a request, or an SVG that cannot see CSS variables.
+6. **Default classes.** The ratio form gets `w-full object-cover` and the ratio class. The integer
+   form gets none, because Tailwind's preflight already sets `max-width: 100%; height: auto` on
+   `img`. Everything goes through `cn`, so `object-contain` or `w-[300px]` replaces the default.
+7. **`onLoad` fires for whichever source settles**, so a `Skeleton` cleared from it always clears.
+   `onError` fires once, for the primary only. A missing `src` is not a failure.
+8. **Warnings are ungated `console.warn` with an `[ui-core] Image:` prefix, like `Button`'s.** The
+   spec says "warn in development". `import.meta.env.DEV` is replaced with `false` by Vite's library
+   build, so the app would never see the warning. Every existing warning in the library is ungated.
+   `process.env.NODE_ENV` remains the unproven alternative if production silence is required.
+9. **The `className`-sizing warning measures the rendered box** against `ratio` (2% tolerance)
+   rather than parsing class names. Zero-size boxes, such as `hidden md:block` on mobile, are skipped.
 
-The app's own `Core/Image` is not touched. Migration is the separate change the spec names.
+## What we hit
 
-## Tasks
+- **A 1×1 fallback pixel turned an integer-sized box square.** With `width` and `height` set, the
+  box's ratio is `aspect-ratio: auto w / h`, and `auto` lets the loaded image's own ratio win over
+  the attributes. The planned 1×1 GIF made a 2:3 box 1:1 the moment it loaded. The built-in source
+  is now an empty SVG carrying the caller's own dimensions. `Offline` pins it.
+- **`srcSet` would outrank the fallback.** A candidate list beats `src`, so leaving it on the element
+  would keep loading the failed candidates. `srcSet` and `sizes` are dropped off the primary stage.
+- **A request that never answers starves the whole suite.** The planned `hang` fixture would hold
+  one of Chromium's six HTTP/1.1 connections to the dev server for the rest of the run, blocking
+  module loads for later stories. Replaced by a bounded `delay` (capped at 10s in the plugin), with
+  "before load" measured while `img.complete` is still `false`.
+- **The union strips Storybook's `play` inference**, as `storybook-standards` predicts. One
+  `PlayContext` alias in the stories file, with `loaded` typed `Record<string, unknown>` because
+  that is what Storybook gives a loader.
+- **react-docgen reads nothing from a type-alias props type**, so the meta declares `argTypes` by
+  hand and the MDX uses `<ArgTypes />`. Checked in the dev server: the props table has all 12 rows.
+- **`Image.utils.ts` is not an allowed file name.** `folderStructure` permits `.constants.ts`, so the
+  helpers live there.
+- **Exact pixel comparisons fail on a scaled display.** At a device pixel ratio of 1.65, a 300px box
+  measures `299.99997`. Headless Chromium runs at 1, so the suite was green while every size check
+  failed in the user's browser. Sizes are compared with `toBeCloseTo(n, 0)`.
+- **The fixture route exists only if Storybook started with it.** Storybook reads `main.ts` once at
+  startup, so a server started without `imageFixtures()` answers 404 and every image story falls
+  back. Restart Storybook after changing `main.ts`.
+- **Test scaffolding showed on the docs page.** `BothColourSchemes`' `bg-muted` probe was a visible
+  square beside each image; it is `sr-only` now, which leaves its computed colour readable.
+- **A hidden Browser pane loads no lazy images.** Opening the docs page with the pane hidden showed
+  every box at its correct size and only the one `eager` image requested. That is the pane, which
+  is not painting, not the component; the headless suite loads the same images.
 
-Each phase is verified and committed before the next starts.
+## Testing
 
-### Phase 1: Types
+Component behaviour is tested in `Image.stories.tsx` `play()` functions and types in
+`Image.types.spec.ts`, which only `check-types` runs. The a11y gate is on (`test: 'error'`) for the
+whole file.
 
-- [x] `Image.types.ts` as in decision 1, with per-prop JSDoc. It also narrows `loading` to
-      `'lazy' | 'eager'` and declares `onError`/`onLoad` so their JSDoc carries the cascade rules.
-- [x] `Image.types.spec.ts`: 7 cases, covering a CSS length (AC3), no shape and half a shape (AC4),
-      both shapes and `unsized` + `ratio` (AC5), ratios outside the set, name vs `decorative`, and
-      `aria-label`/`title`. Proved: deleting the first directive for each of AC3, AC4 and AC5 in turn
-      failed `check-types` with `TS2322` on that line.
+**Network conditions come from `apps/storybook/.storybook/imageFixtures.ts`**, a Vite plugin
+registered in `main.ts`'s `viteFinal`, which the headless suite also applies. It serves a labelled
+SVG at `/__image-fixture`, never cached:
 
-### Phase 2: Rendering
+| Query         | Behaves like                                            |
+| ------------- | ------------------------------------------------------- |
+| `w=300&h=450` | An image of that intrinsic size                         |
+| `delay=2000`  | A slow or mobile connection; capped at 10s              |
+| `status=500`  | A server error                                          |
+| `abort`       | No connectivity: the socket is dropped with no response |
 
-- [x] `Image.tsx`: one `<img>`, `loading='lazy'` default, shape → attributes or class, `alt` only,
-      no `aria-label` and no `title`, native attributes passed through.
-- [x] Stories with `play()` for AC1, AC2, AC6, AC8, AC18, AC19 and AC20, plus `RatioContained` and
-      `SlowConnection` (3s delay; asserts text below the image does not move). The fixture route
-      answers in headless runs: the two delayed stories take ~1.5s each. Proved: removing
-      `width={width}` failed `IntrinsicSize` with a box 0px wide before load.
-
-### Phase 3: Fallback and callbacks
-
-- [x] The cascade from primary to caller `fallback` to built-in, held in state keyed on `src`, so a
-      new `src` resets during render with no effect (AC15) and the same `src` never retries (AC16).
-      `srcSet` and `sizes` are dropped once off the primary, or the browser would keep loading a
-      candidate instead of the fallback. `data-state="fallback"` marks any non-primary stage.
-- [x] An empty or missing `src` goes straight to the built-in fallback and never reaches the DOM
-      (AC11).
-- [x] Stories with `play()` for AC7, AC9, AC10, AC11, AC12, AC14, AC15 and AC16: `FailedToLoad`
-      (500), `Offline` (socket dropped), `EmptySrc`, `MissingSrc`, `Decorative`,
-      `BothColourSchemes`, `CustomFallback`, `CustomFallbackFails` and `SrcChangesAfterFailure`.
-      17/17. Proved: disabling the reset-on-`src` block failed `SrcChangesAfterFailure`. The
-      "requested nothing" checks are not vacuous — the same buffer query counts the one 500
-      request in `SrcChangesAfterFailure`.
-
-### Phase 4: Warnings
-
-- [x] The failing caller `fallback`, named in the message (AC13). No warning when only the primary
-      fails.
-- [x] `alt=""` (or whitespace) without `decorative` (AC17), from an effect so it fires once per
-      change rather than on every render.
-- [x] A ratio that is not taking effect (decision 9), measured in an effect through a ref merged
-      with the caller's own `ref`.
-- [x] A file-wide `console.warn` spy installed in the meta's `beforeEach`. Positive: `EmptyAlt`,
-      `RatioOverriddenByClassName`, `CustomFallbackFails`. Silent: `FailedToLoad`, `Decorative`,
-      `SizedByClassName`. 19/19; the positive stories prove the spy captures, so the silent ones are
-      not vacuous.
-
-### Phase 5: Docs and export
-
-- [ ] `Image.mdx`: when to use intrinsic size or ratio (SC5), the `className` obligation, decorative
-      images, the fallback, and composing `Skeleton` with `onLoad`.
-- [ ] Export `Image`, `IImage` and `ImageRatio` from the package root.
-- [ ] Rewrite this file as the as-built record and move `21` to ✅ done in the roadmap.
-
-## Testing strategy
-
-Component behaviour is tested with Storybook `play()`, never `.spec.ts` files. Types are tested in
-`Image.types.spec.ts` through `check-types`.
-
-**Network conditions come from a fixture route on the Storybook dev server**, added after approval
-at the user's request to mock failures, offline and slow connections. It is a small Vite plugin in
-`apps/storybook/.storybook/`, with no new dependency. It serves a labelled SVG of any size at
-`/__image-fixture`, and query parameters choose the behaviour:
-
-| Query         | Behaves like                                              |
-| ------------- | --------------------------------------------------------- |
-| `w=300&h=450` | A real image of that intrinsic size                       |
-| `delay=2000`  | A slow or mobile connection: the response starts after 2s |
-| `status=500`  | A server error                                            |
-| `abort`       | No connectivity: the socket is dropped with no response   |
-
-The techniques the ACs need:
-
-| Need                      | How                                                                                                                                                                                                                                                                   |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A failing source          | `status=500` or `abort` on the fixture route. Both are real network failures, so the component's `error` path runs exactly as it would in the app.                                                                                                                    |
-| "No request was issued"   | `performance.getEntriesByType('resource')` after the failure has nothing beyond the primary request: not for a fallback, not for the document URL (AC10, AC11).                                                                                                       |
-| "Before the source loads" | `delay=1500`, measured while `img.complete` is still `false`, then measured again after load (AC1, AC2). A `hang` that never answers was dropped: the dev server is HTTP/1.1, so each open request holds one of Chromium's six connections and starves later stories. |
-| Both colour schemes       | The same story twice, once inside `<div className='dark'>`. Compare the fallback's computed `background-color` with a `bg-muted` probe in the same scope (AC12).                                                                                                      |
-
-AC15 and AC16 need `src` to change after a failure. A story `render` with a button that swaps `src`
-does that. It is a test fixture for the component's own reset behaviour, not app state.
-
-## Risks
-
-| Risk                                             | Mitigation                                                                                                                                       |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| The fixture route is not served in headless runs | The Vitest config may not apply `main.ts`'s `viteFinal`. Prove the route answers in a headless story before writing any test that depends on it. |
-| The ratio warning fires on legitimate layouts    | It only compares the box with its own `ratio`, which a correct layout always matches. The 2% tolerance absorbs sub-pixel rounding.               |
-| `cover` crops posters badly                      | The spec defers this to rendered output. Phase 2 stories show a real 2:3 poster in a 16:9 box and the reverse.                                   |
+Each story passes its own `id`, so the browser's in-page image cache never answers for the server.
+"Nothing was requested" reads the Resource Timing buffer for `img` initiators since a timestamp the
+meta's loader takes before render. Warnings go to a file-wide `console.warn` spy installed in
+`beforeEach`, because they fire before `play()` does.
 
 ## Migration notes
 
-How each current call site maps onto the new API (SC6). This is a record for the migration change,
-not part of this deliverable's work.
+How each current call site maps onto the new API (SC6). For the migration change, not this one.
 
 | Call site              | Today                                                 | New                                                                                                                                               |
 | ---------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -203,66 +185,11 @@ not part of this deliverable's work.
 | `Footer`               | `width={140} height={140}`                            | Unchanged.                                                                                                                                        |
 | `Menu`, square logo    | `75px` × `40px`                                       | `width={75} height={40}`                                                                                                                          |
 | `Menu`, wide logo      | `190px` × `20px`                                      | `width={190} height={20}`                                                                                                                         |
-| `EntertainmentSidebar` | `80px` × `40px` network logo                          | `width={80} height={40} className='object-contain'`. Logos vary in shape and must not be cropped.                                                 |
+| `EntertainmentSidebar` | `80px` × `40px` network logo                          | **Open.** Logos vary in shape, so integers do not hold the box (see SC4), and no `ratio` literal is 2:1. Needs a decision before migration.       |
 | `PersonSidebar`        | `unset` + `!h-[450px] !w-[300px]`, `title`            | `ratio='2/3' className='w-[300px]'`. Drop `title`.                                                                                                |
 
 Every call site also drops `label` and keeps one `alt`. The current `label` strings are the better
 names (`` `Poster for ${title}` `` rather than `title`), so `alt` takes the `label` value.
 
-## Acceptance criteria
-
-Walked at close, with evidence beside each. From [`spec.md`](spec.md).
-
-- [ ] **AC1** — Given integer `width` and `height`, when the page renders before the source has
-      loaded, then the element occupies a box of that ratio.
-- [ ] **AC2** — Given a `ratio` and no intrinsic size, when the page renders before the source has
-      loaded, then the element occupies a box of that ratio.
-- [ ] **AC3** — Given a CSS length such as `'250px'` passed as `width`, when the code is type-checked,
-      then it fails to compile.
-- [ ] **AC4** — Given neither a `ratio` nor an intrinsic size and no explicit opt-out, when the code is
-      type-checked, then it fails to compile.
-- [ ] **AC5** — Given both a `ratio` and an intrinsic size, when the code is type-checked, then it
-      fails to compile.
-- [ ] **AC6** — Given a `ratio` and a source of a different shape, when the rendered image is
-      measured, then it fills the box and its content is not distorted.
-- [ ] **AC7** — Given a named image that fails to load, when assistive technology reads the element,
-      then it announces the name the caller supplied and says nothing about the failure.
-- [ ] **AC8** — Given a named image, when the rendered markup is inspected, then the name appears once
-      and there is no `aria-label` or `title` on the element.
-- [ ] **AC9** — Given an image marked decorative, when assistive technology traverses the page, then
-      the element is not reachable — whether or not it loaded.
-- [ ] **AC10** — Given an image that fails to load, when network activity is inspected, then no
-      request was issued as a result of the failure.
-- [ ] **AC11** — Given an empty `src`, when the rendered markup is inspected, then no request for the
-      current document URL was issued and the fallback is shown.
-- [ ] **AC12** — Given a failed image in each colour scheme, when the fallback is inspected, then it
-      matches the scheme in use, including when the scheme is set by the app rather than by the OS.
-- [ ] **AC13** — Given a caller-supplied `fallback` that also fails, when the element settles, then the
-      built-in fallback is shown and a development warning names the failing fallback.
-- [ ] **AC14** — Given a caller passing `onError`, when the image fails, then the fallback is shown
-      **and** the caller's handler is invoked exactly once.
-- [ ] **AC15** — Given an image that has failed, when `src` is changed to a working source, then the
-      image loads and the fallback is no longer shown.
-- [ ] **AC16** — Given an image that has failed, when the same source later becomes available, then
-      nothing changes.
-- [ ] **AC17** — Given `alt=""` with no explicit decorative marking, when the component renders in
-      development, then it warns.
-- [ ] **AC18** — Given a caller passing `loading`, `decoding`, `srcset`, `sizes` or `fetchpriority`,
-      when the rendered markup is inspected, then each appears on the `<img>` unchanged.
-- [ ] **AC19** — Given no `loading` value, when the rendered markup is inspected, then
-      `loading="lazy"` is present.
-- [ ] **AC20** — Given a caller sizing the element through `className`, when the element is measured,
-      then the class takes effect without `!important`.
-
-## Success criteria
-
-- [ ] **SC1** — Every image the component renders reserves its layout space before the source loads,
-      unless the caller has explicitly opted out.
-- [ ] **SC2** — There is exactly one way to name an image, and it is the one assistive technology
-      reads.
-- [ ] **SC3** — No network request is issued as a result of an image failing.
-- [ ] **SC4** — Every shape the app's current call sites need is expressible through the new API
-      without `!important`, demonstrated in Storybook rather than asserted.
-- [ ] **SC5** — A caller can tell from the documentation which of intrinsic size and ratio their case
-      wants.
-- [ ] **SC6** — The mapping from each current prop shape to the new API is written down.
+`Card` and `MostRecentEpisode` change visibly, because their current heights are not 2:3. That is
+the point — the old heights were the contradiction — but it wants eyes at migration.
