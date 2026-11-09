@@ -4,8 +4,7 @@ import { cn } from '@repo/tailwind-config';
 import { imageVariants } from '~/components/Image/Image.variants';
 import { Icon } from '~/components/Icon/Icon';
 import { RATIO_TOLERANCE, RATIO_VALUES } from '~/components/Image/Image.constants';
-import { isUsableSrc } from '~/components/Image/utils/isUsableSrc';
-import { warn } from '~/components/Image/utils/warn';
+import { isUsableSrc, warn } from '~/components/Image/Image.utils';
 import type { IImage, ImageStage } from '~/components/Image/Image.types';
 
 const STAGE_ORDER: Record<ImageStage, number> = { primary: 0, fallback: 1, builtIn: 2 };

@@ -54,6 +54,8 @@ const componentFiles = [
 	{ name: '{FolderName}.types.ts' },
 	{ name: '{FolderName}.variants.ts' },
 	{ name: '{FolderName}.constants.ts' },
+	{ name: '{FolderName}.utils.ts' },
+	{ name: '{FolderName}.utils.spec.ts' },
 	{ name: '{FolderName}.stories.tsx' },
 	{ name: '{FolderName}.mdx' },
 	{ name: '{FolderName}.types.spec.ts' },
