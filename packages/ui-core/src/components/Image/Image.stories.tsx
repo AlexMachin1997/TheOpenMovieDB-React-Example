@@ -92,9 +92,33 @@ const imageWarnings = () =>
 		.map((call) => String(call[0]))
 		.filter((message) => message.startsWith('[ui-core] Image'));
 
+/** Appends a per-mount nonce to a fixture URL; anything else passes through untouched. */
+const withNonce = <T extends string | null | undefined>(url: T, nonce: string): T | string =>
+	typeof url === 'string' && url.startsWith('/__image-fixture') ? `${url}&n=${nonce}` : url;
+
+/**
+ * `Image`, with every fixture URL made unique to this mount.
+ *
+ * The preview iframe stays one document across stories, and Chrome answers a URL it has already
+ * loaded in that document from its in-memory image cache, whatever `Cache-Control` says. Revisiting
+ * a story would then find its image already complete, and a "before load" assertion would fail on
+ * the second view only. A fresh URL per mount means every visit is a first visit.
+ */
+const FreshImage = (props: IImage) => {
+	const [nonce] = React.useState(() => Math.random().toString(36).slice(2));
+	return (
+		<Image
+			{...props}
+			src={withNonce(props.src, nonce)}
+			fallback={props.fallback === undefined ? undefined : withNonce(props.fallback, nonce)}
+		/>
+	);
+};
+
 const meta: Meta<IImage> = {
 	title: 'UI Core/Image',
 	component: Image,
+	render: (args: IImage) => <FreshImage {...args} />,
 	beforeEach: () => {
 		const original = console.warn;
 		warnSpy.mockClear();
@@ -411,7 +435,7 @@ export const SlowConnection: Story = {
 	},
 	render: (args: IImage) => (
 		<div className='flex w-[200px] flex-col gap-2'>
-			<Image {...args} />
+			<FreshImage {...args} />
 			<p className='text-sm'>Text below the image does not move when it loads.</p>
 		</div>
 	),
@@ -552,13 +576,13 @@ export const Decorative: Story = {
 	args: { decorative: true, ratio: '16/9' },
 	render: () => (
 		<div className='flex gap-4'>
-			<Image
+			<FreshImage
 				decorative
 				ratio='16/9'
 				className='w-[160px]'
 				src={fixtureUrl('decorative-loaded', { w: 320, h: 180 })}
 			/>
-			<Image
+			<FreshImage
 				decorative
 				ratio='16/9'
 				className='w-[160px]'
@@ -633,7 +657,7 @@ export const BothColourSchemes: Story = {
 					data-scheme={scheme}
 					className={cn(scheme, 'bg-background text-foreground flex items-start gap-2 p-4')}
 				>
-					<Image
+					<FreshImage
 						src={fixtureUrl(`scheme-${scheme}`, { status: 500 })}
 						ratio='2/3'
 						alt={`A failed poster, ${scheme} scheme`}
@@ -675,10 +699,10 @@ export const CustomFallback: Story = {
 		alt: 'Poster for Dune: Part Two',
 		className: 'w-[200px]'
 	},
-	play: async ({ args, canvasElement }: PlayContext) => {
+	play: async ({ canvasElement }: PlayContext) => {
 		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
 		await toFallback(img);
-		await expect(img).toHaveAttribute('src', args.fallback);
+		await expect(img.getAttribute('src')).toContain('custom-fallback-image');
 		await expect(await settled(img)).toBe('load');
 		await expect(img).not.toHaveClass('bg-muted');
 	}
@@ -729,7 +753,9 @@ export const CustomFallbackFails: Story = {
  * rail — must not keep the previous item's failure.
  */
 const SrcSwitcher = () => {
-	const [src, setSrc] = React.useState(fixtureUrl('switch-broken', { status: 500 }));
+	// Unique per mount for the same reason as `FreshImage`.
+	const [nonce] = React.useState(() => Math.random().toString(36).slice(2));
+	const [src, setSrc] = React.useState(fixtureUrl(`switch-broken-${nonce}`, { status: 500 }));
 
 	return (
 		<div className='flex flex-col items-start gap-2'>
@@ -737,7 +763,7 @@ const SrcSwitcher = () => {
 			<button
 				type='button'
 				className='rounded border px-2 py-1 text-sm'
-				onClick={() => setSrc(fixtureUrl('switch-working', { w: 300, h: 450 }))}
+				onClick={() => setSrc(fixtureUrl(`switch-working-${nonce}`, { w: 300, h: 450 }))}
 			>
 				Load another poster
 			</button>

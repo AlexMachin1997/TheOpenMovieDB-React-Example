@@ -139,6 +139,13 @@ The spec settled behaviour. These are the shapes it left open.
 - **Exact pixel comparisons fail on a scaled display.** At a device pixel ratio of 1.65, a 300px box
   measures `299.99997`. Headless Chromium runs at 1, so the suite was green while every size check
   failed in the user's browser. Sizes are compared with `toBeCloseTo(n, 0)`.
+- **Revisiting a story in the Interactions tab served its image from memory.** The preview iframe
+  stays one document across stories, and Chrome answers a URL already loaded in that document from
+  its in-memory image cache regardless of `Cache-Control: no-store`. `IntrinsicSize` then found the
+  image complete before its "before load" check, on the second visit only. The CLI and the Run
+  tests button never revisit, so both stayed green. Every story now renders through `FreshImage`,
+  which appends a per-mount nonce to fixture URLs. Checked by visiting all 19 stories twice in one
+  preview document: 38/38.
 - **The fixture route exists only if Storybook started with it.** Storybook reads `main.ts` once at
   startup, so a server started without `imageFixtures()` answers 404 and every image story falls
   back. Restart Storybook after changing `main.ts`.
@@ -165,7 +172,7 @@ SVG at `/__image-fixture`, never cached:
 | `status=500`  | A server error                                          |
 | `abort`       | No connectivity: the socket is dropped with no response |
 
-Each story passes its own `id`, so the browser's in-page image cache never answers for the server.
+Each story passes its own `id`, and `FreshImage` adds a per-mount nonce, so the browser's in-page image cache never answers for the server — not even on a revisit.
 "Nothing was requested" reads the Resource Timing buffer for `img` initiators since a timestamp the
 meta's loader takes before render. Warnings go to a file-wide `console.warn` spy installed in
 `beforeEach`, because they fire before `play()` does.
