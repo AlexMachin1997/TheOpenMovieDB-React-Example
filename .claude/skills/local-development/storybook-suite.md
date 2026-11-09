@@ -41,6 +41,26 @@ pages, which carry no tests.
   change, the served module did not, until the server was stopped, `node_modules/.vite` cleared and
   the server started again. Rebuilding underneath a running server also leaves pages showing "No
   Preview" until they reload.
+- **Green in the CLI is not green in the Interactions tab.** Observed under `21`, three ways:
+  - The Interactions tab keeps **one preview document** across stories, so Chrome's in-memory image
+    cache answers a revisited story's image URL whatever `Cache-Control` says. A "before load"
+    assertion passed on the first visit and failed on the second. The CLI and the Run tests button
+    never revisit. Make fetched URLs unique per mount (`Image.stories.tsx`'s `FreshImage`).
+  - The user's display runs at a **device pixel ratio of 1.65**; headless runs at 1. A 300px box
+    measures `299.99997` there, so exact `toBe(300)` on a rect fails only in their browser. Compare
+    sizes with `toBeCloseTo(n, 0)`.
+  - `main.ts` is read **once, at startup**. A dev server started before a `viteFinal` plugin was
+    added (or while it was removed) serves without it, while the CLI — which reads `main.ts` fresh —
+    passes. Restart the user's Storybook after any `main.ts` change; ask, it is their process.
+
+  To check the Interactions-tab behaviour yourself, drive the preview document directly in a visible
+  browser (Claude in Chrome — the in-app pane is often hidden and then loads no lazy images): emit
+  `setCurrentStory` on `window.__STORYBOOK_ADDONS_CHANNEL__` for each story, twice, and collect
+  `playFunctionThrewException` per `storyFinished`.
+
+- **Never run a forced build while a Storybook dev server is up.** `pnpm turbo run build --force`
+  rewrites every package's `dist/`; the running server then 404s on moved files and renders blank.
+  Stop the server first, or restart it with `node_modules/.vite` cleared afterwards.
 - **A stack-trace line number is not a source line number.** A failure reported
   `Calendar.stories.tsx:233` in a 229-line file — the trace points into Storybook's instrumented
   copy. Find the assertion by text, not by line.
