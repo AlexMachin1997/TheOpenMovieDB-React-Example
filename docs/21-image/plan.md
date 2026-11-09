@@ -43,13 +43,15 @@ Evidence is the story or spec case that settles each; every story runs in the su
       type.
 - [x] **AC9** — `Decorative`: `queryAllByRole('img')` is empty for a loaded and a failed decorative
       image, before and after the failure.
-- [x] **AC10** — `FailedToLoad` and `Offline`: no image request in the Resource Timing buffer beyond
-      the primary. The check is not vacuous: the same query counts the one failed request in
-      `SrcChangesAfterFailure`.
-- [x] **AC11** — `EmptySrc`: fallback shown at once, a `data:` source, and no image request at all.
+- [ ] **AC10** — partly met, by decision. No _image_ request follows a failure: `FailedToLoad` and
+      `Offline` find nothing in the Resource Timing buffer beyond the primary, and the same query
+      counts the one failed request in `SrcChangesAfterFailure`, so it is not vacuous. But the
+      built-in fallback renders `Icon`, which fetches `image-off` from Iconify's CDN the first time
+      it appears on a page. Accepted with decision 5, until `Icon` bundles its data.
+- [x] **AC11** — `EmptySrc`: fallback shown at once, no `<img>` in the page, and no image request.
 - [x] **AC12** — `BothColourSchemes`: in a light and a `.dark` panel, the fallback's computed
-      background equals a `bg-muted` swatch in the same panel, and the two panels differ. The scheme
-      is the app's class, not the OS setting.
+      background equals a `bg-muted` swatch in the same panel, and the two panels differ, as does the
+      icon's colour. The scheme is the app's class, not the OS setting.
 - [x] **AC13** — `CustomFallbackFails`: ends on the built-in fallback, one warning containing the
       fallback's URL. _Deviation:_ the warning is not limited to development; see decision 8.
 - [x] **AC14** — `FailedToLoad` (one call), and `CustomFallbackFails` (still one call when the
@@ -69,7 +71,7 @@ Evidence is the story or spec case that settles each; every story runs in the su
 
 - [x] **SC1** — No shape does not compile (AC4); the opt-out is the explicit `unsized`.
 - [x] **SC2** — `alt` is the only naming prop, and is what `getByRole` resolves (AC7, AC8).
-- [x] **SC3** — AC10 and AC11.
+- [ ] **SC3** — partly met: no image request (AC10, AC11), but `Icon`'s one CDN fetch per page.
 - [x] **SC4** — Every mapping in the [migration notes](#migration-notes) has a story: 2:3 at 300px and
       130px, 16:9 at 320px, `object-contain` with a ratio, a logo at its real proportions (`Logo`),
       and a logo of unknown width (`LogoOfUnknownWidth`). None needs `!important`. Both logo
@@ -100,14 +102,22 @@ The spec settled behaviour. These are the shapes it left open.
    `'1/1'` was left out because its only candidate, `Review`, moves to `Avatar`.
 3. **The opt-out is `unsized`**, the explicit form requirement 3 asks for.
 4. **`number` is as far as the type goes.** It rejects `'250px'` but cannot reject `1.5`.
-5. **The built-in fallback is a transparent SVG data URI at the caller's `width` × `height`, with
-   `bg-muted` behind it.** One element, no request, and the token follows `.dark`. It is a flat fill
-   with no icon: an icon needs a wrapper, a request, or an SVG that cannot see CSS variables.
+5. **The built-in fallback is a `<span role="img" aria-label={alt}>` holding `<Icon name='image-off'>`,
+   in `bg-muted` / `text-muted-foreground`.** _Changed after review._ It first shipped as a flat fill
+   on the `<img>` (a transparent SVG data URI), which read as an empty space; an icon cannot live
+   inside an `<img>`. The user chose the existing `Icon` over hand-inlined SVG backgrounds, accepting
+   two spec relaxations in the failed state only: requirement 1 (a `<span>` replaces the `<img>`) and
+   requirement 21 (`aria-label` carries the name, since `alt` names nothing without an image). It
+   also inherits `Icon`'s CDN fetch, so requirement 9 holds for the box and name but not the glyph
+   until `Icon` bundles its data, a planned enhancement. Integer sizes become an `aspect-ratio` and a
+   default width through `--image-width`, so `className` still overrides them.
 6. **Default classes.** The ratio form gets `w-full object-cover` and the ratio class. The integer
    form gets none, because Tailwind's preflight already sets `max-width: 100%; height: auto` on
    `img`. Everything goes through `cn`, so `object-contain` or `w-[300px]` replaces the default.
-7. **`onLoad` fires for whichever source settles**, so a `Skeleton` cleared from it always clears.
-   `onError` fires once, for the primary only. A missing `src` is not a failure.
+7. **`onLoad` fires for `src` and a caller `fallback`, not for the built-in fallback**, which is not
+   an image. The documented `Skeleton` recipe clears on `onError` too. `onError` fires once, for the
+   primary only. A missing `src` is not a failure. A caller's `ref` is `null` while the built-in
+   fallback shows.
 8. **Warnings are ungated `console.warn` with an `[ui-core] Image:` prefix, like `Button`'s.** The
    spec says "warn in development". `import.meta.env.DEV` is replaced with `false` by Vite's library
    build, so the app would never see the warning. Every existing warning in the library is ungated.
@@ -119,8 +129,9 @@ The spec settled behaviour. These are the shapes it left open.
 
 - **A 1×1 fallback pixel turned an integer-sized box square.** With `width` and `height` set, the
   box's ratio is `aspect-ratio: auto w / h`, and `auto` lets the loaded image's own ratio win over
-  the attributes. The planned 1×1 GIF made a 2:3 box 1:1 the moment it loaded. The built-in source
-  is now an empty SVG carrying the caller's own dimensions. `Offline` pins it.
+  the attributes. The planned 1×1 GIF made a 2:3 box 1:1 the moment it loaded, so it became an
+  empty SVG at the caller's own dimensions. Superseded when the built-in fallback became a `<span>`
+  (decision 5), which gets the same shape from `aspect-ratio` and `--image-width` instead.
 - **`srcSet` would outrank the fallback.** A candidate list beats `src`, so leaving it on the element
   would keep loading the failed candidates. `srcSet` and `sizes` are dropped off the primary stage.
 - **A request that never answers starves the whole suite.** The planned `hang` fixture would hold

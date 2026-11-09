@@ -15,8 +15,8 @@ import { Image } from '@repo/ui-core';
 
 - **Space is reserved before the image arrives**, so nothing on the page jumps when it does. You cannot leave this out by accident: an image with no shape does not compile.
 - **One name, and it is the one screen readers read.** `alt` is the only naming prop. `aria-label` and `title` are not accepted, because either would override or duplicate it.
-- **A failed image stays in place.** It falls back to your own `fallback`, then to a muted box painted from the theme. It requests nothing, follows dark mode, and keeps the image's name.
-- **Still a plain `<img>`.** One element, no wrapper. `srcSet`, `sizes`, `decoding` and `fetchPriority` pass straight through. `loading` defaults to `lazy`.
+- **A failed image stays in place.** It falls back to your own `fallback`, then to a muted box with an `image-off` icon, painted from the theme. It follows dark mode and keeps the image's name.
+- **Still a plain `<img>`** until the built-in fallback, which is one `<span>`. Never a wrapper. `srcSet`, `sizes`, `decoding` and `fetchPriority` pass straight through. `loading` defaults to `lazy`.
 - **It tells you when it is covering for a mistake:** a fallback that also failed, an empty `alt`, or a `ratio` that your `className` has overridden.
 
 <Canvas of={ImageStories.Ratio} />
@@ -177,9 +177,13 @@ A failed image, and an image with no `src` at all, behave the same way. You neve
 
 1. **`src` is tried first.** An empty or missing `src` is skipped, and is never written to the page. An empty `src` would make some browsers request the current page again.
 2. **Your `fallback` is tried next**, if you passed one. It is fetched like any other image.
-3. **The built-in fallback is last.** It is a box painted with the theme's `muted` colour. It makes no request, so it still works when you are offline, and it follows the app's light or dark mode.
+3. **The built-in fallback is last.** It is a box in the theme's `muted` colour with an `image-off` [`Icon`](?path=/docs/ui-core-icon--docs) centred on it, at 40% of the box's width up to 3rem. It follows the app's light or dark mode.
 
-At every step the box keeps its size and the image keeps its `alt`. Nothing announces the failure.
+   It is a `<span>`, not an `<img>`, because an image cannot hold an icon. It takes the image's place at the same size, and carries the name from `alt` as `role="img"` with an `aria-label`. Two things follow: `onLoad` does not fire for it, since nothing loads, and a `ref` you pass is `null` while it shows.
+
+At every step the box keeps its size and the image keeps its name. Nothing announces the failure.
+
+> **The icon's data comes from Iconify's CDN** until `Icon` bundles its icons. Offline, the box and the name still show, but the icon may not.
 
 <Canvas of={ImageStories.FailedToLoad} />
 
@@ -232,7 +236,7 @@ A new `src` starts again from the top, even after a failure. This matters when a
 
 ### Styling the fallback
 
-The `<img>` carries `data-state="fallback"` whenever it is not showing `src`, so you can target it:
+The element carries `data-state="fallback"` whenever it is not showing `src`, whether that is your `fallback` image or the built-in `<span>`, so you can target it:
 
 ```tsx
 <Image
@@ -267,19 +271,25 @@ On a slow connection, the reserved box is what the user sees until the file arri
 
 ### Showing a placeholder while it loads
 
-`Image` has no loading state of its own. Once the space is reserved, nothing jumps, so a placeholder is decoration. If you want one, put `Skeleton` behind the image and clear it from `onLoad`. `onLoad` fires however the image settles, including when it falls back, so the placeholder always goes away.
+`Image` has no loading state of its own. Once the space is reserved, nothing jumps, so a placeholder is decoration. If you want one, put `Skeleton` behind the image and clear it from both `onLoad` and `onError`. The built-in fallback is not an image, so `onLoad` does not fire for it; `onError` covers that case. Start without a placeholder when there is no `src`, because then neither fires.
 
 ```tsx
 import * as React from 'react';
 import { Image, Skeleton } from '@repo/ui-core';
 
-const Poster = ({ src, title }: { src: string; title: string }) => {
-	const [loaded, setLoaded] = React.useState(false);
+const Poster = ({ src, title }: { src?: string; title: string }) => {
+	const [settled, setSettled] = React.useState(!src);
 
 	return (
 		<div className='relative w-[200px]'>
-			{!loaded && <Skeleton className='absolute inset-0' />}
-			<Image src={src} ratio='2/3' alt={`Poster for ${title}`} onLoad={() => setLoaded(true)} />
+			{!settled && <Skeleton className='absolute inset-0' />}
+			<Image
+				src={src}
+				ratio='2/3'
+				alt={`Poster for ${title}`}
+				onLoad={() => setSettled(true)}
+				onError={() => setSettled(true)}
+			/>
 		</div>
 	);
 };

@@ -73,9 +73,25 @@ const imageRequestsSince = (since: number) =>
 const startedAt = (loaded: Record<string, unknown>) =>
 	typeof loaded.startedAt === 'number' ? loaded.startedAt : 0;
 
-/** Waits for the component to give up on its primary source. */
-const toFallback = (img: HTMLElement) =>
-	waitFor(() => expect(img).toHaveAttribute('data-state', 'fallback'), { timeout: 3000 });
+/**
+ * Waits for the component to give up on its primary source, and returns what it shows instead.
+ *
+ * Re-queried rather than held: the built-in fallback is a different element from the <img> it
+ * replaces, so a reference taken before the failure points at a node no longer in the page.
+ */
+const toFallback = async (
+	container: HTMLElement,
+	selector = '[data-slot="image"][data-state="fallback"]'
+) => {
+	await waitFor(() => expect(container.querySelector(selector)).not.toBeNull(), { timeout: 3000 });
+	const element = container.querySelector<HTMLElement>(selector);
+	if (element === null) throw new Error(`nothing matches ${selector}`);
+	return element;
+};
+
+/** As `toFallback`, for the built-in fallback: the muted box with an icon, which is not an <img>. */
+const toBuiltInFallback = (container: HTMLElement) =>
+	toFallback(container, 'span[data-slot="image"][data-state="fallback"]');
 
 /**
  * Every story's `console.warn`, swapped for a spy.
@@ -461,12 +477,19 @@ export const Named: Story = {
 		className: 'w-[200px]'
 	},
 	play: async ({ canvasElement, step }: PlayContext) => {
-		const img = within(canvasElement).getByRole('img', { name: 'Poster for Dune: Part Two' });
+		const img = within(canvasElement).getByRole<HTMLImageElement>('img', {
+			name: 'Poster for Dune: Part Two'
+		});
 
 		await step('alt is the only name: no aria-label, no title', async () => {
 			await expect(img).toHaveAttribute('alt', 'Poster for Dune: Part Two');
 			await expect(img).not.toHaveAttribute('aria-label');
 			await expect(img).not.toHaveAttribute('title');
+		});
+
+		await step('A loaded image paints nothing behind itself', async () => {
+			await expect(await settled(img)).toBe('load');
+			await expect(getComputedStyle(img).backgroundImage).toBe('none');
 		});
 
 		await step('Images are lazy unless the caller says otherwise', async () => {
@@ -535,7 +558,10 @@ export const SlowConnection: Story = {
  * Failure
  * ---------------------------------------------------------------------------------------------- */
 
-/** The server answers 500. The box stays, painted from `bg-muted`, and keeps the image's name. */
+/**
+ * The server answers 500. The box stays, as a muted panel with an `image-off` icon, and keeps the
+ * image's name.
+ */
 export const FailedToLoad: Story = {
 	args: {
 		src: fixtureUrl('failed-to-load', { status: 500 }),
@@ -545,8 +571,7 @@ export const FailedToLoad: Story = {
 		onError: fn()
 	},
 	play: async ({ args, canvasElement, loaded, step }: PlayContext) => {
-		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
-		await toFallback(img);
+		const img = await toBuiltInFallback(canvasElement);
 
 		await step('The fallback announces the name the caller gave, not the failure', async () => {
 			await expect(
@@ -554,9 +579,8 @@ export const FailedToLoad: Story = {
 			).toBe(img);
 		});
 
-		await step('It is inlined, so showing it requested nothing', async () => {
-			await expect(img.getAttribute('src')).toMatch(/^data:image\/svg\+xml,/);
-			await expect(await settled(img)).toBe('load');
+		await step('It shows the image-off icon, and requested nothing to do so', async () => {
+			await expect(img.querySelector('[data-slot="icon"]')).not.toBeNull();
 			await expect(
 				imageRequestsSince(startedAt(loaded)).filter((url) => !url.includes('failed-to-load'))
 			).toEqual([]);
@@ -590,9 +614,7 @@ export const Offline: Story = {
 		className: 'w-[200px]'
 	},
 	play: async ({ canvasElement, loaded, step }: PlayContext) => {
-		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
-		await toFallback(img);
-		await expect(await settled(img)).toBe('load');
+		const img = await toBuiltInFallback(canvasElement);
 
 		await step('No request was issued because of the failure', async () => {
 			await expect(
@@ -601,7 +623,7 @@ export const Offline: Story = {
 		});
 
 		await step(
-			'An intrinsic-size box keeps its 2:3 ratio once the fallback has loaded',
+			'An intrinsic-size box keeps its 2:3 ratio and its className width in the fallback',
 			async () => {
 				await expect(img.getBoundingClientRect().width).toBeCloseTo(200, 0);
 				await expect(img.getBoundingClientRect().height).toBeCloseTo(300, 0);
@@ -620,15 +642,15 @@ export const EmptySrc: Story = {
 		onError: fn()
 	},
 	play: async ({ args, canvasElement, loaded, step }: PlayContext) => {
-		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
-
-		await step('The fallback is shown straight away', async () => {
-			await expect(img).toHaveAttribute('data-state', 'fallback');
-			await expect(img.getAttribute('src')).toMatch(/^data:/);
+		await step('The fallback is shown straight away, with no <img> at all', async () => {
+			const fallback = within(canvasElement).getByRole('img', {
+				name: 'Poster for Dune: Part Two'
+			});
+			await expect(fallback).toHaveAttribute('data-state', 'fallback');
+			await expect(canvasElement.querySelector('img')).toBeNull();
 		});
 
 		await step('Nothing was requested — not the page URL, not anything', async () => {
-			await settled(img);
 			await expect(imageRequestsSince(startedAt(loaded))).toEqual([]);
 		});
 
@@ -672,16 +694,14 @@ export const Decorative: Story = {
 		</div>
 	),
 	play: async ({ canvasElement, step }: PlayContext) => {
-		const images = canvasElement.querySelectorAll('img');
-
-		await step('Both carry an empty alt', async () => {
-			for (const img of images) await expect(img).toHaveAttribute('alt', '');
+		await step('The loaded one carries an empty alt', async () => {
+			await expect(canvasElement.querySelector('img')).toHaveAttribute('alt', '');
 		});
 
 		await step('Neither is reachable as an image, before or after one of them fails', async () => {
 			await expect(within(canvasElement).queryAllByRole('img')).toEqual([]);
-			const failed = images.item(1);
-			if (failed !== null) await toFallback(failed);
+			const failed = await toBuiltInFallback(canvasElement);
+			await expect(failed).toHaveAttribute('aria-hidden', 'true');
 			await expect(within(canvasElement).queryAllByRole('img')).toEqual([]);
 		});
 
@@ -751,19 +771,25 @@ export const BothColourSchemes: Story = {
 	),
 	play: async ({ canvasElement }: PlayContext) => {
 		const colours: Record<string, string> = {};
+		const icons: Record<string, string> = {};
 
 		for (const panel of canvasElement.querySelectorAll<HTMLElement>('[data-scheme]')) {
-			const img = within(panel).getByRole('img');
+			const fallback = await toBuiltInFallback(panel);
 			const swatch = panel.querySelector('[data-swatch]');
-			await toFallback(img);
 			if (swatch === null) throw new Error('missing swatch');
 
-			const colour = getComputedStyle(img).backgroundColor;
+			const colour = getComputedStyle(fallback).backgroundColor;
 			await expect(colour).toBe(getComputedStyle(swatch).backgroundColor);
 			colours[panel.dataset.scheme ?? ''] = colour;
+
+			const icon = fallback.querySelector('[data-slot="icon"]');
+			if (icon === null) throw new Error('missing icon');
+			icons[panel.dataset.scheme ?? ''] = getComputedStyle(icon).color;
 		}
 
 		await expect(colours.light).not.toBe(colours.dark);
+		// The icon follows the scheme too, not just the box behind it.
+		await expect(icons.light).not.toBe(icons.dark);
 	}
 };
 
@@ -781,11 +807,10 @@ export const CustomFallback: Story = {
 		className: 'w-[200px]'
 	},
 	play: async ({ canvasElement }: PlayContext) => {
-		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
-		await toFallback(img);
+		const img = await toFallback(canvasElement);
+		if (!(img instanceof HTMLImageElement)) throw new Error('a caller fallback is still an <img>');
 		await expect(img.getAttribute('src')).toContain('custom-fallback-image');
 		await expect(await settled(img)).toBe('load');
-		await expect(img).not.toHaveClass('bg-muted');
 	}
 };
 
@@ -803,11 +828,8 @@ export const CustomFallbackFails: Story = {
 		onError: fn()
 	},
 	play: async ({ args, canvasElement, step }: PlayContext) => {
-		const img = within(canvasElement).getByRole<HTMLImageElement>('img');
-
 		await step('The built-in fallback is where it settles', async () => {
-			await waitFor(() => expect(img.getAttribute('src')).toMatch(/^data:/), { timeout: 3000 });
-			await expect(img).toHaveClass('bg-muted');
+			await toBuiltInFallback(canvasElement);
 		});
 
 		await step('onError ran exactly once', async () => {
@@ -857,12 +879,11 @@ export const SrcChangesAfterFailure: Story = {
 	render: () => <SrcSwitcher />,
 	play: async ({ canvasElement, loaded, step }: PlayContext) => {
 		const canvas = within(canvasElement);
-		const img = canvas.getByRole<HTMLImageElement>('img');
-		await toFallback(img);
+		await toBuiltInFallback(canvasElement);
 
 		await step('Left alone, a failed source is never retried', async () => {
 			await new Promise((resolve) => setTimeout(resolve, 500));
-			await expect(img).toHaveAttribute('data-state', 'fallback');
+			await expect(canvasElement.querySelector('img')).toBeNull();
 			await expect(
 				imageRequestsSince(startedAt(loaded)).filter((url) => url.includes('switch-broken'))
 			).toHaveLength(1);
@@ -870,7 +891,8 @@ export const SrcChangesAfterFailure: Story = {
 
 		await step('A new src resets the failure and loads', async () => {
 			await userEvent.click(canvas.getByRole('button', { name: 'Load another poster' }));
-			await waitFor(() => expect(img).not.toHaveAttribute('data-state'));
+			const img = await toFallback(canvasElement, 'img[data-slot="image"]:not([data-state])');
+			if (!(img instanceof HTMLImageElement)) throw new Error('no <img> after the reset');
 			await expect(img.getAttribute('src')).toContain('switch-working');
 			await expect(await settled(img)).toBe('load');
 		});

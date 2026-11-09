@@ -115,8 +115,8 @@ export type IImage = Omit<
 		onError?: React.ReactEventHandler<HTMLImageElement>;
 
 		/**
-		 * Called when whichever source is shown finishes loading, the fallback included. Use it to
-		 * clear a loading placeholder: it fires however the image settles.
+		 * Called when `src`, or your `fallback`, finishes loading. Not called for the built-in
+		 * fallback, which is not an image; clear a loading placeholder from `onError` as well.
 		 */
 		onLoad?: React.ReactEventHandler<HTMLImageElement>;
 

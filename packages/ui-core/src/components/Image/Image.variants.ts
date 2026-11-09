@@ -7,19 +7,13 @@ import { cva } from 'class-variance-authority';
  *
  * The ratio form fills the width it is given, because `aspect-ratio` can only size a box with one
  * automatic dimension, and covers it so a source of another shape is cropped rather than squashed.
+
  */
 export const imageVariants = cva('', {
 	variants: {
 		ratio: {
 			'2/3': 'aspect-[2/3] w-full object-cover',
 			'16/9': 'aspect-video w-full object-cover'
-		},
-		fallback: {
-			true: 'bg-muted',
-			false: ''
 		}
-	},
-	defaultVariants: {
-		fallback: false
 	}
 });

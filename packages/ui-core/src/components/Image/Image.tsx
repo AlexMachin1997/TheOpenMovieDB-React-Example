@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { cn } from '@repo/tailwind-config';
 import { imageVariants } from '~/components/Image/Image.variants';
+import { Icon } from '~/components/Icon/Icon';
 import {
 	RATIO_TOLERANCE,
 	RATIO_VALUES,
-	builtInFallbackSrc,
 	isUsableSrc,
 	warn
 } from '~/components/Image/Image.constants';
@@ -20,10 +20,11 @@ const STAGE_ORDER: Record<ImageStage, number> = { primary: 0, fallback: 1, built
  * for a slot whose shape is fixed whatever the source, or `unsized` to opt out on purpose. Name it
  * with `alt`, or mark it `decorative`.
  *
- * When `src` fails or is missing, the same element shows a `fallback` if one was given, then a
- * muted box painted from theme tokens. Neither announces the failure: the image keeps its `alt`.
+ * When `src` fails or is missing, it shows a `fallback` if one was given, then a muted box with an
+ * `image-off` icon, painted from theme tokens. Neither announces the failure: both keep the name
+ * the caller gave in `alt`.
  *
- * Renders a single `<img>` and nothing else. Native attributes such as `srcSet`, `sizes`,
+ * Renders a single `<img>` and nothing else, until the built-in fallback, which is one `<span>`. Native attributes such as `srcSet`, `sizes`,
  * `decoding` and `fetchPriority` pass straight through; `loading` defaults to `lazy`.
  *
  * @example
@@ -119,15 +120,44 @@ const Image = ({
 		}
 	}, [ratio, className]);
 
-	const shown =
-		stage === 'primary' ? src : stage === 'fallback' ? fallback : builtInFallbackSrc(width, height);
+	if (stage === 'builtIn') {
+		/*
+		 * Not an <img>: an image cannot contain the icon. The element takes the image's place at the
+		 * same size — integer attributes become an aspect ratio and a default width, both overridable
+		 * by `className` exactly as on the <img> — and takes over its name, since `alt` names nothing
+		 * once there is no image.
+		 */
+		const intrinsic: (React.CSSProperties & Record<'--image-width', string>) | undefined =
+			width !== undefined && height !== undefined
+				? { aspectRatio: `${width} / ${height}`, '--image-width': `${width}px` }
+				: undefined;
+
+		return (
+			<span
+				data-slot='image'
+				data-state='fallback'
+				role={decorative === true ? undefined : 'img'}
+				aria-label={decorative === true ? undefined : alt}
+				aria-hidden={decorative === true ? true : undefined}
+				style={intrinsic}
+				className={cn(
+					'bg-muted text-muted-foreground inline-flex max-w-full items-center justify-center overflow-hidden align-middle',
+					intrinsic !== undefined && 'w-(--image-width)',
+					imageVariants({ ratio }),
+					className
+				)}
+			>
+				<Icon name='image-off' className='h-auto w-[min(3rem,40%)]' />
+			</span>
+		);
+	}
 
 	return (
 		<img
 			ref={setRef}
 			data-slot='image'
 			data-state={stage === 'primary' ? undefined : 'fallback'}
-			src={shown ?? undefined}
+			src={(stage === 'primary' ? src : fallback) ?? undefined}
 			// A candidate list would win over `src`, so it only belongs to the primary source.
 			srcSet={stage === 'primary' ? srcSet : undefined}
 			sizes={stage === 'primary' ? sizes : undefined}
@@ -136,7 +166,7 @@ const Image = ({
 			height={height}
 			loading={loading}
 			onError={handleError}
-			className={cn(imageVariants({ ratio, fallback: stage === 'builtIn' }), className)}
+			className={cn(imageVariants({ ratio }), className)}
 			{...props}
 		/>
 	);
