@@ -127,15 +127,14 @@ This is C05 in [`component-inventory.md`](../component-inventory.md).
 - **The content is checked again when it or its width changes.** Checking once on mount is how the
   current component goes wrong.
 - **No focus movement.** The button stays where the user put focus.
+- **The cut-off text stays in the accessibility tree** _(decided 2026-11-16)_. The clamp is visual
+  only, so a screen reader reads the full content without pressing the button. The current
+  component already behaves this way, by accident. This reverses the inventory's note on C05. Hiding
+  the text would mean not rendering it, which makes screen reader users press a button to hear text
+  they could otherwise read straight through.
 
 ## Open Questions
 
-- **Q1: Should the cut-off text stay in the accessibility tree while collapsed?** The inventory says
-  to remove it. A clamp done in CSS hides text visually but leaves all of it in the accessibility
-  tree, so a screen reader reads the whole biography either way. Removing it means the collapsed
-  part is no longer rendered, or hidden as a separate block, which is extra work. It would also make
-  screen reader users press the button to hear text they could otherwise read straight through.
-  Keeping it in the tree is the simpler path, but it reverses the inventory decision.
 - **Q2: Should the collapsed size be a number of lines or a height?** Lines never cut text in half
   and follow the font size. A height also works for content that isn't text, such as a paragraph
   with an image. It could be lines only, height only, or both.
