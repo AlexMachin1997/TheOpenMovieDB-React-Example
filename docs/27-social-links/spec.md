@@ -117,8 +117,7 @@ when the app is set up again.
 
 ## Open Questions
 
-None for this component. It waits on the `Icon` second pass, which has one naming question of its
-own.
+None. It waits on the `Icon` second pass being built. X's mark is the `x-logo` icon.
 
 ## Design References
 
