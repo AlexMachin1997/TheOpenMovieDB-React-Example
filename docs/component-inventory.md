@@ -22,8 +22,8 @@ account pages.
 
 | Outcome      | Count | Meaning                                                   |
 | ------------ | ----- | --------------------------------------------------------- |
-| **Library**  | 13    | Goes in a `ui-*` package                                  |
-| **App**      | 18    | Built in the app, or already covered by something we ship |
+| **Library**  | 9     | Goes in a `ui-*` package                                  |
+| **App**      | 22    | Built in the app, or already covered by something we ship |
 | **Dropped**  | 8     | Not doing it, or folded into another item                 |
 | **Deferred** | 2     | Agreed in principle, deliberately not now                 |
 
@@ -32,46 +32,46 @@ Every item has a decision on it. C37 is the one that needed unpicking rather tha
 
 ## Library
 
-Thirteen components, in the order they unblock each other.
+Nine components, in the order they unblock each other.
 
 | ID  | Component                   | Notes                                                                                                                                                                                                                                                           |
 | --- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| C01 | `Card`                      | Small composable parts in `ui-core`, assembled by hand at the call site — not a props-driven wrapper, and no `CardImage`. See [Card is parts, not a wrapper](#card-is-parts-not-a-wrapper).                                                                     |
+| C01 | `Card`                      | Small composable parts in `ui-core`, assembled by hand at the call site — not a props-driven wrapper, and no `CardImage`. **The parts' API still needs discussing before it is specified.** See [Card is parts, not a wrapper](#card-is-parts-not-a-wrapper).   |
 | C02 | `Image`                     | **Scheduled as [`21-image`](README.md).** Error fallback, `ratio` prop, and one accessible name. See [Image scope](#image-scope).                                                                                                                               |
 | C10 | Horizontal rail             | The left/right scrolling card container. The app hand-rolls this **16 times** today, none of them keyboard reachable.                                                                                                                                           |
 | C03 | Rating ring                 | Port of `Percentage.tsx`. Hardcodes raw hex and a four-step colour ladder — worth sequencing behind the design-system audit in [`planned.md`](planned.md). Also needs a single name; it currently has three. See [C03](#c03-has-three-names-for-one-component). |
 | C04 | `Spinner` + loading surface | Split in two. The current `Loader.tsx` is a spinner and a full-screen overlay sharing one `isFixed` flag, which stops the spinner being usable inside a button or a rail.                                                                                       |
 | C05 | `ReadMore`                  | Needs `aria-expanded`/`aria-controls`, needs the clamped text out of the accessibility tree while hidden, and needs to respect `prefers-reduced-motion`. Removes the app's only component-level `.scss`.                                                        |
 | C17 | `Separator`                 | Decorative by default, semantic opt-in, plus orientation. Replaces 9 hand-rolled `border-b border-solid` instances.                                                                                                                                             |
-| C20 | `DescriptionList`           | `EntertainmentSidebar.tsx` repeats the label/value block **10 times**, `PersonSidebar.tsx` **5 more** — with a different heading level. Every label is currently marked up as a heading, so the sidebars emit 15 headings that aren't headings.                 |
-| C21 | Badge variant               | Keyword and genre chips. A variant, not a component.                                                                                                                                                                                                            |
-| C24 | Video lightbox              | Thumbnail with a play badge, opening a `Dialog` with a 16:9 embed. The current play affordance is an `<Icon>` in a plain `<div>` — no button, no handler, no keyboard path.                                                                                     |
+| C21 | `Badge` rework              | Keyword and genre chips. The shadcn `Badge` gets reworked into a simple component with the variants the app needs. The variant set depends on the design-system audit in [`planned.md`](planned.md).                                                            |
 | C28 | Social links                | Port of `SocialLinks.tsx`. Blocked on the `Icon` collection change below.                                                                                                                                                                                       |
-| C31 | Filter sidebar              | Onto library components. See [the Formik question](#the-formik-question).                                                                                                                                                                                       |
-| C34 | Infinite scroll             | Scroll-to-load with a button as an equal second route, not a failure fallback. `@tanstack/react-virtual` is already a dependency of both the app and `ui-command`, and the repo has a skill for the house pattern.                                              |
 
 ## App layer, or already covered
 
-| ID  | Component             | Outcome                                                                                                                                                                                         |
-| --- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| C06 | Table                 | No library primitives. Redesign `CreditsTable` in the app — real `<thead>`, Year and Title columns, no `flex` on rows. Work moves to C30.                                                       |
-| C07 | Navigation menu       | Reassembled in the app from `Sheet`, `DropdownMenu`, `Button`, `Popover`. Known trade: no `menubar`, so no arrowing sideways between top-level items.                                           |
-| C08 | `RatingBlock`         | Stays in the app's `shared/`. It _is_ reused — `Review.tsx` and `MostRecentEpisode.tsx` both import it.                                                                                         |
-| C11 | Segmented control     | App-specific. Note TMDB uses the same markup at both widths; the mobile "dropdown" is CSS, not a `<select>`. A real desktop-tabs/mobile-dropdown split is two controls and two keyboard models. |
-| C12 | Search autocomplete   | `Command` at the app layer. `Search` already ships `showClearButton`, a leading icon and debouncing.                                                                                            |
-| C15 | Poster overflow menu  | `DropdownMenu` — it already does roving focus and type-ahead.                                                                                                                                   |
-| C19 | Backdrop hero         | `EntertainmentHeader` already covers it.                                                                                                                                                        |
-| C22 | Review card           | Rebuild on `Avatar`, C03 and C05. Carries a security issue — see [The review card](#the-review-card).                                                                                           |
-| C25 | Season card           | `MostRecentEpisode` reworked. Its poster is `hidden md:block`, so mobile loses the image entirely. Good first test of C01's API.                                                                |
-| C26 | Content score meter   | `Progress` plus a score-to-message lookup.                                                                                                                                                      |
-| C30 | Grouped credits table | The app-layer redesign C06 turned into. Unblocked.                                                                                                                                              |
-| C32 | Slider scale labels   | Covered. `SliderRoot` takes an array value, so two-thumb ranges already work; the printed scale is app markup.                                                                                  |
-| C33 | Token input           | Covered by `MultiSelect`.                                                                                                                                                                       |
-| C35 | Empty state           | App-specific copy, and the markup is a heading and a sentence.                                                                                                                                  |
-| C36 | Action rail           | App composition. The one library-shaped piece is a **toggle button with an exposed pressed state**, which `Button` lacks — same control as C40's sort direction.                                |
-| C37 | Vibes                 | Three mechanisms, not one component. Rating slider and tone picker are buildable on parts we have; the mood picker has no data. See [C37](#c37--vibes-and-why-it-isnt-one-component).           |
-| C38 | Settings layout       | A page, not a component. TMDB's mobile treatment is a horizontally scrolling tab strip that clips mid-word with no affordance; `Select`, `Sheet` or `Accordion` all beat it and all exist.      |
-| C40 | Sort control          | `Select`, plus C36's toggle for direction.                                                                                                                                                      |
+| ID  | Component             | Outcome                                                                                                                                                                                                                                                         |
+| --- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| C06 | Table                 | No library primitives. Redesign `CreditsTable` in the app — real `<thead>`, Year and Title columns, no `flex` on rows. Work moves to C30.                                                                                                                       |
+| C07 | Navigation menu       | Reassembled in the app from `Sheet`, `DropdownMenu`, `Button`, `Popover`. Known trade: no `menubar`, so no arrowing sideways between top-level items.                                                                                                           |
+| C08 | `RatingBlock`         | Stays in the app's `shared/`. It _is_ reused — `Review.tsx` and `MostRecentEpisode.tsx` both import it.                                                                                                                                                         |
+| C11 | Segmented control     | App-specific. Note TMDB uses the same markup at both widths; the mobile "dropdown" is CSS, not a `<select>`. A real desktop-tabs/mobile-dropdown split is two controls and two keyboard models.                                                                 |
+| C12 | Search autocomplete   | `Command` at the app layer. `Search` already ships `showClearButton`, a leading icon and debouncing.                                                                                                                                                            |
+| C15 | Poster overflow menu  | `DropdownMenu` — it already does roving focus and type-ahead.                                                                                                                                                                                                   |
+| C19 | Backdrop hero         | `EntertainmentHeader` already covers it.                                                                                                                                                                                                                        |
+| C20 | Description list      | App-specific. `EntertainmentSidebar.tsx` repeats the label/value block **10 times** and `PersonSidebar.tsx` **5 more**. A `.map()` over a `<dl>`/`<dt>`/`<dd>` fixes it. Today every label is a heading, so the sidebars emit 15 headings that aren't headings. |
+| C22 | Review card           | Rebuild on `Avatar`, C03 and C05. Carries a security issue — see [The review card](#the-review-card).                                                                                                                                                           |
+| C24 | Video lightbox        | App composition: a thumbnail button with a play badge, opening a `Dialog` with a 16:9 embed. The current play affordance is an `<Icon>` in a plain `<div>`, with no button, no handler and no keyboard path.                                                    |
+| C25 | Season card           | `MostRecentEpisode` reworked. Its poster is `hidden md:block`, so mobile loses the image entirely. Good first test of C01's API.                                                                                                                                |
+| C26 | Content score meter   | `Progress` plus a score-to-message lookup.                                                                                                                                                                                                                      |
+| C30 | Grouped credits table | The app-layer redesign C06 turned into. Unblocked.                                                                                                                                                                                                              |
+| C31 | Filter sidebar        | App migration task, done when the app is set up again on library parts. See [the Formik question](#the-formik-question).                                                                                                                                        |
+| C32 | Slider scale labels   | Covered. `SliderRoot` takes an array value, so two-thumb ranges already work; the printed scale is app markup.                                                                                                                                                  |
+| C33 | Token input           | Covered by `MultiSelect`.                                                                                                                                                                                                                                       |
+| C34 | Infinite scroll       | Possibly not needed. If it is, it is app-specific: scroll-to-load with a load-more button as an equal second route. To discuss outside the library.                                                                                                             |
+| C35 | Empty state           | App-specific copy, and the markup is a heading and a sentence.                                                                                                                                                                                                  |
+| C36 | Action rail           | App composition. The one library-shaped piece is a **toggle button with an exposed pressed state**, which `Button` lacks — same control as C40's sort direction.                                                                                                |
+| C37 | Vibes                 | Three mechanisms, not one component. Rating slider and tone picker are buildable on parts we have; the mood picker has no data. See [C37](#c37--vibes-and-why-it-isnt-one-component).                                                                           |
+| C38 | Settings layout       | A page, not a component. TMDB's mobile treatment is a horizontally scrolling tab strip that clips mid-word with no affordance; `Select`, `Sheet` or `Accordion` all beat it and all exist.                                                                      |
+| C40 | Sort control          | `Select`, plus C36's toggle for direction.                                                                                                                                                                                                                      |
 
 ## Dropped
 
@@ -206,7 +206,8 @@ Decisions taken:
   the first place — see [`planned.md`](planned.md#design-system-audit).
 
 Not scheduled. It follows C02, since the parts are worth designing against an `Image` that already
-reserves its space.
+reserves its space. **The parts' API is not settled.** Which parts exist and what each one accepts
+needs discussing before a spec is written.
 
 ### The `Icon` collection change
 
@@ -214,15 +215,21 @@ reserves its space.
 closed 30-name allowlist. **Lucide ships no brand icons**, so social marks are unreachable — this
 blocks C28.
 
-Agreed direction: drop `ICON_COLLECTION` and prefix names with their collection
-(`'lucide:search'`, `'simple-icons:facebook'`), which is Iconify's native identifier format and
-simplifies `Icon.tsx` to `icon={name}`.
+Agreed direction (revised 16 November 2026): **callers keep writing bare names** (`'x'`,
+`'alert-triangle'`, `'facebook'`). The allowlist records which collection each name comes from, and
+`Icon` adds that prefix internally to build the Iconify identifier (`lucide:x`,
+`simple-icons:facebook`). This replaces the earlier plan of writing the prefix at every call site,
+so the 23 existing call sites do not change.
+
+Names must stay unique across collections. A bare name that exists in two collections can only map
+to one of them. For example, `x` is Lucide's close cross, so the X brand mark needs a different bare
+name.
 
 Two things to preserve:
 
 - **The allowlist stays closed.** `Icon.constants.ts` calls the compile-time error on an unknown name
   "by design"; an open string type means typos ship silently.
-- **23 call sites** in `packages/` plus the constants file. Icon data resolves from Iconify's CDN at
+- **23 call sites** in `packages/`, which keep their names under the revised direction. Icon data resolves from Iconify's CDN at
   runtime, so a second collection costs nothing at build time.
 
 ### Naming icon-only links
@@ -239,7 +246,7 @@ top:
 <Tooltip>
 	<TooltipTrigger asChild>
 		<a href={url} aria-label='Facebook'>
-			<Icon name='simple-icons:facebook' />
+			<Icon name='facebook' />
 		</a>
 	</TooltipTrigger>
 	<TooltipContent>Facebook</TooltipContent>
