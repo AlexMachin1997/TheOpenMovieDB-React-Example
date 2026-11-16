@@ -74,6 +74,12 @@ rows also happens when the app is set up again.
 12. The component is exported from `ui-core` and follows the package's existing conventions.
 13. It takes the same `className` escape hatch as every other `ui-core` component.
 
+### Snapping
+
+22. When a scroll ends close to an item's leading edge, the row settles with that edge aligned.
+    When it ends well between two items, it stays where the user left it. A scroll is never pulled
+    back against the user.
+
 ### Scroll buttons
 
 14. The rail has a previous and a next button. They are always in the DOM while the row overflows.
@@ -136,6 +142,9 @@ rows also happens when the app is set up again.
 - AC14: Given a device with no hover, when the rail renders, then the buttons are not shown.
 - AC15: Given a reduced-motion preference, when a button is pressed, then the row jumps with no
   animated scroll.
+- AC16: Given a scroll that ends a few pixels past an item's edge, when it settles, then that edge
+  is aligned. Given a scroll that ends midway between two items, then the row stays where it
+  stopped.
 
 ## Decisions
 
@@ -152,10 +161,12 @@ rows also happens when the app is set up again.
   it as of Chrome's March 2025 write-up, which is below the support floor. Check that again before
   planning, because it would remove the JavaScript.
 
+- **Snapping only when the user stops near an edge** _(decided 2026-11-16)_. That is CSS's
+  `proximity` behaviour rather than `mandatory`. It keeps rows tidy after a button press without
+  fighting a trackpad.
+
 ## Open Questions
 
-- **Q2: Snap to items?** Scroll snapping stops the row with an item edge aligned, so a card is never
-  left half-cut. It can also feel sticky with a trackpad. Check on the live site whether TMDB snaps.
 - **Q3: A visible edge hint?** A fade at an edge that has more content shows the row scrolls. I think
   TMDB fades the right edge, but that is not verified. It needs a background token to fade into. That could make it depend on
   the design-system audit.
