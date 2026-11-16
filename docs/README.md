@@ -81,8 +81,7 @@ because a preset has to be able to pin it. No call site changed; see
 Agreed or open, but with no folder yet. The reasoning behind each — what it would cost, why it isn't
 decided — is in [`planned.md`](planned.md).
 
-- **`Icon`, second pass: more than one collection.** Specified, not built. One naming question is
-  open, and `27` waits on it. [Spec](01-icon/spec.md#second-pass--more-than-one-icon-collection)
+- **`Icon`, second pass: more than one collection.** Specified, not built. `27` waits on it. [Spec](01-icon/spec.md#second-pass--more-than-one-icon-collection)
 
 ## Shipped
 

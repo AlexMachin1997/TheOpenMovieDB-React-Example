@@ -368,7 +368,12 @@ have to come from a brand collection. Iconify's `simple-icons` has `facebook`, `
   compile.
 - AC4: Given the allowlist, when it is checked, then no bare name maps to more than one collection.
 
+### Decisions
+
+- **The X brand mark is `x-logo`** _(decided 2026-11-16)_. It maps to `simple-icons:x`, the current
+  X mark, not `simple-icons:twitter`, the old bird. `x` keeps its meaning of close. A later clash
+  between a brand mark and an existing name is solved the same way, with a `-logo` suffix.
+
 ### Open Questions
 
-- **Q1: What is the X brand mark called?** `x` already means close. Possible names are `x-brand` and
-  `twitter`. Whatever is picked sets the pattern for any later collision.
+None.
