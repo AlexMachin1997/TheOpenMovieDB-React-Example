@@ -43,6 +43,7 @@ rows also happens when the app is set up again.
 
 - **Virtualisation.** TMDB rows hold tens of items, not thousands.
 - **Loading more items at the end of the row.** Infinite scroll is app-level (C34).
+- **An edge fade or other scroll hint.** See Decisions.
 - **Autoplay or carousel behaviour.** Nothing moves unless the user moves it.
 - **A "View all" link.** That is the app's markup, placed after the rail.
 
@@ -165,13 +166,19 @@ rows also happens when the app is set up again.
   `proximity` behaviour rather than `mandatory`. It keeps rows tidy after a button press without
   fighting a trackpad.
 
+- **No edge fade; a partly visible item is the cue** _(decided 2026-11-16)_. Design-system
+  guidance (Volvo Cars' Reel) recommends a partially visible item at the edge to signal more
+  content, and a fade dims exactly that item. The rail does not enforce it, because whether an item
+  is cut off depends on the widths the caller gives the items. Storybook documents it as guidance.
+
 ## Open Questions
 
-- **Q3: A visible edge hint?** A fade at an edge that has more content shows the row scrolls. I think
-  TMDB fades the right edge, but that is not verified. It needs a background token to fade into. That could make it depend on
-  the design-system audit.
+None.
 
 ## Design References
+
+- Partially visible content as the scroll cue:
+  [Volvo Cars design system, Reel](https://designsystem.volvocars.com/web/components/reel/usage/).
 
 - The hand-built rows: `ViewEntertainmentResource.tsx` lines 193, 306, 336, 360 and 405, and
   `ViewPersonResource.tsx` line 60, under `apps/the-open-movie-database/src/components/Templates`.
