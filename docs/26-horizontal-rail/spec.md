@@ -74,6 +74,21 @@ rows also happens when the app is set up again.
 12. The component is exported from `ui-core` and follows the package's existing conventions.
 13. It takes the same `className` escape hatch as every other `ui-core` component.
 
+### Scroll buttons
+
+14. The rail has a previous and a next button. They are always in the DOM while the row overflows.
+15. When nothing overflows, neither button is rendered.
+16. The buttons are visible while the pointer is over the rail or focus is inside it, and hidden
+    otherwise. Hidden means invisible, not removed, so a keyboard user never tabs onto something
+    that isn't shown.
+17. On a device with no hover, the buttons are not shown. Swiping scrolls the row.
+18. At the start of the row, the previous button is disabled. At the end, the next button is
+    disabled. A disabled button stays where it is, so focus is never lost.
+19. Each press scrolls by about the rail's visible width.
+20. Each button has an accessible name that says which way it scrolls. The buttons are the only tab
+    stops the rail itself adds. Requirement 11 is about the scroll area, not these buttons.
+21. The motion of a button scroll respects a reduced-motion preference.
+
 ## Edge Cases & Error Handling
 
 - **No items.** Nothing renders. An empty state is the caller's job (C35 is app-level).
@@ -108,6 +123,19 @@ rows also happens when the app is set up again.
 - AC7: Given no gap setting, when the items are measured, then the space between them is the default
   gap, and the items carry no margin from the rail.
 - AC8: Given items with a fixed width, when the row overflows, then each item keeps that width.
+- AC9: Given a rail that overflows, when the pointer moves over it or focus moves inside it, then
+  both buttons become visible. When neither is true, they are not visible.
+- AC10: Given a rail that does not overflow, when the markup is inspected, then there are no scroll
+  buttons.
+- AC11: Given a rail scrolled to the start, when the buttons are inspected, then previous is
+  disabled and next is enabled. At the end it is the other way round.
+- AC12: Given focus on the next button, when it is pressed until the end of the row, then focus
+  stays on the button once it is disabled.
+- AC13: Given a press of either button, when the scroll settles, then the row has moved by about
+  the visible width, in that direction.
+- AC14: Given a device with no hover, when the rail renders, then the buttons are not shown.
+- AC15: Given a reduced-motion preference, when a button is pressed, then the row jumps with no
+  animated scroll.
 
 ## Decisions
 
@@ -116,13 +144,16 @@ rows also happens when the app is set up again.
 - **Keyboard scrolling comes from focusable content first.** A tab stop for the rail itself is only
   added when nothing inside it can take focus, so a row of links doesn't add a pointless stop.
 
+- **Scroll buttons that show on hover or focus** _(decided 2026-11-16)_. This is the pattern
+  Amazon Prime Video uses. Without buttons, a mouse user with no horizontal wheel has to drag the
+  scrollbar. Showing them only on hover or focus keeps rails visually quiet. Showing them on focus
+  as well as hover is what stops keyboard users from tabbing onto invisible controls. The native
+  CSS `::scroll-button()` was considered and rejected for now: Firefox and Safari did not support
+  it as of Chrome's March 2025 write-up, which is below the support floor. Check that again before
+  planning, because it would remove the JavaScript.
+
 ## Open Questions
 
-- **Q1: Previous and next buttons?** As far as I remember, TMDB has none and its rows scroll with a
-  mouse wheel and a visible scrollbar. Check this on the live site before deciding, because the site
-  refused a scripted fetch on 2026-11-16. Buttons help mouse users without a horizontal wheel. They also add two controls per
-  rail, tab stops, and rules for when each is disabled. Without them, a mouse user without a
-  trackpad drags the scrollbar.
 - **Q2: Snap to items?** Scroll snapping stops the row with an item edge aligned, so a card is never
   left half-cut. It can also feel sticky with a trackpad. Check on the live site whether TMDB snaps.
 - **Q3: A visible edge hint?** A fade at an edge that has more content shows the row scrolls. I think
