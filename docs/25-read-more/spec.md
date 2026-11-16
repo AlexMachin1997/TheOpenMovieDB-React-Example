@@ -49,7 +49,8 @@ This is C05 in [`component-inventory.md`](../component-inventory.md).
 ### Functional
 
 1. The component accepts any content, not only a single paragraph.
-2. The caller sets the collapsed size. A default is provided.
+2. The caller sets the collapsed size as a number of lines. A default is provided. The collapsed
+   content always ends on a whole line.
 3. When the content fits in the collapsed size, it renders in full and no control appears.
 4. When the content does not fit, it is collapsed and a control appears to expand it.
 5. Activating the control expands the content. Activating it again collapses it.
@@ -119,6 +120,8 @@ This is C05 in [`component-inventory.md`](../component-inventory.md).
   after the content.
 - AC11: Given caller-supplied labels, when the button renders in each state, then it shows those
   labels.
+- AC12: Given a collapsed size of N lines, when the content is collapsed, then exactly N whole lines
+  are visible and no line is cut through.
 
 ## Decisions
 
@@ -132,12 +135,15 @@ This is C05 in [`component-inventory.md`](../component-inventory.md).
   component already behaves this way, by accident. This reverses the inventory's note on C05. Hiding
   the text would mean not rendering it, which makes screen reader users press a button to hear text
   they could otherwise read straight through.
+- **The collapsed size is a number of lines** _(decided 2026-11-16)_. A height cuts the last line
+  wherever it lands. Today's 215px is 8.96 lines at a 24px line height. Lines always stop on a
+  whole line and follow the font size. **Fallback:** if planning or implementation shows lines
+  can't meet the requirements (for example, content that isn't text), fall back to a maximum
+  height, which is what the current component uses. Record why in `plan.md`.
 
 ## Open Questions
 
-- **Q2: Should the collapsed size be a number of lines or a height?** Lines never cut text in half
-  and follow the font size. A height also works for content that isn't text, such as a paragraph
-  with an image. It could be lines only, height only, or both.
+None.
 
 ## Design References
 
