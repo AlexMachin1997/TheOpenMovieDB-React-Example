@@ -74,12 +74,6 @@ rows also happens when the app is set up again.
 12. The component is exported from `ui-core` and follows the package's existing conventions.
 13. It takes the same `className` escape hatch as every other `ui-core` component.
 
-### Snapping
-
-22. When a scroll ends close to an item's leading edge, the row settles with that edge aligned.
-    When it ends well between two items, it stays where the user left it. A scroll is never pulled
-    back against the user.
-
 ### Scroll buttons
 
 14. The rail has a previous and a next button. They are always in the DOM while the row overflows.
@@ -94,6 +88,12 @@ rows also happens when the app is set up again.
 20. Each button has an accessible name that says which way it scrolls. The buttons are the only tab
     stops the rail itself adds. Requirement 11 is about the scroll area, not these buttons.
 21. The motion of a button scroll respects a reduced-motion preference.
+
+### Snapping
+
+22. When a scroll ends close to an item's leading edge, the row settles with that edge aligned.
+    When it ends well between two items, it stays where the user left it. A scroll is never pulled
+    back against the user.
 
 ## Edge Cases & Error Handling
 
