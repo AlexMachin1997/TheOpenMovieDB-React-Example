@@ -8,8 +8,7 @@ yet.
 **This is a reference document, not a roadmap entry.** It records a set of decisions so they don't
 get re-argued, and so the deliverables that come out of it start from an agreed scope. Items that
 become work get a numbered folder and a row in [`README.md`](README.md) at that point, and keep their
-row here with a pointer to it. **C02 is the only one scheduled so far** — everything else is
-unscheduled.
+row here with a pointer to it. C02 has shipped, and C04, C05, C10, C17 and C28 have specs. Everything else is unscheduled.
 
 **`C<n>` IDs are inventory IDs and have nothing to do with deliverable numbers.** `C01` is the card
 wrapper; `01` is the shipped Icon deliverable. The prefix exists purely so the two can never be
@@ -38,13 +37,13 @@ Nine components, in the order they unblock each other.
 | --- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | C01 | `Card`                      | Small composable parts in `ui-core`, assembled by hand at the call site — not a props-driven wrapper, and no `CardImage`. **The parts' API still needs discussing before it is specified.** See [Card is parts, not a wrapper](#card-is-parts-not-a-wrapper).   |
 | C02 | `Image`                     | **Scheduled as [`21-image`](README.md).** Error fallback, `ratio` prop, and one accessible name. See [Image scope](#image-scope).                                                                                                                               |
-| C10 | Horizontal rail             | The left/right scrolling card container. The app hand-rolls this **16 times** today, none of them keyboard reachable.                                                                                                                                           |
+| C10 | Horizontal rail             | **Specified as [`26`](26-horizontal-rail/spec.md).** The left/right scrolling card container. Re-measured at 6 in the app's templates _(2026-11-16)_. See the spec.                                                                                             |
 | C03 | Rating ring                 | Port of `Percentage.tsx`. Hardcodes raw hex and a four-step colour ladder — worth sequencing behind the design-system audit in [`planned.md`](planned.md). Also needs a single name; it currently has three. See [C03](#c03-has-three-names-for-one-component). |
-| C04 | `Spinner` + loading surface | Split in two. The current `Loader.tsx` is a spinner and a full-screen overlay sharing one `isFixed` flag, which stops the spinner being usable inside a button or a rail.                                                                                       |
-| C05 | `ReadMore`                  | Needs `aria-expanded`/`aria-controls`, needs the clamped text out of the accessibility tree while hidden, and needs to respect `prefers-reduced-motion`. Removes the app's only component-level `.scss`.                                                        |
-| C17 | `Separator`                 | Decorative by default, semantic opt-in, plus orientation. Replaces 9 hand-rolled `border-b border-solid` instances.                                                                                                                                             |
+| C04 | `Spinner` + loading surface | **Specified as [`24`](24-spinner/spec.md).** Split in two. The current `Loader.tsx` is a spinner and a full-screen overlay sharing one `isFixed` flag, which stops the spinner being usable inside a button or a rail.                                          |
+| C05 | `ReadMore`                  | **Specified as [`25`](25-read-more/spec.md).** Needs `aria-expanded`/`aria-controls`, needs the clamped text out of the accessibility tree while hidden, and needs to respect `prefers-reduced-motion`. Removes the app's only component-level `.scss`.         |
+| C17 | `Separator`                 | **Specified as [`23`](23-separator/spec.md).** Decorative by default, semantic opt-in, plus orientation. Replaces 9 hand-rolled `border-b border-solid` instances.                                                                                              |
 | C21 | `Badge` rework              | Keyword and genre chips. The shadcn `Badge` gets reworked into a simple component with the variants the app needs. The variant set depends on the design-system audit in [`planned.md`](planned.md).                                                            |
-| C28 | Social links                | Port of `SocialLinks.tsx`. Blocked on the `Icon` collection change below.                                                                                                                                                                                       |
+| C28 | Social links                | **Specified as [`27`](27-social-links/spec.md).** Port of `SocialLinks.tsx`. Blocked on the `Icon` collection change below.                                                                                                                                     |
 
 ## App layer, or already covered
 
@@ -213,7 +212,8 @@ needs discussing before a spec is written.
 
 `Icon` resolves every name from one hardcoded collection (`ICON_COLLECTION = 'lucide'`) against a
 closed 30-name allowlist. **Lucide ships no brand icons**, so social marks are unreachable — this
-blocks C28.
+blocks C28. Now specified as the
+[second pass on `01`](01-icon/spec.md#second-pass--more-than-one-icon-collection).
 
 Agreed direction (revised 16 November 2026): **callers keep writing bare names** (`'x'`,
 `'alert-triangle'`, `'facebook'`). The allowlist records which collection each name comes from, and

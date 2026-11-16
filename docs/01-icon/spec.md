@@ -328,3 +328,47 @@ map to the same new `Icon` name; the alias used doesn't change the mapping.
 - Predecessor relationship: [`02-button-enhancements`](../02-button-enhancements/spec.md).
 - Button's own Storybook file, as the coverage-level reference:
   `packages/ui-core/src/components/Button/Button.stories.tsx`.
+
+## Second pass — more than one icon collection
+
+**Status: specified, not built.** Everything above this line shipped as `01`. Everything below is
+follow-on work, raised by the social links component
+([`27-social-links`](../27-social-links/spec.md)), which needs brand marks. The `plan.md` for `01`
+records only the first pass.
+
+### Problem
+
+`Icon` resolves every name from one collection, `ICON_COLLECTION = 'lucide'`. Lucide has removed its
+brand icons upstream. `facebook`, `instagram`, `twitter` and `youtube` are all gone from the Lucide
+repository, and `tiktok` was never in it. Iconify's Lucide mirror still serves the first four
+_(both checked 2026-11-16)_, so building on them would break once the mirror catches up. Brand marks
+have to come from a brand collection. Iconify's `simple-icons` has `facebook`, `instagram`, `tiktok`,
+`youtube` and `x` _(checked 2026-11-16)_.
+
+### Requirements
+
+1. Callers keep writing bare names. No call site changes. There are 17 `<Icon name=…>` uses in
+   non-story source across `packages/` _(measured 2026-11-16)_.
+2. Each allowed name belongs to exactly one collection, recorded with the name in the allowlist.
+   `Icon` builds the full identifier from that.
+3. The allowlist stays closed. An unknown name is still a compile error.
+4. Two collections cannot both contribute the same bare name. If a brand mark's natural name is
+   already taken, as `x` is by Lucide's close cross, the brand mark gets a different bare name.
+5. Icons from any collection keep `Icon`'s existing guarantees: always `aria-hidden`, the same size
+   scale, and the same placeholder while the data loads.
+6. Brand marks are drawn in the current text colour, like every other icon.
+
+### Acceptance Criteria
+
+- AC1: Given every existing call site, when the code is type-checked and rendered, then it compiles
+  unchanged and renders the same icon as before.
+- AC2: Given a brand name from the allowlist, when it is rendered, then the brand mark appears at
+  the requested size, in the current text colour, with `aria-hidden="true"`.
+- AC3: Given a name that is not in the allowlist, when the code is type-checked, then it fails to
+  compile.
+- AC4: Given the allowlist, when it is checked, then no bare name maps to more than one collection.
+
+### Open Questions
+
+- **Q1: What is the X brand mark called?** `x` already means close. Possible names are `x-brand` and
+  `twitter`. Whatever is picked sets the pattern for any later collision.

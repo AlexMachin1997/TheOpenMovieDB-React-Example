@@ -11,7 +11,7 @@ is just the roadmap.
 
 [`component-inventory.md`](component-inventory.md) is a separate survey of what the clone still
 needs — 41 candidate components, each with a decision already taken on whether it belongs in the
-library, in the app, or nowhere. Nothing in it is scheduled; items become deliverables, with their
+library, in the app, or nowhere. Items become deliverables, with their
 own folder and a row below, only when they're picked up. Its `C<n>` IDs are unrelated to the
 deliverable numbers here.
 
@@ -19,9 +19,14 @@ deliverable numbers here.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable      | Area          | Status   | Depends on | Docs                                               |
-| --- | ---------------- | ------------- | -------- | ---------- | -------------------------------------------------- |
-| 03  | Focus indicators | design system | 📝 draft | —          | [03-focus-indicators](03-focus-indicators/spec.md) |
+| ID  | Deliverable                   | Area          | Status     | Depends on       | Docs                                               |
+| --- | ----------------------------- | ------------- | ---------- | ---------------- | -------------------------------------------------- |
+| 03  | Focus indicators              | design system | 📝 draft   | —                | [03-focus-indicators](03-focus-indicators/spec.md) |
+| 23  | `Separator`                   | components    | 🟢 ready   | —                | [23-separator](23-separator/spec.md)               |
+| 24  | `Spinner` and loading surface | components    | 🟢 ready   | —                | [24-spinner](24-spinner/spec.md)                   |
+| 25  | `ReadMore`                    | components    | 📝 draft   | —                | [25-read-more](25-read-more/spec.md)               |
+| 26  | Horizontal rail               | components    | 📝 draft   | —                | [26-horizontal-rail](26-horizontal-rail/spec.md)   |
+| 27  | Social links                  | components    | ⛔ blocked | `01` second pass | [27-social-links](27-social-links/spec.md)         |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.
@@ -75,6 +80,9 @@ because a preset has to be able to pin it. No call site changed; see
 
 Agreed or open, but with no folder yet. The reasoning behind each — what it would cost, why it isn't
 decided — is in [`planned.md`](planned.md).
+
+- **`Icon`, second pass: more than one collection.** Specified, not built. One naming question is
+  open, and `27` waits on it. [Spec](01-icon/spec.md#second-pass--more-than-one-icon-collection)
 
 ## Shipped
 
