@@ -10,22 +10,20 @@ it ignores the theme, and it announces nothing to assistive technology.
 `Loader` has no call sites in the app outside its own story _(measured 2026-11-16)_. The app is being
 set up again, and its loading states will need something to render.
 
-The library already has a spinner in one place. `Button` renders `<Icon name='loader-circle'
-className='animate-spin' />` while `loading` is true. A second spinner with its own look would give
-the library two.
+`Button` already has its own loading spinner (`<Icon name='loader-circle' className='animate-spin' />`).
+It is built and working, and this deliverable leaves it alone.
 
 This is C04 in [`component-inventory.md`](../component-inventory.md).
 
 ## Goals
 
 1. A spinner that works on its own wherever content is loading.
-2. One spinner look across the library, including `Button`'s loading state.
-3. Loading states that assistive technology announces, and motion that respects the user's
+2. Loading states that assistive technology announces, and motion that respects the user's
    preference.
 
 ## Scope
 
-**Included**: a `Spinner` in `ui-core`. `Button`'s loading state renders the same spinner visual.
+**Included**: a `Spinner` in `ui-core`.
 Consumer-facing Storybook documentation.
 
 **Not included**: the app's loading states. They are built when the app is set up again.
@@ -39,6 +37,8 @@ Consumer-facing Storybook documentation.
 - **Progress with a known amount.** `Progress` covers that.
 - **A delay before the spinner appears**, to avoid a flash on fast loads. The caller controls when
   loading starts, and that is the right place for a delay.
+- **Changing `Button`'s loading state** _(decided 2026-11-18)_. `Button` keeps its own spinner
+  icon. The two may look different, which is accepted.
 - **A loading surface that covers content** _(cut 2026-11-18)_. Data is fetched by route loaders,
   and the router's pending state renders _in place of_ the route, which is a `Spinner` laid out by
   the app. Covering content that is already on screen (dimming it and blocking clicks while it
@@ -51,40 +51,38 @@ Consumer-facing Storybook documentation.
 ### Functional
 
 1. `Spinner` renders inline and takes its size from a named size scale, with a default.
-2. `Button`'s loading state renders the same spinner visual as `Spinner`. `Button`'s existing
-   loading behaviour (`aria-busy`, the disabled state, the replaced start icon) does not change.
 
 ### UI/UX
 
-3. The spinner's colour is the current text colour, so it is correct in both colour schemes and on
+2. The spinner's colour is the current text colour, so it is correct in both colour schemes and on
    any surface.
-4. When the user prefers reduced motion, the spinner does not rotate. It pulses its opacity in
+3. When the user prefers reduced motion, the spinner does not rotate. It pulses its opacity in
    place instead, so it still reads as busy.
 
 ### Accessibility
 
-5. A standalone `Spinner` has an accessible name that says loading is in progress. The caller can
+4. A standalone `Spinner` has an accessible name that says loading is in progress. The caller can
    replace the default name, for example "Loading recommendations".
-6. A standalone `Spinner` is exposed as a status, without moving focus. See Known limitations for
+5. A standalone `Spinner` is exposed as a status, without moving focus. See Known limitations for
    when it is announced.
-7. A spinner inside `Button` adds no name of its own. `Button` already reports itself busy.
+6. The caller can mark a spinner decorative, for use beside visible text that already says what is
+   loading. A decorative spinner is not in the accessibility tree.
 
 ### Integration
 
-8. The component is exported from `ui-core` and follows the package's existing conventions.
-9. It takes the same `className` escape hatch as every other `ui-core` component.
+7. The component is exported from `ui-core` and follows the package's existing conventions.
+8. It takes the same `className` escape hatch as every other `ui-core` component.
 
 ## Edge Cases & Error Handling
 
 - **A spinner inside an element that already has a name.** The caller can mark the spinner
-  decorative so the name is not announced twice. `Button` does this itself.
+  decorative so the name is not announced twice.
 
 ## Success Criteria
 
-- SC1: The library has one spinner visual, and `Button` uses it.
-- SC2: A spinner can be placed anywhere content loads.
-- SC3: Assistive technology users are told when loading starts.
-- SC4: No spinner rotates for a user who prefers reduced motion.
+- SC1: A spinner can be placed anywhere content loads.
+- SC2: Assistive technology users are told when loading starts.
+- SC3: No spinner rotates for a user who prefers reduced motion.
 
 ## Acceptance Criteria
 
@@ -94,22 +92,15 @@ Consumer-facing Storybook documentation.
   that name is announced instead of the default.
 - AC3: Given a `Spinner` marked decorative, when the accessibility tree is inspected, then it is not
   in it.
-- AC4: Given a loading `Button`, when the rendered spinner is compared with a `Spinner` of the same
-  size, then they are the same visual.
-- AC5: Given a loading `Button`, when the accessibility tree is inspected, then the button reports
-  busy and its spinner adds no name.
-- AC6: Given a reduced-motion preference, when a `Spinner` is rendered, then it does not rotate and
+- AC4: Given a reduced-motion preference, when a `Spinner` is rendered, then it does not rotate and
   its opacity pulses.
-- AC7: Given each colour scheme, including a scheme set by the app rather than the OS, when the
+- AC5: Given each colour scheme, including a scheme set by the app rather than the OS, when the
   spinner is inspected, then it matches the scheme.
 
 ## Decisions
 
 - **The spinner stands alone.** The old `Loader` combined a spinner and a full-screen overlay behind
   one flag, which is what made the spinner unusable on its own. Only the spinner is carried over.
-- **`Button` adopts the spinner visual, not the `Spinner` component as-is.** `Button` must not get a
-  second accessible name or a status announcement. How the two share the visual is a planning
-  decision.
 - **Reduced motion swaps the rotation for an opacity pulse** _(decided 2026-11-18)_. A frozen ring
   reads as an empty circle, and hiding it would look like a frozen page. Slowing the rotation, as
   Chrome's guidance suggests, still rotates. A pulse shows activity without movement. It is also the
