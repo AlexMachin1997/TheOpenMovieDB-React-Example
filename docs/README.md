@@ -81,6 +81,8 @@ because a preset has to be able to pin it. No call site changed; see
 Agreed or open, but with no folder yet. The reasoning behind each — what it would cost, why it isn't
 decided — is in [`planned.md`](planned.md).
 
+- **Accessibility pass: icon-only controls and tooltips.** Agreed, not started. A tooltip on a named
+  icon control repeats the name. [Reasoning](planned.md#accessibility-pass-icon-only-controls-and-tooltips)
 - **`Icon`, second pass: more than one collection.** Specified, not built. `27` waits on it. [Spec](01-icon/spec.md#second-pass--more-than-one-icon-collection)
 
 ## Shipped

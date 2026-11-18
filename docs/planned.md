@@ -23,6 +23,41 @@ to be decided again for every component. A fade carries over to every one. This 
 Reduce Motion setting does. The audit applies it to every animated component: for example `Sheet`
 slides in now, and would fade in instead.
 
+## Accessibility pass: icon-only controls and tooltips
+
+Agreed 2026-11-18 while grilling [`27`](27-social-links/spec.md). Not started. The aim is to pick the
+right fix once, implement it in the library, and write the guidance down, instead of each component
+working around it.
+
+**The problem.** Radix's `Tooltip` links its content to the trigger with `aria-describedby`. On an
+icon-only control whose name already says the same thing, a screen reader says it twice: "Facebook,
+opens in a new tab, link. Facebook." `aria-hidden` on the tooltip does not help, because
+`aria-describedby` reads hidden content. Every icon-only control with a tooltip will hit this.
+
+Where it appears _(measured 2026-11-18)_:
+
+- **Social links (`27`).** Each link is named, and the tooltip repeats the name.
+- **`EntertainmentHeader`'s 4 action icons** (list, favourite, watchlist, rate). Today the icons are
+  not buttons and have no name, so the tooltip is the only label, and a tooltip cannot name a
+  control. Once rebuilt as named icon buttons, they hit the duplicate.
+- **`FilterTitle`'s info icon** is the correct use: the tooltip adds an explanation, not the name.
+  Any fix must keep this case working.
+
+**Options already weighed:**
+
+- Override `aria-describedby` on the trigger. Radix spreads caller props after its own, so this
+  works with no fork. It has to be remembered at every call site.
+- A label mode on `Tooltip`, as GitHub's Primer does with `type="label"`: the tooltip is the name,
+  not a description. That fixes it once in the library.
+- Rebuild `Tooltip` without Radix on the native `popover` attribute and CSS anchor positioning, as
+  [`20`](20-popover-semantics/spec.md) did for `Popover`. Escape dismissal (WCAG 1.4.13) comes from
+  the platform. The hover and focus delay, and staying open while the pointer moves onto the
+  tooltip, would be ours.
+- Rejected: a CSS-only hover label. It cannot be dismissed with Escape, so it fails WCAG 1.4.13.
+
+**Output:** the chosen fix in `Tooltip`, and consumer guidance in its Storybook docs on naming
+icon-only controls and when a tooltip is a label or a description.
+
 ## RTL / reading direction
 
 Surfaced while planning `04` and not yet specified. The library is currently inconsistent with

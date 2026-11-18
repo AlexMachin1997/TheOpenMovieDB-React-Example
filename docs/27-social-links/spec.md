@@ -142,6 +142,14 @@ This is C28 in [`component-inventory.md`](../component-inventory.md).
 - **X's mark is `x-logo`.** Decided in the `Icon` second pass. TMDB's field is still `twitter_id`,
   which is the app's mapping to make.
 
+## Known limitations
+
+- **The tooltip repeats the link's name to screen readers** _(found 2026-11-18)_. Radix links the
+  tooltip to the link as a description, so a screen reader says "Facebook" twice. The fix is
+  deferred to the
+  [accessibility pass](../planned.md#accessibility-pass-icon-only-controls-and-tooltips), which
+  handles it for every icon-only control at once. This component adopts whatever that decides.
+
 ## Open Questions
 
 None. It waits on the `Icon` second pass being built.
