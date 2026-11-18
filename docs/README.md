@@ -19,14 +19,14 @@ deliverable numbers here.
 
 Outstanding work only. Everything shipped is under [Shipped](#shipped) below.
 
-| ID  | Deliverable                   | Area          | Status     | Depends on       | Docs                                               |
-| --- | ----------------------------- | ------------- | ---------- | ---------------- | -------------------------------------------------- |
-| 03  | Focus indicators              | design system | 📝 draft   | —                | [03-focus-indicators](03-focus-indicators/spec.md) |
-| 23  | `Separator`                   | components    | 🟢 ready   | —                | [23-separator](23-separator/spec.md)               |
-| 24  | `Spinner` and loading surface | components    | 🟢 ready   | —                | [24-spinner](24-spinner/spec.md)                   |
-| 25  | `ReadMore`                    | components    | 🟢 ready   | —                | [25-read-more](25-read-more/spec.md)               |
-| 26  | Horizontal rail               | components    | 🟢 ready   | —                | [26-horizontal-rail](26-horizontal-rail/spec.md)   |
-| 27  | Social links                  | components    | ⛔ blocked | `01` second pass | [27-social-links](27-social-links/spec.md)         |
+| ID  | Deliverable      | Area          | Status     | Depends on       | Docs                                               |
+| --- | ---------------- | ------------- | ---------- | ---------------- | -------------------------------------------------- |
+| 03  | Focus indicators | design system | 📝 draft   | —                | [03-focus-indicators](03-focus-indicators/spec.md) |
+| 23  | `Separator`      | components    | 🟢 ready   | —                | [23-separator](23-separator/spec.md)               |
+| 24  | `Spinner`        | components    | 🟢 ready   | —                | [24-spinner](24-spinner/spec.md)                   |
+| 25  | `ReadMore`       | components    | 🟢 ready   | —                | [25-read-more](25-read-more/spec.md)               |
+| 26  | Horizontal rail  | components    | 🟢 ready   | —                | [26-horizontal-rail](26-horizontal-rail/spec.md)   |
+| 27  | Social links     | components    | ⛔ blocked | `01` second pass | [27-social-links](27-social-links/spec.md)         |
 
 `draft` — open questions remain before planning · `ready` — safe to plan and build · `blocked` —
 waiting on its dependencies · `in progress` · `done` — shipped, with an as-built `plan.md`.

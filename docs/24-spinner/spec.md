@@ -1,4 +1,4 @@
-# Feature: Spinner and loading surface
+# Feature: Spinner
 
 ## Problem
 
@@ -19,15 +19,14 @@ This is C04 in [`component-inventory.md`](../component-inventory.md).
 ## Goals
 
 1. A spinner that works on its own wherever content is loading.
-2. A loading surface that covers a region while its content loads, as a separate component.
-3. One spinner look across the library, including `Button`'s loading state.
-4. Loading states that assistive technology announces, and motion that respects the user's
+2. One spinner look across the library, including `Button`'s loading state.
+3. Loading states that assistive technology announces, and motion that respects the user's
    preference.
 
 ## Scope
 
-**Included**: a `Spinner` and a loading surface in `ui-core`. `Button`'s loading state renders the
-same spinner visual. Consumer-facing Storybook documentation for both.
+**Included**: a `Spinner` in `ui-core`. `Button`'s loading state renders the same spinner visual.
+Consumer-facing Storybook documentation.
 
 **Not included**: the app's loading states. They are built when the app is set up again.
 
@@ -40,6 +39,11 @@ same spinner visual. Consumer-facing Storybook documentation for both.
 - **Progress with a known amount.** `Progress` covers that.
 - **A delay before the spinner appears**, to avoid a flash on fast loads. The caller controls when
   loading starts, and that is the right place for a delay.
+- **A loading surface that covers content** _(cut 2026-11-18)_. Data is fetched by route loaders,
+  and the router's pending state renders _in place of_ the route, which is a `Spinner` laid out by
+  the app. Covering content that is already on screen (dimming it and blocking clicks while it
+  refetches, for example after a filter change) is not something the app does yet. Specify it when
+  that case turns up. Until then the old `Loader`'s overlay half is not carried over.
 - **Colour variants.** The spinner takes its colour from the current text colour.
 
 ## Requirements
@@ -47,48 +51,38 @@ same spinner visual. Consumer-facing Storybook documentation for both.
 ### Functional
 
 1. `Spinner` renders inline and takes its size from a named size scale, with a default.
-2. The loading surface fills the region it is placed in and shows a spinner centred in that region.
-   It does not cover the viewport unless the region is the viewport.
-3. While the loading surface is shown, the content it covers cannot be interacted with.
-4. The loading surface can be shown over existing content or in place of it.
-5. `Button`'s loading state renders the same spinner visual as `Spinner`. `Button`'s existing
+2. `Button`'s loading state renders the same spinner visual as `Spinner`. `Button`'s existing
    loading behaviour (`aria-busy`, the disabled state, the replaced start icon) does not change.
 
 ### UI/UX
 
-6. The spinner's colour is the current text colour, so it is correct in both colour schemes and on
+3. The spinner's colour is the current text colour, so it is correct in both colour schemes and on
    any surface.
-7. The loading surface's backdrop uses a theme token and is correct in both colour schemes.
-8. When the user prefers reduced motion, the spinner does not rotate. It pulses its opacity in
+4. When the user prefers reduced motion, the spinner does not rotate. It pulses its opacity in
    place instead, so it still reads as busy.
 
 ### Accessibility
 
-9. A standalone `Spinner` has an accessible name that says loading is in progress. The caller can
+5. A standalone `Spinner` has an accessible name that says loading is in progress. The caller can
    replace the default name, for example "Loading recommendations".
-10. A standalone `Spinner` is exposed as a status, without moving focus. See Known limitations for
-    when it is announced.
-11. A spinner inside `Button` adds no name of its own. `Button` already reports itself busy.
-12. The content under a loading surface is marked busy while the surface is shown.
+6. A standalone `Spinner` is exposed as a status, without moving focus. See Known limitations for
+   when it is announced.
+7. A spinner inside `Button` adds no name of its own. `Button` already reports itself busy.
 
 ### Integration
 
-13. Both components are exported from `ui-core` and follow the package's existing conventions.
-14. Both take the same `className` escape hatch as every other `ui-core` component.
+8. The component is exported from `ui-core` and follows the package's existing conventions.
+9. It takes the same `className` escape hatch as every other `ui-core` component.
 
 ## Edge Cases & Error Handling
 
 - **A spinner inside an element that already has a name.** The caller can mark the spinner
   decorative so the name is not announced twice. `Button` does this itself.
-- **The loading surface is removed while focus is inside the covered content.** Focus stays where it
-  was. The surface never takes focus.
-- **A region with no height.** The loading surface needs a height to centre in. With none, it
-  collapses to the spinner's own height. Document this as a caller obligation.
 
 ## Success Criteria
 
 - SC1: The library has one spinner visual, and `Button` uses it.
-- SC2: A spinner can be placed anywhere content loads, without an overlay.
+- SC2: A spinner can be placed anywhere content loads.
 - SC3: Assistive technology users are told when loading starts.
 - SC4: No spinner rotates for a user who prefers reduced motion.
 
@@ -106,21 +100,13 @@ same spinner visual. Consumer-facing Storybook documentation for both.
   busy and its spinner adds no name.
 - AC6: Given a reduced-motion preference, when a `Spinner` is rendered, then it does not rotate and
   its opacity pulses.
-- AC7: Given a loading surface over content, when the user clicks or tabs into the covered content,
-  then nothing in it receives the click or the focus.
-- AC8: Given a loading surface over content, when the accessibility tree is inspected, then the
-  covered content is marked busy.
-- AC9: Given a loading surface inside a region smaller than the viewport, when it is measured, then
-  it covers that region and nothing outside it.
-- AC10: Given each colour scheme, including a scheme set by the app rather than the OS, when the
-  spinner and the surface's backdrop are inspected, then both match the scheme.
+- AC7: Given each colour scheme, including a scheme set by the app rather than the OS, when the
+  spinner is inspected, then it matches the scheme.
 
 ## Decisions
 
-- **Two components, not one with a flag.** The flag is what made the current spinner unusable on its
-  own.
-- **The surface covers its region, not the viewport.** A full-page loading state is the same surface
-  placed around the page. A viewport-fixed mode would bring back the problem the split removes.
+- **The spinner stands alone.** The old `Loader` combined a spinner and a full-screen overlay behind
+  one flag, which is what made the spinner unusable on its own. Only the spinner is carried over.
 - **`Button` adopts the spinner visual, not the `Spinner` component as-is.** `Button` must not get a
   second accessible name or a status announcement. How the two share the visual is a planning
   decision.
