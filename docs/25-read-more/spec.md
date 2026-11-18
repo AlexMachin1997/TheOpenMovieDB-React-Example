@@ -130,6 +130,10 @@ This is C05 in [`component-inventory.md`](../component-inventory.md).
 - **The content is checked again when it or its width changes.** Checking once on mount is how the
   current component goes wrong.
 - **No focus movement.** The button stays where the user put focus.
+- **No scroll correction on collapse** _(decided 2026-11-18)_. Collapsing long expanded content
+  shrinks the page above the button, so the button can end up off-screen while it keeps focus. That
+  is accepted: it is not a WCAG failure, and the next Tab scrolls back to the content after the
+  button. Revisit if it proves disorienting in use.
 - **The cut-off text stays in the accessibility tree** _(decided 2026-11-16)_. The clamp is visual
   only, so a screen reader reads the full content without pressing the button. The current
   component already behaves this way, by accident. This reverses the inventory's note on C05. Hiding
