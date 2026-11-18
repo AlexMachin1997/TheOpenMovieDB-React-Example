@@ -59,8 +59,8 @@ same spinner visual. Consumer-facing Storybook documentation for both.
 6. The spinner's colour is the current text colour, so it is correct in both colour schemes and on
    any surface.
 7. The loading surface's backdrop uses a theme token and is correct in both colour schemes.
-8. When the user prefers reduced motion, the spinner does not rotate. It still shows that something
-   is loading.
+8. When the user prefers reduced motion, the spinner does not rotate. It pulses its opacity in
+   place instead, so it still reads as busy.
 
 ### Accessibility
 
@@ -104,7 +104,8 @@ same spinner visual. Consumer-facing Storybook documentation for both.
   size, then they are the same visual.
 - AC5: Given a loading `Button`, when the accessibility tree is inspected, then the button reports
   busy and its spinner adds no name.
-- AC6: Given a reduced-motion preference, when a `Spinner` is rendered, then it does not rotate.
+- AC6: Given a reduced-motion preference, when a `Spinner` is rendered, then it does not rotate and
+  its opacity pulses.
 - AC7: Given a loading surface over content, when the user clicks or tabs into the covered content,
   then nothing in it receives the click or the focus.
 - AC8: Given a loading surface over content, when the accessibility tree is inspected, then the
@@ -123,8 +124,11 @@ same spinner visual. Consumer-facing Storybook documentation for both.
 - **`Button` adopts the spinner visual, not the `Spinner` component as-is.** `Button` must not get a
   second accessible name or a status announcement. How the two share the visual is a planning
   decision.
-- **Reduced motion stops the rotation rather than hiding the spinner.** A loading state with nothing
-  visible would look like a frozen page.
+- **Reduced motion swaps the rotation for an opacity pulse** _(decided 2026-11-18)_. A frozen ring
+  reads as an empty circle, and hiding it would look like a frozen page. Slowing the rotation, as
+  Chrome's guidance suggests, still rotates. A pulse shows activity without movement. It is also the
+  library-wide rule recorded for the design-system audit in
+  [`planned.md`](../planned.md#design-system-audit): under reduced motion, movement becomes a fade.
 
 ## Known limitations
 

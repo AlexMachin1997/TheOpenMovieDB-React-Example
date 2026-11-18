@@ -16,6 +16,13 @@ unrelated focus idioms, a component hardcoding raw palette colours, and a WCAG 2
 in both themes. None of that is really about focus — it's what a library assembled from copied
 component code looks like when nobody has defined the system it should obey.
 
+**Motion rule, agreed 2026-11-18 while specifying [`24`](24-spinner/spec.md):** under a
+reduced-motion preference, movement (rotating, sliding, zooming, growing in height) is replaced by
+an opacity change in place, not slowed down. A slow slide is still a slide, so slowing would have
+to be decided again for every component. A fade carries over to every one. This is what Apple's
+Reduce Motion setting does. The audit applies it to every animated component: for example `Sheet`
+slides in now, and would fade in instead.
+
 ## RTL / reading direction
 
 Surfaced while planning `04` and not yet specified. The library is currently inconsistent with
