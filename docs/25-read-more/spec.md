@@ -65,7 +65,9 @@ This is C05 in [`component-inventory.md`](../component-inventory.md).
 9. The control sits after the content in the normal flow. It does not depend on the parent's
    positioning.
 10. The fade and the control use theme tokens and are correct in both colour schemes.
-11. With a reduced-motion preference, expanding and collapsing happen with no animation.
+11. Expanding and collapsing animate the height in every supported browser, as the current
+    component does. With a reduced-motion preference the height changes at once and the newly
+    revealed text fades in, following the library's motion rule.
 
 ### Accessibility
 
@@ -112,8 +114,10 @@ This is C05 in [`component-inventory.md`](../component-inventory.md).
   the content, not only the first child.
 - AC7: Given content that fits at one width, when the container narrows until it no longer fits,
   then the content collapses and the button appears.
-- AC8: Given a reduced-motion preference, when the content expands or collapses, then no transition
-  runs.
+- AC8: Given a reduced-motion preference, when the content expands or collapses, then the height
+  changes at once with no height animation.
+- AC13: Given no motion preference, when the content expands or collapses in Chrome, Firefox and
+  Safari, then the height animates in each.
 - AC9: Given each colour scheme, including a scheme set by the app rather than the OS, when the
   collapsed fade and the button are inspected, then both match the scheme.
 - AC10: Given a parent with no positioning, when the component renders, then the button sits directly
@@ -144,6 +148,11 @@ This is C05 in [`component-inventory.md`](../component-inventory.md).
   whole line and follow the font size. **Fallback:** if planning or implementation shows lines
   can't meet the requirements (for example, content that isn't text), fall back to a maximum
   height, which is what the current component uses. Record why in `plan.md`.
+
+- **The height animates in every browser** _(decided 2026-11-18)_. Clamping by lines can't be
+  animated in CSS, because a clamp is on or off. `interpolate-size` would animate it, but only in
+  Chromium, and an expand that animates in one browser and snaps in another looks broken. So the
+  height is measured and animated the way the current component does it.
 
 ## Open Questions
 
