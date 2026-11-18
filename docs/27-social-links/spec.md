@@ -67,8 +67,8 @@ This is C28 in [`component-inventory.md`](../component-inventory.md).
 
 7. Each link shows its icon, in the current text colour and at `Icon`'s size scale.
 8. On pointer hover, a tooltip shows the link's label.
-9. Spacing between links comes from a gap. The divider is the library's `Separator`
-   ([`23`](../23-separator/spec.md)) if that has shipped, and otherwise a themed border.
+9. Spacing between links comes from a gap. The divider is a border on the first link of each new
+   group, in the theme's border token, drawn by the component. It adds no element.
 
 ### Accessibility
 
@@ -76,7 +76,7 @@ This is C28 in [`component-inventory.md`](../component-inventory.md).
 11. Each link's accessible name is its label, for example "Facebook", and says that it opens in a new
     tab.
 12. The name is on the link itself. The tooltip does not provide it.
-13. The divider is decorative.
+13. The divider is not in the accessibility tree, and the list's item count is the number of links.
 
 ### Integration
 
@@ -121,7 +121,8 @@ This is C28 in [`component-inventory.md`](../component-inventory.md).
 - AC10: Given a pointer hovering a link, when the tooltip appears, then it shows the link's label.
 - AC11: Given an icon name, when the link renders, then it shows that icon in the current text
   colour.
-- AC12: Given the divider, when the accessibility tree is inspected, then it is not in it.
+- AC12: Given a divider, when the accessibility tree is inspected, then it is not in it and the list
+  reports one item per rendered link.
 
 ## Decisions
 
