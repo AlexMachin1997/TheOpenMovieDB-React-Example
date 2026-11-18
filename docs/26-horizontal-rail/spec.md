@@ -54,7 +54,10 @@ rows also happens when the app is set up again.
 1. The rail lays its items out in one row and scrolls sideways when they overflow.
 2. When the items fit, nothing scrolls and no scrollbar shows.
 3. The gap between items is set by the rail, from the spacing scale, with a default.
-4. Each item keeps its own width. Items do not shrink to fit the row.
+4. Each item keeps its own width. Items do not shrink to fit the row. The rail takes any children,
+   and each child becomes one list item, wrapped by the rail. The caller never writes the list-item
+   markup. A fragment's children each become their own item, and empty
+   children (`null`, `false`) produce no item.
 
 ### UI/UX
 
@@ -104,6 +107,8 @@ rows also happens when the app is set up again.
   unavailable, and keeps focus (requirement 14).
 - **No items.** Nothing renders. An empty state is the caller's job (C35 is app-level).
 - **One item.** It renders as a list of one.
+- **Children wrapped in a fragment, or conditionally rendered.** Each real child is one item. A
+  fragment never becomes a single item, and a `false` or `null` child never becomes an empty one.
 - **An item wider than the rail.** The rail scrolls to show all of it.
 - **A focused item that is only half visible.** Focusing it scrolls it fully into view (requirement
   9).
@@ -152,6 +157,8 @@ rows also happens when the app is set up again.
   stopped.
 - AC17: Given focus on a scroll button, when the rail widens until nothing overflows, then focus
   stays on that button.
+- AC18: Given two cards inside a fragment and a `false` child, when the rail renders, then the list
+  has two items.
 
 ## Decisions
 
@@ -185,6 +192,10 @@ rows also happens when the app is set up again.
   element scroll further either way?) and could serve a crowded `Tabs` strip or a wide table later.
   It is exported from `ui-core` when a second component needs it, not before. Reassess during
   implementation.
+
+- **The rail wraps its children itself** _(decided 2026-11-18)_. The caller passes any children and
+  never writes list-item markup. The cost is that the rail has to flatten fragments and skip empty
+  children itself, which requirement 4 covers.
 
 ## Open Questions
 
