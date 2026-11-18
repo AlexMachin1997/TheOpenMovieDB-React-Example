@@ -357,6 +357,8 @@ have to come from a brand collection. Iconify's `simple-icons` has `facebook`, `
 5. Icons from any collection keep `Icon`'s existing guarantees: always `aria-hidden`, the same size
    scale, and the same placeholder while the data loads.
 6. Brand marks are drawn in the current text colour, like every other icon.
+7. The allowlist gains the icons the social links need: the brand marks `facebook`, `instagram`,
+   `tiktok`, `youtube` and `x-logo`, and the Lucide icons `link` and `circle-play`.
 
 ### Acceptance Criteria
 
