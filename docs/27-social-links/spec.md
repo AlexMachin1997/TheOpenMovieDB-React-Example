@@ -30,7 +30,8 @@ This is C28 in [`component-inventory.md`](../component-inventory.md).
 
 ## Scope
 
-**Included**: a social links component in `ui-core`, with consumer-facing Storybook documentation.
+**Included**: a social links component in `ui-core`, named `SocialLinks`, taking its list as a
+`socials` prop, with consumer-facing Storybook documentation.
 
 **Not included**:
 
@@ -141,6 +142,9 @@ This is C28 in [`component-inventory.md`](../component-inventory.md).
   breaks the Back button without warning.
 - **X's mark is `x-logo`.** Decided in the `Icon` second pass. TMDB's field is still `twitter_id`,
   which is the app's mapping to make.
+
+- **Named `SocialLinks`, with a `socials` prop** _(decided 2026-11-18)_. The component is still a row
+  of social links even though it knows no platform names, so the name stays.
 
 ## Known limitations
 
