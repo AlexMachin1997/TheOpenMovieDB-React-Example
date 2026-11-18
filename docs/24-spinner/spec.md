@@ -66,7 +66,8 @@ same spinner visual. Consumer-facing Storybook documentation for both.
 
 9. A standalone `Spinner` has an accessible name that says loading is in progress. The caller can
    replace the default name, for example "Loading recommendations".
-10. A standalone `Spinner` is announced when it appears, without moving focus.
+10. A standalone `Spinner` is exposed as a status, without moving focus. See Known limitations for
+    when it is announced.
 11. A spinner inside `Button` adds no name of its own. `Button` already reports itself busy.
 12. The content under a loading surface is marked busy while the surface is shown.
 
@@ -77,8 +78,6 @@ same spinner visual. Consumer-facing Storybook documentation for both.
 
 ## Edge Cases & Error Handling
 
-- **Several spinners on one page.** Each is announced. A page that shows many at once should use one
-  loading surface around them, and Storybook documents this.
 - **A spinner inside an element that already has a name.** The caller can mark the spinner
   decorative so the name is not announced twice. `Button` does this itself.
 - **The loading surface is removed while focus is inside the covered content.** Focus stays where it
@@ -126,6 +125,14 @@ same spinner visual. Consumer-facing Storybook documentation for both.
   decision.
 - **Reduced motion stops the rotation rather than hiding the spinner.** A loading state with nothing
   visible would look like a frozen page.
+
+## Known limitations
+
+- **A spinner that mounts may not be spoken straight away** _(accepted 2026-11-18)_. A status region
+  that appears already holding its text is not announced reliably by every screen reader. A screen
+  reader user still finds the spinner when they reach it. This is accepted because data is fetched
+  by route loaders, so a page shows one loader at a time. Revisit, for example with one shared live
+  region, if components start fetching on their own and several spinners can appear at once.
 
 ## Open Questions
 
