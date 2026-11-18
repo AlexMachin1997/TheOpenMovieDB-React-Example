@@ -142,8 +142,6 @@ rows also happens when the app is set up again.
   unavailable and next is available. At the end it is the other way round.
 - AC12: Given focus on the next button, when it is pressed until the end of the row, then focus
   stays on the button once it is unavailable.
-- AC17: Given focus on a scroll button, when the rail widens until nothing overflows, then focus
-  stays on that button.
 - AC13: Given a press of either button, when the scroll settles, then the row has moved by about
   the visible width, in that direction.
 - AC14: Given a device with no hover, when the rail renders, then the buttons are not shown.
@@ -152,6 +150,8 @@ rows also happens when the app is set up again.
 - AC16: Given a scroll that ends a few pixels past an item's edge, when it settles, then that edge
   is aligned. Given a scroll that ends midway between two items, then the row stays where it
   stopped.
+- AC17: Given focus on a scroll button, when the rail widens until nothing overflows, then focus
+  stays on that button.
 
 ## Decisions
 
