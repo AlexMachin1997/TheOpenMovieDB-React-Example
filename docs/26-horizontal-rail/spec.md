@@ -32,7 +32,7 @@ This is C10 in [`component-inventory.md`](../component-inventory.md).
 
 ## Scope
 
-**Included**: a horizontal rail in `ui-core`, with consumer-facing Storybook documentation.
+**Included**: a horizontal rail in `ui-core`, named `HorizontalScroll`, with consumer-facing Storybook documentation.
 
 **Not included**: the cards that go in it (C01 and the app's card components). Migrating the app's
 rows also happens when the app is set up again.
@@ -196,6 +196,9 @@ rows also happens when the app is set up again.
 - **The rail wraps its children itself** _(decided 2026-11-18)_. The caller passes any children and
   never writes list-item markup. The cost is that the rail has to flatten fragments and skip empty
   children itself, which requirement 4 covers.
+
+- **Named `HorizontalScroll`** _(decided 2026-11-18)_. `Carousel` was avoided: in the ARIA
+  Practices it means slides shown one at a time, which this is not.
 
 ## Open Questions
 
