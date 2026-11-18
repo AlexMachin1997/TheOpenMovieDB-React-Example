@@ -77,14 +77,16 @@ rows also happens when the app is set up again.
 
 ### Scroll buttons
 
-14. The rail has a previous and a next button. They are always in the DOM while the row overflows.
-15. When nothing overflows, neither button is rendered.
+14. The rail has a previous and a next button. They are always in the DOM, whether or not the row
+    overflows, so a focused button is never removed.
+15. When nothing overflows, both buttons are unavailable and stay hidden.
 16. The buttons are visible while the pointer is over the rail or focus is inside it, and hidden
     otherwise. Hidden means invisible, not removed, so a keyboard user never tabs onto something
     that isn't shown.
 17. On a device with no hover, the buttons are not shown. Swiping scrolls the row.
-18. At the start of the row, the previous button is disabled. At the end, the next button is
-    disabled. A disabled button stays where it is, so focus is never lost.
+18. At the start of the row, the previous button is unavailable. At the end, the next button is
+    unavailable. An unavailable button keeps focus, stays in the tab order, and is announced as
+    unavailable. Pressing it does nothing.
 19. Each press scrolls by about the rail's visible width.
 20. Each button has an accessible name that says which way it scrolls. The buttons are the only tab
     stops the rail itself adds. Requirement 11 is about the scroll area, not these buttons.
@@ -98,6 +100,8 @@ rows also happens when the app is set up again.
 
 ## Edge Cases & Error Handling
 
+- **The rail resizes until nothing overflows while a button has focus.** The button stays, becomes
+  unavailable, and keeps focus (requirement 14).
 - **No items.** Nothing renders. An empty state is the caller's job (C35 is app-level).
 - **One item.** It renders as a list of one.
 - **An item wider than the rail.** The rail scrolls to show all of it.
@@ -132,12 +136,14 @@ rows also happens when the app is set up again.
 - AC8: Given items with a fixed width, when the row overflows, then each item keeps that width.
 - AC9: Given a rail that overflows, when the pointer moves over it or focus moves inside it, then
   both buttons become visible. When neither is true, they are not visible.
-- AC10: Given a rail that does not overflow, when the markup is inspected, then there are no scroll
-  buttons.
+- AC10: Given a rail that does not overflow, when the buttons are inspected, then both are present,
+  hidden and announced as unavailable.
 - AC11: Given a rail scrolled to the start, when the buttons are inspected, then previous is
-  disabled and next is enabled. At the end it is the other way round.
+  unavailable and next is available. At the end it is the other way round.
 - AC12: Given focus on the next button, when it is pressed until the end of the row, then focus
-  stays on the button once it is disabled.
+  stays on the button once it is unavailable.
+- AC17: Given focus on a scroll button, when the rail widens until nothing overflows, then focus
+  stays on that button.
 - AC13: Given a press of either button, when the scroll settles, then the row has moved by about
   the visible width, in that direction.
 - AC14: Given a device with no hover, when the rail renders, then the buttons are not shown.
@@ -170,6 +176,15 @@ rows also happens when the app is set up again.
   guidance (Volvo Cars' Reel) recommends a partially visible item at the edge to signal more
   content, and a fade dims exactly that item. The rail does not enforce it, because whether an item
   is cut off depends on the widths the caller gives the items. Storybook documents it as guidance.
+
+- **Buttons are never removed or natively disabled** _(decided 2026-11-18)_. Both drop focus to the
+  page in some browsers. Guidance from eBay's carousel and the ARIA Practices discussion is to keep
+  the controls in the DOM and focusable, and mark the inactive one as unavailable. "Nothing
+  overflows" is simply both ends being reached at once, so it needs no separate tracking.
+- **The scroll-edge tracking stays inside the rail** _(decided 2026-11-18)_. It is generic (can this
+  element scroll further either way?) and could serve a crowded `Tabs` strip or a wide table later.
+  It is exported from `ui-core` when a second component needs it, not before. Reassess during
+  implementation.
 
 ## Open Questions
 
